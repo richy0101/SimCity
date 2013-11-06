@@ -1,6 +1,7 @@
 #Design Doc: Car
 
-##The Car is initially parked wherever the passenger last left it in carState= Idle. When the passenger needs the Car, he walks to the Car and sends it msgTakeMeHere(destination). The passengerGui then disappears into the Car and the carGui travels to the destination. The destination coordinates are hardcoded in carGui. When the carGui reaches its destination it sends the agent msgAtDestination(), which sends the car scheduler to perform action parkCar. Within parkCar, the Car messages the passenger that it has arrived at its destination, prompting the passenger to bring back its gui at the destination(or drop-off) coordinates.
+##Summary
+The Car is initially parked wherever the passenger last left it in carState= Idle. When the passenger needs the Car, he walks to the Car and sends it msgTakeMeHere(destination). The passengerGui then disappears into the Car and the carGui travels to the destination. The destination coordinates are hardcoded in carGui. When the carGui reaches its destination it sends the agent msgAtDestination(), which sends the car scheduler to perform action parkCar. Within parkCar, the Car messages the passenger that it has arrived at its destination, prompting the passenger to bring back its gui at the destination(or drop-off) coordinates.
 
 ##Data
 private Person passenger;
