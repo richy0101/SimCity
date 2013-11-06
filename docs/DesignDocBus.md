@@ -1,6 +1,7 @@
 #Design Doc: Bus
 
-##Bus Agent is autonomous. The state of the bus depends on the stop. When the bus is at state/destination StopOne, scheduler prompts the bus to move the gui to the next stop, and the bus will drive around in circles. This code assumes that the city is surrounded by a square road, which the bus can drive around. 
+##Summary
+Bus Agent is autonomous. The state of the bus depends on the stop. When the bus is at state/destination StopOne, scheduler prompts the bus to move the gui to the next stop, and the bus will drive around in circles. This code assumes that the city is surrounded by a square road, which the bus can drive around. 
 At each bus stop: 
 1) Customers will board the bus and send msgINeedARide() (adding them to list).
 2) The bus agent messages all passengers on the bus the current stop.
