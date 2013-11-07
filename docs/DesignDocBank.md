@@ -19,13 +19,15 @@
 	then GiveLoan(a);
 
 ##Messages
- + msgOpenAccount(CustomerAgent customer){
+```
+msgOpenAccount(CustomerAgent customer){
 	accounts.add(customer,uniqueAccountNumber,0,0,AccountState.WantAccountNumber);
 	uniqueAccountNumber++;
 	stateChanged();
    }
-
- + msgDeposit(int accountNumber, double money){
+```
+```
+msgDeposit(int accountNumber, double money){
 	for(BankAccount tempAccount : accounts){
 		if(tempAccount.accountNum == accountNumber){
 			tempAccount.funds += money;
@@ -34,8 +36,9 @@
 	}
 	stateChanged();
    }
-
- + msgWithdraw(int accountNumber, double money){
+```
+```
+msgWithdraw(int accountNumber, double money){
 	for(BankAccount tempAccount : accounts){
 		if(tempAccount.accountNum == accountNumber){
 			tempAccount.state = AccountState.Withdraw;
@@ -43,8 +46,9 @@
 	}
 	stateChanged();
    }
-
- + msgIWantLoan(int accountNumber, double moneyRequest){
+```
+```
+msgIWantLoan(int accountNumber, double moneyRequest){
 	for(BankAccount tempAccount : accounts){
 		if(tempAccount.accountNum == accountNumber){
 			tempAccount.credit += moneyRequest;
@@ -53,30 +57,35 @@
 	}
 	stateChanged();
 }
-
+```
 ##Actions
- + CreateAccount(BankAccount account){
-	account.customer.msgHereIsAccountNumber(account.accountNum);
-	account.state = AccountState.Opened;
-	stateChanged();
-   }
 ```
- + DepositMoney(BankAccount account){
-      account.state = AccountState.Opened;
-      stateChanged();
-   }
+CreateAccount(BankAccount account){
+  account.customer.msgHereIsAccountNumber(account.accountNum);
+  account.state = AccountState.Opened;
+  stateChanged();
+}
 ```
- + GiveCustomerMoney(BankAccount account){
-     account.funds -= account.moneyToWithdraw;
-     account.customer.msgHereIsMoney(account.moneyToWithdraw);
-     `account.moneyToWithdraw = 0;`
-     account.state = AccountState.Opened;
-     stateChanged();  
-   }
-
- + GiveLoan(BankAccount account){
-	account.customer.msgHereIsLoan(account.credit);
-	moneyInBank -= account.credit;
-	account.state = AccountState.Opened;
-	stateChanged();
-   }
+```
+DepositMoney(BankAccount account){
+  account.state = AccountState.Opened;
+  stateChanged();
+}
+```
+```
+GiveCustomerMoney(BankAccount account){
+  account.funds -= account.moneyToWithdraw;
+  account.customer.msgHereIsMoney(account.moneyToWithdraw);            
+  account.moneyToWithdraw = 0;
+  account.state = AccountState.Opened;
+  stateChanged();  
+}
+```
+```
+GiveLoan(BankAccount account){
+  account.customer.msgHereIsLoan(account.credit);
+  moneyInBank -= account.credit;
+  account.state = AccountState.Opened;
+  stateChanged();
+}
+```
