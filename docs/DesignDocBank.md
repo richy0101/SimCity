@@ -60,18 +60,18 @@
 	account.state = AccountState.Opened;
 	stateChanged();
    }
-
+```
  + DepositMoney(BankAccount account){
-	account.state = AccountState.Opened;
-	stateChanged();
+      account.state = AccountState.Opened;
+      stateChanged();
    }
-
- + GiveCustomerMoney(BankAccount account){  
- 	`account.funds -= account.moneyToWithdraw;  
-	<br>account.customer.msgHereIsMoney(account.moneyToWithdraw);  </br>
-	`account.moneyToWithdraw = 0;  `
-	account.state = AccountState.Opened;  
-	stateChanged();  
+```
+ + GiveCustomerMoney(BankAccount account){
+     account.funds -= account.moneyToWithdraw;
+     account.customer.msgHereIsMoney(account.moneyToWithdraw);
+     `account.moneyToWithdraw = 0;`
+     account.state = AccountState.Opened;
+     stateChanged();  
    }
 
  + GiveLoan(BankAccount account){
