@@ -66,13 +66,13 @@
 	stateChanged();
    }
 
- + GiveCustomerMoney(BankAccount account){
+ + ```GiveCustomerMoney(BankAccount account){
 	account.funds -= account.moneyToWithdraw;
 	account.customer.msgHereIsMoney(account.moneyToWithdraw);
 	account.moneyToWithdraw = 0;
 	account.state = AccountState.Opened;
 	stateChanged();
-   }
+   }```
 
  + GiveLoan(BankAccount account){
 	account.customer.msgHereIsLoan(account.credit);
