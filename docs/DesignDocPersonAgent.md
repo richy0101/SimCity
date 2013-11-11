@@ -23,7 +23,7 @@ private class PersonTimerTask extends TimerTask {};
 ##Scheduler
 ```
 if there exists a Role r in roles, such that r.active() {
-	then exectue active role's rules
+	then exectue active role's rules;
 	return true;
 }
 if personState == WantsToGoHome { 
