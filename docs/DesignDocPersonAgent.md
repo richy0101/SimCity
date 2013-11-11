@@ -56,8 +56,8 @@ if personState == NeedsToWork {
 	goWork();
 	return true;
 }
-evaluateStatus();
-return false;
+return evaluateStatus();
+//evaluateStatus becomes our return false for our scheduler of the personAgent.
 ```
 
 ##Messages
@@ -80,17 +80,11 @@ msgCookingDone() {
 
 ```
 msgDoneEating() {
-	if hasWorked = false {
-		personState = NeedsToWork;
-		stateChanged();
-	}
-	else {
-		personState = Idle;
-		hungerLevel = 0;
-		stateChanged();
-		//Go to Evaluate status
+	personState = Idle;
+	hungerLevel = 0;
+	stateChanged();
+	//Go to Evaluate status
 
-	}
 }
 
 ```
@@ -144,13 +138,14 @@ msg//() {
 
 ##Actions
 ```
-public void evaluateStatus() {
+public boolean evaluateStatus() {
 	//Intermediate states = Eating, Cooking, Working.
 	if personState = Cooking || intermediate states waiting for personal timerTask {
-		return;
+		return false;
 	}
-	else if {
-
+	else if hasWorked = false {
+		personState = NeedsToWork;
+		return true;
 	}
 	.
 	.
@@ -207,10 +202,13 @@ public void eatFood() {
 ```
 ```
 public void goWork() {
+	hasWorked = true;
+	Activate transporation role with work place as destination;
 	Create new TimerTask {
 		msgDoneWorking();
 	}(Random time for Working);
 	personState = Working;
+	//Where does the logic for activate worker role go?
 
 }
 ```
