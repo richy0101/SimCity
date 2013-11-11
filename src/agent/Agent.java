@@ -1,7 +1,7 @@
 package agent;
 
 import java.util.concurrent.*;
-import restaurant.test.mock.EventLog;
+//import restaurant.test.mock.EventLog;
 
 /**
  * Base class for simple agents
@@ -11,7 +11,7 @@ public abstract class Agent {
     Semaphore pauseAndResume = new Semaphore(0, true);
     private AgentThread agentThread;
     private boolean isPaused = false;
-    public EventLog log = new EventLog();
+//    public EventLog log = new EventLog();
 
     protected Agent() {
     }
