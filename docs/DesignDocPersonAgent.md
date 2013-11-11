@@ -56,9 +56,6 @@ if personState == NeedsToWork {
 	goWork();
 	return true;
 }
-if personState == DoneWorking {
-	
-}
 evaluateStatus();
 return false;
 ```
