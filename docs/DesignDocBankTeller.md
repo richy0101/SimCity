@@ -12,6 +12,7 @@
  	int accountNumber;
  	CustomerState state;
  }
+ BankManager manager;
  CustomerState(NeedingAssistance, AskedAssistance, OpeningAccount, DepositingMoney, WithdrawingMoney, GettingLoan}
 ```
 	
@@ -91,6 +92,7 @@ DepositMoney(MyBankCustomer customer) {
 	bank.sharedInstance().depositMoney(customer.accountNumber, customer.moneyToDeposity);
 	customer.customer.msgDepositSuccessful();
 	customers.remove(customer);
+	manager.msgTellerFree(this);
 }
 ```
 ```
@@ -105,6 +107,7 @@ GiveCustomerMoney(MyBankCustomer customer) {
 		customer.customer.msgHereIsMoney(funds);
 	}
 	customer.remove(customer);
+	manager.msgTellerFree(this);
 }
 ```
 ```
@@ -116,5 +119,6 @@ GiveLoan(MyBankCustomer customer) {
 		customer.customer.msgLoanDenied()
 	}
 	customer.remove(customer);
+	manager.msgTellerFree(this);
 }
 ```
