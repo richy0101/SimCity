@@ -1,22 +1,26 @@
 #Design Doc: Bank
 
 ##Data
- + class BankAccount{CustomerAgent customer, int accountNum, double funds, double credit, double moneyToWithdraw, AccountState state}
- + List<BankAccount> accounts
- + List<BankTellerAgent> tellers
- + AccountState(Opened,WantAccountNumber,Deposit,Withdraw,Loan,NoMoney)
- + int uniqueAccountNumber = 0
- + double moneyInBank = 10000000
+```
+ class BankAccount{CustomerAgent customer, int accountNum, double funds, double credit, double moneyToWithdraw, AccountState state}
+ List<BankAccount> accounts
+ List<BankTellerAgent> tellers
+ AccountState(Opened,WantAccountNumber,Deposit,Withdraw,Loan,NoMoney)
+ int uniqueAccountNumber = 0
+ double moneyInBank = 10000000
+```
 	
 ##Scheduler
- + if ∃ a in accounts ∋ a.state = WantAccountNumber
+```
+ if ∃ a in accounts ∋ a.state = WantAccountNumber
 	then CreateAccount(a);
- + if ∃ a in accounts ∋ a.state = Deposit
+ if ∃ a in accounts ∋ a.state = Deposit
 	then DepositMoney(a);
- + if ∃ a in accounts ∋ a.state = Withdraw
+ if ∃ a in accounts ∋ a.state = Withdraw
 	then GiveCustomerMoney(a);
- + if ∃ a in accounts ∋ a.state = Loan
+ if ∃ a in accounts ∋ a.state = Loan
 	then GiveLoan(a);
+```
 
 ##Messages
 ```
