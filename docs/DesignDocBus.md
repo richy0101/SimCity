@@ -9,7 +9,20 @@ At each bus stop:
 
 ##Data
 	enum BusState {StopOne, StopTwo, StopThree, StopFour};
-	List<CustomerAgent> myPassengers; //Does this have to be myCustomer?
+	List<myCustomer> myPassengers; //Does this have to be myCustomer?
+	
+	class myCustomer {
+		String name;
+		int SourceStopNumber = 0;
+		int DestinationStopNumber = 0;
+		Boolean sittingOnBus = false;
+		
+		myCustomer(String customerName, int SourceNumber, int DestinationNumber) {
+			name = customerName;
+			SourceStopNumber = SourceNumber;
+			DestinationStopNumber = DestinationNumber;
+		}
+	}
 			
 ##Scheduler
 	if ∃ in bus ∋ state.StopOne()
@@ -25,12 +38,12 @@ At each bus stop:
 		then DriveToStopOne();
 
 ##Messages
-	msgINeedARide(this) { 
+	msgINeedARide(name, source, destination) { 
 		print("Adding " + this.name + " as a passenger.");
-		myCustomers.add(this); //Is it okay to add customeragent to list within messages?
+		myPassengers.add(new myCustomer(name, source, destination); //Is it okay to add customeragent to list within messages?
 	}
 	
-	msgThanksForTheRide(this) {
+	msgThanksForTheRide(name) {
 		print("Removing " + this.name + " from passengers.");
 		myCustomers.remove(this); 
 	}
@@ -39,6 +52,11 @@ At each bus stop:
 	DriveToStopOne() {
 		//gui
 		//timer to replicate bus boarding and unboarding
+		for(myCustomer passenger : myPassengers) {
+			if(passenger.source == 1) {
+				sittingOnBus = true;
+			}
+		}
 		for(CustomerAgent passenger : myPassengers) {
 			passenger.msgThisIsBusStop(int 1);
 		}
@@ -47,6 +65,11 @@ At each bus stop:
 	DriveToStopTwo() {
 		//gui
 		//timer to replicate bus boarding and unboarding
+		for(myCustomer passenger : myPassengers) {
+			if(passenger.source == 2) {
+				sittingOnBus = true;
+			}
+		}
 		for(CustomerAgent passenger : myPassengers) {
 			passenger.msgThisIsBusStop(int 2);
 		}
@@ -55,6 +78,11 @@ At each bus stop:
 	DriveToStopThree() {
 		//gui
 		//timer to replicate bus boarding and unboarding
+		for(myCustomer passenger : myPassengers) {
+			if(passenger.source == 3) {
+				sittingOnBus = true;
+			}
+		}
 		for(CustomerAgent passenger : myPassengers) {
 			passenger.msgThisIsBusStop(int 3);
 		}
@@ -63,6 +91,11 @@ At each bus stop:
 	DriveToStopFour() {
 		//gui
 		//timer to replicate bus boarding and unboarding
+		for(myCustomer passenger : myPassengers) {
+			if(passenger.source == 4) {
+				sittingOnBus = true;
+			}
+		}
 		for(CustomerAgent passenger : myPassengers) {
 			passenger.msgThisIsBusStop(int 4);
 		}
