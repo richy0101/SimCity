@@ -9,7 +9,7 @@ boolean hasWorked;
 boolean atHome;
 enum HouseState { owns House..ownsAppt..};
 HouseState houseState;
-enum PersonState {Idle, WantsToGoHome, WantFood, CookHome, WaitingForCooking, GoOutEat, StartEating, Eating, NeedsToWork, Working,    };
+enum PersonState {Idle, WantsToGoHome, WantFood, CookHome, WaitingForCooking, GoOutEat, StartEating, Eating, NeedsToWork, Working, InTransit   };
 PersonState personState;
 int hungerLevel;
 Clock clock = clock.sharedInstance();
@@ -89,6 +89,7 @@ msgDoneEating() {
 	}
 	else {
 		personState = Idle;
+		hungerLevel = 0;
 		stateChanged();
 		//Go to Evaluate status
 
@@ -106,7 +107,7 @@ msgGoWork() { //Not Really used. Can be used for hacks.
 ```
 
 ```
-msgWorkDone() {
+msgDoneWorking() {
 	Deactivate all roles;//not yet sure how to implement.
 	personState = WantFood;
 	stateChanged();
@@ -123,7 +124,7 @@ msgGoHome() {
 ```
 
 ```
-msgAtHome() {
+msgAtHome() { //GUI message
 	atHome = true;
 	stateChanged();
 }
@@ -146,22 +147,85 @@ msg//() {
 
 ##Actions
 ```
-public void
+public void evaluateStatus() {
+	//Intermediate states = Eating, Cooking, Working.
+	if personState = Cooking || intermediate states waiting for personal timerTask {
+		return;
+	}
+	else if {
+
+	}
+	.
+	.
+	.
+	//Needs group designing IMO. This is our algoritm for evaluation outside of norms
+}
 ```
 ```
-public void DoGiveGroceyOrder(){
-	myWorker.msgGetGroceries(myGroceries);
+public void goHome() {
+	Deactivate current active role;
+	activate transportation role with home as destination;
+	personState = InTransit;
+	gui.GoHome//;
+}
+```
+```
+public void cookHomeFood() {
+	Create new TimerTask {
+		msgCookingDone();
+	}(Random time for cooking);
+	personState = Cooking;
 
 }
 ```
 ```
-public void DoPay() {
-	myWorker.HereIsMoney(myBill.price);
+public void goRestaurant() {
+	personState = OutToEat;
+	Deactivate current active role;
+	activate transportation role with restaurant as destination;
+	gui.GoRestaurant//;
+
+	//Where does the logic for activate Restaurant customer role go?
 
 }
 ```
 ```
-public void DoLeaveMarket() {
+public void decideFood() {
+	//Decide cook or eat out
+	if cook {
+		personState = CookHome;
+	}
+	else {
+		personState = GoOutEat;
+	}
+}
+```
+```
+public void eatFood() {
+	Create new TimerTask {
+		msgDoneEating();
+	}(Random time for eating);
+	personState = Eating;
+}
+```
+```
+public void goWork() {
+	Create new TimerTask {
+		msgDoneWorking();
+	}(Random time for Working);
+	personState = Working;
+
+}
+```
+//FILLER ACTIONS FOR FUTURE DESIGNING
+```
+public void // {
+
+
+}
+```
+```
+public void // {
 
 
 }
