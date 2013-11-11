@@ -48,6 +48,8 @@ msgHereIsYourBill(Bill bill) {
 	Event = GotBill;
 }
 ```
+
+```
 msgHereAreYourGroceries() {
 	Event = GotGroceries;
 }
