@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import bank.interfaces.*;
+import agent.Role;
 
-public class BankManagerRole implements BankManager {
+public class BankManagerRole extends Role implements BankManager {
 //data--------------------------------------------------------------------------------
 	private List<BankCustomer> customers = Collections.synchronizedList(new ArrayList<BankCustomer>());
 	private List<MyBankTeller> tellers = Collections.synchronizedList(new ArrayList<MyBankTeller>());

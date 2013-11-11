@@ -1,8 +1,9 @@
 package bank;
 
 import bank.interfaces.*;
+import agent.Role;
 
-public class BankCustomerRole implements BankCustomer {	
+public class BankCustomerRole extends Role implements BankCustomer {	
 //data--------------------------------------------------------------------------------
 	BankTeller teller;
 	BankManager manager;

@@ -5,8 +5,9 @@ import java.util.Collections;
 import java.util.List;
 
 import bank.interfaces.*;
+import agent.Role;
 
-public class BankTellerRole implements BankTeller {
+public class BankTellerRole extends Role implements BankTeller {
 //data--------------------------------------------------------------------------------
 	private List<MyBankCustomer> customers = Collections.synchronizedList(new ArrayList<MyBankCustomer>());
 	private class MyBankCustomer {
