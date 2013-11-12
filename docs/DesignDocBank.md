@@ -7,12 +7,13 @@
  + AccountState(Opened,WantAccountNumber,Deposit,Withdraw,Loan,NoMoney)
  + int uniqueAccountNumber = 0
  + double moneyInBank = 10000000
+ + TellerAssignerAgent tellerAssigner
 	
 ##Scheduler
  + if ∃ a in accounts ∋ a.state = WantAccountNumber
-	then CreateAccount(a);
+  then CreateAccount(a);
  + if ∃ a in accounts ∋ a.state = Deposit
-	then DepositMoney(a);
+  then DepositMoney(a);
  + if ∃ a in accounts ∋ a.state = Withdraw
 	then GiveCustomerMoney(a);
  + if ∃ a in accounts ∋ a.state = Loan
