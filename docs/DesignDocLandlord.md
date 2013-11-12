@@ -2,12 +2,12 @@
 
 ##Data
 ```
- class MyTenant {
+ class Tenant {
  	PersonAgent inhabitant; 
  	double moneyOwed; 
  	PayingState state;
  }
- List<MyTenant> tenants;
+ List<Tenant> tenants;
  enum PayState {NeedsToPay,WaitingForPayment,OwesMoney,PayLater,NothingOwed}
  double funds;
 ```	
@@ -51,8 +51,10 @@ msgHereIsRent(PersonAgent person, double money){
 				t.moneyOwed -= money;
 				t.state = PayState.NothingOwed;
 			}
-			else
+			else{
+			      t.moneyOwed -= money;
 				t.state = PayState.OwesMoney;
+		      }
 		}
 	}
 	stateChanged();
