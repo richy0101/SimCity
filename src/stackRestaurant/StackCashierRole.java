@@ -11,7 +11,7 @@ import stackRestaurant.interfaces.Market;
 
 import java.util.*;
 
-public class CashierAgent extends Agent implements Cashier {
+public class StackCashierRole extends Agent implements Cashier {
 	
 	private List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	private List<MyCheck> checks = Collections.synchronizedList(new ArrayList<MyCheck>());
@@ -25,7 +25,7 @@ public class CashierAgent extends Agent implements Cashier {
 	private String name;
 	private double till;
 	
-	public CashierAgent(String name) {
+	public StackCashierRole(String name) {
 		this.name = name;
 	}
 	

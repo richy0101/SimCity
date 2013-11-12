@@ -1,12 +1,12 @@
 package stackRestaurant.gui;
 
-import stackRestaurant.CookAgent;
+import stackRestaurant.StackCookRole;
 
 import java.awt.*;
 
 public class CookGui implements Gui {
 
-    private CookAgent agent = null;
+    private StackCookRole agent = null;
     
     private int xHome = 250, yHome = 250;
     private int xPos = 250, yPos = 250;//default waiter position
@@ -23,7 +23,7 @@ public class CookGui implements Gui {
     
     public static final int COOKSIZE = 20;
 
-    public CookGui(CookAgent agent, RestaurantGui gui) {
+    public CookGui(StackCookRole agent, RestaurantGui gui) {
         this.agent = agent;
         this.gui = gui;
     }

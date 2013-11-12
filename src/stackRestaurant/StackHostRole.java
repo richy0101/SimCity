@@ -16,7 +16,7 @@ import java.util.*;
 //does all the rest. Rather than calling the other agent a waiter, we called him
 //the HostAgent. A Host is the manager of a restaurant who sees that all
 //is proceeded as he wishes.
-public class HostAgent extends Agent implements Host {
+public class StackHostRole extends Agent implements Host {
 	//Notice that we implement waitingCustomers using ArrayList, but type it
 	//with List semantics.
 	public List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
@@ -38,7 +38,7 @@ public class HostAgent extends Agent implements Host {
 
 	public WaiterGui hostGui = null;
 
-	public HostAgent(String name) {
+	public StackHostRole(String name) {
 		super();
 		this.name = name;
 		// make some tables

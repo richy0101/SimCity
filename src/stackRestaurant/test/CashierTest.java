@@ -1,8 +1,8 @@
 package stackRestaurant.test;
 
-import stackRestaurant.CashierAgent;
-import stackRestaurant.CashierAgent.CheckState;
-import stackRestaurant.CashierAgent.CustomerState;
+import stackRestaurant.StackCashierRole;
+import stackRestaurant.StackCashierRole.CheckState;
+import stackRestaurant.StackCashierRole.CustomerState;
 import stackRestaurant.helpers.Check;
 import stackRestaurant.test.mock.MockCustomer;
 import stackRestaurant.test.mock.MockWaiter;
@@ -20,7 +20,7 @@ import junit.framework.*;
 public class CashierTest extends TestCase
 {
 	//these are instantiated for each test separately via the setUp() method.
-	CashierAgent cashier;
+	StackCashierRole cashier;
 	MockWaiter waiter;
 	MockCustomer customer;
 	MockCustomer customer2;
@@ -34,7 +34,7 @@ public class CashierTest extends TestCase
 	 */
 	public void setUp() throws Exception{
 		super.setUp();		
-		cashier = new CashierAgent("cashier");		
+		cashier = new StackCashierRole("cashier");		
 		customer = new MockCustomer("mockcustomer");
 		customer2 = new MockCustomer("mockcustomer2");
 		customer3 = new MockCustomer("mockcustomer3");

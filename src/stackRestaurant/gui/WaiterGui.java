@@ -1,13 +1,13 @@
 package stackRestaurant.gui;
 
-import stackRestaurant.WaiterAgent;
+import stackRestaurant.StackWaiterRole;
 import stackRestaurant.helpers.TableList;
 
 import java.awt.*;
 
 public class WaiterGui implements Gui {
 
-    private WaiterAgent agent = null;
+    private StackWaiterRole agent = null;
     private TableList tableList = new TableList();
     private String choice = "";
     
@@ -23,7 +23,7 @@ public class WaiterGui implements Gui {
     
     public static final int HOSTSIZE = 20;
 
-    public WaiterGui(WaiterAgent agent, RestaurantGui gui) {
+    public WaiterGui(StackWaiterRole agent, RestaurantGui gui) {
         this.agent = agent;
         this.gui = gui;
     }

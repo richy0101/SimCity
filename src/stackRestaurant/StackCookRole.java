@@ -11,7 +11,7 @@ import stackRestaurant.interfaces.Market;
 import stackRestaurant.interfaces.Waiter;
 import stackRestaurant.gui.CookGui;
 
-public class CookAgent extends Agent implements Cook {
+public class StackCookRole extends Agent implements Cook {
 	
 	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
 	private Map<String, Food> foods = Collections.synchronizedMap(new HashMap<String, Food>());
@@ -31,7 +31,7 @@ public class CookAgent extends Agent implements Cook {
 	
 	private String name;
 	
-	public CookAgent(String name) {
+	public StackCookRole(String name) {
 		this.name = name;
 		foods.put("Steak", new Food(100));
 		foods.put("Chicken", new Food(140));

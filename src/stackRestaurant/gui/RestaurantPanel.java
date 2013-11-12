@@ -1,11 +1,11 @@
 package stackRestaurant.gui;
 
-import stackRestaurant.CustomerAgent;
-import stackRestaurant.HostAgent;
-import stackRestaurant.WaiterAgent;
-import stackRestaurant.CookAgent;
-import stackRestaurant.MarketAgent;
-import stackRestaurant.CashierAgent;
+import stackRestaurant.StackCustomerRole;
+import stackRestaurant.StackHostRole;
+import stackRestaurant.StackWaiterRole;
+import stackRestaurant.StackCookRole;
+import stackRestaurant.StackMarketRole;
+import stackRestaurant.StackCashierRole;
 
 import javax.swing.*;
 
@@ -21,22 +21,22 @@ import java.util.Vector;
 public class RestaurantPanel extends JPanel implements ActionListener {
 
     //Host, cook, waiters and customers
-    private HostAgent host = new HostAgent("Sarah");
-    private CookAgent cook = new CookAgent("Chef Boyardee");
-    private CashierAgent cashier = new CashierAgent("Mr.Moneybags");
+    private StackHostRole host = new StackHostRole("Sarah");
+    private StackCookRole cook = new StackCookRole("Chef Boyardee");
+    private StackCashierRole cashier = new StackCashierRole("Mr.Moneybags");
     
     //market hack
     /**
      * To edit the markets, simply change the number parameters.
      * The numbers are the inventory for (in this order) steak, chicken, salad, and pizza.
      */
-    private MarketAgent marketSteak = new MarketAgent("Steak Mandini", 1, 0, 0, 0);
-    private MarketAgent marketChicken = new MarketAgent("Chicken Flickin'", 0, 1, 0, 0);
-    private MarketAgent marketSalad = new MarketAgent("Vegan Nansy", 0, 0, 1, 0);
-    private MarketAgent marketPizza = new MarketAgent("Papa Murphy", 0, 0, 0, 1);
+    private StackMarketRole marketSteak = new StackMarketRole("Steak Mandini", 1, 0, 0, 0);
+    private StackMarketRole marketChicken = new StackMarketRole("Chicken Flickin'", 0, 1, 0, 0);
+    private StackMarketRole marketSalad = new StackMarketRole("Vegan Nansy", 0, 0, 1, 0);
+    private StackMarketRole marketPizza = new StackMarketRole("Papa Murphy", 0, 0, 0, 1);
 
-    private Vector<CustomerAgent> customers = new Vector<CustomerAgent>();
-    private Vector<WaiterAgent> waiters = new Vector<WaiterAgent>();
+    private Vector<StackCustomerRole> customers = new Vector<StackCustomerRole>();
+    private Vector<StackWaiterRole> waiters = new Vector<StackWaiterRole>();
 
     private JPanel restLabel = new JPanel();
     private CustomerListPanel customerPanel = new CustomerListPanel(this, "Customers");
@@ -88,7 +88,7 @@ public class RestaurantPanel extends JPanel implements ActionListener {
         
     }
     
-    public Vector<WaiterAgent> getWaiters() {
+    public Vector<StackWaiterRole> getWaiters() {
     	return waiters;
     }
     
@@ -102,10 +102,10 @@ public class RestaurantPanel extends JPanel implements ActionListener {
     		}
     		host.pauseAndResume();
     		cook.pauseAndResume();
-    		for(CustomerAgent customer : customers) {
+    		for(StackCustomerRole customer : customers) {
     			customer.pauseAndResume();
     		}
-    		for(WaiterAgent waiter : waiters) {
+    		for(StackWaiterRole waiter : waiters) {
     			waiter.pauseAndResume();
     		}
     	}
@@ -140,7 +140,7 @@ public class RestaurantPanel extends JPanel implements ActionListener {
         if (type.equals("Customers")) {
 
             for (int i = 0; i < customers.size(); i++) {
-                CustomerAgent temp = customers.get(i);
+                StackCustomerRole temp = customers.get(i);
                 if (temp.getName() == name)
                     gui.updateInfoPanel(temp);
             }
@@ -148,7 +148,7 @@ public class RestaurantPanel extends JPanel implements ActionListener {
         if (type.equals("Waiters")) {
 
             for (int i = 0; i < waiters.size(); i++) {
-                WaiterAgent temp = waiters.get(i);
+                StackWaiterRole temp = waiters.get(i);
                 if (temp.getName() == name)
                     gui.updateInfoPanel(temp);
             }
@@ -164,7 +164,7 @@ public class RestaurantPanel extends JPanel implements ActionListener {
     public void addPerson(String type, String name, boolean isHungry) {
 
     	if (type.equals("Customers")) {
-    		CustomerAgent c = new CustomerAgent(name);
+    		StackCustomerRole c = new StackCustomerRole(name);
     		
     		CustomerGui g = new CustomerGui(c, gui);
 
@@ -179,7 +179,7 @@ public class RestaurantPanel extends JPanel implements ActionListener {
     		c.startThread();
     	}
     	else if (type.equals("Waiters")) {
-    		WaiterAgent w = new WaiterAgent(name);
+    		StackWaiterRole w = new StackWaiterRole(name);
     		
     		WaiterGui wg = new WaiterGui(w, gui);
     		w.setGui(wg);

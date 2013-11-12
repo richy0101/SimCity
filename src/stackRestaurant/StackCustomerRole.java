@@ -13,7 +13,7 @@ import stackRestaurant.interfaces.*;
 /**
  * Restaurant customer agent.
  */
-public class CustomerAgent extends Agent implements Customer {
+public class StackCustomerRole extends Agent implements Customer {
 	private String name;
 	private int hungerLevel = 5;        // determines length of meal
 	private int tableNumber;
@@ -51,7 +51,7 @@ public class CustomerAgent extends Agent implements Customer {
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public CustomerAgent(String name){
+	public StackCustomerRole(String name){
 		super();
 		this.name = name;
 		if(name.equals("cheap")) {

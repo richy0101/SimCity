@@ -12,7 +12,7 @@ import stackRestaurant.interfaces.*;
 
 
 
-public class WaiterAgent extends Agent implements Waiter {
+public class StackWaiterRole extends Agent implements Waiter {
 	private Cook cook;
 	private Host host;
 	private Cashier cashier;
@@ -30,7 +30,7 @@ public class WaiterAgent extends Agent implements Waiter {
 	private enum CustomerState
 	{Waiting, Seated, ReadyToOrder, Ordering, Ordered, AtCook, FoodEmpty, FoodReady, WaitingForReadyFood, Eating, DoneEating, ReadyForCheck, WaitingForCheck, HasCheck, Paying, Gone};
 	
-	public WaiterAgent(String name) {
+	public StackWaiterRole(String name) {
 		super();
 		this.name = name;
 	}

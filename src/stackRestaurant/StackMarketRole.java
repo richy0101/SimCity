@@ -7,7 +7,7 @@ import stackRestaurant.interfaces.Market;
 import stackRestaurant.interfaces.Cashier;
 import stackRestaurant.helpers.Check;
 
-public class MarketAgent extends Agent implements Market {
+public class StackMarketRole extends Agent implements Market {
 	
 	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
 	private Map<String, Food> food = Collections.synchronizedMap(new HashMap<String, Food>());
@@ -20,7 +20,7 @@ public class MarketAgent extends Agent implements Market {
 	
 	private String name;
 	
-	public MarketAgent(String name, int steak, int chicken, int salad, int pizza) {
+	public StackMarketRole(String name, int steak, int chicken, int salad, int pizza) {
 		this.name = name;
 		food.put("Steak", new Food(steak, 5));
 		food.put("Chicken", new Food(chicken, 4));

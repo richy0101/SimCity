@@ -1,7 +1,7 @@
 package stackRestaurant.gui;
 
-import stackRestaurant.CustomerAgent;
-import stackRestaurant.WaiterAgent;
+import stackRestaurant.StackCustomerRole;
+import stackRestaurant.StackWaiterRole;
 
 import javax.swing.*;
 
@@ -93,8 +93,8 @@ public class RestaurantGui extends JFrame implements ActionListener {
     public void updateInfoPanel(Object person) {
         currentPerson = person;
 
-        if (person instanceof CustomerAgent) {
-            CustomerAgent customer = (CustomerAgent) person;
+        if (person instanceof StackCustomerRole) {
+            StackCustomerRole customer = (StackCustomerRole) person;
             stateCB.setVisible(true);
             waiterBreak.setVisible(false);
             stateCB.setText("Hungry?");
@@ -103,8 +103,8 @@ public class RestaurantGui extends JFrame implements ActionListener {
             infoLabel.setText(
                "<html><pre>     Name: " + customer.getName() + " </pre></html>");
         }
-        if (person instanceof WaiterAgent) {
-        	WaiterAgent waiter = (WaiterAgent) person;
+        if (person instanceof StackWaiterRole) {
+        	StackWaiterRole waiter = (StackWaiterRole) person;
         	infoLabel.setText("<html><pre>     Name: " + waiter.getName()  + " </pre></html>");
         	stateCB.setVisible(false);
         	waiterBreak.setText("Go On Break?");
@@ -126,15 +126,15 @@ public class RestaurantGui extends JFrame implements ActionListener {
      */
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == stateCB) {
-            if (currentPerson instanceof CustomerAgent) {
-                CustomerAgent c = (CustomerAgent) currentPerson;
+            if (currentPerson instanceof StackCustomerRole) {
+                StackCustomerRole c = (StackCustomerRole) currentPerson;
                 c.getGui().setHungry();
                 stateCB.setEnabled(false);
             }
         }
         else if (e.getSource() == waiterBreak) {
-        	if(currentPerson instanceof WaiterAgent) {
-        		WaiterAgent w = (WaiterAgent) currentPerson;
+        	if(currentPerson instanceof StackWaiterRole) {
+        		StackWaiterRole w = (StackWaiterRole) currentPerson;
         		if (waiterBreak.isSelected()) {
             		w.getGui().setWantsToGoOnBreak();
             	}
@@ -150,9 +150,9 @@ public class RestaurantGui extends JFrame implements ActionListener {
      *
      * @param c reference to the customer
      */
-    public void setCustomerEnabled(CustomerAgent c) {
-        if (currentPerson instanceof CustomerAgent) {
-            CustomerAgent cust = (CustomerAgent) currentPerson;
+    public void setCustomerEnabled(StackCustomerRole c) {
+        if (currentPerson instanceof StackCustomerRole) {
+            StackCustomerRole cust = (StackCustomerRole) currentPerson;
             if (c.equals(cust)) {
                 stateCB.setEnabled(true);
                 stateCB.setSelected(false);
@@ -160,9 +160,9 @@ public class RestaurantGui extends JFrame implements ActionListener {
         }
     }
     
-    public void setWaiterBreakOff(WaiterAgent w) {
-    	if (currentPerson instanceof WaiterAgent) {
-    		WaiterAgent waiter = (WaiterAgent) currentPerson;
+    public void setWaiterBreakOff(StackWaiterRole w) {
+    	if (currentPerson instanceof StackWaiterRole) {
+    		StackWaiterRole waiter = (StackWaiterRole) currentPerson;
     		if(w.equals(waiter)) {
     			waiterBreak.setSelected(false);
     		}

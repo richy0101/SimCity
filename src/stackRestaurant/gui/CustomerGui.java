@@ -1,13 +1,13 @@
 package stackRestaurant.gui;
 
-import stackRestaurant.CustomerAgent;
+import stackRestaurant.StackCustomerRole;
 import stackRestaurant.helpers.TableList;
 
 import java.awt.*;
 
 public class CustomerGui implements Gui{
 
-	private CustomerAgent agent = null;
+	private StackCustomerRole agent = null;
 	private boolean isPresent = false;
 	private boolean isHungry = false;
 	private TableList tableList = new TableList();
@@ -28,7 +28,7 @@ public class CustomerGui implements Gui{
 	private static final int WAITINGX = 3;
 	private static final int WAITINGY = 3;
 
-	public CustomerGui(CustomerAgent c, RestaurantGui gui){ //HostAgent m) {
+	public CustomerGui(StackCustomerRole c, RestaurantGui gui){ //HostAgent m) {
 		agent = c;
 		xPos = -40;
 		yPos = -40;
