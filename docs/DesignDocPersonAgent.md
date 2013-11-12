@@ -16,7 +16,7 @@ Stack<Roles> roles;
 Map<String, Restaurant> restaurants;
 Map<String, Market> markets;
 Map<String, Bank> banks;
-WorkRole workRole;
+Role workRole;
 double funds;
 boolean hasCar;
 boolean hasWorked;
