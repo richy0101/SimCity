@@ -1,8 +1,11 @@
-﻿#Design Doc: MarketCustomer
+﻿#Design Doc: PersonAgent extends Agent
 
 ##Data
 ```
 List<Roles> roles;
+Map<String, Restaurant> restaurants;
+Map<String, Market> markets;
+Map<String, Bank> banks;
 double funds;
 boolean hasCar;
 boolean hasWorked;
@@ -14,8 +17,39 @@ PersonState personState;
 int hungerLevel;
 Clock clock = clock.sharedInstance();
 Timer timer = new Timer();
-private class PersonTimerTask extends TimerTask {};
+public class PersonTimerTask extends TimerTask {};
+//Restaurant class within person so he knows how to go to a certain restaurant. 
+public class Restaurant {
+	HostRole hostRole;
+	Location location;
+	Menu menu;
+	RestaurantType type;
+	CustomerRole customerRole;
+	
+	
 
+};
+
+public class Market {
+	MarketRole marketRole;
+	Location location;
+	MarketCustomerRole marketCustomerRole;
+
+
+};
+public class Bank {
+	Location location;
+	BankTellerRole tellerRole;
+	BankManagerRole bankManagerRole;
+	BankCustomerRole bankCustomerRole;
+	
+
+};
+public class Transit {
+	Destination;
+	TransportationRole transportationRole;
+	
+}
 
 
 ```
@@ -23,8 +57,8 @@ private class PersonTimerTask extends TimerTask {};
 ##Scheduler
 ```
 if there exists a Role r in roles, such that r.active() {
-	then exectue active role's rules;
-	return true;
+	then boolean b = r.pickAndExecuteAnAction();
+	return b;
 }
 if personState == WantsToGoHome { 
 	goHome();
@@ -173,11 +207,39 @@ public void cookHomeFood() {
 ```
 public void goRestaurant() {
 	personState = OutToEat;
-	Deactivate current active role;
-	activate transportation role with restaurant as destination;
-	gui.GoRestaurant//;
+	Restaurant r = restaurants.chooseOne();
+	//
+	roles.clear();//deactivates current role;
+	guiGoToRestaurant(r.location);
+	//We need to figure out how transporation works. If our personAgent takes on a transport role, our scheduler needs to accomodate.
+	roles.add(r.cr);
+	r.h.msgImHungry(r.cr);
 
-	//Where does the logic for activate Restaurant customer role go?
+}
+```
+```
+public void decideRestaurant() {
+	personState = OutToEat;
+	Restaurant r = restaurants.chooseOne();
+	//
+	roles.clear();//deactivates current role;
+	guiGoToRestaurant(r.location);
+	//We need to figure out how transporation works. If our personAgent takes on a transport role, our scheduler needs to accomodate with phases for each action...
+	roles.add(r.cr);
+	r.h.msgImHungry(r.cr);
+
+}
+```
+```
+public void goRestaurant() {
+	personState = OutToEat;
+	Restaurant r = restaurants.chooseOne();
+	//
+	roles.clear();//deactivates current role;
+	guiGoToRestaurant(r.location);
+	//We need to figure out how transporation works. If our personAgent takes on a transport role, our scheduler needs to accomodate.
+	roles.add(r.cr);
+	r.h.msgImHungry(r.cr);
 
 }
 ```
