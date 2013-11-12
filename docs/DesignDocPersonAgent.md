@@ -1,15 +1,22 @@
-<<<<<<< HEAD
 ﻿#Design Doc: PersonAgent extends Agent
-=======
-﻿#Design Doc: PersonAgent base
->>>>>>> 12901a47f668103eed93d0db8fb5c6679ea9dc7d
+
+
+##Summary
+```
+This agent uses a Stack of Roles in order to execute transportation and its next role after reaching a destination. The only downside of using a stack is that we will not have a memory of the different roles's data that the agent assumed during run but it is not part of the requirements to do so. 
+
+Everytime a role finishes, it should send a message to this agent saying it is done so that the agent can move onto the next role in the stack. 
+
+
+```
 
 ##Data
 ```
-List<Roles> roles;
+Stack<Roles> roles;
 Map<String, Restaurant> restaurants;
 Map<String, Market> markets;
 Map<String, Bank> banks;
+WorkRole workRole;
 double funds;
 boolean hasCar;
 boolean hasWorked;
@@ -49,10 +56,9 @@ public class Bank {
 	
 
 };
-public class Transit {
-	Destination;
-	TransportationRole transportationRole;
-	
+public class WorkRole {
+	Location location;
+	Role workRole;
 }
 
 
@@ -60,8 +66,8 @@ public class Transit {
 	
 ##Scheduler
 ```
-if there exists a Role r in roles, such that r.active() {
-	then boolean b = r.pickAndExecuteAnAction();
+if roles is not empty{
+	then boolean b = roles.peek.pickAndExecuteAnAction();
 	return b;
 }
 if personState == WantsToGoHome { 
@@ -159,10 +165,10 @@ msgAtHome() { //GUI message
 }
 
 ```
-//FILLER MESSAGES FOR FUTURE DESIGNING
 ```
-msg//() {
-
+msgRoleFinished() {
+	roles.pop();
+	stateChanged();
 }
 
 ```
@@ -214,36 +220,10 @@ public void goRestaurant() {
 	Restaurant r = restaurants.chooseOne();
 	//
 	roles.clear();//deactivates current role;
-	guiGoToRestaurant(r.location);
 	//We need to figure out how transporation works. If our personAgent takes on a transport role, our scheduler needs to accomodate.
 	roles.add(r.cr);
-	r.h.msgImHungry(r.cr);
-
-}
-```
-```
-public void decideRestaurant() {
-	personState = OutToEat;
-	Restaurant r = restaurants.chooseOne();
-	//
-	roles.clear();//deactivates current role;
-	guiGoToRestaurant(r.location);
-	//We need to figure out how transporation works. If our personAgent takes on a transport role, our scheduler needs to accomodate with phases for each action...
-	roles.add(r.cr);
-	r.h.msgImHungry(r.cr);
-
-}
-```
-```
-public void goRestaurant() {
-	personState = OutToEat;
-	Restaurant r = restaurants.chooseOne();
-	//
-	roles.clear();//deactivates current role;
-	guiGoToRestaurant(r.location);
-	//We need to figure out how transporation works. If our personAgent takes on a transport role, our scheduler needs to accomodate.
-	roles.add(r.cr);
-	r.h.msgImHungry(r.cr);
+	roles.add(new TransportationRole(r.location));
+	//roles is a stack so the scheduler will execute the last added role until it exits.
 
 }
 ```
@@ -269,7 +249,9 @@ public void eatFood() {
 ```
 public void goWork() {
 	hasWorked = true;
-	Activate transporation role with work place as destination;
+	roles.clear();
+	roles.add(workRole);
+	roles.add(new TransportationRole(workRole.location);
 	Create new TimerTask {
 		msgDoneWorking();
 	}(Random time for Working);

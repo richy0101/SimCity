@@ -2,10 +2,14 @@
 
 ##Data
 ```
- + class Tenant{PersonAgent inhabitant, double moneyOwed, PayingState state}
- + List<Tenant> tenants
- + PayState(NeedsToPay,WaitingForPayment,OwesMoney,PayLater,NothingOwed)
- + double funds
+ class MyTenant {
+ 	PersonAgent inhabitant; 
+ 	double moneyOwed; 
+ 	PayingState state;
+ }
+ List<MyTenant> tenants;
+ enum PayState {NeedsToPay,WaitingForPayment,OwesMoney,PayLater,NothingOwed}
+ double funds;
 ```	
 
 ##Scheduler
