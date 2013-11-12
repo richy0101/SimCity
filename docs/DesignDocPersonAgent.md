@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿#Design Doc: PersonAgent extends Agent
+=======
+﻿#Design Doc: PersonAgent base
+>>>>>>> 12901a47f668103eed93d0db8fb5c6679ea9dc7d
 
 ##Data
 ```
