@@ -6,17 +6,13 @@ The Car is initially parked wherever the passenger last left it in carState= Idl
 ##Data
 	int CurrentStopNumber = 0;
 	int DesiredStopNumber;
-	enum state TransportationState {NeedsToTravel, InTransit, AtDestination};
+	enum state TransportationState {NeedsToTravel, InTransit, AtDestination, None};
 	CarAgent car;
 	BusAgent bus;
 	
 ##Scheduler
-	
 	if ∃ in TransportationAgent ∋ state.NeedsToTravel()
 		then GetAVehicle(); 
-	
-	if ∃ in TransportationAgent ∋ state.InTransit()
-		then InTransitToDestination(); 	
 	
 	if ∃ in TransportationAgent ∋ state.AtDestination()
 		then GetOffVehicle(); 
@@ -30,15 +26,9 @@ The Car is initially parked wherever the passenger last left it in carState= Idl
 		}
 	}
 	
-	msgTakeMeHere(String myDestination){ //receives msg from passenger
-		carState = inTransit;
-		destination= myDestination;
-		stateChanged();
-	}
-	
 	msgArrivedAtDestination(){ //from carGui when reached destination
 		driving.release();
-		carState= atDestination;
+		carState = atDestination;
 		stateChanged();
 	}
 
@@ -50,12 +40,10 @@ The Car is initially parked wherever the passenger last left it in carState= Idl
 		else if(!hasCar) {
 			bus.msgINeedARde()
 		}
-	}
-	
-	InTransitToDestination() {
-		//gui?
+		TransportationState = InTransit;
 	}
 	
 	GetOffVehicle() {
-	
+		print("I've arrived ay my destination.");
+		TransportationState = None;
 	}	
