@@ -1,120 +1,84 @@
-﻿#Design Doc: BankTeller
+﻿#Design Doc: MarketCustomer
 
 ##Data
 ```
- Bank bank = bank.sharedInstance();
- List<MyBankCustomer> customers
- Class MyBankCustomer {
- 	Customer customer;
- 	double moneyToDeposit;
- 	double moneyToWithdraw;
- 	double moneyRequest;
- 	int accountNumber;
- 	CustomerState state;
- }
- CustomerState(NeedingAssistance, AskedAssistance, OpeningAccount, DepositingMoney, WithdrawingMoney, GettingLoan}
+ Class MarketCustomerRole extends Role implements MarketCustomer
+MarketWorkerAgent myWorker;
+enum State {DoingNothing, DecidingGroceries, WaitingForService, Paying, DoneTransaction};
+enum Event {WantsGroceries, DecidedGroceries, GotBill, GotGroceries};
+Timer timer = new Timer();
+Bill myBill;
+Map<String, int> myGroceries;
+
+
 ```
 	
 ##Scheduler
 ```
- if ∃ customer in customers ∋ customer.state = NeedingAssistance
- 	then OfferAssistance(customer)
- if ∃ customer in customers ∋ customer.state = OpeningAccount
-	then CreateAccount(customer);
- if ∃ customer in customers ∋ customer.state = DepositingMoney
-	then DepositMoney(customer);
- if ∃ customer in customers ∋ customer.state = WithdrawingMoney
-	then GiveCustomerMoney(customer);
- if ∃ customer in customers ∋ customer.state = GettingLoan
-	then GiveLoan(customer);
+if State == DoingNothing && Event == WantsGroceries {
+	State = DecidingGroceries;
+	DoDecideGroceries();
+}
+if State == DecidingGroceries && Event == DecidedGroceries {
+	State = WaitingForService
+	DoGiveGroceryOrder();
+}
+if State == WaitingForService && Event == GotBill{
+	State = Paying;
+	DoPay();
+}
+if State == Paying && Event == GotGroceries {
+	State = DoneTransaction;
+	DoLeaveMarket();
+}
+return false;
 ```
 
 ##Messages
 ```
-msgAssigningCustomer(CustomerAgent customer) {
-	customers.add(new MyBankCustomer(customer, NeedingAssistance);
-	statecChanged();
+msgDecidedGroceriesList(Map<String, int> groceries) {
+	myGroceries = groceries;
+	Event = DecidedGroceries;
 }
 ```
 
 ```
-msgOpenAccount(CustomerAgent customer) {
-	MyBankCustomer bankCustomer = customers.find(customer);
-	bankCustomer.state = OpeningAccount;
-	stateChanged();
+msgHereIsYourBill(Bill bill) {
+	myBill = bill;
+	Event = GotBill;
 }
 ```
+
 ```
-msgDepositMoney(int accountNumber, double money) {
-	MyBankCustomer bankCustomer = customers.find(customer);
-	bankCustomer.moneyToDeposit = money;
-	bankCustomer.accountNumber = accountNumber;
-	bankCustomer.state = DepositingMoney;
-	stateChanged();
+msgHereAreYourGroceries() {
+	Event = GotGroceries;
 }
+
 ```
-```
-msgWithdrawMoney(int accountNumber, double money) {
-	MyBankCustomer bankCustomer = customers.find(customer);
-	bankCustomer.moneyToWithdraw = money;
-	bankCustomer.accountNumber = accountNumber;
-	bankCustomer.state = WithdrawingMoney;
-	stateChanged();
-   }
-```
-```
-msgIWantLoan(int accountNumber, double moneyRequest) {
-	MyBankCustomer bankCustomer = customers.find(customer);
-	bankCustomer.moneyToRequest = moenyRequest;
-	bankCustomer.accountNumber = accountNumber;
-	bankCustomer.state = GettingLoan;
-	stateChanged();
-}
-```
+
 ##Actions
 ```
-OfferAssistance(MyBankCustomer customer) {
-	customer.customer.msgHowMayIHelpYou(this);
-	customer.state = AskedAssistance;
+More of a method instead of an action.
+public Map<String, int> groceries DoDecideGroceries() {
+//Timertask that returns a map of groceries?
+
 }
 ```
 ```
-CreateAccount(MyBankCustomer customer) {
-	int UUID = //unique account number
-	bank.sharedInstance().addAccount(customer, UUID);
-	customer.customer.msgHereIsAccount(UUID);
-	customers.remove(customer);
+public void DoGiveGroceyOrder(){
+	myWorker.msgGetGroceries(myGroceries);
+
 }
 ```
 ```
-DepositMoney(MyBankCustomer customer) {
-	bank.sharedInstance().depositMoney(customer.accountNumber, customer.moneyToDeposity);
-	customer.customer.msgDepositSuccessful();
-	customers.remove(customer);
+public void DoPay() {
+	myWorker.HereIsMoney(myBill.price);
+
 }
 ```
 ```
-GiveCustomerMoney(MyBankCustomer customer) {
-	double funds = bank.sharedInstance().getAccountFunds(customer.accountNumber);
-	if(funds >= customer.moneyToWithdraw) {
-		bank.sharedInstance().withdrawCash(customer.accountNumber, customer.moneyToWithdraw);
-		customer.customer.msgHereIsMoney(customer.moneyToWithdraw);
-	}
-	else {
-		bank.sharedInstance().withdrawMax(customer.accountNumber);
-		customer.customer.msgHereIsMoney(funds);
-	}
-	customer.remove(customer);
-}
-```
-```
-GiveLoan(MyBankCustomer customer) {
-	//determine if eligible
-	if(eligible) {
-		customer.customer.msgHereAreFunds(customer.moneyRequest);
-	else {
-		customer.customer.msgLoanDenied()
-	}
-	customer.remove(customer);
+public void DoLeaveMarket() {
+
+
 }
 ```
