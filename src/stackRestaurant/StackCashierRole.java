@@ -1,17 +1,16 @@
 package stackRestaurant;
 
-import agent.Agent;
+import agent.Role;
 
 import stackRestaurant.helpers.Check;
 import stackRestaurant.helpers.Menu;
-import stackRestaurant.interfaces.Cashier;
-import stackRestaurant.interfaces.Customer;
-import stackRestaurant.interfaces.Waiter;
-import stackRestaurant.interfaces.Market;
+import stackRestaurant.interfaces.*;
+import city.interfaces.Person;
+
 
 import java.util.*;
 
-public class StackCashierRole extends Agent implements Cashier {
+public class StackCashierRole extends Role implements Cashier {
 	
 	private List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	private List<MyCheck> checks = Collections.synchronizedList(new ArrayList<MyCheck>());

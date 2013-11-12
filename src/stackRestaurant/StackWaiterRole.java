@@ -1,6 +1,6 @@
 package stackRestaurant;
 
-import agent.Agent;
+import agent.Role;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
@@ -8,11 +8,12 @@ import java.util.concurrent.Semaphore;
 import stackRestaurant.gui.WaiterGui;
 import stackRestaurant.helpers.Check;
 import stackRestaurant.interfaces.*;
+import city.interfaces.Person;
 
 
 
 
-public class StackWaiterRole extends Agent implements Waiter {
+public class StackWaiterRole extends Role implements Waiter {
 	private Cook cook;
 	private Host host;
 	private Cashier cashier;
@@ -92,7 +93,6 @@ public class StackWaiterRole extends Agent implements Waiter {
 			}
 			for(MyCustomer customer : customers) {
 				if(customer.state == CustomerState.ReadyForCheck) {
-					print("compute this");
 					cashier.msgComputeCheck(this, customer.customer, customer.choice);
 					customer.state = CustomerState.WaitingForCheck;
 					return true;
@@ -100,7 +100,6 @@ public class StackWaiterRole extends Agent implements Waiter {
 			}
 			for(MyCustomer customer : customers) {
 				if(customer.state == CustomerState.HasCheck) {
-					print("give customer check");
 					giveCustomerCheck(customer);
 					return true;
 				}

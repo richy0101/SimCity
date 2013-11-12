@@ -1,6 +1,6 @@
 package stackRestaurant;
 
-import agent.Agent;
+import agent.Role;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
@@ -11,7 +11,7 @@ import stackRestaurant.interfaces.Market;
 import stackRestaurant.interfaces.Waiter;
 import stackRestaurant.gui.CookGui;
 
-public class StackCookRole extends Agent implements Cook {
+public class StackCookRole extends Role implements Cook {
 	
 	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
 	private Map<String, Food> foods = Collections.synchronizedMap(new HashMap<String, Food>());

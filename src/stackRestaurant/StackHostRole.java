@@ -1,6 +1,6 @@
 package stackRestaurant;
 
-import agent.Agent;
+import agent.Role;
 import stackRestaurant.gui.WaiterGui;
 import stackRestaurant.helpers.TableList;
 import stackRestaurant.interfaces.Customer;
@@ -16,7 +16,7 @@ import java.util.*;
 //does all the rest. Rather than calling the other agent a waiter, we called him
 //the HostAgent. A Host is the manager of a restaurant who sees that all
 //is proceeded as he wishes.
-public class StackHostRole extends Agent implements Host {
+public class StackHostRole extends Role implements Host {
 	//Notice that we implement waitingCustomers using ArrayList, but type it
 	//with List semantics.
 	public List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
@@ -143,7 +143,8 @@ public class StackHostRole extends Agent implements Host {
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	@Override
+	public boolean pickAndExecuteAnAction() {
 		synchronized(waiters) {
 			for(MyWaiter waiter : waiters) {
 				if(waiter.askingForBreak) {
@@ -199,7 +200,7 @@ public class StackHostRole extends Agent implements Host {
 
 	// Actions
 	private void assignCustomerToWaiter(MyCustomer customer, MyWaiter waiter, Table table) {
-		Do("assigning customer to waiter: " + waiter.waiter);
+		print("assigning customer to waiter: " + waiter.waiter);
 		waiter.waiter.msgSeatCustomer(customer.customer, table.tableNumber, 0);
 		waiter.state = WaiterState.Busy;
 		customer.state = CustomerState.Eating;

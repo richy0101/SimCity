@@ -1,13 +1,14 @@
 package stackRestaurant;
 
-import agent.Agent;
+import agent.Role;
 import java.util.*;
 import stackRestaurant.interfaces.Cook;
 import stackRestaurant.interfaces.Market;
 import stackRestaurant.interfaces.Cashier;
 import stackRestaurant.helpers.Check;
+import city.interfaces.Person;
 
-public class StackMarketRole extends Agent implements Market {
+public class StackMarketRole extends Role implements Market {
 	
 	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
 	private Map<String, Food> food = Collections.synchronizedMap(new HashMap<String, Food>());

@@ -3,7 +3,7 @@ package stackRestaurant;
 import stackRestaurant.gui.CustomerGui;
 import stackRestaurant.helpers.Menu;
 import stackRestaurant.helpers.Check;
-import agent.Agent;
+import agent.Role;
 
 import java.util.Timer;
 import java.util.Random;
@@ -13,7 +13,7 @@ import stackRestaurant.interfaces.*;
 /**
  * Restaurant customer agent.
  */
-public class StackCustomerRole extends Agent implements Customer {
+public class StackCustomerRole extends Role implements Customer {
 	private String name;
 	private int hungerLevel = 5;        // determines length of meal
 	private int tableNumber;
@@ -172,7 +172,6 @@ public class StackCustomerRole extends Agent implements Customer {
 			return true;
 		}
 		if (state == AgentState.WaitingForWaiter && event == AgentEvent.waitingForSeating) {
-			print(state + " " + event);
 			if(!willingToWait) {
 				notWaitingAndLeaving();
 				state = AgentState.Leaving;
