@@ -110,10 +110,12 @@ public class PersonAgent extends Agent implements Person {
 			goHome();
 			return true;
 		}
+		//For Home Person
 		if (personState == PersonState.CookHome && personPosition == PersonPosition.AtHome) {
 			cookHomeFood();
 			return true;
 		}
+		//End of Home Person
 		if (personState == PersonState.CookHome) {
 			goHome();
 			return true;
