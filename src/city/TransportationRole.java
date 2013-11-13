@@ -30,7 +30,7 @@ public class TransportationRole extends Agent implements Transportation  {
 	 * Messages
 	 */
 	
-	void msgThisIsBusStop(int BusStopNumber) {
+	void msgThisIsYourStop(int BusStopNumber) {
 		//not relevant for norm scenario
 	}
 	
@@ -77,13 +77,13 @@ public class TransportationRole extends Agent implements Transportation  {
 	
 	private void GetAVehicle() {
 		if(hasCar) {
-			//create vehicle gui in mainwindow gui at source
-			//remove person gui from source gui
+			//create car gui in mainwindow gui just outside of source
 			car.msgTakeMeHere(destination);
 		}
 		else if (!hasCar) {
-			//create person gui in mainwindow gui at source
-			//remove person gui from source gui
+			//create transportationrole gui in mainwindow
+			//have transportationrole gui walk to bus stop
+			
 			//bus.msgINeedARide(destination);
 		}
 		
@@ -93,14 +93,17 @@ public class TransportationRole extends Agent implements Transportation  {
 	
 	private void GetOffVehicle() {
 		if(hasCar) {
-			//remove gui from main window
-			state = TransportationState.None;
-			stateChanged();
+			//remove car gui from main window
 		}
 		else if (!hasCar) {
-			//create gui at bus stop
-			state = TransportationState.Walking;
-			stateChanged();
+			//create transportationrole gui at bus stop
+			//have transportationrole gui walk to destination
+			//remove transportationrole gui
 		}
+		
+		state = TransportationState.None;
+		stateChanged();
+		
+		//change roles
 	}
 }
