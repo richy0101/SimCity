@@ -1,6 +1,7 @@
 package stackRestaurant.gui;
 
 import stackRestaurant.StackCookRole;
+import gui.Gui;
 
 import java.awt.*;
 

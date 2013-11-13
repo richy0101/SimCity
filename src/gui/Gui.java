@@ -1,4 +1,4 @@
-package stackRestaurant.gui;
+package gui;
 
 import java.awt.*;
 

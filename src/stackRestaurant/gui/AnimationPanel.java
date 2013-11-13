@@ -1,5 +1,7 @@
 package stackRestaurant.gui;
 
+import gui.Gui;
+
 import javax.swing.*;
 
 import java.awt.*;

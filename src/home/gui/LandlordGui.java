@@ -1,8 +1,8 @@
 package home.gui;
 
-import java.awt.Graphics2D;
+import gui.Gui;
 
-import stackRestaurant.gui.Gui;
+import java.awt.Graphics2D;
 
 public class LandlordGui implements Gui {
 
