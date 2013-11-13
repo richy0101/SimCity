@@ -16,7 +16,7 @@ public class CarAgent extends Agent implements Car {
     /**
 	*Data
 	*/
-	private Transportation passenger;
+	private TransportationRole passenger;
 	
 	public enum carState
 	{inTransit, atDestination, Idle}
@@ -76,7 +76,7 @@ public class CarAgent extends Agent implements Car {
 		}
 		
 		private void doGoTo(String myDestination){
-			System.out.println("car is going to "+ myDestination);
+			System.out.println("Car is going to "+ myDestination);
 			//haven't implemented carGui
 			//carGui.msgGoTo(myDestination);
 		}

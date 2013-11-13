@@ -11,8 +11,6 @@ import city.interfaces.Transportation;
 
 public class TransportationRole extends Agent implements Transportation  {
 
-	int currentStopNumber = 0;
-	int desiredStopNumber = 0;
 	String destination;
 	CarAgent car;
 	BusAgent bus;
@@ -28,21 +26,81 @@ public class TransportationRole extends Agent implements Transportation  {
 		super();
 	}
 	
+	/*
+	 * Messages
+	 */
+	
 	void msgThisIsBusStop(int BusStopNumber) {
-		//bus
+		//not relevant for norm scenario
 	}
 	
-	void msgArrivedAtDestination(TransportationRole person, String destination) {
-		
+	void msgArrivedAtDestination(String destination) {
+		print("Car successfully took me to " + destination + ".");
 		state = TransportationState.AtDestination;
 		stateChanged();
 	}
 
-
-
-	@Override
+	
+	/*
+	 * Scheduler
+	 * @see agent.Agent#pickAndExecuteAnAction()
+	 */
 	protected boolean pickAndExecuteAnAction() {
-		// TODO Auto-generated method stub
+		if(state == TransportationState.Walking) {
+			WalkToDestination();
+			return true;
+		}
+		
+		if(state == TransportationState.NeedsToTravel) {
+			GetAVehicle();
+			return true;
+		}
+		
+		if(state == TransportationState.AtDestination) {
+			GetOffVehicle();
+			return true;
+		}
+		
 		return false;
+	}
+	
+	
+	/*
+	 * Actions
+	 */
+	private void WalkToDestination() {
+		//gui
+		
+		state = TransportationState.None;
+		stateChanged();
+	}
+	
+	private void GetAVehicle() {
+		if(hasCar) {
+			//create vehicle gui in mainwindow gui at source
+			//remove person gui from source gui
+			car.msgTakeMeHere(destination);
+		}
+		else if (!hasCar) {
+			//create person gui in mainwindow gui at source
+			//remove person gui from source gui
+			//bus.msgINeedARide(destination);
+		}
+		
+		state = TransportationState.InTransit;
+		stateChanged();
+	}
+	
+	private void GetOffVehicle() {
+		if(hasCar) {
+			//remove gui from main window
+			state = TransportationState.None;
+			stateChanged();
+		}
+		else if (!hasCar) {
+			//create gui at bus stop
+			state = TransportationState.Walking;
+			stateChanged();
+		}
 	}
 }
