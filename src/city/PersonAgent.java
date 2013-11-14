@@ -6,29 +6,33 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
+
+import stackRestaurant.helpers.Menu;
 import market.MarketCustomerRole;
 import market.MarketRole;
 import bank.BankCustomerRole;
 import bank.BankManagerRole;
 import bank.BankTellerRole;
+import city.helpers.Directory;
 import city.interfaces.Person;
 import agent.Agent;
 import agent.Role;
 
 public class PersonAgent extends Agent implements Person {
 	/**
-	 * Data
+	 * Data---------------------------------------------------------------------------------------------------------------
 	 */
-	Stack<Role> roles;
+	Stack<Role> roles = new Stack<Role>();
 	WorkDetails workDetails;
 	//LandLordRole landLord;
 	double funds;
 	boolean hasCar;
 	boolean hasWorked;
 	boolean rentDue;
+	String name;
 	String homeName;
 	public enum PersonPosition {AtHome, InTransit, AtMarket, AtRestaurant, AtBank};
-	public enum HouseState {OwnsHouse, OwnsAppt, Homelesss};
+	public enum HouseState {OwnsHouse, OwnsAppt, Homeless};
 	public enum PersonState {Idle, WantsToGoHome, WantFood, CookHome, WaitingForCooking, GoOutEat, StartEating, Eating, NeedsToWork, InTransit, Cooking, OutToEat};
 	PersonPosition personPosition;
 	HouseState houseState;
@@ -54,6 +58,19 @@ public class PersonAgent extends Agent implements Person {
 			this.workRole = job;
 			this.workLocation = location;
 		}
+	}
+	PersonAgent(Role job, String job_location, String home) {
+		workDetails = new WorkDetails(job, job_location);
+		homeName = home;
+		houseState = HouseState.OwnsHouse;
+		personPosition = PersonPosition.AtHome;
+		personState = PersonState.Idle;
+		hungerLevel = 0;
+		dirtynessLevel = 0;
+		funds = 10000.00;
+		hasCar = true;
+		rentDue = false;
+		hasWorked = false;
 	}
 	/**
 	 * Messages
@@ -137,10 +154,10 @@ public class PersonAgent extends Agent implements Person {
 			goWork();
 			return true;
 		}
-		if (rentDue == true) {
+		/*if (rentDue == true) {
 			payRent();
 			return true;
-		}
+		}*/
 		return evaluateStatus();
 	}
 
@@ -182,10 +199,10 @@ public class PersonAgent extends Agent implements Person {
 	}
 	private void goRestaurant() {
 		personState = PersonState.OutToEat;
-		Restaurant r = restaurants.get(0);
+		Restaurant r = Directory.sharedInstance().restaurants.get(0);
 		roles.clear();
-		roles.add(r.customer);
-		roles.add(new TransportationRole(r.locationName));
+		roles.add(REFLECTIONCODE);//Implement Reflection
+		roles.add(new TransportationRole(r.getName));
 		
 	}
 	private void decideFood() {
