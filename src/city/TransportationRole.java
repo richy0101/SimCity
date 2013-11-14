@@ -22,7 +22,7 @@ public class TransportationRole extends Agent implements Transportation  {
 	TransportationState state = TransportationState.None;
 
 	
-	public TransportationRole() {
+	public TransportationRole(String workLocation) {
 		super();
 	}
 	
