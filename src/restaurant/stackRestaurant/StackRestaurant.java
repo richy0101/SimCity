@@ -4,7 +4,7 @@ import restaurant.Restaurant;
 import restaurant.stackRestaurant.*;
 
 
-public class StackRestaurant implements Restaurant {
+public class StackRestaurant extends Restaurant {
 
 	StackHostRole host;
 	String name;

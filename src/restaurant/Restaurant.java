@@ -1,9 +1,17 @@
 package restaurant;
 
-public interface Restaurant {
+public class Restaurant {
 	
-	public Object getHost();
+	public Restaurant() {
+		
+	}
 	
-	public String getName();
+	public Object getHost() {
+		return null;
+	}
+	
+	public String getName() {
+		return "";
+	}
 
 }
