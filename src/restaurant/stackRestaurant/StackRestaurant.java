@@ -7,10 +7,16 @@ import restaurant.stackRestaurant.*;
 public class StackRestaurant implements Restaurant {
 
 	StackHostRole host;
+	String name;
 	
-	public StackRestaurant() {
+	public StackRestaurant(String name) {
 		host = new StackHostRole("Garcon");
+		this.name = name;
 		
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	@Override
