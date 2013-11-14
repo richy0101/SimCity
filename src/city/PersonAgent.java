@@ -5,6 +5,7 @@ import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
 
+
 import market.MarketCustomerRole;
 import market.MarketRole;
 import bank.BankCustomerRole;
@@ -19,52 +20,41 @@ public class PersonAgent extends Agent implements Person {
 	 * Data
 	 */
 	Stack<Role> roles;
-	Map<String, Restaurant> restaurants;
-	Map<String, Market> markets;
-	Map<String, Bank> banks;
-	Role workRole;
+	WorkDetails workDetails;
+	//LandLordRole landLord;
 	double funds;
 	boolean hasCar;
 	boolean hasWorked;
+	boolean rentDue;
 	String homeName;
 	public enum PersonPosition {AtHome, InTransit, AtMarket, AtRestaurant, AtBank};
-	public enum HouseState {OwnsHouse, OwnsAppt, Homeless};
-	public enum PersonState {Idle, WantsToGoHome, WantFood, CookHome, WaitingForCooking, GoOutEat, StartEating, Eating, NeedsToWork, InTransit};
+	public enum HouseState {OwnsHouse, OwnsAppt, Homelesss};
+	public enum PersonState {Idle, WantsToGoHome, WantFood, CookHome, WaitingForCooking, GoOutEat, StartEating, Eating, NeedsToWork, InTransit, Cooking, OutToEat};
 	PersonPosition personPosition;
 	HouseState houseState;
 	PersonState personState;
 	int hungerLevel;
+	int dirtynessLevel;
 	Timer personTimer = new Timer();
 	public class PersonTimerTask extends TimerTask {
+		PersonAgent p;
+		PersonTimerTask(PersonAgent p) {
+			this.p = p;
+		}
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
 			
 		}	
 	};
-	public class Restaurant {
-		String locationName;
-		Host host;
-		Customer customer;
-		Restaurant(String type, Host host, Customer cust) {
-			this.host = host;
-			this.locationName = type;
-			this.customer = cust;
+	private class WorkDetails {
+		Role workRole;
+		String workLocation;
+		WorkDetails(Role job, String location) {
+			this.workRole = job;
+			this.workLocation = location;
 		}
-	};
-	public class Market {
-		String locationName;
-		MarketRole market;
-		MarketCustomerRole marketCustomer;
-		
-	};
-	public class Bank {
-		String locationName;
-		BankTellerRole teller;
-		BankManagerRole bankManager;
-		BankCustomerRole bankCustomer;
-		
-	};
+	}
 	/**
 	 * Messages
 	 */
@@ -94,12 +84,24 @@ public class PersonAgent extends Agent implements Person {
 		personState = PersonState.WantsToGoHome;
 		stateChanged();
 	}
+	public void msgRentPaid() {
+		rentDue = false;
+		stateChanged();
+	}
 	public void msgRoleFinished() {
 		roles.pop();
 		stateChanged();
 	}
+	public void msgAtHome() {
+		personPosition = PersonPosition.AtHome;
+		stateChanged();
+	}
+	public void msgPayRent() {
+		rentDue = true;
+		stateChanged();
+	}
 	/**
-	 * Scheduler.  Determine what action is called for, and do it.
+	 * Scheduler.  Determine what action is called for, and do it. -------------------------------------------------------
 	 */
 	protected boolean pickAndExecuteAnAction() {
 		if(!roles.isEmpty()) {
@@ -110,7 +112,6 @@ public class PersonAgent extends Agent implements Person {
 			goHome();
 			return true;
 		}
-		//For Home Person
 		if (personState == PersonState.CookHome && personPosition == PersonPosition.AtHome) {
 			cookHomeFood();
 			return true;
@@ -134,41 +135,89 @@ public class PersonAgent extends Agent implements Person {
 		}
 		if (personState == PersonState.NeedsToWork) {
 			goWork();
+			return true;
+		}
+		if (rentDue == true) {
+			payRent();
+			return true;
 		}
 		return evaluateStatus();
 	}
+
 	/**
-	 * Actions.
+	 * Actions --------------------------------------------------------------------------------------------------------
 	 * 
 	 */
 	private boolean evaluateStatus() {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	private void goHome() {
+	/*private void payRent() {
 		roles.clear();
+		if (personPosition == personPosition.AtHome) {
+			roles.clear();
+			roles.add(new HomePersonRole(landLord));
+		}
+		else {
+			roles.clear();
+			roles.add(new HomePersonRole(landLord));
+			roles.add(new TransportationRole(homeName));
+		}
+		
+	}*/
+	private void goHome() {
 		personState = PersonState.InTransit;
+		roles.clear();
 		roles.add(new TransportationRole(homeName));
 		
 	}	
 	private void cookHomeFood() {
-		// TODO Auto-generated method stub
-		
+		personState = PersonState.Cooking;
+		personTimer.schedule(new PersonTimerTask(this) {
+			public void run() {
+				p.msgCookingDone();
+			}
+		},
+		1000);//time for cooking
 	}
 	private void goRestaurant() {
-		// TODO Auto-generated method stub
+		personState = PersonState.OutToEat;
+		Restaurant r = restaurants.get(0);
+		roles.clear();
+		roles.add(r.customer);
+		roles.add(new TransportationRole(r.locationName));
 		
 	}
 	private void decideFood() {
 		// TODO Auto-generated method stub
 		
+		boolean cook = true;
+		//if Stay at home and eat. Alters Cook true or false
+		if (cook == true) {
+			personState = PersonState.CookHome;
+		}
+		else {
+			personState = PersonState.GoOutEat;
+		}
 	}
 	private void eatFood() {
-		// TODO Auto-generated method stub
+		personState = PersonState.Eating;
+		personTimer.schedule(new PersonTimerTask(this) {
+			public void run() {
+				p.msgDoneEating();
+			}
+		},
+		5000);//time for Eating
 		
 	}
 	private void goWork() {
-		// TODO Auto-generated method stub
+		hasWorked = true;
+		roles.clear();
+		roles.add(workDetails.workRole);
+		roles.add(new TransportationRole(workDetails.workLocation));
+		
+	}
+	private void cleanRoom() {
 		
 	}
 }
