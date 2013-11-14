@@ -54,7 +54,7 @@ public class StackWaiterRole extends Role implements Waiter {
 	
 //	scheduler---------------------------------------------------------------------------------------------------------------------------------
 	@Override
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		try {
 			if(state == AgentState.WantToGoOnBreak) {
 				askHostToGoOnBreak();

@@ -52,7 +52,7 @@ public class StackCookRole extends Role implements Cook {
 	}
 	
 	@Override
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		synchronized(orders) {
 			for(Order order : orders) {
 				if(order.state == OrderState.Done) {

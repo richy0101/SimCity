@@ -160,7 +160,7 @@ public class StackCustomerRole extends Role implements Customer {
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		if (state == AgentState.DoingNothing && event == AgentEvent.gotHungry ) {
 			state = AgentState.WaitingInRestaurant;
 			goToRestaurant();

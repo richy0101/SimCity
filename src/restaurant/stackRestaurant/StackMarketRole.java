@@ -39,7 +39,7 @@ public class StackMarketRole extends Role implements Market {
 	
 	
 	@Override
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		synchronized(orders) {
 			for(Order order : orders) {
 				if(order.state == OrderState.Pending) {

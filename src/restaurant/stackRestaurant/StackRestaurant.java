@@ -6,16 +6,17 @@ import restaurant.stackRestaurant.*;
 
 public class StackRestaurant implements Restaurant {
 
-	StackHostRole host = new StackHostRole();
+	StackHostRole host;
 	
-	public Restaurant() {
+	public StackRestaurant() {
+		host = new StackHostRole("Garcon");
 		
 	}
 	
 	@Override
 	public Object getHost() {
 		// TODO Auto-generated method stub
-		return null;
+		return host;
 	}
 
 }
