@@ -3,6 +3,7 @@ package city;
 import java.util.concurrent.Semaphore;
 
 import city.interfaces.Bus;
+import agent.Agent;
 
 public class BusAgent extends Agent implements Bus {
 	
@@ -30,6 +31,7 @@ public class BusAgent extends Agent implements Bus {
 			return false;
 		}
 		
+
 	/**
 	 * Messages
 	 * @param myDestination
@@ -45,6 +47,11 @@ public class BusAgent extends Agent implements Bus {
 	 * Actions	
 	 * @param myDestination
 	 */
+	private void goTo(String destination) {
+		// TODO Auto-generated method stub
+			
+	}
+		
 
 
 
