@@ -1,26 +1,45 @@
 package city.helpers;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+
 import restaurant.Restaurant;
+import restaurant.stackRestaurant.*;
 
 public class Directory {
 	public static final Directory sharedInstance = new Directory();
 	
-	private List<Restaurant> restaurants;
-	//private List<Bank> banks;
-	//private List<Market> markets;
-	//private List<Houses> houses;
-
 	public static Directory sharedInstance() {
 		return sharedInstance;
 	}
 	
-	public List<Restaurant> getRestaurants() {
-		return restaurants;
-		
+//RESTAURANTS	
+	private Restaurant stackRestaurant = new StackRestaurant("StackRestaurant");
+	Coordinates stackRestaurantLocation = new Coordinates(0,0);
+	
+	Map<Restaurant, Coordinates> restaurantDirectory = new HashMap<Restaurant, Coordinates>(); {
+		restaurantDirectory.put(stackRestaurant, stackRestaurantLocation);	
 	}
-	/*
-	Map<String, double, double> directory = new HashMap<String, double, double>();
-		directory.put("Restaurant1", 0, 0);
-	*/
+	
+	public List<Restaurant> restaurants = new ArrayList<Restaurant>();
+	restaurants.add(stackRestaurant);
+	
+//HOUSES
+	
+//MARKETS
+	
+//BANKS
+}
+
+class Coordinates {
+	public int xCoordinates;
+	public int yCoordinates;
+	
+	public Coordinates(int x, int y) {
+		this.xCoordinates = x;
+		this.yCoordinates = y;
+	}
 }
