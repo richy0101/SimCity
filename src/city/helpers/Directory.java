@@ -6,10 +6,10 @@ import restaurant.Restaurant;
 public class Directory {
 	public static final Directory sharedInstance = new Directory();
 	
-	List<Restaurant> restaurants;
-	//List<Bank> banks;
-	//List<Market> markets;
-	//List<Houses> houses;
+	private List<Restaurant> restaurants;
+	//private List<Bank> banks;
+	//private List<Market> markets;
+	//private List<Houses> houses;
 
 	public static Directory sharedInstance() {
 		return sharedInstance;
@@ -19,4 +19,8 @@ public class Directory {
 		return restaurants;
 		
 	}
+	/*
+	Map<String, double, double> directory = new HashMap<String, double, double>();
+		directory.put("Restaurant1", 0, 0);
+	*/
 }
