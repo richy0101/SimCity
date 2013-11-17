@@ -37,18 +37,20 @@ public class SimCity {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(0, 0, 1200, 900);
+		frame.setBounds(0, 0, 1300, 855);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new MigLayout("", "[grow][grow][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][grow]", "[238.00,grow][grow][]"));
+		frame.getContentPane().setLayout(null);
 		
 		MacroAnimationPanel macroAnimationPanel = new MacroAnimationPanel();
-		frame.getContentPane().add(macroAnimationPanel, "cell 0 0 42 1,grow");
-		
-		ControlPanel controlPanel = new ControlPanel();
-		frame.getContentPane().add(controlPanel, "cell 42 0 1 2,alignx right,growy");
+		macroAnimationPanel.setBounds(5, 5, 835, 400);
+		frame.getContentPane().add(macroAnimationPanel);
 		
 		MicroAnimationPanel microAnimationPanel = new MicroAnimationPanel();
-		frame.getContentPane().add(microAnimationPanel, "cell 0 1 42 2,grow");
+		microAnimationPanel.setBounds(5, 425, 835, 400);
+		frame.getContentPane().add(microAnimationPanel);
+		
+		ControlPanel controlPanel = new ControlPanel();
+		controlPanel.setBounds(844, 5, 450, 845);
+		frame.getContentPane().add(controlPanel);
 	}
-
 }

@@ -21,7 +21,7 @@ public class MicroAnimationPanel extends JPanel implements ActionListener {
     private List<Gui> guis = new ArrayList<Gui>();
 
     public MicroAnimationPanel() {
-    	setSize(WINDOWX, WINDOWY);
+//    	setSize(getWidth(), getHeight());
         setVisible(true);
         setBackground(Color.lightGray);
  
@@ -38,7 +38,7 @@ public class MicroAnimationPanel extends JPanel implements ActionListener {
 
         //Clear the screen by painting a rectangle the size of the frame
         g2.setColor(getBackground());
-        g2.fillRect(0, 0, WINDOWX, WINDOWY );
+        g2.fillRect(0, 0, getWidth(), getHeight());
 
         for(Gui gui : guis) {
             if (gui.isPresent()) {
