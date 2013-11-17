@@ -12,8 +12,8 @@ import javax.swing.*;
 
 public class MacroAnimationPanel extends JPanel implements ActionListener {
 	
-	private final int WINDOWX = 750;
-    private final int WINDOWY = 425;
+	private final int WINDOWX = 835;
+    private final int WINDOWY = 400;
    
     
     private final int DELAY = 5;
@@ -38,7 +38,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener {
 
         //Clear the screen by painting a rectangle the size of the frame
         g2.setColor(getBackground());
-        g2.fillRect(0, 0, WINDOWX, WINDOWY );
+        g2.fillRect(0, 0, getWidth(), getHeight());
 
         for(Gui gui : guis) {
             if (gui.isPresent()) {
