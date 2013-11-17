@@ -11,13 +11,13 @@ import java.awt.geom.Rectangle2D;
 import java.util.List;
 import java.util.ArrayList;
 
-import stackRestaurant.helpers.TableList;
+import restaurant.stackRestaurant.helpers.TableList;
 
 @SuppressWarnings("serial")
 public class AnimationPanel extends JPanel implements ActionListener {
 
 	private final int WINDOWX = 750;
-    private final int WINDOWY = 425;
+    private final int WINDOWY = 350;
     
     private final int TABLESIZE = 50;
     
