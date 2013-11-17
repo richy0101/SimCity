@@ -7,6 +7,8 @@ import java.util.TimerTask;
 
 
 
+
+import restaurant.Restaurant;
 import market.MarketCustomerRole;
 import market.MarketRole;
 import bank.BankCustomerRole;
@@ -205,7 +207,7 @@ public class PersonAgent extends Agent implements Person {
 		
 	}
 	private void decideFood() {
-		boolean cook = false; //cooks at home at the moment
+		boolean cook = true; //cooks at home at the moment
 		//if Stay at home and eat. Alters Cook true or false
 		if (cook == true) {
 			personState = PersonState.CookHome;

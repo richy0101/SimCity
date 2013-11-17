@@ -1,7 +1,7 @@
 package restaurant;
 
 public class Restaurant {
-	
+
 	public Restaurant() {
 		
 	}

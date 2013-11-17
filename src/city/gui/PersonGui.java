@@ -10,7 +10,7 @@ public class PersonGui implements Gui {
 	private PersonAgent agent = null;	
 	
 	void DoSleeping() {
-		if(Clock.sharedInstance.getTime() == 0) { //CHANGE TIME TO APPROPRIATE WAKE UP TIME
+		if(Clock.sharedInstance().getTime() == 0) { //CHANGE TIME TO APPROPRIATE WAKE UP TIME
 			agent.msgWakeUp();
 		}
 	}
