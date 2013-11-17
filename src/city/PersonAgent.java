@@ -1,9 +1,9 @@
 package city;
 
-import java.util.Map;
 import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
+
 
 
 
@@ -16,6 +16,7 @@ import market.MarketRole;
 import bank.BankCustomerRole;
 import bank.BankManagerRole;
 import bank.BankTellerRole;
+import city.helpers.Clock;
 import city.helpers.Directory;
 import city.interfaces.Person;
 import agent.Agent;
@@ -35,11 +36,11 @@ public class PersonAgent extends Agent implements Person {
 	boolean rentDue;
 	String name;
 	String homeName;
-	public enum PersonPosition {AtHome, InTransit, AtMarket, AtRestaurant, AtBank};
+	public enum PersonPosition {AtHome, AtMarket, AtRestaurant, AtBank, City};
 	public enum HouseState {OwnsHouse, OwnsAppt, Homeless};
 	public enum PersonState {
 		//Norm Scenario Constants
-		Idle, WantsToGoHome, WantFood, CookHome, WaitingForCooking, GoOutEat, StartEating, Eating, NeedsToWork, InTransit, Cooking, OutToEat,
+		Idle, InTransit, WantsToGoHome, WantFood, CookHome, WaitingForCooking, GoOutEat, StartEating, Eating, NeedsToWork, Cooking, OutToEat,
 		//Bank Scenario Constants
 		OutToBank, WantsToWithdraw, WantsToGetLoan, WantsToDeposit, WantsToRob,
 		//Market Scenario Constants
