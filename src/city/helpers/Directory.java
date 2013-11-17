@@ -1,12 +1,11 @@
 package city.helpers;
 
+import java.util.List;
+import restaurant.Restaurant;
+
 public class Directory {
-	List<Restaurants> restaurants;
-	List<Bank> banks;
-	List<Market> markets;
-	List<Houses> houses;
- 	
-	public int getLocationOfDestinaton(int xCoordinates, int yCoordinates) {
-		
-	}
+	List<Restaurant> restaurants;
+	//List<Bank> banks;
+	//List<Market> markets;
+	//List<Houses> houses;
 }
