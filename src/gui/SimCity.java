@@ -3,7 +3,6 @@ package gui;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import net.miginfocom.swing.MigLayout;
 
 public class SimCity {
 

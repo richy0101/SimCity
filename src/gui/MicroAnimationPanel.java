@@ -12,8 +12,8 @@ import javax.swing.*;
 
 public class MicroAnimationPanel extends JPanel implements ActionListener {
 	
-	private final int WINDOWX = 750;
-    private final int WINDOWY = 425;
+	private final int WINDOWX = 835;
+    private final int WINDOWY = 400;
    
     
     private final int DELAY = 5;
@@ -21,7 +21,7 @@ public class MicroAnimationPanel extends JPanel implements ActionListener {
     private List<Gui> guis = new ArrayList<Gui>();
 
     public MicroAnimationPanel() {
-//    	setSize(getWidth(), getHeight());
+    	setSize(WINDOWX, WINDOWY);
         setVisible(true);
         setBackground(Color.lightGray);
  
