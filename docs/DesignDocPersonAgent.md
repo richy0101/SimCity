@@ -13,53 +13,39 @@ Everytime a role finishes, it should send a message to this agent saying it is d
 ##Data
 ```
 Stack<Roles> roles;
-Map<String, Restaurant> restaurants;
-Map<String, Market> markets;
-Map<String, Bank> banks;
+RoleFactory factory;
 Role workRole;
 double funds;
 boolean hasCar;
 boolean hasWorked;
 boolean atHome;
+String name;
+String homeName;
+enum PersonPosition {AtHome, InTransit, AtMarket, AtRestaurant, AtBank};
 enum HouseState { owns House..ownsAppt..};
+enum PersonState {
+	Idle, WantsToGoHome, WantFood, CookHome, WaitingForCooking, GoOutEat, StartEating, 	Eating, NeedsToWork, Working,
+	//Bank Scenario States
+	OutToBank, WantsToWithdraw, WantsToGetLoan, WantsToDesposit, WantsToRob,	
+};
+PersonPosition personPosition;
 HouseState houseState;
-enum PersonState {Idle, WantsToGoHome, WantFood, CookHome, WaitingForCooking, GoOutEat, StartEating, Eating, NeedsToWork, Working, InTransit   };
 PersonState personState;
 int hungerLevel;
 Clock clock = clock.sharedInstance();
 Timer timer = new Timer();
 public class PersonTimerTask extends TimerTask {};
 //Restaurant class within person so he knows how to go to a certain restaurant. 
-public class Restaurant {
-	HostRole hostRole;
-	Location location;
-	Menu menu;
-	RestaurantType type;
-	CustomerRole customerRole;
-	
-	
+
+public class RoleFactory {
+	Role newRole;
+	Role createRole(String order);
 
 };
-
-public class Market {
-	MarketRole marketRole;
-	Location location;
-	MarketCustomerRole marketCustomerRole;
-
-
-};
-public class Bank {
-	Location location;
-	BankTellerRole tellerRole;
-	BankManagerRole bankManagerRole;
-	BankCustomerRole bankCustomerRole;
-	
-
-};
-public class WorkRole {
+public class WorkDetails {
 	Location location;
 	Role workRole;
-}
+};
 
 
 ```
@@ -70,6 +56,24 @@ if roles is not empty{
 	then boolean b = roles.peek.pickAndExecuteAnAction();
 	return b;
 }
+//Non-Norm Rules
+if (personState == PersonState.WantsToWithdraw) {
+	goWithdraw();
+	return true;
+}
+if (personState == PersonState.WantsToGetLoan) {
+	goLoan();
+	return true;
+}
+if (personState == PersonState.WantsToDeposit) {
+	goDeposit();
+	return true;
+}
+if (personState == PersonState.WantsToRob) {
+	goRob();
+	return true;
+}
+//Normative Scenario Rules
 if personState == WantsToGoHome { 
 	goHome();
 	return true;
@@ -250,8 +254,8 @@ public void eatFood() {
 public void goWork() {
 	hasWorked = true;
 	roles.clear();
-	roles.add(workRole);
-	roles.add(new TransportationRole(workRole.location);
+	roles.add(workDetails.workRole);
+	roles.add(new TransportationRole(workDetails.workLocation);
 	Create new TimerTask {
 		msgDoneWorking();
 	}(Random time for Working);

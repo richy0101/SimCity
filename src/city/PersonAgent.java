@@ -37,7 +37,13 @@ public class PersonAgent extends Agent implements Person {
 	String homeName;
 	public enum PersonPosition {AtHome, InTransit, AtMarket, AtRestaurant, AtBank};
 	public enum HouseState {OwnsHouse, OwnsAppt, Homeless};
-	public enum PersonState {Idle, WantsToGoHome, WantFood, CookHome, WaitingForCooking, GoOutEat, StartEating, Eating, NeedsToWork, InTransit, Cooking, OutToEat};
+	public enum PersonState {
+		//Norm Scenario Constants
+		Idle, WantsToGoHome, WantFood, CookHome, WaitingForCooking, GoOutEat, StartEating, Eating, NeedsToWork, InTransit, Cooking, OutToEat,
+		//Bank Scenario Constants
+		OutToBank, WantsToWithdraw, WantsToGetLoan, WantsToDeposit, WantsToRob,
+		//Market Scenario Constants
+		};
 	PersonPosition personPosition;
 	HouseState houseState;
 	PersonState personState;
@@ -141,6 +147,27 @@ public class PersonAgent extends Agent implements Person {
 			boolean b = roles.peek().pickAndExecuteAnAction();
 			return b;
 		}
+		/** Rules for Market and Bank visits. Should only happen if evaluate status is called. **/
+		//Bank Rules
+		if (personState == PersonState.WantsToWithdraw) {
+			goWithdraw();
+			return true;
+		}
+		if (personState == PersonState.WantsToGetLoan) {
+			goLoan();
+			return true;
+		}
+		if (personState == PersonState.WantsToDeposit) {
+			goDeposit();
+			return true;
+		}
+		if (personState == PersonState.WantsToRob) {
+			goRob();
+			return true;
+		}
+		//Market Rules
+		
+		/** Normative Scenario Rules **/
 		if (personState == PersonState.WantsToGoHome) {
 			goHome();
 			return true;
@@ -149,7 +176,6 @@ public class PersonAgent extends Agent implements Person {
 			cookHomeFood();
 			return true;
 		}
-		//End of Home Person
 		if (personState == PersonState.CookHome) {
 			goHome();
 			return true;
@@ -177,12 +203,16 @@ public class PersonAgent extends Agent implements Person {
 		return evaluateStatus();
 	}
 
+	
 	/**
 	 * Actions --------------------------------------------------------------------------------------------------------
 	 * 
 	 */
 	private boolean evaluateStatus() {
 		// TODO Auto-generated method stub
+		if(funds <= 25.00) {
+			
+		}
 		return false;
 	}
 	/*private void payRent() {
@@ -249,6 +279,29 @@ public class PersonAgent extends Agent implements Person {
 		
 	}
 	private void cleanRoom() {
+
+	}
+	/** Non Norm Actions **/
+	private void goRob() {
+		// TODO Auto-generated method stub
 		
+	}
+	private void goDeposit() {
+		// TODO Auto-generated method stub
+		
+	}
+	private void goLoan() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private void goWithdraw() {
+		/* 
+		personState = PersonState.OutToEat;
+		Restaurant r = Directory.sharedInstance().banks.get(0);
+		roles.clear();
+		roles.add(factory.createRole(r.getName()));//Hacked factory LOL
+		roles.add(new TransportationRole(r.getName()));
+		*/
 	}
 }
