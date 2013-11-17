@@ -2,6 +2,7 @@ package city;
 
 import java.util.concurrent.Semaphore;
 
+import agent.Agent;
 import city.interfaces.Bus;
 
 public class BusAgent extends Agent implements Bus {
@@ -45,6 +46,21 @@ public class BusAgent extends Agent implements Bus {
 	 * Actions	
 	 * @param myDestination
 	 */
+		private void goTo(String myDestination){
+			doGoTo(myDestination); //sets destination in carGui
+			try {
+				driving.acquire(); //to ensure that the gui is uninterrupted on the way
+				} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				}
+		}
+		
+		private void doGoTo(String myDestination){
+			System.out.println("Car is going to "+ myDestination);
+			//haven't implemented carGui
+			//carGui.msgGoTo(myDestination);
+		}
 
 
 
