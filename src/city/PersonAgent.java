@@ -8,7 +8,9 @@ import java.util.TimerTask;
 
 
 
+
 import restaurant.Restaurant;
+import restaurant.stackRestaurant.StackCustomerRole;
 import market.MarketCustomerRole;
 import market.MarketRole;
 import bank.BankCustomerRole;
@@ -24,6 +26,7 @@ public class PersonAgent extends Agent implements Person {
 	 * Data---------------------------------------------------------------------------------------------------------------
 	 */
 	Stack<Role> roles = new Stack<Role>();
+	RoleFactory factory = new RoleFactory();
 	WorkDetails workDetails;
 	//LandLordRole landLord;
 	double funds;
@@ -59,7 +62,19 @@ public class PersonAgent extends Agent implements Person {
 			this.workRole = job;
 			this.workLocation = location;
 		}
-	}
+	};
+	private class RoleFactory {
+		Role newRole;
+		RoleFactory() {
+			newRole = null;
+		}
+		Role createRole(String order) {
+			if(order == "StackRestaurant") {
+				this.newRole = new StackCustomerRole(name);
+			}
+			return newRole;
+		}
+	};
 	PersonAgent(Role job, String job_location, String home) {
 		workDetails = new WorkDetails(job, job_location);
 		homeName = home;
@@ -202,8 +217,8 @@ public class PersonAgent extends Agent implements Person {
 		personState = PersonState.OutToEat;
 		Restaurant r = Directory.sharedInstance().restaurants.get(0);
 		roles.clear();
-		roles.add(REFLECTIONCODE);//Implement Reflection
-		roles.add(new TransportationRole(r.getName));
+		roles.add(factory.createRole(r.getName()));//Hacked factory LOL
+		roles.add(new TransportationRole(r.getName()));
 		
 	}
 	private void decideFood() {
