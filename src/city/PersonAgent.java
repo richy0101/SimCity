@@ -205,9 +205,7 @@ public class PersonAgent extends Agent implements Person {
 		
 	}
 	private void decideFood() {
-		// TODO Auto-generated method stub
-		
-		boolean cook = true;
+		boolean cook = false; //cooks at home at the moment
 		//if Stay at home and eat. Alters Cook true or false
 		if (cook == true) {
 			personState = PersonState.CookHome;
