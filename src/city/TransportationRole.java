@@ -6,10 +6,10 @@ package city;
 //import java.util.List;
 //import java.util.concurrent.Semaphore;
 
-import agent.Agent;
+import agent.Role;
 import city.interfaces.Transportation;
 
-public class TransportationRole extends Agent implements Transportation  {
+public class TransportationRole extends Role implements Transportation  {
 
 	String destination;
 	CarAgent car;
@@ -22,7 +22,7 @@ public class TransportationRole extends Agent implements Transportation  {
 	TransportationState state = TransportationState.None;
 
 	
-	public TransportationRole() {
+	public TransportationRole(String workLocation) {
 		super();
 	}
 	
@@ -45,7 +45,7 @@ public class TransportationRole extends Agent implements Transportation  {
 	 * Scheduler
 	 * @see agent.Agent#pickAndExecuteAnAction()
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		if(state == TransportationState.Walking) {
 			WalkToDestination();
 			return true;

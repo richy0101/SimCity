@@ -4,6 +4,7 @@ import java.util.concurrent.Semaphore;
 
 import agent.Agent;
 import city.interfaces.Bus;
+import agent.Agent;
 
 public class BusAgent extends Agent implements Bus {
 	
@@ -31,6 +32,7 @@ public class BusAgent extends Agent implements Bus {
 			return false;
 		}
 		
+
 	/**
 	 * Messages
 	 * @param myDestination
@@ -46,6 +48,7 @@ public class BusAgent extends Agent implements Bus {
 	 * Actions	
 	 * @param myDestination
 	 */
+
 		private void goTo(String myDestination){
 			doGoTo(myDestination); //sets destination in carGui
 			try {
@@ -61,6 +64,7 @@ public class BusAgent extends Agent implements Bus {
 			//haven't implemented carGui
 			//carGui.msgGoTo(myDestination);
 		}
+
 
 
 

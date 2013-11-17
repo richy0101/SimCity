@@ -15,7 +15,7 @@ public class Role {
 		myPerson.stateChanged();
 	}
 	
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		return true;
 	}
 	
