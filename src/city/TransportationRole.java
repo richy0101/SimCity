@@ -24,6 +24,10 @@ public class TransportationRole extends Role implements Transportation  {
 	
 	public TransportationRole(String workLocation) {
 		super();
+		hasCar = true; //hack for normative
+		state = TransportationState.NeedsToTravel; // hack for normative;
+		destination = workLocation;
+		stateChanged();
 	}
 	
 	/*

@@ -5,6 +5,7 @@ import city.interfaces.Car;
 import city.interfaces.Person;
 import city.interfaces.Transportation;
 import agent.Agent;
+import city.gui.CarGui;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
@@ -18,6 +19,7 @@ public class CarAgent extends Agent implements Car {
 	*Data
 	*/
 	private TransportationRole passenger;
+	CarGui carGui;
 	
 	public enum carState
 	{inTransit, atDestination, Idle}
@@ -78,14 +80,21 @@ public class CarAgent extends Agent implements Car {
 		
 		private void doGoTo(String myDestination){
 			System.out.println("Car is going to "+ myDestination);
-			//haven't implemented carGui
-			//carGui.msgGoTo(myDestination);
+			carGui.DoGoTo(myDestination);
 		}
 		
 		private void parkCar(){
 		//msg gives passenger the destination so its gui can reappear at an appropriate place
 			passenger.msgArrivedAtDestination(destination);
+			carGui.DoParkCar();
 			currentState = carState.Idle;
+		}
+		
+		/**
+		 * Utilities
+		 */
+		public void setGui(CarGui gui){
+			carGui= gui;
 		}
 
 
