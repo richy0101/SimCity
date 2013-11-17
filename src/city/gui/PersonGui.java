@@ -3,15 +3,17 @@ package city.gui;
 import gui.Gui;
 import city.helpers.Clock;
 import java.awt.Graphics2D;
+import city.PersonAgent;
 
 public class PersonGui implements Gui {
-
+	
+	private PersonAgent agent = null;	
+	
 	void DoSleeping() {
-		
-		//if timer = time, msgWakeUp
+		if(Clock.sharedInstance.getTime() == 0) { //CHANGE TIME TO APPROPRIATE WAKE UP TIME
+			agent.msgWakeUp();
+		}
 	}
-	
-	
 	
 	@Override
 	public void updatePosition() {
