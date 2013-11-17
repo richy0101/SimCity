@@ -12,6 +12,11 @@ import restaurant.stackRestaurant.*;
 public class Directory {
 	public static final Directory sharedInstance = new Directory();
 	
+	Directory() {
+		restaurants.add(stackRestaurant);
+		
+	}
+	
 	public static Directory sharedInstance() {
 		return sharedInstance;
 	}
@@ -25,7 +30,6 @@ public class Directory {
 	}
 	
 	public List<Restaurant> restaurants = new ArrayList<Restaurant>();
-	restaurants.add(stackRestaurant);
 	
 //HOUSES
 	
