@@ -8,7 +8,7 @@ import market.interfaces.MarketCustomer;
 public class MarketCustomerRole implements MarketCustomer {
 
 	//data--------------------------------------------------------------------------------
-	Map<String, Integer> myGroceries;
+	Map<String, Integer> myGroceryList;
 	
 	enum State {DoingNothing, DecidingGroceries, WaitingForService, Paying, DoneTransaction};
 	enum Event {WantsGroceries, DecidedGroceries, GotBill, GotGroceries};
@@ -16,21 +16,25 @@ public class MarketCustomerRole implements MarketCustomer {
 	Event roleEvent;
 	
 	Market market;
+	double orderCost;
 	
 	//messages----------------------------------------------------------------------------
 	public void msgWantGroceries(Map<String, Integer> groceries) {
-	    myGroceries = groceries;
+	    myGroceryList = groceries;
 	    roleEvent = Event.WantsGroceries;
 	}
 	
 	public void msgHereIsBill(double price) {
-	    
+		orderCost = price;
 	    roleEvent = Event.GotBill;
 	}
 	
 	public void msgHereAreYourGroceries(Map<String, Integer> groceries) {
-		
 	    roleEvent = Event.GotGroceries;
+	}
+	
+	public void msgCantFillOrder(Map<String, Integer> groceries) {
+		
 	}
 	
 	//scheduler---------------------------------------------------------------------------
@@ -60,12 +64,12 @@ public class MarketCustomerRole implements MarketCustomer {
 	}
 	
 	public void GiveGroceryOrder() {
-	    market.msgGetGroceries(myGroceries);
+	    market.msgGetGroceries(this, myGroceryList);
 	}
 	
 	public void Pay() {
-	    market.HereIsMoney(/*money*/);
-
+		//Decide if he has enough money
+	    market.msgHereIsMoney(this, orderCost);
 	}
 	
 	public void LeaveMarket() {

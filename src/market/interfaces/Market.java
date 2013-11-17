@@ -1,5 +1,7 @@
 package market.interfaces;
 
+import java.util.Map;
+
 public interface Market {
 	public void msgGetGroceries(MarketCustomer customer, Map<String, Integer> groceryList);
 	

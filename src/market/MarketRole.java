@@ -33,10 +33,12 @@ public class MarketRole implements Market {
 	class Food {
 	    String name;
 	    int supply;
+	    double price;
 	    
-	    Food(String n, int s) {
+	    Food(String n, int s, double p) {
 	    	name = n;
 	    	supply = s;
+	    	price = p;
 	    }
 	}
 	
@@ -91,6 +93,7 @@ public class MarketRole implements Market {
 	    	choice = (String) i.next();
 	    	amount = o.groceryList.get(choice);
 	    	if(inventory.get(choice).supply >= amount) {
+	    		o.price += inventory.get(choice).price;
 	    		o.retrievedGroceries.put(choice, amount);
 	    		i.remove();
 	    		DoGetItem(choice); //GUI
@@ -105,8 +108,9 @@ public class MarketRole implements Market {
 	    o.customer.msgCantFillOrder(o.groceryList);
 	}
 	private void BillCustomer(Order o) {
-	    //Calculate price
-	    o.customer.msgHereIsBill(o.price);
+		o.customer.msgCantFillOrder(o.groceryList); //Part of order that couldn't be filled
+		
+	    o.customer.msgHereIsBill(o.price); //Bill for part of order that was filled
 	    o.state = orderState.Billed;
 	}
 	private void GiveGroceries(Order o) {
