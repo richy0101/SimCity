@@ -104,6 +104,12 @@ public class PersonAgent extends Agent implements Person {
 		hasCar = true;
 		rentDue = false;
 		hasWorked = false;
+		startThread();
+	}
+	//Hax for testing
+	PersonAgent (Role hardCodeJob) {
+		roles.add(hardCodeJob);
+		startThread();
 	}
 	/**
 	 * Messages
