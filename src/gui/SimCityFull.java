@@ -4,7 +4,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
-public class SimCity {
+public class SimCityFull {
 
 	private JFrame frame;
 
@@ -15,7 +15,7 @@ public class SimCity {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					SimCity window = new SimCity();
+					SimCityFull window = new SimCityFull();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -27,7 +27,7 @@ public class SimCity {
 	/**
 	 * Create the application.
 	 */
-	public SimCity() {
+	public SimCityFull() {
 		initialize();
 	}
 

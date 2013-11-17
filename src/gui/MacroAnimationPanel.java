@@ -56,5 +56,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener {
     public void addGui(Gui gui) {
         guis.add(gui);
     }
+    
+    
 
 }

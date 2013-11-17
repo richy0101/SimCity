@@ -22,7 +22,7 @@ public class HomePersonRole extends Role implements HomePerson {
 	}
 	
 	//scheduler---------------------------------------------------------------------------
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		if(needToPayRent == true) {
 			PayRent();
 		}
