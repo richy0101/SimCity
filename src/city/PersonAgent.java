@@ -9,6 +9,16 @@ import java.util.TimerTask;
 
 
 
+
+
+
+
+
+
+
+
+
+
 import restaurant.Restaurant;
 import restaurant.stackRestaurant.StackCustomerRole;
 import market.MarketCustomerRole;
@@ -99,44 +109,54 @@ public class PersonAgent extends Agent implements Person {
 	 * Messages
 	 */
 	public void msgWakeUp() {
+		System.out.println(name + ": msgWakeUp received - Setting state to WantFood.");
 		hasWorked = false;
 		personState = PersonState.WantFood;
 		stateChanged();
 	}
 	public void msgCookingDone() {
+		System.out.println(name + ": msgCookingDone received - Setting state to StartEating.");
 		personState = PersonState.StartEating;
 		stateChanged();
 	}
 	public void msgDoneEating() {
+		System.out.println(name + ": msgDoneEating received - Setting state to Idle.");
 		personState = PersonState.Idle;
 		hungerLevel = 0;
 		stateChanged();
 	}
 	public void msgGoWork() {
+		System.out.println(name + ": msgGoWork received - Setting state to NeedsToWork.");
 		personState = PersonState.NeedsToWork;
 		stateChanged();
 	}
 	public void msgDoneWorking() {
+		System.out.println(name + ": msgDoneWorking received - Setting state to WantFood.");
 		personState = PersonState.WantFood;
 		stateChanged();
 	}
 	public void msgGoHome() {
+		System.out.println(name + ": msgGoHome received - Setting state to WantsToGoHome");
 		personState = PersonState.WantsToGoHome;
 		stateChanged();
 	}
 	public void msgRentPaid() {
+		System.out.println(name + ": msgRentPaid received - Setting rentDue to false.");
 		rentDue = false;
 		stateChanged();
 	}
 	public void msgRoleFinished() {
-		roles.pop();
+		Role r = roles.pop();
+		System.out.println(name + ": msgRoleFinished received - Popping current Role: " + r.toString() + ".");
 		stateChanged();
 	}
 	public void msgAtHome() {
+		System.out.println(name + ": msgAtHome received - Setting position to AtHome.");
 		personPosition = PersonPosition.AtHome;
 		stateChanged();
 	}
 	public void msgPayRent() {
+		System.out.println(name + ": msgPayrent received - setting rentDue to true.");
 		rentDue = true;
 		stateChanged();
 	}
@@ -230,12 +250,14 @@ public class PersonAgent extends Agent implements Person {
 		
 	}*/
 	private void goHome() {
+		System.out.println(name + ": Action goHome - State set to InTransit. Adding new Transportation Role.");
 		personState = PersonState.InTransit;
 		roles.clear();
 		roles.add(new TransportationRole(homeName));
 		
 	}	
 	private void cookHomeFood() {
+		System.out.println(name + ": Action cookHomeFood - State set to Cooking.");
 		personState = PersonState.Cooking;
 		personTimer.schedule(new PersonTimerTask(this) {
 			public void run() {
@@ -245,6 +267,7 @@ public class PersonAgent extends Agent implements Person {
 		1000);//time for cooking
 	}
 	private void goRestaurant() {
+		System.out.println(name + ": Action goRestaurant - State set to OutToEat");
 		personState = PersonState.OutToEat;
 		Restaurant r = Directory.sharedInstance().restaurants.get(0);
 		roles.clear();
@@ -253,6 +276,7 @@ public class PersonAgent extends Agent implements Person {
 		
 	}
 	private void decideFood() {
+		System.out.println(name + ": Action decideFood - Deciding to eat in or out.");
 		boolean cook = true; //cooks at home at the moment
 		//if Stay at home and eat. Alters Cook true or false
 		if (cook == true) {
@@ -263,6 +287,7 @@ public class PersonAgent extends Agent implements Person {
 		}
 	}
 	private void eatFood() {
+		System.out.println(name + ": Action eatFood - State set to Eating at home.");
 		personState = PersonState.Eating;
 		personTimer.schedule(new PersonTimerTask(this) {
 			public void run() {
@@ -273,6 +298,7 @@ public class PersonAgent extends Agent implements Person {
 		
 	}
 	private void goWork() {
+		System.out.println(name + ": Action goWork - hasWorked = true. Going to work.");
 		hasWorked = true;
 		roles.clear();
 		roles.add(workDetails.workRole);
