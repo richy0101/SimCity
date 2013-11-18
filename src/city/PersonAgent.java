@@ -92,7 +92,7 @@ public class PersonAgent extends Agent implements Person {
 			return newRole;
 		}
 	};
-	PersonAgent(Role job, String job_location, String home) {
+	public PersonAgent(Role job, String job_location, String home) {
 		workDetails = new WorkDetails(job, job_location);
 		homeName = home;
 		houseState = HouseState.OwnsHouse;
@@ -107,7 +107,7 @@ public class PersonAgent extends Agent implements Person {
 		startThread();
 	}
 	//Hax for testing
-	PersonAgent (Role hardCodeJob) {
+	public PersonAgent (Role hardCodeJob) {
 		roles.add(hardCodeJob);
 		startThread();
 	}
