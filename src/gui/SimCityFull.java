@@ -52,4 +52,10 @@ public class SimCityFull {
 		controlPanel.setBounds(844, 5, 450, 845);
 		frame.getContentPane().add(controlPanel);
 	}
+	private void runSuperNorm() {
+		//Instantiate directory to have Stack restaurant in it. 
+		//Instantiate 1 person to go to stack restaurant. give it an arbitrary name for job and home and role.
+		//Something needs to call this person's msgWakeUp. And scenario should run from there. Person should wake up eat and then idle.
+		//change boolean Cook in person.Decide eat to false to make person go to a restaurant.
+	}
 }
