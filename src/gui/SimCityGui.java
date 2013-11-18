@@ -4,6 +4,10 @@ import java.awt.EventQueue;
 
 import javax.swing.*;
 
+import city.PersonAgent;
+import agent.Role;
+import bank.BankManagerRole;
+
 public class SimCityGui {
 
 	private JFrame frame;
@@ -50,14 +54,14 @@ public class SimCityGui {
 		frame.getContentPane().add(microAnimationPanel);
 		SpringLayout springLayout = new SpringLayout();
 		springLayout.putConstraint(SpringLayout.NORTH, macroAnimationPanel, 10, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, macroAnimationPanel, -25, SpringLayout.NORTH, microAnimationPanel);
-		springLayout.putConstraint(SpringLayout.NORTH, microAnimationPanel, 429, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, microAnimationPanel, 0, SpringLayout.EAST, macroAnimationPanel);
-		springLayout.putConstraint(SpringLayout.WEST, macroAnimationPanel, 10, SpringLayout.WEST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.SOUTH, macroAnimationPanel, -1, SpringLayout.NORTH, microAnimationPanel);
+		springLayout.putConstraint(SpringLayout.NORTH, microAnimationPanel, 417, SpringLayout.NORTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, microAnimationPanel, 10, SpringLayout.WEST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, macroAnimationPanel, 10, SpringLayout.WEST, frame.getContentPane());
 		frame.getContentPane().setLayout(springLayout);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		springLayout.putConstraint(SpringLayout.EAST, microAnimationPanel, -6, SpringLayout.WEST, tabbedPane);
 		springLayout.putConstraint(SpringLayout.EAST, macroAnimationPanel, -6, SpringLayout.WEST, tabbedPane);
 		springLayout.putConstraint(SpringLayout.SOUTH, microAnimationPanel, 0, SpringLayout.SOUTH, tabbedPane);
 		springLayout.putConstraint(SpringLayout.NORTH, tabbedPane, 10, SpringLayout.NORTH, frame.getContentPane());
@@ -158,13 +162,23 @@ public class SimCityGui {
 		sl_panel.putConstraint(SpringLayout.WEST, comboBox_2, 0, SpringLayout.WEST, textField);
 		sl_panel.putConstraint(SpringLayout.EAST, comboBox_2, 0, SpringLayout.EAST, btnPopulateCity);
 		panel.add(comboBox_2);
+		
+		JPanel panel_1 = new JPanel();
+		tabbedPane.addTab("New tab", null, panel_1, null);
+		SpringLayout sl_panel_1 = new SpringLayout();
+		panel_1.setLayout(sl_panel_1);
+		
+		JLabel lblWorkers = new JLabel("Workers");
+		sl_panel_1.putConstraint(SpringLayout.NORTH, lblWorkers, 10, SpringLayout.NORTH, panel_1);
+		sl_panel_1.putConstraint(SpringLayout.WEST, lblWorkers, 10, SpringLayout.WEST, panel_1);
+		panel_1.add(lblWorkers);
 	}
 	private void runSuperNorm() {
-//		Role role = new BankManagerRole();
-//		PersonAgent p = new PersonAgent(role);
-//		role.setPerson(p);
-//		p.startThread();
-//		p.msgWakeUp();
+		Role role = new BankManagerRole();
+		PersonAgent p = new PersonAgent(role);
+		role.setPerson(p);
+		p.startThread();
+		p.msgWakeUp();
 		//Example Code
 		//Instantiate directory to have Stack restaurant in it. 
 		//Instantiate 1 person to go to stack restaurant. give it an arbitrary name for job and home and role.
