@@ -53,6 +53,11 @@ public class SimCityFull {
 		frame.getContentPane().add(controlPanel);
 	}
 	private void runSuperNorm() {
+		/*new Role wtvRole;
+		new PersonAgent p PersonAgent(wtvRole);
+		wtvRole.setPerson(p);
+		p.startThread();*/ 
+		//Example Code
 		//Instantiate directory to have Stack restaurant in it. 
 		//Instantiate 1 person to go to stack restaurant. give it an arbitrary name for job and home and role.
 		//Something needs to call this person's msgWakeUp. And scenario should run from there. Person should wake up eat and then idle.
