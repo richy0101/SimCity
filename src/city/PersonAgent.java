@@ -109,7 +109,6 @@ public class PersonAgent extends Agent implements Person {
 	//Hax for testing
 	public PersonAgent (Role hardCodeJob) {
 		roles.add(hardCodeJob);
-		startThread();
 	}
 	/**
 	 * Messages
