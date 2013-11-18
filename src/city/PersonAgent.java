@@ -92,7 +92,8 @@ public class PersonAgent extends Agent implements Person {
 			return newRole;
 		}
 	};
-	public PersonAgent(Role job, String job_location, String home) {
+	public PersonAgent(Role job, String job_location, String home, String name) {
+		this.name = name;
 		workDetails = new WorkDetails(job, job_location);
 		homeName = home;
 		houseState = HouseState.OwnsHouse;
@@ -108,6 +109,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	//Hax for testing
 	public PersonAgent (Role hardCodeJob) {
+		name = "HardCoded " + hardCodeJob.toString();
 		roles.add(hardCodeJob);
 	}
 	/**
@@ -170,7 +172,9 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	protected boolean pickAndExecuteAnAction() {
 		if(!roles.isEmpty()) {
-			boolean b = roles.peek().pickAndExecuteAnAction();
+			//print("STUB IN PERSONAGENT SCHEDULER: INROLESSTACK " + roles.peek().toString());
+			boolean b = false;
+			b = roles.peek().pickAndExecuteAnAction();
 			return b;
 		}
 		/** Rules for Market and Bank visits. Should only happen if evaluate status is called. **/
@@ -211,7 +215,7 @@ public class PersonAgent extends Agent implements Person {
 			return true;
 		}
 		if (personState == PersonState.WantFood) {
-			print("STUB IN PERSONAGENT SCHEDULER: WANTFOOD");
+			//print("STUB IN PERSONAGENT SCHEDULER: WANTFOOD");
 			decideFood();
 			return true;
 		}

@@ -174,8 +174,11 @@ public class SimCityGui {
 		panel_1.add(lblWorkers);
 	}
 	private void runSuperNorm() {
+		String a = "Test Bank 1";
+		String b = "Test Home 1";
+		String name = "Test Person 1";
 		Role role = new BankManagerRole();
-		PersonAgent p = new PersonAgent(role);
+		PersonAgent p = new PersonAgent(role, a , b, name);
 		role.setPerson(p);
 		p.startThread();
 		p.msgWakeUp();
