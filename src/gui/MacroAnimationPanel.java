@@ -14,15 +14,14 @@ import javax.swing.*;
 public class MacroAnimationPanel extends JPanel implements ActionListener {
 	
 	private final int WINDOWX = 835;
-    private final int WINDOWY = 400;
+    private final int WINDOWY = 415;
    
-    
     private final int DELAY = 5;
 
     private List<Gui> guis = new ArrayList<Gui>();
-    private ImageIcon background = new ImageIcon("/team02/src/gui/SIMCITY.jpg");
-    //private ImageIcon background = new ImageIcon("/images/SIMCITY.png");
-    private Image image = background.getImage();
+    //private ImageIcon background = new ImageIcon("/team02/src/gui/SIMCITY.jpg");
+    //private ImageIcon background = new ImageIcon("/images/SIMCITY.jpg");
+    //private Image image = background.getImage();
 
 
     public MacroAnimationPanel() {

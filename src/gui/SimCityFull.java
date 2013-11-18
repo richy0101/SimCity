@@ -46,7 +46,7 @@ public class SimCityFull {
 		frame.getContentPane().setLayout(null);
 		
 		MacroAnimationPanel macroAnimationPanel = new MacroAnimationPanel();
-		macroAnimationPanel.setBounds(5, 5, 835, 400);
+		macroAnimationPanel.setBounds(5, 5, 835, 415);
 		frame.getContentPane().add(macroAnimationPanel);
 		
 		MicroAnimationPanel microAnimationPanel = new MicroAnimationPanel();
