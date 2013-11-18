@@ -36,7 +36,7 @@ public class PersonAgent extends Agent implements Person {
 	/**
 	 * Data---------------------------------------------------------------------------------------------------------------
 	 */
-	Stack<Role> roles = new Stack<Role>();
+	public Stack<Role> roles = new Stack<Role>();
 	RoleFactory factory = new RoleFactory();
 	WorkDetails workDetails;
 	//LandLordRole landLord;
@@ -240,6 +240,10 @@ public class PersonAgent extends Agent implements Person {
 		if(funds <= 25.00) {
 			
 		}
+		else {
+			personState = PersonState.Idle;
+		}
+		personState = PersonState.Idle;
 		return false;
 	}
 	/*private void payRent() {
@@ -283,6 +287,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	private void decideFood() {
 		System.out.println(name + ": Action decideFood - Deciding to eat in or out.");
+		//Change cook to false if want to try going to stack Restaurant scenario.
 		boolean cook = true; //cooks at home at the moment
 		//if Stay at home and eat. Alters Cook true or false
 		if (cook == true) {
