@@ -20,14 +20,16 @@ public class MacroAnimationPanel extends JPanel implements ActionListener {
 
     private List<Gui> guis = new ArrayList<Gui>();
     //private ImageIcon background = new ImageIcon("/team02/src/gui/SIMCITY.jpg");
-    //private ImageIcon background = new ImageIcon("/images/SIMCITY.jpg");
-    //private Image image = background.getImage();
-
+    private ImageIcon background;
+    private Image image;
 
     public MacroAnimationPanel() {
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
         setBackground(Color.darkGray);
+        
+       background = new ImageIcon("team02/src/gui/SIMCITY.jpg");
+       image = background.getImage();
         
     	Timer timer = new Timer(DELAY, this);
     	timer.start();
@@ -43,7 +45,10 @@ public class MacroAnimationPanel extends JPanel implements ActionListener {
         //Clear the screen by painting a rectangle the size of the frame
         g2.setColor(getBackground());
         g2.fillRect(0, 0, getWidth(), getHeight());
-        //g2.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+       
+        if(image != null) {
+        	g2.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+        }
 
         for(Gui gui : guis) {
             if (gui.isPresent()) {
