@@ -4,6 +4,10 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
+import bank.BankManagerRole;
+import city.PersonAgent;
+import agent.Role;
+
 public class SimCityFull {
 
 	private JFrame frame;
@@ -29,6 +33,7 @@ public class SimCityFull {
 	 */
 	public SimCityFull() {
 		initialize();
+		runSuperNorm();
 	}
 
 	/**
@@ -53,10 +58,11 @@ public class SimCityFull {
 		frame.getContentPane().add(controlPanel);
 	}
 	private void runSuperNorm() {
-		/*new Role wtvRole;
-		new PersonAgent p PersonAgent(wtvRole);
-		wtvRole.setPerson(p);
-		p.startThread();*/ 
+		Role role = new BankManagerRole();
+		PersonAgent p = new PersonAgent(role);
+		role.setPerson(p);
+		p.startThread();
+		p.msgWakeUp();
 		//Example Code
 		//Instantiate directory to have Stack restaurant in it. 
 		//Instantiate 1 person to go to stack restaurant. give it an arbitrary name for job and home and role.
