@@ -211,6 +211,7 @@ public class PersonAgent extends Agent implements Person {
 			return true;
 		}
 		if (personState == PersonState.WantFood) {
+			print("STUB IN PERSONAGENT SCHEDULER: WANTFOOD");
 			decideFood();
 			return true;
 		}
