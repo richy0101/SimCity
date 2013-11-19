@@ -23,21 +23,50 @@ public class Directory {
     	}
     	return sharedInstance;
 	}
-	
-//RESTAURANTS	
+//ROLES
+	public Map<String, String> roleDirectory = new HashMap<String, String>(); {
+		//Bank Roles
+		roleDirectory.put("bank.BankCustomerRole", "Bank");
+		roleDirectory.put("bank.BankManagerRole", "Bank");
+		roleDirectory.put("bank.BankTellerRole", "Bank");
+		//Market Roles
+		roleDirectory.put("market.MarketRole1" , "Market1");
+		roleDirectory.put("market.MarketRole2", "Market2");
+		//LandLord Roles
+		roleDirectory.put("home.LandlordRole1", "AppartmentComplex1");
+		roleDirectory.put("home.LandlordRole2", "AppartmentComplex2");
+		//Restaurant Roles Stack
+		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "StackRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "StackRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "StackRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "StackRestaurant");
+		
+		
+	}
+	//RESTAURANT Instantiations
 	private Restaurant stackRestaurant = new StackRestaurant("StackRestaurant");
-	Coordinate stackRestaurantLocation = new Coordinate(0,0);
+	Coordinate stackRestaurantLocation = new Coordinate(105,275);
 	
-	private static Map<Restaurant, Coordinate> restaurantDirectory = new HashMap<Restaurant, Coordinate>(); {
-		restaurantDirectory.put(stackRestaurant, stackRestaurantLocation);	
+	private static Map<String, Coordinate> locationDirectory = new HashMap<String, Coordinate>(); {
+		//Bank
+		
+		//Markets
+		
+		//Apartments
+		
+		//Homes
+		
+		//Restaurants
+		locationDirectory.put(stackRestaurant.getName(), stackRestaurantLocation);	
+		
 	}
 	
 	
 	
 	public static List<Restaurant> restaurants = new ArrayList<Restaurant>();
 	
-	public Map<Restaurant, Coordinate> getDirectory() {
-		return restaurantDirectory;
+	public Map<String, Coordinate> getDirectory() {
+		return locationDirectory;
 	}
 	
 	public List<Restaurant> getRestaurants() {
