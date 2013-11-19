@@ -21,6 +21,7 @@ import javax.swing.event.ChangeEvent;
 
 import restaurant.stackRestaurant.StackCookRole;
 import restaurant.stackRestaurant.StackHostRole;
+import javax.swing.GroupLayout.Alignment;
 
 public class SimCityGui {
 
@@ -78,6 +79,16 @@ public class SimCityGui {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		springLayout.putConstraint(SpringLayout.EAST, microAnimationPanel, -6, SpringLayout.WEST, tabbedPane);
 		springLayout.putConstraint(SpringLayout.EAST, macroAnimationPanel, -6, SpringLayout.WEST, tabbedPane);
+		GroupLayout gl_macroAnimationPanel = new GroupLayout(macroAnimationPanel);
+		gl_macroAnimationPanel.setHorizontalGroup(
+			gl_macroAnimationPanel.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 827, Short.MAX_VALUE)
+		);
+		gl_macroAnimationPanel.setVerticalGroup(
+			gl_macroAnimationPanel.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 406, Short.MAX_VALUE)
+		);
+		macroAnimationPanel.setLayout(gl_macroAnimationPanel);
 		springLayout.putConstraint(SpringLayout.SOUTH, microAnimationPanel, 0, SpringLayout.SOUTH, tabbedPane);
 		springLayout.putConstraint(SpringLayout.NORTH, tabbedPane, 10, SpringLayout.NORTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, tabbedPane, 843, SpringLayout.WEST, frame.getContentPane());
@@ -176,8 +187,8 @@ public class SimCityGui {
 		sl_panel.putConstraint(SpringLayout.EAST, transportationComboBox, 0, SpringLayout.EAST, btnPopulateCity);
 		
 		transportationComboBox.addItem("None");
-		transportationComboBox.addItem("Owns a car");
-		transportationComboBox.addItem("Takes the bus");
+		transportationComboBox.addItem("Owns A Car");
+		transportationComboBox.addItem("Takes The Bus");
 		
 		panel.add(transportationComboBox);
 		
@@ -254,9 +265,9 @@ public class SimCityGui {
 		sl_panel.putConstraint(SpringLayout.EAST, housingComboBox, 0, SpringLayout.EAST, btnPopulateCity);
 		
 		housingComboBox.addItem("None");
-		housingComboBox.addItem("Owns a house");
-		housingComboBox.addItem("Owns an apartment");
-		housingComboBox.addItem("Rents an apartment");
+		housingComboBox.addItem("Owns A House");
+		housingComboBox.addItem("Owns An Apartment");
+		housingComboBox.addItem("Rents An Apartment");
 		
 		panel.add(housingComboBox);
 		
