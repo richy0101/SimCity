@@ -106,8 +106,7 @@ public class TransportationRole extends Role implements Transportation  {
 		}
 		
 		state = TransportationState.None;
-		stateChanged();
-		
+		getPersonAgent().msgRoleFinished();
 		//change roles
 	}
 }
