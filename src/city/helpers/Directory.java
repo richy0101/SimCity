@@ -43,20 +43,30 @@ public class Directory {
 		
 		
 	}
-//RESTAURANTS	
+	//RESTAURANT Instantiations
 	private Restaurant stackRestaurant = new StackRestaurant("StackRestaurant");
-	Coordinate stackRestaurantLocation = new Coordinate(0,0);
+	Coordinate stackRestaurantLocation = new Coordinate(105,275);
 	
-	private static Map<String, Coordinate> restaurantDirectory = new HashMap<String, Coordinate>(); {
-		restaurantDirectory.put(stackRestaurant.getName(), stackRestaurantLocation);	
+	private static Map<String, Coordinate> locationDirectory = new HashMap<String, Coordinate>(); {
+		//Bank
+		
+		//Markets
+		
+		//Apartments
+		
+		//Homes
+		
+		//Restaurants
+		locationDirectory.put(stackRestaurant.getName(), stackRestaurantLocation);	
+		
 	}
 	
 	
 	
 	public static List<Restaurant> restaurants = new ArrayList<Restaurant>();
 	
-	public Map<Restaurant, Coordinate> getDirectory() {
-		return restaurantDirectory;
+	public Map<String, Coordinate> getDirectory() {
+		return locationDirectory;
 	}
 	
 	public List<Restaurant> getRestaurants() {
