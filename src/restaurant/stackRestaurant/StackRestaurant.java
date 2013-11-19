@@ -32,7 +32,6 @@ public class StackRestaurant extends Restaurant {
     private Vector<PersonAgent> waiters = new Vector<PersonAgent>();
 	
 	public StackRestaurant(String name) {
-//		host = new StackHostRole("Garcon");
 		this.name = name;
 		
 		waiters.add(waiterPerson);

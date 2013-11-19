@@ -176,8 +176,8 @@ public class SimCityGui {
 		sl_panel.putConstraint(SpringLayout.EAST, transportationComboBox, 0, SpringLayout.EAST, btnPopulateCity);
 		
 		transportationComboBox.addItem("None");
-		transportationComboBox.addItem("Owns a car");
-		transportationComboBox.addItem("Takes the bus");
+		transportationComboBox.addItem("Owns A Car");
+		transportationComboBox.addItem("Takes The Bus");
 		
 		panel.add(transportationComboBox);
 		
@@ -254,9 +254,9 @@ public class SimCityGui {
 		sl_panel.putConstraint(SpringLayout.EAST, housingComboBox, 0, SpringLayout.EAST, btnPopulateCity);
 		
 		housingComboBox.addItem("None");
-		housingComboBox.addItem("Owns a house");
-		housingComboBox.addItem("Owns an apartment");
-		housingComboBox.addItem("Rents an apartment");
+		housingComboBox.addItem("Owns A House");
+		housingComboBox.addItem("Owns An Apartment");
+		housingComboBox.addItem("Rents An Apartment");
 		
 		panel.add(housingComboBox);
 		
