@@ -23,13 +23,32 @@ public class Directory {
     	}
     	return sharedInstance;
 	}
-	
+//ROLES
+	public Map<String, String> roleDirectory = new HashMap<String, String>(); {
+		//Bank Roles
+		roleDirectory.put("bank.BankCustomerRole", "Bank");
+		roleDirectory.put("bank.BankManagerRole", "Bank");
+		roleDirectory.put("bank.BankTellerRole", "Bank");
+		//Market Roles
+		roleDirectory.put("market.MarketRole1" , "Market1");
+		roleDirectory.put("market.MarketRole2", "Market2");
+		//LandLord Roles
+		roleDirectory.put("home.LandlordRole1", "AppartmentComplex1");
+		roleDirectory.put("home.LandlordRole2", "AppartmentComplex2");
+		//Restaurant Roles Stack
+		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "StackRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "StackRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "StackRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "StackRestaurant");
+		
+		
+	}
 //RESTAURANTS	
 	private Restaurant stackRestaurant = new StackRestaurant("StackRestaurant");
 	Coordinate stackRestaurantLocation = new Coordinate(0,0);
 	
-	private static Map<Restaurant, Coordinate> restaurantDirectory = new HashMap<Restaurant, Coordinate>(); {
-		restaurantDirectory.put(stackRestaurant, stackRestaurantLocation);	
+	private static Map<String, Coordinate> restaurantDirectory = new HashMap<String, Coordinate>(); {
+		restaurantDirectory.put(stackRestaurant.getName(), stackRestaurantLocation);	
 	}
 	
 	

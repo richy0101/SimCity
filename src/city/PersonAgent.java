@@ -41,13 +41,13 @@ public class PersonAgent extends Agent implements Person {
 	WorkDetails workDetails;
 	//LandLordRole landLord;
 	double funds;
-	boolean hasCar;
 	boolean hasWorked;
 	boolean rentDue;
 	String name;
 	String homeName;
+	public enum TransportationMethod {OwnsACar, TakesTheBus, Walks};
 	public enum PersonPosition {AtHome, AtMarket, AtRestaurant, AtBank, City};
-	public enum HouseState {OwnsHouse, OwnsAppt, Homeless};
+	public enum HouseState {OwnsAHouse, OwnsAnApartment, Homeless, RentsAnApartment};
 	public enum PersonState {
 		//Norm Scenario Constants
 		Idle, InTransit, WantsToGoHome, WantFood, CookHome, WaitingForCooking, GoOutEat, StartEating, Eating, NeedsToWork, Cooking, OutToEat,
@@ -58,7 +58,9 @@ public class PersonAgent extends Agent implements Person {
 	PersonPosition personPosition;
 	HouseState houseState;
 	PersonState personState;
+	TransportationMethod transMethod;
 	int hungerLevel;
+	int aggressivenessLevel;
 	int dirtynessLevel;
 	Timer personTimer = new Timer();
 	public class PersonTimerTask extends TimerTask {
@@ -96,13 +98,12 @@ public class PersonAgent extends Agent implements Person {
 		this.name = name;
 		workDetails = new WorkDetails(job, job_location);
 		homeName = home;
-		houseState = HouseState.OwnsHouse;
+		houseState = HouseState.OwnsAHouse;
 		personPosition = PersonPosition.AtHome;
 		personState = PersonState.Idle;
 		hungerLevel = 0;
 		dirtynessLevel = 0;
 		funds = 10000.00;
-		hasCar = true;
 		rentDue = false;
 		hasWorked = false;
 		startThread();
@@ -115,6 +116,21 @@ public class PersonAgent extends Agent implements Person {
 			String housingStatus,
 			String vehicleStatus) {
 		
+		this.name = name;
+		workDetails = new WorkDetails(job, Directory.sharedInstance().roleDirectory.get(job.toString()));
+		this.aggressivenessLevel = aggressivenessLevel;
+		this.funds = startingFunds;
+		String vehicleStatusNoSpace = vehicleStatus.replaceAll(" ", "");
+		this.transMethod = TransportationMethod.valueOf(vehicleStatusNoSpace);
+		String housingStatusNoSpace = housingStatus.replaceAll(" ", "");
+		this.houseState = HouseState.valueOf(housingStatusNoSpace);
+		personPosition = PersonPosition.AtHome;
+		personState = PersonState.Idle;
+		hungerLevel = 0;
+		dirtynessLevel = 0;
+		rentDue = false;
+		hasWorked = false;
+		startThread();
 	}
 	
 	//Hax for testing
@@ -293,7 +309,7 @@ public class PersonAgent extends Agent implements Person {
 	private void goRestaurant() {
 		print("Action goRestaurant - State set to OutToEat");
 		personState = PersonState.OutToEat;
-		Restaurant r = Directory.sharedInstance().restaurants.get(0);
+		Restaurant r = Directory.sharedInstance().getRestaurants().get(0);
 		roles.clear();
 		roles.add(factory.createRole(r.getName()));//Hacked factory LOL
 		roles.add(new TransportationRole(r.getName()));
@@ -302,7 +318,7 @@ public class PersonAgent extends Agent implements Person {
 	private void decideFood() {
 		print("Action decideFood - Deciding to eat in or out.");
 		//Change cook to false if want to try going to stack Restaurant scenario.
-		boolean cook = true; //cooks at home at the moment
+		boolean cook = false; //cooks at home at the moment
 		//if Stay at home and eat. Alters Cook true or false
 		if (cook == true) {
 			personState = PersonState.CookHome;
