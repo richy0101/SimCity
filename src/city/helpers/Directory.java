@@ -7,7 +7,6 @@ import java.util.Map;
 
 import restaurant.Restaurant;
 import restaurant.stackRestaurant.*;
-import restaurant.stackRestaurant.helpers.Menu;
 
 public class Directory {
 	public static Directory sharedInstance;
@@ -55,6 +54,7 @@ public class Directory {
 		//Apartments
 		
 		//Homes
+		locationDirectory.put("House1", new Coordinate(350, 275));
 		
 		//Restaurants
 		locationDirectory.put(stackRestaurant.getName(), stackRestaurantLocation);	
@@ -78,14 +78,4 @@ public class Directory {
 //MARKETS
 	
 //BANKS
-}
-
-class Coordinate {
-	public int xCoordinate;
-	public int yCoordinate;
-	
-	public Coordinate(int x, int y) {
-		this.xCoordinate = x;
-		this.yCoordinate = y;
-	}
 }
