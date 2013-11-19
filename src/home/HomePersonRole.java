@@ -20,7 +20,7 @@ public class HomePersonRole extends Role implements HomePerson {
 	public void msgPayLater() {
 		
 	}
-	
+		
 	//scheduler---------------------------------------------------------------------------
 	public boolean pickAndExecuteAnAction() {
 		if(needToPayRent == true) {

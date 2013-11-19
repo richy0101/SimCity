@@ -36,7 +36,7 @@ public class CarGui implements Gui {
 	
 	public void DoParkCar(){
 		System.out.println("carGui: Parking car.");
-		//not sure how to make it disappear. Making it transparent probably isn't a good solution
+		//send msg to animation panel to remove gui from the list
 	}
 
 	/**
