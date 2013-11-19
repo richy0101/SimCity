@@ -28,7 +28,7 @@ public class Directory {
 	private Restaurant stackRestaurant = new StackRestaurant("StackRestaurant");
 	Coordinates stackRestaurantLocation = new Coordinates(0,0);
 	
-	Map<Restaurant, Coordinates> restaurantDirectory = new HashMap<Restaurant, Coordinates>(); {
+	private static Map<Restaurant, Coordinates> restaurantDirectory = new HashMap<Restaurant, Coordinates>(); {
 		restaurantDirectory.put(stackRestaurant, stackRestaurantLocation);	
 	}
 	
