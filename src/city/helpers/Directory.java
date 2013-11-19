@@ -43,8 +43,30 @@ public class Directory {
 		
 	}
 	//RESTAURANT Instantiations
-	private Restaurant stackRestaurant = new StackRestaurant("StackRestaurant");
+	private Restaurant stackRestaurant = new StackRestaurant("StackRestaurant"); //restaurant 1
 	Coordinate stackRestaurantLocation = new Coordinate(105,275);
+	/*
+	private Restaurant huangRestaurant = new HuangRestaurant("HuangRestaurant"); //restaurant 2
+	Coordinate huangRestaurantLocation = new Coordinate(255,78);
+	
+	private Restaurant nakamuraRestaurant = new NakamuraRestaurant("NakamuraRestaurant"); //restaurant 3
+	Coordinate nakamuraRestaurantLocation = new Coordinate(383,69);
+	
+	private Restaurant phillipsRestaurant = new PhillipsRestaurant("PhillipsRestaurant"); //restaurant 4
+	Coordinate phillipsRestaurantLocation = new Coordinate(779,340);
+	
+	private Restaurant shehRestaurant = new ShehRestaurant("ShehRestaurant"); //restaurant 5
+	Coordinate shehRestaurantLocation = new Coordinate(576,310);
+	
+	private Restaurant tanRestaurant = new TanRestaurant("TanRestaurant"); //restaurant 6
+	Coordinate tanRestaurantLocation = new Coordinate(258,307);
+	*/
+	
+	//HOUSES
+		
+	//MARKETS
+		
+	//BANKS
 	
 	private static Map<String, Coordinate> locationDirectory = new HashMap<String, Coordinate>(); {
 		//Bank
@@ -73,9 +95,5 @@ public class Directory {
 		return restaurants;
 	}
 	
-//HOUSES
-	
-//MARKETS
-	
-//BANKS
+
 }
