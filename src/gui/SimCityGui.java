@@ -61,11 +61,11 @@ public class SimCityGui {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		MacroAnimationPanel macroAnimationPanel = new MacroAnimationPanel();
-		macroAnimationPanel.setBounds(5, 5, 835, 400);
+		macroAnimationPanel.setBounds(5, 5, 827, 406);
 		frame.getContentPane().add(macroAnimationPanel);
 		
 		MicroAnimationPanel microAnimationPanel = new MicroAnimationPanel();
-		microAnimationPanel.setBounds(5, 425, 835, 400);
+		microAnimationPanel.setBounds(5, 425, 827, 406);
 		frame.getContentPane().add(microAnimationPanel);
 		SpringLayout springLayout = new SpringLayout();
 		springLayout.putConstraint(SpringLayout.NORTH, macroAnimationPanel, 10, SpringLayout.NORTH, frame.getContentPane());
