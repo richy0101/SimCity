@@ -300,11 +300,14 @@ public class SimCityGui {
 		panel_1.add(lblWorkers);
 	}
 	private void runSuperNorm() {
-//		Role role = new BankManagerRole();
-//		PersonAgent p = new PersonAgent(role);
-//		role.setPerson(p);
-//		p.startThread();
-//		p.msgWakeUp();
+		String a = "Test Bank 1";
+		String b = "Test Home 1";
+		String name = "Test Person 1";
+		Role role = new BankManagerRole();
+		PersonAgent p = new PersonAgent(role, a , b, name);
+		role.setPerson(p);
+		p.startThread();
+		p.msgWakeUp();
 		//Example Code
 		//Instantiate directory to have Stack restaurant in it. 
 		//Instantiate 1 person to go to stack restaurant. give it an arbitrary name for job and home and role.
