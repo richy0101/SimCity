@@ -2,9 +2,7 @@ package market.interfaces;
 
 import java.util.Map;
 
-public interface MarketCustomer {
-	public void msgWantGroceries(Map<String, Integer> groceries);
-	
+public interface MarketCustomer {	
 	public void msgHereIsBill(double price);
 	
 	public void msgHereAreYourGroceries(Map<String, Integer> groceries);

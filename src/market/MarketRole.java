@@ -89,14 +89,19 @@ public class MarketRole implements Market {
 		Iterator<String> i = o.groceryList.keySet().iterator();
 		String choice;
 		int amount;
+		
 	    while(i.hasNext()) {
 	    	choice = (String) i.next();
 	    	amount = o.groceryList.get(choice);
+	    	
 	    	if(inventory.get(choice).supply >= amount) {
 	    		o.price += inventory.get(choice).price;
 	    		o.retrievedGroceries.put(choice, amount);
-	    		i.remove();
+	    		
 	    		DoGetItem(choice); //GUI
+	    		inventory.get(choice).supply -= amount;
+
+	    		i.remove();
 	    	}
 	    }
 	    if(o.retrievedGroceries.isEmpty())
@@ -106,11 +111,12 @@ public class MarketRole implements Market {
 	}
 	private void TurnAwayCustomer(Order o) {
 	    o.customer.msgCantFillOrder(o.groceryList);
+	    MyOrders.remove(o);
 	}
 	private void BillCustomer(Order o) {
 		o.customer.msgCantFillOrder(o.groceryList); //Part of order that couldn't be filled
 		
-	    o.customer.msgHereIsBill(o.price); //Bill for part of order that was filled
+	    o.customer.msgHereIsBill(o.price);
 	    o.state = orderState.Billed;
 	}
 	private void GiveGroceries(Order o) {
