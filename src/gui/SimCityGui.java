@@ -21,7 +21,6 @@ import javax.swing.event.ChangeEvent;
 
 import restaurant.stackRestaurant.StackCookRole;
 import restaurant.stackRestaurant.StackHostRole;
-import javax.swing.GroupLayout.Alignment;
 
 public class SimCityGui {
 
@@ -79,16 +78,6 @@ public class SimCityGui {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		springLayout.putConstraint(SpringLayout.EAST, microAnimationPanel, -6, SpringLayout.WEST, tabbedPane);
 		springLayout.putConstraint(SpringLayout.EAST, macroAnimationPanel, -6, SpringLayout.WEST, tabbedPane);
-		GroupLayout gl_macroAnimationPanel = new GroupLayout(macroAnimationPanel);
-		gl_macroAnimationPanel.setHorizontalGroup(
-			gl_macroAnimationPanel.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 827, Short.MAX_VALUE)
-		);
-		gl_macroAnimationPanel.setVerticalGroup(
-			gl_macroAnimationPanel.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 406, Short.MAX_VALUE)
-		);
-		macroAnimationPanel.setLayout(gl_macroAnimationPanel);
 		springLayout.putConstraint(SpringLayout.SOUTH, microAnimationPanel, 0, SpringLayout.SOUTH, tabbedPane);
 		springLayout.putConstraint(SpringLayout.NORTH, tabbedPane, 10, SpringLayout.NORTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, tabbedPane, 843, SpringLayout.WEST, frame.getContentPane());

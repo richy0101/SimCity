@@ -26,15 +26,17 @@ public class Directory {
 	
 //RESTAURANTS	
 	private Restaurant stackRestaurant = new StackRestaurant("StackRestaurant");
-	Coordinates stackRestaurantLocation = new Coordinates(0,0);
+	Coordinate stackRestaurantLocation = new Coordinate(0,0);
 	
-	private static Map<Restaurant, Coordinates> restaurantDirectory = new HashMap<Restaurant, Coordinates>(); {
+	private static Map<Restaurant, Coordinate> restaurantDirectory = new HashMap<Restaurant, Coordinate>(); {
 		restaurantDirectory.put(stackRestaurant, stackRestaurantLocation);	
 	}
 	
+	
+	
 	public static List<Restaurant> restaurants = new ArrayList<Restaurant>();
 	
-	public Map<Restaurant, Coordinates> getDirectory() {
+	public Map<Restaurant, Coordinate> getDirectory() {
 		return restaurantDirectory;
 	}
 	
@@ -49,12 +51,12 @@ public class Directory {
 //BANKS
 }
 
-class Coordinates {
-	public int xCoordinates;
-	public int yCoordinates;
+class Coordinate {
+	public int xCoordinate;
+	public int yCoordinate;
 	
-	public Coordinates(int x, int y) {
-		this.xCoordinates = x;
-		this.yCoordinates = y;
+	public Coordinate(int x, int y) {
+		this.xCoordinate = x;
+		this.yCoordinate = y;
 	}
 }
