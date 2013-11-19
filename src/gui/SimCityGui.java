@@ -56,6 +56,7 @@ public class SimCityGui {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setResizable(false);
 		frame.setBounds(0, 0, 1133, 855);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		

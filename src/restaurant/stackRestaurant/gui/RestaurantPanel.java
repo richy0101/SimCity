@@ -21,9 +21,9 @@ import java.util.Vector;
 public class RestaurantPanel extends JPanel implements ActionListener {
 
     //Host, cook, waiters and customers
-    private StackHostRole host = new StackHostRole("Sarah");
-    private StackCookRole cook = new StackCookRole("Chef Boyardee");
-    private StackCashierRole cashier = new StackCashierRole("Mr.Moneybags");
+    private StackHostRole host = new StackHostRole();
+    private StackCookRole cook = new StackCookRole();
+    private StackCashierRole cashier = new StackCashierRole();
     
     //market hack
     /**

@@ -43,14 +43,6 @@ public class StackHostRole extends Role implements Host {
 		}
 	}
 
-	public String getMaitreDName() {
-		return name;
-	}
-
-	public String getName() {
-		return name;
-	}
-
 	public List<MyCustomer> getCustomers() {
 		return customers;
 	}

@@ -7,9 +7,10 @@ import java.util.Map;
 
 import restaurant.Restaurant;
 import restaurant.stackRestaurant.*;
+import restaurant.stackRestaurant.helpers.Menu;
 
 public class Directory {
-	public static final Directory sharedInstance = new Directory();
+	public static Directory sharedInstance;
 	
 	Directory() {
 		restaurants.add(stackRestaurant);
@@ -17,7 +18,10 @@ public class Directory {
 	}
 	
 	public static Directory sharedInstance() {
-		return sharedInstance;
+		if(sharedInstance == null) {
+    		sharedInstance = new Directory();
+    	}
+    	return sharedInstance;
 	}
 	
 //RESTAURANTS	
@@ -29,6 +33,10 @@ public class Directory {
 	}
 	
 	public List<Restaurant> restaurants = new ArrayList<Restaurant>();
+	
+	public Map<Restaurant, Coordinates> getDirectory() {
+		return restaurantDirectory;
+	}
 	
 //HOUSES
 	
