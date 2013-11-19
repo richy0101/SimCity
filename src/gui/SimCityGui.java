@@ -307,7 +307,6 @@ public class SimCityGui {
 		Role role = new BankManagerRole();
 		PersonAgent p = new PersonAgent(role, a , b, name);
 		role.setPerson(p);
-		p.startThread();
 		p.msgWakeUp();
 		//Example Code
 		//Instantiate directory to have Stack restaurant in it. 

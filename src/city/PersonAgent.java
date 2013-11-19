@@ -106,6 +106,7 @@ public class PersonAgent extends Agent implements Person {
 		funds = 10000.00;
 		rentDue = false;
 		hasWorked = false;
+		aggressivenessLevel = 1;
 		startThread();
 	}
 	
@@ -131,6 +132,7 @@ public class PersonAgent extends Agent implements Person {
 		rentDue = false;
 		hasWorked = false;
 		startThread();
+		print("I LIVE.");
 	}
 	
 	//Hax for testing
