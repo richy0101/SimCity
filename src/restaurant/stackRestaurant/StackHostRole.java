@@ -31,16 +31,11 @@ public class StackHostRole extends Role implements Host {
 	
 	public enum WaiterState
 	{Idle, Busy};
-	
-
-	private String name;
-	
 
 	public WaiterGui hostGui = null;
 
-	public StackHostRole(String name) {
+	public StackHostRole() {
 		super();
-		this.name = name;
 		// make some tables
 		tables = new ArrayList<Table>(tableList.getTables().size());
 		for (int ix = 1; ix <= tableList.getTables().size(); ix++) {
