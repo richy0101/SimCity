@@ -32,10 +32,14 @@ public class Directory {
 		restaurantDirectory.put(stackRestaurant, stackRestaurantLocation);	
 	}
 	
-	public List<Restaurant> restaurants = new ArrayList<Restaurant>();
+	public static List<Restaurant> restaurants = new ArrayList<Restaurant>();
 	
 	public Map<Restaurant, Coordinates> getDirectory() {
 		return restaurantDirectory;
+	}
+	
+	public List<Restaurant> getRestaurants() {
+		return restaurants;
 	}
 	
 //HOUSES
