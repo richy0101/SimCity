@@ -1,11 +1,12 @@
 package home;
 
 import java.util.*;
+import agent.Role;
 
 import home.interfaces.Landlord;
 import home.*;
 
-public class LandlordRole implements Landlord {
+public class LandlordRole extends Role implements Landlord {
     
 	private class MyTenant{
 		HomePersonRole inhabitant;
@@ -62,7 +63,7 @@ public class LandlordRole implements Landlord {
 	}
 	
 	//Scheduler
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		synchronized(this.tenants){
 			for(int i=0;i<tenants.size();i++){
 				if(tenants.get(i).state == PayState.NeedsToPay){
