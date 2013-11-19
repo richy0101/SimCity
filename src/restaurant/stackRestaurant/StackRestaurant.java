@@ -15,7 +15,7 @@ public class StackRestaurant extends Restaurant {
 	private String name;
 	
 	 //Host, cook, waiters and customers
-    private StackHostRole host = new StackHostRole("Sarah");
+    private StackHostRole host = new StackHostRole();
     private StackCookRole cook = new StackCookRole("Chef Boyardee");
     private StackWaiterRole waiter = new StackWaiterRole("Garcon");
     private StackCashierRole cashier = new StackCashierRole("Mr.Moneybags");
@@ -25,6 +25,7 @@ public class StackRestaurant extends Restaurant {
     private PersonAgent cookPerson = new PersonAgent(cook);
     private PersonAgent waiterPerson = new PersonAgent(waiter);
     private PersonAgent marketPerson = new  PersonAgent(market);
+    private PersonAgent cashierPerson = new PersonAgent(cashier);
     
 
     private Vector<PersonAgent> customers = new Vector<PersonAgent>();
@@ -35,14 +36,30 @@ public class StackRestaurant extends Restaurant {
 		this.name = name;
 		
 		waiters.add(waiterPerson);
+		
+		host.setPerson(hostPerson);
+		cook.setPerson(cookPerson);
+		waiter.setPerson(waiterPerson);
+		market.setPerson(marketPerson);
+		cashier.setPerson(cashierPerson);
+		
+		waiter.setCashier(cashier);
+		waiter.setCook(cook);
+		waiter.setHost(host);
+		host.msgAddWaiter(waiter);
+		market.setCashier(cashier);
+        cook.msgAddMarket(market);
+		
 		hostPerson.startThread();
 		cookPerson.startThread();
 		waiterPerson.startThread();
 		marketPerson.startThread();
+//		new Role wtvRole;
+//		new PersonAgent p PersonAgent(wtvRole);
+//		wtvRole.setPerson(p);
+//		p.startThread();
 
-		market.setCashier(cashier);
-        
-        cook.msgAddMarket(market);
+		
 	}
 	
 	public String getName() {
