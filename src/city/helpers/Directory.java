@@ -81,10 +81,11 @@ public class Directory {
 		*/
 		
 	}
-	//RESTAURANT Instantiations
+//RESTAURANT Instantiations
 	private Restaurant stackRestaurant = new StackRestaurant("StackRestaurant"); //restaurant 1
 	Coordinate stackRestaurantLocation = new Coordinate(105,275);
 	
+	/*
 	private Restaurant huangRestaurant = new HuangRestaurant("HuangRestaurant"); //restaurant 2
 	Coordinate huangRestaurantLocation = new Coordinate(255,78);
 	
@@ -99,43 +100,44 @@ public class Directory {
 	
 	private Restaurant tanRestaurant = new TanRestaurant("TanRestaurant"); //restaurant 6
 	Coordinate tanRestaurantLocation = new Coordinate(258,307);
+	*/
 	
 //HOUSES
 	private Home houseOne = new Home("HouseOne");
 	Coordinate houseOneLocation = new Coordinate(350,275);
 	
 	private Home houseTwo = new Home("HouseTwo");
-	Coordinate houseTwoLocation = new Coordinate(0,0);
+	Coordinate houseTwoLocation = new Coordinate(478,285);
 
 	private Home houseThree = new Home("HouseThree");
-	Coordinate houseThreeLocation = new Coordinate(0,0);
+	Coordinate houseThreeLocation = new Coordinate(594,285);
 	
 	private Home houseFour = new Home("HouseFour");
-	Coordinate houseFourLocation = new Coordinate(0,0);
+	Coordinate houseFourLocation = new Coordinate(370,140);
 	
 	private Home houseFive = new Home("HouseFive");
-	Coordinate houseFiveLocation = new Coordinate(0,0);
+	Coordinate houseFiveLocation = new Coordinate(502,140);
 	
 	private Home houseSix = new Home("HouseSix");
-	Coordinate houseSixLocation = new Coordinate(0,0);
+	Coordinate houseSixLocation = new Coordinate(602,140);
 		
 //MARKETS
-	private Market marketOne = new Market("MarketOne");
-	Coordinate marketOneLocation = new Coordinate(0,0);
+	private Market marketOne = new Market("MarketOne"); //priority market
+	Coordinate marketOneLocation = new Coordinate(523,72);
 	
-	private Market marketTwo = new Market("MarketTwo");
-	Coordinate marketTwoLocation = new Coordinate(0,0);
+	private Market marketTwo = new Market("MarketTwo"); //secondary market
+	Coordinate marketTwoLocation = new Coordinate(397,344);
 	
 //APARTMENTS
-	private Apartment apartmentOne = new Apartment("ApartmentOne");
-	Coordinate apartmentOneLocation = new Coordinate(0,0);
+	private Apartment apartmentOne = new Apartment("ApartmentOne"); //smaller limited apartment
+	Coordinate apartmentOneLocation = new Coordinate(236,285);
 	
-	private Apartment apartmentTwo = new Apartment("ApartmentTwo");
-	Coordinate apartmentTwoLocation = new Coordinate(0,0);
+	private Apartment apartmentTwo = new Apartment("ApartmentTwo"); //larger infinite apartment
+	Coordinate apartmentTwoLocation = new Coordinate(771,259);
 
 //BANKS
 	private Bank bank = new Bank("Bank");
-	Coordinate bankLocation = new Coordinate(0,0);
+	Coordinate bankLocation = new Coordinate(108,151);
 	
 //LOCATION DIRECTORY
 	private static Map<String, Coordinate> locationDirectory = new HashMap<String, Coordinate>(); {
