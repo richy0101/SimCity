@@ -1,5 +1,6 @@
 package city.helpers;
 
+import home.Apartment;
 import home.Home;
 
 import java.util.ArrayList;
@@ -7,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import market.Market;
+import bank.Bank;
 import restaurant.Restaurant;
 import restaurant.stackRestaurant.*;
 
@@ -130,7 +133,6 @@ public class Directory {
 		locationDirectory.put(huangRestaurant.getName(), huangRestaurantLocation);
 		
 	}
-	
 	
 	public static List<Restaurant> restaurants = new ArrayList<Restaurant>();
 	
