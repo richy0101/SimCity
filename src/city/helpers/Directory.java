@@ -47,7 +47,7 @@ public class Directory {
 	//RESTAURANT Instantiations
 	private Restaurant stackRestaurant = new StackRestaurant("StackRestaurant"); //restaurant 1
 	Coordinate stackRestaurantLocation = new Coordinate(105,275);
-	/*
+	
 	private Restaurant huangRestaurant = new HuangRestaurant("HuangRestaurant"); //restaurant 2
 	Coordinate huangRestaurantLocation = new Coordinate(255,78);
 	
@@ -62,11 +62,10 @@ public class Directory {
 	
 	private Restaurant tanRestaurant = new TanRestaurant("TanRestaurant"); //restaurant 6
 	Coordinate tanRestaurantLocation = new Coordinate(258,307);
-	*/
 	
-	//HOUSES
+//HOUSES
 	private Home houseOne = new Home("HouseOne");
-	Coordinate houseOneLocation = new Coordinate(0,0);
+	Coordinate houseOneLocation = new Coordinate(350,275);
 	
 	private Home houseTwo = new Home("HouseTwo");
 	Coordinate houseTwoLocation = new Coordinate(0,0);
@@ -82,27 +81,55 @@ public class Directory {
 	
 	private Home houseSix = new Home("HouseSix");
 	Coordinate houseSixLocation = new Coordinate(0,0);
-	
 		
-	//MARKETS
-		
-	//BANKS
+//MARKETS
+	private Market marketOne = new Market("MarketOne");
+	Coordinate marketOneLocation = new Coordinate(0,0);
 	
+	private Market marketTwo = new Market("MarketTwo");
+	Coordinate marketTwoLocation = new Coordinate(0,0);
+	
+//APARTMENTS
+	private Apartment apartmentOne = new Apartment("ApartmentOne");
+	Coordinate apartmentOneLocation = new Coordinate(0,0);
+	
+	private Apartment apartmentTwo = new Apartment("ApartmentTwo");
+	Coordinate apartmentTwoLocation = new Coordinate(0,0);
+
+//BANKS
+	private Bank bank = new Bank("Bank");
+	Coordinate bankLocation = new Coordinate(0,0);
+	
+//LOCATION DIRECTORY
 	private static Map<String, Coordinate> locationDirectory = new HashMap<String, Coordinate>(); {
 		//Bank
+		locationDirectory.put(bank.getName(), bankLocation);
 		
 		//Markets
+		locationDirectory.put(marketOne.getName(), marketOneLocation);
+		locationDirectory.put(marketTwo.getName(), marketTwoLocation);
 		
 		//Apartments
+		locationDirectory.put(apartmentOne.getName(), apartmentOneLocation);
+		locationDirectory.put(apartmentTwo.getName(), apartmentTwoLocation);
 		
 		//Homes
-		locationDirectory.put("House1", new Coordinate(350, 275));
+		locationDirectory.put(houseOne.getName(), houseOneLocation);
+		locationDirectory.put(houseTwo.getName(), houseTwoLocation);
+		locationDirectory.put(houseThree.getName(), houseThreeLocation);
+		locationDirectory.put(houseFour.getName(), houseFourLocation);
+		locationDirectory.put(houseFive.getName(), houseFiveLocation);
+		locationDirectory.put(houseSix.getName(), houseSixLocation);
 		
 		//Restaurants
-		locationDirectory.put(stackRestaurant.getName(), stackRestaurantLocation);	
+		locationDirectory.put(stackRestaurant.getName(), stackRestaurantLocation);
+		locationDirectory.put(shehRestaurant.getName(), shehRestaurantLocation);
+		locationDirectory.put(tanRestaurant.getName(), tanRestaurantLocation);
+		locationDirectory.put(phillipsRestaurant.getName(), phillipsRestaurantLocation);
+		locationDirectory.put(nakamuraRestaurant.getName(), nakamuraRestaurantLocation);
+		locationDirectory.put(huangRestaurant.getName(), huangRestaurantLocation);
 		
 	}
-	
 	
 	
 	public static List<Restaurant> restaurants = new ArrayList<Restaurant>();
