@@ -18,7 +18,6 @@ public class StackWaiterRole extends Role implements Waiter {
 	private Host host;
 	private Cashier cashier;
 	private List<MyCustomer> customers = new ArrayList<MyCustomer>();
-	private String name;
 	
 	private Semaphore doneAnimation = new Semaphore(0,true);
 	
@@ -31,13 +30,12 @@ public class StackWaiterRole extends Role implements Waiter {
 	private enum CustomerState
 	{Waiting, Seated, ReadyToOrder, Ordering, Ordered, AtCook, FoodEmpty, FoodReady, WaitingForReadyFood, Eating, DoneEating, ReadyForCheck, WaitingForCheck, HasCheck, Paying, Gone};
 	
-	public StackWaiterRole(String name) {
+	public StackWaiterRole() {
 		super();
-		this.name = name;
 	}
 	
 	public String getName() {
-		return name;
+		return getPersonAgent().getName();
 	}
 	
 	public void setCook(Cook cook) {

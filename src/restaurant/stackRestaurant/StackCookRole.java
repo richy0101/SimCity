@@ -29,10 +29,7 @@ public class StackCookRole extends Role implements Cook {
 	{Empty, Ordered, Stocked, PermanentlyEmpty};
 	
 	
-	private String name;
-	
-	public StackCookRole(String name) {
-		this.name = name;
+	public StackCookRole() {
 		foods.put("Steak", new Food(100));
 		foods.put("Chicken", new Food(140));
 		foods.put("Salad", new Food(70));
@@ -40,7 +37,7 @@ public class StackCookRole extends Role implements Cook {
 	}
 	
 	public String getName() {
-		return name;
+		return getPersonAgent().getName();
 	}
 	
 	public void setGui(CookGui g) {

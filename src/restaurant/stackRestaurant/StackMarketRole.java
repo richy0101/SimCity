@@ -1,7 +1,9 @@
 package restaurant.stackRestaurant;
 
 import agent.Role;
+
 import java.util.*;
+
 import restaurant.stackRestaurant.interfaces.Cook;
 import restaurant.stackRestaurant.interfaces.Market;
 import restaurant.stackRestaurant.interfaces.Cashier;
@@ -21,16 +23,15 @@ public class StackMarketRole extends Role implements Market {
 	
 	private String name;
 	
-	public StackMarketRole(String name, int steak, int chicken, int salad, int pizza) {
-		this.name = name;
+	public StackMarketRole(int steak, int chicken, int salad, int pizza) {
 		food.put("Steak", new Food(steak, 5));
 		food.put("Chicken", new Food(chicken, 4));
 		food.put("Salad", new Food(salad, 1));
 		food.put("Pizza", new Food(pizza, 3));
 	}
 	
-	public String toString() {
-		return name;
+	public String getName() {
+		return getPersonAgent().getName();
 	}
 	
 	public void setCashier(Cashier cashier) {

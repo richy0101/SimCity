@@ -18,6 +18,9 @@ import javax.swing.*;
 public class MacroAnimationPanel extends JPanel implements ActionListener {
        
 	BufferedImage cityImage;
+	BufferedImage cityImageTop;
+	BufferedImage cityImageNight;
+	BufferedImage cityImageNightTop;
 
 	private final int WINDOWX = 827;
     private final int WINDOWY = 406;
@@ -34,8 +37,11 @@ public class MacroAnimationPanel extends JPanel implements ActionListener {
     	Timer timer = new Timer(DELAY, this);
     	timer.start();
     	
-        try {
-        	cityImage = ImageIO.read(getClass().getResource("SIMCITY.png"));
+    	try {
+        	cityImage = ImageIO.read(getClass().getResource("SIMCITYBOTTOM.png"));
+        	cityImageTop = ImageIO.read(getClass().getResource("SIMCITYTOP.png"));
+        	cityImageNight = ImageIO.read(getClass().getResource("SIMCITYBOTTOMNIGHT.png"));
+        	cityImageNightTop = ImageIO.read(getClass().getResource("SIMCITYTOPNIGHT.png"));
         }
         catch(IOException e) {
         	System.out.println("Error w/ Background");
@@ -53,6 +59,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener {
         Graphics2D g2 = (Graphics2D)g;
 
         g2.drawImage(cityImage, 0, 0, null);
+        
         for(Gui gui : guis) {
             if (gui.isPresent()) {
                 gui.updatePosition();
@@ -64,6 +71,9 @@ public class MacroAnimationPanel extends JPanel implements ActionListener {
                 gui.draw(g2);
             }
         }
+        
+        g2.drawImage(cityImageTop, 0, 0, null);
+        
     }
 
     public void addGui(Gui gui) {

@@ -8,6 +8,7 @@ import agent.Role;
 import java.util.Timer;
 import java.util.Random;
 import java.util.TimerTask;
+
 import restaurant.stackRestaurant.interfaces.*;
 
 /**
@@ -51,9 +52,8 @@ public class StackCustomerRole extends Role implements Customer {
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public StackCustomerRole(String name){
+	public StackCustomerRole(){
 		super();
-		this.name = name;
 		if(name.equals("cheap")) {
 			cheapSkate = true;
 		} else if (name.equals("impatient")) {
@@ -84,9 +84,6 @@ public class StackCustomerRole extends Role implements Customer {
 		this.cashier = cashier;
 	}
 
-	public String getCustomerName() {
-		return name;
-	}
 	// Messages
 
 	public void msgGotHungry() {//from animation
@@ -334,7 +331,7 @@ public class StackCustomerRole extends Role implements Customer {
 	// Accessors, etc.
 
 	public String getName() {
-		return name;
+		return getPersonAgent().getName();
 	}
 	
 	public int getHungerLevel() {

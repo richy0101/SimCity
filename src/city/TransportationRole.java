@@ -27,7 +27,6 @@ public class TransportationRole extends Role implements Transportation  {
 		hasCar = true; //hack for normative
 		state = TransportationState.NeedsToTravel; // hack for normative;
 		destination = workLocation;
-		stateChanged();
 	}
 	
 	/*

@@ -21,16 +21,7 @@ public class StackCashierRole extends Role implements Cashier {
 	public enum CheckState
 	{NeedPaying, Paid};
 	
-	private String name;
 	private double till;
-	
-	public StackCashierRole(String name) {
-		this.name = name;
-	}
-	
-	public String getName() {
-		return name;
-	}
 	
 	public List<MyCustomer> getCustomers() {
 		return customers;

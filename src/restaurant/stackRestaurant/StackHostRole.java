@@ -50,6 +50,11 @@ public class StackHostRole extends Role implements Host {
 	public Collection<Table> getTables() {
 		return tables;
 	}
+	
+	public String getName() {
+		return getPersonAgent().getName();
+	}
+	
 	// Messages
 
 	public void msgIWantFood(Customer cust) {

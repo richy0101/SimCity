@@ -16,10 +16,10 @@ public class StackRestaurant extends Restaurant {
 	
 	 //Host, cook, waiters and customers
     private StackHostRole host = new StackHostRole();
-    private StackCookRole cook = new StackCookRole("Chef Boyardee");
-    private StackWaiterRole waiter = new StackWaiterRole("Garcon");
-    private StackCashierRole cashier = new StackCashierRole("Mr.Moneybags");
-    private StackMarketRole market = new StackMarketRole("McNugs", 100, 100, 100, 100);
+    private StackCookRole cook = new StackCookRole();
+    private StackWaiterRole waiter = new StackWaiterRole();
+    private StackCashierRole cashier = new StackCashierRole();
+    private StackMarketRole market = new StackMarketRole(100, 100, 100, 100);
     
     private PersonAgent hostPerson = new PersonAgent(host);
     private PersonAgent cookPerson = new PersonAgent(cook);
@@ -53,12 +53,6 @@ public class StackRestaurant extends Restaurant {
 		cookPerson.startThread();
 		waiterPerson.startThread();
 		marketPerson.startThread();
-//		new Role wtvRole;
-//		new PersonAgent p PersonAgent(wtvRole);
-//		wtvRole.setPerson(p);
-//		p.startThread();
-
-		
 	}
 	
 	public String getName() {
