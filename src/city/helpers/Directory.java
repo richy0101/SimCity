@@ -33,18 +33,52 @@ public class Directory {
 		roleDirectory.put("bank.BankCustomerRole", "Bank");
 		roleDirectory.put("bank.BankManagerRole", "Bank");
 		roleDirectory.put("bank.BankTellerRole", "Bank");
+		
 		//Market Roles
 		roleDirectory.put("market.MarketRole1" , "Market1");
 		roleDirectory.put("market.MarketRole2", "Market2");
+		
 		//LandLord Roles
 		roleDirectory.put("home.LandlordRole1", "AppartmentComplex1");
 		roleDirectory.put("home.LandlordRole2", "AppartmentComplex2");
+		
 		//Restaurant Roles Stack
 		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "StackRestaurant");
 		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "StackRestaurant");
 		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "StackRestaurant");
 		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "StackRestaurant");
 		
+		/*
+		//Restaurant Roles Tan
+		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "StackRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "StackRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "StackRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "StackRestaurant");	
+		
+		//Restaurant Roles Sheh
+		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "StackRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "StackRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "StackRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "StackRestaurant");	
+		
+		//Restaurant Roles Nakamura
+		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "StackRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "StackRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "StackRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "StackRestaurant");	
+		
+		//Restaurant Roles Huang
+		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "StackRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "StackRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "StackRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "StackRestaurant");	
+		
+		//Restaurant Roles Phillips
+		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "StackRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "StackRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "StackRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "StackRestaurant");	
+		*/
 		
 	}
 	//RESTAURANT Instantiations
