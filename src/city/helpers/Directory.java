@@ -1,5 +1,7 @@
 package city.helpers;
 
+import home.Home;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +65,24 @@ public class Directory {
 	*/
 	
 	//HOUSES
+	private Home houseOne = new Home("HouseOne");
+	Coordinate houseOneLocation = new Coordinate(0,0);
+	
+	private Home houseTwo = new Home("HouseTwo");
+	Coordinate houseTwoLocation = new Coordinate(0,0);
+
+	private Home houseThree = new Home("HouseThree");
+	Coordinate houseThreeLocation = new Coordinate(0,0);
+	
+	private Home houseFour = new Home("HouseFour");
+	Coordinate houseFourLocation = new Coordinate(0,0);
+	
+	private Home houseFive = new Home("HouseFive");
+	Coordinate houseFiveLocation = new Coordinate(0,0);
+	
+	private Home houseSix = new Home("HouseSix");
+	Coordinate houseSixLocation = new Coordinate(0,0);
+	
 		
 	//MARKETS
 		
