@@ -5,13 +5,13 @@ import java.util.Map;
 import market.interfaces.Market;
 import market.interfaces.MarketCustomer;
 
-public class MockMarketRole extends Mock implements Market {
+public class MockMarket extends Mock implements Market {
 
 	public MarketCustomer customer;
 	public EventLog log;
 	public Map<String, Integer> groceries;
 
-	public MockMarketRole(String name) {
+	public MockMarket(String name) {
 		super(name);
 		log = new EventLog();
 	}

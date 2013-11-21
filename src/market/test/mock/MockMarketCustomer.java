@@ -6,14 +6,14 @@ import market.interfaces.Market;
 import market.interfaces.MarketCustomer;
 
 
-public class MockMarketCustomerRole extends Mock implements MarketCustomer {
+public class MockMarketCustomer extends Mock implements MarketCustomer {
 
 	public Market market;
 	public EventLog log;
 	public double price;
 	public Map<String, Integer> groceries;
 
-	public MockMarketCustomerRole (String name) {
+	public MockMarketCustomer (String name) {
 		super(name);
 		log = new EventLog();
 

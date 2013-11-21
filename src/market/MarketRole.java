@@ -42,6 +42,20 @@ public class MarketRole implements Market {
 	    }
 	}
 	
+	public MarketRole() {
+		inventory.put("Chicken", new Food("Chicken", 10, 1.00));
+		inventory.put("Steak", new Food("Steak", 10, 2.00));
+		inventory.put("Pizza", new Food("Pizza", 10, 3.00));
+		inventory.put("Salad", new Food("Salad", 10, 4.00));
+	}
+	
+	public List<Order> getMyOrders() {
+		return MyOrders;
+	}
+	public Map<String, Food> getInventory() {
+		return inventory;
+	}
+	
 	//messages----------------------------------------------------------------------------
 	public void msgGetGroceries(MarketCustomer customer, Map<String, Integer> groceryList) {
 	    MyOrders.add(new Order(customer, groceryList));
