@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -43,7 +44,7 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
         catch(IOException e) {
         	System.out.println("Error w/ Background");
         }
-    	/*
+    	
         HashMap<String, CityCard> cards = new HashMap<String, CityCard>(); {
         cards.put("null", new CityCard(city, Color.DARK_GRAY);
         	
@@ -54,7 +55,7 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
        	}
         	
        	layout.show(this, "null");
-       	*/
+       	
     }
 
     /*
