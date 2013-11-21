@@ -17,6 +17,8 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import restaurant.Restaurant;
+
 public class MicroAnimationPanel extends JPanel implements ActionListener/*, MouseListener*/ {
 	
 	private final int WINDOWX = 835;
@@ -28,6 +30,18 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
 
     private List<Gui> guis = new ArrayList<Gui>();
     
+    public HashMap<String, CityCard> cards = new HashMap<String, CityCard>();
+    
+    private class CityCard {
+    	CityCard(MicroAnimationPanel window, JPanel panel) {
+    		
+    	}
+
+		public CityCard(MicroAnimationPanel window, Color red) {
+
+		}
+    }
+    
     public MicroAnimationPanel() {
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
@@ -37,29 +51,35 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
         
     	Timer timer = new Timer(DELAY, this);
     	timer.start();
-    	
+    	/*
     	try {
         	restaurantImage = ImageIO.read(getClass().getResource("stackRestaurant.png"));
         }
         catch(IOException e) {
         	System.out.println("Error w/ Background");
         }
+        */
     	
-        HashMap<String, CityCard> cards = new HashMap<String, CityCard>(); {
-        cards.put("null", new CityCard(city, Color.DARK_GRAY);
+    	cards.put("null", new CityCard(this, Color.RED));
+    	cards.put("House1", new CityCard(this, Color.RED));
         	
        	CardLayout layout = new CardLayout();
        	this.setLayout(layout);
        	for(String key: cards.keySet()) {
-       		this.add(cards.get((key), key);
+       		this.add(cards.get(key), key);
        	}
         	
-       	layout.show(this, "null");
-       	
+       	layout.show(this, "null"); 	
     }
+        
+    
+    private void add(CityCard cityCard, String key) {
+		// TODO Auto-generated method stub
+		
+	}
 
     /*
-    public boolean addView(CityCard panel, String key) {
+	public boolean addView(CityCard panel, String key) {
     	if(cards.containsKey(key))
     		return false;
     	cards.put(key, panel);
@@ -81,7 +101,7 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
     	}
     	
     }
-	*/
+    */
 
 	public void actionPerformed(ActionEvent e) {
 		repaint();  //Will have paintComponent called
@@ -94,7 +114,7 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
         g2.setColor(getBackground());
         g2.fillRect(0, 0, getWidth(), getHeight());
 
-        g2.drawImage(restaurantImage, 0, 0, null);
+        //g2.drawImage(restaurantImage, 0, 0, null);
         for(Gui gui : guis) {
             if (gui.isPresent()) {
                 gui.updatePosition();

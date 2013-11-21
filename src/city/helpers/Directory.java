@@ -1,8 +1,5 @@
 package city.helpers;
 
-import home.Apartment;
-import home.Home;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +7,8 @@ import java.util.Map;
 
 import market.Market;
 import bank.Bank;
+import home.Apartment;
+import home.Home;
 import restaurant.Restaurant;
 import restaurant.stackRestaurant.*;
 
