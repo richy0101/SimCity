@@ -114,8 +114,6 @@ public class MarketRole implements Market {
 	    MyOrders.remove(o);
 	}
 	private void BillCustomer(Order o) {
-		o.customer.msgCantFillOrder(o.groceryList); //Part of order that couldn't be filled
-		
 	    o.customer.msgHereIsBill(o.price);
 	    o.state = orderState.Billed;
 	}

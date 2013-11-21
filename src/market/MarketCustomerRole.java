@@ -33,7 +33,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	}
 	
 	public void msgHereAreYourGroceries(Map<String, Integer> groceries) {
-		myPerson.groceryList.keySet().removeAll(myGroceryList.keySet());
+//		getPersonAgent().groceryList.keySet().removeAll(myGroceryList.keySet());
 	    roleEvent = Event.GotGroceries;
 	}
 	
@@ -82,9 +82,9 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	}
 	
 	public void Pay() {
-		if(myPerson.funds >= orderCost) {
+		if(getPersonAgent().getFunds() >= orderCost) {
 			market.msgHereIsMoney(this, orderCost);
-			myPerson.funds -= orderCost;
+			getPersonAgent().setFunds(getPersonAgent().getFunds() - orderCost);
 		}
 		else {
 			market.msgCantAffordGroceries(this);
@@ -93,7 +93,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	}
 	
 	public void LeaveMarket() {
-		myPerson.msgRoleFinished();
+		getPersonAgent().msgRoleFinished();
 	}
 	
 	//GUI Actions-------------------------------------------------------------------------
