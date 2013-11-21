@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class MicroAnimationPanel extends JPanel implements ActionListener {
+public class MicroAnimationPanel extends JPanel implements ActionListener, MouseListener {
 	
 	private final int WINDOWX = 835;
     private final int WINDOWY = 400;
@@ -29,6 +30,8 @@ public class MicroAnimationPanel extends JPanel implements ActionListener {
         setVisible(true);
         setBackground(Color.lightGray);
  
+        addMouseListener(this);
+        
     	Timer timer = new Timer(DELAY, this);
     	timer.start();
     	
@@ -38,6 +41,15 @@ public class MicroAnimationPanel extends JPanel implements ActionListener {
         catch(IOException e) {
         	System.out.println("Error w/ Background");
         }
+    }
+    
+    public Boolean contains() {
+    	for(CityComponent c: statics) {
+    		if(c.contains(arg0.getX(), arg0.getY())) {
+    			city.view.setView(c.ID);
+    		}
+    	}
+    	
     }
 
 	public void actionPerformed(ActionEvent e) {
