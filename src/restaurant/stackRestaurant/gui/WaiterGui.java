@@ -20,13 +20,11 @@ public class WaiterGui implements Gui {
     private int xBreak = 200, yBreak = 300;
     private int WAITINGX = 3, WAITINGY = 3;
   
-    RestaurantGui gui;
     
     public static final int HOSTSIZE = 20;
 
-    public WaiterGui(StackWaiterRole agent, RestaurantGui gui) {
+    public WaiterGui(StackWaiterRole agent) {
         this.agent = agent;
-        this.gui = gui;
     }
 
     public void updatePosition() {
@@ -67,7 +65,7 @@ public class WaiterGui implements Gui {
     }
     
     public void setWaiterCheckOff() {
-    	gui.setWaiterBreakOff(agent);
+//    	gui.setWaiterBreakOff(agent);
     }
 
     public void setGoingOffBreak() {

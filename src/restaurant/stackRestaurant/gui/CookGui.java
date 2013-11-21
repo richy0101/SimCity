@@ -20,13 +20,11 @@ public class CookGui implements Gui {
     {noCommand, GoToFridge, GoToCooktop, GoToPlating};
 	private Command command=Command.noCommand;
   
-    RestaurantGui gui;
     
     public static final int COOKSIZE = 20;
 
-    public CookGui(StackCookRole agent, RestaurantGui gui) {
+    public CookGui(StackCookRole agent) {
         this.agent = agent;
-        this.gui = gui;
     }
 
     public void updatePosition() {

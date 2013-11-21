@@ -14,8 +14,6 @@ public class CustomerGui implements Gui{
 	private TableList tableList = new TableList();
 	private String choice = "";
 
-	//private HostAgent host;
-	RestaurantGui gui;
 
 	private int xPos, yPos;
 	private int xDestination, yDestination;
@@ -29,14 +27,13 @@ public class CustomerGui implements Gui{
 	private static final int WAITINGX = 3;
 	private static final int WAITINGY = 3;
 
-	public CustomerGui(StackCustomerRole c, RestaurantGui gui){ //HostAgent m) {
+	public CustomerGui(StackCustomerRole c){ //HostAgent m) {
 		agent = c;
 		xPos = -40;
 		yPos = -40;
 		xDestination = -40;
 		yDestination = -40;
 		//maitreD = m;
-		this.gui = gui;
 	}
 
 	public void updatePosition() {
@@ -55,7 +52,7 @@ public class CustomerGui implements Gui{
 			else if (command==Command.LeaveRestaurant) {
 				agent.msgAnimationFinishedLeaveRestaurant();
 				isHungry = false;
-				gui.setCustomerEnabled(agent);
+//				gui.setCustomerEnabled(agent);
 			}
 			else if (command==Command.GoToCashier) {
 				agent.msgAnimationFinishedGoToCashier();

@@ -89,7 +89,7 @@ public class PersonAgent extends Agent implements Person {
 		}
 		Role createRole(String order) {
 			if(order == "StackRestaurant") {
-				this.newRole = new StackCustomerRole(name);
+				this.newRole = new StackCustomerRole();
 			}
 			return newRole;
 		}
