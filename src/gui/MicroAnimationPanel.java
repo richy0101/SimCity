@@ -9,28 +9,30 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class MicroAnimationPanel extends JPanel implements ActionListener, MouseListener {
+public class MicroAnimationPanel extends JPanel implements ActionListener/*, MouseListener*/ {
 	
 	private final int WINDOWX = 835;
     private final int WINDOWY = 400;
    
     BufferedImage restaurantImage;
-    
+   
     private final int DELAY = 5;
 
     private List<Gui> guis = new ArrayList<Gui>();
-
+    
     public MicroAnimationPanel() {
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
         setBackground(Color.lightGray);
  
-        addMouseListener(this);
+        //addMouseListener(this);
         
     	Timer timer = new Timer(DELAY, this);
     	timer.start();
@@ -41,9 +43,36 @@ public class MicroAnimationPanel extends JPanel implements ActionListener, Mouse
         catch(IOException e) {
         	System.out.println("Error w/ Background");
         }
+    	/*
+        HashMap<String, CityCard> cards = new HashMap<String, CityCard>(); {
+        cards.put("null", new CityCard(city, Color.DARK_GRAY);
+        	
+       	CardLayout layout = new CardLayout();
+       	this.setLayout(layout);
+       	for(String key: cards.keySet()) {
+       		this.add(cards.get((key), key);
+       	}
+        	
+       	layout.show(this, "null");
+       	*/
+    }
+
+    /*
+    public boolean addView(CityCard panel, String key) {
+    	if(cards.containsKey(key))
+    		return false;
+    	cards.put(key, panel);
+    	this.add(cards.get(key), key);
+    	return true;
     }
     
-    public Boolean contains() {
+    public void setView(String key) {
+    	if (cards.containsKey(key)){ 
+    		layout.show(this,key);
+    	}
+    }
+    
+    public boolean contains() {
     	for(CityComponent c: statics) {
     		if(c.contains(arg0.getX(), arg0.getY())) {
     			city.view.setView(c.ID);
@@ -51,6 +80,7 @@ public class MicroAnimationPanel extends JPanel implements ActionListener, Mouse
     	}
     	
     }
+	*/
 
 	public void actionPerformed(ActionEvent e) {
 		repaint();  //Will have paintComponent called
