@@ -32,16 +32,6 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
     
     public HashMap<String, CityCard> cards = new HashMap<String, CityCard>();
     
-    private class CityCard {
-    	CityCard(MicroAnimationPanel window, JPanel panel) {
-    		
-    	}
-
-		public CityCard(MicroAnimationPanel window, Color red) {
-
-		}
-    }
-    
     public MicroAnimationPanel() {
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
