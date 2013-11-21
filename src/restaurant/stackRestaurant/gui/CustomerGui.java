@@ -5,6 +5,10 @@ import restaurant.stackRestaurant.helpers.TableList;
 import gui.Gui;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class CustomerGui implements Gui{
 
@@ -13,6 +17,7 @@ public class CustomerGui implements Gui{
 	private boolean isHungry = false;
 	private TableList tableList = new TableList();
 	private String choice = "";
+	BufferedImage customerImage;
 
 
 	private int xPos, yPos;
@@ -21,19 +26,25 @@ public class CustomerGui implements Gui{
 	private Command command=Command.noCommand;
 
 	
-	private static final int CUSTOMERSIZE = 20;
-	private static final int CASHIERX = 100;
-	private static final int CASHIERY = 180;
+	private static final int PERSONSIZEX = 32, PERSONSIZEY = 40;
+	private static final int CASHIERX = 460;
+	private static final int CASHIERY = 34;
 	private static final int WAITINGX = 3;
 	private static final int WAITINGY = 3;
 
 	public CustomerGui(StackCustomerRole c){ //HostAgent m) {
 		agent = c;
-		xPos = -40;
-		yPos = -40;
-		xDestination = -40;
-		yDestination = -40;
-		//maitreD = m;
+		xPos = 850;
+		yPos = 450;
+		xDestination = 850;
+		yDestination = 450;
+		
+		try {
+        	customerImage = ImageIO.read(getClass().getResource("stackRestaurantCustomer.png"));
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ Background");
+        }
 	}
 
 	public void updatePosition() {
@@ -69,10 +80,7 @@ public class CustomerGui implements Gui{
 	}
 	
 	public void draw(Graphics2D g) {
-		g.setColor(Color.GREEN);
-		g.fillRect(xPos, yPos, CUSTOMERSIZE, CUSTOMERSIZE);
-		g.setColor(Color.WHITE);
-		g.drawString(choice, xPos + 20, yPos + 20);
+		g.drawImage(customerImage, 0, 0, null);
 	}
 
 	public boolean isPresent() {

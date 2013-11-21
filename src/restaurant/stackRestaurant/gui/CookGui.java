@@ -4,6 +4,10 @@ import restaurant.stackRestaurant.StackCookRole;
 import gui.Gui;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class CookGui implements Gui {
 
@@ -12,19 +16,28 @@ public class CookGui implements Gui {
     private int xHome = 250, yHome = 250;
     private int xPos = 250, yPos = 250;//default waiter position
     private int xDestination = 250, yDestination = 250;//default start position
-    private int PLATINGX = 280, PLATINGY = 220 + COOKSIZE;
-    private int COOKTOPX = 280, COOKTOPY = 300 - COOKSIZE;
-    private int FRIDGEX = 310 - COOKSIZE, FRIDGEY = 250;
+    private int PLATINGX = 543, PLATINGY = 70;
+    private int COOKTOPX = 781, COOKTOPY = 35;
+    private int FRIDGEX = 595, FRIDGEY = 35;
+    
+    BufferedImage cookImage;
     
     private enum Command 
     {noCommand, GoToFridge, GoToCooktop, GoToPlating};
 	private Command command=Command.noCommand;
   
     
-    public static final int COOKSIZE = 20;
+	private static final int PERSONSIZEX = 32, PERSONSIZEY = 40;
 
     public CookGui(StackCookRole agent) {
         this.agent = agent;
+        
+        try {
+        	cookImage = ImageIO.read(getClass().getResource("stackRestaurantCook.png"));
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ Background");
+        }
     }
 
     public void updatePosition() {
@@ -52,8 +65,7 @@ public class CookGui implements Gui {
     }
     
     public void draw(Graphics2D g) {
-        g.setColor(Color.YELLOW);
-        g.fillRect(xPos, yPos, COOKSIZE, COOKSIZE);
+    	g.drawImage(cookImage, 0, 0, null);
     }
     
     public void DoGoToFridge() {
