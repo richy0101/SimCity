@@ -30,7 +30,7 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
 
     private List<Gui> guis = new ArrayList<Gui>();
     
-    public HashMap<String, CityCard> cards = new HashMap<String, CityCard>();
+    //public HashMap<String, CityCard> cards = new HashMap<String, CityCard>();
     
     public MicroAnimationPanel() {
     	setSize(WINDOWX, WINDOWY);
@@ -41,14 +41,14 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
         
     	Timer timer = new Timer(DELAY, this);
     	timer.start();
-    	/*
+    	
     	try {
         	restaurantImage = ImageIO.read(getClass().getResource("stackRestaurant.png"));
         }
         catch(IOException e) {
         	System.out.println("Error w/ Background");
         }
-        */
+        /*
     	
     	cards.put("null", new CityCard(this, Color.RED));
     	cards.put("House1", new CityCard(this, Color.RED));
@@ -60,15 +60,16 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
        	}
         	
        	layout.show(this, "null"); 	
+       	*/
     }
         
-    
+    /*
     private void add(CityCard cityCard, String key) {
 		// TODO Auto-generated method stub
 		
 	}
 
-    /*
+    
 	public boolean addView(CityCard panel, String key) {
     	if(cards.containsKey(key))
     		return false;
