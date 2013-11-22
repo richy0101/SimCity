@@ -140,6 +140,7 @@ public class PersonAgent extends Agent implements Person {
 	//Hax for testing
 	public PersonAgent (Role hardCodeJob) {
 		name = "HardCoded " + hardCodeJob.toString();
+		print(name);
 		roles.add(hardCodeJob);
 	}
 	/**

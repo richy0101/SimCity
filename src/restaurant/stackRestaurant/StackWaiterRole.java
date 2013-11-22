@@ -434,9 +434,9 @@ public class StackWaiterRole extends Role implements Waiter {
 	}
 //	other---------------------------------------------------------------------------------------------------------------------------------
 	
-	public String toString() {
+	/*public String toString() {
 		return getName();
-	}
+	}*/
 	
 	public boolean isOnBreak() {
 		if(state == AgentState.OnBreak) {

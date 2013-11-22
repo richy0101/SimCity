@@ -45,14 +45,18 @@ public class StackRestaurant extends Restaurant {
 		waiter.setCashier(cashier);
 		waiter.setCook(cook);
 		waiter.setHost(host);
-		host.msgAddWaiter(waiter);
+		
 		market.setCashier(cashier);
-        cook.msgAddMarket(market);
+      
 		
 		hostPerson.startThread();
 		cookPerson.startThread();
+		cashierPerson.startThread();
 		waiterPerson.startThread();
 		marketPerson.startThread();
+		
+		cook.msgAddMarket(market);
+		host.msgAddWaiter(waiter);
 	}
 	
 	public String getName() {
