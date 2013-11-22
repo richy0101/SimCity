@@ -161,11 +161,12 @@ public class Directory {
 		
 		//Restaurants
 		locationDirectory.put(stackRestaurant.getName(), stackRestaurantLocation);
+		/*
 		locationDirectory.put(shehRestaurant.getName(), shehRestaurantLocation);
 		locationDirectory.put(tanRestaurant.getName(), tanRestaurantLocation);
 		locationDirectory.put(phillipsRestaurant.getName(), phillipsRestaurantLocation);
 		locationDirectory.put(nakamuraRestaurant.getName(), nakamuraRestaurantLocation);
-		locationDirectory.put(huangRestaurant.getName(), huangRestaurantLocation);
+		locationDirectory.put(huangRestaurant.getName(), huangRestaurantLocation);*/
 		
 	}
 	
