@@ -1,5 +1,6 @@
 package bank;
 
+import city.helpers.Directory;
 import bank.interfaces.*;
 import agent.Role;
 
@@ -8,7 +9,13 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	BankTeller teller;
 	BankManager manager;
 	private enum CustomerState {DoingNothing, Waiting, BeingHelped, Done};
+	private enum BankTask {WantsToWithdraw, WantsToGetLoan, WantsToDeposit, WantsToRob};
 	CustomerState state = CustomerState.DoingNothing;
+	BankTask task;
+	public BankCustomerRole(String task) {
+		this.task = BankTask.valueOf(task);
+		this.manager = Directory.sharedInstance().getBanks().get(0).getManager();
+	}
 	
 
 //messages----------------------------------------------------------------------------

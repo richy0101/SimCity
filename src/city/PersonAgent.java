@@ -19,10 +19,12 @@ import java.util.TimerTask;
 
 
 
+
 import restaurant.Restaurant;
 import restaurant.stackRestaurant.StackCustomerRole;
 import market.MarketCustomerRole;
 import market.MarketRole;
+import bank.Bank;
 import bank.BankCustomerRole;
 import bank.BankManagerRole;
 import bank.BankTellerRole;
@@ -269,8 +271,9 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private boolean evaluateStatus() {
 		// TODO Auto-generated method stub
-		if(funds <= 25.00) {
-			
+		if(funds <= 100.00) {
+			personState = PersonState.WantsToWithdraw;
+			return true;
 		}
 		else {
 			personState = PersonState.Idle;
@@ -353,26 +356,40 @@ public class PersonAgent extends Agent implements Person {
 	}
 	/** Non Norm Actions **/
 	private void goRob() {
-		// TODO Auto-generated method stub
+		Bank b = Directory.sharedInstance().getBanks().get(0);
+		roles.clear();
+		roles.add(new BankCustomerRole(personState.toString()));//Hacked factory LOL
+		roles.add(new TransportationRole(b.getName()));
+		print("Action goRob - State set to OutBank");
+		personState = PersonState.OutToBank;
 		
 	}
 	private void goDeposit() {
-		// TODO Auto-generated method stub
+		Bank b = Directory.sharedInstance().getBanks().get(0);
+		roles.clear();
+		roles.add(new BankCustomerRole(personState.toString()));//Hacked factory LOL
+		roles.add(new TransportationRole(b.getName()));
+		print("Action goDeposit - State set to OutBank");
+		personState = PersonState.OutToBank;
 		
 	}
 	private void goLoan() {
-		// TODO Auto-generated method stub
+		Bank b = Directory.sharedInstance().getBanks().get(0);
+		roles.clear();
+		roles.add(new BankCustomerRole(personState.toString()));//Hacked factory LOL
+		roles.add(new TransportationRole(b.getName()));
+		print("Action goLoan - State set to OutBank");
+		personState = PersonState.OutToBank;
 		
 	}
 	
 	private void goWithdraw() {
-		/* 
-		personState = PersonState.OutToEat;
-		Restaurant r = Directory.sharedInstance().banks.get(0);
+		Bank b = Directory.sharedInstance().getBanks().get(0);
 		roles.clear();
-		roles.add(factory.createRole(r.getName()));//Hacked factory LOL
-		roles.add(new TransportationRole(r.getName()));
-		*/
+		roles.add(new BankCustomerRole(personState.toString()));//Hacked factory LOL
+		roles.add(new TransportationRole(b.getName()));
+		print("Action goWithraw - State set to OutBank");
+		personState = PersonState.OutToBank;
 	}
 	
 	public String getName() {

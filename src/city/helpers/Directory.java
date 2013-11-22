@@ -17,7 +17,7 @@ public class Directory {
 	
 	Directory() {
 		restaurants.add(stackRestaurant);
-		
+		banks.add(bank);
 	}
 	
 	public static Directory sharedInstance() {
@@ -171,13 +171,16 @@ public class Directory {
 	}
 	
 	public static List<Restaurant> restaurants = new ArrayList<Restaurant>();
-	
+	public static List<Bank> banks = new ArrayList<Bank>();
 	public Map<String, Coordinate> getDirectory() {
 		return locationDirectory;
 	}
 	
 	public List<Restaurant> getRestaurants() {
 		return restaurants;
+	}
+	public List<Bank> getBanks() {
+		return banks;
 	}
 	
 

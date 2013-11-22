@@ -18,7 +18,9 @@ public class Bank {
     	}
     	return sharedInstance;
     }
-    
+    public BankManagerRole getManager() {
+    	return null;
+    }
 	public Object getOwner() {
 		return null;
 	}
