@@ -139,7 +139,7 @@ public class Directory {
 	Coordinate bankLocation = new Coordinate(108,151);
 	
 //LOCATION DIRECTORY
-	private static Map<String, Coordinate> locationDirectory = new HashMap<String, Coordinate>(); {
+	public Map<String, Coordinate> locationDirectory = new HashMap<String, Coordinate>(); {
 		//Bank
 		locationDirectory.put(bank.getName(), bankLocation);
 		
