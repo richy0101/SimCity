@@ -54,7 +54,7 @@ public class SimCityGui {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize() { //BUTTONS
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setBounds(0, 0, 1133, 855);
