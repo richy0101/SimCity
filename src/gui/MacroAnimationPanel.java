@@ -43,8 +43,13 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     	buildings = new ArrayList<Building>();
     	
     	//Adding building blocks
-    	Building b = new Building(0, 0, 10, 10);
-    	buildings.add(b);
+    	/*
+    	Building bank = new Building(0, 123, 105, 105);
+    	buildings.add(bank);
+    	*/
+    	
+    	Building stackRestaurant = new Building(0, 240, 105, 120);
+    	buildings.add(stackRestaurant);
     	
     	addMouseListener(this);
     	
@@ -58,7 +63,6 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
         catch(IOException e) {
         	System.out.println("Error w/ Background");
         }
-
     }
     
 	public void actionPerformed(ActionEvent e) {
@@ -69,12 +73,6 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
         Graphics2D g2 = (Graphics2D)g;
         g2.setColor(Color.black);
         
-        //paint all building squares black
-        for(int i = 0; i < buildings.size(); i++) {
-        	Building b = buildings.get(i);
-        	g2.fill(b);
-        }
-
         g2.drawImage(cityImage, 0, 0, null);
         
         for(Gui gui : guis) {
@@ -91,6 +89,13 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
         
         g2.drawImage(cityImageTop, 0, 0, null);
         
+        //paint all building squares black
+        //PLACED ONTOP FOR BUILDING REFERENCE PURPOSES
+        for(int i = 0; i < buildings.size(); i++) {
+        	Building b = buildings.get(i);
+        	g2.fill(b);
+        }
+        
     }
     
     public ArrayList<Building> getBuildings() {
@@ -104,7 +109,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     //if click on building, then building displayed
 	public void mouseClicked(MouseEvent e) {
 		for(int i = 0; i < buildings.size(); i++) {
-			Building b= buildings.get(i);
+			Building b = buildings.get(i);
 			if(b.contains(e.getX(), e.getY())) {
 				b.displayBuilding();
 			}
