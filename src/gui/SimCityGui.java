@@ -14,6 +14,7 @@ import bank.BankTellerRole;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +27,6 @@ import restaurant.stackRestaurant.StackHostRole;
 public class SimCityGui {
 
 	//NEW STUFF
-	//CityPanel cityPanel;
 	JPanel buildingPanels;
 	CardLayout cardLayout;
 
@@ -55,18 +55,6 @@ public class SimCityGui {
 	public SimCityGui() {
 		initialize();
 		runSuperNorm();
-		
-		//Creates building panel for each object.
-		/*
-		ArrayList<Building> buildings = cityPanel.getBuildings();
-		for ( int i=0; i<buildings.size(); i++ ) {
-			Building b = buildings.get(i);
-			BuildingPanel bp = new BuildingPanel( b, i, this );
-			b.setBuildingPanel( bp );
-			buildingPanels.add( bp, "" + i );
-		}
-		*/
-		
 	}
 
 	/**
@@ -83,6 +71,18 @@ public class SimCityGui {
 		frame.getContentPane().add(macroAnimationPanel);
 		
 		MicroAnimationPanel microAnimationPanel = new MicroAnimationPanel();
+		cardLayout = new CardLayout();
+		microAnimationPanel.setLayout(cardLayout);
+		
+		//Creates building panel for each object
+		ArrayList<Building> buildings = macroAnimationPanel.getBuildings();
+		for ( int i=0; i<buildings.size(); i++ ) {
+			Building b = buildings.get(i);
+			BuildingPanel bp = new BuildingPanel( b, i, this );
+			b.setBuildingPanel( bp );
+			microAnimationPanel.add( bp, "" + i );
+		}
+		
 		microAnimationPanel.setBounds(5, 425, 827, 406);
 		frame.getContentPane().add(microAnimationPanel);
 		
@@ -329,9 +329,9 @@ public class SimCityGui {
 		//change boolean Cook in person.Decide eat to false to make person go to a restaurant.
 	}
 	
-	public void displayBuildingPanel( BuildingPanel bp ) {
-		System.out.println("abc");
-		System.out.println( bp.getName() );
+	public void displayBuildingPanel( BuildingPanel bp ) { //How is this tied in with the Micro Panel?
+		//System.out.println("abc");
+		System.out.println("Accessing " + bp.getName() + " for MicroAnimation Panel." );
 		cardLayout.show( buildingPanels, bp.getName() );
 	}
 }
