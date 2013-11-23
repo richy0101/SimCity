@@ -15,7 +15,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class MacroAnimationPanel extends JPanel implements ActionListener { //City Panel
+public class MacroAnimationPanel extends JPanel implements ActionListener {
        
 	BufferedImage cityImage;
 	BufferedImage cityImageTop;
@@ -45,7 +45,8 @@ public class MacroAnimationPanel extends JPanel implements ActionListener { //Ci
         }
         catch(IOException e) {
         	System.out.println("Error w/ Background");
-        } 	
+        }
+
     }
     
 	public void actionPerformed(ActionEvent e) {

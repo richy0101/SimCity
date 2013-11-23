@@ -30,7 +30,7 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
 
     private List<Gui> guis = new ArrayList<Gui>();
     
-    //public HashMap<String, CityCard> cards = new HashMap<String, CityCard>();
+    public HashMap<String, CityCard> cards = new HashMap<String, CityCard>();
     
     public MicroAnimationPanel() {
     	setSize(WINDOWX, WINDOWY);
@@ -48,18 +48,20 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
         catch(IOException e) {
         	System.out.println("Error w/ Background");
         }
-        /*
-    	cards.put("null", new CityCard(this, Color.RED));
-    	cards.put("House1", new CityCard(this, Color.RED));
+    	  	
+        
+    	//cards.put("null", new CityCard(this, Color.RED));
+    	//cards.put("House1", new CityCard(this, Color.RED));
         	
        	CardLayout layout = new CardLayout();
+       	
        	this.setLayout(layout);
        	for(String key: cards.keySet()) {
        		this.add(cards.get(key), key);
        	}
         	
-       	layout.show(this, "null"); 	
-       	*/
+       	//layout.show(this, "null"); 	
+       	
     }
         
     /*

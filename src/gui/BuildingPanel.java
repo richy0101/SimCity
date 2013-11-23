@@ -1,14 +1,15 @@
-import javax.swing.*;
+package gui;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
 
 public class BuildingPanel extends JPanel {
 	Rectangle2D myRectangle;
 	String myName;
-	SimCity201 myCity;
+	SimCityGui myCity;
 	
-	public BuildingPanel( Rectangle2D r, int i, SimCity201 sc ) {
+	public BuildingPanel( Rectangle2D r, int i, SimCityGui sc ) {
 		myRectangle = r;
 		myName = "" + i;
 		myCity = sc;

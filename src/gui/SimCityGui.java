@@ -328,4 +328,10 @@ public class SimCityGui {
 		//Something needs to call this person's msgWakeUp. And scenario should run from there. Person should wake up eat and then idle.
 		//change boolean Cook in person.Decide eat to false to make person go to a restaurant.
 	}
+	
+	public void displayBuildingPanel( BuildingPanel bp ) {
+		System.out.println("abc");
+		System.out.println( bp.getName() );
+		cardLayout.show( buildingPanels, bp.getName() );
+	}
 }

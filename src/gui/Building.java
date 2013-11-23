@@ -1,5 +1,6 @@
-import java.awt.geom.*;
+package gui;
 
+import java.awt.geom.*;
 
 public class Building extends Rectangle2D.Double {
 	BuildingPanel myBuildingPanel;
