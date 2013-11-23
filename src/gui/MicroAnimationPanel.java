@@ -42,35 +42,23 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
     	Timer timer = new Timer(DELAY, this);
     	timer.start();
     	
-    	try {
+    	/*
+    	try { //STACK RESTAURANT BACKGROUND
         	restaurantImage = ImageIO.read(getClass().getResource("stackRestaurant.png"));
         }
         catch(IOException e) {
         	System.out.println("Error w/ Background");
-        }
-    	  	
-        
-    	//cards.put("null", new CityCard(this, Color.RED));
-    	//cards.put("House1", new CityCard(this, Color.RED));
-        	
-       	CardLayout layout = new CardLayout();
-       	
-       	this.setLayout(layout);
-       	for(String key: cards.keySet()) {
-       		this.add(cards.get(key), key);
-       	}
-        	
-       	//layout.show(this, "null"); 	
-       	
+        } 
+        */	
     }
         
-    /*
+    
     private void add(CityCard cityCard, String key) {
 		// TODO Auto-generated method stub
 		
 	}
 
-    
+/*   
 	public boolean addView(CityCard panel, String key) {
     	if(cards.containsKey(key))
     		return false;
@@ -93,7 +81,7 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
     	}
     	
     }
-    */
+*/
 
 	public void actionPerformed(ActionEvent e) {
 		repaint();  //Will have paintComponent called

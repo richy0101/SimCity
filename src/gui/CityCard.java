@@ -6,7 +6,7 @@ import java.awt.event.MouseEvent;
 
 public class CityCard extends MacroAnimationPanel {
 
-	public static final int CARD_WIDTH = 500, CARD_HEIGHT = 500;
+	public static final int CARD_WIDTH = 827, CARD_HEIGHT = 406;
 
 	public CityCard(SimCityGui city) {
 		super(city);
@@ -16,8 +16,8 @@ public class CityCard extends MacroAnimationPanel {
 		background = Color.green;
 	}
 	
-	public CityCard(MicroAnimationPanel microAnimationPanel, Color c) {
-		super(microAnimationPanel);
+	public CityCard(SimCityGui city, Color c) {
+		super(city);
 		this.setPreferredSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
 		this.setVisible(true);
 		addMouseListener(this);

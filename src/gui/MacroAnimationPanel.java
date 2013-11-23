@@ -31,8 +31,18 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
 
     private List<Gui> guis = new ArrayList<Gui>();
     ArrayList<Building> buildings;
+    
+    //SimCityPanel
+    protected SimCityGui city;
+    protected ArrayList<CityComponent> statics, movings;
+    protected Color background;
+    protected Timer timer;
 
-    public MacroAnimationPanel() {
+    public MacroAnimationPanel(SimCityGui city) {
+    	this.city = city;
+    	statics = new ArrayList<CityComponent>();
+    	movings = new ArrayList<CityComponent>();
+    	
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
         setBackground(Color.green);
@@ -64,14 +74,16 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
         	System.out.println("Error w/ Background");
         }
     }
-    
+
 	public void actionPerformed(ActionEvent e) {
 		repaint();  //Will have paintComponent called
+		this.repaint();
 	}
 
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
         g2.setColor(Color.black);
+        
         
         g2.drawImage(cityImage, 0, 0, null);
         
@@ -86,6 +98,9 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
                 gui.draw(g2);
             }
         }
+        
+        moveComponents();
+        drawComponents(g);
         
         g2.drawImage(cityImageTop, 0, 0, null);
         
@@ -114,6 +129,30 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
 				b.displayBuilding();
 			}
 		}
+	}
+	
+	public void drawComponents(Graphics g) {
+		for (CityComponent c:statics) {
+			c.paint(g);
+		}
+		
+		for (CityComponent c:movings) {
+			c.paint(g);
+		}
+	}
+	
+	public void moveComponents() {
+		for (CityComponent c:movings) {
+			c.updatePosition();
+		}
+	}
+	
+	public void addStatic(CityComponent c) {
+		statics.add(c);
+	}
+	
+	public void addMoving(CityComponent c) {
+		movings.add(c);
 	}
 
 	@Override

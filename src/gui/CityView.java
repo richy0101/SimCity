@@ -1,4 +1,4 @@
-package simcity.gui;
+package gui;
 
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -52,7 +52,7 @@ public class CityView extends JPanel implements MouseListener, ActionListener {
 	public void setView(String key) {
 		if (cards.containsKey(key)) {
 			layout.show(this, key);
-			city.info.setText(key);
+			//city.info.setText(key); //CHANGES INFO PANEL TO APPROPRIATE STRING OF BUILDING
 		}
 	}
 
