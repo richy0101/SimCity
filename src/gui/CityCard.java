@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 
-public class CityCard extends SimCityPanel {
+public class CityCard extends MacroAnimationPanel {
 
 	public static final int CARD_WIDTH = 500, CARD_HEIGHT = 500;
 

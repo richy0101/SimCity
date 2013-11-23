@@ -2,6 +2,7 @@ package gui;
 
 import home.LandlordRole;
 
+import java.awt.CardLayout;
 import java.awt.EventQueue;
 
 import javax.swing.*;
@@ -26,8 +27,8 @@ public class SimCityGui {
 
 	//NEW STUFF
 	//CityPanel cityPanel;
-	//JPanel buildingPanels;
-	//CardLayout cardLayout;
+	JPanel buildingPanels;
+	CardLayout cardLayout;
 
 	private JFrame frame;
 	private Map<String, Role> roles = new HashMap<String, Role>();
@@ -55,6 +56,17 @@ public class SimCityGui {
 		initialize();
 		runSuperNorm();
 		
+		//Creates building panel for each object.
+		/*
+		ArrayList<Building> buildings = cityPanel.getBuildings();
+		for ( int i=0; i<buildings.size(); i++ ) {
+			Building b = buildings.get(i);
+			BuildingPanel bp = new BuildingPanel( b, i, this );
+			b.setBuildingPanel( bp );
+			buildingPanels.add( bp, "" + i );
+		}
+		*/
+		
 	}
 
 	/**
@@ -73,6 +85,7 @@ public class SimCityGui {
 		MicroAnimationPanel microAnimationPanel = new MicroAnimationPanel();
 		microAnimationPanel.setBounds(5, 425, 827, 406);
 		frame.getContentPane().add(microAnimationPanel);
+		
 		SpringLayout springLayout = new SpringLayout();
 		springLayout.putConstraint(SpringLayout.NORTH, macroAnimationPanel, 10, SpringLayout.NORTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, macroAnimationPanel, 10, SpringLayout.WEST, frame.getContentPane());
@@ -283,18 +296,13 @@ public class SimCityGui {
 //					do more stuff here
 					
 				}
-				
-				
-				
-				
+					
 			}
 		});
 		sl_panel.putConstraint(SpringLayout.NORTH, btnCreatePerson, 6, SpringLayout.SOUTH, aggressivenessSlider);
 		sl_panel.putConstraint(SpringLayout.WEST, btnCreatePerson, 0, SpringLayout.WEST, btnPopulateCity);
 		sl_panel.putConstraint(SpringLayout.EAST, btnCreatePerson, 0, SpringLayout.EAST, btnPopulateCity);
 		panel.add(btnCreatePerson);
-		
-		
 		
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Current Building", null, panel_1, null);

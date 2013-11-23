@@ -49,7 +49,6 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
         	System.out.println("Error w/ Background");
         }
         /*
-    	
     	cards.put("null", new CityCard(this, Color.RED));
     	cards.put("House1", new CityCard(this, Color.RED));
         	
