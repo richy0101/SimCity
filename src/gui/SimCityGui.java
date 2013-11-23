@@ -24,6 +24,11 @@ import restaurant.stackRestaurant.StackHostRole;
 
 public class SimCityGui {
 
+	//NEW STUFF
+	//CityPanel cityPanel;
+	//JPanel buildingPanels;
+	//CardLayout cardLayout;
+
 	private JFrame frame;
 	private Map<String, Role> roles = new HashMap<String, Role>();
 	
@@ -49,6 +54,7 @@ public class SimCityGui {
 	public SimCityGui() {
 		initialize();
 		runSuperNorm();
+		
 	}
 
 	/**
