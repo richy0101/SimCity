@@ -52,12 +52,57 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     	
     	buildings = new ArrayList<Building>();
     	
-    	//Adding building blocks    	
+    	//Adding building blocks  
+    //RESTAURANT
     	Building stackRestaurant = new Building(0, 240, 105, 120);
     	buildings.add(stackRestaurant);
     	
+    	Building huangRestaurant = new Building(183, 6, 134, 80);
+    	buildings.add(huangRestaurant);
+    	
+    	Building nakamuraRestaurant = new Building(321, 6, 138, 77);
+    	buildings.add(nakamuraRestaurant);
+    	
+    	Building phillipsRestaurant = new Building(729, 263, 107, 93);
+    	buildings.add(phillipsRestaurant);
+    	
+    	Building shehRestaurant = new Building(523, 326, 142, 74);
+    	buildings.add(shehRestaurant);
+    	
+    	Building tanRestaurant = new Building(185, 325, 158, 75);
+    	buildings.add(tanRestaurant);
+    
+    //HOUSES
+    	Building house1 = new Building(326, 196, 129, 99);
+    	buildings.add(house1);
+    	
+    	Building house2 = new Building(330, 132, 145, 69);
+    	buildings.add(house2);
+    	
+    	Building house3 = new Building(473, 133, 85, 73);
+    	buildings.add(house3);
+    	
+    	Building house4 = new Building(564, 133, 104, 41);
+    	buildings.add(house4);
+    	
+    	Building house5 = new Building(564, 178, 104, 117);
+    	buildings.add(house5);
+
+    	Building house6 = new Building(458, 210, 107, 86);
+    	buildings.add(house6);
+    	
+    //MARKET
     	Building market1 = new Building(459, 8, 200, 70);
     	buildings.add(market1);
+    	
+    	Building market2 = new Building(347, 329, 175, 71);
+    	buildings.add(market2);
+    	
+    //APARTMENT
+    	
+    //BANK 
+    	Building bank = new Building(0, 0, 104, 214);
+    	buildings.add(bank);
     	
     	addMouseListener(this);
     	
