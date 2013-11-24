@@ -18,16 +18,16 @@ import restaurant.stackRestaurant.helpers.Menu;
 import restaurant.stackRestaurant.helpers.TableList;
 
 @SuppressWarnings("serial")
-public class AnimationPanel extends JPanel implements ActionListener {
+public class StackRestaurantAnimationPanel extends JPanel implements ActionListener {
 
 	private final int WINDOWX = 827;
     private final int WINDOWY = 406;
     BufferedImage restaurantImage;
     private final int DELAY = 10;
     private List<Gui> guis = new ArrayList<Gui>();
-    private static AnimationPanel sharedInstance = null;
+    private static StackRestaurantAnimationPanel sharedInstance = null;
     
-    private AnimationPanel() {
+    private StackRestaurantAnimationPanel() {
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
         setBackground(Color.lightGray);
@@ -44,9 +44,9 @@ public class AnimationPanel extends JPanel implements ActionListener {
     	
     }
     
-    public static AnimationPanel sharedInstance() {
+    public static StackRestaurantAnimationPanel sharedInstance() {
     	if(sharedInstance == null) {
-    		sharedInstance = new AnimationPanel();
+    		sharedInstance = new StackRestaurantAnimationPanel();
     	}
     	return sharedInstance;
     }

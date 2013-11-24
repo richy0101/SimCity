@@ -6,7 +6,7 @@ import gui.Gui;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import restaurant.stackRestaurant.gui.AnimationPanel;
+import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 import javax.imageio.ImageIO;
 
 public class CookGui implements Gui {
@@ -40,7 +40,7 @@ public class CookGui implements Gui {
         catch(IOException e) {
         	System.out.println("Error w/ Background");
         }
-        AnimationPanel.sharedInstance().addGui(this);
+        StackRestaurantAnimationPanel.sharedInstance().addGui(this);
     }
 
     public void updatePosition() {
