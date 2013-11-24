@@ -5,10 +5,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 import agent.Role;
 import market.test.mock.EventLog;
 import market.test.mock.LoggedEvent;
+import market.gui.MarketGui;
 import market.interfaces.Market;
 import market.interfaces.MarketCustomer;
 
@@ -18,7 +20,11 @@ public class MarketRole extends Role implements Market {
 	public enum orderState {Ordered, CantFill, Filled, Billed, Paid};
 	
 	List<Order> MyOrders;
+	boolean jobDone;
 	Map<String, Food> inventory = new HashMap<String, Food>();
+
+	private Semaphore actionComplete = new Semaphore(0,true);
+	private MarketGui gui;
 	
 	public EventLog log;
 	
@@ -75,7 +81,10 @@ public class MarketRole extends Role implements Market {
 		inventory.put("Salad", new Food("Salad", 10, 4.00));
 		
 		MyOrders = new ArrayList<Order>();
+		jobDone = false;
 		log = new EventLog();
+		
+		gui = new MarketGui(this);
 	}
 	
 	public List<Order> getMyOrders() {
@@ -90,7 +99,10 @@ public class MarketRole extends Role implements Market {
 	    MyOrders.add(new Order(customer, groceryList));
 	    
 	    log.add(new LoggedEvent("Received msgGetGroceries from MarketCustomer."));
+	    
+	    stateChanged();
 	}
+	
 	public void msgHereIsMoney(MarketCustomer customer, double money) {
 	    for(Order o : MyOrders) {
 	    	if(o.customer == customer)
@@ -98,7 +110,9 @@ public class MarketRole extends Role implements Market {
 	    }
 	    
 	    log.add(new LoggedEvent("Received msgHereIsMoney from MarketCustomer. Amount = $" + money));
+	    stateChanged();
 	}
+	
 	public void msgCantAffordGroceries(MarketCustomer customer) {
 		for(Order o : MyOrders) {
 			if(o.customer == customer)
@@ -106,13 +120,31 @@ public class MarketRole extends Role implements Market {
 		}
 		
 	    log.add(new LoggedEvent("Received msgCantAffordGroceries from MarketCustomer."));
+	    stateChanged();
+	}
+	
+	public void msgJobDone() {
+		jobDone = true;
+		stateChanged();
+	}
+	
+	public void msgActionComplete() {
+		actionComplete.release();
+		stateChanged();
 	}
 	
 	//scheduler---------------------------------------------------------------------------
 	public boolean pickAndExecuteAnAction() {
+		if(MyOrders.isEmpty() && jobDone == true) {
+			LeaveJob();
+		}		
+		
 		for(Order o : MyOrders) {
 			if(o.state == orderState.Ordered) {
-				FillOrder(o);
+				if(jobDone == false)
+					FillOrder(o);
+				else
+					TurnAwayCustomer(o);
 				return true;
 			}
 		}
@@ -156,9 +188,23 @@ public class MarketRole extends Role implements Market {
 	    		o.retrievedGroceries.put(choice, amount);
 	    		
 	    		DoGetItem(choice); //GUI
+	    		try {
+	    			actionComplete.acquire();
+	    		} catch (InterruptedException e) {
+	    			e.printStackTrace();
+	    		}
+	    		
 	    		inventory.get(choice).supply -= amount;
 	    	}
 	    }
+	    
+	    DoGoToCounter();
+		try {
+			actionComplete.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 	    if(o.retrievedGroceries.isEmpty())
 	        o.state = orderState.CantFill;
 	    else
@@ -184,9 +230,16 @@ public class MarketRole extends Role implements Market {
 	    
 	    log.add(new LoggedEvent("Gave MarketCustomer the groceries."));
 	}
+	private void LeaveJob() {
+		getPersonAgent().msgRoleFinished();
+	}
 
 	//GUI Actions-------------------------------------------------------------------------
 	private void DoGetItem(String s) {
-		
+		gui.DoGetFood();		
+	}
+	
+	private void DoGoToCounter() {
+		gui.DoGoToCounter();
 	}
 }

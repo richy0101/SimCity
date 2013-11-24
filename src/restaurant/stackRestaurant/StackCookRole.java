@@ -34,6 +34,7 @@ public class StackCookRole extends Role implements Cook {
 		foods.put("Chicken", new Food(140));
 		foods.put("Salad", new Food(70));
 		foods.put("Pizza", new Food(120));
+		cookGui = new CookGui(this);
 	}
 	
 	public String getName() {

@@ -89,9 +89,10 @@ public class LandlordRole extends Role implements Landlord {
 		tenant.state = PayState.WaitingForPayment;
 		stateChanged();
 	}
+//	TODO have to implement a pay later system
 	public void payRentLater(MyTenant tenant){
-		tenant.inhabitant.msgPayRentLater(tenant.moneyOwed);
-		tenant.state = PayState.PayLater;
-		stateChanged();
+//		tenant.inhabitant.msgPayRentLater(tenant.moneyOwed);
+//		tenant.state = PayState.PayLater;
+//		stateChanged();
 	}
 }

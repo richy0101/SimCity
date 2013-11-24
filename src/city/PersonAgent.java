@@ -1,33 +1,23 @@
 package city;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 import restaurant.Restaurant;
 import restaurant.stackRestaurant.StackCustomerRole;
 import market.MarketCustomerRole;
 import market.MarketRole;
+import market.Market;
 import bank.Bank;
 import bank.BankCustomerRole;
 import bank.BankManagerRole;
 import bank.BankTellerRole;
+import city.gui.PersonGui;
 import city.helpers.Clock;
 import city.helpers.Directory;
 import city.interfaces.Person;
@@ -54,8 +44,9 @@ public class PersonAgent extends Agent implements Person {
 		//Norm Scenario Constants
 		Idle, InTransit, WantsToGoHome, WantFood, CookHome, WaitingForCooking, GoOutEat, StartEating, Eating, NeedsToWork, Cooking, OutToEat,
 		//Bank Scenario Constants
-		OutToBank, WantsToWithdraw, WantsToGetLoan, WantsToDeposit, WantsToRob,
+		OutToBank, WantsToWithdraw, WantsToGetLoan, WantsToDeposit, WantsToRob, 
 		//Market Scenario Constants
+		NeedsToGoMarket, OutToMarket
 		};
 	PersonPosition personPosition;
 	HouseState houseState;
@@ -64,7 +55,10 @@ public class PersonAgent extends Agent implements Person {
 	int hungerLevel;
 	int aggressivenessLevel;
 	int dirtynessLevel;
+	PersonGui personGui;
+	Map<String, Integer> groceryList;
 	Timer personTimer = new Timer();
+	
 	public class PersonTimerTask extends TimerTask {
 		PersonAgent p;
 		PersonTimerTask(PersonAgent p) {
@@ -76,6 +70,7 @@ public class PersonAgent extends Agent implements Person {
 			
 		}	
 	};
+	
 	private class WorkDetails {
 		Role workRole;
 		String workLocation;
@@ -89,13 +84,39 @@ public class PersonAgent extends Agent implements Person {
 		RoleFactory() {
 			newRole = null;
 		}
-		Role createRole(String order) {
+		Role createRole(String order, PersonAgent p) {
 			if(order == "StackRestaurant") {
 				this.newRole = new StackCustomerRole();
 			}
+			if(order == "Market1" || order == "Market2") {
+				this.newRole = new MarketCustomerRole(p.groceryList);
+			}
+			newRole.setPerson(p);
 			return newRole;
 		}
 	};
+	private class Food {
+		public String type;
+		public int preparationTime;
+		public int stock;
+		public Food(String type) {
+			this.type = type;
+			if (this.type == "Chicken") {
+				preparationTime = 5000;
+			}
+			else if (this.type == "Steak") {
+				preparationTime = 9000;
+			}
+			else if (this.type == "Salad") {
+				preparationTime = 4000;
+			}
+			else if (this.type == "Pizza") {
+				preparationTime = 7000;
+			}
+			stock = 3;
+		}
+	}
+	private List<Food> inventory = Collections.synchronizedList(new ArrayList<Food>());
 	public PersonAgent(Role job, String job_location, String home, String name) {
 		this.name = name;
 		workDetails = new WorkDetails(job, job_location);
@@ -109,6 +130,17 @@ public class PersonAgent extends Agent implements Person {
 		rentDue = false;
 		hasWorked = false;
 		aggressivenessLevel = 1;
+		
+		//Set up inventory
+		Food initialFood = new Food("Chicken");
+		inventory.add(initialFood);
+		initialFood = new Food ("Steak");
+		inventory.add(initialFood);
+		initialFood = new Food ("Salad");
+		inventory.add(initialFood);
+		initialFood = new Food ("Pizza");
+		inventory.add(initialFood);
+		
 		startThread();
 	}
 	
@@ -133,6 +165,8 @@ public class PersonAgent extends Agent implements Person {
 		dirtynessLevel = 0;
 		rentDue = false;
 		hasWorked = false;
+		Directory.sharedInstance().addPerson(this);
+		personGui = new PersonGui(this);
 		startThread();
 		print("I LIVE.");
 	}
@@ -142,6 +176,7 @@ public class PersonAgent extends Agent implements Person {
 		name = "HardCoded " + hardCodeJob.toString();
 		print(name);
 		roles.add(hardCodeJob);
+		personGui = new PersonGui(this);
 	}
 	/**
 	 * Messages
@@ -227,7 +262,9 @@ public class PersonAgent extends Agent implements Person {
 			return true;
 		}
 		//Market Rules
-		
+		if (personState == PersonState.NeedsToGoMarket) {
+			goMarket();
+		}
 		/** Normative Scenario Rules **/
 		if (personState == PersonState.WantsToGoHome) {
 			goHome();
@@ -265,7 +302,7 @@ public class PersonAgent extends Agent implements Person {
 		return evaluateStatus();
 	}
 
-	
+
 	/**
 	 * Actions --------------------------------------------------------------------------------------------------------
 	 * 
@@ -276,10 +313,12 @@ public class PersonAgent extends Agent implements Person {
 			personState = PersonState.WantsToWithdraw;
 			return true;
 		}
+		else if(checkInventory() == false) {
+			personState = PersonState.NeedsToGoMarket;
+		}
 		else {
 			personState = PersonState.Idle;
 		}
-		personState = PersonState.Idle;
 		return false;
 	}
 	/*private void payRent() {
@@ -317,9 +356,9 @@ public class PersonAgent extends Agent implements Person {
 		personState = PersonState.OutToEat;
 		Restaurant r = Directory.sharedInstance().getRestaurants().get(0);
 		roles.clear();
-		roles.add(factory.createRole(r.getName()));//Hacked factory LOL
-		roles.add(new TransportationRole(r.getName()));
-		
+		roles.add(factory.createRole(r.getName(), this));//Hacked factory LOL
+		//roles.add(new TransportationRole(r.getName()));
+		print("Action goRestaurant - State set to OutToEat");
 	}
 	private void decideFood() {
 		print("Action decideFood - Deciding to eat in or out.");
@@ -354,6 +393,23 @@ public class PersonAgent extends Agent implements Person {
 	}
 	private void cleanRoom() {
 
+	}
+	private boolean checkInventory() {
+		for(Food f : inventory) {
+			if (f.stock <=1) {
+				groceryList.put(f.type, 3);
+			}
+		}
+		return groceryList.isEmpty();
+	}
+	private void goMarket() {
+		Market m = Directory.sharedInstance().getMarkets().get(0);
+		roles.clear();
+		factory.createRole(m.getName(), this);
+		roles.add(new TransportationRole(m.getName()));
+		print("Action goMarket - State set to OutToMarket");
+		personState = PersonState.OutToMarket;
+		
 	}
 	/** Non Norm Actions **/
 	private void goRob() {
@@ -392,7 +448,9 @@ public class PersonAgent extends Agent implements Person {
 		print("Action goWithraw - State set to OutBank");
 		personState = PersonState.OutToBank;
 	}
-	
+	public void clearGroceries() {
+		groceryList.clear();
+	}
 	public String getName() {
 		return name;
 	}

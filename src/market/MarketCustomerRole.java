@@ -1,8 +1,10 @@
 package market;
 
 import java.util.*;
+import java.util.concurrent.Semaphore;
 
 import agent.Role;
+import market.gui.MarketCustomerGui;
 import market.interfaces.Market;
 import market.interfaces.MarketCustomer;
 
@@ -19,26 +21,40 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	Market market;
 	double orderCost;
 	
+	private Semaphore actionComplete = new Semaphore(0,true);
+	private MarketCustomerGui gui;
+	
 	public MarketCustomerRole(Map<String, Integer> groceries) {
 		roleEvent = Event.WantsGroceries;
 		roleState = State.DoingNothing;
 		
 		myGroceryList = groceries;
+		gui = new MarketCustomerGui(this);
 	}
 	
 	//messages----------------------------------------------------------------------------
 	public void msgHereIsBill(double price) {
 		orderCost = price;
 	    roleEvent = Event.GotBill;
+	    stateChanged();
 	}
 	
 	public void msgHereAreYourGroceries(Map<String, Integer> groceries) {
 //		getPersonAgent().groceryList.keySet().removeAll(myGroceryList.keySet());
+		
+		getPersonAgent().clearGroceries();
 	    roleEvent = Event.GotGroceries;
+	    stateChanged();
 	}
 	
 	public void msgCantFillOrder(Map<String, Integer> groceries) {
 		roleEvent = Event.TurnedAway;
+		stateChanged();
+	}
+	
+	public void msgActionComplete() {
+		actionComplete.release();
+		stateChanged();
 	}
 	
 	//scheduler---------------------------------------------------------------------------
@@ -78,6 +94,13 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 	//actions-----------------------------------------------------------------------------
 	public void GiveGroceryOrder() {
+		DoEnterMarket();
+		try {
+			actionComplete.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 	    market.msgGetGroceries(this, myGroceryList);
 	}
 	
@@ -93,9 +116,22 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	}
 	
 	public void LeaveMarket() {
+		DoLeaveMarket();
+		try {
+			actionComplete.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 		getPersonAgent().msgRoleFinished();
 	}
 	
 	//GUI Actions-------------------------------------------------------------------------
-
+	private void DoEnterMarket() {
+		gui.DoEnterMarket();
+	}
+	
+	private void DoLeaveMarket() {
+		gui.DoLeaveMarket();
+	}
 }

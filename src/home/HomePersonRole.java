@@ -36,12 +36,13 @@ public class HomePersonRole extends Role implements HomePerson {
 	
 	//actions-----------------------------------------------------------------------------
 	private void PayRent() {
-		if(myPerson.funds >= debt) {
-			landlord.msgHereIsRent(debt);
-			myPerson.funds -= debt;
+		if(getPersonAgent().getFunds() >= debt) {
+			landlord.msgHereIsRent(this, debt);
+			getPersonAgent().setFunds(getPersonAgent().getFunds() - debt);
 		}
 		else 
-			landlord.msgCantPayRent();
+//			TODO implement pay later system
+//			landlord.msgCantPayRent();
 		
 		needToPayRent = false;
 	}
