@@ -3,14 +3,15 @@ package bank.helpers;
 import java.util.*;
 
 
+
 public class AccountSystem {
 	
-	private static List<BankAccount> accounts = new ArrayList<BankAccount>();
+	private Map<Integer,BankAccount> accounts = new HashMap<Integer,BankAccount>();
     private int uniqueAccountNumber = 0;
     
     private static AccountSystem sharedInstance = null;
     
-    private AccountSystem() {
+    public AccountSystem() {
     	
     }
     
@@ -27,14 +28,14 @@ public class AccountSystem {
     }
     
     public void addMoney(double money,int accountNum){
-    	for(BankAccount tempAccount : accounts){
-    		if(tempAccount.accountNumber == accountNum){
-    			tempAccount.totalFunds+=money;
-    		}
-    	}
+    	for (Map.Entry<Integer, BankAccount> entry : accounts.entrySet()) {
+			if(entry.getKey() == accountNum){
+				entry.getValue().totalFunds += money;
+			}
+		}
     }
     
-    public List<BankAccount> getAccounts() {
+    public Map<Integer,BankAccount> getAccounts() {
     	return accounts;
     }
     
@@ -43,7 +44,7 @@ public class AccountSystem {
 	    double moneyToDeposit;
 	    double moneyToWithdraw;
 	    double moneyRequest;
-	    int accountNumber;
+	    //int accountNumber;
 	    
 	    public BankAccount(){
 	    	totalFunds = 0;
