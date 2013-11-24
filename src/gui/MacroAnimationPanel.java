@@ -56,8 +56,8 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     	Building stackRestaurant = new Building(0, 240, 105, 120);
     	buildings.add(stackRestaurant);
     	
-    	Building shehRestaurant = new Building(0, 400, 105, 120);
-    	buildings.add(shehRestaurant);
+    	Building market1 = new Building(459, 8, 200, 70);
+    	buildings.add(market1);
     	
     	addMouseListener(this);
     	
