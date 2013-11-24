@@ -35,7 +35,7 @@ public class PersonAgent extends Agent implements Person {
 	double funds;
 	boolean hasWorked;
 	boolean rentDue;
-	String name;
+	public String name;
 	String homeName;
 	public enum TransportationMethod {OwnsACar, TakesTheBus, Walks};
 	public enum PersonPosition {AtHome, AtMarket, AtRestaurant, AtBank, City};
@@ -86,12 +86,12 @@ public class PersonAgent extends Agent implements Person {
 		}
 		Role createRole(String order, PersonAgent p) {
 			if(order == "StackRestaurant") {
-				this.newRole = new StackCustomerRole();
+				this.newRole = new StackCustomerRole(p);
 			}
 			if(order == "Market1" || order == "Market2") {
 				this.newRole = new MarketCustomerRole(p.groceryList);
 			}
-			newRole.setPerson(p);
+			//print("Set role complete.");
 			return newRole;
 		}
 	};
