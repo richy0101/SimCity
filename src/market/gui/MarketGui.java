@@ -5,28 +5,30 @@ import gui.Gui;
 
 import java.awt.Graphics2D;
 
-import market.MarketCustomerRole;
+import market.MarketRole;
 
-public class MarketCustomerGui implements Gui {
+public class MarketGui implements Gui {
 
-	private MarketCustomerRole role = null;
+	private MarketRole role = null;
 	GUIMarket gui;
 	
 	private boolean isPresent = false;
 	private int xPos, yPos;
 	private int xDestination, yDestination;
 	
-	private enum state {NoCommand, Entering, Leaving};
+	private enum state {NoCommand, GettingItem, GoingToCounter};
 	private state command = state.NoCommand;
 	
 	public static final int xCounter = 75;
 	public static final int yCounter = 50;
-	public static final int xStart = -40;
-	public static final int yStart = -40;
+	public static final int xStart = 75;
+	public static final int yStart = 50;
+	public static final int xShelf = 100;
+	public static final int yShelf = 100;
 	
 	
-	public MarketCustomerGui(MarketCustomerRole mcr) {
-		role = mcr;
+	public MarketGui(MarketRole mr) {
+		role = mr;
 //		gui = m;
 		
 		xPos = xStart;
@@ -48,8 +50,10 @@ public class MarketCustomerGui implements Gui {
 			yPos--;
 		
 		if(xPos == xDestination && yPos == yDestination) {
-			if(command == state.Entering || command == state.Leaving)
+			if(command == state.GettingItem || command == state.GoingToCounter) {
 				role.msgActionComplete();
+				command = state.NoCommand;
+			}
 		}
 	}
 
@@ -63,15 +67,16 @@ public class MarketCustomerGui implements Gui {
 		return isPresent;
 	}
 
-	public void DoEnterMarket() {
-		xDestination = xCounter;
-		yDestination = yCounter;
-		command = state.Entering;
+	public void DoGetFood() {
+		xDestination = xShelf;
+		yDestination = yShelf;
+		command = state.GettingItem;
 	}
 	
-	public void DoLeaveMarket() {
-		xDestination = xStart;
-		yDestination = yStart;
-		command = state.Leaving;
+	public void DoGoToCounter() {
+		xDestination = xCounter;
+		yDestination = yCounter;
+		command = state.GoingToCounter;
 	}
+	
 }
