@@ -357,8 +357,8 @@ public class PersonAgent extends Agent implements Person {
 		Restaurant r = Directory.sharedInstance().getRestaurants().get(0);
 		roles.clear();
 		roles.add(factory.createRole(r.getName(), this));//Hacked factory LOL
-		roles.add(new TransportationRole(r.getName()));
-		
+		//roles.add(new TransportationRole(r.getName()));
+		print("Action goRestaurant - State set to OutToEat");
 	}
 	private void decideFood() {
 		print("Action decideFood - Deciding to eat in or out.");

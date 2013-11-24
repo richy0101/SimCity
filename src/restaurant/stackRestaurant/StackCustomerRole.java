@@ -54,6 +54,7 @@ public class StackCustomerRole extends Role implements Customer {
 	public StackCustomerRole(){
 		super();
 		customerGui = new CustomerGui(this);
+		print("Customer is alive.");
 	}
 
 	/**
