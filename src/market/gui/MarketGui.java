@@ -3,6 +3,7 @@ package market.gui;
 import gui.GUIMarket;
 import gui.Gui;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 import market.MarketRole;
@@ -59,7 +60,8 @@ public class MarketGui implements Gui {
 
 	@Override
 	public void draw(Graphics2D g) {
-
+		g.setColor(Color.GREEN);
+		g.fillRect(xPos, yPos, 20, 20);
 	}
 
 	@Override

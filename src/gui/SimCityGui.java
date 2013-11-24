@@ -73,8 +73,10 @@ public class SimCityGui {
 		
 		
 		MicroAnimationPanel microAnimationPanel = new MicroAnimationPanel();
+		buildingPanels = new JPanel();
 		cardLayout = new CardLayout();
 		microAnimationPanel.setLayout(cardLayout);
+		buildingPanels.setLayout(cardLayout);
 		
 		
 		//TAKES SQUARES FROM MACRO AND TURNS INTO PANELS IN MICRO
@@ -84,7 +86,8 @@ public class SimCityGui {
 			BuildingPanel ma = new BuildingPanel( b, i, this );
 			//b.setMicroAnimationPanel( ma );
 			b.setBuildingPanel( ma );
-			microAnimationPanel.add( ma, "" + i );
+			microAnimationPanel.add( ma, "" + i );	
+			buildingPanels.add( ma, "" + i );		
 		}
 		
 		microAnimationPanel.setBounds(5, 425, 827, 406);

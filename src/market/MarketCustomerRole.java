@@ -3,6 +3,7 @@ package market;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import city.PersonAgent;
 import agent.Role;
 import market.gui.MarketCustomerGui;
 import market.interfaces.Market;
@@ -24,12 +25,14 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	private Semaphore actionComplete = new Semaphore(0,true);
 	private MarketCustomerGui gui;
 	
-	public MarketCustomerRole(Map<String, Integer> groceries) {
+	public MarketCustomerRole(PersonAgent person, Map<String, Integer> groceries) {
 		roleEvent = Event.WantsGroceries;
 		roleState = State.DoingNothing;
 		
 		myGroceryList = groceries;
 		gui = new MarketCustomerGui(this);
+		
+		setPerson(person);
 	}
 	
 	//messages----------------------------------------------------------------------------

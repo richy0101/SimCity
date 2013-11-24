@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
+import city.PersonAgent;
 import agent.Role;
 import market.test.mock.EventLog;
 import market.test.mock.LoggedEvent;
@@ -74,7 +75,7 @@ public class MarketRole extends Role implements Market {
 	    }
 	}
 	
-	public MarketRole() {
+	public MarketRole(PersonAgent person) {
 		inventory.put("Chicken", new Food("Chicken", 10, 1.00));
 		inventory.put("Steak", new Food("Steak", 10, 2.00));
 		inventory.put("Pizza", new Food("Pizza", 10, 3.00));
@@ -85,6 +86,7 @@ public class MarketRole extends Role implements Market {
 		log = new EventLog();
 		
 		gui = new MarketGui(this);
+		setPerson(person);
 	}
 	
 	public List<Order> getMyOrders() {
