@@ -49,7 +49,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
     
     //messages----------------------------------------------------------------------------
-	public void msgHowCanIHelpYou(BankTeller teller, tellerNumber) {
+	public void msgHowCanIHelpYou(BankTeller teller, int tellerNumber) {
 		state = CustomerState.GoingToTeller;
 		this.teller = teller;
 		this.tellerNumber = tellerNumber;
