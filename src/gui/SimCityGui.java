@@ -32,6 +32,7 @@ public class SimCityGui {
 
 	private JFrame frame;
 	private Map<String, Role> roles = new HashMap<String, Role>();
+	private HashMap<String, CityCard> cards = new HashMap<String, CityCard>();
 	
 	/**
 	 * Launch the application.
@@ -76,7 +77,7 @@ public class SimCityGui {
 		microAnimationPanel.setLayout(cardLayout);
 		
 		
-		//Creates building panel for each object
+		//TAKES SQUARES FROM MACRO AND TURNS INTO PANELS IN MICRO
 		ArrayList<Building> buildings = macroAnimationPanel.getBuildings();
 		for ( int i=0; i<buildings.size(); i++ ) {
 			Building b = buildings.get(i);
@@ -331,14 +332,13 @@ public class SimCityGui {
 		//change boolean Cook in person.Decide eat to false to make person go to a restaurant.
 	}
 	
-	public void displayBuildingPanel( MicroAnimationPanel microAnimationPanel ) { //How is this tied in with the Micro Panel?
+	public void displayBuildingPanel( BuildingPanel buildingPanel ) { //How is this tied in with the Micro Panel?
 		//System.out.println("abc");
-		System.out.println("Accessing " + microAnimationPanel.getName() + " for MicroAnimation Panel." );
-		cardLayout.show( buildingPanels, microAnimationPanel.getName() );
+		System.out.println("Accessing " + buildingPanel.getName() + " for MicroAnimation Panel." );
+		cardLayout.show( buildingPanels, buildingPanel.getName());
 	}
 
-	public void displayMicroAnimationPanel(
-			MicroAnimationPanel microAnimationPanel) {
+	public void displayMicroAnimationPanel(MicroAnimationPanel microAnimationPanel) {
 			System.out.println("Accessing " + microAnimationPanel.getName() + " for MicroAnimationPanel.");
 			cardLayout.show(buildingPanels, microAnimationPanel.getName());
 	}

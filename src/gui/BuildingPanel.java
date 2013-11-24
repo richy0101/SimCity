@@ -14,10 +14,10 @@ public class BuildingPanel extends JPanel {
 		myName = "" + i;
 		myCity = sc;
 		
-		setBackground( Color.WHITE );
-		setMinimumSize( new Dimension( 500, 250 ) ); //DO WE NEED MIN/MAX SIZE? WHAT IS PURPOSE?
-		setMaximumSize( new Dimension( 500, 250 ) );
-		setPreferredSize( new Dimension( 500, 250 ) );
+		setBackground( Color.magenta );
+		//setMinimumSize( new Dimension( 500, 250 ) ); //DO WE NEED MIN/MAX SIZE? WHAT IS PURPOSE?
+		//setMaximumSize( new Dimension( 500, 250 ) );
+		//setPreferredSize( new Dimension( 500, 250 ) );
 		
 		JLabel j = new JLabel( myName );
 		add( j );

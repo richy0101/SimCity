@@ -2,6 +2,7 @@ package city;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -35,7 +36,7 @@ public class PersonAgent extends Agent implements Person {
 	double funds;
 	boolean hasWorked;
 	boolean rentDue;
-	String name;
+	public String name;
 	String homeName;
 	public enum TransportationMethod {OwnsACar, TakesTheBus, Walks};
 	public enum PersonPosition {AtHome, AtMarket, AtRestaurant, AtBank, City};
@@ -56,7 +57,7 @@ public class PersonAgent extends Agent implements Person {
 	int aggressivenessLevel;
 	int dirtynessLevel;
 	PersonGui personGui;
-	Map<String, Integer> groceryList;
+	Map<String, Integer> groceryList = new HashMap<String, Integer>();
 	Timer personTimer = new Timer();
 	
 	//bank information
@@ -89,13 +90,12 @@ public class PersonAgent extends Agent implements Person {
 		}
 		Role createRole(String order, PersonAgent p) {
 			if(order == "StackRestaurant") {
-				this.newRole = new StackCustomerRole();
+				this.newRole = new StackCustomerRole(p);
 			}
 			if(order == "Market1" || order == "Market2") {
 				this.newRole = new MarketCustomerRole(p.groceryList);
 			}
-			newRole.setPerson(p);
-			print("setting person agent");
+			//print("Set role complete.");
 			return newRole;
 		}
 	};
@@ -144,7 +144,8 @@ public class PersonAgent extends Agent implements Person {
 		inventory.add(initialFood);
 		initialFood = new Food ("Pizza");
 		inventory.add(initialFood);
-		
+		//Set up gui
+		personGui = new PersonGui(this);
 		startThread();
 	}
 	

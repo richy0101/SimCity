@@ -13,7 +13,7 @@ public class CityCard extends MacroAnimationPanel {
 		this.setPreferredSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
 		this.setVisible(true);
 		addMouseListener(this);
-		background = Color.green;
+		background = Color.cyan;
 	}
 	
 	public CityCard(SimCityGui city, Color c) {
