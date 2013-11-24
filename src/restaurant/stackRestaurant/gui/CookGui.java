@@ -6,7 +6,7 @@ import gui.Gui;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
+import restaurant.stackRestaurant.gui.AnimationPanel;
 import javax.imageio.ImageIO;
 
 public class CookGui implements Gui {
@@ -32,12 +32,15 @@ public class CookGui implements Gui {
     public CookGui(StackCookRole agent) {
         this.agent = agent;
         
+        
+        
         try {
         	cookImage = ImageIO.read(getClass().getResource("stackRestaurantCook.png"));
         }
         catch(IOException e) {
         	System.out.println("Error w/ Background");
         }
+        AnimationPanel.sharedInstance().addGui(this);
     }
 
     public void updatePosition() {
