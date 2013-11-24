@@ -52,12 +52,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     	
     	buildings = new ArrayList<Building>();
     	
-    	//Adding building blocks
-    	/*
-    	Building bank = new Building(0, 123, 105, 105);
-    	buildings.add(bank);
-    	*/
-    	
+    	//Adding building blocks    	
     	Building stackRestaurant = new Building(0, 240, 105, 120);
     	buildings.add(stackRestaurant);
     	

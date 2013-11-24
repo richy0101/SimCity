@@ -295,8 +295,7 @@ public class SimCityGui {
 							(String)transportationComboBox.getSelectedItem());
 //					do more stuff here
 					
-				}
-					
+				}		
 			}
 		});
 		sl_panel.putConstraint(SpringLayout.NORTH, btnCreatePerson, 6, SpringLayout.SOUTH, aggressivenessSlider);

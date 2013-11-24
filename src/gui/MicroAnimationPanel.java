@@ -51,14 +51,7 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
         } 
         */	
     }
-        
-    
-    private void add(CityCard cityCard, String key) {
-		// TODO Auto-generated method stub
-		
-	}
-
-/*   
+  
 	public boolean addView(CityCard panel, String key) {
     	if(cards.containsKey(key))
     		return false;
@@ -66,7 +59,8 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
     	this.add(cards.get(key), key);
     	return true;
     }
-    
+	
+	/*
     public void setView(String key) {
     	if (cards.containsKey(key)){ 
     		layout.show(this,key);
@@ -79,9 +73,8 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
     			city.view.setView(c.ID);
     		}
     	}
-    	
     }
-*/
+    */
 
 	public void actionPerformed(ActionEvent e) {
 		repaint();  //Will have paintComponent called
@@ -111,5 +104,4 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
     public void addGui(Gui gui) {
         guis.add(gui);
     }
-
 }
