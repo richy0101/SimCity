@@ -90,17 +90,17 @@ public class SimCityGui {
 			buildingPanels.add( ma, "" + i );		
 		}
 		
-		microAnimationPanel.setBounds(5, 425, 827, 406);
-		frame.getContentPane().add(microAnimationPanel);
+		buildingPanels.setBounds(5, 425, 827, 406);
+		frame.getContentPane().add(buildingPanels);
 		
 		SpringLayout springLayout = new SpringLayout();
 		springLayout.putConstraint(SpringLayout.NORTH, macroAnimationPanel, 10, SpringLayout.NORTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, macroAnimationPanel, 10, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, macroAnimationPanel, -6, SpringLayout.NORTH, microAnimationPanel);
-		springLayout.putConstraint(SpringLayout.EAST, microAnimationPanel, 0, SpringLayout.EAST, macroAnimationPanel);
-		springLayout.putConstraint(SpringLayout.NORTH, microAnimationPanel, 417, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, microAnimationPanel, 10, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, microAnimationPanel, -10, SpringLayout.SOUTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.SOUTH, macroAnimationPanel, -6, SpringLayout.NORTH, buildingPanels);
+		springLayout.putConstraint(SpringLayout.EAST, buildingPanels, 0, SpringLayout.EAST, macroAnimationPanel);
+		springLayout.putConstraint(SpringLayout.NORTH, buildingPanels, 417, SpringLayout.NORTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, buildingPanels, 10, SpringLayout.WEST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.SOUTH, buildingPanels, -10, SpringLayout.SOUTH, frame.getContentPane());
 		frame.getContentPane().setLayout(springLayout);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
