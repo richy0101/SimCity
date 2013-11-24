@@ -1,22 +1,28 @@
 package market;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import agent.Role;
+import market.test.mock.EventLog;
+import market.test.mock.LoggedEvent;
 import market.interfaces.Market;
 import market.interfaces.MarketCustomer;
 
-public class MarketRole implements Market {
+public class MarketRole extends Role implements Market {
 
 	//data--------------------------------------------------------------------------------
-	enum orderState {Ordered, CantFill, Filled, Billed, Paid};
+	public enum orderState {Ordered, CantFill, Filled, Billed, Paid};
 	
 	List<Order> MyOrders;
 	Map<String, Food> inventory = new HashMap<String, Food>();
 	
-	class Order {
+	public EventLog log;
+	
+	public class Order {
 	    MarketCustomer customer;
 	    Map<String, Integer> groceryList = new HashMap<String, Integer>();
 	    Map<String, Integer> retrievedGroceries = new HashMap<String, Integer>();
@@ -28,9 +34,29 @@ public class MarketRole implements Market {
 	    	groceryList = gl;
 	    	state = orderState.Ordered;
 	    }
+	    
+	    public MarketCustomer getCustomer() {
+	    	return customer;
+	    }
+	    
+	    public Map<String, Integer> getGroceryList() {
+	    	return groceryList;
+	    }
+
+		public Map<String, Integer> getRetrievedGroceries() {
+			return retrievedGroceries;
+		}
+	    
+	    public orderState getState() {
+	    	return state;
+	    }
+
+		public double getPrice() {
+			return price;
+		}
 	}
 
-	class Food {
+	public class Food {
 	    String name;
 	    int supply;
 	    double price;
@@ -47,6 +73,9 @@ public class MarketRole implements Market {
 		inventory.put("Steak", new Food("Steak", 10, 2.00));
 		inventory.put("Pizza", new Food("Pizza", 10, 3.00));
 		inventory.put("Salad", new Food("Salad", 10, 4.00));
+		
+		MyOrders = new ArrayList<Order>();
+		log = new EventLog();
 	}
 	
 	public List<Order> getMyOrders() {
@@ -59,40 +88,54 @@ public class MarketRole implements Market {
 	//messages----------------------------------------------------------------------------
 	public void msgGetGroceries(MarketCustomer customer, Map<String, Integer> groceryList) {
 	    MyOrders.add(new Order(customer, groceryList));
+	    
+	    log.add(new LoggedEvent("Received msgGetGroceries from MarketCustomer."));
 	}
 	public void msgHereIsMoney(MarketCustomer customer, double money) {
 	    for(Order o : MyOrders) {
 	    	if(o.customer == customer)
 	    		o.state = orderState.Paid;  
 	    }
+	    
+	    log.add(new LoggedEvent("Received msgHereIsMoney from MarketCustomer. Amount = $" + money));
 	}
 	public void msgCantAffordGroceries(MarketCustomer customer) {
 		for(Order o : MyOrders) {
 			if(o.customer == customer)
 				MyOrders.remove(o);   
 		}
+		
+	    log.add(new LoggedEvent("Received msgCantAffordGroceries from MarketCustomer."));
 	}
 	
 	//scheduler---------------------------------------------------------------------------
 	public boolean pickAndExecuteAnAction() {
 		for(Order o : MyOrders) {
-			if(o.state == orderState.Ordered)
+			if(o.state == orderState.Ordered) {
 				FillOrder(o);
+				return true;
+			}
 		}
 		
 		for(Order o : MyOrders) {
-			if(o.state == orderState.CantFill)
+			if(o.state == orderState.CantFill) {
 				TurnAwayCustomer(o);
+				return true;
+			}
 		}
 		
 		for(Order o : MyOrders) {
-			if(o.state == orderState.Filled)
+			if(o.state == orderState.Filled) {
 				BillCustomer(o);
+				return true;
+			}
 		}
 		
 		for(Order o : MyOrders) {
-			if(o.state == orderState.Paid)
-				GiveGroceries(o);
+			if(o.state == orderState.Paid) {
+					GiveGroceries(o);
+				return true;
+			}
 		}
 		
 		return false;
@@ -109,31 +152,37 @@ public class MarketRole implements Market {
 	    	amount = o.groceryList.get(choice);
 	    	
 	    	if(inventory.get(choice).supply >= amount) {
-	    		o.price += inventory.get(choice).price;
+	    		o.price += inventory.get(choice).price * amount;
 	    		o.retrievedGroceries.put(choice, amount);
 	    		
 	    		DoGetItem(choice); //GUI
 	    		inventory.get(choice).supply -= amount;
-
-	    		i.remove();
 	    	}
 	    }
 	    if(o.retrievedGroceries.isEmpty())
 	        o.state = orderState.CantFill;
 	    else
 	        o.state = orderState.Filled;
+	    
+	    log.add(new LoggedEvent("Got MarketCustomer order."));
 	}
 	private void TurnAwayCustomer(Order o) {
 	    o.customer.msgCantFillOrder(o.groceryList);
 	    MyOrders.remove(o);
+	    
+	    log.add(new LoggedEvent("Couldn't fill MarketCustomer's order."));
 	}
 	private void BillCustomer(Order o) {
 	    o.customer.msgHereIsBill(o.price);
 	    o.state = orderState.Billed;
+
+	    log.add(new LoggedEvent("Sent MarketCustomer the bill."));
 	}
 	private void GiveGroceries(Order o) {
 	    o.customer.msgHereAreYourGroceries(o.retrievedGroceries);
 	    MyOrders.remove(o);
+	    
+	    log.add(new LoggedEvent("Gave MarketCustomer the groceries."));
 	}
 
 	//GUI Actions-------------------------------------------------------------------------
