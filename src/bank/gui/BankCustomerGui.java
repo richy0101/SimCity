@@ -11,6 +11,7 @@ public class BankCustomerGui implements Gui {
     
 	private BankCustomerRole agent = null;
 	private boolean isPresent = false;
+	boolean atDestination = false;
 	
 	public static final int xTeller1 = 80;
 	public static final int xTeller2 = 160;
@@ -57,21 +58,25 @@ public class BankCustomerGui implements Gui {
 		else if (yPos > yDestination)
 			yPos = yPos;
         
-		if(xPos == xDestination && yPos == yDestination
+		if(atDestination == false && xPos == xDestination && yPos == yDestination
            & (xDestination == 80) & (yDestination == 50)) {
+			atDestination = true;
             agent.msgAtTeller();
         }
-		else if(xPos == xDestination && yPos == yDestination
+		else if(atDestination == false && xPos == xDestination && yPos == yDestination
         		& (xDestination == 160) & (yDestination == 50)) {
+			atDestination = true;
             agent.msgAtTeller();
         }
-		else if(xPos == xDestination && yPos == yDestination
+		else if(atDestination == false && xPos == xDestination && yPos == yDestination
         		& (xDestination == 240) & (yDestination == 50)) {
-            agent.msgAtTeller();
+			atDestination = true;
+			agent.msgAtTeller();
         }
 		
-		if (xPos == xDestination && yPos == yDestination &&
+		if (atDestination == false && xPos == xDestination && yPos == yDestination &&
 			(xDestination == 50) & (yDestination == 200) ) {
+			atDestination = true;
 			agent.msgAtHost();
 		}
 		else if (command==Command.LeaveBank) {
@@ -98,22 +103,26 @@ public class BankCustomerGui implements Gui {
 	public void DoGoToTeller(int tellerNum) {
 		if (tellerNum==1)
         {
+			atDestination = false;
     		xDestination = xTeller1;
     		yDestination = yTeller;
         }
     	if (tellerNum==2)
         {
+    		atDestination = false;
     		xDestination = xTeller2;
     		yDestination = yTeller;
         }
     	if (tellerNum==3)
         {
+    		atDestination = false;
     		xDestination = xTeller3;
     		yDestination = yTeller;
         }
 		command = Command.GoToTeller;
 	}
 	public void DoGoToHost() {
+		atDestination = false;
     	xDestination = 50;
     	yDestination = 200;
 	}
