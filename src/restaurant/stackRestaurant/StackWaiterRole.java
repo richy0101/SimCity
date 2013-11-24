@@ -32,6 +32,7 @@ public class StackWaiterRole extends Role implements Waiter {
 	
 	public StackWaiterRole() {
 		super();
+		waiterGui = new WaiterGui(this);
 	}
 	
 	public String getName() {

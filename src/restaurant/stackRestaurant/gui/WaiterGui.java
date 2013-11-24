@@ -40,6 +40,8 @@ public class WaiterGui implements Gui {
         	System.out.println("Error w/ Background");
         }
         
+        StackRestaurantAnimationPanel.sharedInstance().addGui(this);
+        
     }
 
     public void updatePosition() {

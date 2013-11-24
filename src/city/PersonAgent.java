@@ -8,7 +8,6 @@ import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
 import restaurant.Restaurant;
 import restaurant.stackRestaurant.StackCustomerRole;
 import market.MarketCustomerRole;
@@ -18,6 +17,7 @@ import bank.Bank;
 import bank.BankCustomerRole;
 import bank.BankManagerRole;
 import bank.BankTellerRole;
+import city.gui.PersonGui;
 import city.helpers.Clock;
 import city.helpers.Directory;
 import city.interfaces.Person;
@@ -55,8 +55,10 @@ public class PersonAgent extends Agent implements Person {
 	int hungerLevel;
 	int aggressivenessLevel;
 	int dirtynessLevel;
+	PersonGui personGui;
 	Map<String, Integer> groceryList;
 	Timer personTimer = new Timer();
+	
 	public class PersonTimerTask extends TimerTask {
 		PersonAgent p;
 		PersonTimerTask(PersonAgent p) {
@@ -68,6 +70,7 @@ public class PersonAgent extends Agent implements Person {
 			
 		}	
 	};
+	
 	private class WorkDetails {
 		Role workRole;
 		String workLocation;
@@ -163,6 +166,7 @@ public class PersonAgent extends Agent implements Person {
 		rentDue = false;
 		hasWorked = false;
 		Directory.sharedInstance().addPerson(this);
+		personGui = new PersonGui(this);
 		startThread();
 		print("I LIVE.");
 	}
@@ -172,6 +176,7 @@ public class PersonAgent extends Agent implements Person {
 		name = "HardCoded " + hardCodeJob.toString();
 		print(name);
 		roles.add(hardCodeJob);
+		personGui = new PersonGui(this);
 	}
 	/**
 	 * Messages

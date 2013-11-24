@@ -32,7 +32,7 @@ public class CustomerGui implements Gui{
 	private static final int WAITINGX = 3;
 	private static final int WAITINGY = 3;
 
-	public CustomerGui(StackCustomerRole c){ //HostAgent m) {
+	public CustomerGui(StackCustomerRole c) { 
 		agent = c;
 		xPos = 850;
 		yPos = 450;
@@ -45,6 +45,8 @@ public class CustomerGui implements Gui{
         catch(IOException e) {
         	System.out.println("Error w/ Background");
         }
+		
+		StackRestaurantAnimationPanel.sharedInstance().addGui(this);
 	}
 
 	public void updatePosition() {

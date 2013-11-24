@@ -7,12 +7,10 @@ import city.PersonAgent;
 
 public class PersonGui implements Gui {
 	
-	private PersonAgent agent = null;	
+	private PersonAgent agent = null;
 	
-	void DoSleeping() {
-		if(Clock.sharedInstance().getTime() == 0) { //CHANGE TIME TO APPROPRIATE WAKE UP TIME
-			agent.msgWakeUp();
-		}
+	public PersonGui(PersonAgent agent) {
+		this.agent = agent;
 	}
 	
 	@Override

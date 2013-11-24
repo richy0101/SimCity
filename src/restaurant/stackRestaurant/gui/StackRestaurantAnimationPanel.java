@@ -77,4 +77,8 @@ public class StackRestaurantAnimationPanel extends JPanel implements ActionListe
     public void addGui(Gui gui) {
         guis.add(gui);
     }
+    
+    public void removeGui(Gui gui) {
+    	guis.remove(gui);
+    }
 }
