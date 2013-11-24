@@ -29,6 +29,7 @@ public class MicroAnimationPanel extends JPanel implements ActionListener, Mouse
 	Rectangle2D myRectangle;
 	String myName;
 	SimCityGui myCity;
+	CardLayout layout;
    
     BufferedImage restaurantImage;
    
@@ -48,9 +49,18 @@ public class MicroAnimationPanel extends JPanel implements ActionListener, Mouse
     	Timer timer = new Timer(DELAY, this);
     	timer.start();
     	
-    	cards.put("null", new CityCard(myCity, Color.pink));
+    	cards.put("null", new CityCard(myCity, Color.blue));
     	cards.put("stackRestaurant", new CityCard(myCity, Color.pink));
     	cards.put("0", new CityCard(myCity, Color.pink));
+    	
+    	layout = new CardLayout();
+    	this.setLayout(layout);
+    	
+    	for(String key: cards.keySet()) {
+    		this.add(cards.get(key), key);
+    	}
+    	
+    	layout.show(this, "null");
     	
     	/*
     	try { //STACK RESTAURANT BACKGROUND
@@ -84,17 +94,16 @@ public class MicroAnimationPanel extends JPanel implements ActionListener, Mouse
     	return true;
     }
 	
-	/*
     public void setView(String key) {
     	if (cards.containsKey(key)){ 
     		layout.show(this,key);
     	}
     }
-    
+    /*
     public boolean contains() {
     	for(CityComponent c: statics) {
     		if(c.contains(arg0.getX(), arg0.getY())) {
-    			city.view.setView(c.ID);
+    			myCity.view.setView(c.ID);
     		}
     	}
     }
