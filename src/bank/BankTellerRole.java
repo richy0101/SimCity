@@ -14,6 +14,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	private List<BankAccount> accounts = Collections.synchronizedList(new ArrayList<BankAccount>());
 	private class BankAccount {
 	    BankCustomer customer;
+	    double totalFunds;
 	    double moneyToDeposit;
 	    double moneyToWithdraw;
 	    double moneyRequest;
@@ -23,11 +24,12 @@ public class BankTellerRole extends Role implements BankTeller {
 	    public BankAccount(BankCustomer customer, CustomerState state){
 	    	this.customer = customer;
 	    	this.custState = state;
+	    	totalFunds = 0;
 	    }
     }
     private int uniqueAccountNum = 0;
     BankManager manager;
-    private enum CustomerState {DoingNothing, NeedingAssistance, AskedAssistance, OpeningAccount, DepositingMoney, WithdrawingMoney, GettingLoan};
+    private enum CustomerState {DoingNothing, NeedingAssistance, AskedAssistance, OpeningAccount, OpenedAccount, DepositingMoney, WithdrawingMoney, GettingLoan};
     //messages----------------------------------------------------------------------------
 	public void msgAssigningCustomer(BankCustomer customer) {
 		boolean newCustomer = true;
@@ -55,11 +57,23 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	
 	public void msgDepositMoney(int accountNumber, double money) {
-		
+		for(BankAccount tempAccount : accounts){
+			if(tempAccount.accountNumber == accountNumber){
+				tempAccount.moneyToDeposit = money;
+				tempAccount.custState = CustomerState.DepositingMoney;
+			}
+		}
+	    stateChanged();
 	}
 	
 	public void msgWithdrawMoney(int accountNumber, double money) {
-		
+		for(BankAccount tempAccount : accounts){
+			if(tempAccount.accountNumber == accountNumber){
+				tempAccount.moneyToDeposit = money;
+				tempAccount.custState = CustomerState.DepositingMoney;
+			}
+		}
+	    stateChanged();
 	}
 	
 	public void msgIWantLoan(int accountNumber, double moneyRequest) {
@@ -67,6 +81,30 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
     //scheduler---------------------------------------------------------------------------
 	protected boolean pickAndExecuteAction(){
+		synchronized(this.accounts){
+			for(BankAccount tempCustomer: accounts){
+				if(tempCustomer.custState == CustomerState.NeedingAssistance){
+					OfferAssistance(tempCustomer);
+					return true;
+				}
+			}
+		}
+		synchronized(this.accounts){
+			for(BankAccount tempCustomer: accounts){
+				if(tempCustomer.custState == CustomerState.OpeningAccount){
+					OpenedAccount(tempCustomer);
+					return true;
+				}
+			}
+		}
+		synchronized(this.accounts){
+			for(BankAccount tempCustomer: accounts){
+				if(tempCustomer.custState == CustomerState.DepositingMoney){
+					DepositMoney(tempCustomer);
+					return true;
+				}
+			}
+		}
 		synchronized(this.accounts){
 			for(BankAccount tempCustomer: accounts){
 				if(tempCustomer.custState == CustomerState.NeedingAssistance){
@@ -85,15 +123,16 @@ public class BankTellerRole extends Role implements BankTeller {
 		account.customer.msgHowCanIHelpYou(this);
 		account.custState = CustomerState.AskedAssistance;
 		stateChanged();
-		
 	}
 	
-	private void CreateAccount(BankAccount myCustomer) {
-		
+	private void OpenedAccount(BankAccount account) {
+		account.customer.msgHereIsYourAccount(account.accountNumber);
+		account.custState = CustomerState.OpenedAccount;
+		stateChanged();
 	}
 	
-	private void DepositMoney(BankAccount myCustomer) {
-		
+	private void DepositMoney(BankAccount account) {
+		account.totalFunds +=
 	}
 	
 	private void GiveCustomerMoney(BankAccount myCustomer) {
