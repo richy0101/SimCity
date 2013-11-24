@@ -53,7 +53,6 @@ public class StackCustomerRole extends Role implements Customer {
 	 */
 	public StackCustomerRole(){
 		super();
-		print(getName());
 	}
 
 	/**
