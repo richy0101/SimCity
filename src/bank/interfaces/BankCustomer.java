@@ -1,7 +1,7 @@
 package bank.interfaces;
 
 public interface BankCustomer {
-	public void msgHowCanIHelpYou(BankTeller teller);
+	public void msgHowCanIHelpYou(BankTeller teller, int tellerNumber);
 	
 	public void msgLoanDenied();
 	
