@@ -92,7 +92,7 @@ public class WaiterGui implements Gui {
     }
     
     public void draw(Graphics2D g) {
-    	g.drawImage(waiterImage, 0, 0, null);
+    	g.drawImage(waiterImage, xPos, yPos, null);
     }
 
     public boolean isPresent() {

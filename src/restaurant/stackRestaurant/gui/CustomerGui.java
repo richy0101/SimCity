@@ -82,7 +82,7 @@ public class CustomerGui implements Gui{
 	}
 	
 	public void draw(Graphics2D g) {
-		g.drawImage(customerImage, 0, 0, null);
+		g.drawImage(customerImage, xPos, yPos, null);
 	}
 
 	public boolean isPresent() {

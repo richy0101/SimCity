@@ -31,9 +31,7 @@ public class CookGui implements Gui {
 
     public CookGui(StackCookRole agent) {
         this.agent = agent;
-        
-        
-        
+
         try {
         	cookImage = ImageIO.read(getClass().getResource("stackRestaurantCook.png"));
         }
@@ -68,7 +66,7 @@ public class CookGui implements Gui {
     }
     
     public void draw(Graphics2D g) {
-    	g.drawImage(cookImage, 0, 0, null);
+    	g.drawImage(cookImage, xPos, yPos, null);
     }
     
     public void DoGoToFridge() {
