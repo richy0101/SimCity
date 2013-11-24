@@ -75,7 +75,7 @@ public class SimCityGui {
 		MicroAnimationPanel microAnimationPanel = new MicroAnimationPanel();
 		buildingPanels = new JPanel();
 		cardLayout = new CardLayout();
-		microAnimationPanel.setLayout(cardLayout);
+//		microAnimationPanel.setLayout(cardLayout);
 		buildingPanels.setLayout(cardLayout);
 		
 		
@@ -86,7 +86,7 @@ public class SimCityGui {
 			BuildingPanel ma = new BuildingPanel( b, i, this );
 			//b.setMicroAnimationPanel( ma );
 			b.setBuildingPanel( ma );
-			microAnimationPanel.add( ma, "" + i );	
+//			microAnimationPanel.add( ma, "" + i );	
 			buildingPanels.add( ma, "" + i );		
 		}
 		
@@ -341,8 +341,8 @@ public class SimCityGui {
 		cardLayout.show( buildingPanels, buildingPanel.getName());
 	}
 
-	public void displayMicroAnimationPanel(MicroAnimationPanel microAnimationPanel) {
-			System.out.println("Accessing " + microAnimationPanel.getName() + " for MicroAnimationPanel.");
-			cardLayout.show(buildingPanels, microAnimationPanel.getName());
-	}
+//	public void displayMicroAnimationPanel(MicroAnimationPanel microAnimationPanel) {
+//			System.out.println("Accessing " + microAnimationPanel.getName() + " for MicroAnimationPanel.");
+//			cardLayout.show(buildingPanels, microAnimationPanel.getName());
+//	}
 }
