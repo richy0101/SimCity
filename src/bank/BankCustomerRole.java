@@ -22,7 +22,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	int tellerNumber;
     
 	String task;
-	public BankCustomerRole(String task, int moneyToDeposit, int moneyRequired) {
+	public BankCustomerRole(String task, double moneyToDeposit, double moneyRequired) {
 		this.task = task;
 		this.manager = Directory.sharedInstance().getBanks().get(0).getManager();
 		this.moneyRequired = moneyRequired;
