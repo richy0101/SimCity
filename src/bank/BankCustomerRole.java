@@ -15,16 +15,14 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	CustomerEvent event = CustomerEvent.NoAccount;
 	CustomerIntention intention = null;
 	
-	double funds;
 	double moneyToDeposit;
 	double moneyToWithdraw;
 	double moneyRequired;
     
-	BankTask task;
+	String task;
 	public BankCustomerRole(String task) {
-		this.task = BankTask.valueOf(task);
+		this.task = task;
 		this.manager = Directory.sharedInstance().getBanks().get(0).getManager();
-        funds = (double) (Math.random()*1500);
 	}
 	
 	
@@ -79,11 +77,14 @@ public class BankCustomerRole extends Role implements BankCustomer {
 			return true;
 		}
 		else if(state == CustomerState.BeingHelped && event == CustomerEvent.AccountOpened){
-			if(state == CustomerState.BeingHelped && funds >= 500){
+			if(state == CustomerState.BeingHelped && task.equals("WantsToDeposit")){
 				depositMoney();
 			}
-			if(state == CustomerState.BeingHelped && funds < 500){
+			else if(state == CustomerState.BeingHelped && task.equals("WantsToWithdraw")){
 				withdrawMoney();
+			}
+			else if(state == CustomerState.BeingHelped && task.equals("WantToGetLoan")) {
+				takeOutLoan();
 			}
 		}
 		return false;
