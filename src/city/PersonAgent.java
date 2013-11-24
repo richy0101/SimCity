@@ -59,6 +59,9 @@ public class PersonAgent extends Agent implements Person {
 	Map<String, Integer> groceryList;
 	Timer personTimer = new Timer();
 	
+	//bank information
+	int accountNumber;
+	
 	public class PersonTimerTask extends TimerTask {
 		PersonAgent p;
 		PersonTimerTask(PersonAgent p) {
@@ -92,6 +95,7 @@ public class PersonAgent extends Agent implements Person {
 				this.newRole = new MarketCustomerRole(p.groceryList);
 			}
 			newRole.setPerson(p);
+			print("setting person agent");
 			return newRole;
 		}
 	};
@@ -462,5 +466,11 @@ public class PersonAgent extends Agent implements Person {
 	}
 	public void setFunds(double funds) {
 		this.funds = funds;
+	}
+	public int getAccountNumber() {
+		return accountNumber;
+	}
+	public void setAccountNumber(int accountNumber) {
+		this.accountNumber = accountNumber;
 	}
 }

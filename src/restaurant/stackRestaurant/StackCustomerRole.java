@@ -316,6 +316,7 @@ public class StackCustomerRole extends Role implements Customer {
 		Do("Leaving.");
 		waiter.msgDoneEating(this);
 		customerGui.DoExitRestaurant();
+		getPersonAgent().msgRoleFinished();
 	}
 	
 	private void notWaitingAndLeaving() {
