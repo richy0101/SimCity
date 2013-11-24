@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -21,7 +22,7 @@ import javax.swing.*;
 
 import restaurant.Restaurant;
 
-public class MicroAnimationPanel extends JPanel implements ActionListener/*, MouseListener*/ {
+public class MicroAnimationPanel extends JPanel implements ActionListener, MouseListener {
 	private final int WINDOWX = 835;
     private final int WINDOWY = 400;
     
@@ -35,17 +36,21 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
 
     private List<Gui> guis = new ArrayList<Gui>();
     
-    public HashMap<String, CityCard> cards = new HashMap<String, CityCard>();
+    private HashMap<String, CityCard> cards = new HashMap<String, CityCard>();
   
     public MicroAnimationPanel() {
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
         setBackground(Color.BLUE);
  
-        //addMouseListener(this);
+        addMouseListener(this);
         
     	Timer timer = new Timer(DELAY, this);
     	timer.start();
+    	
+    	cards.put("null", new CityCard(myCity, Color.pink));
+    	cards.put("stackRestaurant", new CityCard(myCity, Color.pink));
+    	cards.put("0", new CityCard(myCity, Color.pink));
     	
     	/*
     	try { //STACK RESTAURANT BACKGROUND
@@ -127,13 +132,38 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
 	public String getName() {
 		return myName;
 	}
-
-	public void displayBuildingPanel() {
-		myCity.displayBuildingPanel( this );
-		
-	}
 	
 	public void displayMicroAnimationPanel() {
 		myCity.displayMicroAnimationPanel( this ); 
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

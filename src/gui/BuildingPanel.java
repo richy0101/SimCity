@@ -14,7 +14,7 @@ public class BuildingPanel extends JPanel {
 		myName = "" + i;
 		myCity = sc;
 		
-		setBackground( Color.WHITE );
+		setBackground( Color.DARK_GRAY );
 		setMinimumSize( new Dimension( 500, 250 ) ); //DO WE NEED MIN/MAX SIZE? WHAT IS PURPOSE?
 		setMaximumSize( new Dimension( 500, 250 ) );
 		setPreferredSize( new Dimension( 500, 250 ) );
