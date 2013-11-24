@@ -9,6 +9,7 @@ import java.util.Timer;
 import java.util.Random;
 import java.util.TimerTask;
 
+import city.PersonAgent;
 import restaurant.stackRestaurant.interfaces.*;
 
 /**
@@ -51,10 +52,14 @@ public class StackCustomerRole extends Role implements Customer {
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public StackCustomerRole(){
+	public StackCustomerRole(PersonAgent p){
 		super();
 		customerGui = new CustomerGui(this);
-		print("Customer is alive.");
+		setPerson(p);
+		if(getPersonAgent() == null) {
+			System.out.println("Person is null.");
+		}
+		msgGotHungry();
 	}
 
 	/**
@@ -316,6 +321,7 @@ public class StackCustomerRole extends Role implements Customer {
 		Do("Leaving.");
 		waiter.msgDoneEating(this);
 		customerGui.DoExitRestaurant();
+		getPersonAgent().msgRoleFinished();
 	}
 	
 	private void notWaitingAndLeaving() {

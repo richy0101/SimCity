@@ -5,6 +5,7 @@ public class Role {
 	PersonAgent myPerson;
 	public void setPerson(PersonAgent person) {
 		myPerson = person; 
+		//System.out.println(myPerson.name + "WOAH");
 	}
 	
 	public PersonAgent getPersonAgent() {
