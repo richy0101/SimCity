@@ -15,7 +15,6 @@ import restaurant.stackRestaurant.interfaces.*;
  * Restaurant customer agent.
  */
 public class StackCustomerRole extends Role implements Customer {
-	private String name;
 	private int hungerLevel = 5;        // determines length of meal
 	private int tableNumber;
 	private String choice;
@@ -54,11 +53,7 @@ public class StackCustomerRole extends Role implements Customer {
 	 */
 	public StackCustomerRole(){
 		super();
-		if(name.equals("cheap")) {
-			cheapSkate = true;
-		} else if (name.equals("impatient")) {
-			willingToWait = false;
-		}
+		print(getName());
 	}
 
 	/**
