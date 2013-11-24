@@ -36,7 +36,7 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
     private List<Gui> guis = new ArrayList<Gui>();
     
     public HashMap<String, CityCard> cards = new HashMap<String, CityCard>();
-/*    
+  
     public MicroAnimationPanel() {
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
@@ -47,15 +47,15 @@ public class MicroAnimationPanel extends JPanel implements ActionListener/*, Mou
     	Timer timer = new Timer(DELAY, this);
     	timer.start();
     	
-    	
+    	/*
     	try { //STACK RESTAURANT BACKGROUND
         	restaurantImage = ImageIO.read(getClass().getResource("stackRestaurant.png"));
         }
         catch(IOException e) {
         	System.out.println("Error w/ Background");
         } 
+        */
     }
-*/
     
 	public MicroAnimationPanel( Rectangle2D r, int i, SimCityGui sc ) {
 		myRectangle = r;

@@ -70,16 +70,19 @@ public class SimCityGui {
 		macroAnimationPanel.setBounds(5, 5, 827, 406);
 		frame.getContentPane().add(macroAnimationPanel);
 		
+		
 		MicroAnimationPanel microAnimationPanel = new MicroAnimationPanel();
 		cardLayout = new CardLayout();
 		microAnimationPanel.setLayout(cardLayout);
+		
 		
 		//Creates building panel for each object
 		ArrayList<Building> buildings = macroAnimationPanel.getBuildings();
 		for ( int i=0; i<buildings.size(); i++ ) {
 			Building b = buildings.get(i);
-			MicroAnimationPanel ma = new MicroAnimationPanel( b, i, this );
-			b.setMicroAnimationPanel( ma );
+			BuildingPanel ma = new BuildingPanel( b, i, this );
+			//b.setMicroAnimationPanel( ma );
+			b.setBuildingPanel( ma );
 			microAnimationPanel.add( ma, "" + i );
 		}
 		
