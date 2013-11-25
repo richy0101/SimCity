@@ -1,14 +1,14 @@
 package agent;
-import city.PersonAgent;
+import city.interfaces.Person;
 
 public class Role {
-	PersonAgent myPerson;
-	public void setPerson(PersonAgent person) {
+	Person myPerson;
+	public void setPerson(Person person) {
 		myPerson = person; 
 		//System.out.println(myPerson.name + "WOAH");
 	}
 	
-	public PersonAgent getPersonAgent() {
+	public Person getPerson() {
 		return myPerson;
 	}
 	
