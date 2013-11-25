@@ -7,6 +7,8 @@ package city;
 //import java.util.concurrent.Semaphore;
 
 import agent.Role;
+import city.PersonAgent.TransportationMethod;
+import city.helpers.Directory;
 import city.interfaces.Transportation;
 
 public class TransportationRole extends Role implements Transportation  {
@@ -26,11 +28,16 @@ public class TransportationRole extends Role implements Transportation  {
 	TransportationState state = TransportationState.None;
 
 	
-	public TransportationRole(String workLocation) {
+	public TransportationRole(String destination, String startingLocation) {
 		super();
 		hasCar = true; //hack for normative
 		state = TransportationState.NeedsToTravel; // hack for normative;
-		destination = workLocation;
+		this.destination = destination;
+		if (getPersonAgent().transMethod.equals(TransportationMethod.TakesTheBus)) {
+			
+		}
+		Directory.sharedInstance().locationDirectory.get(destination).xCoordinate;
+		Directory.sharedInstance().locationDirectory.get(destination).yCoordinate;
 		
 		//need a function to assign stopDestination based on final destination
 		//if(destination.equals("")||)

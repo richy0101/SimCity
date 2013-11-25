@@ -101,8 +101,9 @@ public class PersonAgent extends Agent implements Person {
 				this.newRole = new StackCustomerRole(p);
 			}
 			if(order == "Market1" || order == "Market2") {
-				this.newRole = new MarketCustomerRole(p, p.groceryList);
+				this.newRole = new MarketCustomerRole(p, p.groceryList, order);
 			}
+			newRole.setPerson(p);
 			//print("Set role complete.");
 			return newRole;
 		}
@@ -376,7 +377,7 @@ public class PersonAgent extends Agent implements Person {
 		print("Action goHome - State set to InTransit. Adding new Transportation Role.");
 		personState = PersonState.InTransit;
 		roles.clear();
-		roles.add(new TransportationRole(homeName));
+		//roles.add(new TransportationRole(homeName));
 		
 	}	
 	private void cookHomeFood() {
@@ -439,7 +440,7 @@ public class PersonAgent extends Agent implements Person {
 		hasWorked = true;
 		roles.clear();
 		roles.add(workDetails.workRole);
-		roles.add(new TransportationRole(workDetails.workLocation));
+		//roles.add(new TransportationRole(workDetails.workLocation));
 		
 	}
 	private void cleanRoom() {
@@ -457,7 +458,7 @@ public class PersonAgent extends Agent implements Person {
 		Market m = Directory.sharedInstance().getMarkets().get(0);
 		roles.clear();
 		factory.createRole(m.getName(), this);
-		roles.add(new TransportationRole(m.getName()));
+		//roles.add(new TransportationRole(m.getName()));
 		print("Action goMarket - State set to OutToMarket");
 		personState = PersonState.OutToMarket;
 		
@@ -467,7 +468,7 @@ public class PersonAgent extends Agent implements Person {
 		Bank b = Directory.sharedInstance().getBanks().get(0);
 		roles.clear();
 		roles.add(new BankCustomerRole(personState.toString(), 0.0, 0.0));//Hacked factory LOL
-		roles.add(new TransportationRole(b.getName()));
+		//roles.add(new TransportationRole(b.getName()));
 		print("Action goRob - State set to OutBank");
 		personState = PersonState.OutToBank;
 		
@@ -483,7 +484,7 @@ public class PersonAgent extends Agent implements Person {
 		}
 		roles.clear();
 		roles.add(new BankCustomerRole(personState.toString(), deposit, 0.0));//Hacked factory LOL
-		roles.add(new TransportationRole(b.getName()));
+		//roles.add(new TransportationRole(b.getName()));
 		print("Action goDeposit - State set to OutBank");
 		personState = PersonState.OutToBank;
 		
@@ -492,7 +493,7 @@ public class PersonAgent extends Agent implements Person {
 		Bank b = Directory.sharedInstance().getBanks().get(0);
 		roles.clear();
 		roles.add(new BankCustomerRole(personState.toString(), 0.0, 1000.00));//Hacked factory LOL
-		roles.add(new TransportationRole(b.getName()));
+		//roles.add(new TransportationRole(b.getName()));
 		print("Action goLoan - State set to OutBank");
 		personState = PersonState.OutToBank;
 		
@@ -502,7 +503,7 @@ public class PersonAgent extends Agent implements Person {
 		Bank b = Directory.sharedInstance().getBanks().get(0);
 		roles.clear();
 		roles.add(new BankCustomerRole(personState.toString(), 0.0, 0.0));//Hacked factory LOL
-		roles.add(new TransportationRole(b.getName()));
+		//roles.add(new TransportationRole(b.getName()));
 		print("Action goWithraw - State set to OutBank");
 		personState = PersonState.OutToBank;
 	}
