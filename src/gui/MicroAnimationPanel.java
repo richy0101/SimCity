@@ -42,7 +42,7 @@ public class MicroAnimationPanel extends JPanel implements ActionListener, Mouse
     public MicroAnimationPanel() {
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
-        setBackground(Color.BLUE);
+        //setBackground(Color.BLUE);
  
         addMouseListener(this);
         
