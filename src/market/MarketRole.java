@@ -2,6 +2,8 @@ package market;
 
 import gui.Building;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,6 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
+
+import javax.imageio.ImageIO;
 
 import city.PersonAgent;
 import city.helpers.Directory;
@@ -27,6 +31,7 @@ public class MarketRole extends Role implements Market {
 	List<Order> MyOrders;
 	boolean jobDone;
 	Map<String, Food> inventory = new HashMap<String, Food>();
+	
 
 	private Semaphore actionComplete = new Semaphore(0,true);
 	private MarketGui gui;
@@ -91,6 +96,7 @@ public class MarketRole extends Role implements Market {
 		log = new EventLog();
 		
 		gui = new MarketGui(this);
+
 		myLocation = location;
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {

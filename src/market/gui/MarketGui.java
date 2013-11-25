@@ -5,6 +5,10 @@ import gui.Gui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import market.MarketRole;
 
@@ -20,10 +24,15 @@ public class MarketGui implements Gui {
 	private enum state {NoCommand, GettingItem, GoingToCounter};
 	private state command = state.NoCommand;
 	
-	public static final int xCounter = 75;
-	public static final int yCounter = 50;
-	public static final int xStart = 75;
-	public static final int yStart = 50;
+	BufferedImage marketRoleLeft;
+	BufferedImage marketRoleRight;
+	BufferedImage marketRoleUp;
+	BufferedImage marketRoleDown;
+	
+	public static final int xCounter = 118;
+	public static final int yCounter = 170;
+	public static final int xStart = 118;
+	public static final int yStart = 170;
 	public static final int xShelf = 100;
 	public static final int yShelf = 100;
 	
@@ -36,6 +45,17 @@ public class MarketGui implements Gui {
 		yPos = yStart;
 		xDestination = xStart;
 		yDestination = yStart;
+		
+	
+		try {
+			marketRoleLeft = ImageIO.read(getClass().getResource("GUIMarketRoleLeft.png"));
+        	marketRoleRight = ImageIO.read(getClass().getResource("GUIMarketRoleRight.png"));
+        	marketRoleUp = ImageIO.read(getClass().getResource("GUIMarketRoleUp.png"));
+        	marketRoleDown = ImageIO.read(getClass().getResource("GUIMarketRoleDown.png"));
+		}
+		catch(IOException e) {
+			System.out.println("Error w/ MarketRoleImage");
+		}
 		
 		isPresent = true;
 	}
@@ -62,8 +82,29 @@ public class MarketGui implements Gui {
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.setColor(Color.GREEN);
-		g.fillRect(xPos, yPos, 20, 20);
+		if (xPos < xDestination) {
+			g.drawImage(marketRoleLeft, xPos, yPos, null);
+		}
+		else if (xPos > xDestination) {
+			g.drawImage(marketRoleRight,  xPos, yPos, null);
+		}
+		else if (yPos < yDestination) {
+			g.drawImage(marketRoleUp, xPos, yPos, null);
+		}
+		else if (yPos > yDestination) {
+			g.drawImage(marketRoleDown, xPos, yPos, null);
+		}
+		/*
+		else if (xPos == xBed && yPos == yBed) {
+			g.drawImage(marketRoleDown, xPos, yPos, null);
+		}
+		else if (xPos == xTable && yPos == yTable) {
+			g.drawImage(marketRoleDown, xPos, yPos, null);
+		}
+		else if (xPos == xKitchen && yPos == yKitchen) {
+			g.drawImage(marketRoleUp , xPos, yPos, null);
+		}
+		*/
 	}
 
 	@Override
