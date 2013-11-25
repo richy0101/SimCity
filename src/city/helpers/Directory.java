@@ -128,36 +128,7 @@ public class Directory {
 	Coordinate house5Location = new Coordinate(502,140);
 	
 	private Home house6 = new Home("House6");
-	Coordinate house6Location = new Coordinate(602,140);
-
-//BUS STOPS
-	private BusStop busStop1 = new BusStop("BusStop1"); //bottom left
-	Coordinate busStop1Location = new Coordinate(171,361);
-	
-	private BusStop busStop2 = new BusStop("BusStop2"); //bottom right
-	Coordinate busStop4Location = new Coordinate(675,356);
-	
-	private BusStop busStop3 = new BusStop("BusStop3"); //top right
-	Coordinate busStop3Location = new Coordinate(610,73);
-	
-	private BusStop busStop4 = new BusStop("BusStop4"); //top left
-	Coordinate busStop2Location = new Coordinate(110,73);
-	
-	
-//STREETCORNERS
-	
-	private StreetCorner bottomLeft = new StreetCorner("Bottom-Left");
-	Coordinate streetCornerBottomLeftLocation = new Coordinate(135, 325);
-	
-	private StreetCorner bottomRight = new StreetCorner("Bottom-Right");
-	Coordinate streetCornerBottomRightLocation = new Coordinate(700, 325);
-	
-	private StreetCorner topLeft = new StreetCorner("Top-Left");
-	Coordinate streetCornerTopLeftLocation = new Coordinate(135, 105);
-	
-	private StreetCorner topRight = new StreetCorner("Top-Right");
-	Coordinate streetCornerTopRightLocation = new Coordinate(700, 105);
-
+	Coordinate house6Location = new Coordinate(602,140);	
 	
 		
 //MARKETS
@@ -214,10 +185,6 @@ public class Directory {
 	public static List<Bank> banks = new ArrayList<Bank>();
 	public static List<Market> markets = new ArrayList<Market>();
 	public static List<PersonAgent> people = new ArrayList<PersonAgent>();
-	public static List<TransportationRole> waitingPassengersAtStop1 = new ArrayList<TransportationRole>();
-	public static List<TransportationRole> waitingPassengersAtStop2 = new ArrayList<TransportationRole>();
-	public static List<TransportationRole> waitingPassengersAtStop3 = new ArrayList<TransportationRole>();
-	public static List<TransportationRole> waitingPassengersAtStop4 = new ArrayList<TransportationRole>();
 	public Map<String, Coordinate> getDirectory() {
 		return locationDirectory;
 	}
@@ -235,18 +202,6 @@ public class Directory {
 	}
 	public List<Market> getMarkets() {
 		return markets;
-	}
-	public List<TransportationRole> getWaitingPassengersAtStop1(){
-		return waitingPassengersAtStop1;
-	}
-	public List<TransportationRole> getWaitingPassengersAtStop2(){
-		return waitingPassengersAtStop2;
-	}
-	public List<TransportationRole> getWaitingPassengersAtStop3(){
-		return waitingPassengersAtStop3;
-	}
-	public List<TransportationRole> getWaitingPassengersAtStop4(){
-		return waitingPassengersAtStop4;
 	}
 	public SimCityGui getCityGui() {
 		return cityGui;
