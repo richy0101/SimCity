@@ -21,11 +21,6 @@ public class TransportationGui implements Gui {
 	BufferedImage personRight;
 	BufferedImage personUp;
 	BufferedImage personDown;
-
-	BufferedImage busLeft;
-	BufferedImage busRight;
-	BufferedImage busUp;
-	BufferedImage busDown;
 	
 	public enum CurrentAction {Cooking, Eating, Transition, Idle};
 	CurrentAction currentAction = CurrentAction.Idle;
@@ -35,21 +30,12 @@ public class TransportationGui implements Gui {
 		yPos = startY;
 		xDestination = destX;
 		yDestination = destY;
+		
 		try {
         	personLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
         	personRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));
         	personUp = ImageIO.read(getClass().getResource("GUIPersonUp.png"));
         	personDown = ImageIO.read(getClass().getResource("GUIPersonDown.png"));
-        }
-        catch(IOException e) {
-        	System.out.println("Error w/ Person assets");
-        }
-		
-		try {
-        	busLeft = ImageIO.read(getClass().getResource("busLeft.png"));
-        	busRight = ImageIO.read(getClass().getResource("busRight.png"));
-        	busUp = ImageIO.read(getClass().getResource("busUp.png"));
-        	busDown = ImageIO.read(getClass().getResource("busDown.png"));
         }
         catch(IOException e) {
         	System.out.println("Error w/ Person assets");
@@ -73,15 +59,6 @@ public class TransportationGui implements Gui {
 		}
 		else if (yPos > yDestination) {
 			yPos-= 5;
-		}
-		
-		if(xPos == xKitchen && yPos == yKitchen && currentAction == CurrentAction.Cooking) {
-			currentAction = CurrentAction.Transition;
-			agent.msgActionComplete();
-		}
-		if(xPos == xTable && yPos == yTable && currentAction == CurrentAction.Eating) {
-			currentAction = CurrentAction.Transition;
-			agent.msgActionComplete();
 		}
 	}
 

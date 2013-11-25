@@ -1,8 +1,10 @@
 package city.gui;
 
+import gui.CityComponent;
 import gui.Gui;
 import city.BusAgent;
 import city.helpers.Directory;
+import city.helpers.BusHelper;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -10,7 +12,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class BusGui implements Gui {
+public class BusGui extends CityComponent implements Gui {
 	/**
 	 * Data
 	 */
@@ -25,7 +27,10 @@ public class BusGui implements Gui {
 	int TopRow = 105;
 	int BottomRow = 325;
 	int LeftCol = 135;
-	int RightCol = 700;
+	int RightCol = 700;	
+	
+	int xStart = 0;
+	int yStart = 0;
 	
 	private BusAgent agent = null;
 	
@@ -72,6 +77,11 @@ public class BusGui implements Gui {
 	
 	public BusGui(BusAgent agent) {
         this.agent = agent;
+        
+        xPos = xStart;
+        yPos = yStart;
+        xDestination = xStart;
+        yDestination = yStart;
         
         try {
         	busLeftImage = ImageIO.read(getClass().getResource("busLeft.png"));

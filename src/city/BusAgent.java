@@ -51,7 +51,8 @@ public class BusAgent extends Agent implements Bus {
 		
 	}
 	
-	BusAgent(){//constructor
+	public BusAgent(){//constructor
+		busGui = new BusGui(this);
 	}
 		
 	/**
@@ -75,31 +76,37 @@ public class BusAgent extends Agent implements Bus {
 			if(state==State.driving && event==Event.reachedStop){
 				state=State.stopping;
 				stopBus();//change event to stopped
+				return true;
 			}
 			
 			if(state==State.stopping && event==Event.stopped){
 				state=State.notifyingPassengersToAlightBus;
 				alertPassengersToAlightBus(); //change event to notified passengers
+				return true;
 			}
 			
 			if(state==State.notifyingPassengersToAlightBus && event==Event.notifiedPassengersToAlightBus){
 				state=State.waitForAlighting;
 				waitForPassengersToAlight(); //timer event when done changes to passengersAlighted
+				return true;
 			}
 			
 			if(state==State.waitForAlighting && event==Event.passengersAlighted){
 				state=State.notifyingPassengersToBoardBus;
 				alertPassengersToBoardBus(); //change event to notifiedPassengersToBoardBus 
+				return true;
 			}
 			
 			if(state==State.notifyingPassengersToBoardBus && event==Event.notifiedPassengersToBoardBus){
 				state=State.waitForBoarding;
 				waitForPassengersToBoard(); //timer event when done changes to passengersBoarded
+				return true;
 			}
 			
 			if(state==State.waitForBoarding && event==Event.passengersBoarded){
 				state=State.driving;
 				keepDriving(); //changes event to reachedStop when reaches stop
+				return true;
 			}
 		
 			return false;

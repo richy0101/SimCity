@@ -2,5 +2,8 @@ package gui;
 
 public enum CityComponents {
 	RESTAURANT, 
-	BANK
+	BANK,
+	MARKET,
+	HOUSE,
+	APARTMENT
 };

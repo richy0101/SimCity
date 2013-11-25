@@ -20,6 +20,7 @@ public class TransportationRole extends Role implements Transportation  {
 
 	String destination;
 	String startingLocation;
+	String currentLocation;
 	//String stopDestination; //for bus stop
 	private Semaphore actionComplete = new Semaphore(0,true);
 	CarAgent car;
@@ -62,12 +63,14 @@ public class TransportationRole extends Role implements Transportation  {
 	
 	public void msgArrivedAtDestination(String destination) {
 		print("Car successfully took me to " + destination + ".");
+		currentLocation= destination;
 		state = TransportationState.AtDestination;
 		stateChanged();
 	}
 	public void msgAtStop(int stopNumber) {
 		if(stopNumber == finalStopNumber) {
 			state = TransportationState.AtFinalStop;
+			currentLocation= "BusStop"+stopNumber;
 		}
 		stateChanged();
 	}
@@ -79,6 +82,7 @@ public class TransportationRole extends Role implements Transportation  {
 	public boolean pickAndExecuteAnAction() {
 		if (state == TransportationState.AtDestination) {
 			EnterBuilding();
+			return true;
 		}
 		if	(state == TransportationState.JustGotOffBus) {
 			WalkToFinalDestination();
@@ -91,8 +95,7 @@ public class TransportationRole extends Role implements Transportation  {
 		if(state == TransportationState.GettingOnBus) {
 			GetOnBus();
 			return false;
-		}
-		
+		}	
 		if(state == TransportationState.NeedsToTravel) {
 			GetAVehicle();
 			return true;
@@ -149,7 +152,7 @@ public class TransportationRole extends Role implements Transportation  {
 			//bus.msgINeedARide(destination);
 		}**/
 		state = TransportationState.InTransit;
-		if (getPersonAgent().getTransportationMethod.contains("Bus")) {
+		if (getPersonAgent().getTransportationMethod().contains("Bus")) {
 			startStopX = BusHelper.sharedInstance().busStopEvaluator.get(startingLocation).xCoordinate;
 			startStopY = BusHelper.sharedInstance().busStopEvaluator.get(startingLocation).yCoordinate;
 			endStopX = BusHelper.sharedInstance().busStopEvaluator.get(destination).xCoordinate;
@@ -173,6 +176,7 @@ public class TransportationRole extends Role implements Transportation  {
 	}
 	private void GetOffBus() {
 		bus.msgLeavingBus(this);
+		getPersonAgent().msgTransportFinished(currentLocation);
 		state = TransportationState.JustGotOffBus;
 		stateChanged();
 	}
@@ -187,7 +191,7 @@ public class TransportationRole extends Role implements Transportation  {
 		}
 		
 		state = TransportationState.None;
-		getPersonAgent().msgTransportFinished();
+		getPersonAgent().msgTransportFinished(currentLocation); //haven't implemented updating the currentLoc for cars
 		//change roles
 	}
 }
