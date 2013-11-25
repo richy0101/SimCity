@@ -14,4 +14,14 @@ public interface BankTeller {
 	public void msgThankYouForAssistance(BankCustomer bankCustomer);
 	
 	public void msgGoToRegister(int registerNumber);
+	
+	public void msgDoneWorking();
+	
+	//animation
+	
+	public void msgAtRegister();
+	
+	public void msgAtManager();
+	
+	public void msgAnimationFinishedLeavingBank();
 }

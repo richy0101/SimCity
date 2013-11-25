@@ -4,7 +4,7 @@ import bank.interfaces.BankManager;
 
 public class Bank {
 	private static Bank sharedInstance = null;
-	String name;
+	String name = "Bank";
 	BankManagerAgent manager;
     
     private Bank() {
