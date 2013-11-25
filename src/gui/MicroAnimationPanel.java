@@ -158,10 +158,6 @@ public class MicroAnimationPanel extends JPanel implements ActionListener, Mouse
 	public String getName() {
 		return myName;
 	}
-	
-	public void displayMicroAnimationPanel() {
-		myCity.displayMicroAnimationPanel( this ); 
-	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
