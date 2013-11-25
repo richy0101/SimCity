@@ -36,4 +36,7 @@ public class Building extends Rectangle2D.Double {
 	public void setMicroAnimationPanel( MicroAnimationPanel ma) {
 		myMicroAnimationPanel = ma;
 	}
+	public void addGui(Gui gui) {
+		myBuildingPanel.addGui(gui);
+	}
 }
