@@ -5,6 +5,10 @@ import city.CarAgent;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class CarGui implements Gui {
 	/**
@@ -17,6 +21,11 @@ public class CarGui implements Gui {
 	int yDestination = 20;
 	
 	private CarAgent agent = null;
+	
+	BufferedImage carRightImage;
+	BufferedImage carLeftImage;
+	BufferedImage carUpImage;
+	BufferedImage carDownImage;
 	
 	/**
 	 * Received Messages/Actions
@@ -44,6 +53,16 @@ public class CarGui implements Gui {
 	 */
 	public CarGui(CarAgent agent) {
         this.agent = agent;
+        
+        try {
+        	carRightImage = ImageIO.read(getClass().getResource("SIMCITYBOTTOM.png"));
+        	carLeftImage = ImageIO.read(getClass().getResource("SIMCITYTOP.png"));
+        	carUpImage = ImageIO.read(getClass().getResource("SIMCITYBOTTOMNIGHT.png"));
+        	carDownImage = ImageIO.read(getClass().getResource("SIMCITYTOPNIGHT.png"));
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ Car");
+        }
     }
 	
 	@Override
