@@ -3,7 +3,6 @@ package bank;
 import gui.Building;
 
 import java.util.ArrayList;
-
 import city.helpers.Directory;
 
 import java.util.Collections;
@@ -30,11 +29,13 @@ public class BankTellerRole extends Role implements BankTeller {
 	    	this.custState = state;
 	    }
     }
+	
+	private static final int MAXLOAN = 1000;
 	private Semaphore doneAnimation = new Semaphore(0,true);
     private int registerNumber;
     BankManager manager;
     private BankTellerGui tellerGui;
-    private enum TellerState {ArrivedAtWork, AtManager, GoingToRegister, ReadyForCustomers, Gone};
+    private enum TellerState {ArrivedAtWork, AtManager, GoingToRegister, ReadyForCustomers, DoneWorking, Gone};
     TellerState state = TellerState.ArrivedAtWork;
     
     private enum CustomerState {NeedingAssistance, 
@@ -124,6 +125,11 @@ public class BankTellerRole extends Role implements BankTeller {
 		}
 		
 	}
+	
+	public void msgDoneWorking() {
+		state = TellerState.DoneWorking;
+		stateChanged();
+	}
     //scheduler---------------------------------------------------------------------------
 	protected boolean pickAndExecuteAction(){
 		if(state == TellerState.ArrivedAtWork) {
@@ -193,6 +199,10 @@ public class BankTellerRole extends Role implements BankTeller {
 			}
 			manager.msgTellerFree(this);
 		}
+		if(state == TellerState.DoneWorking) {
+			LeaveBank();
+			return true;
+		}
 		return false;
 	}
 
@@ -214,6 +224,7 @@ public class BankTellerRole extends Role implements BankTeller {
 			e.printStackTrace();
 		}
 		state = TellerState.ReadyForCustomers;
+		manager.msgTellerFree(this);
 	}
 	private void OfferAssistance(MyCustomer account) {
 		print("What do you need help with?");
@@ -248,14 +259,25 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	
 	private void GiveLoan(MyCustomer myCustomer) {
-		AccountSystem.sharedInstance().getAccounts().get(myCustomer.accountNumber).loanAccepted(1000);
-		myCustomer.customer.msgHereAreFunds(1000);
+		AccountSystem.sharedInstance().getAccounts().get(myCustomer.accountNumber).loanAccepted(MAXLOAN);
+		myCustomer.customer.msgHereAreFunds(MAXLOAN);
 		myCustomer.custState = CustomerState.Leaving;
 	}
 	
 	private void RejectLoan(MyCustomer myCustomer) {
 		myCustomer.customer.msgLoanDenied();
 		myCustomer.custState = CustomerState.Leaving;
+	}
+	
+	private void LeaveBank() {
+		tellerGui.DoLeaveBank();
+		try {
+			doneAnimation.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		state = TellerState.Gone;
+		getPersonAgent().msgRoleFinished();
 	}
 	//animation messages-------------------------------------------------------------------
 	public void msgAtRegister() {
@@ -265,9 +287,6 @@ public class BankTellerRole extends Role implements BankTeller {
 		doneAnimation.release();
 	}
 	public void msgAnimationFinishedLeavingBank() {
-		//from animation
-		state = TellerState.Gone;
 		doneAnimation.release();
-		stateChanged();
 	}
 }

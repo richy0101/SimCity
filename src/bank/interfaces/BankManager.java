@@ -5,5 +5,5 @@ public interface BankManager {
 	
 	public void msgTellerFree(BankTeller teller);
 	
-	public void msgAddTeller(BankTeller teller);
+	public void msgHereForWork(BankTeller teller);
 }

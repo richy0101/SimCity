@@ -67,17 +67,9 @@ public class BankManagerAgent extends Agent implements BankManager {
     //actions-----------------------------------------------------------------------------
 	private void AssignCustomerToTeller(BankCustomer customer, MyBankTeller myTeller) {
 		print("Assigning customer to teller");
-		//customer.msgGoToTeller(myTeller.teller,myTeller.tellerNum);
 	    myTeller.teller.msgAssigningCustomer(customer);
 	    myTeller.state = BankTellerState.Busy;
 	    customers.remove(customer);
 	    stateChanged();
 	}
-    //GUI Actions-------------------------------------------------------------------------
-
-	@Override
-	public void msgAddTeller(BankTeller teller) {
-		// TODO Auto-generated method stub
-		
-	}  
 }
