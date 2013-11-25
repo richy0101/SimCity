@@ -1,5 +1,6 @@
 package city.gui;
 
+import gui.CityComponent;
 import gui.Gui;
 import city.BusAgent;
 import city.helpers.Directory;
@@ -11,7 +12,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class BusGui implements Gui {
+public class BusGui extends CityComponent implements Gui {
 	/**
 	 * Data
 	 */
@@ -28,8 +29,8 @@ public class BusGui implements Gui {
 	int LeftCol = 135;
 	int RightCol = 700;	
 	
-	int xStart = TopRow;
-	int yStart = LeftCol;
+	int xStart = 0;
+	int yStart = 0;
 	
 	private BusAgent agent = null;
 	
