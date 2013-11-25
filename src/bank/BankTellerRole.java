@@ -153,23 +153,27 @@ public class BankTellerRole extends Role implements BankTeller {
 		manager.msgAddTeller(this);
 	}
 	private void OfferAssistance(MyCustomer account) {
+		print("What do you need help with?");
 		account.customer.msgHowCanIHelpYou(this,tellerNumber);
 		account.custState = CustomerState.AskedAssistance;
 		stateChanged();
 	}
 	
 	private void OpenedAccount(MyCustomer myCustomer) {
+		print("Opening up your account");
 		myCustomer.customer.msgHereIsYourAccount(myCustomer.accountNumber);
 		myCustomer.custState = CustomerState.OpenedAccount;
 		stateChanged();
 	}
 	
 	private void DepositMoney(MyCustomer myCustomer) {
+		print("Depositing your money into your account");
 		myCustomer.customer.msgDepositSuccessful();
 		myCustomer.custState = CustomerState.Leaving;
 		stateChanged();
 	}
 	private void WithdrawMoney(MyCustomer myCustomer) {
+		print("Withdrawing money from your account");
 		for (Map.Entry<Integer, AccountSystem.BankAccount> entry : AccountSystem.sharedInstance().getAccounts().entrySet()) {
 			if(entry.getKey() == myCustomer.accountNumber){
 				entry.getValue().addMoney(-myCustomer.moneyToWithdraw);
@@ -180,6 +184,7 @@ public class BankTellerRole extends Role implements BankTeller {
 		stateChanged();
 	}
 	private void TellerIsFree(MyCustomer myCustomer){
+		print("I am free to take another customer");
 		manager.msgTellerFree(this);
 		customers.remove(myCustomer);
 	}
