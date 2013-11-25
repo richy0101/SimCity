@@ -24,7 +24,7 @@ public class BusAgent extends Agent implements Bus {
 	*Scheduler
 	*/	
 		protected boolean pickAndExecuteAnAction(){
-			if (currentState == busState.inTransit){
+			if (currentState == busState.atStop1){
 				goTo(destination);
 				return true;
 			}
@@ -60,7 +60,7 @@ public class BusAgent extends Agent implements Bus {
 		}
 		
 		private void doGoTo(String myDestination){
-			System.out.println("Car is going to "+ myDestination);
+			System.out.println("Bus is going to "+ myDestination);
 			//haven't implemented carGui
 			//carGui.msgGoTo(myDestination);
 		}

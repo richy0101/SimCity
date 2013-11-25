@@ -11,11 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.Timer;
 
 public class GUIHome extends BuildingPanel {
 	
 	List<Gui> guis = new ArrayList<Gui>();
     BufferedImage homeImage;
+    private final int DELAY = 10;
 
 	public GUIHome( Rectangle2D r, int i, SimCityGui sc) {
 		super(r, i, sc);
@@ -26,6 +28,10 @@ public class GUIHome extends BuildingPanel {
         catch(IOException e) {
         	System.out.println("Error w/ Background");
         }
+    	
+
+    	Timer timer = new Timer(DELAY, this );
+    	timer.start();
 	}
 	
 	public void actionPerformed(ActionEvent e) {

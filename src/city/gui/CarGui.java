@@ -23,7 +23,14 @@ public class CarGui implements Gui {
 	int yPos = 10;
 	int xDestination = 20;
 	int yDestination = 20;
-	BufferedImage carImage;
+	int TopRow = 10;
+	int BottomRow = 10;
+	int LeftCol = 10;
+	int RightCol = 10;
+	BufferedImage carUpImage;
+	BufferedImage carDownImage;
+	BufferedImage carLeftImage;
+	BufferedImage carRightImage;
 	
 	private CarAgent agent = null;
 	
@@ -65,7 +72,10 @@ public class CarGui implements Gui {
         
         //check the x/y coord on the grid to know which side it's on and outputs appropriate car image.
         try {
-        	carImage = ImageIO.read(getClass().getResource("carLeft.png"));
+        	carLeftImage = ImageIO.read(getClass().getResource("carLeft.png"));
+        	carRightImage = ImageIO.read(getClass().getResource("carRight.png"));
+        	carUpImage = ImageIO.read(getClass().getResource("carUp.png"));
+        	carDownImage = ImageIO.read(getClass().getResource("carDown.png"));
         }
         catch(IOException e) {
         	System.out.println("Error w/ carGui");
@@ -76,19 +86,38 @@ public class CarGui implements Gui {
 	@Override
 	public void updatePosition() {		
 		
+		//car going Clockwise
+		if ((xPos == LeftCol) && (yPos != BottomRow)) //at left, going up
+            yPos--;
+		else if ((yPos == TopRow) && (xPos != LeftCol)) //at top, going right
+            xPos++;
+		else if ((xPos == RightCol) && (yPos != TopRow)) //at right, going down
+            yPos++;
+		else if ((yPos == BottomRow) && (xPos != RightCol)) //at bottom, going left
+            xPos--;
+		
 		//if not at proper position, then keep driving clockwise/ counter clockwise;
 		//if at one of 4 corners, update carImage accordingly to down right left or up
 		//once reached proper coords:
-		agent.msgAtDestination();
+		//agent.msgAtDestination();
 
 	}
 
 	@Override
 	public void draw(Graphics2D g) { //need to account for x and y position
-		 g.drawImage(carImage, 0, 0, null);
+		//clockwise
+		if (yPos==TopRow)
+			g.drawImage(carRightImage, xPos, yPos, null);
+		else if (xPos==RightCol)
+			g.drawImage(carDownImage, xPos, yPos, null);
+		if(yPos==BottomRow)
+			g.drawImage(carLeftImage, xPos, yPos, null);
+		else if (xPos==LeftCol)
+			g.drawImage(carUpImage, xPos, yPos, null);
 
 	}
 
+	
 	@Override
 	public boolean isPresent() {
 		// TODO Auto-generated method stub

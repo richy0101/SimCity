@@ -130,31 +130,31 @@ public class Directory {
 	Coordinate house6Location = new Coordinate(602,140);
 
 //BUS STOPS
-	private BusStop busStop1 = new BusStop("BusStop1"); //priority market
+	private BusStop busStop1 = new BusStop("BusStop1"); //bottom left
 	Coordinate busStop1Location = new Coordinate(171,361);
 	
-	private BusStop busStop2 = new BusStop("BusStop2"); //priority market
+	private BusStop busStop2 = new BusStop("BusStop2"); //top left
 	Coordinate busStop2Location = new Coordinate(110,73);
 	
-	private BusStop busStop3 = new BusStop("BusStop3"); //priority market
+	private BusStop busStop3 = new BusStop("BusStop3"); //top right
 	Coordinate busStop3Location = new Coordinate(610,73);
 	
-	private BusStop busStop4 = new BusStop("BusStop4"); //priority market
+	private BusStop busStop4 = new BusStop("BusStop4"); //bottom right
 	Coordinate busStop4Location = new Coordinate(675,356);
 	
 //STREETCORNERS
 	
 	private StreetCorner bottomLeft = new StreetCorner("Bottom-Left");
-	Coordinate streetCornerBottomLeftLocation = new Coordinate(135. 325);
+	Coordinate streetCornerBottomLeftLocation = new Coordinate(135, 325);
 	
 	private StreetCorner bottomRight = new StreetCorner("Bottom-Right");
-	Coordinate streetCornerBottomRightLocation = new Coordinate(135. 325);
+	Coordinate streetCornerBottomRightLocation = new Coordinate(700, 325);
 	
 	private StreetCorner topLeft = new StreetCorner("Top-Left");
-	Coordinate streetCornerTopLeftLocation = new Coordinate(700. 325);
+	Coordinate streetCornerTopLeftLocation = new Coordinate(135, 105);
 	
 	private StreetCorner topRight = new StreetCorner("Top-Right");
-	Coordinate streetCornerTopRightLocation = new Coordinate(700. 105);
+	Coordinate streetCornerTopRightLocation = new Coordinate(700, 105);
 
 	
 		
