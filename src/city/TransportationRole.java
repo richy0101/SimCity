@@ -63,6 +63,7 @@ public class TransportationRole extends Role implements Transportation  {
 	
 	public void msgArrivedAtDestination(String destination) {
 		print("Car successfully took me to " + destination + ".");
+		currentLocation= destination;
 		state = TransportationState.AtDestination;
 		stateChanged();
 	}
@@ -94,8 +95,7 @@ public class TransportationRole extends Role implements Transportation  {
 		if(state == TransportationState.GettingOnBus) {
 			GetOnBus();
 			return false;
-		}
-		
+		}	
 		if(state == TransportationState.NeedsToTravel) {
 			GetAVehicle();
 			return true;
@@ -152,7 +152,7 @@ public class TransportationRole extends Role implements Transportation  {
 			//bus.msgINeedARide(destination);
 		}**/
 		state = TransportationState.InTransit;
-		if (getPersonAgent().getTransportationMethod.contains("Bus")) {
+		if (getPersonAgent().getTransportationMethod().contains("Bus")) {
 			startStopX = BusHelper.sharedInstance().busStopEvaluator.get(startingLocation).xCoordinate;
 			startStopY = BusHelper.sharedInstance().busStopEvaluator.get(startingLocation).yCoordinate;
 			endStopX = BusHelper.sharedInstance().busStopEvaluator.get(destination).xCoordinate;
@@ -191,7 +191,7 @@ public class TransportationRole extends Role implements Transportation  {
 		}
 		
 		state = TransportationState.None;
-		getPersonAgent().msgTransportFinished(currentLocation); //should pass in currentlocation as param?
+		getPersonAgent().msgTransportFinished(currentLocation); //haven't implemented updating the currentLoc for cars
 		//change roles
 	}
 }
