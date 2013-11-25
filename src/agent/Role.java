@@ -8,7 +8,7 @@ public class Role {
 		//System.out.println(myPerson.name + "WOAH");
 	}
 	
-	public Person getPerson() {
+	public Person getPersonAgent() {
 		return myPerson;
 	}
 	
