@@ -17,6 +17,9 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import city.BusAgent;
+import city.gui.BusGui;
+
 public class MacroAnimationPanel extends JPanel implements ActionListener, MouseListener {
        
 	BufferedImage cityImage;
@@ -121,6 +124,9 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     	
     //BUSES
     	BusAgent bus = new BusAgent();
+    	BusGui busGui = new BusGui(bus);
+    	guis.add(busGui);
+    	//movings.add(bus);
     	
     	addMouseListener(this);
     	
