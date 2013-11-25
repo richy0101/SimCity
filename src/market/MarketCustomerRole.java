@@ -21,6 +21,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	enum Event {WantsGroceries, GotBill, TurnedAway, GotGroceries};
 	State roleState;
 	Event roleEvent;
+	//BufferedImage customerImage;
 	
 	Market market;
 	String myLocation;
@@ -29,14 +30,12 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	private Semaphore actionComplete = new Semaphore(0,true);
 	private MarketCustomerGui gui;
 	
-	public MarketCustomerRole(PersonAgent person, Map<String, Integer> groceries, String location) {
+	public MarketCustomerRole(Map<String, Integer> groceries, String location) {
 		roleEvent = Event.WantsGroceries;
 		roleState = State.DoingNothing;
 		
 		myGroceryList = groceries;
 		gui = new MarketCustomerGui(this);
-		
-		setPerson(person);
 		
 		myLocation = location;
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
@@ -47,14 +46,22 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		}
 	}
 	
+	public void setMarket(Market m) {
+		market = m;
+	}
+	
 	//messages----------------------------------------------------------------------------
 	public void msgHereIsBill(double price) {
+		print("Received msgHereIsBill");
+		
 		orderCost = price;
 	    roleEvent = Event.GotBill;
 	    stateChanged();
 	}
 	
 	public void msgHereAreYourGroceries(Map<String, Integer> groceries) {
+		print("Received msgHereAreYourGroceries");
+		
 //		getPersonAgent().groceryList.keySet().removeAll(myGroceryList.keySet());
 		
 		getPersonAgent().clearGroceries();
@@ -63,6 +70,8 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	}
 	
 	public void msgCantFillOrder(Map<String, Integer> groceries) {
+		print("Receieved msgCantFillOrder");
+		
 		roleEvent = Event.TurnedAway;
 		stateChanged();
 	}

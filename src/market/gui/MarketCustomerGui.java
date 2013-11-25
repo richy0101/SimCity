@@ -20,10 +20,10 @@ public class MarketCustomerGui implements Gui {
 	private enum state {NoCommand, Entering, Leaving};
 	private state command = state.NoCommand;
 	
-	public static final int xCounter = 75;
-	public static final int yCounter = 50;
-	public static final int xStart = -40;
-	public static final int yStart = -40;
+	public static final int xCounter = 100;
+	public static final int yCounter = 237;
+	public static final int xStart = 833;
+	public static final int yStart = 359;
 	
 	
 	public MarketCustomerGui(MarketCustomerRole mcr) {
@@ -34,6 +34,8 @@ public class MarketCustomerGui implements Gui {
 		yPos = yStart;
 		xDestination = xStart;
 		yDestination = yStart;
+		
+		isPresent = true;
 	}
 	
 	@Override

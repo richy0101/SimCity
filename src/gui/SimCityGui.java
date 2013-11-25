@@ -22,6 +22,7 @@ import java.util.Map;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
+import market.MarketCustomerRole;
 import market.MarketRole;
 import restaurant.stackRestaurant.StackCookRole;
 import restaurant.stackRestaurant.StackHostRole;
@@ -356,6 +357,17 @@ public class SimCityGui {
 		PersonAgent marketPerson = new PersonAgent(market);
 		market.setPerson(marketPerson);
 		marketPerson.startThread();
+		
+		Map<String, Integer> groceries = new HashMap<String, Integer>();
+		groceries.put("Steak", 1);
+		
+		MarketCustomerRole marketCustomer = new MarketCustomerRole(groceries, "Market1");
+		PersonAgent marketCustomerPerson = new PersonAgent(marketCustomer);
+		marketCustomer.setPerson(marketCustomerPerson);
+		marketCustomer.setMarket(market);
+		marketCustomerPerson.setFunds(50.00);
+		
+		marketCustomerPerson.startThread();
 		
 		//Example Code
 		//Instantiate directory to have Stack restaurant in it. 

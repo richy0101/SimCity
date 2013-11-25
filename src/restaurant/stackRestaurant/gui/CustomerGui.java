@@ -13,7 +13,6 @@ import javax.imageio.ImageIO;
 public class CustomerGui implements Gui{
 
 	private StackCustomerRole agent = null;
-	private boolean isPresent = false;
 	private boolean isHungry = false;
 	private TableList tableList = new TableList();
 	private String choice = "";
@@ -85,21 +84,17 @@ public class CustomerGui implements Gui{
 		g.drawImage(customerImage, xPos, yPos, null);
 	}
 
-	public boolean isPresent() {
-		return isPresent;
-	}
 	public void setHungry() {
 		isHungry = true;
 		agent.msgGotHungry();
-		setPresent(true);
 	}
 	public boolean isHungry() {
 		return isHungry;
 	}
-
-	public void setPresent(boolean p) {
-		isPresent = p;
-	}
+	
+	public boolean isPresent() {
+        return true;
+    }
 
 	public void DoGoToSeat(int seatnumber, int tableNumber) {//later you will map seatnumber to table coordinates.
 		xDestination = (int)tableList.getTables().get(tableNumber-1).getX(); 

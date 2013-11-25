@@ -24,7 +24,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	String task;
 	public BankCustomerRole(String task, double moneyToDeposit, double moneyRequired) {
 		this.task = task;
-		this.manager = Directory.sharedInstance().getBanks().get(0).getManager();
+		//this.manager = Directory.sharedInstance().getBanks().get(0).getManager();
 		this.moneyRequired = moneyRequired;
 		this.moneyToDeposit = moneyToDeposit;
 		customerGui = new BankCustomerGui(this);
@@ -127,29 +127,35 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	private void openAccount() {
+		print("I need my account opened");
 		teller.msgOpenAccount(this);
 	}
 	
 	private void takeOutLoan() {
+		print("I need to take out a loan");
 		teller.msgIWantLoan(accountNumber, moneyRequired);
 	}
 	
 	private void depositMoney() {
+		print("I need to deposit money");
 		teller.msgDepositMoney(accountNumber, moneyToDeposit);
 		getPersonAgent().setFunds(getPersonAgent().getFunds() - moneyToDeposit);
 	}
 	
 	private void withdrawMoney() {
+		print("I need to withdraw money");
 		teller.msgWithdrawMoney(accountNumber, moneyToWithdraw);
 		getPersonAgent().setFunds(getPersonAgent().getFunds() + moneyToWithdraw);
 	}
 	
 	private void leaveBank() {
+		print("Leaving bank");
 		customerGui.DoLeaveBank();
 		
 	}
 	
 	private void goToTeller() {
+		print("Going to bank teller");
 		customerGui.DoGoToTeller(tellerNumber);
 		
 	}
