@@ -16,6 +16,7 @@ import bank.*;
 public class BankCustomerGui implements Gui {
     
 	private BankCustomerRole agent = null;
+	private boolean isPresent = false;
 	
 	private static final List<Point> tellerBench = new ArrayList<Point>() {{
 		add(new Point(87, 106));
@@ -91,6 +92,11 @@ public class BankCustomerGui implements Gui {
 		g.drawImage(customerImage, xPos, yPos, null);
 	}
     
+	@Override
+	public boolean isPresent() {
+		return false;
+	}
+	
 	public void DoGoToTeller(int tellerNum) {
 		xTeller = (int) tellerBench.get(tellerNum).getX();
 		yTeller = (int) tellerBench.get(tellerNum).getY();
@@ -111,4 +117,7 @@ public class BankCustomerGui implements Gui {
 		command = Command.LeaveBank;
 	}
 	
+	public void setPresent(boolean p) {
+		isPresent = p;
+	}
 }
