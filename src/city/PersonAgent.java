@@ -102,7 +102,7 @@ public class PersonAgent extends Agent implements Person {
 				this.newRole = new StackCustomerRole("StackRestaurant");
 			}
 			if(order == "Market1" || order == "Market2") {
-				this.newRole = new MarketCustomerRole(p, p.groceryList, order);
+				this.newRole = new MarketCustomerRole(p.groceryList, order);
 			}
 			newRole.setPerson(p);
 			//print("Set role complete.");
@@ -540,4 +540,6 @@ public class PersonAgent extends Agent implements Person {
 	public String getTransportationMethod() {
 		return transMethod.toString();
 	}
+
+
 }

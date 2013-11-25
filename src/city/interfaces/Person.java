@@ -12,7 +12,7 @@ public interface Person{
 	public void msgGoHome();
 	public void msgRentPaid();
 	public void msgRoleFinished();
-	public void msgTransportFinished();
+	public void msgTransportFinished(String s);
 	public void msgAtHome();
 	public void msgPayRent();
 	
