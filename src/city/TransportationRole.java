@@ -41,8 +41,8 @@ public class TransportationRole extends Role implements Transportation  {
 	 * Messages
 	 */
 	
-	void msgThisIsYourStop(int BusStopNumber) {
-		//not relevant for norm scenario
+	void msgAtStop(int BusStopNumber) {
+		//now relevant for norm scenario
 	}
 	
 	void msgArrivedAtDestination(String destination) {
