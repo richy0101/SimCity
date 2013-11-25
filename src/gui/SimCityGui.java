@@ -56,6 +56,7 @@ public class SimCityGui {
 	 */
 	public SimCityGui() {
 		initialize();
+		Directory.sharedInstance().setCityGui(this);
 		runSuperNorm();
 	}
 
