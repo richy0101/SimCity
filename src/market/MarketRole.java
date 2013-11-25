@@ -1,5 +1,7 @@
 package market;
 
+import gui.Building;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,6 +10,7 @@ import java.util.Map;
 import java.util.concurrent.Semaphore;
 
 import city.PersonAgent;
+import city.helpers.Directory;
 import agent.Role;
 import market.test.mock.EventLog;
 import market.test.mock.LoggedEvent;
@@ -26,6 +29,7 @@ public class MarketRole extends Role implements Market {
 
 	private Semaphore actionComplete = new Semaphore(0,true);
 	private MarketGui gui;
+	private String myLocation;
 	
 	public EventLog log;
 	
@@ -75,7 +79,7 @@ public class MarketRole extends Role implements Market {
 	    }
 	}
 	
-	public MarketRole(PersonAgent person) {
+	public MarketRole(String location) {
 		inventory.put("Chicken", new Food("Chicken", 10, 1.00));
 		inventory.put("Steak", new Food("Steak", 10, 2.00));
 		inventory.put("Pizza", new Food("Pizza", 10, 3.00));
@@ -86,7 +90,13 @@ public class MarketRole extends Role implements Market {
 		log = new EventLog();
 		
 		gui = new MarketGui(this);
-		setPerson(person);
+		myLocation = location;
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == myLocation) {
+				b.addGui(gui);
+			}
+		}
 	}
 	
 	public List<Order> getMyOrders() {

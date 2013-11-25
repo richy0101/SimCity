@@ -33,6 +33,10 @@ public class Building extends Rectangle2D.Double {
 		myBuildingPanel = bp;
 	}
 	
+	public BuildingPanel getBuildingPanel() {
+		return myBuildingPanel;
+	}
+	
 	public void setMicroAnimationPanel( MicroAnimationPanel ma) {
 		myMicroAnimationPanel = ma;
 	}

@@ -1,9 +1,12 @@
 package market;
 
+import gui.Building;
+
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
 import city.PersonAgent;
+import city.helpers.Directory;
 import agent.Role;
 import market.gui.MarketCustomerGui;
 import market.interfaces.Market;
@@ -20,12 +23,13 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	Event roleEvent;
 	
 	Market market;
+	String myLocation;
 	double orderCost;
 	
 	private Semaphore actionComplete = new Semaphore(0,true);
 	private MarketCustomerGui gui;
 	
-	public MarketCustomerRole(PersonAgent person, Map<String, Integer> groceries) {
+	public MarketCustomerRole(PersonAgent person, Map<String, Integer> groceries, String location) {
 		roleEvent = Event.WantsGroceries;
 		roleState = State.DoingNothing;
 		
@@ -33,6 +37,14 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		gui = new MarketCustomerGui(this);
 		
 		setPerson(person);
+		
+		myLocation = location;
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == myLocation) {
+				b.addGui(gui);
+			}
+		}
 	}
 	
 	//messages----------------------------------------------------------------------------
