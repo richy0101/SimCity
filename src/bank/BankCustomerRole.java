@@ -66,6 +66,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	public void msgHereAreFunds(double funds) {
 		getPersonAgent().setFunds(getPersonAgent().getFunds() + funds);
 		state = CustomerState.Done;
+		leaveBank();
 		stateChanged();
 		
 	}
@@ -78,8 +79,10 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	public void msgDepositSuccessful() {
 		state = CustomerState.Done;
+		leaveBank();
 		stateChanged();
 	}
+	
     //scheduler---------------------------------------------------------------------------
 	
 	protected boolean pickAndExecuteAction(){
@@ -133,10 +136,12 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	private void depositMoney() {
 		teller.msgDepositMoney(accountNumber, moneyToDeposit);
+		getPersonAgent().setFunds(getPersonAgent().getFunds() - moneyToDeposit);
 	}
 	
 	private void withdrawMoney() {
 		teller.msgWithdrawMoney(accountNumber, moneyToWithdraw);
+		getPersonAgent().setFunds(getPersonAgent().getFunds() + moneyToWithdraw);
 	}
 	
 	private void leaveBank() {
