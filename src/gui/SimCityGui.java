@@ -10,7 +10,7 @@ import javax.swing.*;
 import city.PersonAgent;
 import city.helpers.Directory;
 import agent.Role;
-import bank.BankManagerRole;
+import bank.BankManagerAgent;
 import bank.BankTellerRole;
 import bank.gui.*;
 
@@ -212,15 +212,15 @@ public class SimCityGui {
         //		occupationComboBox.addItem("Nakamura's Restaurant Cook");
         //		occupationComboBox.addItem("Nakamura's Restaurant Cashier");
 		
-		roles.put("Bank Manager", new BankManagerRole());
+		roles.put("Bank Manager", new BankManagerAgent());
 		//roles.put("Bank Teller", new BankTellerRole());
 		//roles.put("Bank Customer", new BankCustomerRole());
-		roles.put("Market Seller", new BankManagerRole());
+		roles.put("Market Seller", new BankManagerAgent());
 		roles.put("Landlord", new LandlordRole());
 		roles.put("Stack's Restaurant Host", new StackHostRole());
-		roles.put("Stack's Restaurant Waiter", new BankManagerRole());
-		roles.put("Stack's Restaurant Cook", new BankManagerRole());
-		roles.put("Stack's Restaurant Cashier", new BankManagerRole());
+		roles.put("Stack's Restaurant Waiter", new BankManagerAgent());
+		roles.put("Stack's Restaurant Cook", new BankManagerAgent());
+		roles.put("Stack's Restaurant Cashier", new BankManagerAgent());
 		
 		panel.add(occupationComboBox);
 		
@@ -352,7 +352,7 @@ public class SimCityGui {
 		String a = "Test Bank 1";
 		String b = "Test Home 1";
 		String name = "Test Person 1";
-		Role role = new BankManagerRole();
+		Role role = new BankManagerAgent();
 		PersonAgent p = new PersonAgent(role, a , b, name);
 		role.setPerson(p);
 		p.msgWakeUp();

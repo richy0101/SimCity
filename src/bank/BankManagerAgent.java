@@ -5,11 +5,10 @@ import java.util.Collections;
 import java.util.List;
 
 import bank.gui.BankCustomerGui;
-import bank.gui.BankManagerGui;
 import bank.interfaces.*;
-import agent.Role;
+import agent.Agent;
 
-public class BankManagerRole extends Role implements BankManager {
+public class BankManagerAgent extends Agent implements BankManager {
     //data--------------------------------------------------------------------------------
 	private List<BankCustomer> customers = Collections.synchronizedList(new ArrayList<BankCustomer>());
 	private List<MyBankTeller> tellers = Collections.synchronizedList(new ArrayList<MyBankTeller>());
@@ -24,22 +23,10 @@ public class BankManagerRole extends Role implements BankManager {
 	    	this.tellerNum = tellerNum;
 	    }
 	}
-	private BankManagerGui managerGui;
 	public enum BankTellerState {Idle, Busy};
 	private int tellerNum = 0;
 	
-	public BankManagerRole(){
-        
-		//managerGui = new BankManagerGui(this);
-	}
-	
-	//setters-----------------------------------------------------------------------------
-	public void setTeller(BankTeller teller) {
-		synchronized(this.tellers){
-			tellers.add(new MyBankTeller(teller,BankTellerState.Idle,tellerNum));
-			tellerNum++;
-		}
-		stateChanged();
+	public BankManagerAgent(){
 	}
 	
     //messages----------------------------------------------------------------------------
@@ -49,16 +36,22 @@ public class BankManagerRole extends Role implements BankManager {
 	}
 	
 	public void msgTellerFree(BankTeller teller) {
-		for(MyBankTeller tempTeller:tellers){
+		for(MyBankTeller tempTeller : tellers){
 			if(tempTeller.teller == teller){
 				tempTeller.state = BankTellerState.Idle;
 			}
 		}
 	    stateChanged();
 	}
+	
+	public void msgHereForWork(BankTeller teller) {
+		tellers.add(new MyBankTeller(teller, BankTellerState.Busy, tellerNum));
+		tellerNum++;
+	}
     
     //scheduler---------------------------------------------------------------------------
-	protected boolean pickAndExecuteAction(){
+	@Override
+	protected boolean pickAndExecuteAnAction() {
 		synchronized(this.tellers){
 			for(MyBankTeller tempTeller: tellers){
 				if(tempTeller.state == BankTellerState.Idle){
@@ -81,5 +74,10 @@ public class BankManagerRole extends Role implements BankManager {
 	    stateChanged();
 	}
     //GUI Actions-------------------------------------------------------------------------
-    
+
+	@Override
+	public void msgAddTeller(BankTeller teller) {
+		// TODO Auto-generated method stub
+		
+	}  
 }

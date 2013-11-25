@@ -4,20 +4,14 @@ import gui.Building;
 
 import java.util.ArrayList;
 
-import city.*;
 import city.helpers.Directory;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.Semaphore;
 
-import bank.*;
-import bank.BankManagerRole.BankTellerState;
 import bank.gui.BankTellerGui;
 import bank.helpers.AccountSystem;
-import bank.helpers.AccountSystem.BankAccount;
-import bank.BankCustomerRole;
-//import bank.BankManagerRole.MyBankTeller;
 import bank.interfaces.*;
 import agent.Role;
 
@@ -29,16 +23,24 @@ public class BankTellerRole extends Role implements BankTeller {
 	    int accountNumber;
 	    CustomerState custState;
 	    double moneyToWithdraw;
+	    double moneyToDeposit;
 	    
 	    public MyCustomer(BankCustomer customer, CustomerState state){
 	    	this.customer = customer;
 	    	this.custState = state;
 	    }
     }
-    private int tellerNumber;
+	private Semaphore doneAnimation = new Semaphore(0,true);
+    private int registerNumber;
     BankManager manager;
     private BankTellerGui tellerGui;
-    private enum CustomerState {ArrivedAtWork, DoingNothing, NeedingAssistance, AskedAssistance, OpeningAccount, OpenedAccount, DepositingMoney, WithdrawingMoney, LoanAccepted, LoanRejected, Leaving};
+    private enum TellerState {ArrivedAtWork, AtManager, GoingToRegister, ReadyForCustomers, Gone};
+    TellerState state = TellerState.ArrivedAtWork;
+    
+    private enum CustomerState {NeedingAssistance, 
+    	AskedAssistance, OpeningAccount, OpenedAccount, 
+    	DepositingMoney, WithdrawingMoney, LoanAccepted, 
+    	LoanRejected, Leaving};
     String myLocation;
     
     public BankTellerRole(BankTellerGui gui, String location){
@@ -50,8 +52,6 @@ public class BankTellerRole extends Role implements BankTeller {
 				b.addGui(tellerGui);
 			}
 		}
-    	//setPerson(person);
-    	//GotToWork();
     }
     
     public void setGui(BankTellerGui tellerGui){
@@ -59,17 +59,14 @@ public class BankTellerRole extends Role implements BankTeller {
     }
     
     //messages----------------------------------------------------------------------------
+	public void msgGoToRegister(int registerNumber) {
+		this.registerNumber = registerNumber;
+		state = TellerState.GoingToRegister;
+		stateChanged();
+		
+	}
 	public void msgAssigningCustomer(BankCustomer customer) {
-		boolean newCustomer = true;
-		for(MyCustomer tempCustomer : customers){
-			if(tempCustomer.customer == customer){
-				tempCustomer.custState = CustomerState.NeedingAssistance;
-				newCustomer = false;
-			}
-		}
-		if(newCustomer == true){
-			customers.add(new MyCustomer(customer, CustomerState.NeedingAssistance));
-		}
+		customers.add(new MyCustomer(customer, CustomerState.NeedingAssistance));
 	    stateChanged();
 	}
 	
@@ -85,14 +82,10 @@ public class BankTellerRole extends Role implements BankTeller {
 	    stateChanged();
 	}
 	
-	public void msgDepositMoney(int accountNumber, double money) {
-		for (Map.Entry<Integer, AccountSystem.BankAccount> entry : AccountSystem.sharedInstance().getAccounts().entrySet()) {
-			if(entry.getKey() == accountNumber){
-				entry.getValue().addMoney(money);
-			}
-		}
+	public void msgDepositMoney(int accountNumber, double money) {		
 		for(MyCustomer tempCustomer : customers){
 			if(tempCustomer.accountNumber == accountNumber){
+				tempCustomer.moneyToDeposit = money;
 				tempCustomer.custState = CustomerState.DepositingMoney;
 			}
 		}
@@ -110,104 +103,171 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	
 	public void msgIWantLoan(int accountNumber, double moneyRequest) {
-		for (Map.Entry<Integer, AccountSystem.BankAccount> entry : AccountSystem.sharedInstance().getAccounts().entrySet()) {
-			if(entry.getKey() == accountNumber){
-				if(entry.getValue().elligibleForLoan == true){
-					for(MyCustomer tempCustomer : customers){
-						if(tempCustomer.accountNumber == accountNumber){
-							tempCustomer.moneyToWithdraw = moneyRequest;
-							tempCustomer.custState = CustomerState.LoanAccepted;
-						}
-					}
+		for(MyCustomer customer : customers) {
+			if(customer.accountNumber == accountNumber) {
+				if(AccountSystem.sharedInstance().getAccounts().get(accountNumber).elligibleForLoan) {
+					customer.custState = CustomerState.LoanAccepted;
+				}
+				else {
+					customer.custState = CustomerState.LoanRejected;
 				}
 			}
 		}
+		stateChanged();
+	}
+	
+	public void msgThankYouForAssistance(BankCustomer customer) {
+		for(MyCustomer mCustomer : customers) {
+			if(mCustomer.equals(customer)) {
+				mCustomer.custState = CustomerState.Leaving;
+			}
+		}
+		
 	}
     //scheduler---------------------------------------------------------------------------
 	protected boolean pickAndExecuteAction(){
-		synchronized(this.customers){
-			for(MyCustomer tempCustomer: customers){
-				if(tempCustomer.custState == CustomerState.NeedingAssistance){
-					OfferAssistance(tempCustomer);
-					return true;
-				}
-			}
+		if(state == TellerState.ArrivedAtWork) {
+			DoGoCheckInWithManager();
+			return true;
 		}
-		synchronized(this.customers){
-			for(MyCustomer tempCustomer: customers){
-				if(tempCustomer.custState == CustomerState.OpeningAccount){
-					OpenedAccount(tempCustomer);
-					return true;
-				}
-			}
+		if(state == TellerState.GoingToRegister) {
+			DoGoToRegister();
+			return true;
 		}
-		synchronized(this.customers){
-			for(MyCustomer tempCustomer: customers){
-				if(tempCustomer.custState == CustomerState.DepositingMoney){
-					DepositMoney(tempCustomer);
-					return true;
+		if(state == TellerState.ReadyForCustomers) {
+			synchronized(customers){
+				for(MyCustomer tempCustomer: customers){
+					if(tempCustomer.custState == CustomerState.NeedingAssistance){
+						OfferAssistance(tempCustomer);
+						return true;
+					}
 				}
 			}
-		}
-		synchronized(this.customers){
-			for(MyCustomer tempCustomer: customers){
-				if(tempCustomer.custState == CustomerState.WithdrawingMoney){
-					WithdrawMoney(tempCustomer);
-					return true;
+			synchronized(customers){
+				for(MyCustomer tempCustomer: customers){
+					if(tempCustomer.custState == CustomerState.OpeningAccount){
+						OpenedAccount(tempCustomer);
+						return true;
+					}
 				}
 			}
-		}
-		synchronized(this.customers){
-			for(MyCustomer tempCustomer: customers){
-				if(tempCustomer.custState == CustomerState.Leaving){
-					TellerIsFree(tempCustomer);
-					return true;
+			synchronized(customers){
+				for(MyCustomer tempCustomer: customers){
+					if(tempCustomer.custState == CustomerState.DepositingMoney){
+						DepositMoney(tempCustomer);
+						return true;
+					}
 				}
 			}
+			synchronized(customers){
+				for(MyCustomer tempCustomer: customers){
+					if(tempCustomer.custState == CustomerState.WithdrawingMoney){
+						WithdrawMoney(tempCustomer);
+						return true;
+					}
+				}
+			}
+			synchronized(customers){
+				for(MyCustomer tempCustomer: customers){
+					if(tempCustomer.custState == CustomerState.LoanAccepted){
+						GiveLoan(tempCustomer);
+						return true;
+					}
+				}
+			}
+			synchronized(customers){
+				for(MyCustomer tempCustomer: customers){
+					if(tempCustomer.custState == CustomerState.LoanRejected){
+						RejectLoan(tempCustomer);
+						return true;
+					}
+				}
+			}
+			synchronized(customers){
+				for(MyCustomer tempCustomer: customers){
+					if(tempCustomer.custState == CustomerState.Leaving){
+						CustomerFinished(tempCustomer);
+						return true;
+					}
+				}
+			}
+			manager.msgTellerFree(this);
 		}
 		return false;
 	}
-    //actions-----------------------------------------------------------------------------
-	private void GotToWork(){
-		//manager.setTeller(this);
+
+	//actions-----------------------------------------------------------------------------
+	private void DoGoCheckInWithManager() {
+		tellerGui.DoGoToManager();
+		try {
+			doneAnimation.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		state = TellerState.AtManager;
+	}
+    private void DoGoToRegister() {
+		tellerGui.DoGoToRegister(registerNumber);
+		try {
+			doneAnimation.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		state = TellerState.ReadyForCustomers;
 	}
 	private void OfferAssistance(MyCustomer account) {
 		print("What do you need help with?");
-		account.customer.msgHowCanIHelpYou(this,tellerNumber);
+		account.customer.msgHowCanIHelpYou(this,registerNumber);
 		account.custState = CustomerState.AskedAssistance;
-		stateChanged();
 	}
 	
 	private void OpenedAccount(MyCustomer myCustomer) {
 		print("Opening up your account");
 		myCustomer.customer.msgHereIsYourAccount(myCustomer.accountNumber);
 		myCustomer.custState = CustomerState.OpenedAccount;
-		stateChanged();
 	}
 	
 	private void DepositMoney(MyCustomer myCustomer) {
 		print("Depositing your money into your account");
+		AccountSystem.sharedInstance().getAccounts().get(myCustomer.accountNumber).depositMoney(myCustomer.moneyToDeposit);
 		myCustomer.customer.msgDepositSuccessful();
 		myCustomer.custState = CustomerState.Leaving;
-		stateChanged();
 	}
+	
 	private void WithdrawMoney(MyCustomer myCustomer) {
 		print("Withdrawing money from your account");
-		for (Map.Entry<Integer, AccountSystem.BankAccount> entry : AccountSystem.sharedInstance().getAccounts().entrySet()) {
-			if(entry.getKey() == myCustomer.accountNumber){
-				entry.getValue().addMoney(-myCustomer.moneyToWithdraw);
-				myCustomer.customer.msgHereAreFunds(myCustomer.moneyToWithdraw);
-			}
-		}
+		
+		AccountSystem.sharedInstance().getAccounts().get(myCustomer.accountNumber).withdrawMoney(myCustomer.moneyToWithdraw);
+		myCustomer.customer.msgHereAreFunds(myCustomer.moneyToWithdraw);
 		myCustomer.custState = CustomerState.Leaving;
-		stateChanged();
 	}
-	private void TellerIsFree(MyCustomer myCustomer){
-		print("I am free to take another customer");
-		manager.msgTellerFree(this);
+	
+	private void CustomerFinished(MyCustomer myCustomer){
+		print("Finished aiding cusomter");
 		customers.remove(myCustomer);
 	}
+	
 	private void GiveLoan(MyCustomer myCustomer) {
-		
+		AccountSystem.sharedInstance().getAccounts().get(myCustomer.accountNumber).loanAccepted(1000);
+		myCustomer.customer.msgHereAreFunds(1000);
+		myCustomer.custState = CustomerState.Leaving;
+	}
+	
+	private void RejectLoan(MyCustomer myCustomer) {
+		myCustomer.customer.msgLoanDenied();
+		myCustomer.custState = CustomerState.Leaving;
+	}
+	//animation messages-------------------------------------------------------------------
+	public void msgAtRegister() {
+		doneAnimation.release();
+	}
+	public void msgAtManager() {
+		doneAnimation.release();
+	}
+	public void msgAnimationFinishedLeavingBank() {
+		//from animation
+		state = TellerState.Gone;
+		doneAnimation.release();
+		stateChanged();
 	}
 }

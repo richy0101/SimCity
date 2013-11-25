@@ -10,4 +10,8 @@ public interface BankTeller {
 	public void msgWithdrawMoney(int accountNumber, double money);
 	
 	public void msgIWantLoan(int accountNumber, double moneyRequest);
+
+	public void msgThankYouForAssistance(BankCustomer bankCustomer);
+	
+	public void msgGoToRegister(int registerNumber);
 }

@@ -1,10 +1,15 @@
 package bank;
 
+import bank.interfaces.BankManager;
+
 public class Bank {
 	private static Bank sharedInstance = null;
 	String name;
+	BankManagerAgent manager;
     
     private Bank() {
+    	manager = new BankManagerAgent();
+    	manager.startThread();
     	
     }
     
@@ -18,12 +23,9 @@ public class Bank {
     	}
     	return sharedInstance;
     }
-    public BankManagerRole getManager() {
-    	return null;
+    public BankManagerAgent getManager() {
+    	return manager;
     }
-	public Object getOwner() {
-		return null;
-	}
 	
 	public String getName() {
 		return name;
