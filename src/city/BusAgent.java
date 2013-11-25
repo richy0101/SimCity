@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import agent.Agent;
+import city.gui.BusGui;
 import city.interfaces.Bus;
 import city.helpers.Directory;
 
@@ -15,6 +16,8 @@ public class BusAgent extends Agent implements Bus {
 	*Data
 	*/
 	private TransportationRole passenger;
+	
+	private BusGui busGui= null;
 	
 	public enum busState
 	{inTransit, atDestination, Idle, atStop}
@@ -36,6 +39,8 @@ public class BusAgent extends Agent implements Bus {
 	boolean Flag3 = false;
 	boolean Flag4 = false; //flag if there are any passengers who want to alight at stop 4
 	
+	BusAgent(){//constructor
+	}
 		
 	/**
 	*Scheduler
@@ -119,6 +124,13 @@ public class BusAgent extends Agent implements Bus {
 			System.out.println("Bus is going to "+ myDestination);
 			//haven't implemented carGui
 			//carGui.msgGoTo(myDestination);
+		}
+		
+		/*
+		 * Utilities
+		 */
+		private void setGui(BusGui gui){
+			busGui = gui;
 		}
 
 
