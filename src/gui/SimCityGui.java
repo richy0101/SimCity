@@ -9,6 +9,7 @@ import javax.swing.*;
 
 import city.BusAgent;
 import city.PersonAgent;
+import city.gui.BusGui;
 import city.helpers.Directory;
 import agent.Role;
 import bank.BankManagerRole;
@@ -39,6 +40,8 @@ public class SimCityGui {
 	private JFrame frame;
 	private Map<String, Role> roles = new HashMap<String, Role>();
 	private HashMap<String, CityCard> cards = new HashMap<String, CityCard>();
+	BusAgent bus;
+	BusGui busGui;
 	
 	/**
 	 * Launch the application.
@@ -77,7 +80,6 @@ public class SimCityGui {
 		macroAnimationPanel = new MacroAnimationPanel(this);
 		macroAnimationPanel.setBounds(5, 5, 827, 406);
 		frame.getContentPane().add(macroAnimationPanel);
-		
 		
 		MicroAnimationPanel microAnimationPanel = new MicroAnimationPanel();
 		buildingPanels = new JPanel();
@@ -364,8 +366,12 @@ public class SimCityGui {
 		market.setPerson(marketPerson);
 		marketPerson.startThread();
 		
-		BusAgent bus = new BusAgent();
+		bus = new BusAgent();
+		busGui = new BusGui(bus);
+		bus.setGui(busGui);
+		macroAnimationPanel.addGui(busGui);
 		bus.startThread();
+		
 		
 		Map<String, Integer> groceries = new HashMap<String, Integer>();
 		groceries.put("Steak", 1);
@@ -436,4 +442,8 @@ public class SimCityGui {
     //			System.out.println("Accessing " + microAnimationPanel.getName() + " for MicroAnimationPanel.");
     //			cardLayout.show(buildingPanels, microAnimationPanel.getName());
     //	}
+	
+	public BusAgent getBus() {
+		return bus;
+	}
 }

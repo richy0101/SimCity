@@ -28,8 +28,8 @@ public class BusGui extends CityComponent implements Gui {
 	int LeftCol = 135;
 	int RightCol = 700;	
 	
-	int xStart = 0;
-	int yStart = 0;
+	int xStart = 25;
+	int yStart = 25;
 	
 	private BusAgent agent = null;
 	

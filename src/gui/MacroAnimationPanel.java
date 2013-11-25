@@ -54,8 +54,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     	timer.start();
     	
     	buildings = new ArrayList<Building>();
-    	
-    	//Adding building blocks  
+
     //RESTAURANT
     	Building stackRestaurant = new Building(0, 240, 105, 120);
     	stackRestaurant.setName("StackRestaurant");
@@ -121,14 +120,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     	Building bank = new Building(0, 0, 104, 214);
     	bank.setName("Bank");
     	buildings.add(bank);
-    	
-    //BUSES
-    	bus = new BusAgent();
-    	busGui = new BusGui(bus);
-    	//guis.add(busGui);
-    	//movings.add(busGui);
-    	//addMoving(bus);
-    	
+
     	addMouseListener(this);
     	
     	//CITY BACKGROUND

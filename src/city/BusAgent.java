@@ -24,7 +24,8 @@ public class BusAgent extends Agent implements Bus {
 	
 	public enum busState
 	{inTransit, atStop}
-	public busState currentState = busState.atStop;
+	//public busState currentState = busState.atStop;
+	public busState currentState = busState.inTransit;
 	
 	public enum Station
 	{Stop1, Stop2, Stop3, Stop4}
@@ -243,8 +244,11 @@ public class BusAgent extends Agent implements Bus {
 		/*
 		 * Utilities
 		 */
-		private void setGui(BusGui gui){
+		public void setGui(BusGui gui){
 			busGui = gui;
+		}
+		public BusGui getGui() {
+			return busGui;
 		}
 
 
