@@ -20,7 +20,7 @@ import market.MarketRole;
 import market.Market;
 import bank.Bank;
 import bank.BankCustomerRole;
-import bank.BankManagerRole;
+import bank.BankManagerAgent;
 import bank.BankTellerRole;
 import city.gui.PersonGui;
 import city.helpers.Clock;

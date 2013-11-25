@@ -12,7 +12,8 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import bank.*;
+import bank.BankTellerRole;
+
 
 public class BankTellerGui implements Gui {
     
@@ -21,6 +22,9 @@ public class BankTellerGui implements Gui {
     
     public int xPos = 0, yPos = 0;//default teller position
     public int xDestination = 0, yDestination = 0;//default start position
+    
+    private enum Command {noCommand, GoToManager, GoToRegister, LeaveBank};
+	private Command tellerCommand =Command.noCommand;
     
     private static final int xManager = 400, yManager = 68;
 	private static final int xExit = 100, yExit = 100;
@@ -39,8 +43,7 @@ public class BankTellerGui implements Gui {
 	BufferedImage personLeft;
 	BufferedImage personRight;
 	
-	public BankTellerGui(BankTellerRole tellerAgent, int tellerNum) {
-		this.tellerNum = tellerNum;
+	public BankTellerGui(BankTellerRole tellerAgent) {
 		agent = tellerAgent;
 		xPos = 450;
 		yPos = 450;
@@ -62,23 +65,65 @@ public class BankTellerGui implements Gui {
 	
 	@Override
 	public void updatePosition() {
-		// TODO Auto-generated method stub
-        
+		if (xPos < xDestination)
+			xPos++;
+		else if (xPos > xDestination)
+			xPos--;
+
+		if (yPos < yDestination)
+			yPos++;
+		else if (yPos > yDestination)
+			yPos--;
+		
+		if(xPos == xDestination && yPos == yDestination
+			&& tellerCommand == Command.GoToRegister) {
+			agent.msgAtRegister();
+		}
+
+		if(xPos == xDestination && yPos == yDestination
+				&& (xDestination == xManager) && (yDestination == yManager) && tellerCommand == Command.GoToManager) {
+			agent.msgAtManager();
+		}
+
+		if (xPos == xDestination && yPos == yDestination
+				&& (xDestination == xExit) && (yDestination == yExit) && tellerCommand == Command.LeaveBank) {
+			agent.msgAnimationFinishedLeavingBank();
+		}
+
+		tellerCommand=Command.noCommand;
+		
+		
+
 	}
     
 	@Override
 	public void draw(Graphics2D g) {
-		if(xPos == 0){
-			g.drawImage(personRight, xPos, yPos, null);
-		}
-		else if(xPos == 780){
-			g.drawImage(personLeft, xPos, yPos, null);
-		}
+		g.drawImage(personRight, xPos, yPos, null);
 	}
     
 	@Override
 	public boolean isPresent() {
 		return true;
+	}
+	
+	public void DoGoToRegister(int tellerNum) {
+		this.tellerNum = tellerNum;
+		xDestination = (int) tellerBench.get(tellerNum).getX();
+		yDestination = (int) tellerBench.get(tellerNum).getY();
+
+		tellerCommand = Command.GoToRegister;
+	}
+	
+	public void DoGoToManager() {
+		xDestination = xManager;
+		yDestination = yManager;
+		tellerCommand = Command.GoToManager;
+	}
+
+	public void DoLeaveBank() {
+		xDestination = xExit;
+		yDestination = yExit;
+		tellerCommand = Command.LeaveBank;
 	}
     
 }

@@ -7,7 +7,7 @@ import java.util.*;
 public class AccountSystem {
 	
 	private Map<Integer,BankAccount> accounts = new HashMap<Integer,BankAccount>();
-    private int uniqueAccountNumber = 0;
+    private int uniqueAccountNumber = 1;
     
     private static AccountSystem sharedInstance = null;
     
@@ -26,15 +26,7 @@ public class AccountSystem {
     	uniqueAccountNumber++;
     	return uniqueAccountNumber;
     }
-    
-    public void addMoney(double money,int accountNum){
-    	for (Map.Entry<Integer, BankAccount> entry : accounts.entrySet()) {
-			if(entry.getKey() == accountNum){
-				entry.getValue().totalFunds += money;
-			}
-		}
-    }
-    
+
     public void addAccount(int uniqueNum){
     	accounts.put(uniqueNum,new BankAccount());
     }
@@ -45,19 +37,27 @@ public class AccountSystem {
     
     public class BankAccount {
 	    double totalFunds;
-	    double moneyToDeposit;
-	    double moneyToWithdraw;
-	    double moneyRequest;
 	    public boolean elligibleForLoan;
+	    double debt;
 	    //int accountNumber;
 	    
 	    public BankAccount(){
 	    	totalFunds = 0;
 	    	elligibleForLoan = true;
 	    }
-	    
-	    public void addMoney(double money){
+	    public void depositMoney(double money){
 	    	totalFunds += money;
+	    }
+	    public void withdrawMoney(double money) {
+	    	if(money >= totalFunds) {
+	    		totalFunds = 0;
+	    	}
+	    	else {
+	    		totalFunds -= money;
+	    	}
+	    }
+	    public void loanAccepted(double money) {
+	    	debt += money;
 	    }
     }
 	

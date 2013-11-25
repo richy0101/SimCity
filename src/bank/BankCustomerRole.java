@@ -59,6 +59,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	public void msgLoanDenied() {
 		state = CustomerState.Done;
+		teller.msgThankYouForAssistance(this);
 		stateChanged();
 		
 	}
@@ -66,6 +67,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	public void msgHereAreFunds(double funds) {
 		getPersonAgent().setFunds(getPersonAgent().getFunds() + funds);
 		state = CustomerState.Done;
+		teller.msgThankYouForAssistance(this);
 		leaveBank();
 		stateChanged();
 	}
@@ -78,6 +80,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	public void msgDepositSuccessful() {
 		state = CustomerState.Done;
+		teller.msgThankYouForAssistance(this);
 		leaveBank();
 		stateChanged();
 	}
