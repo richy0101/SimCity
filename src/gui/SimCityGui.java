@@ -12,6 +12,7 @@ import city.helpers.Directory;
 import agent.Role;
 import bank.BankManagerRole;
 import bank.BankTellerRole;
+import bank.gui.*;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -29,7 +30,7 @@ import restaurant.stackRestaurant.StackHostRole;
 import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 
 public class SimCityGui {
-
+    
 	//NEW STUFF
 	JPanel buildingPanels;
 	CardLayout cardLayout;
@@ -53,7 +54,7 @@ public class SimCityGui {
 			}
 		});
 	}
-
+    
 	/**
 	 * Create the application.
 	 */
@@ -62,7 +63,7 @@ public class SimCityGui {
 		Directory.sharedInstance().setCityGui(this);
 		runSuperNorm();
 	}
-
+    
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -80,7 +81,7 @@ public class SimCityGui {
 		MicroAnimationPanel microAnimationPanel = new MicroAnimationPanel();
 		buildingPanels = new JPanel();
 		cardLayout = new CardLayout();
-//		microAnimationPanel.setLayout(cardLayout);
+        //		microAnimationPanel.setLayout(cardLayout);
 		buildingPanels.setLayout(cardLayout);
 		
 		
@@ -88,7 +89,7 @@ public class SimCityGui {
 		ArrayList<Building> buildings = macroAnimationPanel.getBuildings();
 		for ( int i=0; i<buildings.size(); i++ ) {
 			Building b = buildings.get(i);
-//			BuildingPanel ma = new GUIHome(b, i ,this);
+            //			BuildingPanel ma = new GUIHome(b, i ,this);
 			
 			
 			BuildingPanel ma = null;
@@ -105,15 +106,14 @@ public class SimCityGui {
 			}
 			else if(b.getName().toLowerCase().contains("stack")) {
 				b.setBuildingPanel(new StackRestaurantAnimationPanel(b, i, this));
-			}
+            }
 			else {//if(b.getName().toLowerCase().contains("stack")) {
 				b.setBuildingPanel(new GUIMarket( b, i, this ));
 			}
-			
-		
-//			b.setMicroAnimationPanel( ma );
-//			b.setBuildingPanel( ma );
-//			microAnimationPanel.add( ma, "" + i );	
+            
+            //			b.setMicroAnimationPanel( ma );
+            //			b.setBuildingPanel( ma );
+            //			microAnimationPanel.add( ma, "" + i );
 			buildingPanels.add( b.myBuildingPanel, "" + i );
 		}
 		
@@ -187,33 +187,34 @@ public class SimCityGui {
 		occupationComboBox.addItem("Stack's Restaurant Cook");
 		occupationComboBox.addItem("Stack's Restaurant Cashier");
 		
-//		occupationComboBox.addItem("Sheh's Restaurant Host");
-//		occupationComboBox.addItem("Sheh's Restaurant Waiter");
-//		occupationComboBox.addItem("Sheh's Restaurant Cook");
-//		occupationComboBox.addItem("Sheh's Restaurant Cashier");
-//		
-//		occupationComboBox.addItem("Philips's Restaurant Host");
-//		occupationComboBox.addItem("Philips's Restaurant Waiter");
-//		occupationComboBox.addItem("Philips's Restaurant Cook");
-//		occupationComboBox.addItem("Philips's Restaurant Cashier");
-//		
-//		occupationComboBox.addItem("Tan's Restaurant Host");
-//		occupationComboBox.addItem("Tan's Restaurant Waiter");
-//		occupationComboBox.addItem("Tan's Restaurant Cook");
-//		occupationComboBox.addItem("Tan's Restaurant Cashier");
-//		
-//		occupationComboBox.addItem("Huang's Restaurant Host");
-//		occupationComboBox.addItem("Huang's Restaurant Waiter");
-//		occupationComboBox.addItem("Huang's Restaurant Cook");
-//		occupationComboBox.addItem("Huang's Restaurant Cashier");
-//		
-//		occupationComboBox.addItem("Nakamura's Restaurant Host");
-//		occupationComboBox.addItem("Nakamura's Restaurant Waiter");
-//		occupationComboBox.addItem("Nakamura's Restaurant Cook");
-//		occupationComboBox.addItem("Nakamura's Restaurant Cashier");
+        //		occupationComboBox.addItem("Sheh's Restaurant Host");
+        //		occupationComboBox.addItem("Sheh's Restaurant Waiter");
+        //		occupationComboBox.addItem("Sheh's Restaurant Cook");
+        //		occupationComboBox.addItem("Sheh's Restaurant Cashier");
+        //
+        //		occupationComboBox.addItem("Philips's Restaurant Host");
+        //		occupationComboBox.addItem("Philips's Restaurant Waiter");
+        //		occupationComboBox.addItem("Philips's Restaurant Cook");
+        //		occupationComboBox.addItem("Philips's Restaurant Cashier");
+        //
+        //		occupationComboBox.addItem("Tan's Restaurant Host");
+        //		occupationComboBox.addItem("Tan's Restaurant Waiter");
+        //		occupationComboBox.addItem("Tan's Restaurant Cook");
+        //		occupationComboBox.addItem("Tan's Restaurant Cashier");
+        //
+        //		occupationComboBox.addItem("Huang's Restaurant Host");
+        //		occupationComboBox.addItem("Huang's Restaurant Waiter");
+        //		occupationComboBox.addItem("Huang's Restaurant Cook");
+        //		occupationComboBox.addItem("Huang's Restaurant Cashier");
+        //
+        //		occupationComboBox.addItem("Nakamura's Restaurant Host");
+        //		occupationComboBox.addItem("Nakamura's Restaurant Waiter");
+        //		occupationComboBox.addItem("Nakamura's Restaurant Cook");
+        //		occupationComboBox.addItem("Nakamura's Restaurant Cashier");
 		
 		roles.put("Bank Manager", new BankManagerRole());
-		roles.put("Bank Teller", new BankTellerRole());
+		//roles.put("Bank Teller", new BankTellerRole());
+		//roles.put("Bank Customer", new BankCustomerRole());
 		roles.put("Market Seller", new BankManagerRole());
 		roles.put("Landlord", new LandlordRole());
 		roles.put("Stack's Restaurant Host", new StackHostRole());
@@ -318,18 +319,18 @@ public class SimCityGui {
 		btnCreatePerson.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(nameTextField.getText() != "" &&
-						occupationComboBox.getSelectedItem() != "None" &&
-						transportationComboBox.getSelectedItem() != "None" &&
-								housingComboBox.getSelectedItem() != "None") {
+                   occupationComboBox.getSelectedItem() != "None" &&
+                   transportationComboBox.getSelectedItem() != "None" &&
+                   housingComboBox.getSelectedItem() != "None") {
 					PersonAgent person = new PersonAgent(roles.get(occupationComboBox.getSelectedItem()),
-							nameTextField.getText(),
-							aggressivenessSlider.getValue(),
-							(double)initialFundsSlider.getValue(),
-							(String)housingComboBox.getSelectedItem(),
-							(String)transportationComboBox.getSelectedItem());
-//					do more stuff here
+                                                         nameTextField.getText(),
+                                                         aggressivenessSlider.getValue(),
+                                                         (double)initialFundsSlider.getValue(),
+                                                         (String)housingComboBox.getSelectedItem(),
+                                                         (String)transportationComboBox.getSelectedItem());
+                    //					do more stuff here
 					
-				}		
+				}
 			}
 		});
 		sl_panel.putConstraint(SpringLayout.NORTH, btnCreatePerson, 6, SpringLayout.SOUTH, aggressivenessSlider);
@@ -356,8 +357,7 @@ public class SimCityGui {
 		role.setPerson(p);
 		p.msgWakeUp();
 		
-		
-
+        
 		MarketRole market = new MarketRole("Market1");
 		PersonAgent marketPerson = new PersonAgent(market);
 		market.setPerson(marketPerson);
@@ -365,17 +365,56 @@ public class SimCityGui {
 		
 		Map<String, Integer> groceries = new HashMap<String, Integer>();
 		groceries.put("Steak", 1);
+		/*
+         MarketCustomerRole marketCustomer = new MarketCustomerRole(groceries, "Market1");
+         PersonAgent marketCustomerPerson = new PersonAgent(marketCustomer);
+         marketCustomer.setPerson(marketCustomerPerson);
+         marketCustomer.setMarket(market);
+         marketCustomerPerson.setFunds(50.00);
+         
+         marketCustomerPerson.startThread();*/
 		
-		MarketCustomerRole marketCustomer = new MarketCustomerRole(groceries, "Market1");
-		PersonAgent marketCustomerPerson = new PersonAgent(marketCustomer);
-		marketCustomer.setPerson(marketCustomerPerson);
-		marketCustomer.setMarket(market);
-		marketCustomerPerson.setFunds(50.00);
 		
-		marketCustomerPerson.startThread();
+		//sample bank gui interaction
+		BankTellerGui tellerGui0 = new BankTellerGui(0);
+		BankTellerRole teller0 = new BankTellerRole(tellerGui0,"Bank");
+		PersonAgent teller0Person = new PersonAgent(teller0);
+		teller0.setPerson(teller0Person);
+		teller0.setGui(tellerGui0);
+		teller0Person.startThread();
+		BankTellerGui tellerGui1 = new BankTellerGui(1);
+		BankTellerRole teller1 = new BankTellerRole(tellerGui1,"Bank");
+		PersonAgent teller1Person = new PersonAgent(teller1);
+		teller1.setPerson(teller1Person);
+		teller1.setGui(tellerGui1);
+		teller0Person.startThread();
+		BankTellerGui tellerGui2 = new BankTellerGui(2);
+		BankTellerRole teller2 = new BankTellerRole(tellerGui2,"Bank");
+		PersonAgent teller2Person = new PersonAgent(teller2);
+		teller0.setPerson(teller2Person);
+		teller0.setGui(tellerGui2);
+		teller0Person.startThread();
+		BankTellerGui tellerGui3 = new BankTellerGui(3);
+		BankTellerRole teller3 = new BankTellerRole(tellerGui3,"Bank");
+		PersonAgent teller3Person = new PersonAgent(teller3);
+		teller3.setPerson(teller3Person);
+		teller3.setGui(tellerGui3);
+		teller3Person.startThread();
+		BankTellerGui tellerGui4 = new BankTellerGui(4);
+		BankTellerRole teller4 = new BankTellerRole(tellerGui4,"Bank");
+		PersonAgent teller4Person = new PersonAgent(teller4);
+		teller4.setPerson(teller4Person);
+		teller4.setGui(tellerGui4);
+		teller4Person.startThread();
+		BankTellerGui tellerGui5 = new BankTellerGui(5);
+		BankTellerRole teller5 = new BankTellerRole(tellerGui5,"Bank");
+		PersonAgent teller5Person = new PersonAgent(teller5);
+		teller5.setPerson(teller5Person);
+		teller5.setGui(tellerGui5);
+		teller5Person.startThread();
 		
 		//Example Code
-		//Instantiate directory to have Stack restaurant in it. 
+		//Instantiate directory to have Stack restaurant in it.
 		//Instantiate 1 person to go to stack restaurant. give it an arbitrary name for job and home and role.
 		//Something needs to call this person's msgWakeUp. And scenario should run from there. Person should wake up eat and then idle.
 		//change boolean Cook in person.Decide eat to false to make person go to a restaurant.
@@ -389,8 +428,8 @@ public class SimCityGui {
 	public MacroAnimationPanel getMacroAnimationPanel() {
 		return macroAnimationPanel;
 	}
-//	public void displayMicroAnimationPanel(MicroAnimationPanel microAnimationPanel) {
-//			System.out.println("Accessing " + microAnimationPanel.getName() + " for MicroAnimationPanel.");
-//			cardLayout.show(buildingPanels, microAnimationPanel.getName());
-//	}
+    //	public void displayMicroAnimationPanel(MicroAnimationPanel microAnimationPanel) {
+    //			System.out.println("Accessing " + microAnimationPanel.getName() + " for MicroAnimationPanel.");
+    //			cardLayout.show(buildingPanels, microAnimationPanel.getName());
+    //	}
 }

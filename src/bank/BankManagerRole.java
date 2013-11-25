@@ -30,10 +30,17 @@ public class BankManagerRole extends Role implements BankManager {
 	
 	public BankManagerRole(){
         
-		managerGui = new BankManagerGui(this);
+		//managerGui = new BankManagerGui(this);
 	}
 	
 	//setters-----------------------------------------------------------------------------
+	public void setTeller(BankTeller teller) {
+		synchronized(this.tellers){
+			tellers.add(new MyBankTeller(teller,BankTellerState.Idle,tellerNum));
+			tellerNum++;
+		}
+		stateChanged();
+	}
 	
     //messages----------------------------------------------------------------------------
 	public void msgINeedAssistance(BankCustomer customer) {
@@ -49,14 +56,7 @@ public class BankManagerRole extends Role implements BankManager {
 		}
 	    stateChanged();
 	}
-	
-	public void msgAddTeller(BankTeller teller) {
-		synchronized(this.tellers){
-			tellers.add(new MyBankTeller(teller,BankTellerState.Idle,tellerNum));
-			tellerNum++;
-		}
-		stateChanged();
-	}
+    
     //scheduler---------------------------------------------------------------------------
 	protected boolean pickAndExecuteAction(){
 		synchronized(this.tellers){

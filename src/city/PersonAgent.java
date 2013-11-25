@@ -57,7 +57,7 @@ public class PersonAgent extends Agent implements Person {
 	PersonPosition personPosition;
 	HouseState houseState;
 	PersonState personState;
-	TransportationMethod transMethod;
+	public TransportationMethod transMethod;
 	int hungerLevel;
 	int aggressivenessLevel;
 	int dirtynessLevel;
@@ -102,7 +102,7 @@ public class PersonAgent extends Agent implements Person {
 				this.newRole = new StackCustomerRole("StackRestaurant");
 			}
 			if(order == "Market1" || order == "Market2") {
-				this.newRole = new MarketCustomerRole(p, p.groceryList, order);
+				this.newRole = new MarketCustomerRole(p.groceryList, order);
 			}
 			newRole.setPerson(p);
 			//print("Set role complete.");
@@ -255,6 +255,12 @@ public class PersonAgent extends Agent implements Person {
 	public void msgRoleFinished() {
 		Role r = roles.pop();
 		print("msgRoleFinished received - Popping current Role: " + r.toString() + ".");
+		stateChanged();
+	}
+	public void msgTransportFinished(String location) {
+		Role r = roles.pop();
+		currentLocation = location;
+		print("msgTransportFinished received - Popping transport role, updating current location to: " + currentLocation + ".");
 		stateChanged();
 	}
 	public void msgAtHome() {
@@ -529,4 +535,11 @@ public class PersonAgent extends Agent implements Person {
 	public void setAccountNumber(int accountNumber) {
 		this.accountNumber = accountNumber;
 	}
+
+	@Override
+	public String getTransportationMethod() {
+		return transMethod.toString();
+	}
+
+
 }

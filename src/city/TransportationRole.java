@@ -149,7 +149,7 @@ public class TransportationRole extends Role implements Transportation  {
 			//bus.msgINeedARide(destination);
 		}**/
 		state = TransportationState.InTransit;
-		if (getPersonAgent().transMethod.equals(TransportationMethod.TakesTheBus)) {
+		if (getPersonAgent().getTransportationMethod.contains("Bus")) {
 			startStopX = BusHelper.sharedInstance().busStopEvaluator.get(startingLocation).xCoordinate;
 			startStopY = BusHelper.sharedInstance().busStopEvaluator.get(startingLocation).yCoordinate;
 			endStopX = BusHelper.sharedInstance().busStopEvaluator.get(destination).xCoordinate;
@@ -187,7 +187,7 @@ public class TransportationRole extends Role implements Transportation  {
 		}
 		
 		state = TransportationState.None;
-		getPersonAgent().msgRoleFinished();
+		getPersonAgent().msgTransportFinished();
 		//change roles
 	}
 }
