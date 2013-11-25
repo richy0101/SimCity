@@ -241,4 +241,8 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
 		// TODO Auto-generated method stub
 		
 	}
+
+	public void removeGui(Gui gui) {
+		guis.remove(gui);
+	}
 }

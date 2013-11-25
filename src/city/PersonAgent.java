@@ -42,6 +42,7 @@ public class PersonAgent extends Agent implements Person {
 	boolean rentDue;
 	public String name;
 	String homeName;
+	String currentLocation;
 	public enum TransportationMethod {OwnsACar, TakesTheBus, Walks};
 	public enum PersonPosition {AtHome, AtMarket, AtRestaurant, AtBank, City};
 	public enum HouseState {OwnsAHouse, OwnsAnApartment, Homeless, RentsAnApartment};

@@ -23,18 +23,12 @@ public class TransportationGui implements Gui {
 	BufferedImage personDown;
 	public enum CurrentAction {Cooking, Eating, Transition, Idle};
 	CurrentAction currentAction = CurrentAction.Idle;
-	public TransportationGui(PersonAgent agent, String startingLocation, String finalDestination) {
+	public TransportationGui(int startX, int startY, int destX, int destY) {
 		this.agent = agent;
-		xBed = 5;
-		yBed = 135;
-		xKitchen = 695;
-		yKitchen = 160;
-		xTable = 425;
-		yTable = 250;
-		xPos = xBed;
-		yPos = yBed;
-		xDestination = xBed;
-		yDestination = yBed;
+		xPos = startX;
+		yPos = startY;
+		xDestination = destX;
+		yDestination = destY;
 		try {
         	personLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
         	personRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));

@@ -37,18 +37,52 @@ public class BusHelper {
 	private BusStop busStop1 = new BusStop("BusStop1"); //bottom left
 	Coordinate busStop1Location = new Coordinate(171,361);
 	
-	private BusStop busStop4 = new BusStop("BusStop2"); //bottom right
-	Coordinate busStop4Location = new Coordinate(675,356);
+	private BusStop busStop2 = new BusStop("BusStop2"); //bottom right
+	Coordinate busStop2Location = new Coordinate(675,356);
 	
 	private BusStop busStop3 = new BusStop("BusStop3"); //top right
 	Coordinate busStop3Location = new Coordinate(610,73);
 	
-	private BusStop busStop2 = new BusStop("BusStop4"); //top left
-	Coordinate busStop2Location = new Coordinate(110,73);
+	private BusStop busStop4 = new BusStop("BusStop4"); //top left
+	Coordinate busStop4Location = new Coordinate(110,73);
 	
-	public Map<String, Coordinate> busStopEvaluator = new HashMap<String, Coordinate>();
-	
-	
+	public Map<String, Coordinate> busStopEvaluator = new HashMap<String, Coordinate>(); {
+		busStopEvaluator.put("Bank", busStop4Location);
+		
+		busStopEvaluator.put("House1", busStop3Location);
+		busStopEvaluator.put("House2", busStop3Location);
+		busStopEvaluator.put("House3", busStop4Location);
+		busStopEvaluator.put("House4", busStop4Location);
+		busStopEvaluator.put("House5", busStop1Location);
+		busStopEvaluator.put("House6", busStop2Location);
+		
+		busStopEvaluator.put("Apartment1", busStop4Location);
+		busStopEvaluator.put("Apartment2", busStop3Location);
+		
+		busStopEvaluator.put("Market1", busStop3Location);
+		busStopEvaluator.put("Market2", busStop1Location);
+		
+		busStopEvaluator.put("StackRestaurant", busStop4Location);
+	}
+	public Map<String, Integer> busStopToInt = new HashMap<String, Integer>(); {
+		busStopToInt.put("Bank", 4);
+		
+		busStopToInt.put("House1", 3);
+		busStopToInt.put("House2", 3);
+		busStopToInt.put("House3", 4);
+		busStopToInt.put("House4", 4);
+		busStopToInt.put("House5", 1);
+		busStopToInt.put("House6", 2);
+		
+		busStopToInt.put("Apartment1", 4);
+		busStopToInt.put("Apartment2", 3);
+		
+		busStopToInt.put("Market1", 3);
+		busStopToInt.put("Market2", 1);
+		
+		busStopToInt.put("StackRestaurant", 4);
+	}
+		
 //STREETCORNERS
 	
 	private StreetCorner bottomLeft = new StreetCorner("Bottom-Left");
@@ -83,6 +117,20 @@ public class BusHelper {
 	
 	public Map<String, Coordinate> getDirectory() {
 		return locationDirectory;
+	}
+	public void addWaitingPerson(TransportationRole t, int stopNumber) {
+		if (stopNumber == 1) {
+			waitingPassengersAtStop1.add(t);
+		}
+		else if (stopNumber == 2) {
+			waitingPassengersAtStop2.add(t);
+		}
+		else if (stopNumber == 3) {
+			waitingPassengersAtStop3.add(t);
+		}
+		else {
+			waitingPassengersAtStop4.add(t);
+		}
 	}
 	public List<TransportationRole> getWaitingPassengersAtStop1(){
 		return waitingPassengersAtStop1;
