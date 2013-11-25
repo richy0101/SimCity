@@ -145,16 +145,16 @@ public class Directory {
 //STREETCORNERS
 	
 	private StreetCorner bottomLeft = new StreetCorner("Bottom-Left");
-	Coordinate streetCornerBottomLeftLocation = new Coordinate(135. 325);
+	Coordinate streetCornerBottomLeftLocation = new Coordinate(135, 325);
 	
 	private StreetCorner bottomRight = new StreetCorner("Bottom-Right");
-	Coordinate streetCornerBottomRightLocation = new Coordinate(135. 325);
+	Coordinate streetCornerBottomRightLocation = new Coordinate(135, 325);
 	
 	private StreetCorner topLeft = new StreetCorner("Top-Left");
-	Coordinate streetCornerTopLeftLocation = new Coordinate(700. 325);
+	Coordinate streetCornerTopLeftLocation = new Coordinate(700, 325);
 	
 	private StreetCorner topRight = new StreetCorner("Top-Right");
-	Coordinate streetCornerTopRightLocation = new Coordinate(700. 105);
+	Coordinate streetCornerTopRightLocation = new Coordinate(700, 105);
 
 	
 		

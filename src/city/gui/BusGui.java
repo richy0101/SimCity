@@ -14,8 +14,10 @@ public class BusGui implements Gui {
 	 * Data
 	 */
 	String destination;
+	//start at top left
 	int xPos = 110;
-	int yPos = 73;  //start at top left
+	int yPos = 73;
+	
 	int xDestination = 20;
 	int yDestination = 20;
 	

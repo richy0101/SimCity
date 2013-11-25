@@ -24,7 +24,7 @@ public class BusAgent extends Agent implements Bus {
 	*Scheduler
 	*/	
 		protected boolean pickAndExecuteAnAction(){
-			if (currentState == busState.inTransit){
+			if (currentState == busState.atStop1){
 				goTo(destination);
 				return true;
 			}
