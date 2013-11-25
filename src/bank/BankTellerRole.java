@@ -1,8 +1,11 @@
 package bank;
 
+import gui.Building;
+
 import java.util.ArrayList;
 
 import city.*;
+import city.helpers.Directory;
 
 import java.util.Collections;
 import java.util.List;
@@ -10,6 +13,7 @@ import java.util.Map;
 
 import bank.*;
 import bank.BankManagerRole.BankTellerState;
+import bank.gui.BankTellerGui;
 import bank.helpers.AccountSystem;
 import bank.helpers.AccountSystem.BankAccount;
 import bank.BankCustomerRole;
@@ -33,10 +37,25 @@ public class BankTellerRole extends Role implements BankTeller {
     }
     private int tellerNumber;
     BankManager manager;
+    private BankTellerGui tellerGui;
     private enum CustomerState {ArrivedAtWork, DoingNothing, NeedingAssistance, AskedAssistance, OpeningAccount, OpenedAccount, DepositingMoney, WithdrawingMoney, LoanAccepted, LoanRejected, Leaving};
+    String myLocation;
     
-    public BankTellerRole(){
+    public BankTellerRole(BankTellerGui gui, String location){
+    	this.tellerGui = gui;
+    	myLocation = location;
+    	List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == myLocation) {
+				b.addGui(tellerGui);
+			}
+		}
+    	//setPerson(person);
     	//GotToWork();
+    }
+    
+    public void setGui(BankTellerGui tellerGui){
+    	this.tellerGui = tellerGui;
     }
     
     //messages----------------------------------------------------------------------------
@@ -150,7 +169,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
     //actions-----------------------------------------------------------------------------
 	private void GotToWork(){
-		manager.msgAddTeller(this);
+		manager.setTeller(this);
 	}
 	private void OfferAssistance(MyCustomer account) {
 		print("What do you need help with?");

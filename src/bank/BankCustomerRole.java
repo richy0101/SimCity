@@ -68,7 +68,6 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		state = CustomerState.Done;
 		leaveBank();
 		stateChanged();
-		
 	}
 	
 	public void msgHereIsYourAccount(int accountNumber) {
