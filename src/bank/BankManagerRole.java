@@ -13,13 +13,16 @@ public class BankManagerRole extends Role implements BankManager {
 	private class MyBankTeller {
 	    BankTeller teller;
 	    BankTellerState state;
+	    int tellerNum;
 	    
-	    public MyBankTeller(BankTeller teller, BankTellerState state){
+	    public MyBankTeller(BankTeller teller, BankTellerState state, int tellerNum){
 	    	this.teller = teller;
 	    	this.state = state;
+	    	this.tellerNum = tellerNum;
 	    }
 	}
 	public enum BankTellerState {Idle, Busy};
+	private int tellerNum = 0;
 	
 	//setters-----------------------------------------------------------------------------
 	
@@ -40,7 +43,8 @@ public class BankManagerRole extends Role implements BankManager {
 	
 	public void msgAddTeller(BankTeller teller) {
 		synchronized(this.tellers){
-			tellers.add(new MyBankTeller(teller,BankTellerState.Idle));
+			tellers.add(new MyBankTeller(teller,BankTellerState.Idle,tellerNum));
+			tellerNum++;
 		}
 		stateChanged();
 	}
@@ -60,7 +64,7 @@ public class BankManagerRole extends Role implements BankManager {
 	}
     //actions-----------------------------------------------------------------------------
 	private void AssignCustomerToTeller(BankCustomer customer, MyBankTeller myTeller) {
-		//customer.msgGoToTeller(myTeller.teller);
+		//customer.msgGoToTeller(myTeller.teller,myTeller.tellerNum);
 	    myTeller.teller.msgAssigningCustomer(customer);
 	    myTeller.state = BankTellerState.Busy;
 	    customers.remove(customer);

@@ -48,7 +48,7 @@ public class AccountSystem {
 	    double moneyToDeposit;
 	    double moneyToWithdraw;
 	    double moneyRequest;
-	    boolean elligibleForLoan;
+	    public boolean elligibleForLoan;
 	    //int accountNumber;
 	    
 	    public BankAccount(){
