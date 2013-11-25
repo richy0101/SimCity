@@ -85,9 +85,13 @@ public class SimCityGui {
 		ArrayList<Building> buildings = macroAnimationPanel.getBuildings();
 		for ( int i=0; i<buildings.size(); i++ ) {
 			Building b = buildings.get(i);
-			BuildingPanel ma = null;
+			BuildingPanel ma = new GUIHome(b, i ,this);
 			
-			if(ma.getName().toLowerCase().contains("house")) {
+			
+			//BuildingPanel ma = null;
+			
+			/*
+			if(buildings.get(i).getName().toLowerCase().contains("house")) {
 				ma = new GUIHome( b, i, this );
 			}
 			if(ma.getName().toLowerCase().contains("market")) {
@@ -96,6 +100,7 @@ public class SimCityGui {
 			if(ma.getName().toLowerCase().contains("bank")) {
 				ma = new GUIBank( b, i, this );
 			}
+			*/
 			/*
 			if(ma.getName().toLowerCase().contains("stack")) {
 				ma = new GUIHome( b, i, this );
