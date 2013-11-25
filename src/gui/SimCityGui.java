@@ -34,7 +34,6 @@ public class SimCityGui {
 	private JFrame frame;
 	private Map<String, Role> roles = new HashMap<String, Role>();
 	private HashMap<String, CityCard> cards = new HashMap<String, CityCard>();
-	private MacroAnimationPanel macroAnimationPanel;
 	
 	/**
 	 * Launch the application.
@@ -70,7 +69,7 @@ public class SimCityGui {
 		frame.setBounds(0, 0, 1133, 855);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		macroAnimationPanel = new MacroAnimationPanel(this);
+		MacroAnimationPanel macroAnimationPanel = new MacroAnimationPanel(this);
 		macroAnimationPanel.setBounds(5, 5, 827, 406);
 		frame.getContentPane().add(macroAnimationPanel);
 		
@@ -348,8 +347,4 @@ public class SimCityGui {
 //			System.out.println("Accessing " + microAnimationPanel.getName() + " for MicroAnimationPanel.");
 //			cardLayout.show(buildingPanels, microAnimationPanel.getName());
 //	}
-	
-	public MacroAnimationPanel getMacroAnimationPanel() {
-		return macroAnimationPanel;
-	}
 }

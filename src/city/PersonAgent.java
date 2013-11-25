@@ -1,5 +1,7 @@
 package city;
 
+import gui.Building;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -176,7 +178,12 @@ public class PersonAgent extends Agent implements Person {
 		personGui = new PersonGui(this);
 		
 		homeName = "House1";
-		List<Building> b = Directory.sharedInstance().Macropanel
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == homeName) {
+				b.addGui(personGui);
+			}
+		}
 		startThread();
 		print("I LIVE.");
 	}

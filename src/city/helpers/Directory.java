@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import city.PersonAgent;
-import city.gui.BusStop;
 import market.Market;
 import bank.Bank;
 import gui.MacroAnimationPanel;
@@ -19,7 +18,7 @@ import restaurant.stackRestaurant.*;
 public class Directory {
 	public static Directory sharedInstance;
 	
-	MacroAnimationPanel macroanimationpanel;
+	private SimCityGui cityGui;
 	
 	Directory() {
 		restaurants.add(stackRestaurant);
@@ -35,7 +34,6 @@ public class Directory {
     	return sharedInstance;
 	}
 //ROLES
-	private SimCityGui cityGui; 
 	public Map<String, String> roleDirectory = new HashMap<String, String>(); {
 		//Bank Roles
 		roleDirectory.put("bank.BankCustomerRole", "Bank");
@@ -216,14 +214,10 @@ public class Directory {
 	public List<Market> getMarkets() {
 		return markets;
 	}
-	public MacroAnimationPanel getMacroAnimationPanel() {
-		return macroanimationpanel;
-	}
-
-	public void setCityGui(SimCityGui simCityGui) {
-		this.cityGui = simCityGui;
-	}
 	public SimCityGui getCityGui() {
 		return cityGui;
+	}
+	public void setCityGui(SimCityGui gui) {
+		this.cityGui = gui;
 	}
 }
