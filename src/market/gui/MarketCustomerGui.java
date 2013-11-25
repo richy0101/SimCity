@@ -5,6 +5,10 @@ import gui.Gui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import market.MarketCustomerRole;
 
@@ -25,6 +29,11 @@ public class MarketCustomerGui implements Gui {
 	public static final int xStart = 833;
 	public static final int yStart = 359;
 	
+	BufferedImage customerLeft;
+	BufferedImage customerRight;
+	BufferedImage customerUp;
+	BufferedImage customerDown;
+	
 	
 	public MarketCustomerGui(MarketCustomerRole mcr) {
 		role = mcr;
@@ -34,6 +43,16 @@ public class MarketCustomerGui implements Gui {
 		yPos = yStart;
 		xDestination = xStart;
 		yDestination = yStart;
+		
+		try {
+        	customerLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
+        	customerRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));
+        	customerUp = ImageIO.read(getClass().getResource("GUIPersonUp.png"));
+        	customerDown = ImageIO.read(getClass().getResource("GUIPersonDown.png"));
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ Person assets");
+        }
 		
 		isPresent = true;
 	}
@@ -58,8 +77,18 @@ public class MarketCustomerGui implements Gui {
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.setColor(Color.RED);
-		g.fillRect(xPos, yPos, 20, 20);
+		if (xPos < xDestination) {
+			g.drawImage(customerRight, xPos, yPos, null);
+		}
+		else if (xPos > xDestination) {
+			g.drawImage(customerLeft,  xPos, yPos, null);
+		}
+		else if (yPos < yDestination) {
+			g.drawImage(customerUp, xPos, yPos, null);
+		}
+		else if (yPos > yDestination) {
+			g.drawImage(customerDown, xPos, yPos, null);
+		}
 	}
 
 	@Override
