@@ -3,6 +3,7 @@ package city.gui;
 import gui.Gui;
 import city.BusAgent;
 import city.helpers.Directory;
+import city.helpers.BusHelper;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
