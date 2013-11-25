@@ -12,6 +12,7 @@ import city.BusAgent.MyPassenger.Status;
 import city.gui.BusGui;
 import city.interfaces.Bus;
 import city.helpers.Directory;
+import city.helpers.BusHelper;
 
 
 public class BusAgent extends Agent implements Bus {
@@ -191,22 +192,22 @@ public class BusAgent extends Agent implements Bus {
 		
 		private void alertPassengersToBoardBus(){
 			if((lastStation == Station.Stop1) && (state!=State.driving)){
-				for(TransportationRole person: Directory.sharedInstance().getWaitingPassengersAtStop1()){
+				for(TransportationRole person: BusHelper.sharedInstance().getWaitingPassengersAtStop1()){
 					person.msgGetOnBus(this);
 				}	
 			}
 			if((lastStation == Station.Stop2) && (state!=State.driving)){
-				for(TransportationRole person: Directory.sharedInstance().getWaitingPassengersAtStop2()){
+				for(TransportationRole person: BusHelper.sharedInstance().getWaitingPassengersAtStop2()){
 					person.msgAtStop(2);
 				}	
 			}
 			if((lastStation == Station.Stop3) && (state!=State.driving)){
-				for(TransportationRole person: Directory.sharedInstance().getWaitingPassengersAtStop3()){
+				for(TransportationRole person: BusHelper.sharedInstance().getWaitingPassengersAtStop3()){
 					person.msgAtStop(3);
 				}	
 			}
 			if((lastStation == Station.Stop4) && (state!=State.driving)){
-				for(TransportationRole person: Directory.sharedInstance().getWaitingPassengersAtStop4()){
+				for(TransportationRole person: BusHelper.sharedInstance().getWaitingPassengersAtStop4()){
 					person.msgAtStop(4);
 				}	
 			}
