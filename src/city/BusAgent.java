@@ -53,6 +53,7 @@ public class BusAgent extends Agent implements Bus {
 	}
 	
 	public BusAgent(){//constructor
+		print("Bus created.");
 		busGui = new BusGui(this);
 	}
 		
