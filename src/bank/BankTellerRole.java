@@ -1,6 +1,9 @@
 package bank;
 
 import java.util.ArrayList;
+
+import city.*;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +25,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	    int accountNumber;
 	    CustomerState custState;
 	    
-	    public MyCustomer(BankCustomer customer, CustomerState state){
+	    public MyCustomer(BankCustomerRole customer, CustomerState state){
 	    	this.customer = customer;
 	    	this.custState = state;
 	    }
@@ -31,7 +34,7 @@ public class BankTellerRole extends Role implements BankTeller {
     BankManager manager;
     private enum CustomerState {ArrivedAtWork, DoingNothing, NeedingAssistance, AskedAssistance, OpeningAccount, OpenedAccount, DepositingMoney, WithdrawingMoney, GettingLoan};
     //messages----------------------------------------------------------------------------
-	public void msgAssigningCustomer(BankCustomer customer) {
+	public void msgAssigningCustomer(BankCustomerRole customer) {
 		boolean newCustomer = true;
 		for(MyCustomer tempCustomer : customers){
 			if(tempCustomer.customer == customer){
@@ -46,22 +49,21 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	
 	public void msgOpenAccount(BankCustomer customer) {
-		customer.getPersonAgent().setAccountNumber(5);
-		AccountSystem.sharedInstance().addAccount()
-		for (Map.Entry<Integer, AccountSystem.BankAccount> entry : AccountSystem.sharedInstance().getAccounts().entrySet()) {
-			
-		}
-		for(MyCustomer tempAccount : customers){
-			if(tempAccount.customer == customer){
-				tempAccount.accountNumber = uniqueAccountNum;
-				uniqueAccountNum++;
-				tempAccount.custState = CustomerState.OpeningAccount;
+		int uniqueNum = AccountSystem.sharedInstance().newUniqueAccountNumber();
+		AccountSystem.sharedInstance().addAccount(uniqueNum);
+		for(MyCustomer tempCustomer : customers){
+			if(tempCustomer.customer == customer){
+				tempCustomer.accountNumber = uniqueNum;
+				tempCustomer.custState = CustomerState.OpeningAccount;
 			}
 		}
 	    stateChanged();
 	}
 	
 	public void msgDepositMoney(int accountNumber, double money) {
+        for (Map.Entry<Integer, AccountSystem.BankAccount> entry : AccountSystem.sharedInstance().getAccounts().entrySet()) {
+			
+		}
 		for(MyCustomer tempAccount : customers){
 			if(tempAccount.accountNumber == accountNumber){
 				tempAccount.moneyToDeposit = money;
