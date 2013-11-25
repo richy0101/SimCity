@@ -84,10 +84,10 @@ public class SimCityGui {
 		for ( int i=0; i<buildings.size(); i++ ) {
 			Building b = buildings.get(i);
 			BuildingPanel ma = new BuildingPanel( b, i, this );
-			//b.setMicroAnimationPanel( ma );
+//			b.setMicroAnimationPanel( ma );
 			b.setBuildingPanel( ma );
 //			microAnimationPanel.add( ma, "" + i );	
-			buildingPanels.add( ma, "" + i );		
+			buildingPanels.add( b.myBuildingPanel, "" + i );		
 		}
 		
 		buildingPanels.setBounds(5, 425, 827, 406);
