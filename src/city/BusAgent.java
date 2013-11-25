@@ -1,10 +1,13 @@
 package city;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import agent.Agent;
 import city.interfaces.Bus;
-import agent.Agent;
+import city.helpers.Directory;
 
 public class BusAgent extends Agent implements Bus {
 	
@@ -21,8 +24,18 @@ public class BusAgent extends Agent implements Bus {
 	{Stop1, Stop2, Stop3, Stop4}
 	public Station lastStation= Station.Stop1;
 	
+	public List<TransportationRole> passengersOnBoard
+	= Collections.synchronizedList(new ArrayList<TransportationRole>());
+	
 	private String destination;
 	private Semaphore driving = new Semaphore(0,true);
+	
+	//flags for whether there are any passengers for each stop
+	boolean Flag1 = false;
+	boolean Flag2 = false;
+	boolean Flag3 = false;
+	boolean Flag4 = false; //flag if there are any passengers who want to alight at stop 4
+	
 		
 	/**
 	*Scheduler
@@ -36,9 +49,13 @@ public class BusAgent extends Agent implements Bus {
 		protected boolean pickAndExecuteAnAction(){
 			
 			//start btwn stations and moving CCW
-			if ((lastStation == Station.Stop1) && (currentState==busState.atStop) && Stop1Passengers.isEmpty()){
-				goTo(destination);
-				return true;
+			if ((lastStation == Station.Stop1) && (currentState==busState.atStop)){
+				if(Directory.sharedInstance().getWaitingPassengersAtStop1().isEmpty() && Flag1==false){ //no one waiting & no one alighting
+				  //continue moving
+				}
+				else{
+					//start sequence to wait for passengers to alight/get on
+				}
 			}
 
 			return false;
@@ -57,6 +74,7 @@ public class BusAgent extends Agent implements Bus {
 		
 		public void msgAtStopOne(){
 			lastStation = Station.Stop1;
+			currentState = busState.Idle;
 		}
 		
 		public void msgAtStopTwo(){
@@ -75,6 +93,17 @@ public class BusAgent extends Agent implements Bus {
 	 * Actions	
 	 * @param myDestination
 	 */
+		private void addPassenger(TransportationRole passenger){
+			passengersOnBoard.add(passenger);
+			if(passenger.stopDestination.equals("Stop1"))
+				Flag1= true;
+			else if(passenger.stopDestination.equals("Stop2"))
+				Flag2= true;
+			else if(passenger.stopDestination.equals("Stop3"))
+				Flag3= true;
+			else if(passenger.stopDestination.equals("Stop4"))
+				Flag4= true;
+		}
 
 		private void goTo(String myDestination){
 			doGoTo(myDestination); //sets destination in carGui

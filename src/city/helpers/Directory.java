@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import city.PersonAgent;
+import city.TransportationRole;
 import city.gui.BusStop;
 import city.gui.StreetCorner;
 import market.Market;
@@ -213,6 +214,10 @@ public class Directory {
 	public static List<Bank> banks = new ArrayList<Bank>();
 	public static List<Market> markets = new ArrayList<Market>();
 	public static List<PersonAgent> people = new ArrayList<PersonAgent>();
+	public static List<TransportationRole> waitingPassengersAtStop1 = new ArrayList<TransportationRole>();
+	public static List<TransportationRole> waitingPassengersAtStop2 = new ArrayList<TransportationRole>();
+	public static List<TransportationRole> waitingPassengersAtStop3 = new ArrayList<TransportationRole>();
+	public static List<TransportationRole> waitingPassengersAtStop4 = new ArrayList<TransportationRole>();
 	public Map<String, Coordinate> getDirectory() {
 		return locationDirectory;
 	}
@@ -230,6 +235,18 @@ public class Directory {
 	}
 	public List<Market> getMarkets() {
 		return markets;
+	}
+	public List<TransportationRole> getWaitingPassengersAtStop1(){
+		return waitingPassengersAtStop1;
+	}
+	public List<TransportationRole> getWaitingPassengersAtStop2(){
+		return waitingPassengersAtStop2;
+	}
+	public List<TransportationRole> getWaitingPassengersAtStop3(){
+		return waitingPassengersAtStop3;
+	}
+	public List<TransportationRole> getWaitingPassengersAtStop4(){
+		return waitingPassengersAtStop4;
 	}
 	public SimCityGui getCityGui() {
 		return cityGui;

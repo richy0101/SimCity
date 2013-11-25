@@ -12,6 +12,7 @@ import city.interfaces.Transportation;
 public class TransportationRole extends Role implements Transportation  {
 
 	String destination;
+	String stopDestination; //for bus stop
 	CarAgent car;
 	BusAgent bus;
 	Boolean hasCar = false;
@@ -27,6 +28,9 @@ public class TransportationRole extends Role implements Transportation  {
 		hasCar = true; //hack for normative
 		state = TransportationState.NeedsToTravel; // hack for normative;
 		destination = workLocation;
+		
+		need a function to assign stopDestination based on final destination
+		
 	}
 	
 	/*
