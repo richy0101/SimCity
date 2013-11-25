@@ -22,6 +22,7 @@ import java.util.Map;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
+import market.MarketRole;
 import restaurant.stackRestaurant.StackCookRole;
 import restaurant.stackRestaurant.StackHostRole;
 
@@ -348,6 +349,14 @@ public class SimCityGui {
 		PersonAgent p = new PersonAgent(role, a , b, name);
 		role.setPerson(p);
 		p.msgWakeUp();
+		
+		
+
+		MarketRole market = new MarketRole("Market1");
+		PersonAgent marketPerson = new PersonAgent(market);
+		market.setPerson(marketPerson);
+		marketPerson.startThread();
+		
 		//Example Code
 		//Instantiate directory to have Stack restaurant in it. 
 		//Instantiate 1 person to go to stack restaurant. give it an arbitrary name for job and home and role.
