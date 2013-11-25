@@ -14,8 +14,12 @@ public class BusAgent extends Agent implements Bus {
 	private TransportationRole passenger;
 	
 	public enum busState
-	{inTransit, atDestination, Idle}
+	{inTransit, atDestination, Idle, atStop}
 	public busState currentState = busState.Idle;
+	
+	public enum Station
+	{Stop1, Stop2, Stop3, Stop4}
+	public Station lastStation= Station.Stop1;
 	
 	private String destination;
 	private Semaphore driving = new Semaphore(0,true);
@@ -23,8 +27,16 @@ public class BusAgent extends Agent implements Bus {
 	/**
 	*Scheduler
 	*/	
+	
+	/*the bus should always be running and not be controlled by states.
+	 * It should stop at a station only if there is someone to pickup/dropoff
+	 * (non-Javadoc)
+	 * @see agent.Agent#pickAndExecuteAnAction()
+	 */
 		protected boolean pickAndExecuteAnAction(){
-			if (currentState == busState.atStop1){
+			
+			//start btwn stations and moving CCW
+			if ((lastStation == Station.Stop1) && (currentState==busState.atStop) && Stop1Passengers.isEmpty()){
 				goTo(destination);
 				return true;
 			}
@@ -42,7 +54,22 @@ public class BusAgent extends Agent implements Bus {
 			destination= myDestination;
 			stateChanged();
 		}
+		
+		public void msgAtStopOne(){
+			lastStation = Station.Stop1;
+		}
+		
+		public void msgAtStopTwo(){
+			lastStation = Station.Stop2;
+		}
 
+		public void msgAtStopThree(){
+			lastStation = Station.Stop3;
+		}
+		
+		public void msgAtStopFour(){
+			lastStation = Station.Stop4;
+		}
 
 	/**
 	 * Actions	

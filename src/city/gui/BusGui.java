@@ -2,6 +2,7 @@ package city.gui;
 
 import gui.Gui;
 import city.BusAgent;
+import city.helpers.Directory;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -58,6 +59,15 @@ public class BusGui implements Gui {
 	/**
 	 * Utilities
 	 */
+	/*
+	public int getX(String Destination){
+		return Directory.sharedInstance().locationDirectory.get(Destination).xCoordinate;
+	}
+	
+	public int getY(String Destination){
+		return Directory.sharedInstance().locationDirectory.get(Destination).yCoordinate;
+	}*/
+	
 	public BusGui(BusAgent agent) {
         this.agent = agent;
         
@@ -85,6 +95,16 @@ public class BusGui implements Gui {
             yPos--;
         else if ((yPos == TopRow) && (xPos != LeftCol)) //at top, going left
             xPos--;
+		
+		if((xPos==171) && (yPos==361))
+			agent.msgAtStopOne();
+		else if((xPos==110) && (yPos==73))
+			agent.msgAtStopTwo();
+		else if((xPos==610) && (yPos==73))
+			agent.msgAtStopThree();
+		else if((xPos==675) && (yPos==356))
+			agent.msgAtStopFour();
+		
 		
 		//account for roads
 
