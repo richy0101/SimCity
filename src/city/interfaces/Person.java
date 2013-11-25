@@ -2,6 +2,7 @@ package city.interfaces;
 
 public interface Person{
 
+	public String getTransportationMethod();
 	public void msgActionComplete();
 	public void msgWakeUp() ;
 	public void msgCookingDone();
@@ -11,6 +12,7 @@ public interface Person{
 	public void msgGoHome();
 	public void msgRentPaid();
 	public void msgRoleFinished();
+	public void msgTransportFinished();
 	public void msgAtHome();
 	public void msgPayRent();
 	
@@ -25,5 +27,6 @@ public interface Person{
 	public void stateChanged();
 	public void print(String msg);
 	public void Do(String msg);
+
 
 }
