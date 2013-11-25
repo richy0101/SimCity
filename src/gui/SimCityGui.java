@@ -29,6 +29,7 @@ import market.MarketCustomerRole;
 import market.MarketRole;
 import restaurant.stackRestaurant.StackCookRole;
 import restaurant.stackRestaurant.StackHostRole;
+import restaurant.stackRestaurant.StackWaiterRole;
 import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 
 public class SimCityGui {
@@ -215,15 +216,15 @@ public class SimCityGui {
         //		occupationComboBox.addItem("Nakamura's Restaurant Cook");
         //		occupationComboBox.addItem("Nakamura's Restaurant Cashier");
 		
-		roles.put("Bank Manager", new BankManagerAgent());
-		//roles.put("Bank Teller", new BankTellerRole());
-		//roles.put("Bank Customer", new BankCustomerRole());
-		roles.put("Market Seller", new BankManagerAgent());
-		roles.put("Landlord", new LandlordRole());
-		roles.put("Stack's Restaurant Host", new StackHostRole());
-		roles.put("Stack's Restaurant Waiter", new BankManagerAgent());
-		roles.put("Stack's Restaurant Cook", new BankManagerAgent());
-		roles.put("Stack's Restaurant Cashier", new BankManagerAgent());
+//		roles.put("Bank Manager", new BankManagerAgent());
+//		//roles.put("Bank Teller", new BankTellerRole());
+//		//roles.put("Bank Customer", new BankCustomerRole());
+//		roles.put("Market Seller", new BankManagerAgent());
+//		roles.put("Landlord", new LandlordRole());
+//		roles.put("Stack's Restaurant Host", new StackHostRole());
+//		roles.put("Stack's Restaurant Waiter", new BankManagerAgent());
+//		roles.put("Stack's Restaurant Cook", new BankManagerAgent());
+//		roles.put("Stack's Restaurant Cashier", new BankManagerAgent());
 		
 		panel.add(occupationComboBox);
 		
@@ -355,7 +356,7 @@ public class SimCityGui {
 		String a = "Test Bank 1";
 		String b = "Test Home 1";
 		String name = "Test Person 1";
-		Role role = new BankManagerAgent();
+		Role role = new StackWaiterRole("StackRestaurant");
 		PersonAgent p = new PersonAgent(role, a , b, name);
 		role.setPerson(p);
 		p.msgWakeUp();
