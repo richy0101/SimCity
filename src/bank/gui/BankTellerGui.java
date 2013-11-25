@@ -56,10 +56,4 @@ public class BankTellerGui implements Gui {
         
 	}
     
-	@Override
-	public boolean isPresent() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-    
 }

@@ -62,15 +62,11 @@ public class StackRestaurantAnimationPanel extends JPanel implements ActionListe
         g2.drawImage(restaurantImage, 0, 0, null);
 
         for(Gui gui : guis) {
-            if (gui.isPresent()) {
-                gui.updatePosition();
-            }
+           gui.updatePosition();
         }
 
         for(Gui gui : guis) {
-            if (gui.isPresent()) {
-                gui.draw(g2);
-            }
+           gui.draw(g2);
         }
     }
 
