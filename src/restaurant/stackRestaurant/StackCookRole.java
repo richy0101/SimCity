@@ -1,10 +1,12 @@
 package restaurant.stackRestaurant;
 
 import agent.Role;
+import gui.Building;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import city.helpers.Directory;
 import restaurant.stackRestaurant.helpers.Menu;
 import restaurant.stackRestaurant.interfaces.Cook;
 import restaurant.stackRestaurant.interfaces.Market;
@@ -17,6 +19,7 @@ public class StackCookRole extends Role implements Cook {
 	private Map<String, Food> foods = Collections.synchronizedMap(new HashMap<String, Food>());
 	private List<MyMarket> markets = Collections.synchronizedList(new ArrayList<MyMarket>());
 	private CookGui cookGui;
+	String myLocation;
 	Timer timer = new Timer();
 	
 	private Semaphore doneAnimation = new Semaphore(0,true);
@@ -29,12 +32,20 @@ public class StackCookRole extends Role implements Cook {
 	{Empty, Ordered, Stocked, PermanentlyEmpty};
 	
 	
-	public StackCookRole() {
+	public StackCookRole(String location) {
 		foods.put("Steak", new Food(100));
 		foods.put("Chicken", new Food(140));
 		foods.put("Salad", new Food(70));
 		foods.put("Pizza", new Food(120));
 		cookGui = new CookGui(this);
+		
+		myLocation = location;
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == myLocation) {
+				b.addGui(cookGui);
+			}
+		}
 	}
 	
 	public String getName() {

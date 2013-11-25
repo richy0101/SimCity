@@ -4,12 +4,15 @@ import restaurant.stackRestaurant.gui.CustomerGui;
 import restaurant.stackRestaurant.helpers.Menu;
 import restaurant.stackRestaurant.helpers.Check;
 import agent.Role;
+import gui.Building;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.Random;
 import java.util.TimerTask;
 
 import city.PersonAgent;
+import city.helpers.Directory;
 import restaurant.stackRestaurant.interfaces.*;
 
 /**
@@ -22,6 +25,7 @@ public class StackCustomerRole extends Role implements Customer {
 	Timer timer = new Timer();
 	Random rand = new Random(); 
 	private CustomerGui customerGui;
+	String myLocation;
 	Check check;
 	
 	/**
@@ -52,12 +56,16 @@ public class StackCustomerRole extends Role implements Customer {
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public StackCustomerRole(PersonAgent p){
+	public StackCustomerRole(String location){
 		super();
 		customerGui = new CustomerGui(this);
-		setPerson(p);
-		if(getPersonAgent() == null) {
-			System.out.println("Person is null.");
+		
+		myLocation = location;
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == myLocation) {
+				b.addGui(customerGui);
+			}
 		}
 		msgGotHungry();
 	}

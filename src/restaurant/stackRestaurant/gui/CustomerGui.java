@@ -44,8 +44,6 @@ public class CustomerGui implements Gui{
         catch(IOException e) {
         	System.out.println("Error w/ Background");
         }
-		
-		StackRestaurantAnimationPanel.sharedInstance().addGui(this);
 	}
 
 	public void updatePosition() {

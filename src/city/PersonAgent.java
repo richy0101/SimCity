@@ -99,7 +99,7 @@ public class PersonAgent extends Agent implements Person {
 		}
 		Role createRole(String order, PersonAgent p) {
 			if(order == "StackRestaurant") {
-				this.newRole = new StackCustomerRole(p);
+				this.newRole = new StackCustomerRole("StackRestaurant");
 			}
 			if(order == "Market1" || order == "Market2") {
 				this.newRole = new MarketCustomerRole(p, p.groceryList, order);

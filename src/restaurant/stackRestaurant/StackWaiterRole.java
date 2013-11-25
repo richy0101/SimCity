@@ -1,6 +1,7 @@
 package restaurant.stackRestaurant;
 
 import agent.Role;
+import gui.Building;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
@@ -8,6 +9,7 @@ import java.util.concurrent.Semaphore;
 import restaurant.stackRestaurant.gui.WaiterGui;
 import restaurant.stackRestaurant.helpers.Check;
 import restaurant.stackRestaurant.interfaces.*;
+import city.helpers.Directory;
 import city.interfaces.Person;
 
 
@@ -22,6 +24,7 @@ public class StackWaiterRole extends Role implements Waiter {
 	private Semaphore doneAnimation = new Semaphore(0,true);
 	
 	public WaiterGui waiterGui = null;
+	private String myLocation;
 	
 	private enum AgentState
 	{Working, WantToGoOnBreak, WaitingForNotice, GoingOnBreak, OnBreak, FinishingBreak};
@@ -30,9 +33,16 @@ public class StackWaiterRole extends Role implements Waiter {
 	private enum CustomerState
 	{Waiting, Seated, ReadyToOrder, Ordering, Ordered, AtCook, FoodEmpty, FoodReady, WaitingForReadyFood, Eating, DoneEating, ReadyForCheck, WaitingForCheck, HasCheck, Paying, Gone};
 	
-	public StackWaiterRole() {
+	public StackWaiterRole(String location) {
 		super();
 		waiterGui = new WaiterGui(this);
+		myLocation = location;
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == myLocation) {
+				b.addGui(waiterGui);
+			}
+		}
 	}
 	
 	public String getName() {
