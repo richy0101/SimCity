@@ -386,44 +386,6 @@ public class SimCityGui {
          marketCustomerPerson.startThread();*/
 		
 		
-//		//sample bank gui interaction
-//		BankTellerGui tellerGui0 = new BankTellerGui(0);
-//		BankTellerRole teller0 = new BankTellerRole(tellerGui0,"Bank");
-//		PersonAgent teller0Person = new PersonAgent(teller0);
-//		teller0.setPerson(teller0Person);
-//		teller0.setGui(tellerGui0);
-//		teller0Person.startThread();
-//		BankTellerGui tellerGui1 = new BankTellerGui(1);
-//		BankTellerRole teller1 = new BankTellerRole(tellerGui1,"Bank");
-//		PersonAgent teller1Person = new PersonAgent(teller1);
-//		teller1.setPerson(teller1Person);
-//		teller1.setGui(tellerGui1);
-//		teller0Person.startThread();
-//		BankTellerGui tellerGui2 = new BankTellerGui(2);
-//		BankTellerRole teller2 = new BankTellerRole(tellerGui2,"Bank");
-//		PersonAgent teller2Person = new PersonAgent(teller2);
-//		teller0.setPerson(teller2Person);
-//		teller0.setGui(tellerGui2);
-//		teller0Person.startThread();
-//		BankTellerGui tellerGui3 = new BankTellerGui(3);
-//		BankTellerRole teller3 = new BankTellerRole(tellerGui3,"Bank");
-//		PersonAgent teller3Person = new PersonAgent(teller3);
-//		teller3.setPerson(teller3Person);
-//		teller3.setGui(tellerGui3);
-//		teller3Person.startThread();
-//		BankTellerGui tellerGui4 = new BankTellerGui(4);
-//		BankTellerRole teller4 = new BankTellerRole(tellerGui4,"Bank");
-//		PersonAgent teller4Person = new PersonAgent(teller4);
-//		teller4.setPerson(teller4Person);
-//		teller4.setGui(tellerGui4);
-//		teller4Person.startThread();
-//		BankTellerGui tellerGui5 = new BankTellerGui(5);
-//		BankTellerRole teller5 = new BankTellerRole(tellerGui5,"Bank");
-//		PersonAgent teller5Person = new PersonAgent(teller5);
-//		teller5.setPerson(teller5Person);
-//		teller5.setGui(tellerGui5);
-//		teller5Person.startThread();
-		
 		//Example Code
 		//Instantiate directory to have Stack restaurant in it.
 		//Instantiate 1 person to go to stack restaurant. give it an arbitrary name for job and home and role.

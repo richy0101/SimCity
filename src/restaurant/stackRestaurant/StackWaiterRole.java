@@ -10,10 +10,6 @@ import restaurant.stackRestaurant.gui.WaiterGui;
 import restaurant.stackRestaurant.helpers.Check;
 import restaurant.stackRestaurant.interfaces.*;
 import city.helpers.Directory;
-import city.interfaces.Person;
-
-
-
 
 public class StackWaiterRole extends Role implements Waiter {
 	private Cook cook;
