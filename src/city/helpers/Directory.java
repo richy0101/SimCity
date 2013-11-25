@@ -10,6 +10,7 @@ import city.gui.BusStop;
 import market.Market;
 import bank.Bank;
 import gui.MacroAnimationPanel;
+import gui.SimCityGui;
 import home.Apartment;
 import home.Home;
 import restaurant.Restaurant;
@@ -34,6 +35,7 @@ public class Directory {
     	return sharedInstance;
 	}
 //ROLES
+	private SimCityGui cityGui; 
 	public Map<String, String> roleDirectory = new HashMap<String, String>(); {
 		//Bank Roles
 		roleDirectory.put("bank.BankCustomerRole", "Bank");
@@ -218,4 +220,10 @@ public class Directory {
 		return macroanimationpanel;
 	}
 
+	public void setCityGui(SimCityGui simCityGui) {
+		this.cityGui = simCityGui;
+	}
+	public SimCityGui getCityGui() {
+		return cityGui;
+	}
 }

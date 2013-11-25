@@ -8,6 +8,7 @@ import java.awt.EventQueue;
 import javax.swing.*;
 
 import city.PersonAgent;
+import city.helpers.Directory;
 import agent.Role;
 import bank.BankManagerRole;
 import bank.BankTellerRole;

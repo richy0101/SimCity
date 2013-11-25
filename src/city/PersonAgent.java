@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -56,6 +57,7 @@ public class PersonAgent extends Agent implements Person {
 	int hungerLevel;
 	int aggressivenessLevel;
 	int dirtynessLevel;
+	int desiredFood;
 	PersonGui personGui;
 	Map<String, Integer> groceryList = new HashMap<String, Integer>();
 	Timer personTimer = new Timer();
@@ -93,7 +95,7 @@ public class PersonAgent extends Agent implements Person {
 				this.newRole = new StackCustomerRole(p);
 			}
 			if(order == "Market1" || order == "Market2") {
-				this.newRole = new MarketCustomerRole(p.groceryList);
+				this.newRole = new MarketCustomerRole(p, p.groceryList);
 			}
 			//print("Set role complete.");
 			return newRole;
@@ -172,6 +174,9 @@ public class PersonAgent extends Agent implements Person {
 		hasWorked = false;
 		Directory.sharedInstance().addPerson(this);
 		personGui = new PersonGui(this);
+		
+		homeName = "House1";
+		List<Building> b = Directory.sharedInstance().Macropanel
 		startThread();
 		print("I LIVE.");
 	}
@@ -323,6 +328,7 @@ public class PersonAgent extends Agent implements Person {
 		}
 		else {
 			personState = PersonState.Idle;
+			personGui.DoSleep();
 		}
 		return false;
 	}
@@ -347,14 +353,15 @@ public class PersonAgent extends Agent implements Person {
 		
 	}	
 	private void cookHomeFood() {
-		print("Action cookHomeFood - State set to Cooking.");
+		print("Action cookHomeFood - State set to cooking " + inventory.get(desiredFood).type + ".");
 		personState = PersonState.Cooking;
+		personGui.DoCook();
 		personTimer.schedule(new PersonTimerTask(this) {
 			public void run() {
 				p.msgCookingDone();
 			}
 		},
-		1000);//time for cooking
+		inventory.get(desiredFood).preparationTime);//time for cooking
 	}
 	private void goRestaurant() {
 		print("Action goRestaurant - State set to OutToEat");
@@ -367,8 +374,16 @@ public class PersonAgent extends Agent implements Person {
 	}
 	private void decideFood() {
 		print("Action decideFood - Deciding to eat in or out.");
-		//Change cook to false if want to try going to stack Restaurant scenario.
-		boolean cook = false; //cooks at home at the moment
+		Random rng = new Random();
+		desiredFood = rng.nextInt();
+		desiredFood = desiredFood % 4;
+		boolean cook; //cooks at home at the moment
+		if (inventory.get(desiredFood).stock > 0) {
+			cook = true;
+		}
+		else {
+			cook = false;
+		}
 		//if Stay at home and eat. Alters Cook true or false
 		if (cook == true) {
 			personState = PersonState.CookHome;
@@ -385,8 +400,8 @@ public class PersonAgent extends Agent implements Person {
 				p.msgDoneEating();
 			}
 		},
-		5000);//time for Eating
-		
+		6000);//time for Eating
+		personGui.DoEat();
 	}
 	private void goWork() {
 		print("Action goWork - hasWorked = true. Going to work.");
@@ -420,7 +435,7 @@ public class PersonAgent extends Agent implements Person {
 	private void goRob() {
 		Bank b = Directory.sharedInstance().getBanks().get(0);
 		roles.clear();
-		roles.add(new BankCustomerRole(personState.toString()));//Hacked factory LOL
+		roles.add(new BankCustomerRole(personState.toString(), 0.0, 0.0));//Hacked factory LOL
 		roles.add(new TransportationRole(b.getName()));
 		print("Action goRob - State set to OutBank");
 		personState = PersonState.OutToBank;
@@ -428,8 +443,15 @@ public class PersonAgent extends Agent implements Person {
 	}
 	private void goDeposit() {
 		Bank b = Directory.sharedInstance().getBanks().get(0);
+		double deposit;
+		if (funds - 100.00 > 0) {
+			deposit = funds - 100.00;
+		}
+		else {
+			deposit = 0.0;
+		}
 		roles.clear();
-		roles.add(new BankCustomerRole(personState.toString()));//Hacked factory LOL
+		roles.add(new BankCustomerRole(personState.toString(), deposit, 0.0));//Hacked factory LOL
 		roles.add(new TransportationRole(b.getName()));
 		print("Action goDeposit - State set to OutBank");
 		personState = PersonState.OutToBank;
@@ -438,7 +460,7 @@ public class PersonAgent extends Agent implements Person {
 	private void goLoan() {
 		Bank b = Directory.sharedInstance().getBanks().get(0);
 		roles.clear();
-		roles.add(new BankCustomerRole(personState.toString()));//Hacked factory LOL
+		roles.add(new BankCustomerRole(personState.toString(), 0.0, 1000.00));//Hacked factory LOL
 		roles.add(new TransportationRole(b.getName()));
 		print("Action goLoan - State set to OutBank");
 		personState = PersonState.OutToBank;
@@ -448,7 +470,7 @@ public class PersonAgent extends Agent implements Person {
 	private void goWithdraw() {
 		Bank b = Directory.sharedInstance().getBanks().get(0);
 		roles.clear();
-		roles.add(new BankCustomerRole(personState.toString()));//Hacked factory LOL
+		roles.add(new BankCustomerRole(personState.toString(), 0.0, 0.0));//Hacked factory LOL
 		roles.add(new TransportationRole(b.getName()));
 		print("Action goWithraw - State set to OutBank");
 		personState = PersonState.OutToBank;
