@@ -140,7 +140,21 @@ public class Directory {
 	
 	private BusStop busStop4 = new BusStop("BusStop4"); //priority market
 	Coordinate busStop4Location = new Coordinate(675,356);
-
+	
+//STREETCORNERS
+	/*
+	private StreetCorners bottomLeft = new StreetCorner("Bottom-Left");
+	Coordinate streetCornerBottomLeftLocation = new Coordinate(135. 325);
+	
+	private StreetCorners bottomRight = new StreetCorner("Bottom-Left");
+	Coordinate streetCornerBottomLeftLocation = new Coordinate(135. 325);
+	
+	private StreetCorners topLeft = new StreetCorner("Bottom-Left");
+	Coordinate streetCornerBottomLeftLocation = new Coordinate(135. 325);
+	
+	private StreetCorners topRight = new StreetCorner("Bottom-Left");
+	Coordinate streetCornerBottomLeftLocation = new Coordinate(135. 325);
+	*/
 	
 		
 //MARKETS
