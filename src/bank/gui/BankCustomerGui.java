@@ -94,7 +94,7 @@ public class BankCustomerGui implements Gui {
     
 	@Override
 	public boolean isPresent() {
-		return false;
+		return true;
 	}
 	
 	public void DoGoToTeller(int tellerNum) {
@@ -115,9 +115,5 @@ public class BankCustomerGui implements Gui {
 		xDestination = xExit;
 		yDestination = yExit;
 		command = Command.LeaveBank;
-	}
-	
-	public void setPresent(boolean p) {
-		isPresent = p;
 	}
 }

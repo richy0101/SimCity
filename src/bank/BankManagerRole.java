@@ -3,6 +3,9 @@ package bank;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import bank.gui.BankCustomerGui;
+import bank.gui.BankManagerGui;
 import bank.interfaces.*;
 import agent.Role;
 
@@ -21,8 +24,14 @@ public class BankManagerRole extends Role implements BankManager {
 	    	this.tellerNum = tellerNum;
 	    }
 	}
+	private BankManagerGui managerGui;
 	public enum BankTellerState {Idle, Busy};
 	private int tellerNum = 0;
+	
+	public BankManagerRole(){
+        
+		managerGui = new BankManagerGui(this);
+	}
 	
 	//setters-----------------------------------------------------------------------------
 	
@@ -64,6 +73,7 @@ public class BankManagerRole extends Role implements BankManager {
 	}
     //actions-----------------------------------------------------------------------------
 	private void AssignCustomerToTeller(BankCustomer customer, MyBankTeller myTeller) {
+		print("Assigning customer to teller");
 		//customer.msgGoToTeller(myTeller.teller,myTeller.tellerNum);
 	    myTeller.teller.msgAssigningCustomer(customer);
 	    myTeller.state = BankTellerState.Busy;

@@ -34,6 +34,8 @@ public class MarketCustomerGui implements Gui {
 		yPos = yStart;
 		xDestination = xStart;
 		yDestination = yStart;
+		
+		isPresent = true;
 	}
 	
 	@Override
