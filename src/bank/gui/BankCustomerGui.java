@@ -4,6 +4,12 @@ import gui.Gui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.*;
+
+import javax.imageio.ImageIO;
 
 import bank.*;
 
@@ -12,16 +18,23 @@ public class BankCustomerGui implements Gui {
 	private BankCustomerRole agent = null;
 	private boolean isPresent = false;
 	
-	private static final int xTeller1 = 80;
-	private static final int xTeller2 = 160;
-	private static final int xTeller3 = 240;
-	private static final int yTeller = 50;
+	private static final List<Point> tellerBench = new ArrayList<Point>() {{
+		add(new Point(87, 106));
+		add(new Point(87, 182));
+		add(new Point(87, 265));
+		add(new Point(728, 106));
+		add(new Point(728, 182));
+		add(new Point(728, 265));
+	}};
+
 	private static final int xManager = 50, yManager = 200;
 	private static final int xExit = 100, yExit = 100;
+	BufferedImage customerImage;
 	
 	//BankGui gui;
     
 	private int xPos, yPos;
+	private int xTeller, yTeller;
 	private int xDestination, yDestination;
 	private enum Command {noCommand, GoToManager, GoToTeller, LeaveBank};
 	private Command command=Command.noCommand;
@@ -29,8 +42,17 @@ public class BankCustomerGui implements Gui {
 	
 	public BankCustomerGui(BankCustomerRole customerAgent){
 		agent = customerAgent;
-		xPos = 0;
-		yPos = 0;
+		xPos = 450;
+		yPos = 450;
+		xDestination = 450;
+		yDestination = 450;
+		
+		try {
+        	customerImage = ImageIO.read(getClass().getResource("team02/src/restaurant/stackRestaraunt/gui/stackRestaurantCustomer.png"));
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ Background");
+        }
 	}
 	
 	@Override
@@ -46,21 +68,15 @@ public class BankCustomerGui implements Gui {
             yPos--;
         
 		if(xPos == xDestination && yPos == yDestination
-           && (xDestination == xTeller1) && (yDestination == yTeller) && command == Command.GoToTeller) {
+           && (xDestination == xTeller) && (yDestination == yTeller) && command == Command.GoToTeller) {
             agent.msgAtTeller();
         }
+		
 		if(xPos == xDestination && yPos == yDestination
-        		&& (xDestination == xTeller2) && (yDestination == yTeller) && command == Command.GoToTeller) {
-            agent.msgAtTeller();
-        }
-		if(xPos == xDestination && yPos == yDestination
-        		&& (xDestination == xTeller3) && (yDestination == yTeller) && command == Command.GoToTeller) {
-			agent.msgAtTeller();
-        }
-		if (xPos == xDestination && yPos == yDestination
-				&& (xDestination == xManager) && (yDestination == yManager) && command == Command.GoToManager) {
-			agent.msgAtManager();
+		   && (xDestination == xManager) && (yDestination == yManager) && command == Command.GoToManager) {
+		    agent.msgAtManager();
 		}
+		
 		if (xPos == xDestination && yPos == yDestination
 				&& (xDestination == xExit) && (yDestination == yExit) && command == Command.LeaveBank) {
             agent.msgAnimationFinishedLeavingBank();
@@ -73,9 +89,7 @@ public class BankCustomerGui implements Gui {
     
 	@Override
 	public void draw(Graphics2D g) {
-		//g.setColor(Color.GREEN);
-		//g.fillRect(xPos, yPos, 20, 20);
-		//set customer to a pokemon image?
+		g.drawImage(customerImage, xPos, yPos, null);
 	}
     
 	@Override
@@ -84,21 +98,11 @@ public class BankCustomerGui implements Gui {
 	}
 	
 	public void DoGoToTeller(int tellerNum) {
-		if (tellerNum==1)
-        {
-    		xDestination = xTeller1;
-    		yDestination = yTeller;
-        }
-    	if (tellerNum==2)
-        {
-    		xDestination = xTeller2;
-    		yDestination = yTeller;
-        }
-    	if (tellerNum==3)
-        {
-    		xDestination = xTeller3;
-    		yDestination = yTeller;
-        }
+		xTeller = (int) tellerBench.get(tellerNum).getX();
+		yTeller = (int) tellerBench.get(tellerNum).getY();
+    	xDestination = (int) tellerBench.get(tellerNum).getX();
+    	yDestination = (int) tellerBench.get(tellerNum).getY();
+
 		command = Command.GoToTeller;
 	}
 	public void DoGoToManager() {
@@ -110,6 +114,10 @@ public class BankCustomerGui implements Gui {
 	public void DoLeaveBank() {
 		xDestination = xExit;
 		yDestination = yExit;
+		command = Command.LeaveBank;
 	}
-    
+	
+	public void setPresent(boolean p) {
+		isPresent = p;
+	}
 }

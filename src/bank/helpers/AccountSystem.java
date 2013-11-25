@@ -35,6 +35,10 @@ public class AccountSystem {
 		}
     }
     
+    public void addAccount(int uniqueNum){
+    	accounts.put(uniqueNum,new BankAccount());
+    }
+    
     public Map<Integer,BankAccount> getAccounts() {
     	return accounts;
     }

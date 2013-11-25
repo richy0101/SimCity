@@ -5,8 +5,8 @@ import bank.gui.BankCustomerGui;
 import bank.interfaces.*;
 import agent.Role;
 
-public class BankCustomerRole extends Role implements BankCustomer {	
-//data--------------------------------------------------------------------------------
+public class BankCustomerRole extends Role implements BankCustomer {
+    //data--------------------------------------------------------------------------------
 	BankTeller teller;
 	BankManager manager;
 	private enum CustomerState {DoingNothing, Waiting, GoingToTeller, BeingHelped, AtManager, Done, Gone};
@@ -28,10 +28,11 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		this.moneyRequired = moneyRequired;
 		this.moneyToDeposit = moneyToDeposit;
 		customerGui = new BankCustomerGui(this);
+		
 	}
 	
 	
-//    //messages from animation-------------------------------------------------------------
+    //    //messages from animation-------------------------------------------------------------
 	public void msgAtTeller() {
 		//from animation
 		state = CustomerState.BeingHelped;
