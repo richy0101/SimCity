@@ -36,6 +36,8 @@ public class GUIMarket extends BuildingPanel {
 	public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
         
+        g2.drawImage(marketImage, 0, 0, null);
+        
         for(Gui gui : guis) {
             if (gui.isPresent()) {
                 gui.updatePosition();
@@ -51,6 +53,12 @@ public class GUIMarket extends BuildingPanel {
 	
 	public void addGui(Gui gui) {
 		guis.add(gui);
+	}
+
+	@Override
+	public void displayBuildingPanel() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

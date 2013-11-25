@@ -15,13 +15,13 @@ import javax.imageio.ImageIO;
 public class GUIBank extends BuildingPanel {
 	
 	List<Gui> guis = new ArrayList<Gui>();
-    BufferedImage homeImage;
+    BufferedImage bankImage;
 
 	public GUIBank( Rectangle2D r, int i, SimCityGui sc) {
 		super(r, i, sc);
     	
     	try {
-        	homeImage = ImageIO.read(getClass().getResource("GUIbank.png"));
+        	bankImage = ImageIO.read(getClass().getResource("GUIbank.png"));
         }
         catch(IOException e) {
         	System.out.println("Error w/ Background");
@@ -31,10 +31,11 @@ public class GUIBank extends BuildingPanel {
 	public void actionPerformed(ActionEvent e) {
 		repaint();  //Will have paintComponent called
 	}
-
 	
 	public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
+        
+    	g2.drawImage(bankImage, 0, 0, null);
         
         for(Gui gui : guis) {
             if (gui.isPresent()) {
@@ -51,6 +52,12 @@ public class GUIBank extends BuildingPanel {
 	
 	public void addGui(Gui gui) {
 		guis.add(gui);
+	}
+
+	@Override
+	public void displayBuildingPanel() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
