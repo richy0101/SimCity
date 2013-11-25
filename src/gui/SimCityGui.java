@@ -7,6 +7,7 @@ import java.awt.EventQueue;
 
 import javax.swing.*;
 
+import city.BusAgent;
 import city.PersonAgent;
 import city.helpers.Directory;
 import agent.Role;
@@ -362,6 +363,9 @@ public class SimCityGui {
 		PersonAgent marketPerson = new PersonAgent(market);
 		market.setPerson(marketPerson);
 		marketPerson.startThread();
+		
+		BusAgent bus = new BusAgent();
+		bus.startThread();
 		
 		Map<String, Integer> groceries = new HashMap<String, Integer>();
 		groceries.put("Steak", 1);

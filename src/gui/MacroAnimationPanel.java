@@ -1,10 +1,8 @@
 package gui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -34,6 +32,8 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
 
     private List<Gui> guis = new ArrayList<Gui>();
     ArrayList<Building> buildings;
+    BusAgent bus;
+    BusGui busGui;
     
     //SimCityPanel
     protected SimCityGui city;
@@ -123,10 +123,11 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     	buildings.add(bank);
     	
     //BUSES
-    	BusAgent bus = new BusAgent();
-    	BusGui busGui = new BusGui(bus);
-    	guis.add(busGui);
-    	//movings.add(bus);
+    	bus = new BusAgent();
+    	busGui = new BusGui(bus);
+    	//guis.add(busGui);
+    	//movings.add(busGui);
+    	//addMoving(bus);
     	
     	addMouseListener(this);
     	
@@ -174,12 +175,10 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
             }
         }
         
-        moveComponents();
-        drawComponents(g);
+        //moveComponents();
+        //drawComponents(g);
         
-        g2.drawImage(cityImageTop, 0, 0, null);
-
-        
+        g2.drawImage(cityImageTop, 0, 0, null);   
     }
     
     public ArrayList<Building> getBuildings() {
