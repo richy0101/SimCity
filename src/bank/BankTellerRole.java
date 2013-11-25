@@ -33,10 +33,10 @@ public class BankTellerRole extends Role implements BankTeller {
     }
     private int tellerNumber;
     BankManager manager;
-    private enum CustomerState {ArrivedAtWork, DoingNothing, NeedingAssistance, AskedAssistance, OpeningAccount, OpenedAccount, DepositingMoney, WithdrawingMoney, GettingLoan, Leaving};
+    private enum CustomerState {ArrivedAtWork, DoingNothing, NeedingAssistance, AskedAssistance, OpeningAccount, OpenedAccount, DepositingMoney, WithdrawingMoney, LoanAccepted, LoanRejected, Leaving};
     
     public BankTellerRole(){
-    	GotToWork();
+    	//GotToWork();
     }
     
     //messages----------------------------------------------------------------------------
@@ -91,7 +91,18 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	
 	public void msgIWantLoan(int accountNumber, double moneyRequest) {
-		
+		for (Map.Entry<Integer, AccountSystem.BankAccount> entry : AccountSystem.sharedInstance().getAccounts().entrySet()) {
+			if(entry.getKey() == accountNumber){
+				if(entry.getValue().elligibleForLoan == true){
+					for(MyCustomer tempCustomer : customers){
+						if(tempCustomer.accountNumber == accountNumber){
+							tempCustomer.moneyToWithdraw = moneyRequest;
+							tempCustomer.custState = CustomerState.LoanAccepted;
+						}
+					}
+				}
+			}
+		}
 	}
     //scheduler---------------------------------------------------------------------------
 	protected boolean pickAndExecuteAction(){
@@ -123,6 +134,14 @@ public class BankTellerRole extends Role implements BankTeller {
 			for(MyCustomer tempCustomer: customers){
 				if(tempCustomer.custState == CustomerState.WithdrawingMoney){
 					WithdrawMoney(tempCustomer);
+					return true;
+				}
+			}
+		}
+		synchronized(this.customers){
+			for(MyCustomer tempCustomer: customers){
+				if(tempCustomer.custState == CustomerState.Leaving){
+					TellerIsFree(tempCustomer);
 					return true;
 				}
 			}
@@ -160,7 +179,10 @@ public class BankTellerRole extends Role implements BankTeller {
 		myCustomer.custState = CustomerState.Leaving;
 		stateChanged();
 	}
-	
+	private void TellerIsFree(MyCustomer myCustomer){
+		manager.msgTellerFree(this);
+		customers.remove(myCustomer);
+	}
 	private void GiveLoan(MyCustomer myCustomer) {
 		
 	}
