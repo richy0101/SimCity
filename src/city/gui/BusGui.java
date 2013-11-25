@@ -34,6 +34,8 @@ public class BusGui implements Gui {
 	BufferedImage busLeftImage;
 	BufferedImage busRightImage;
 	
+	boolean stopRequested= false;
+	
 	/**
 	 * Received Messages/Actions
 	 */
@@ -86,7 +88,9 @@ public class BusGui implements Gui {
 	public void updatePosition() {
 		// TODO Auto-generated method stub
 		
-		//Counter Clockwise motion
+		//Counter Clockwise motion that goes on as long as stop is not requested
+		if(stopRequested==false){
+
 		if ((xPos == LeftCol) && (yPos != BottomRow)) //at left, coming down
             yPos++;
 		else if ((yPos == BottomRow) && (xPos != RightCol)) //at bottom, going right
@@ -95,6 +99,7 @@ public class BusGui implements Gui {
             yPos--;
         else if ((yPos == TopRow) && (xPos != LeftCol)) //at top, going left
             xPos--;
+		
 		
 		if((xPos==171) && (yPos==361))
 			agent.msgAtStopOne();
@@ -105,9 +110,8 @@ public class BusGui implements Gui {
 		else if((xPos==675) && (yPos==356))
 			agent.msgAtStopFour();
 		
+		}
 		
-		//account for roads
-
 	}
 
 	@Override
@@ -129,8 +133,15 @@ public class BusGui implements Gui {
 	@Override
 	public boolean isPresent() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 	
+	public void DoKeepDriving(){
+		stopRequested=false;
+	}
+	
+	public void DoStopDriving(){
+		stopRequested=true;
+	}
 
 }
