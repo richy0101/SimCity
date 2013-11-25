@@ -148,10 +148,10 @@ public class Directory {
 	Coordinate streetCornerBottomLeftLocation = new Coordinate(135, 325);
 	
 	private StreetCorner bottomRight = new StreetCorner("Bottom-Right");
-	Coordinate streetCornerBottomRightLocation = new Coordinate(135, 325);
+	Coordinate streetCornerBottomRightLocation = new Coordinate(700, 325);
 	
 	private StreetCorner topLeft = new StreetCorner("Top-Left");
-	Coordinate streetCornerTopLeftLocation = new Coordinate(700, 325);
+	Coordinate streetCornerTopLeftLocation = new Coordinate(135, 105);
 	
 	private StreetCorner topRight = new StreetCorner("Top-Right");
 	Coordinate streetCornerTopRightLocation = new Coordinate(700, 105);

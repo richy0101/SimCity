@@ -21,10 +21,10 @@ public class BusGui implements Gui {
 	int xDestination = 20;
 	int yDestination = 20;
 	
-	int TopRow = 10;
-	int BottomRow = 10;
-	int LeftCol = 10;
-	int RightCol = 10;
+	int TopRow = 105;
+	int BottomRow = 325;
+	int LeftCol = 135;
+	int RightCol = 700;
 	
 	private BusAgent agent = null;
 	
