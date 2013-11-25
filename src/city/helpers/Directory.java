@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import city.PersonAgent;
+import city.gui.BusStop;
 import market.Market;
 import bank.Bank;
 import gui.MacroAnimationPanel;
