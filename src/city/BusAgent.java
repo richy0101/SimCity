@@ -54,13 +54,44 @@ public class BusAgent extends Agent implements Bus {
 		protected boolean pickAndExecuteAnAction(){
 			
 			//start btwn stations and moving CCW
+			
+			if((lastStation == Station.Stop1) && (currentState==busState.atStop)){
+				stopBus(); //stop bus no matter what
+				boardBusStop1();
+				alightBusStop1();
+			}
+			
+			
 			if ((lastStation == Station.Stop1) && (currentState==busState.atStop)){
 				if(Directory.sharedInstance().getWaitingPassengersAtStop1().isEmpty() && Flag1==false){ //no one waiting & no one alighting
-				  //continue moving
+					keepDriving();
+					currentState= busState.inTransit;
 				}
 				else{
 					//start sequence to wait for passengers to alight/get on
-				}
+					stopBus();
+					//get passengers on bus might have probs if someone tries to get on waiting list while bus is doing this
+					for(TransportationRole person: Directory.sharedInstance().getWaitingPassengersAtStop1()){
+						passengersOnBoard.add(person);
+						Directory.sharedInstance().getWaitingPassengersAtStop1().remove(person); //remove from waiting
+					}
+					
+					//get passengers off bus
+					for(TransportationRole person: passengersOnBoard){
+						if (person.stopDestination.equals("stop1")){
+							passengersOnBoard.remove(person); //get off bus
+							//need to msg something to recreate the transportationRole
+						}
+					}
+					
+					Flag1 = false; //all ppl alighted, now need to wait for ppl to get on
+					
+					while(!Directory.sharedInstance().getWaitingPassengersAtStop1().isEmpty()){
+						//wait till there are no more people waiting
+					}
+					
+					keepDriving();
+				}			
 			}
 
 			return false;
@@ -79,7 +110,8 @@ public class BusAgent extends Agent implements Bus {
 		
 		public void msgAtStopOne(){
 			lastStation = Station.Stop1;
-			currentState = busState.Idle;
+			currentState = busState.atStop;
+			stateChanged();
 		}
 		
 		public void msgAtStopTwo(){
@@ -98,6 +130,23 @@ public class BusAgent extends Agent implements Bus {
 	 * Actions	
 	 * @param myDestination
 	 */
+		private void boardBusStop1(){
+			for(TransportationRole person: Directory.sharedInstance().getWaitingPassengersAtStop1()){
+				passengersOnBoard.add(person);
+				Directory.sharedInstance().getWaitingPassengersAtStop1().remove(person); //remove from waiting
+			}
+		}
+		
+		private void alightBusStop1(){
+			for(TransportationRole person: passengersOnBoard){
+				person.msgAtStop();
+				if (person.stopDestination.equals("stop1")){
+					passengersOnBoard.remove(person); //get off bus
+					//need to msg something to recreate the transportationRole
+				}
+			}
+		}
+		
 		private void addPassenger(TransportationRole passenger){
 			passengersOnBoard.add(passenger);
 			if(passenger.stopDestination.equals("Stop1"))
@@ -110,6 +159,7 @@ public class BusAgent extends Agent implements Bus {
 				Flag4= true;
 		}
 
+		/*
 		private void goTo(String myDestination){
 			doGoTo(myDestination); //sets destination in carGui
 			try {
@@ -118,13 +168,33 @@ public class BusAgent extends Agent implements Bus {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				}
+		}*/
+		
+		private void keepDriving(){
+			//doGoTo(myDestination); //sets destination in carGui
+			doKeepDriving();
+			try {
+				driving.acquire(); //to ensure that the gui is uninterrupted on the way
+				} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				}
 		}
 		
+		private void doKeepDriving(){
+			busGui.DoKeepDriving();
+		}
+		
+		private void stopBus(){
+			busGui.DoStopDriving();
+		}
+		
+		/*
 		private void doGoTo(String myDestination){
-			System.out.println("Bus is going to "+ myDestination);
+			busGui.DoKeepDriving();
 			//haven't implemented carGui
 			//carGui.msgGoTo(myDestination);
-		}
+		}*/
 		
 		/*
 		 * Utilities

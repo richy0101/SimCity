@@ -8,8 +8,8 @@ public class BusStop {
 		
 	}
 	
-	public BusStop(String buildingName) {
-		name = buildingName;
+	public BusStop(String name) {
+		this.name = name;
 	}
 	
 	public String getName() {

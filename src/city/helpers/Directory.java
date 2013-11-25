@@ -134,13 +134,13 @@ public class Directory {
 	private BusStop busStop1 = new BusStop("BusStop1"); //bottom left
 	Coordinate busStop1Location = new Coordinate(171,361);
 	
-	private BusStop busStop4 = new BusStop("BusStop2"); //bottom right
+	private BusStop busStop2 = new BusStop("BusStop2"); //bottom right
 	Coordinate busStop4Location = new Coordinate(675,356);
 	
 	private BusStop busStop3 = new BusStop("BusStop3"); //top right
 	Coordinate busStop3Location = new Coordinate(610,73);
 	
-	private BusStop busStop2 = new BusStop("BusStop4"); //top left
+	private BusStop busStop4 = new BusStop("BusStop4"); //top left
 	Coordinate busStop2Location = new Coordinate(110,73);
 	
 	
