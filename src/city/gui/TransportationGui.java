@@ -35,6 +35,7 @@ public class TransportationGui implements Gui {
 		yPos = startY;
 		xDestination = destX;
 		yDestination = destY;
+		
 		try {
         	personLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
         	personRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));
@@ -99,6 +100,19 @@ public class TransportationGui implements Gui {
 		}
 		else if (yPos > yDestination) {
 			g.drawImage(personDown, xPos, yPos, null);
+		}
+		
+		if (xPos < xDestination) {
+			g.drawImage(busRight, xPos, yPos, null);
+		}
+		else if (xPos > xDestination) {
+			g.drawImage(busLeft,  xPos, yPos, null);
+		}
+		else if (yPos < yDestination) {
+			g.drawImage(busUp, xPos, yPos, null);
+		}
+		else if (yPos > yDestination) {
+			g.drawImage(busDown, xPos, yPos, null);
 		}
 	}
 
