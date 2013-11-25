@@ -32,7 +32,6 @@ public class StackHostRole extends Role implements Host {
 	public enum WaiterState
 	{Idle, Busy};
 
-	public WaiterGui hostGui = null;
 
 	public StackHostRole() {
 		super();
