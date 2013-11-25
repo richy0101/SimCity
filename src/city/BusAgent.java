@@ -51,7 +51,7 @@ public class BusAgent extends Agent implements Bus {
 		
 	}
 	
-	BusAgent(){//constructor
+	public BusAgent(){//constructor
 	}
 		
 	/**

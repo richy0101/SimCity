@@ -78,6 +78,8 @@ public class BusGui implements Gui {
         
         xPos = xStart;
         yPos = yStart;
+        xDestination = xStart;
+        yDestination = yStart;
         
         try {
         	busLeftImage = ImageIO.read(getClass().getResource("busLeft.png"));
