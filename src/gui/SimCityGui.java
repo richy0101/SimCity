@@ -86,6 +86,9 @@ public class SimCityGui {
 		for ( int i=0; i<buildings.size(); i++ ) {
 			Building b = buildings.get(i);
 			BuildingPanel ma;
+			
+			//if(ma.getName() == )
+			
 				ma = new GUIHome( b, i, this );
 //			b.setMicroAnimationPanel( ma );
 				b.setBuildingPanel( ma );
