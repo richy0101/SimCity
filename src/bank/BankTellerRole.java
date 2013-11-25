@@ -24,17 +24,23 @@ public class BankTellerRole extends Role implements BankTeller {
 	    BankCustomer customer;
 	    int accountNumber;
 	    CustomerState custState;
+	    double moneyToWithdraw;
 	    
-	    public MyCustomer(BankCustomerRole customer, CustomerState state){
+	    public MyCustomer(BankCustomer customer, CustomerState state){
 	    	this.customer = customer;
 	    	this.custState = state;
 	    }
     }
     private int tellerNumber;
     BankManager manager;
-    private enum CustomerState {ArrivedAtWork, DoingNothing, NeedingAssistance, AskedAssistance, OpeningAccount, OpenedAccount, DepositingMoney, WithdrawingMoney, GettingLoan};
+    private enum CustomerState {ArrivedAtWork, DoingNothing, NeedingAssistance, AskedAssistance, OpeningAccount, OpenedAccount, DepositingMoney, WithdrawingMoney, GettingLoan, Leaving};
+    
+    public BankTellerRole(){
+    	GotToWork();
+    }
+    
     //messages----------------------------------------------------------------------------
-	public void msgAssigningCustomer(BankCustomerRole customer) {
+	public void msgAssigningCustomer(BankCustomer customer) {
 		boolean newCustomer = true;
 		for(MyCustomer tempCustomer : customers){
 			if(tempCustomer.customer == customer){
@@ -61,23 +67,24 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	
 	public void msgDepositMoney(int accountNumber, double money) {
-        for (Map.Entry<Integer, AccountSystem.BankAccount> entry : AccountSystem.sharedInstance().getAccounts().entrySet()) {
-			
+		for (Map.Entry<Integer, AccountSystem.BankAccount> entry : AccountSystem.sharedInstance().getAccounts().entrySet()) {
+			if(entry.getKey() == accountNumber){
+				entry.getValue().addMoney(money);
+			}
 		}
-		for(MyCustomer tempAccount : customers){
-			if(tempAccount.accountNumber == accountNumber){
-				tempAccount.moneyToDeposit = money;
-				tempAccount.custState = CustomerState.DepositingMoney;
+		for(MyCustomer tempCustomer : customers){
+			if(tempCustomer.accountNumber == accountNumber){
+				tempCustomer.custState = CustomerState.DepositingMoney;
 			}
 		}
 	    stateChanged();
 	}
 	
 	public void msgWithdrawMoney(int accountNumber, double money) {
-		for(MyCustomer tempAccount : customers){
-			if(tempAccount.accountNumber == accountNumber){
-				tempAccount.moneyToDeposit = money;
-				tempAccount.custState = CustomerState.DepositingMoney;
+		for(MyCustomer tempCustomer : customers){
+			if(tempCustomer.accountNumber == accountNumber){
+				tempCustomer.moneyToWithdraw = money;
+				tempCustomer.custState = CustomerState.WithdrawingMoney;
 			}
 		}
 	    stateChanged();
@@ -114,8 +121,8 @@ public class BankTellerRole extends Role implements BankTeller {
 		}
 		synchronized(this.customers){
 			for(MyCustomer tempCustomer: customers){
-				if(tempCustomer.custState == CustomerState.NeedingAssistance){
-					OfferAssistance(tempCustomer);
+				if(tempCustomer.custState == CustomerState.WithdrawingMoney){
+					WithdrawMoney(tempCustomer);
 					return true;
 				}
 			}
@@ -132,18 +139,26 @@ public class BankTellerRole extends Role implements BankTeller {
 		stateChanged();
 	}
 	
-	private void OpenedAccount(MyCustomer account) {
-		account.customer.msgHereIsYourAccount(account.accountNumber);
-		account.custState = CustomerState.OpenedAccount;
+	private void OpenedAccount(MyCustomer myCustomer) {
+		myCustomer.customer.msgHereIsYourAccount(myCustomer.accountNumber);
+		myCustomer.custState = CustomerState.OpenedAccount;
 		stateChanged();
 	}
 	
-	private void DepositMoney(MyCustomer account) {
-		account.totalFunds +=
+	private void DepositMoney(MyCustomer myCustomer) {
+		myCustomer.customer.msgDepositSuccessful();
+		myCustomer.custState = CustomerState.Leaving;
+		stateChanged();
 	}
-	
-	private void GiveCustomerMoney(MyCustomer myCustomer) {
-		
+	private void WithdrawMoney(MyCustomer myCustomer) {
+		for (Map.Entry<Integer, AccountSystem.BankAccount> entry : AccountSystem.sharedInstance().getAccounts().entrySet()) {
+			if(entry.getKey() == myCustomer.accountNumber){
+				entry.getValue().addMoney(-myCustomer.moneyToWithdraw);
+				myCustomer.customer.msgHereAreFunds(myCustomer.moneyToWithdraw);
+			}
+		}
+		myCustomer.custState = CustomerState.Leaving;
+		stateChanged();
 	}
 	
 	private void GiveLoan(MyCustomer myCustomer) {

@@ -48,10 +48,16 @@ public class AccountSystem {
 	    double moneyToDeposit;
 	    double moneyToWithdraw;
 	    double moneyRequest;
+	    boolean elligibleForLoan;
 	    //int accountNumber;
 	    
 	    public BankAccount(){
 	    	totalFunds = 0;
+	    	elligibleForLoan = true;
+	    }
+	    
+	    public void addMoney(double money){
+	    	totalFunds += money;
 	    }
     }
 	
