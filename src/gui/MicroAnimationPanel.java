@@ -49,7 +49,7 @@ public class MicroAnimationPanel extends JPanel implements ActionListener, Mouse
     	Timer timer = new Timer(DELAY, this);
     	timer.start();
     	
-    	cards.put("null", new CityCard(myCity, Color.blue));
+    	cards.put("null", new CityCard(myCity, Color.green));
     	
     	cards.put("stackRestaurant", new CityCard(myCity, Color.pink));
     	cards.put("huangRestaurant", new CityCard(myCity, Color.pink));

@@ -24,7 +24,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
 	BufferedImage cityImageNight;
 	BufferedImage cityImageNightTop;
 
-	private final int WINDOWX = 827;
+	private final int WINDOWX = 835;
     private final int WINDOWY = 406;
    
     private final int DELAY = 5;
@@ -55,53 +55,68 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     	//Adding building blocks  
     //RESTAURANT
     	Building stackRestaurant = new Building(0, 240, 105, 120);
+    	stackRestaurant.setName("StackRestaurant");
     	buildings.add(stackRestaurant);
     	
     	Building huangRestaurant = new Building(183, 6, 134, 80);
+    	huangRestaurant.setName("HuangRestaurant");
     	buildings.add(huangRestaurant);
     	
     	Building nakamuraRestaurant = new Building(321, 6, 138, 77);
+    	nakamuraRestaurant.setName("NakamuraRestaurant");
     	buildings.add(nakamuraRestaurant);
     	
     	Building phillipsRestaurant = new Building(729, 263, 107, 93);
+    	phillipsRestaurant.setName("PhillipsRestaurant");
     	buildings.add(phillipsRestaurant);
     	
     	Building shehRestaurant = new Building(523, 326, 142, 74);
+    	shehRestaurant.setName("ShehRestaurant");
     	buildings.add(shehRestaurant);
     	
     	Building tanRestaurant = new Building(185, 325, 158, 75);
+    	tanRestaurant.setName("TanRestaurant");
     	buildings.add(tanRestaurant);
     
     //HOUSES
     	Building house1 = new Building(326, 196, 129, 99);
+    	house1.setName("House1");
     	buildings.add(house1);
     	
     	Building house2 = new Building(330, 132, 145, 69);
+    	house2.setName("House2");
     	buildings.add(house2);
     	
     	Building house3 = new Building(473, 133, 85, 73);
+    	house3.setName("House3");
     	buildings.add(house3);
     	
     	Building house4 = new Building(564, 133, 104, 41);
+    	house4.setName("House4");
     	buildings.add(house4);
     	
     	Building house5 = new Building(564, 178, 104, 117);
+    	house5.setName("House5");
     	buildings.add(house5);
 
     	Building house6 = new Building(458, 210, 107, 86);
+    	house6.setName("House6");
     	buildings.add(house6);
     	
     //MARKET
     	Building market1 = new Building(459, 8, 200, 70);
+    	market1.setName("Market1");
     	buildings.add(market1);
     	
     	Building market2 = new Building(347, 329, 175, 71);
+    	market2.setName("Market2");
     	buildings.add(market2);
     	
     //APARTMENT
     	
     //BANK 
     	Building bank = new Building(0, 0, 104, 214);
+    	bank.setName("Bank");
     	buildings.add(bank);
     	
     	addMouseListener(this);
