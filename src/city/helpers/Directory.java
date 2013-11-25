@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import city.PersonAgent;
+import city.gui.BusStop;
 import market.Market;
 import bank.Bank;
 import gui.MacroAnimationPanel;
@@ -128,16 +129,16 @@ public class Directory {
 	Coordinate house6Location = new Coordinate(602,140);
 
 //BUS STOPS
-	private BusStop busStop1 = new BusStop("BusStop1"); //priority market
+	private BusStop busStop1 = new BusStop("BusStop1"); //bottom left
 	Coordinate busStop1Location = new Coordinate(171,361);
 	
-	private BusStop busStop2 = new BusStop("BusStop2"); //priority market
+	private BusStop busStop2 = new BusStop("BusStop2"); //top left
 	Coordinate busStop2Location = new Coordinate(110,73);
 	
-	private BusStop busStop3 = new BusStop("BusStop3"); //priority market
+	private BusStop busStop3 = new BusStop("BusStop3"); //top right
 	Coordinate busStop3Location = new Coordinate(610,73);
 	
-	private BusStop busStop4 = new BusStop("BusStop4"); //priority market
+	private BusStop busStop4 = new BusStop("BusStop4"); //bottom right
 	Coordinate busStop4Location = new Coordinate(675,356);
 
 	
