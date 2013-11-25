@@ -12,14 +12,17 @@ import city.interfaces.Transportation;
 public class TransportationRole extends Role implements Transportation  {
 
 	String destination;
-	String stopDestination; //for bus stop
+	//String stopDestination; //for bus stop
 	CarAgent car;
 	BusAgent bus;
 	Boolean hasCar = false;
 	
+	public enum BusStop
+		{stop1, stop2, stop3, stop4, none}
+	BusStop stopDestination = BusStop.none; 
+	
 	public enum TransportationState 
-		{Walking, NeedsToTravel, InTransit, AtDestination, None};
-		
+		{Walking, NeedsToTravel, InTransit, AtDestination, None};	
 	TransportationState state = TransportationState.None;
 
 	
@@ -29,7 +32,8 @@ public class TransportationRole extends Role implements Transportation  {
 		state = TransportationState.NeedsToTravel; // hack for normative;
 		destination = workLocation;
 		
-		need a function to assign stopDestination based on final destination
+		//need a function to assign stopDestination based on final destination
+		//if(destination.equals("")||)
 		
 	}
 	
