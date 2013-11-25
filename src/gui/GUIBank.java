@@ -1,38 +1,56 @@
 package gui;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class GUIBank extends CityComponent {
+import javax.imageio.ImageIO;
 
-	public GUIBank(int x, int y) {
-		super(x, y, Color.red, "Restaurant 1");
-		rectangle = new Rectangle(x, y, 20, 20);
+public class GUIBank extends BuildingPanel {
+	
+	List<Gui> guis = new ArrayList<Gui>();
+    BufferedImage homeImage;
+
+	public GUIBank( Rectangle2D r, int i, SimCityGui sc) {
+		super(r, i, sc);
+    	
+    	try {
+        	homeImage = ImageIO.read(getClass().getResource("GUIbank.png"));
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ Background");
+        }
 	}
 	
-	public GUIBank(int x, int y, String ID) {
-		super(x, y, Color.red, ID);
-		rectangle = new Rectangle(x, y, 20, 20);
-	}
-
-	public void updatePosition() {
-		
+	public void actionPerformed(ActionEvent e) {
+		repaint();  //Will have paintComponent called
 	}
 
 	
-	public void paint(Graphics g) {
-		g.setColor(color);
-		g.fillOval(x, y, 20, 20);
-		g.fill3DRect(x, y, 20, 20, true);
-	}
+	public void paintComponent(Graphics g) {
+        Graphics2D g2 = (Graphics2D)g;
+        
+        for(Gui gui : guis) {
+            if (gui.isPresent()) {
+                gui.updatePosition();
+            }
+        }
 
+        for(Gui gui : guis) {
+            if (gui.isPresent()) {
+                gui.draw(g2);
+            }
+        }
+	}
 	
-//	public boolean contains(int x, int y) {
-//		if (x >= this.x && x <= this.x+20)
-//			if (y >= this.y && y <= this.y+20)
-//				return true;
-//		return false;
-//	}
+	public void addGui(Gui gui) {
+		guis.add(gui);
+	}
 
 }
