@@ -1,6 +1,8 @@
 package restaurant.stackRestaurant.gui;
 
+import gui.BuildingPanel;
 import gui.Gui;
+import gui.SimCityGui;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -14,20 +16,19 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 
-import restaurant.stackRestaurant.helpers.Menu;
-import restaurant.stackRestaurant.helpers.TableList;
-
 @SuppressWarnings("serial")
-public class StackRestaurantAnimationPanel extends JPanel implements ActionListener {
+public class StackRestaurantAnimationPanel extends BuildingPanel implements ActionListener {
 
 	private final int WINDOWX = 827;
     private final int WINDOWY = 406;
     BufferedImage restaurantImage;
     private final int DELAY = 10;
     private List<Gui> guis = new ArrayList<Gui>();
-    private static StackRestaurantAnimationPanel sharedInstance = null;
+//    private static StackRestaurantAnimationPanel sharedInstance = null;
     
-    private StackRestaurantAnimationPanel() {
+		
+    public StackRestaurantAnimationPanel(Rectangle2D r, int i, SimCityGui sc) {
+    	super(r, i, sc);
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
         setBackground(Color.lightGray);
@@ -44,12 +45,12 @@ public class StackRestaurantAnimationPanel extends JPanel implements ActionListe
     	
     }
     
-    public static StackRestaurantAnimationPanel sharedInstance() {
-    	if(sharedInstance == null) {
-    		sharedInstance = new StackRestaurantAnimationPanel();
-    	}
-    	return sharedInstance;
-    }
+//    public static StackRestaurantAnimationPanel sharedInstance() {
+//    	if(sharedInstance == null) {
+//    		sharedInstance = new StackRestaurantAnimationPanel(r, i, sc);
+//    	}
+//    	return sharedInstance;
+//    }
 
 	public void actionPerformed(ActionEvent e) {
 		repaint();  //Will have paintComponent called
@@ -81,4 +82,9 @@ public class StackRestaurantAnimationPanel extends JPanel implements ActionListe
     public void removeGui(Gui gui) {
     	guis.remove(gui);
     }
+
+	public void displayBuildingPanel() {
+		myCity.displayBuildingPanel(this);	
+		
+	}
 }

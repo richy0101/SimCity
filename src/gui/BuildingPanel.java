@@ -9,7 +9,7 @@ import java.awt.geom.*;
 public abstract class BuildingPanel extends JPanel implements ActionListener{
 	Rectangle2D myRectangle;
 	String myName;
-	SimCityGui myCity;
+	protected SimCityGui myCity;
 	private final int WINDOWX = 827;
     private final int WINDOWY = 406;
 	

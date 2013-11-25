@@ -26,6 +26,7 @@ import market.MarketCustomerRole;
 import market.MarketRole;
 import restaurant.stackRestaurant.StackCookRole;
 import restaurant.stackRestaurant.StackHostRole;
+import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 
 public class SimCityGui {
 
@@ -102,9 +103,13 @@ public class SimCityGui {
 			else if(b.getName().toLowerCase().contains("bank")) {
 				b.setBuildingPanel(new GUIBank( b, i, this ));
 			}
+			else if(b.getName().toLowerCase().contains("stack")) {
+				b.setBuildingPanel(new StackRestaurantAnimationPanel(b, i, this));
+			}
 			else {//if(b.getName().toLowerCase().contains("stack")) {
 				b.setBuildingPanel(new GUIMarket( b, i, this ));
 			}
+			
 		
 //			b.setMicroAnimationPanel( ma );
 //			b.setBuildingPanel( ma );
