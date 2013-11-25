@@ -7,6 +7,7 @@ import java.util.Map;
 
 import city.PersonAgent;
 import city.gui.BusStop;
+import city.gui.StreetCorner;
 import market.Market;
 import bank.Bank;
 import gui.MacroAnimationPanel;
@@ -142,19 +143,19 @@ public class Directory {
 	Coordinate busStop4Location = new Coordinate(675,356);
 	
 //STREETCORNERS
-	/*
-	private StreetCorners bottomLeft = new StreetCorner("Bottom-Left");
+	
+	private StreetCorner bottomLeft = new StreetCorner("Bottom-Left");
 	Coordinate streetCornerBottomLeftLocation = new Coordinate(135. 325);
 	
-	private StreetCorners bottomRight = new StreetCorner("Bottom-Left");
-	Coordinate streetCornerBottomLeftLocation = new Coordinate(135. 325);
+	private StreetCorner bottomRight = new StreetCorner("Bottom-Right");
+	Coordinate streetCornerBottomRightLocation = new Coordinate(135. 325);
 	
-	private StreetCorners topLeft = new StreetCorner("Bottom-Left");
-	Coordinate streetCornerBottomLeftLocation = new Coordinate(135. 325);
+	private StreetCorner topLeft = new StreetCorner("Top-Left");
+	Coordinate streetCornerTopLeftLocation = new Coordinate(700. 325);
 	
-	private StreetCorners topRight = new StreetCorner("Bottom-Left");
-	Coordinate streetCornerBottomLeftLocation = new Coordinate(135. 325);
-	*/
+	private StreetCorner topRight = new StreetCorner("Top-Right");
+	Coordinate streetCornerTopRightLocation = new Coordinate(700. 105);
+
 	
 		
 //MARKETS
