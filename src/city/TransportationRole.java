@@ -20,6 +20,7 @@ public class TransportationRole extends Role implements Transportation  {
 
 	String destination;
 	String startingLocation;
+	String currentLocation;
 	//String stopDestination; //for bus stop
 	private Semaphore actionComplete = new Semaphore(0,true);
 	CarAgent car;
@@ -68,6 +69,7 @@ public class TransportationRole extends Role implements Transportation  {
 	public void msgAtStop(int stopNumber) {
 		if(stopNumber == finalStopNumber) {
 			state = TransportationState.AtFinalStop;
+			currentLocation= "BusStop"+stopNumber;
 		}
 		stateChanged();
 	}
@@ -79,6 +81,7 @@ public class TransportationRole extends Role implements Transportation  {
 	public boolean pickAndExecuteAnAction() {
 		if (state == TransportationState.AtDestination) {
 			EnterBuilding();
+			return true;
 		}
 		if	(state == TransportationState.JustGotOffBus) {
 			WalkToFinalDestination();
@@ -173,6 +176,7 @@ public class TransportationRole extends Role implements Transportation  {
 	}
 	private void GetOffBus() {
 		bus.msgLeavingBus(this);
+		getPersonAgent().msgTransportFinished(currentLocation);
 		state = TransportationState.JustGotOffBus;
 		stateChanged();
 	}
@@ -187,7 +191,7 @@ public class TransportationRole extends Role implements Transportation  {
 		}
 		
 		state = TransportationState.None;
-		getPersonAgent().msgTransportFinished();
+		getPersonAgent().msgTransportFinished(currentLocation); //should pass in currentlocation as param?
 		//change roles
 	}
 }
