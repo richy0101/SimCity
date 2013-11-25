@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import city.PersonAgent;
-import city.gui.BusStop;
 import market.Market;
 import bank.Bank;
 import gui.MacroAnimationPanel;
+import gui.SimCityGui;
 import home.Apartment;
 import home.Home;
 import restaurant.Restaurant;
@@ -18,7 +18,7 @@ import restaurant.stackRestaurant.*;
 public class Directory {
 	public static Directory sharedInstance;
 	
-	MacroAnimationPanel macroanimationpanel;
+	private SimCityGui cityGui;
 	
 	Directory() {
 		restaurants.add(stackRestaurant);
@@ -214,8 +214,10 @@ public class Directory {
 	public List<Market> getMarkets() {
 		return markets;
 	}
-	public MacroAnimationPanel getMacroAnimationPanel() {
-		return macroanimationpanel;
+	public SimCityGui getCityGui() {
+		return cityGui;
 	}
-
+	public void setCityGui(SimCityGui gui) {
+		this.cityGui = gui;
+	}
 }

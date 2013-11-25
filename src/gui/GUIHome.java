@@ -36,6 +36,8 @@ public class GUIHome extends BuildingPanel {
 	public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
         
+        g2.drawImage(homeImage, 0, 0, null);
+        
         for(Gui gui : guis) {
             if (gui.isPresent()) {
                 gui.updatePosition();
@@ -51,6 +53,10 @@ public class GUIHome extends BuildingPanel {
 	
 	public void addGui(Gui gui) {
 		guis.add(gui);
+	}
+	
+	public void displayBuildingPanel() {
+		myCity.displayBuildingPanel( this );
 	}
 
 }

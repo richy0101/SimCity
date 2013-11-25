@@ -79,7 +79,7 @@ public class TransportationRole extends Role implements Transportation  {
 	}
 	
 	private void GetAVehicle() {
-		if(hasCar) {
+		/**if(hasCar) {
 			//create car gui in mainwindow gui just outside of source
 			car.msgTakeMeHere(destination);
 		}
@@ -88,7 +88,8 @@ public class TransportationRole extends Role implements Transportation  {
 			//have transportationrole gui walk to bus stop
 			
 			//bus.msgINeedARide(destination);
-		}
+		}**/
+		
 		
 		state = TransportationState.InTransit;
 		stateChanged();

@@ -8,6 +8,7 @@ import java.awt.EventQueue;
 import javax.swing.*;
 
 import city.PersonAgent;
+import city.helpers.Directory;
 import agent.Role;
 import bank.BankManagerRole;
 import bank.BankTellerRole;
@@ -33,7 +34,6 @@ public class SimCityGui {
 	private JFrame frame;
 	private Map<String, Role> roles = new HashMap<String, Role>();
 	private HashMap<String, CityCard> cards = new HashMap<String, CityCard>();
-	private MacroAnimationPanel macroAnimationPanel;
 	
 	/**
 	 * Launch the application.
@@ -69,7 +69,7 @@ public class SimCityGui {
 		frame.setBounds(0, 0, 1133, 855);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		macroAnimationPanel = new MacroAnimationPanel(this);
+		MacroAnimationPanel macroAnimationPanel = new MacroAnimationPanel(this);
 		macroAnimationPanel.setBounds(5, 5, 827, 406);
 		frame.getContentPane().add(macroAnimationPanel);
 		
@@ -85,11 +85,12 @@ public class SimCityGui {
 		ArrayList<Building> buildings = macroAnimationPanel.getBuildings();
 		for ( int i=0; i<buildings.size(); i++ ) {
 			Building b = buildings.get(i);
-			BuildingPanel ma = new BuildingPanel( b, i, this );
+			BuildingPanel ma;
+				ma = new GUIHome( b, i, this );
 //			b.setMicroAnimationPanel( ma );
-			b.setBuildingPanel( ma );
+				b.setBuildingPanel( ma );
 //			microAnimationPanel.add( ma, "" + i );	
-			buildingPanels.add( b.myBuildingPanel, "" + i );		
+				buildingPanels.add( b.myBuildingPanel, "" + i );
 		}
 		
 		buildingPanels.setBounds(5, 425, 827, 406);
@@ -347,8 +348,4 @@ public class SimCityGui {
 //			System.out.println("Accessing " + microAnimationPanel.getName() + " for MicroAnimationPanel.");
 //			cardLayout.show(buildingPanels, microAnimationPanel.getName());
 //	}
-	
-	public MacroAnimationPanel getMacroAnimationPanel() {
-		return macroAnimationPanel;
-	}
 }

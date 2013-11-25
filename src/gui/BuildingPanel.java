@@ -5,7 +5,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.geom.*;
-import java.awt.image.BufferedImage;
 
 public abstract class BuildingPanel extends JPanel implements ActionListener{
 	Rectangle2D myRectangle;
@@ -13,7 +12,6 @@ public abstract class BuildingPanel extends JPanel implements ActionListener{
 	SimCityGui myCity;
 	private final int WINDOWX = 827;
     private final int WINDOWY = 406;
-    private final int DELAY = 10;
 	
 	public BuildingPanel( Rectangle2D r, int i, SimCityGui sc) {
 		myRectangle = r;
@@ -32,19 +30,16 @@ public abstract class BuildingPanel extends JPanel implements ActionListener{
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
         setBackground(Color.lightGray);
- 
-    	Timer timer = new Timer(DELAY, this);
-    	timer.start();
 	}
 	
 	public abstract void paintComponent(Graphics g);
+	
+	public abstract void addGui(Gui gui);
 	
 	public String getName() {
 		return myName;
 	}
 
-	public void displayBuildingPanel() {
-		myCity.displayBuildingPanel( this );
-	}
+	public abstract void displayBuildingPanel();
 
 }
