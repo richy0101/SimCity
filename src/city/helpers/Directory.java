@@ -9,6 +9,7 @@ import city.PersonAgent;
 import city.gui.BusStop;
 import market.Market;
 import bank.Bank;
+import gui.MacroAnimationPanel;
 import home.Apartment;
 import home.Home;
 import restaurant.Restaurant;
@@ -16,6 +17,8 @@ import restaurant.stackRestaurant.*;
 
 public class Directory {
 	public static Directory sharedInstance;
+	
+	MacroAnimationPanel macroanimationpanel;
 	
 	Directory() {
 		restaurants.add(stackRestaurant);
@@ -210,6 +213,9 @@ public class Directory {
 	}
 	public List<Market> getMarkets() {
 		return markets;
+	}
+	public MacroAnimationPanel getMacroAnimationPanel() {
+		return macroanimationpanel;
 	}
 
 }
