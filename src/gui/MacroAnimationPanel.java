@@ -142,6 +142,11 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
         Graphics2D g2 = (Graphics2D)g;
         g2.setColor(Color.black);
         
+        //PLACED ONTOP FOR BUILDING REFERENCE PURPOSES
+        for(int i = 0; i < buildings.size(); i++) {
+        	Building b = buildings.get(i);
+        	g2.fill(b);
+        }
         
         g2.drawImage(cityImage, 0, 0, null);
         
@@ -161,13 +166,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
         drawComponents(g);
         
         g2.drawImage(cityImageTop, 0, 0, null);
-        
-        //paint all building squares black
-        //PLACED ONTOP FOR BUILDING REFERENCE PURPOSES
-        for(int i = 0; i < buildings.size(); i++) {
-        	Building b = buildings.get(i);
-        	g2.fill(b);
-        }
+
         
     }
     

@@ -6,6 +6,7 @@ public class Building extends Rectangle2D.Double {
 	String buildingName;
 	BuildingPanel myBuildingPanel;
 	MicroAnimationPanel myMicroAnimationPanel;
+	String buildingType;
 
 	public Building( int x, int y, int width, int height ) {
 		super( x, y, width, height );
@@ -20,6 +21,10 @@ public class Building extends Rectangle2D.Double {
 		buildingName = name;
 	}
 	
+	public String getBuildingType() {
+		return buildingType;
+	}
+	
 	public String getName() {
 		return buildingName;
 	}
@@ -30,5 +35,8 @@ public class Building extends Rectangle2D.Double {
 	
 	public void setMicroAnimationPanel( MicroAnimationPanel ma) {
 		myMicroAnimationPanel = ma;
+	}
+	public void addGui(Gui gui) {
+		myBuildingPanel.addGui(gui);
 	}
 }
