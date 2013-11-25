@@ -20,8 +20,8 @@ public class MarketCustomerGui implements Gui {
 	private enum state {NoCommand, Entering, Leaving};
 	private state command = state.NoCommand;
 	
-	public static final int xCounter = 103;
-	public static final int yCounter = 346;
+	public static final int xCounter = 100;
+	public static final int yCounter = 237;
 	public static final int xStart = 833;
 	public static final int yStart = 359;
 	

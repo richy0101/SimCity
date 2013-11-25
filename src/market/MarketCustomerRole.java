@@ -21,6 +21,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	enum Event {WantsGroceries, GotBill, TurnedAway, GotGroceries};
 	State roleState;
 	Event roleEvent;
+	//BufferedImage customerImage;
 	
 	Market market;
 	String myLocation;
