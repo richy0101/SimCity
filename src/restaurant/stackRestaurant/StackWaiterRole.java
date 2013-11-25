@@ -185,7 +185,6 @@ public class StackWaiterRole extends Role implements Waiter {
 	
 	private void waiterFree() {
 //		host.msgWaiterFree(this);
-//		can you see this?
 	}
 	
 	private void takeOrderFromCustomer(MyCustomer customer) {
