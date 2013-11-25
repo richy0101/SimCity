@@ -11,6 +11,7 @@ import java.util.Random;
 import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Semaphore;
 
 import restaurant.Restaurant;
 import restaurant.stackRestaurant.StackCustomerRole;
@@ -66,6 +67,9 @@ public class PersonAgent extends Agent implements Person {
 	
 	//bank information
 	int accountNumber;
+	
+	//Animation Semaphores
+	private Semaphore actionComplete = new Semaphore(0,true);
 	
 	public class PersonTimerTask extends TimerTask {
 		PersonAgent p;
@@ -150,6 +154,14 @@ public class PersonAgent extends Agent implements Person {
 		inventory.add(initialFood);
 		//Set up gui
 		personGui = new PersonGui(this);
+		homeName = "House1";
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == homeName) {
+				print("Adding GUI");
+				b.addGui(personGui);
+			}
+		}
 		startThread();
 	}
 	
@@ -198,6 +210,9 @@ public class PersonAgent extends Agent implements Person {
 	/**
 	 * Messages
 	 */
+	public void msgActionComplete() {
+		actionComplete.release();
+	}
 	public void msgWakeUp() {
 		print("msgWakeUp received - Setting state to WantFood.");
 		hasWorked = false;
@@ -326,17 +341,22 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private boolean evaluateStatus() {
 		// TODO Auto-generated method stub
-		if(funds <= 100.00) {
+		if (personState == PersonState.Cooking || personState == PersonState.Eating) {
+			return false;
+		}
+		else if(funds <= 100.00) {
 			personState = PersonState.WantsToWithdraw;
 			return true;
 		}
 		else if(checkInventory() == false) {
 			personState = PersonState.NeedsToGoMarket;
+			return true;
 		}
-		else {
-			personState = PersonState.Idle;
+		else if(personState == PersonState.Idle){
 			personGui.DoSleep();
+			return false;
 		}
+		personGui.DoSleep();
 		return false;
 	}
 	/*private void payRent() {
@@ -363,6 +383,7 @@ public class PersonAgent extends Agent implements Person {
 		print("Action cookHomeFood - State set to cooking " + inventory.get(desiredFood).type + ".");
 		personState = PersonState.Cooking;
 		personGui.DoCook();
+		actionComplete.acquireUninterruptibly();
 		personTimer.schedule(new PersonTimerTask(this) {
 			public void run() {
 				p.msgCookingDone();
@@ -384,6 +405,7 @@ public class PersonAgent extends Agent implements Person {
 		Random rng = new Random();
 		desiredFood = rng.nextInt();
 		desiredFood = desiredFood % 4;
+		desiredFood = 1;
 		boolean cook; //cooks at home at the moment
 		if (inventory.get(desiredFood).stock > 0) {
 			cook = true;
@@ -402,13 +424,15 @@ public class PersonAgent extends Agent implements Person {
 	private void eatFood() {
 		print("Action eatFood - State set to Eating at home.");
 		personState = PersonState.Eating;
+		personGui.DoEat();
+		actionComplete.acquireUninterruptibly();
 		personTimer.schedule(new PersonTimerTask(this) {
 			public void run() {
 				p.msgDoneEating();
 			}
 		},
 		6000);//time for Eating
-		personGui.DoEat();
+
 	}
 	private void goWork() {
 		print("Action goWork - hasWorked = true. Going to work.");

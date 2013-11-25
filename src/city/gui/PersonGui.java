@@ -22,13 +22,15 @@ public class PersonGui implements Gui {
 	BufferedImage personRight;
 	BufferedImage personUp;
 	BufferedImage personDown;
+	public enum CurrentAction {Cooking, Eating, Transition, Idle};
+	CurrentAction currentAction = CurrentAction.Idle;
 	public PersonGui(PersonAgent agent) {
-		xBed = 35;
-		yBed = 165;
+		xBed = 5;
+		yBed = 135;
 		xKitchen = 695;
 		yKitchen = 160;
 		xTable = 425;
-		yTable = 300;
+		yTable = 250;
 		xPos = xBed;
 		yPos = yBed;
 		xDestination = xBed;
@@ -47,19 +49,34 @@ public class PersonGui implements Gui {
 	
 	@Override
 	public void updatePosition() {
-		if (xPos < xDestination)
-			xPos++;
-		else if (xPos > xDestination)
-			xPos--;
-
-		if (yPos < yDestination)
-			yPos++;
-		else if (yPos > yDestination)
-			yPos--;
+		//System.out.println("Updating Pos.");
+		if (xPos < xDestination) {
+			xPos+= 5;
+		}
+		else if (xPos > xDestination) {
+			xPos-= 5;
+		}
+		
+		if (yPos < yDestination) {
+			yPos+= 5;
+		}
+		else if (yPos > yDestination) {
+			yPos-= 5;
+		}
+		
+		if(xPos == xKitchen && yPos == yKitchen && currentAction == CurrentAction.Cooking) {
+			currentAction = CurrentAction.Transition;
+			agent.msgActionComplete();
+		}
+		if(xPos == xTable && yPos == yTable && currentAction == CurrentAction.Eating) {
+			currentAction = CurrentAction.Transition;
+			agent.msgActionComplete();
+		}
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
+		//System.out.println("Updating Pos.");
 		if (xPos < xDestination) {
 			g.drawImage(personRight, xPos, yPos, null);
 		}
@@ -73,26 +90,28 @@ public class PersonGui implements Gui {
 			g.drawImage(personDown, xPos, yPos, null);
 		}
 		else if (xPos == xBed && yPos == yBed) {
-			g.drawImage(personUp, xPos, yPos, null);
+			g.drawImage(personDown, xPos, yPos, null);
 		}
 		else if (xPos == xTable && yPos == yTable) {
 			g.drawImage(personDown, xPos, yPos, null);
 		}
 		else if (xPos == xKitchen && yPos == yKitchen) {
-			g.drawImage(personUp, xPos, yPos, null);
+			g.drawImage(personDown , xPos, yPos, null);
 		}
 	}
 
 	@Override
 	public boolean isPresent() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 	public void DoCook() {
+		currentAction = CurrentAction.Cooking;
 		xDestination = xKitchen;
 		yDestination = yKitchen;
 	}
 	public void DoEat() {
+		currentAction = CurrentAction.Eating;
 		xDestination = xTable;
 		yDestination = yTable;
 	}

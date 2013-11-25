@@ -17,7 +17,7 @@ public class GUIHome extends BuildingPanel {
 	
 	List<Gui> guis = new ArrayList<Gui>();
     BufferedImage homeImage;
-    private final int DELAY = 10;
+    private final int DELAY = 20;
 
 	public GUIHome( Rectangle2D r, int i, SimCityGui sc) {
 		super(r, i, sc);
