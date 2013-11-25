@@ -138,9 +138,11 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
 	public void actionPerformed(ActionEvent e) {
 		repaint();  //Will have paintComponent called
 		this.repaint();
-//		for(Building b : buildings) {
-//			b.getBuildingPanel().repaint();
-//		}
+		for(Building b : this.buildings) {
+			if(b.hasBuildingPanel()) {
+				b.getBuildingPanel().updateGui();
+			}
+		}
 	}
 
     public void paintComponent(Graphics g) {

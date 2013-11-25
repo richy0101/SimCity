@@ -33,6 +33,13 @@ public class Building extends Rectangle2D.Double {
 		myBuildingPanel = bp;
 	}
 	
+	public boolean hasBuildingPanel() {
+		if(myBuildingPanel != null)
+			return true;
+		else
+			return false;
+	}
+	
 	public BuildingPanel getBuildingPanel() {
 		return myBuildingPanel;
 	}

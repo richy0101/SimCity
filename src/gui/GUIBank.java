@@ -55,6 +55,13 @@ public class GUIBank extends BuildingPanel {
         }
 	}
 	
+	public void updateGui() {
+        for(Gui gui : guis) {
+            if (gui.isPresent())
+                gui.updatePosition();
+        }
+	}
+	
 	public void addGui(Gui gui) {
 		guis.add(gui);
 	}

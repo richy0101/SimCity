@@ -36,6 +36,8 @@ public abstract class BuildingPanel extends JPanel implements ActionListener{
 	
 	public abstract void addGui(Gui gui);
 	
+	public abstract void updateGui();
+	
 	public String getName() {
 		return myName;
 	}
