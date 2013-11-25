@@ -24,12 +24,12 @@ public class BusAgent extends Agent implements Bus {
 	
 	public enum busState
 	{inTransit, atStop}
-	//public busState currentState = busState.atStop;
-	public busState currentState = busState.inTransit;
+	public busState currentState = busState.atStop;
+	//public busState currentState = busState.inTransit;
 	
 	public enum Station
 	{Stop1, Stop2, Stop3, Stop4}
-	public Station lastStation= Station.Stop1;
+	public Station lastStation = Station.Stop1;
 	
 	public List<MyPassenger> passengersOnBoard
 	= Collections.synchronizedList(new ArrayList<MyPassenger>());
@@ -162,27 +162,32 @@ public class BusAgent extends Agent implements Bus {
 	 * @param myDestination
 	 */
 		private void stopBus(){
+			print("Bus is stopping.");
 			busGui.DoStopDriving();
 			event=Event.stopped;
 		}
 		
 		private void alertPassengersToAlightBus(){
 			if((lastStation == Station.Stop1) && (state!=State.driving)){
+				print("This is bus stop one.");
 				for(MyPassenger person: passengersOnBoard){
 					person.passenger.msgAtStop(1);
 				}
 			}
 			if((lastStation == Station.Stop2) && (state!=State.driving)){
+				print("This is bus stop two.");
 				for(MyPassenger person: passengersOnBoard){
 					person.passenger.msgAtStop(2);
 				}
 			}
 			if((lastStation == Station.Stop3) && (state!=State.driving)){
+				print("This is bus stop three.");
 				for(MyPassenger person: passengersOnBoard){
 					person.passenger.msgAtStop(3);
 				}
 			}
 			if((lastStation == Station.Stop4) && (state!=State.driving)){
+				print("This is bus stop four");
 				for(MyPassenger person: passengersOnBoard){
 					person.passenger.msgAtStop(4);
 				}
@@ -191,6 +196,7 @@ public class BusAgent extends Agent implements Bus {
 		}
 		
 		private void waitForPassengersToAlight(){
+			print("Unloading passengers.");
 			timer.schedule(new TimerTask() {
 				public void run() {
 					event=Event.passengersAlighted;
@@ -200,6 +206,7 @@ public class BusAgent extends Agent implements Bus {
 		}
 		
 		private void alertPassengersToBoardBus(){
+			print("Passengers boarding bus.");
 			if((lastStation == Station.Stop1) && (state!=State.driving)){
 				for(TransportationRole person: BusHelper.sharedInstance().getWaitingPassengersAtStop1()){
 					person.msgGetOnBus(this);
@@ -224,6 +231,7 @@ public class BusAgent extends Agent implements Bus {
 		}
 		
 		private void waitForPassengersToBoard(){
+			print("Loading passengers.");
 			timer.schedule(new TimerTask() {
 				public void run() {
 					event=Event.passengersBoarded;
@@ -234,6 +242,7 @@ public class BusAgent extends Agent implements Bus {
 		
 		private void keepDriving(){
 			//doGoTo(myDestination); //sets destination in carGui
+			print("Bus is driving.");
 			doKeepDriving();
 			try {
 				driving.acquire(); //to ensure that the gui is uninterrupted on the way
@@ -254,11 +263,4 @@ public class BusAgent extends Agent implements Bus {
 		public void setGui(BusGui gui){
 			busGui = gui;
 		}
-		public BusGui getGui() {
-			return busGui;
-		}
-
-
-
-
 }

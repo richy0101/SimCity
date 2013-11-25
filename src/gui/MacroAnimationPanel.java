@@ -150,10 +150,12 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
         g2.setColor(Color.black);
         
         //PLACED ONTOP FOR BUILDING REFERENCE PURPOSES
+        
         for(int i = 0; i < buildings.size(); i++) {
         	Building b = buildings.get(i);
         	g2.fill(b);
         }
+        
         
         g2.drawImage(cityImage, 0, 0, null);
         

@@ -128,6 +128,19 @@ public class BusGui extends CityComponent implements Gui {
 	public void draw(Graphics2D g) {
 		// TODO Auto-generated method stub
 		
+		//if (xPos < xDestination) {
+			g.drawImage(busLeftImage, xPos, yPos, null);
+		/*}
+		else if (xPos > xDestination) {
+			g.drawImage(busRightImage,  xPos, yPos, null);
+		}
+		else if (yPos < yDestination) {
+			g.drawImage(busUpImage, xPos, yPos, null);
+		}
+		else if (yPos > yDestination) {
+			g.drawImage(busDownImage, xPos, yPos, null);
+		}*/
+		/*
 		//counter clockwise
 		if(yPos==BottomRow)
 			g.drawImage(busRightImage, xPos, yPos, null);
@@ -137,7 +150,7 @@ public class BusGui extends CityComponent implements Gui {
 			g.drawImage(busLeftImage, xPos, yPos, null);
 		else if (xPos==LeftCol)
 			g.drawImage(busDownImage, xPos, yPos, null);
-
+		*/
 	}
 
 	@Override
