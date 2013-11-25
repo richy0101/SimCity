@@ -21,6 +21,12 @@ public class TransportationGui implements Gui {
 	BufferedImage personRight;
 	BufferedImage personUp;
 	BufferedImage personDown;
+
+	BufferedImage busLeft;
+	BufferedImage busRight;
+	BufferedImage busUp;
+	BufferedImage busDown;
+	
 	public enum CurrentAction {Cooking, Eating, Transition, Idle};
 	CurrentAction currentAction = CurrentAction.Idle;
 	public TransportationGui(int startX, int startY, int destX, int destY) {
@@ -29,6 +35,7 @@ public class TransportationGui implements Gui {
 		yPos = startY;
 		xDestination = destX;
 		yDestination = destY;
+		
 		try {
         	personLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
         	personRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));
@@ -38,6 +45,17 @@ public class TransportationGui implements Gui {
         catch(IOException e) {
         	System.out.println("Error w/ Person assets");
         }
+		
+		try {
+        	busLeft = ImageIO.read(getClass().getResource("busLeft.png"));
+        	busRight = ImageIO.read(getClass().getResource("busRight.png"));
+        	busUp = ImageIO.read(getClass().getResource("busUp.png"));
+        	busDown = ImageIO.read(getClass().getResource("busDown.png"));
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ Person assets");
+        }
+		
 		this.agent = agent;
 	}
 	
@@ -83,14 +101,18 @@ public class TransportationGui implements Gui {
 		else if (yPos > yDestination) {
 			g.drawImage(personDown, xPos, yPos, null);
 		}
-		else if (xPos == xBed && yPos == yBed) {
-			g.drawImage(personDown, xPos, yPos, null);
+		
+		if (xPos < xDestination) {
+			g.drawImage(busRight, xPos, yPos, null);
 		}
-		else if (xPos == xTable && yPos == yTable) {
-			g.drawImage(personDown, xPos, yPos, null);
+		else if (xPos > xDestination) {
+			g.drawImage(busLeft,  xPos, yPos, null);
 		}
-		else if (xPos == xKitchen && yPos == yKitchen) {
-			g.drawImage(personDown , xPos, yPos, null);
+		else if (yPos < yDestination) {
+			g.drawImage(busUp, xPos, yPos, null);
+		}
+		else if (yPos > yDestination) {
+			g.drawImage(busDown, xPos, yPos, null);
 		}
 	}
 

@@ -169,7 +169,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
     //actions-----------------------------------------------------------------------------
 	private void GotToWork(){
-		manager.setTeller(this);
+		//manager.setTeller(this);
 	}
 	private void OfferAssistance(MyCustomer account) {
 		print("What do you need help with?");

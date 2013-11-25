@@ -33,8 +33,8 @@ public class MarketGui implements Gui {
 	public static final int yCounter = 170;
 	public static final int xStart = 118;
 	public static final int yStart = 170;
-	public static final int xShelf = 100;
-	public static final int yShelf = 100;
+	public static final int xShelf = 39;
+	public static final int yShelf = 46;
 	
 	
 	public MarketGui(MarketRole mr) {
@@ -94,17 +94,6 @@ public class MarketGui implements Gui {
 		else if (yPos > yDestination) {
 			g.drawImage(marketRoleDown, xPos, yPos, null);
 		}
-		/*
-		else if (xPos == xBed && yPos == yBed) {
-			g.drawImage(marketRoleDown, xPos, yPos, null);
-		}
-		else if (xPos == xTable && yPos == yTable) {
-			g.drawImage(marketRoleDown, xPos, yPos, null);
-		}
-		else if (xPos == xKitchen && yPos == yKitchen) {
-			g.drawImage(marketRoleUp , xPos, yPos, null);
-		}
-		*/
 	}
 
 	@Override

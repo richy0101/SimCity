@@ -26,7 +26,10 @@ public class BusGui implements Gui {
 	int TopRow = 105;
 	int BottomRow = 325;
 	int LeftCol = 135;
-	int RightCol = 700;
+	int RightCol = 700;	
+	
+	int xStart = TopRow;
+	int yStart = LeftCol;
 	
 	private BusAgent agent = null;
 	
@@ -73,6 +76,11 @@ public class BusGui implements Gui {
 	
 	public BusGui(BusAgent agent) {
         this.agent = agent;
+        
+        xPos = xStart;
+        yPos = yStart;
+        xDestination = xStart;
+        yDestination = yStart;
         
         try {
         	busLeftImage = ImageIO.read(getClass().getResource("busLeft.png"));

@@ -120,7 +120,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     	buildings.add(bank);
     	
     //BUSES
-    	
+    	BusAgent bus = new BusAgent();
     	
     	addMouseListener(this);
     	

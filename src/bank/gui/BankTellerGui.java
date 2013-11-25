@@ -7,6 +7,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -15,70 +17,43 @@ import bank.*;
 public class BankTellerGui implements Gui {
     
 	private BankTellerRole agent = null;
-    
-    boolean atDestination = false;
+	int tellerNum;
     
     public int xPos = 0, yPos = 0;//default teller position
     public int xDestination = 0, yDestination = 0;//default start position
     
-    public static final int xTeller123 = 0;
-	public static final int xTeller456 = 780;
-	public static final int yTeller14 = 80;
-	public static final int yTeller25 = 156;
-	public static final int yTeller36 = 239;
+    private static final int xManager = 400, yManager = 68;
+	private static final int xExit = 100, yExit = 100;
+	BufferedImage customerImage;
+	
+	private static final List<Point> tellerBench = new ArrayList<Point>() {{
+		add(new Point(36, 106));
+		add(new Point(36, 182));
+		add(new Point(36, 265));
+		add(new Point(778, 106));
+		add(new Point(778, 182));
+		add(new Point(778, 265));
+	}};
 	
 	
 	BufferedImage personLeft;
 	BufferedImage personRight;
 	
-	public BankTellerGui( int tellerNum) {
-        //this.agent = agent;
+	public BankTellerGui(BankTellerRole tellerAgent, int tellerNum) {
+		this.tellerNum = tellerNum;
+		agent = tellerAgent;
+		xPos = 450;
+		yPos = 450;
+		xDestination = 450;
+		yDestination = 450;
         try {
-        	personLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
-        	personRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));
+        	personLeft = ImageIO.read(getClass().getResource("team02/src/city/gui/GUIPersonLeft.png"));
+        	personRight = ImageIO.read(getClass().getResource("team02/src/city/gui/GUIPersonRight.png"));
         }
         catch(IOException e) {
         	System.out.println("Error w/ Person assets");
         }
-        switch(tellerNum%6){
-            case 0:
-                xPos = xTeller123;
-                yPos = yTeller14;
-                xDestination = xTeller123;
-                yDestination = yTeller14;
-                break;
-            case 1:
-                xPos = xTeller123;
-                yPos = yTeller25;
-                xDestination = xTeller123;
-                yDestination = yTeller25;
-                break;
-            case 2:
-                xPos = xTeller123;
-                yPos = yTeller36;
-                xDestination = xTeller123;
-                yDestination = yTeller36;
-                break;
-            case 3:
-                xPos = xTeller456;
-                yPos = yTeller14;
-                xDestination = xTeller456;
-                yDestination = yTeller14;
-                break;
-            case 4:
-                xPos = xTeller456;
-                yPos = yTeller25;
-                xDestination = xTeller456;
-                yDestination = yTeller25;
-                break;
-            case 5:
-                xPos = xTeller456;
-                yPos = yTeller36;
-                xDestination = xTeller456;
-                yDestination = yTeller36;
-                break;
-                
-        }
+
     }
 	
 	public void setAgent(BankTellerRole agent){
@@ -103,7 +78,6 @@ public class BankTellerGui implements Gui {
     
 	@Override
 	public boolean isPresent() {
-		// TODO Auto-generated method stub
 		return true;
 	}
     
