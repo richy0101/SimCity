@@ -23,13 +23,15 @@ public class WaiterGui implements Gui {
     
     //827 x 406 y
     
-    private int xHome = 413, yHome = 20;
+    private static final int xHome = 413, yHome = 20;
     private int xPos = 850, yPos = 450;//default waiter position
     private int xDestination = 850, yDestination = 450;//default start position
     private int xTable = -20, yTable = -20;
-    private int xCook = 485, yCook = 70;
-    private int xBreak = 413, yBreak = 22;
-    private int WAITINGX = 725, WAITINGY = 333;
+    private static final int xCook = 485, yCook = 70;
+    private static final int xBreak = 413, yBreak = 22;
+    private static final int WAITINGX = 725, WAITINGY = 333;
+    private static final int xCashier = 460, yCashier = 34;
+	private static final int xExit = 850, yExit = 450;
   
     
     private static final int PERSONSIZEX = 32, PERSONSIZEY = 40;
@@ -160,4 +162,16 @@ public class WaiterGui implements Gui {
     public int getYPos() {
         return yPos;
     }
+
+	public void DoExitRestaurant() {
+		xDestination = xExit;
+    	yDestination = yExit;
+		
+	}
+
+	public void DoGoToPaycheck() {
+		xDestination = xCashier;
+    	yDestination = yCashier;
+		
+	}
 }
