@@ -683,12 +683,4 @@ public class PersonAgent extends Agent implements Person {
 	public String getTransportationMethod() {
 		return transMethod.toString();
 	}
-
-	@Override
-	public void clearGroceries() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 }
