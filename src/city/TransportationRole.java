@@ -169,7 +169,7 @@ public class TransportationRole extends Role implements Transportation  {
 		guiToStop = new TransportationGui(startX, startY, startStopX, startStopY);
 		Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToStop);
 		print("adding transport gui to macro");
-		actionComplete.acquireUninterruptibly();
+//		actionComplete.acquireUninterruptibly();
 		BusHelper.sharedInstance().addWaitingPerson(this, startStopNumber);
 		state = TransportationState.WaitingForBus;
 		stateChanged();
