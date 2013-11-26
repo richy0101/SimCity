@@ -129,6 +129,7 @@ public class TransportationRole extends Role implements Transportation  {
 	private void GetOnBus() {
 		print("Getting on bus");
 //		Directory.sharedInstance().getCityGui().getMacroAnimationPanel().removeGui(guiToStop);
+		bus.msgBoardingBus(this);
 		BusHelper.sharedInstance().removeWaitingPerson(this, finalStopNumber); 
 		state = TransportationState.OnBus;
 		stateChanged();
