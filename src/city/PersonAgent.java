@@ -181,8 +181,6 @@ public class PersonAgent extends Agent implements Person {
 		this.funds = initialFunds;
 		String vehicleStatusNoSpace = vehicleStatus.replaceAll(" ", "");
 		this.transMethod = TransportationMethod.valueOf(vehicleStatusNoSpace);
-		String housingStatusNoSpace = housingStatus.replaceAll(" ", "");
-		this.houseState = HouseState.valueOf(housingStatusNoSpace);
 		personPosition = PersonPosition.AtHome;
 		personState = PersonState.Idle;
 		hungerLevel = 0;
