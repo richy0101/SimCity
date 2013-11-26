@@ -17,13 +17,16 @@ public class BusTest extends TestCase{
 	
 	public void setUp() throws Exception{
 		super.setUp();		
-		bus = new BusAgent();
+		bus = new BusAgent(1);
 		bus.state= State.driving;
 		passenger1= new MockTransportation("Person 1");
 		passenger2= new MockTransportation("Person 2");
 		passenger3= new MockTransportation("Person 3");		
 	}	
 	
+	/*
+	 * Test for one passenger's full ride to the next stop.
+	 */
 	public void testOneFullPassenger(){
 	//preconditions: 
 		assertTrue("should be no passengers at stop 1, but there is, ", BusHelper.sharedInstance().getWaitingPassengersAtStop1().isEmpty());
@@ -49,6 +52,7 @@ public class BusTest extends TestCase{
 	//Step 4: waiting for passengers to alight
 		assertTrue("Bus's scheduler should have returned true (one action to do), but didn't.", bus.pickAndExecuteAnAction());
 		assertTrue("bus state should record waitForAlighting after running scheduler", bus.state==State.waitForAlighting);
+		bus.msgChangeEventToPassengersAlighted();
 		assertTrue("bus event should record passengersAlighted after running scheduler", bus.event==Event.passengersAlighted);
 		assertTrue("passengersOnBoard should be empty, but isn't", bus.passengersOnBoard.isEmpty());
 		
@@ -61,6 +65,7 @@ public class BusTest extends TestCase{
 	//Step 6: passenger boards bus
 		assertTrue("Bus's scheduler should have returned true (one action to do), but didn't.", bus.pickAndExecuteAnAction());
 		assertTrue("bus state should record waitForBoarding after running scheduler", bus.state==State.waitForBoarding);
+		bus.msgChangeEventToPassengersBoarded();
 		assertTrue("bus event should record passengersBoarded after running scheduler", bus.event==Event.passengersBoarded);
 		bus.msgBoardingBus(passenger1);
 		BusHelper.sharedInstance().getWaitingPassengersAtStop1().remove(passenger1);
@@ -92,11 +97,14 @@ public class BusTest extends TestCase{
 		bus.msgLeavingBus(passenger1);
 		bus.msgLeavingBus(passenger2);
 		bus.msgLeavingBus(passenger3);
+		bus.msgChangeEventToPassengersAlighted();
 		assertTrue("bus event should record passengersAlighted after running scheduler", bus.event==Event.passengersAlighted);
 		assertTrue("passengersOnBoard should be empty, but has "+ bus.passengersOnBoard.size(), bus.passengersOnBoard.isEmpty());
 	}
 	
-	
+	/* 
+	 * Test for multiple passengers leaving from the same stop to the same destination
+	 */
 	public void testMultiplePassengersSameStopAndDestination(){
 		//preconditions: 
 				assertTrue("should be no passengers at stop 1, but there is, ", BusHelper.sharedInstance().getWaitingPassengersAtStop1().isEmpty());
@@ -124,6 +132,7 @@ public class BusTest extends TestCase{
 			//Step 4: waiting for passengers to alight
 				assertTrue("Bus's scheduler should have returned true (one action to do), but didn't.", bus.pickAndExecuteAnAction());
 				assertTrue("bus state should record waitForAlighting after running scheduler", bus.state==State.waitForAlighting);
+				bus.msgChangeEventToPassengersAlighted();
 				assertTrue("bus event should record passengersAlighted after running scheduler", bus.event==Event.passengersAlighted);
 				assertTrue("passengersOnBoard should be empty, but isn't", bus.passengersOnBoard.isEmpty());
 				
@@ -136,6 +145,7 @@ public class BusTest extends TestCase{
 			//Step 6: passenger boards bus
 				assertTrue("Bus's scheduler should have returned true (one action to do), but didn't.", bus.pickAndExecuteAnAction());
 				assertTrue("bus state should record waitForBoarding after running scheduler", bus.state==State.waitForBoarding);
+				bus.msgChangeEventToPassengersBoarded();
 				assertTrue("bus event should record passengersBoarded after running scheduler", bus.event==Event.passengersBoarded);
 				bus.msgBoardingBus(passenger1);
 				bus.msgBoardingBus(passenger2);
@@ -171,14 +181,19 @@ public class BusTest extends TestCase{
 				bus.msgLeavingBus(passenger1);
 				bus.msgLeavingBus(passenger2);
 				bus.msgLeavingBus(passenger3);
+				bus.msgChangeEventToPassengersAlighted();
 				assertTrue("bus event should record passengersAlighted after running scheduler", bus.event==Event.passengersAlighted);
 				assertTrue("passengersOnBoard should be empty, but has "+ bus.passengersOnBoard.size(), bus.passengersOnBoard.isEmpty());
 	}
 	
-	//at Stop1, p1 gets on.
-	//at Stop2, p2 gets on.
-	//at Stop3, p3 gets on, p1 gets off.
-	//at Stop4, p2 and p4 get off.
+	/* Test for multiple passengers coming from different stops and going to different destinations. Includes 2 people who start
+	 * at different stops and end at the same stop.
+	 * at Stop1, p1 gets on.
+	 * at Stop2, p2 gets on. 
+	 * at Stop3, p3 gets on, p1 gets off.
+	 * at Stop4, p2 and p4 get off.
+	 */
+	
 	public void testMultiplePassengersDifferentStopsAndDestinations(){
 	//preconditions: 
 		assertTrue("should be no passengers at stop 1, but there is, ", BusHelper.sharedInstance().getWaitingPassengersAtStop1().isEmpty());
@@ -210,6 +225,7 @@ public class BusTest extends TestCase{
 	//Step 4: waiting for passengers to alight
 		assertTrue("Bus's scheduler should have returned true (one action to do), but didn't.", bus.pickAndExecuteAnAction());
 		assertTrue("bus state should record waitForAlighting after running scheduler", bus.state==State.waitForAlighting);
+		bus.msgChangeEventToPassengersAlighted();
 		assertTrue("bus event should record passengersAlighted after running scheduler", bus.event==Event.passengersAlighted);
 		assertTrue("passengersOnBoard should be empty, but isn't", bus.passengersOnBoard.isEmpty());
 		
@@ -222,6 +238,7 @@ public class BusTest extends TestCase{
 	//Step 6: passenger boards bus
 		assertTrue("Bus's scheduler should have returned true (one action to do), but didn't.", bus.pickAndExecuteAnAction());
 		assertTrue("bus state should record waitForBoarding after running scheduler", bus.state==State.waitForBoarding);
+		bus.msgChangeEventToPassengersBoarded();
 		assertTrue("bus event should record passengersBoarded after running scheduler", bus.event==Event.passengersBoarded);
 		bus.msgBoardingBus(passenger1);
 		BusHelper.sharedInstance().getWaitingPassengersAtStop1().remove(passenger1);
@@ -250,6 +267,7 @@ public class BusTest extends TestCase{
 	//Step 10: waiting for passengers to alight
 		assertTrue("Bus's scheduler should have returned true (one action to do), but didn't.", bus.pickAndExecuteAnAction());
 		assertTrue("bus state should record waitForAlighting after running scheduler", bus.state==State.waitForAlighting);
+		bus.msgChangeEventToPassengersAlighted();
 		assertTrue("bus event should record passengersAlighted after running scheduler", bus.event==Event.passengersAlighted);
 		assertEquals("passengersOnBoard should be 1, but has "+ bus.passengersOnBoard.size(), 1, bus.passengersOnBoard.size());
 	
@@ -262,6 +280,7 @@ public class BusTest extends TestCase{
 	//Step 12: passenger boards bus
 		assertTrue("Bus's scheduler should have returned true (one action to do), but didn't.", bus.pickAndExecuteAnAction());
 		assertTrue("bus state should record waitForBoarding after running scheduler", bus.state==State.waitForBoarding);
+		bus.msgChangeEventToPassengersBoarded();
 		assertTrue("bus event should record passengersBoarded after running scheduler", bus.event==Event.passengersBoarded);
 		bus.msgBoardingBus(passenger2);
 		BusHelper.sharedInstance().getWaitingPassengersAtStop2().remove(passenger2);
@@ -288,6 +307,7 @@ public class BusTest extends TestCase{
 	//Step 16: waiting for passengers to alight
 		assertTrue("Bus's scheduler should have returned true (one action to do), but didn't.", bus.pickAndExecuteAnAction());
 		assertTrue("bus state should record waitForAlighting after running scheduler", bus.state==State.waitForAlighting);
+		bus.msgChangeEventToPassengersAlighted();
 		assertTrue("bus event should record passengersAlighted after running scheduler", bus.event==Event.passengersAlighted);
 		bus.msgLeavingBus(passenger1);
 		assertEquals("passengersOnBoard should be 1, but has "+ bus.passengersOnBoard.size(), 1, bus.passengersOnBoard.size());
@@ -301,6 +321,7 @@ public class BusTest extends TestCase{
 	//Step 18: passenger boards bus
 		assertTrue("Bus's scheduler should have returned true (one action to do), but didn't.", bus.pickAndExecuteAnAction());
 		assertTrue("bus state should record waitForBoarding after running scheduler", bus.state==State.waitForBoarding);
+		bus.msgChangeEventToPassengersBoarded();
 		assertTrue("bus event should record passengersBoarded after running scheduler", bus.event==Event.passengersBoarded);
 		bus.msgBoardingBus(passenger3);
 		BusHelper.sharedInstance().getWaitingPassengersAtStop1().remove(passenger3);
@@ -327,6 +348,7 @@ public class BusTest extends TestCase{
 	//Step 22: waiting for passengers to alight
 		assertTrue("Bus's scheduler should have returned true (one action to do), but didn't.", bus.pickAndExecuteAnAction());
 		assertTrue("bus state should record waitForAlighting after running scheduler", bus.state==State.waitForAlighting);
+		bus.msgChangeEventToPassengersAlighted();
 		assertTrue("bus event should record passengersAlighted after running scheduler", bus.event==Event.passengersAlighted);
 		bus.msgLeavingBus(passenger2);
 		bus.msgLeavingBus(passenger3);
