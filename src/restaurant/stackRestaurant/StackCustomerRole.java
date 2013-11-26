@@ -96,7 +96,6 @@ public class StackCustomerRole extends Role implements Customer {
 	// Messages
 	@Override
 	public void msgGotHungry() {//from animation
-		Do("I'm hungry");
 		event = AgentEvent.gotHungry;
 		stateChanged();
 	}
@@ -259,7 +258,7 @@ public class StackCustomerRole extends Role implements Customer {
 			for(Menu.Food food : Menu.sharedInstance().getMenu()) {
 				if(availableFunds > food.getPrice() 
 						&& Menu.sharedInstance().getInventoryStock(food.getName())) {
-					Do("Ordering food");
+					print("Ordering food");
 					choice = food.getName();
 					waiter.msgGiveOrder(this, choice);
 					updateGui(choice.substring(0, 2) + "?");
@@ -268,13 +267,13 @@ public class StackCustomerRole extends Role implements Customer {
 			}
 			state = AgentState.Paid;
 			event = AgentEvent.donePaying;
-			Do("Too expensive, going home");
+			print("Too expensive, going home");
 		}
 		else {
 			for(int i = 0; i <=4; i++) {
 				choice = Menu.sharedInstance().getMenu().get(rand.nextInt(Menu.sharedInstance().getMenu().size())).getName();
 				if(Menu.sharedInstance().getInventoryStock(choice)) {
-					Do("Ordering food");
+					print("Ordering food");
 					waiter.msgGiveOrder(this, choice);
 					updateGui(choice.substring(0, 2) + "?");
 					return;
@@ -282,17 +281,17 @@ public class StackCustomerRole extends Role implements Customer {
 			}
 			state = AgentState.Paid;
 			event = AgentEvent.donePaying;
-			Do("Going home");	
+			print("Going home");	
 		}
 	}
 	
 	private void readyToOrder() {
-		Do("Telling waiter ready to order");
+		print("Telling waiter ready to order");
 		waiter.msgReadyToOrder(this);
 	}
 
 	private void goToRestaurant() {
-		Do("Going to restaurant");
+		print("Going to restaurant");
 		customerGui.DoEnterRestaurant();
 		
 	}
@@ -303,12 +302,12 @@ public class StackCustomerRole extends Role implements Customer {
 	}
 
 	private void SitDown() {
-		Do("Being seated. Going to table");
+		print("Being seated. Going to table");
 		customerGui.DoGoToSeat(1, tableNumber);
 	}
 
 	private void EatFood() {
-		Do("Eating Food");
+		print("Eating Food");
 		//This next complicated line creates and starts a timer thread.
 		//We schedule a deadline of getHungerLevel()*1000 milliseconds.
 		//When that time elapses, it will call back to the run routine
@@ -332,14 +331,14 @@ public class StackCustomerRole extends Role implements Customer {
 	}
 
 	private void leaveRestaurant() {
-		Do("Leaving.");
+		print("Leaving.");
 		waiter.msgDoneEating(this);
 		customerGui.DoExitRestaurant();
 		getPersonAgent().msgRoleFinished();
 	}
 	
 	private void notWaitingAndLeaving() {
-		Do("Leaving because it's too busy");
+		print("Leaving because it's too busy");
 		host.msgNotWaiting(this);
 		customerGui.DoExitRestaurant();
 	}
