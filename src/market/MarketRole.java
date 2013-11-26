@@ -114,6 +114,8 @@ public class MarketRole extends Role implements Market {
 		MyOrders = Collections.synchronizedList(new ArrayList<Order>());
 		jobDone = false;
 		log = new EventLog();
+		
+		gui = new MarketGui(this);
 	}
 		
 	

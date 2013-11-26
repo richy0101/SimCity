@@ -551,8 +551,6 @@ public class PersonAgent extends Agent implements Person {
 	public void setAccountNumber(int accountNumber) {
 		this.accountNumber = accountNumber;
 	}
-
-	@Override
 	public String getTransportationMethod() {
 		return transMethod.toString();
 	}
