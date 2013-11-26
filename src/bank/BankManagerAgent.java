@@ -44,7 +44,7 @@ public class BankManagerAgent extends Agent implements BankManager {
 			return tellerNum;
 		}
 	}
-	public enum BankTellerState {GotToWork, Idle, Busy};
+	public enum BankTellerState {GotToWork, Idle, Busy, GivingPay, ReceivedPay};
 	private int tellerNum = 0;
 	private String name;
 	
@@ -77,6 +77,14 @@ public class BankManagerAgent extends Agent implements BankManager {
 		stateChanged();
 	}
 	
+	public void msgCollectPay(BankTeller teller){
+		for(MyBankTeller tempTeller: tellers){
+			if(tempTeller.teller == teller){
+				tempTeller.state = BankTellerState.GivingPay;
+			}
+		}
+	}
+	
 	public void msgTellerLeavingWork(BankTeller teller) {
 		synchronized(this.tellers) {
 			tellers.remove(teller);
@@ -105,6 +113,13 @@ public class BankManagerAgent extends Agent implements BankManager {
 				}
 			}
 		}
+		synchronized(this.tellers){
+			for(MyBankTeller tempTeller: tellers){
+				if(tempTeller.state == BankTellerState.GivingPay){
+					GiveTellerPay(tempTeller);
+				}
+			}
+		}
 		return false;
 	}
     //actions-----------------------------------------------------------------------------
@@ -123,6 +138,12 @@ public class BankManagerAgent extends Agent implements BankManager {
 	    myTeller.state = BankTellerState.Busy;
 	    customers.remove(customer);
 	    stateChanged();
+	}
+	
+	private void GiveTellerPay(MyBankTeller myTeller){
+		print("Giving teller his paycheck");
+		myTeller.teller.msgHereIsPaycheck(100.0); //100 is amount of money from unlimited bank funds
+		myTeller.state = BankTellerState.ReceivedPay;
 	}
 	
 	//getters for unit test-----------------------------------------------------------------

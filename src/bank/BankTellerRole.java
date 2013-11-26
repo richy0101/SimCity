@@ -37,7 +37,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	private int registerNumber = 0;
     private BankManager manager;
     private BankTellerGui tellerGui;
-    private enum TellerState {ArrivedAtWork, AtManager, GoingToRegister, ReadyForCustomers, DoneWorking, Gone, ToldManager};
+    private enum TellerState {ArrivedAtWork, AtManager, GoingToRegister, ReadyForCustomers, DoneWorking, GettingPaycheck, ReceivedPaycheck, Gone, ToldManager};
     private TellerState state;
     
     private enum CustomerState {NeedingAssistance, 
@@ -126,12 +126,18 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	
 	public void msgThankYouForAssistance(BankCustomer customer) {
-		for(MyCustomer mCustomer : customers) {
-			if(mCustomer.equals(customer)) {
-				mCustomer.custState = CustomerState.Leaving;
+		for(MyCustomer tempCustomer : customers) {
+			if(tempCustomer.equals(customer)) {
+				tempCustomer.custState = CustomerState.Leaving;
 			}
 		}
 		
+	}
+	
+	public void msgHereIsPaycheck(double paycheck){
+		getPersonAgent().setFunds(getPersonAgent().getFunds() + paycheck);
+		state = TellerState.ReceivedPaycheck;
+		stateChanged();
 	}
 	
 	public void msgDoneWorking() {
@@ -215,6 +221,10 @@ public class BankTellerRole extends Role implements BankTeller {
 			return false;
 		}
 		if(state == TellerState.DoneWorking) {
+			GetPayCheck();
+			return true;
+		}
+		if(state == TellerState.ReceivedPaycheck) {
 			LeaveBank();
 			return true;
 		}
@@ -289,6 +299,16 @@ public class BankTellerRole extends Role implements BankTeller {
 	private void RejectLoan(MyCustomer myCustomer) {
 		myCustomer.customer.msgLoanDenied();
 		myCustomer.custState = CustomerState.Leaving;
+	}
+	private void GetPayCheck(){
+		tellerGui.DoGoToManager();
+		manager.msgCollectPay(this);
+		try {
+			doneAnimation.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		state = TellerState.GettingPaycheck;
 	}
 	
 	private void LeaveBank() {

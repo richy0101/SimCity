@@ -8,4 +8,6 @@ public interface BankManager {
 	public void msgHereForWork(BankTeller teller);
 
 	public void msgTellerLeavingWork(BankTeller teller);
+
+	public void msgCollectPay(BankTeller teller);
 }
