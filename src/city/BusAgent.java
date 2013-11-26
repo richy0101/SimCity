@@ -177,23 +177,31 @@ public class BusAgent extends Agent implements Bus {
 		
 		private void alertPassengersToAlightBus(){
 			if((lastStation == Station.Stop1) && (state!=State.driving)){
-				for(MyPassenger person: passengersOnBoard){
-					person.passenger.msgAtStop(1);
+				synchronized(passengersOnBoard){
+					for(MyPassenger person: passengersOnBoard){
+						person.passenger.msgAtStop(1);
+					}
 				}
 			}
 			if((lastStation == Station.Stop2) && (state!=State.driving)){
-				for(MyPassenger person: passengersOnBoard){
-					person.passenger.msgAtStop(2);
+				synchronized(passengersOnBoard){
+					for(MyPassenger person: passengersOnBoard){
+						person.passenger.msgAtStop(2);
+					}
 				}
 			}
 			if((lastStation == Station.Stop3) && (state!=State.driving)){
-				for(MyPassenger person: passengersOnBoard){
-					person.passenger.msgAtStop(3);
+				synchronized(passengersOnBoard){
+					for(MyPassenger person: passengersOnBoard){
+						person.passenger.msgAtStop(3);
+					}
 				}
 			}
 			if((lastStation == Station.Stop4) && (state!=State.driving)){
-				for(MyPassenger person: passengersOnBoard){
-					person.passenger.msgAtStop(4);
+				synchronized(passengersOnBoard){
+					for(MyPassenger person: passengersOnBoard){
+						person.passenger.msgAtStop(4);
+					}
 				}
 			}	
 			event=Event.notifiedPassengersToAlightBus;
@@ -216,24 +224,32 @@ public class BusAgent extends Agent implements Bus {
 		
 		private void alertPassengersToBoardBus(){
 			if((lastStation == Station.Stop1) && (state!=State.driving)){
-				for(Transportation person: BusHelper.sharedInstance().getWaitingPassengersAtStop1()){
-					person.msgGetOnBus(this);
-				}	
+				synchronized(BusHelper.sharedInstance().getWaitingPassengersAtStop1()){
+					for(Transportation person: BusHelper.sharedInstance().getWaitingPassengersAtStop1()){
+						person.msgGetOnBus(this);
+					}	
+				}
 			}
 			if((lastStation == Station.Stop2) && (state!=State.driving)){
-				for(Transportation person: BusHelper.sharedInstance().getWaitingPassengersAtStop2()){
-					person.msgGetOnBus(this);
+				synchronized(BusHelper.sharedInstance().getWaitingPassengersAtStop2()){
+					for(Transportation person: BusHelper.sharedInstance().getWaitingPassengersAtStop2()){
+						person.msgGetOnBus(this);
+					}	
 				}	
 			}
 			if((lastStation == Station.Stop3) && (state!=State.driving)){
-				for(Transportation person: BusHelper.sharedInstance().getWaitingPassengersAtStop3()){
-					person.msgGetOnBus(this);
-				}	
+				synchronized(BusHelper.sharedInstance().getWaitingPassengersAtStop3()){
+					for(Transportation person: BusHelper.sharedInstance().getWaitingPassengersAtStop3()){
+						person.msgGetOnBus(this);
+					}	
+				}
 			}
 			if((lastStation == Station.Stop4) && (state!=State.driving)){
-				for(Transportation person: BusHelper.sharedInstance().getWaitingPassengersAtStop4()){
-					person.msgGetOnBus(this);
-				}	
+				synchronized(BusHelper.sharedInstance().getWaitingPassengersAtStop4()){
+					for(Transportation person: BusHelper.sharedInstance().getWaitingPassengersAtStop4()){
+						person.msgGetOnBus(this);
+					}	
+				}
 			}
 			event=Event.notifiedPassengersToBoardBus;
 		}

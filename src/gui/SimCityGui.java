@@ -411,7 +411,7 @@ public class SimCityGui {
 		String b6 = "House4";
 		String name6 = "Test Person 6";
 		PersonAgent p6 = new PersonAgent(role6, a6 , b6, name6);
-		role.setPerson(p6);
+		role6.setPerson(p6);
 		p6.msgGoWork();
 		
 		String a7 = "Test Bank 5";
@@ -419,7 +419,7 @@ public class SimCityGui {
 		String name7 = "MarketGoerPerson";
 		Role role7 = new BankTellerRole("Bank");
 		PersonAgent p7 = new PersonAgent(role7, a7 , b7, name7);
-		role.setPerson(p7);
+		role7.setPerson(p7);
 		p7.msgTestWakeUp();
 		
 		bus = new BusAgent();

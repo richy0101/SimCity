@@ -54,6 +54,7 @@ public class BankManagerAgent extends Agent implements BankManager {
 	
     //messages----------------------------------------------------------------------------
 	public void msgINeedAssistance(BankCustomer customer) {
+		print("A customer needs assistance.");
 		customers.add(customer);
 	    stateChanged();
 	}

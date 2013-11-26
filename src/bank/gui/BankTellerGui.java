@@ -48,7 +48,7 @@ public class BankTellerGui implements Gui {
 		xPos = 450;
 		yPos = 450;
 		xDestination = 450;
-		yDestination = 450;
+		yDestination = 100;
         try {
         	personLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
         	personRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));

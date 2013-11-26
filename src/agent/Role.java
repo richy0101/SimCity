@@ -1,11 +1,12 @@
 package agent;
+import market.MarketRole;
 import city.interfaces.Person;
 
 public class Role {
 	Person myPerson;
 	public void setPerson(Person person) {
 		myPerson = person; 
-		System.out.println(myPerson.getName() + "WOAH");
+		//System.out.println(myPerson.getName() + "WOAH");
 	}
 	
 	public Person getPersonAgent() {
@@ -43,6 +44,11 @@ public class Role {
 	}
 	//Bank Methods
 	public void setManager(Agent agent) {
+		
+	}
+
+	public void setMarket(MarketRole marketRole) {
+		// TODO Auto-generated method stub
 		
 	}
 }
