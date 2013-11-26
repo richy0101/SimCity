@@ -14,6 +14,9 @@ import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
 
+import restaurant.stackRestaurant.helpers.Check;
+import restaurant.stackRestaurant.interfaces.Cashier;
+import restaurant.stackRestaurant.interfaces.Cook;
 import city.PersonAgent;
 import city.helpers.Directory;
 import agent.Role;
@@ -29,16 +32,33 @@ public class MarketRole extends Role implements Market {
 	public enum orderState {Ordered, CantFill, Filled, Billed, Paid, CantPay};
 	
 	List<Order> MyOrders;
+	List<RestaurantOrder> MyRestaurantOrders;
 	boolean jobDone;
 	Map<String, Food> inventory = new HashMap<String, Food>();
 	double funds;
-	
 
 	private Semaphore actionComplete = new Semaphore(0,true);
 	private MarketGui gui;
 	private String myLocation;
 	
 	public EventLog log;
+	
+	public class RestaurantOrder {
+		Cook cook;
+		Cashier cashier;
+		String choice;
+		int amount;
+		double price;
+		orderState state;
+		
+		RestaurantOrder(Cook cook, Cashier cashier, String choice, int amount) {
+			this.cook = cook;
+			this.cashier = cashier;
+			this.choice = choice;
+			this.amount = amount;
+			state = orderState.Ordered;
+		}
+	}
 	
 	public class Order {
 	    MarketCustomer customer;
@@ -93,6 +113,8 @@ public class MarketRole extends Role implements Market {
 		inventory.put("Salad", new Food("Salad", 10, 4.00));
 		
 		MyOrders = Collections.synchronizedList(new ArrayList<Order>());
+		MyRestaurantOrders = Collections.synchronizedList(new ArrayList<RestaurantOrder>());
+		
 		jobDone = false;
 		funds = 0.00;
 		
@@ -134,7 +156,7 @@ public class MarketRole extends Role implements Market {
 		return jobDone;
 	}
 	
-	//messages----------------------------------------------------------------------------
+	//MarketCustomer messages-------------------------------------------------------------
 	public void msgGetGroceries(MarketCustomer customer, Map<String, Integer> groceryList) {
 		print("Received msgGetGroceries");
 		
@@ -175,6 +197,25 @@ public class MarketRole extends Role implements Market {
 	    stateChanged();
 	}
 	
+	//Restaurant messages-------------------------------------------------------------
+	public void msgOrderFood(Cook cook, Cashier cashier, String choice) {
+		MyRestaurantOrders.add(new RestaurantOrder(cook, cashier, choice, 5));
+		
+		stateChanged();
+	}
+	
+	public void msgPayForOrder(Cashier cashier, double funds) {
+		this.funds += funds;
+		for(RestaurantOrder o : MyRestaurantOrders) {
+			if(o.cashier == cashier)
+				o.state = orderState.Paid;
+		}
+		
+		stateChanged();
+	}
+	
+
+	//Person/GUI messages-------------------------------------------------------------
 	public void msgJobDone() {
 		print("Received msgJobDone");
 		jobDone = true;
@@ -192,10 +233,27 @@ public class MarketRole extends Role implements Market {
 	public boolean pickAndExecuteAnAction() {
 		gui.setPresent();
 		
-		if(MyOrders.isEmpty() && jobDone == true) {
+		if(MyOrders.isEmpty() && MyRestaurantOrders.isEmpty() && jobDone == true) {
 			LeaveJob();
 			return true;
 		}		
+		
+		synchronized(MyRestaurantOrders) {
+			for(RestaurantOrder o : MyRestaurantOrders) {
+				if(o.state == orderState.Ordered) {
+					FillRestaurantOrder(o);
+					return true;
+				}
+			}
+			
+			for(RestaurantOrder o : MyRestaurantOrders) {
+				if(o.state == orderState.Paid) {
+					MyRestaurantOrders.remove(o);
+					return true;
+				}
+			}
+		}
+		
 		synchronized(MyOrders) {
 			for(Order o : MyOrders) {
 				if(o.state == orderState.Ordered) {
@@ -242,7 +300,7 @@ public class MarketRole extends Role implements Market {
 		return false;
 	}
 	
-	//actions-----------------------------------------------------------------------------
+	//Customer Order actions--------------------------------------------------------------
 	private void FillOrder(Order o) {
 		Iterator<String> i = o.groceryList.keySet().iterator();
 		String choice;
@@ -300,6 +358,24 @@ public class MarketRole extends Role implements Market {
 	    
 	    log.add(new LoggedEvent("Gave MarketCustomer the groceries."));
 	}
+
+	//Restaurant Order actions--------------------------------------------------------------
+	private void FillRestaurantOrder(RestaurantOrder o) {
+		if(inventory.get(o.choice).supply >= o.amount) {
+			inventory.get(o.choice).supply -= o.amount;
+			o.price = o.amount * inventory.get(o.choice).price;
+			o.state = orderState.Billed;
+
+			o.cook.msgMarketDeliveringOrder(inventory.get(o.choice).supply, o.choice);
+			o.cashier.msgGiveBill(new Check(o.price, o.choice), this);
+		}
+		else {
+			o.cook.msgInventoryOut(this, o.choice);
+			MyRestaurantOrders.remove(o);
+		}
+	}
+
+	//PersonAgent actions--------------------------------------------------------------
 	private void LeaveJob() {
 		log.add(new LoggedEvent("MarketRole leaving job"));
 		getPersonAgent().setFunds(getPersonAgent().getFunds() + funds);
