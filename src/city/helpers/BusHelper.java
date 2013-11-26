@@ -119,6 +119,7 @@ public class BusHelper {
 		return locationDirectory;
 	}
 	public void addWaitingPerson(TransportationRole t, int stopNumber) {
+		System.out.println("adding waiting person");
 		if (stopNumber == 1) {
 			waitingPassengersAtStop1.add(t);
 		}
