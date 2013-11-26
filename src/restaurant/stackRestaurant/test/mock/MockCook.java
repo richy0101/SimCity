@@ -1,7 +1,7 @@
 package restaurant.stackRestaurant.test.mock;
 
 import restaurant.stackRestaurant.interfaces.Cook;
-import restaurant.stackRestaurant.interfaces.Market;
+import market.interfaces.Market;
 import restaurant.stackRestaurant.interfaces.Waiter;
 
 public class MockCook extends Mock implements Cook {

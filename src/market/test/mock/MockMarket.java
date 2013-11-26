@@ -2,6 +2,8 @@ package market.test.mock;
 
 import java.util.Map;
 
+import restaurant.stackRestaurant.interfaces.Cashier;
+import restaurant.stackRestaurant.interfaces.Cook;
 import market.interfaces.Market;
 import market.interfaces.MarketCustomer;
 
@@ -32,5 +34,17 @@ public class MockMarket extends Mock implements Market {
 	@Override
 	public void msgCantAffordGroceries(MarketCustomer customer) {
 		log.add(new LoggedEvent("Received msgCantAffordGroceries from MarketCustomer"));
+	}
+
+	@Override
+	public void msgOrderFood(Cook cook, Cashier cashier, String choice) {
+		log.add(new LoggedEvent("Received msgOrderFood from cook"));
+		
+	}
+
+	@Override
+	public void msgPayForOrder(Cashier cashier, double funds) {
+		log.add(new LoggedEvent("Received msgPayForOrder from cook"));
+		
 	}
 }

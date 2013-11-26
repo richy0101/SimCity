@@ -53,8 +53,8 @@ public class BusAgent extends Agent implements Bus {
 		
 	}
 	
-	public BusAgent(){//constructor
-		busGui = new BusGui(this);
+	public BusAgent(int stopNumber){//constructor
+		busGui = new BusGui(this, stopNumber);
 	}
 		
 	/**
@@ -223,7 +223,7 @@ public class BusAgent extends Agent implements Bus {
 					msgChangeEventToPassengersAlighted();
 				}
 			},
-			350);
+			420);
 		}
 		
 		private void alertPassengersToBoardBus(){
@@ -265,7 +265,7 @@ public class BusAgent extends Agent implements Bus {
 					msgChangeEventToPassengersBoarded();
 				}
 			},
-			350);
+			420);
 			
 		}
 		

@@ -1,11 +1,10 @@
 package restaurant.stackRestaurant.test.mock;
 
 import restaurant.stackRestaurant.helpers.Check;
-
 import restaurant.stackRestaurant.interfaces.Cashier;
 import restaurant.stackRestaurant.interfaces.Customer;
 import restaurant.stackRestaurant.interfaces.Waiter;
-import restaurant.stackRestaurant.interfaces.Market;
+import market.interfaces.Market;
 
 public class MockCashier extends Mock implements Cashier {
 	
@@ -21,8 +20,9 @@ public class MockCashier extends Mock implements Cashier {
 	public void msgPayCheck(Customer cust, Check check, double money) {
 		
 	}
-	
+
 	public void msgGiveBill(Check check, Market market) {
+		// TODO Auto-generated method stub
 		
 	}
 
