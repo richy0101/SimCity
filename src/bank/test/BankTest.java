@@ -1,18 +1,25 @@
-package market.test;
+package bank.test;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import bank.Bank;
+import bank.BankTellerRole;
+import bank.interfaces.BankTeller;
+import bank.test.mock.MockBankCustomer;
+import bank.test.mock.MockBankManager;
+import bank.test.mock.MockBankTeller;
 import market.MarketRole;
 import market.MarketRole.orderState;
 import market.test.mock.*;
 import junit.framework.*;
 
-public class MarketTest extends TestCase {
+public class BankTest extends TestCase {
 
 	//these are instantiated for each test separately via the setUp() method.
-	MarketRole market;
-	MockMarketCustomer customer;
+	MockBankCustomer customer;
+	MockBankManager manager;
+	MockBankTeller teller;
 	
 	Map<String, Integer> groceryList;
 	
@@ -21,9 +28,10 @@ public class MarketTest extends TestCase {
 	 * for your agent and mocks, etc.
 	 */
 	public void setUp() throws Exception{
-		super.setUp();		
-		market = new MarketRole();		
-		customer = new MockMarketCustomer("mockcustomer");
+		super.setUp();
+		manager = new MockBankManager("mockbankmanager");
+		teller = new MockBankTeller("mockbankteller");		
+		customer = new MockBankCustomer("mockcustomer");
 		
 		groceryList = new HashMap<String, Integer>();
 		groceryList.put("Steak", 1);

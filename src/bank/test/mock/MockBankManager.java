@@ -1,21 +1,24 @@
-package market.test.mock;
+package bank.test.mock;
 
 import java.util.Map;
 
+import bank.interfaces.BankCustomer;
+import bank.interfaces.BankManager;
+import bank.interfaces.BankTeller;
 import market.interfaces.Market;
 import market.interfaces.MarketCustomer;
 
-public class MockPerson extends Mock implements Market {
+public class MockBankManager extends Mock implements BankManager {
 
 	public MarketCustomer customer;
 	public EventLog log;
 	public Map<String, Integer> groceries;
 
-	public MockPerson(String name) {
+	public MockBankManager(String name) {
 		super(name);
 		log = new EventLog();
 	}
-	
+	/*
 	@Override
 	public void msgGetGroceries(MarketCustomer customer, Map<String, Integer> groceryList) {
 		log.add(new LoggedEvent("Received msgGetGroceries from MarketCustomer"));
@@ -30,5 +33,24 @@ public class MockPerson extends Mock implements Market {
 	@Override
 	public void msgCantAffordGroceries(MarketCustomer customer) {
 		log.add(new LoggedEvent("Received msgCantAffordGroceries from MarketCustomer"));
+	}
+	*/
+
+	@Override
+	public void msgINeedAssistance(BankCustomer customer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgTellerFree(BankTeller teller) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgHereForWork(BankTeller teller) {
+		// TODO Auto-generated method stub
+		
 	}
 }
