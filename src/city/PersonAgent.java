@@ -595,6 +595,7 @@ public class PersonAgent extends Agent implements Person {
 		roles.clear();
 		Role bankCustRole = new BankCustomerRole(personState.toString(), deposit, 0.0);
 		bankCustRole.setManager(Directory.sharedInstance().getAgents().get(b.getName()));
+		roles.add(bankCustRole);
 		Role t = new TransportationRole(b.getName(), currentLocation);
 		t.setPerson(this);
 		roles.add(t);
@@ -611,6 +612,7 @@ public class PersonAgent extends Agent implements Person {
 		roles.clear();
 		Role bankCustRole = new BankCustomerRole(personState.toString(), 0.0, 1000.0);
 		bankCustRole.setManager(Directory.sharedInstance().getAgents().get(b.getName()));
+		roles.add(bankCustRole);
 		Role t = new TransportationRole(b.getName(), currentLocation);
 		t.setPerson(this);
 		roles.add(t);
@@ -628,6 +630,7 @@ public class PersonAgent extends Agent implements Person {
 		roles.clear();
 		Role bankCustRole = new BankCustomerRole(personState.toString(), 0.0, 0.0);
 		bankCustRole.setManager(Directory.sharedInstance().getAgents().get(b.getName()));
+		roles.add(bankCustRole);
 		Role t = new TransportationRole(b.getName(), currentLocation);
 		t.setPerson(this);
 		roles.add(t);
