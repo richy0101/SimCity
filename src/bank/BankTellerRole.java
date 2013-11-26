@@ -49,6 +49,9 @@ public class BankTellerRole extends Role implements BankTeller {
     	tellerGui = new BankTellerGui(this);
     	myLocation = location;
     	List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+    	
+    	tellerGui = new BankTellerGui(this);
+    	
 		for(Building b : buildings) {
 			if (b.getName() == myLocation) {
 				b.addGui(tellerGui);

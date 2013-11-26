@@ -36,6 +36,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		this.moneyToDeposit = moneyToDeposit;
 		customerGui = new BankCustomerGui(this);
     	List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+    	
 		for(Building b : buildings) {
 			if (b.getName() == myLocation) {
 				b.addGui(customerGui);
