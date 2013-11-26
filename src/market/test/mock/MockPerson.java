@@ -25,7 +25,6 @@ public class MockPerson extends Mock implements Person {
 
 	@Override
 	public double getFunds() {
-		log.add(new LoggedEvent("GetFunds called"));
 		return funds;
 	}
 
