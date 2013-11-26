@@ -86,22 +86,22 @@ public class CustomerGui implements Gui{
 	}
 	
 	public void draw(Graphics2D g) {
-		if(choice == "") {
+		if(choice.equals("")) {
 			g.drawImage(customerImage, xPos, yPos, null);
 		}
-		else if(choice == "Steak") {
+		else if(choice.equals("St")) {
 			g.drawImage(customerImage, xPos, yPos, null);
 			g.drawImage(steakImage, xPos + 26, yPos + 20, null);
 		}
-		else if(choice == "Chicken") {
+		else if(choice.equals("Ch")) {
 			g.drawImage(customerImage, xPos, yPos, null);
 			g.drawImage(chickenImage, xPos + 26, yPos + 20, null);
 		}
-		else if(choice == "Pizza") {
+		else if(choice.equals("Pi")) {
 			g.drawImage(customerImage, xPos, yPos, null);
 			g.drawImage(pizzaImage, xPos + 26, yPos + 20, null);
 		}
-		else if(choice == "Salad") {
+		else if(choice.equals("Sa")) {
 			g.drawImage(customerImage, xPos, yPos, null);
 			g.drawImage(saladImage, xPos + 26, yPos + 20, null);
 		}

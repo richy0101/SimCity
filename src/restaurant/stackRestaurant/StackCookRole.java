@@ -8,7 +8,6 @@ import java.util.concurrent.Semaphore;
 
 import city.helpers.Directory;
 import restaurant.stackRestaurant.helpers.Menu;
-import restaurant.stackRestaurant.interfaces.Cashier;
 import restaurant.stackRestaurant.interfaces.Cook;
 import restaurant.stackRestaurant.interfaces.Host;
 import restaurant.stackRestaurant.interfaces.Market;

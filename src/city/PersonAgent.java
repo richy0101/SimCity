@@ -161,6 +161,15 @@ public class PersonAgent extends Agent implements Person {
 				b.addGui(personGui);
 			}
 		}
+		if (this.name.contains("BankD")) {
+			personState = PersonState.WantsToDeposit;
+		}
+		else if (this.name.contains("BankW")) {
+			personState = PersonState.WantsToWithdraw;
+		}
+		else if (this.name.contains("BankL")) {
+			personState = PersonState.WantsToGetLoan;
+		}
 		startThread();
 	}
 	
@@ -243,6 +252,9 @@ public class PersonAgent extends Agent implements Person {
 	/**
 	 * Messages
 	 */
+	public void msgTestWakeUp() {
+		stateChanged();
+	}
 	public void msgActionComplete() {
 		actionComplete.release();
 	}
@@ -566,7 +578,6 @@ public class PersonAgent extends Agent implements Person {
 		
 	}
 	private void goDeposit() {
-		Bank b = Directory.sharedInstance().getBanks().get(0);
 		double deposit;
 		if (funds - 100.00 > 0) {
 			deposit = funds - 100.00;
@@ -574,30 +585,52 @@ public class PersonAgent extends Agent implements Person {
 		else {
 			deposit = 0.0;
 		}
-		roles.clear();
-		roles.add(new BankCustomerRole(personState.toString(), deposit, 0.0));//Hacked factory LOL
-		//roles.add(new TransportationRole(b.getName()));
 		print("Action goDeposit - State set to OutBank");
 		personState = PersonState.OutToBank;
+		personGui.DoLeaveHouse();
+		actionComplete.acquireUninterruptibly();
+		personGui.setPresentFalse();
+		//Role logic
+		Bank b = Directory.sharedInstance().getBanks().get(0);
+		roles.clear();
+		Role bankCustRole = new BankCustomerRole(personState.toString(), deposit, 0.0);
+		bankCustRole.setManager(Directory.sharedInstance().getAgents().get(b.getName()));
+		Role t = new TransportationRole(b.getName(), currentLocation);
+		t.setPerson(this);
+		roles.add(t);
 		
 	}
 	private void goLoan() {
-		Bank b = Directory.sharedInstance().getBanks().get(0);
-		roles.clear();
-		roles.add(new BankCustomerRole(personState.toString(), 0.0, 1000.00));//Hacked factory LOL
-		//roles.add(new TransportationRole(b.getName()));
 		print("Action goLoan - State set to OutBank");
 		personState = PersonState.OutToBank;
+		personGui.DoLeaveHouse();
+		actionComplete.acquireUninterruptibly();
+		personGui.setPresentFalse();
+		//Role logic
+		Bank b = Directory.sharedInstance().getBanks().get(0);
+		roles.clear();
+		Role bankCustRole = new BankCustomerRole(personState.toString(), 0.0, 1000.0);
+		bankCustRole.setManager(Directory.sharedInstance().getAgents().get(b.getName()));
+		Role t = new TransportationRole(b.getName(), currentLocation);
+		t.setPerson(this);
+		roles.add(t);
 		
 	}
 	
 	private void goWithdraw() {
-		Bank b = Directory.sharedInstance().getBanks().get(0);
-		roles.clear();
-		roles.add(new BankCustomerRole(personState.toString(), 0.0, 0.0));//Hacked factory LOL
-		//roles.add(new TransportationRole(b.getName()));
 		print("Action goWithraw - State set to OutBank");
 		personState = PersonState.OutToBank;
+		personGui.DoLeaveHouse();
+		actionComplete.acquireUninterruptibly();
+		personGui.setPresentFalse();
+		//Role logic
+		Bank b = Directory.sharedInstance().getBanks().get(0);
+		roles.clear();
+		Role bankCustRole = new BankCustomerRole(personState.toString(), 0.0, 0.0);
+		bankCustRole.setManager(Directory.sharedInstance().getAgents().get(b.getName()));
+		Role t = new TransportationRole(b.getName(), currentLocation);
+		t.setPerson(this);
+		roles.add(t);
 	}
 	
 	private void leaveHouse() {
