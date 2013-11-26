@@ -103,10 +103,10 @@ public class PersonGui implements Gui {
 			g.drawImage(personLeft,  xPos, yPos, null);
 		}
 		else if (yPos < yDestination) {
-			g.drawImage(personUp, xPos, yPos, null);
+			g.drawImage(personDown, xPos, yPos, null);
 		}
 		else if (yPos > yDestination) {
-			g.drawImage(personDown, xPos, yPos, null);
+			g.drawImage(personUp, xPos, yPos, null);
 		}
 		else if (xPos == xBed && yPos == yBed) {
 			g.drawImage(personDown, xPos, yPos, null);
@@ -116,6 +116,9 @@ public class PersonGui implements Gui {
 		}
 		else if (xPos == xKitchen && yPos == yKitchen) {
 			g.drawImage(personDown , xPos, yPos, null);
+		}
+		else {
+			g.drawImage(personDown, xPos, yPos, null);
 		}
 	}
 

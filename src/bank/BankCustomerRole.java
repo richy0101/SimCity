@@ -191,7 +191,6 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		state = CustomerState.WaitingForHelpResponse;
 		print("I need to withdraw money");
 		teller.msgWithdrawMoney(accountNumber, moneyToWithdraw);
-		getPersonAgent().setFunds(getPersonAgent().getFunds() + moneyToWithdraw);
 	}
 	
 	private void leaveBank() {

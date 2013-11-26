@@ -28,7 +28,10 @@ public class BankCustomerGui implements Gui {
 
 	private static final int xManager = 400, yManager = 68;
 	private static final int xExit = 400, yExit = 420;
-	BufferedImage customerImage;
+	BufferedImage customerUp;
+	BufferedImage customerDown;
+	BufferedImage customerLeft;
+	BufferedImage customerRight;
 
 	//BankGui gui;
 
@@ -48,7 +51,10 @@ public class BankCustomerGui implements Gui {
 		yDestination = 450;
 
 		try {
-			customerImage = ImageIO.read(getClass().getResource("GUIPersonDown.png"));
+			customerLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
+        	customerRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));
+        	customerUp = ImageIO.read(getClass().getResource("GUIPersonUp.png"));
+        	customerDown = ImageIO.read(getClass().getResource("GUIPersonDown.png"));
 		}
 		catch(IOException e) {
 			System.out.println("Error w/ Background");
@@ -90,7 +96,21 @@ public class BankCustomerGui implements Gui {
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.drawImage(customerImage, xPos, yPos, null);
+		if (xPos < xDestination) {
+			g.drawImage(customerRight, xPos, yPos, null);
+		}
+		else if (xPos > xDestination) {
+			g.drawImage(customerLeft,  xPos, yPos, null);
+		}
+		else if (yPos < yDestination) {
+			g.drawImage(customerDown, xPos, yPos, null);
+		}
+		else if (yPos > yDestination) {
+			g.drawImage(customerUp, xPos, yPos, null);
+		}
+		else {
+			g.drawImage(customerDown, xPos, yPos, null);
+		}
 	}
 
 	@Override
