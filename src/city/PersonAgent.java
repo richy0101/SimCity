@@ -655,7 +655,10 @@ public class PersonAgent extends Agent implements Person {
 			f.stock = 0;
 		}
 	}
-	public void clearGroceries() {
+	public void clearGroceries(Map<String, Integer> givenGroceries) {
+		for (Food f : inventory) {
+			f.stock += givenGroceries.get(f.type);
+		}
 		groceryList.clear();
 	}
 	public String getName() {
@@ -678,6 +681,12 @@ public class PersonAgent extends Agent implements Person {
 	}
 	public String getTransportationMethod() {
 		return transMethod.toString();
+	}
+
+	@Override
+	public void clearGroceries() {
+		// TODO Auto-generated method stub
+		
 	}
 
 
