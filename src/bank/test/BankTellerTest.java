@@ -14,7 +14,7 @@ import market.MarketRole.orderState;
 import market.test.mock.*;
 import junit.framework.*;
 
-public class BankTest extends TestCase {
+public class BankTellerTest extends TestCase {
 
 	//these are instantiated for each test separately via the setUp() method.
 	MockBankCustomer customer;
