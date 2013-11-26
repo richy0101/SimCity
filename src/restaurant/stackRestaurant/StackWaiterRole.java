@@ -23,7 +23,7 @@ public class StackWaiterRole extends Role implements Waiter {
 	private String myLocation;
 	
 	protected enum AgentState
-	{Arrived, Working, WantToGoOnBreak, WaitingForNotice, GoingOnBreak, OnBreak, FinishingBreak};
+	{Arrived, Working, WantToGoOnBreak, WaitingForNotice, GoingOnBreak, OnBreak, FinishingBreak, GettingPaycheck, Leaving, WaitingForPaycheck};
 	AgentState state = AgentState.Working;
 	
 	protected enum CustomerState
@@ -66,6 +66,14 @@ public class StackWaiterRole extends Role implements Waiter {
 		try {
 			if(state == AgentState.Arrived) {
 				tellHostAtWork();
+				return true;
+			}
+			if(state == AgentState.GettingPaycheck) {
+				goGetPaycheck();
+				return true;
+			}
+			if(state == AgentState.Leaving) {
+				leaveRestaurant();
 				return true;
 			}
 			if(state == AgentState.WantToGoOnBreak) {
@@ -258,11 +266,23 @@ public class StackWaiterRole extends Role implements Waiter {
 		host.msgLeavingTable(customer.customer);
 	}
 	
-//	private void leaveRestaurant() {
-//		print("Leaving.");
-//		customerGui.DoExitRestaurant();
-//		getPersonAgent().msgRoleFinished();
-//	}
+	private void leaveRestaurant() {
+		print("Leaving.");
+		waiterGui.DoExitRestaurant();
+		getPersonAgent().msgRoleFinished();
+	}
+	
+	private void goGetPaycheck() {
+		print("Getting paycheck");
+		waiterGui.DoGoToPaycheck();
+		try {
+			doneAnimation.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		cashier.msgNeedPaycheck(this);
+		state = AgentState.WaitingForPaycheck;
+	}
 
 	
 //	animation---------------------------------------------------------------------------------------------------------------------------------
@@ -298,6 +318,18 @@ public class StackWaiterRole extends Role implements Waiter {
 	
 	
 //	messages---------------------------------------------------------------------------------------------------------------------------------
+	public void msgHereIsPaycheck(double funds) {
+		getPersonAgent().setFunds(getPersonAgent().getFunds() + funds);
+		state = AgentState.Leaving;
+		stateChanged();
+	}
+	
+	public void msgJobDone() {
+		state = AgentState.GettingPaycheck;
+		stateChanged();
+		
+	}
+	
 	public void msgHereIsCheck(Check check) {
 		for(MyCustomer customer : customers) {
 			if(customer.customer.equals(check.getCustomer())) {
@@ -453,6 +485,13 @@ public class StackWaiterRole extends Role implements Waiter {
 		doneAnimation.release();
 	}
 	
+	public void msgAtCashier() {
+		doneAnimation.release();	
+	}
+	
+	public void msgAnimationFinishedLeavingRestaurant() {
+		doneAnimation.release();
+	}
 //	other---------------------------------------------------------------------------------------------------------------------------------
 	
 	/*public String toString() {

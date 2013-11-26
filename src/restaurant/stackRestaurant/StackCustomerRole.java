@@ -93,7 +93,6 @@ public class StackCustomerRole extends Role implements Customer {
 	}
 
 	// Messages
-	@Override
 	public void msgGotHungry() {//from animation
 		event = AgentEvent.gotHungry;
 		stateChanged();

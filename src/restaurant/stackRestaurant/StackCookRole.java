@@ -13,6 +13,7 @@ import restaurant.stackRestaurant.interfaces.Cashier;
 import restaurant.stackRestaurant.interfaces.Cook;
 import restaurant.stackRestaurant.interfaces.Host;
 import restaurant.stackRestaurant.interfaces.Waiter;
+import restaurant.stackRestaurant.StackWaiterRole.AgentState;
 import restaurant.stackRestaurant.gui.CookGui;
 
 public class StackCookRole extends Role implements Cook {
@@ -29,7 +30,7 @@ public class StackCookRole extends Role implements Cook {
 	
 	private Semaphore doneAnimation = new Semaphore(0,true);
 	private enum AgentState 
-	{Arrived, Working};
+	{Arrived, Working, GettingPaycheck, Leaving, WaitingForPaycheck};
 	AgentState state;
 	
 	private enum OrderState
@@ -85,6 +86,14 @@ public class StackCookRole extends Role implements Cook {
 			tellHostAtWork();
 			return true;
 		}
+		if(state == AgentState.GettingPaycheck) {
+			goGetPaycheck();
+			return true;
+		}
+		if(state == AgentState.Leaving) {
+			leaveRestaurant();
+			return true;
+		}
 		synchronized(orders) {
 			for(MyOrder order : orders) {
 				if(order.state == OrderState.Done) {
@@ -108,6 +117,7 @@ public class StackCookRole extends Role implements Cook {
 			for(Map.Entry<String, Food> food : foods.entrySet()) {
 				if(food.getValue().state == FoodState.Empty) {
 					orderIt(food.getKey());
+					return true;
 				}
 			}
 		}
@@ -203,9 +213,39 @@ public class StackCookRole extends Role implements Cook {
 		cookGui.DoGoHome();
 		state = AgentState.Working;
 	}
+	
+	private void leaveRestaurant() {
+		print("Leaving.");
+		cookGui.DoExitRestaurant();
+		getPersonAgent().msgRoleFinished();
+	}
+	
+	private void goGetPaycheck() {
+		print("Getting paycheck");
+		cookGui.DoGoToPaycheck();
+		try {
+			doneAnimation.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		cashier.msgNeedPaycheck(this);
+		state = AgentState.WaitingForPaycheck;
+	}
 
 		
 	//messages
+	public void msgHereIsPaycheck(double funds) {
+		getPersonAgent().setFunds(getPersonAgent().getFunds() + funds);
+		state = AgentState.Leaving;
+		stateChanged();
+	}
+	
+	public void msgJobDone() {
+		state = AgentState.GettingPaycheck;
+		stateChanged();
+		
+	}
+	
 	public void msgCheckOrders() {
 		sharedState = SharedOrderState.NeedsChecking;
 		stateChanged();
@@ -248,6 +288,13 @@ public class StackCookRole extends Role implements Cook {
 	}
 	
 	public void msgAtFridge() {
+		doneAnimation.release();
+	}
+	
+	public void msgAtCashier() {
+		doneAnimation.release();
+	}
+	public void msgAnimationFinishedLeavingRestaurant() {
 		doneAnimation.release();
 	}
 	
