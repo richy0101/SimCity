@@ -524,7 +524,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	private void leaveHouse() {
-		personGui.setIsPresent(false);
+		personGui.setPresentFalse();
 		print("Leaving house now.");
 	}
 	
