@@ -16,8 +16,10 @@ public class BankCustomerRole extends Role implements BankCustomer {
     //data--------------------------------------------------------------------------------
 	private BankTeller teller;
 	public BankManager manager;
+
 	public Person person;
-	private enum CustomerState {DoingNothing, Waiting, GoingToTeller, BeingHelped, AtManager, Done, Gone};
+	private enum CustomerState {DoingNothing, Waiting, GoingToTeller, BeingHelped, AtManager, Done, Gone, WaitingForHelpResponse, InTransit, FinishedRole};
+
 	private CustomerState state = CustomerState.DoingNothing;
 	
 	public BankCustomerGui customerGui;
@@ -116,6 +118,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	public void msgHereIsYourAccount(int accountNumber) {
 		getPersonAgent().setAccountNumber(accountNumber);
+		state = CustomerState.BeingHelped;
 		this.accountNumber = accountNumber;
 		stateChanged();
 	}
@@ -143,26 +146,40 @@ public class BankCustomerRole extends Role implements BankCustomer {
 			return true;
 		}
 		if(state == CustomerState.BeingHelped && accountNumber != 0){
-			if(state == CustomerState.BeingHelped && task.equals("WantsToDeposit")){
+			if(state == CustomerState.BeingHelped && task.contains("Deposit")){
 				depositMoney();
+				return true;
 			}
-			else if(state == CustomerState.BeingHelped && task.equals("WantsToWithdraw")){
+			else if(state == CustomerState.BeingHelped && task.contains("Withdraw")){
 				withdrawMoney();
+				return true;
 			}
-			else if(state == CustomerState.BeingHelped && task.equals("WantToGetLoan")) {
+			else if(state == CustomerState.BeingHelped && task.contains("Loan")) {
 				takeOutLoan();
+				return true;
 			}
-			return true;
+			else {
+				print("What is task?");
+				return false;
+			}
 		}
 		if(state == CustomerState.Done) {
 			leaveBank();
 			return true;
 		}
-		
+		if(state == CustomerState.Gone) {
+			roleDone();
+		}
 		return false;
 	}
 	
-    //actions-----------------------------------------------------------------------------
+
+
+	//actions-----------------------------------------------------------------------------
+    private void roleDone() {
+		getPersonAgent().msgRoleFinished();
+		state = CustomerState.FinishedRole;
+	}
 	private void askForAssistance() {
 		//print("I need assistance");
 		customerGui.DoGoToManager();
@@ -174,34 +191,39 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	private void openAccount() {
+		state = CustomerState.WaitingForHelpResponse;
 		print("I need my account opened");
 		teller.msgOpenAccount(this);
 	}
 	
 	private void takeOutLoan() {
+		state = CustomerState.WaitingForHelpResponse;
 		print("I need to take out a loan");
 		teller.msgIWantLoan(accountNumber, moneyRequired);
 	}
 	
 	private void depositMoney() {
+		state = CustomerState.WaitingForHelpResponse;
 		print("I need to deposit money");
 		teller.msgDepositMoney(accountNumber, moneyToDeposit);
 		getPersonAgent().setFunds(getPersonAgent().getFunds() - moneyToDeposit);
 	}
 	
 	private void withdrawMoney() {
+		state = CustomerState.WaitingForHelpResponse;
 		print("I need to withdraw money");
 		teller.msgWithdrawMoney(accountNumber, moneyToWithdraw);
-		getPersonAgent().setFunds(getPersonAgent().getFunds() + moneyToWithdraw);
 	}
 	
 	private void leaveBank() {
+		state = CustomerState.InTransit;
 		print("Leaving bank");
 		customerGui.DoLeaveBank();
 		
 	}
 	
 	private void goToTeller() {
+		state = CustomerState.InTransit;
 		print("Going to bank teller");
 		customerGui.DoGoToTeller(tellerNumber);
 		try {

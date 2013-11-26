@@ -25,7 +25,7 @@ public class PersonGui implements Gui {
 	
 	boolean isPresent = true;
 	
-	public enum CurrentAction {Cooking, Eating, Transition, Idle, Deciding, Leaving};
+	public enum CurrentAction {Cooking, Eating, Transition, Idle, Deciding, Leaving, Sleeping};
 	CurrentAction currentAction = CurrentAction.Idle;
 	public PersonGui(PersonAgent agent) {
 		xBed = 5;
@@ -87,6 +87,10 @@ public class PersonGui implements Gui {
 			currentAction = CurrentAction.Transition;
 			agent.msgActionComplete();
 		}
+		if(xPos == xBed && yPos == yBed && currentAction == CurrentAction.Sleeping) {
+			currentAction = CurrentAction.Transition;
+			agent.msgActionComplete();
+		}
 	}
 
 	@Override
@@ -99,10 +103,10 @@ public class PersonGui implements Gui {
 			g.drawImage(personLeft,  xPos, yPos, null);
 		}
 		else if (yPos < yDestination) {
-			g.drawImage(personUp, xPos, yPos, null);
+			g.drawImage(personDown, xPos, yPos, null);
 		}
 		else if (yPos > yDestination) {
-			g.drawImage(personDown, xPos, yPos, null);
+			g.drawImage(personUp, xPos, yPos, null);
 		}
 		else if (xPos == xBed && yPos == yBed) {
 			g.drawImage(personDown, xPos, yPos, null);
@@ -112,6 +116,9 @@ public class PersonGui implements Gui {
 		}
 		else if (xPos == xKitchen && yPos == yKitchen) {
 			g.drawImage(personDown , xPos, yPos, null);
+		}
+		else {
+			g.drawImage(personDown, xPos, yPos, null);
 		}
 	}
 
@@ -141,6 +148,7 @@ public class PersonGui implements Gui {
 		yDestination = yTable;
 	}
 	public void DoSleep() {
+		currentAction = CurrentAction.Sleeping;
 		xDestination = xBed;
 		yDestination = yBed;
 	}

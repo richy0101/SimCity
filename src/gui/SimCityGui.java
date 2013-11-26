@@ -49,7 +49,9 @@ public class SimCityGui {
 	private Map<String, Role> roles = new HashMap<String, Role>();
 	private HashMap<String, CityCard> cards = new HashMap<String, CityCard>();
 	BusAgent bus;
+	BusAgent bus2;
 	BusGui busGui;
+	BusGui busGui2;
 	
 	/**
 	 * Launch the application.
@@ -422,7 +424,7 @@ public class SimCityGui {
 		
 		String a5 = "Bank";
 		String b5 = "House5";
-		String name5 = "BankDepositPerson5";
+		String name5 = "BankLoanPerson5";
 		Role role5 = new BankTellerRole("Bank");
 		PersonAgent p5 = new PersonAgent(role5, a5 , b5, name5);
 		role5.setPerson(p5);
@@ -451,6 +453,15 @@ public class SimCityGui {
 		bus.setGui(busGui);
 		macroAnimationPanel.addGui(busGui);
 		bus.startThread();
+		
+		/*
+		bus2 = new BusAgent();
+		busGui2 = new BusGui(bus2);
+		bus2.setGui(busGui2);
+		macroAnimationPanel.addGui(busGui2);
+		bus2.startThread();*/
+		
+		
 		
 //		TransportationRole transportation = new TransportationRole("House1", "StackRestaurant");
 //		PersonAgent transportationPerson = new PersonAgent(transportation);

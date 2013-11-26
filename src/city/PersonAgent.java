@@ -26,6 +26,7 @@ import city.gui.PersonGui;
 import city.helpers.Clock;
 import city.helpers.Directory;
 import city.interfaces.Person;
+import city.interfaces.RoleInterface;
 import agent.Agent;
 import agent.Role;
 
@@ -33,12 +34,12 @@ public class PersonAgent extends Agent implements Person {
 	/**
 	 * Data---------------------------------------------------------------------------------------------------------------
 	 */
-	public Stack<Role> roles = new Stack<Role>();
+	public Stack<RoleInterface> roles = new Stack<RoleInterface>();
 	RoleFactory factory = new RoleFactory();
 	WorkDetails workDetails;
 	//LandLordRole landLord;
 	double funds;
-	boolean hasWorked;
+	public boolean hasWorked;
 	boolean rentDue;
 	public String name;
 	String homeName;
@@ -47,14 +48,14 @@ public class PersonAgent extends Agent implements Person {
 	public enum HouseState {OwnsAHouse, OwnsAnApartment, Homeless, RentsAnApartment};
 	public enum PersonState {
 		//Norm Scenario Constants
-		Idle, InTransit, WantsToGoHome, WantFood, CookHome, WaitingForCooking, GoOutEat, StartEating, Eating, NeedsToWork, Cooking, OutToEat,
+		Idle, InTransit, WantsToGoHome, WantFood, CookHome, GoOutEat, StartEating, Eating, NeedsToWork, Cooking, OutToEat,
 		//Bank Scenario Constants
 		OutToBank, WantsToWithdraw, WantsToGetLoan, WantsToDeposit, WantsToRob, 
 		//Market Scenario Constants
 		NeedsToGoMarket, OutToMarket, EnterHome, OutToWork, Sleeping
 		};
 	HouseState houseState;
-	PersonState personState;
+	private PersonState personState;
 	public TransportationMethod transMethod;
 	int hungerLevel;
 	int aggressivenessLevel;
@@ -135,7 +136,7 @@ public class PersonAgent extends Agent implements Person {
 		homeName = home;
 		currentLocation = home;
 		houseState = HouseState.OwnsAHouse;
-		personState = PersonState.Idle;
+		setPersonState(PersonState.Idle);
 		hungerLevel = 0;
 		dirtynessLevel = 0;
 		funds = 10000.00;
@@ -157,21 +158,21 @@ public class PersonAgent extends Agent implements Person {
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
 			if (b.getName() == homeName) {
-				print("Adding GUI");
+				//print("Adding GUI");
 				b.addGui(personGui);
 			}
 		}
 		if (this.name.contains("BankD")) {
-			personState = PersonState.WantsToDeposit;
+			setPersonState(PersonState.WantsToDeposit);
 		}
 		else if (this.name.contains("BankW")) {
-			personState = PersonState.WantsToWithdraw;
+			setPersonState(PersonState.WantsToWithdraw);
 		}
 		else if (this.name.contains("BankL")) {
-			personState = PersonState.WantsToGetLoan;
+			setPersonState(PersonState.WantsToGetLoan);
 		}
 		else if (this.name.contains("MarketG")) {
-			personState = PersonState.NeedsToGoMarket;
+			setPersonState(PersonState.NeedsToGoMarket);
 			clearInventory();
 			checkInventory();
 		}
@@ -191,7 +192,7 @@ public class PersonAgent extends Agent implements Person {
 		this.funds = initialFunds;
 		String vehicleStatusNoSpace = vehicleStatus.replaceAll(" ", "");
 		this.transMethod = TransportationMethod.valueOf(vehicleStatusNoSpace);
-		personState = PersonState.Idle;
+		setPersonState(PersonState.Idle);
 		hungerLevel = 0;
 		dirtynessLevel = 0;
 		rentDue = false;
@@ -207,8 +208,7 @@ public class PersonAgent extends Agent implements Person {
 			}
 		}
 		startThread();
-		print("I LIVE.");
-		
+		//print("I LIVE.");
 	}
 	
 	
@@ -227,7 +227,7 @@ public class PersonAgent extends Agent implements Person {
 		this.transMethod = TransportationMethod.valueOf(vehicleStatusNoSpace);
 		String housingStatusNoSpace = housingStatus.replaceAll(" ", "");
 		this.houseState = HouseState.valueOf(housingStatusNoSpace);
-		personState = PersonState.Idle;
+		setPersonState(PersonState.Idle);
 		hungerLevel = 0;
 		dirtynessLevel = 0;
 		rentDue = false;
@@ -243,7 +243,7 @@ public class PersonAgent extends Agent implements Person {
 			}
 		}
 		startThread();
-		print("I LIVE.");
+		//print("I LIVE.");
 	}
 	
 	//Hax for testing
@@ -266,33 +266,33 @@ public class PersonAgent extends Agent implements Person {
 	public void msgWakeUp() {
 		print("msgWakeUp received - Setting state to WantFood.");
 		hasWorked = false;
-		personState = PersonState.WantFood;
+		setPersonState(PersonState.WantFood);
 		stateChanged();
 	}
 	public void msgCookingDone() {
 		print("msgCookingDone received - Setting state to StartEating.");
-		personState = PersonState.StartEating;
+		setPersonState(PersonState.StartEating);
 		stateChanged();
 	}
 	public void msgDoneEating() {
 		print("msgDoneEating received - Setting state to Idle.");
-		personState = PersonState.Idle;
+		setPersonState(PersonState.Idle);
 		hungerLevel = 0;
 		stateChanged();
 	}
 	public void msgGoWork() {
 		print("msgGoWork received - Setting state to NeedsToWork.");
-		personState = PersonState.NeedsToWork;
+		setPersonState(PersonState.NeedsToWork);
 		stateChanged();
 	}
 	public void msgDoneWorking() {
 		print("msgDoneWorking received - Setting state to WantFood.");
-		personState = PersonState.WantFood;
+		setPersonState(PersonState.WantFood);
 		stateChanged();
 	}
 	public void msgGoHome() {
 		print("msgGoHome received - Setting state to WantsToGoHome");
-		personState = PersonState.WantsToGoHome;
+		setPersonState(PersonState.WantsToGoHome);
 		stateChanged();
 	}
 	public void msgRentPaid() {
@@ -301,17 +301,18 @@ public class PersonAgent extends Agent implements Person {
 		stateChanged();
 	}
 	public void msgRoleFinished() {
-		Role r = roles.pop();
+		RoleInterface r = roles.pop();
 		print("msgRoleFinished received - Popping current Role: " + r.toString() + ".");
-		print ("Current state: " + personState.toString());
+		//print ("Current state: " + personState.toString());
+		personState = PersonState.InTransit;
 		stateChanged();
 	}
 	public void msgTransportFinished(String location) {
-		Role r = roles.pop();
+		RoleInterface r = roles.pop();
 		currentLocation = location;
 		if (currentLocation == homeName) {
-			personState = PersonState.EnterHome;
-			print("msgTransportFinished received - Popping transport role, updating current location to: " + currentLocation + ".");
+			setPersonState(PersonState.EnterHome);
+			print("msgTransportFinished received - Popping transport role, updating current location to: " + currentLocation + ". At Home.");
 			stateChanged();
 		}
 		else {
@@ -341,58 +342,58 @@ public class PersonAgent extends Agent implements Person {
 		}
 		/** Rules for Market and Bank visits. Should only happen if evaluate status is called. **/
 		//Bank Rules
-		if (personState == PersonState.WantsToWithdraw) {
+		if (getPersonState() == PersonState.WantsToWithdraw) {
 			goWithdraw();
 			return true;
 		}
-		if (personState == PersonState.WantsToGetLoan) {
+		if (getPersonState() == PersonState.WantsToGetLoan) {
 			goLoan();
 			return true;
 		}
-		if (personState == PersonState.WantsToDeposit) {
+		if (getPersonState() == PersonState.WantsToDeposit) {
 			goDeposit();
 			return true;
 		}
-		if (personState == PersonState.WantsToRob) {
+		if (getPersonState() == PersonState.WantsToRob) {
 			goRob();
 			return true;
 		}
 		//Market Rules
-		if (personState == PersonState.NeedsToGoMarket) {
+		if (getPersonState() == PersonState.NeedsToGoMarket) {
 			goMarket();
 			return true;
 		}
 		/** Normative Scenario Rules **/
-		if(personState == PersonState.EnterHome) {
+		if(getPersonState() == PersonState.EnterHome) {
 			enterHome();
 			return true;
 		}
-		if (personState == PersonState.WantsToGoHome) {
+		if (getPersonState() == PersonState.WantsToGoHome) {
 			goHome();
 			return true;
 		}
-		if (personState == PersonState.CookHome && currentLocation == homeName) {
+		if (getPersonState() == PersonState.CookHome && currentLocation == homeName) {
 			cookHomeFood();
 			return true;
 		}
-		if (personState == PersonState.CookHome) {
+		if (getPersonState() == PersonState.CookHome) {
 			goHome();
 			return true;
 		}
-		if (personState == PersonState.GoOutEat) {
+		if (getPersonState() == PersonState.GoOutEat) {
 			goRestaurant();
 			return true;
 		}
-		if (personState == PersonState.WantFood) {
+		if (getPersonState() == PersonState.WantFood) {
 			//print("STUB IN PERSONAGENT SCHEDULER: WANTFOOD");
 			decideFood();
 			return true;
 		}
-		if (personState == PersonState.StartEating) {
+		if (getPersonState() == PersonState.StartEating) {
 			eatFood();
 			return true;
 		}
-		if (personState == PersonState.NeedsToWork) {
+		if (getPersonState() == PersonState.NeedsToWork) {
 			goWork();
 			return true;
 		}
@@ -411,40 +412,48 @@ public class PersonAgent extends Agent implements Person {
 	 * 
 	 */
 	private boolean evaluateStatus() {
-		print("In Eval");
-		if (personState == PersonState.Cooking || personState == PersonState.Eating) {
+		print("In Eval: Current Location = " + currentLocation + ".");
+		if (getPersonState().toString().contains("ing") || getPersonState().toString().contains("OutTo") || getPersonState().toString().contains("NeedsTo")){
 			return false;
 		}
 		else if (hasWorked = false) {
-			personState = PersonState.NeedsToWork;
+			print("Eval says go WORK");
+			setPersonState(PersonState.NeedsToWork);
 			return true;
 		}
-		else if(funds <= 100.00) {
-			personState = PersonState.WantsToWithdraw;
+		else if(funds < 100.00) {
+			print("Eval says GO WITHDRAW");
+			setPersonState(PersonState.WantsToWithdraw);
 			return true;
 		}
 		else if(checkInventory() == false) {
-			//print("Just checked inventory, need to replenish!");
-			personState = PersonState.NeedsToGoMarket;
+			print("Just checked inventory, need to replenish!");
+			setPersonState(PersonState.NeedsToGoMarket);
 			return true;
 		}
-		else if (currentLocation != homeName) {
-			personState = PersonState.WantsToGoHome;
+		else if(currentLocation != homeName) {
+			print ("Eval says GO HOME");
+			setPersonState(PersonState.WantsToGoHome);
 			return true;
 		}
-		else if(personState == PersonState.Idle){
-			personState = PersonState.Sleeping;
+		else if(getPersonState() == PersonState.Idle){
+			setPersonState(PersonState.Sleeping);
 			personGui.DoSleep();
+			actionComplete.acquireUninterruptibly();
 			return false;
 		}
-		personState = PersonState.Sleeping;
-		personGui.DoSleep();
-		return false;
+		else {
+			print("Eval says ELSE!");
+			setPersonState(PersonState.Sleeping);
+			personGui.DoSleep();
+			actionComplete.acquireUninterruptibly();
+			return false;
+		}
 	}
 	private void enterHome() {
 		personGui.setPresentTrue();
 		personGui.DoEnterHouse();
-		personState = PersonState.Idle;
+		setPersonState(PersonState.Idle);
 	}
 	/*private void payRent() {
 		roles.clear();
@@ -461,7 +470,7 @@ public class PersonAgent extends Agent implements Person {
 	}*/
 	private void goHome() {
 		print("Action goHome - State set to InTransit. Adding new Transportation Role.");
-		personState = PersonState.InTransit;
+		setPersonState(PersonState.InTransit);
 		roles.clear();
 		Role t = new TransportationRole(homeName, currentLocation);
 		t.setPerson(this);
@@ -469,7 +478,7 @@ public class PersonAgent extends Agent implements Person {
 	}	
 	private void cookHomeFood() {
 		print("Action cookHomeFood - State set to cooking " + inventory.get(desiredFood).type + ".");
-		personState = PersonState.Cooking;
+		setPersonState(PersonState.Cooking);
 		personGui.DoCook();
 		actionComplete.acquireUninterruptibly();
 		personTimer.schedule(new PersonTimerTask(this) {
@@ -478,17 +487,18 @@ public class PersonAgent extends Agent implements Person {
 			}
 		},
 		inventory.get(desiredFood).preparationTime);//time for cooking
-		leaveHouse();
 	}
 	private void goRestaurant() {
 		print("Action goRestaurant - State set to OutToEat");
-		personState = PersonState.OutToEat;
+		setPersonState(PersonState.OutToEat);
 		//Decide Which restaurant to go to
 		Restaurant r = Directory.sharedInstance().getRestaurants().get(0);
 		//End of Decide block
-		personGui.DoLeaveHouse();
-		actionComplete.acquireUninterruptibly();
-		personGui.setPresentFalse();
+		if(currentLocation == homeName) {
+			personGui.DoLeaveHouse();
+			actionComplete.acquireUninterruptibly();
+			personGui.setPresentFalse();
+		}
 		//Role logic
 		roles.clear();
 		Role custRole = factory.createRole(r.getName(), this);
@@ -496,7 +506,7 @@ public class PersonAgent extends Agent implements Person {
 		custRole.msgGotHungry();
 		custRole.setHost(Directory.sharedInstance().getAgents().get(r.getName() + "Host"));
 		custRole.setCashier(Directory.sharedInstance().getAgents().get(r.getName() + "Cashier"));
-		Role t = new TransportationRole(r.getName(), homeName);
+		Role t = new TransportationRole(r.getName(), currentLocation);
 		t.setPerson(this);
 		roles.add(t);
 	}
@@ -518,15 +528,15 @@ public class PersonAgent extends Agent implements Person {
 		cook = false;
 		//if Stay at home and eat. Alters Cook true or false
 		if (cook == true) {
-			personState = PersonState.CookHome;
+			setPersonState(PersonState.CookHome);
 		}
 		else {
-			personState = PersonState.GoOutEat;
+			setPersonState(PersonState.GoOutEat);
 		}
 	}
 	private void eatFood() {
 		print("Action eatFood - State set to Eating at home.");
-		personState = PersonState.Eating;
+		setPersonState(PersonState.Eating);
 		personGui.DoEat();
 		actionComplete.acquireUninterruptibly();
 		personTimer.schedule(new PersonTimerTask(this) {
@@ -540,10 +550,12 @@ public class PersonAgent extends Agent implements Person {
 	private void goWork() {
 		print("Action goWork - hasWorked = true. Going to work.");
 		hasWorked = true;
-		personState = PersonState.OutToWork;
-		personGui.DoLeaveHouse();
-		actionComplete.acquireUninterruptibly();
-		personGui.setPresentFalse();
+		setPersonState(PersonState.OutToWork);
+		if(currentLocation == homeName) {
+			personGui.DoLeaveHouse();
+			actionComplete.acquireUninterruptibly();
+			personGui.setPresentFalse();
+		}
 		//Role Logic
 		roles.clear();
 		roles.add(workDetails.workRole);
@@ -572,7 +584,12 @@ public class PersonAgent extends Agent implements Person {
 	}
 	private void goMarket() {
 		print("Action goMarket - State set to OutToMarket");
-		personState = PersonState.OutToMarket;
+		setPersonState(PersonState.OutToMarket);
+		if(currentLocation == homeName) {
+			personGui.DoLeaveHouse();
+			actionComplete.acquireUninterruptibly();
+			personGui.setPresentFalse();
+		}
 		Market m = Directory.sharedInstance().getMarkets().get(0);
 		roles.clear();
 		Role marketCust = factory.createRole(m.getName(), this);
@@ -602,63 +619,63 @@ public class PersonAgent extends Agent implements Person {
 		else {
 			deposit = 0.0;
 		}
-		print("Action goDeposit - State set to OutBank");
-		personState = PersonState.OutToBank;
-		personGui.DoLeaveHouse();
-		actionComplete.acquireUninterruptibly();
-		personGui.setPresentFalse();
+		if(currentLocation == homeName) {
+			personGui.DoLeaveHouse();
+			actionComplete.acquireUninterruptibly();
+			personGui.setPresentFalse();
+		};
 		//Role logic
 		Bank b = Directory.sharedInstance().getBanks().get(0);
 		roles.clear();
-		Role bankCustRole = new BankCustomerRole(personState.toString(), deposit, 0.0);
+		Role bankCustRole = new BankCustomerRole(getPersonState().toString(), deposit, 0.0);
 		//bankCustRole.setManager(Directory.sharedInstance().getAgents().get(b.getName()));
 		bankCustRole.setPerson(this);
 		roles.add(bankCustRole);
 		Role t = new TransportationRole(b.getName(), currentLocation);
 		t.setPerson(this);
 		roles.add(t);
-		
+		print("Action goDeposit - State set to OutBank");
+		setPersonState(PersonState.OutToBank);
 	}
 	private void goLoan() {
-		print("Action goLoan - State set to OutBank");
-		personState = PersonState.OutToBank;
-		personGui.DoLeaveHouse();
-		actionComplete.acquireUninterruptibly();
-		personGui.setPresentFalse();
+		if(currentLocation == homeName) {
+			personGui.DoLeaveHouse();
+			actionComplete.acquireUninterruptibly();
+			personGui.setPresentFalse();
+		}
 		//Role logic
 		Bank b = Directory.sharedInstance().getBanks().get(0);
 		roles.clear();
-		Role bankCustRole = new BankCustomerRole(personState.toString(), 0.0, 1000.0);
+		Role bankCustRole = new BankCustomerRole(getPersonState().toString(), 0.0, 1000.0);
 		//bankCustRole.setManager(Directory.sharedInstance().getAgents().get(b.getName()));
 		bankCustRole.setPerson(this);
 		roles.add(bankCustRole);
 		Role t = new TransportationRole(b.getName(), currentLocation);
 		t.setPerson(this);
 		roles.add(t);
+		print("Action goLoan - State set to OutBank");
+		setPersonState(PersonState.OutToBank);
 		
 	}
 	
 	private void goWithdraw() {
-		print("Action goWithraw - State set to OutBank");
-		personState = PersonState.OutToBank;
-		personGui.DoLeaveHouse();
-		actionComplete.acquireUninterruptibly();
-		personGui.setPresentFalse();
+		if(currentLocation == homeName) {
+			personGui.DoLeaveHouse();
+			actionComplete.acquireUninterruptibly();
+			personGui.setPresentFalse();
+		}
 		//Role logic
 		Bank b = Directory.sharedInstance().getBanks().get(0);
 		roles.clear();
-		Role bankCustRole = new BankCustomerRole(personState.toString(), 0.0, 0.0);
+		Role bankCustRole = new BankCustomerRole(getPersonState().toString(), 0.0, 0.0);
 		//bankCustRole.setManager(Directory.sharedInstance().getAgents().get(b.getName()));
 		bankCustRole.setPerson(this);
 		roles.add(bankCustRole);
 		Role t = new TransportationRole(b.getName(), currentLocation);
 		t.setPerson(this);
 		roles.add(t);
-	}
-	
-	private void leaveHouse() {
-		personGui.setPresentFalse();
-		print("Leaving house now.");
+		print("Action goWithraw - State set to OutBank");
+		setPersonState(PersonState.OutToBank);
 	}
 	public void clearInventory() {
 		for (Food f : inventory) {
@@ -692,5 +709,13 @@ public class PersonAgent extends Agent implements Person {
 	}
 	public String getTransportationMethod() {
 		return transMethod.toString();
+	}
+
+	public PersonState getPersonState() {
+		return personState;
+	}
+
+	public void setPersonState(PersonState personState) {
+		this.personState = personState;
 	}
 }

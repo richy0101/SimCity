@@ -31,17 +31,19 @@ public class BankTellerGui implements Gui {
 	BufferedImage customerImage;
 	
 	private static final List<Point> tellerBench = new ArrayList<Point>() {{
-		add(new Point(36, 106));
-		add(new Point(36, 182));
-		add(new Point(36, 265));
-		add(new Point(778, 106));
-		add(new Point(778, 182));
-		add(new Point(778, 265));
+		add(new Point(5, 51));
+		add(new Point(5, 127));
+		add(new Point(5, 210));
+		add(new Point(778-30, 51));
+		add(new Point(778, 127));
+		add(new Point(778, 210));
 	}};
 	
 	
 	BufferedImage personLeft;
 	BufferedImage personRight;
+	BufferedImage personUp;
+	BufferedImage personDown;
 	
 	public BankTellerGui(BankTellerRole tellerAgent) {
 		agent = tellerAgent;
@@ -52,6 +54,8 @@ public class BankTellerGui implements Gui {
         try {
         	personLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
         	personRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));
+        	personUp = ImageIO.read(getClass().getResource("GUIPersonUp.png"));
+        	personDown = ImageIO.read(getClass().getResource("GUIPersonDown.png"));
         }
         catch(IOException e) {
         	System.out.println("Error w/ Person assets");
@@ -79,26 +83,37 @@ public class BankTellerGui implements Gui {
 			&& tellerCommand == Command.GoToRegister) {
 			agent.msgAtRegister();
 		}
-
 		if(xPos == xDestination && yPos == yDestination
 				&& (xDestination == xManager) && (yDestination == yManager) && tellerCommand == Command.GoToManager) {
+			System.out.println("At bank manager, releasing.");
 			agent.msgAtManager();
+			tellerCommand = Command.noCommand;
 		}
 
 		if (xPos == xDestination && yPos == yDestination
 				&& (xDestination == xExit) && (yDestination == yExit) && tellerCommand == Command.LeaveBank) {
 			agent.msgAnimationFinishedLeavingBank();
-		}
-
-		tellerCommand=Command.noCommand;
-		
-		
-
+			tellerCommand = Command.noCommand;
+		}		
 	}
     
 	@Override
 	public void draw(Graphics2D g) {
-		g.drawImage(personRight, xPos, yPos, null);
+		if (xPos < xDestination) {
+			g.drawImage(personRight, xPos, yPos, null);
+		}
+		else if (xPos > xDestination) {
+			g.drawImage(personLeft,  xPos, yPos, null);
+		}
+		else if (yPos < yDestination) {
+			g.drawImage(personDown, xPos, yPos, null);
+		}
+		else if (yPos > yDestination) {
+			g.drawImage(personUp, xPos, yPos, null);
+		}
+		else {
+			g.drawImage(personDown, xPos, yPos, null);
+		}
 	}
     
 	@Override
