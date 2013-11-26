@@ -564,13 +564,16 @@ public class PersonAgent extends Agent implements Person {
 		return groceryList.isEmpty();
 	}
 	private void goMarket() {
-		Market m = Directory.sharedInstance().getMarkets().get(0);
-		roles.clear();
-		factory.createRole(m.getName(), this);
-		//roles.add(new TransportationRole(m.getName()));
 		print("Action goMarket - State set to OutToMarket");
 		personState = PersonState.OutToMarket;
-		
+		Market m = Directory.sharedInstance().getMarkets().get(0);
+		roles.clear();
+		Role marketCust = factory.createRole(m.getName(), this);
+		marketCust.setMarket(Directory.sharedInstance().marketDirectory.get(m.getName()).getWorker());
+		roles.add(marketCust);
+		Role t = new TransportationRole(m.getName(), currentLocation);
+		t.setPerson(this);
+		roles.add(t);
 	}
 	/** Non Norm Actions **/
 	private void goRob() {

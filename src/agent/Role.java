@@ -1,4 +1,5 @@
 package agent;
+import market.MarketRole;
 import city.interfaces.Person;
 
 public class Role {
@@ -43,6 +44,11 @@ public class Role {
 	}
 	//Bank Methods
 	public void setManager(Agent agent) {
+		
+	}
+
+	public void setMarket(MarketRole marketRole) {
+		// TODO Auto-generated method stub
 		
 	}
 }
