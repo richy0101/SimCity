@@ -47,25 +47,6 @@ public class BusHelper {
 	Coordinate busStop4Location = new Coordinate(110,73);
 	
 	public Map<String, Coordinate> busStopEvaluator = new HashMap<String, Coordinate>(); {
-		/*
-		busStopEvaluator.put("Bank", busStop4Location);
-		
-		busStopEvaluator.put("House1", busStop3Location);
-		busStopEvaluator.put("House2", busStop3Location);
-		busStopEvaluator.put("House3", busStop4Location);
-		busStopEvaluator.put("House4", busStop4Location);
-		busStopEvaluator.put("House5", busStop1Location);
-		busStopEvaluator.put("House6", busStop2Location);
-		
-		busStopEvaluator.put("Apartment1", busStop4Location);
-		busStopEvaluator.put("Apartment2", busStop3Location);
-		
-		busStopEvaluator.put("Market1", busStop3Location);
-		busStopEvaluator.put("Market2", busStop1Location);
-		
-		busStopEvaluator.put("StackRestaurant", busStop4Location);
-		*/
-		
 		busStopEvaluator.put("Bank", busStop4Location);
 		
 		busStopEvaluator.put("House1", busStop1Location);
@@ -86,20 +67,21 @@ public class BusHelper {
 	public Map<String, Integer> busStopToInt = new HashMap<String, Integer>(); {
 		busStopToInt.put("Bank", 4);
 		
-		busStopToInt.put("House1", 3);
-		busStopToInt.put("House2", 3);
-		busStopToInt.put("House3", 4);
-		busStopToInt.put("House4", 4);
-		busStopToInt.put("House5", 1);
+		busStopToInt.put("House1", 1);
+		busStopToInt.put("House2", 4);
+		busStopToInt.put("House3", 3);
+		busStopToInt.put("House4", 3);
+		busStopToInt.put("House5", 2);
 		busStopToInt.put("House6", 2);
 		
-		busStopToInt.put("Apartment1", 4);
-		busStopToInt.put("Apartment2", 3);
+		busStopToInt.put("Apartment1", 1);
+		busStopToInt.put("Apartment2", 2);
 		
 		busStopToInt.put("Market1", 3);
-		busStopToInt.put("Market2", 1);
+		busStopToInt.put("Market2", 2);
 		
-		busStopToInt.put("StackRestaurant", 4);
+		busStopToInt.put("StackRestaurant", 1);
+		
 	}
 		
 //STREETCORNERS
