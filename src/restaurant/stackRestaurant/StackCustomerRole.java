@@ -67,7 +67,6 @@ public class StackCustomerRole extends Role implements Customer {
 				b.addGui(customerGui);
 			}
 		}
-		msgGotHungry();
 	}
 
 	/**
@@ -94,7 +93,7 @@ public class StackCustomerRole extends Role implements Customer {
 	}
 
 	// Messages
-
+	@Override
 	public void msgGotHungry() {//from animation
 		Do("I'm hungry");
 		event = AgentEvent.gotHungry;
