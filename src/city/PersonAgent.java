@@ -169,6 +169,43 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	public PersonAgent(Role job, 
+			String job_location, 
+			String name, 
+			int aggressivenessLevel, 
+			double initialFunds, 
+			String housingStatus, 
+			String vehicleStatus) {
+		this.name = name;
+		workDetails = new WorkDetails(job, job_location);
+		this.aggressivenessLevel = aggressivenessLevel;
+		this.funds = initialFunds;
+		String vehicleStatusNoSpace = vehicleStatus.replaceAll(" ", "");
+		this.transMethod = TransportationMethod.valueOf(vehicleStatusNoSpace);
+		String housingStatusNoSpace = housingStatus.replaceAll(" ", "");
+		this.houseState = HouseState.valueOf(housingStatusNoSpace);
+		personPosition = PersonPosition.AtHome;
+		personState = PersonState.Idle;
+		hungerLevel = 0;
+		dirtynessLevel = 0;
+		rentDue = false;
+		hasWorked = false;
+		Directory.sharedInstance().addPerson(this);
+		personGui = new PersonGui(this);
+		
+		homeName = housingStatus;
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == homeName) {
+				b.addGui(personGui);
+			}
+		}
+		startThread();
+		print("I LIVE.");
+		
+	}
+	
+	
+	public PersonAgent(Role job, 
 			String name, 
 			int aggressivenessLevel, 
 			double startingFunds,
@@ -192,7 +229,7 @@ public class PersonAgent extends Agent implements Person {
 		Directory.sharedInstance().addPerson(this);
 		personGui = new PersonGui(this);
 		
-		homeName = "House1";
+		homeName = housingStatus;
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
 			if (b.getName() == homeName) {
