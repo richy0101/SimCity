@@ -50,8 +50,8 @@ public class BankTellerGui implements Gui {
 		xDestination = 450;
 		yDestination = 450;
         try {
-        	personLeft = ImageIO.read(getClass().getResource("team02/src/city/gui/GUIPersonLeft.png"));
-        	personRight = ImageIO.read(getClass().getResource("team02/src/city/gui/GUIPersonRight.png"));
+        	personLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
+        	personRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));
         }
         catch(IOException e) {
         	System.out.println("Error w/ Person assets");

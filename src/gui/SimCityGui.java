@@ -31,7 +31,7 @@ import javax.swing.event.ChangeEvent;
 import market.MarketCustomerRole;
 import market.MarketRole;
 import restaurant.stackRestaurant.StackCookRole;
-import restaurant.stackRestaurant.StackHostRole;
+import restaurant.stackRestaurant.StackHostAgent;
 import restaurant.stackRestaurant.StackWaiterRole;
 import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 
