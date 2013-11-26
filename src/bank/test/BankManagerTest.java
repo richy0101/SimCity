@@ -63,7 +63,7 @@ public class BankManagerTest extends TestCase {
 				+ manager.log.toString(), 0, manager.log.size());
 		
 		manager.msgHereForWork(teller1);
-		assertEquals("Manager's first teller in his list of tellers should not be assigned to a register",manager.getTellers().get(0).getTellerNum(),-1);
+		assertEquals("Manager's first teller in his list of tellers should not be assigned to a register", manager.getTeller(0).getTellerNum(),-1);
 		assertTrue("Market scheduler should return true. It does", manager.pickAndExecuteAnAction());
 		assertEquals("Manager should have 1 tellers in his list of tellers",manager.getTellers().size(),1);
 		assertEquals("Manager should have event log of 1. Manager's event log reads: "

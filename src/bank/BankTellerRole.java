@@ -17,7 +17,7 @@ import agent.Role;
 public class BankTellerRole extends Role implements BankTeller {
     //data--------------------------------------------------------------------------------
 	private List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
-	private class MyCustomer {
+	public class MyCustomer {
 	    BankCustomer customer;
 	    int accountNumber;
 	    CustomerState custState;
@@ -303,8 +303,8 @@ public class BankTellerRole extends Role implements BankTeller {
 	/**
 	 * @return the customers
 	 */
-	public List<MyCustomer> getCustomers() {
-		return customers;
+	public MyCustomer getCustomer(int customerInstance) {
+		return customers.get(customerInstance);
 	}
 
 	/**

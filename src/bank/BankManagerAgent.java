@@ -12,7 +12,7 @@ public class BankManagerAgent extends Agent implements BankManager {
     //data--------------------------------------------------------------------------------
 	private List<BankCustomer> customers = Collections.synchronizedList(new ArrayList<BankCustomer>());
 	private List<MyBankTeller> tellers = Collections.synchronizedList(new ArrayList<MyBankTeller>());
-	private class MyBankTeller {
+	public class MyBankTeller {
 
 		BankTeller teller;
 	    BankTellerState state;
@@ -134,6 +134,13 @@ public class BankManagerAgent extends Agent implements BankManager {
 		return customers;
 	}
 
+	/**
+	 * @return a specific teller
+	 */
+	public MyBankTeller getTeller(int tellerInstance) {
+		return tellers.get(tellerInstance);
+	}
+	
 	/**
 	 * @return the tellers
 	 */

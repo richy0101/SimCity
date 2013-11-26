@@ -1,5 +1,10 @@
 package bank;
 
+import gui.Building;
+
+import java.util.List;
+
+import city.helpers.Directory;
 import bank.gui.BankCustomerGui;
 import bank.interfaces.*;
 import agent.Agent;
@@ -22,6 +27,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	private int tellerNumber = -1;  //hack initializer for unit tests (-1 as null)
     
 	private String task;
+	private String myLocation = "Bank";
 
 	public BankCustomerRole(String task, double moneyToDeposit, double moneyRequired) {
 		this.task = task;
@@ -29,6 +35,12 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		this.moneyRequired = moneyRequired;
 		this.moneyToDeposit = moneyToDeposit;
 		customerGui = new BankCustomerGui(this);
+    	List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == myLocation) {
+				b.addGui(customerGui);
+			}
+		}
 		
 	}
 	
