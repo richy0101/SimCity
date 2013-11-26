@@ -217,6 +217,11 @@ public class StackCookRole extends Role implements Cook {
 	private void leaveRestaurant() {
 		print("Leaving.");
 		cookGui.DoExitRestaurant();
+		try {
+			doneAnimation.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		getPersonAgent().msgRoleFinished();
 	}
 	
