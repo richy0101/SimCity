@@ -611,7 +611,8 @@ public class PersonAgent extends Agent implements Person {
 		Bank b = Directory.sharedInstance().getBanks().get(0);
 		roles.clear();
 		Role bankCustRole = new BankCustomerRole(personState.toString(), deposit, 0.0);
-		bankCustRole.setManager(Directory.sharedInstance().getAgents().get(b.getName()));
+		//bankCustRole.setManager(Directory.sharedInstance().getAgents().get(b.getName()));
+		bankCustRole.setPerson(this);
 		roles.add(bankCustRole);
 		Role t = new TransportationRole(b.getName(), currentLocation);
 		t.setPerson(this);
@@ -628,7 +629,8 @@ public class PersonAgent extends Agent implements Person {
 		Bank b = Directory.sharedInstance().getBanks().get(0);
 		roles.clear();
 		Role bankCustRole = new BankCustomerRole(personState.toString(), 0.0, 1000.0);
-		bankCustRole.setManager(Directory.sharedInstance().getAgents().get(b.getName()));
+		//bankCustRole.setManager(Directory.sharedInstance().getAgents().get(b.getName()));
+		bankCustRole.setPerson(this);
 		roles.add(bankCustRole);
 		Role t = new TransportationRole(b.getName(), currentLocation);
 		t.setPerson(this);
@@ -646,7 +648,8 @@ public class PersonAgent extends Agent implements Person {
 		Bank b = Directory.sharedInstance().getBanks().get(0);
 		roles.clear();
 		Role bankCustRole = new BankCustomerRole(personState.toString(), 0.0, 0.0);
-		bankCustRole.setManager(Directory.sharedInstance().getAgents().get(b.getName()));
+		//bankCustRole.setManager(Directory.sharedInstance().getAgents().get(b.getName()));
+		bankCustRole.setPerson(this);
 		roles.add(bankCustRole);
 		Role t = new TransportationRole(b.getName(), currentLocation);
 		t.setPerson(this);
