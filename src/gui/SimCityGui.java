@@ -422,7 +422,7 @@ public class SimCityGui {
 		
 		String a5 = "Bank";
 		String b5 = "House5";
-		String name5 = "BankDepositPerson5";
+		String name5 = "BankLoanPerson5";
 		Role role5 = new BankTellerRole("Bank");
 		PersonAgent p5 = new PersonAgent(role5, a5 , b5, name5);
 		role5.setPerson(p5);
