@@ -197,12 +197,18 @@ public class BusAgent extends Agent implements Bus {
 		
 		private void waitForPassengersToAlight(){
 			print("Unloading passengers.");
+			
+			event = Event.passengersAlighted; //temporarily placed here until timer issue is resolved
+			
+			//TIMER DOES NOT RUN THIS?
+			/*
 			timer.schedule(new TimerTask() {
 				public void run() {
 					event=Event.passengersAlighted;
 				}
 			},
-			3000);	
+			1000);
+			*/	
 		}
 		
 		private void alertPassengersToBoardBus(){
@@ -232,12 +238,18 @@ public class BusAgent extends Agent implements Bus {
 		
 		private void waitForPassengersToBoard(){
 			print("Loading passengers.");
+			
+			event = Event.passengersBoarded; //TEMPORARILY PLACED UNTIL RESOLVING TIMER ISSUE
+			
+			//TIMER ISSUES
+			/*
 			timer.schedule(new TimerTask() {
 				public void run() {
 					event=Event.passengersBoarded;
 				}
 			},
 			3000);
+			*/
 		}
 		
 		private void keepDriving(){
