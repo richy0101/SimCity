@@ -68,13 +68,13 @@ public class XMLReader {
 				 } else if(job.equals("StackCookRole")) {
 					 person = new PersonAgent(new StackCookRole(jobLocation), jobLocation, name, aggressiveness, initialFunds, housing, transportation);
 					 persons.add(person);
-				 } else if(job.equals("BankTellerRole")) {
+				 } else if(job.equals("BankTeller")) {
 					 person = new PersonAgent(new BankTellerRole(jobLocation), jobLocation, name, aggressiveness, initialFunds, housing, transportation);
 					 persons.add(person);
 				 } else if(job.equals("MarketSeller")) {
 					 person = new PersonAgent(new MarketRole(jobLocation), jobLocation, name, aggressiveness, initialFunds, housing, transportation);
 					 persons.add(person);
-				 } else if(job.equals(null)) {
+				 } else if(job.equals("")) {
 					 person = new PersonAgent(null, null, name, aggressiveness, initialFunds, housing, transportation);
 					 persons.add(person);
 				 } 
