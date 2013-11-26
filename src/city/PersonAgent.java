@@ -421,6 +421,7 @@ public class PersonAgent extends Agent implements Person {
 			return true;
 		}
 		else if(checkInventory() == false) {
+			print("Just checked inventory, need to replenish!");
 			personState = PersonState.NeedsToGoMarket;
 			return true;
 		}
@@ -556,6 +557,7 @@ public class PersonAgent extends Agent implements Person {
 
 	}
 	private boolean checkInventory() {
+		groceryList.clear();
 		for(Food f : inventory) {
 			if (f.stock <=1) {
 				groceryList.put(f.type, 3);
