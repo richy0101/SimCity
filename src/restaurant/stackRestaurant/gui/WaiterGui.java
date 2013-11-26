@@ -113,6 +113,9 @@ public class WaiterGui implements Gui {
 			g.drawImage(waiterImage, xPos, yPos, null);
 			g.drawImage(saladImage, xPos + 26, yPos + 20, null);
 		}
+		else {
+			g.drawImage(waiterImage, xPos, yPos, null);
+		}
     }
 
     public boolean isPresent() {
