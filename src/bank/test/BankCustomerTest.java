@@ -4,18 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import bank.Bank;
+import bank.BankCustomerRole;
 import bank.BankTellerRole;
 import bank.interfaces.BankTeller;
-import bank.test.mock.MockBankCustomer;
-import bank.test.mock.MockBankManager;
-import bank.test.mock.MockBankTeller;
 import bank.test.mock.*;
 import junit.framework.*;
 
-public class BankTest extends TestCase {
+public class BankCustomerTest extends TestCase {
 
 	//these are instantiated for each test separately via the setUp() method.
-	MockBankCustomer customer;
+	BankCustomerRole customer;
 	MockBankManager manager;
 	MockBankTeller teller;
 	
@@ -34,7 +32,9 @@ public class BankTest extends TestCase {
 	
 	//Deposit w/ Account
 	public void testOneBankInteraction(){
-		//teller size should be empty
+		customer = new BankCustomerRole("WantsToDeposit",300,0);
+		
+		//customer
 		assertEquals("Bank should have empty tellers. Instead, the Market's event log reads: "
 				+ market.log.toString(), 1, market.log.size());
 		//teller initial state Arrived At Work
