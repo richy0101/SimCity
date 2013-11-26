@@ -54,4 +54,10 @@ public class MockBankManager extends Mock implements BankManager {
 		log.add(new LoggedEvent("Teller is here for work"));
 		
 	}
+
+	@Override
+	public void msgTellerLeavingWork(BankTeller teller) {
+		log.add(new LoggedEvent("Teller is leaving work"));
+		
+	}
 }

@@ -32,7 +32,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	
 	private static final int MAXLOAN = 1000;
 	private Semaphore doneAnimation = new Semaphore(0,true);
-    private int registerNumber;
+    public int registerNumber = 0;
     BankManager manager;
     private BankTellerGui tellerGui;
     private enum TellerState {ArrivedAtWork, AtManager, GoingToRegister, ReadyForCustomers, DoneWorking, Gone};
