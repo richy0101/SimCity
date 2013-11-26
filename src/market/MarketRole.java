@@ -125,6 +125,9 @@ public class MarketRole extends Role implements Market {
 	public Map<String, Food> getInventory() {
 		return inventory;
 	}
+	public boolean getJobDone() {
+		return jobDone;
+	}
 	
 	//messages----------------------------------------------------------------------------
 	public void msgGetGroceries(MarketCustomer customer, Map<String, Integer> groceryList) {
@@ -167,8 +170,9 @@ public class MarketRole extends Role implements Market {
 	
 	public void msgJobDone() {
 		print("Received msgJobDone");
-		
 		jobDone = true;
+
+	    log.add(new LoggedEvent("Received msgJobDone from Person."));
 		stateChanged();
 	}
 	
@@ -181,6 +185,7 @@ public class MarketRole extends Role implements Market {
 	public boolean pickAndExecuteAnAction() {
 		if(MyOrders.isEmpty() && jobDone == true) {
 			LeaveJob();
+			return true;
 		}		
 		synchronized(MyOrders) {
 			for(Order o : MyOrders) {
@@ -216,8 +221,11 @@ public class MarketRole extends Role implements Market {
 			
 			for(Order o : MyOrders) {
 				if(o.state == orderState.CantPay) {
-						MyOrders.remove(o);
+					MyOrders.remove(o);
+					
+					log.add(new LoggedEvent("Deleting order."));
 					return true;
+					
 				}
 			}
 		}
@@ -249,18 +257,19 @@ public class MarketRole extends Role implements Market {
 	    		inventory.get(choice).supply -= amount;
 	    	}
 	    }
-	    
-	    DoGoToCounter();
-		try {
-			actionComplete.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 		
 	    if(o.retrievedGroceries.isEmpty())
 	        o.state = orderState.CantFill;
-	    else
+	    else {
 	        o.state = orderState.Filled;
+	        
+	        DoGoToCounter();
+			try {
+				actionComplete.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+	    }
 	    
 	    log.add(new LoggedEvent("Got MarketCustomer order."));
 	}
@@ -283,6 +292,8 @@ public class MarketRole extends Role implements Market {
 	    log.add(new LoggedEvent("Gave MarketCustomer the groceries."));
 	}
 	private void LeaveJob() {
+		log.add(new LoggedEvent("MarketRole leaving job"));
+		
 		getPersonAgent().msgRoleFinished();
 	}
 

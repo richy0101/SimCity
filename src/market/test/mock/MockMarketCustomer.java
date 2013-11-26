@@ -34,6 +34,5 @@ public class MockMarketCustomer extends Mock implements MarketCustomer {
 	@Override
 	public void msgCantFillOrder(Map<String, Integer> groceries) {
 		log.add(new LoggedEvent("Received msgCantFillOrder from Market."));
-		this.groceries = groceries;
 	}
 }
