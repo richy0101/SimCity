@@ -26,4 +26,6 @@ public interface Waiter {
 	public abstract void msgIWantToGoOnBreak();
 	
 	public abstract void msgImComingOffBreak();
+
+	public abstract void msgCookHere(Cook cook);
 }

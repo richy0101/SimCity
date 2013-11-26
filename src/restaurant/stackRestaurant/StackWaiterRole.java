@@ -424,6 +424,12 @@ public class StackWaiterRole extends Role implements Waiter {
 		}
 	}
 	
+	@Override
+	public void msgCookHere(Cook cook) {
+		this.cook = cook;
+		stateChanged();
+	}
+	
 	public void msgIWantToGoOnBreak() {//from GUI
 		print("I want to go on break");
 		state = AgentState.WantToGoOnBreak;

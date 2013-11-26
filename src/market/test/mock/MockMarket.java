@@ -10,6 +10,7 @@ public class MockMarket extends Mock implements Market {
 	public MarketCustomer customer;
 	public EventLog log;
 	public Map<String, Integer> groceries;
+	public double money;
 
 	public MockMarket(String name) {
 		super(name);
@@ -25,6 +26,7 @@ public class MockMarket extends Mock implements Market {
 	@Override
 	public void msgHereIsMoney(MarketCustomer customer, double money) {
 		log.add(new LoggedEvent("Received msgHereIsMoney from MarketCustomer. Money = $" + money));
+		this.money = money;
 	}
 
 	@Override

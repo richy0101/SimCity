@@ -117,10 +117,10 @@ public class Directory {
 	Coordinate house1Location = new Coordinate(350,275);
 	
 	private Home house2 = new Home("House2");
-	Coordinate house2Location = new Coordinate(478,285);
+	Coordinate house2Location = new Coordinate(350,130);
 
 	private Home house3 = new Home("House3");
-	Coordinate house3Location = new Coordinate(594,285);
+	Coordinate house3Location = new Coordinate(520,130);
 	
 	private Home house4 = new Home("House4");
 	Coordinate house4Location = new Coordinate(600,130);

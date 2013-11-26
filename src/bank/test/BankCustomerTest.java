@@ -75,11 +75,11 @@ public class BankCustomerTest extends TestCase {
 	
 	//Deposit w/o Account
 	public void testTwoBankInteraction(){
-		customer = new MockBankCustomer("WantsToDeposit",300,0);
-		teller.registerNumber = -1; //teller not at register
+		customer = new BankCustomerRole("WantsToDeposit",300,0);
 		
-		assertEquals("Teller should not be at a register",teller.registerNumber, -1);
-		teller.msgGoToRegister(1);
+		assertEquals("Customer should not be assigned a bank teller",customer.registerNumber, -1);
+		assertEquals("Customer should not be at manager ",customer.registerNumber, -1);
+		customer.msgGoToRegister(1);
 		assertFalse("Teller scheduler should return true,
 				teller.pickAndExecuteAction(),true);
 		assertEquals("Teller should be at register 1",teller.registerNumber, 1);

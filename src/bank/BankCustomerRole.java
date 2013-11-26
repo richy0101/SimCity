@@ -6,21 +6,22 @@ import agent.Role;
 
 public class BankCustomerRole extends Role implements BankCustomer {
     //data--------------------------------------------------------------------------------
-	BankTeller teller;
-	BankManager manager;
+	private BankTeller teller;
+	private BankManager manager;
 	private enum CustomerState {DoingNothing, Waiting, GoingToTeller, BeingHelped, AtManager, Done, Gone};
-	CustomerState state = CustomerState.DoingNothing;
+	private CustomerState state = CustomerState.DoingNothing;
 	
-	BankCustomerGui customerGui;
+	private BankCustomerGui customerGui;
 	
-	double moneyToDeposit;
-	double moneyToWithdraw = 100;
-	double moneyRequired;
+	private double moneyToDeposit = 0;
+	private double moneyToWithdraw = 100;
+	private double moneyRequired = 0;
 	
-	int accountNumber;
-	int tellerNumber = -1;  //hack initializer for unit tests (-1 as null)
+	private int accountNumber = 0;
+	private int tellerNumber = -1;  //hack initializer for unit tests (-1 as null)
     
-	String task;
+	private String task;
+
 	public BankCustomerRole(String task, double moneyToDeposit, double moneyRequired) {
 		this.task = task;
 		//this.manager = Directory.sharedInstance().getBanks().get(0).getManager();
@@ -162,4 +163,53 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
     //GUI Actions-------------------------------------------------------------------------
 	
+	
+	//Getters for unit tests--------------------------------------------------------------
+	/**
+	 * @return the state
+	 */
+	public String getState() {
+		return state.toString();
+	}
+
+
+	/**
+	 * @return the moneyToDeposit
+	 */
+	public double getMoneyToDeposit() {
+		return moneyToDeposit;
+	}
+
+
+	/**
+	 * @return the moneyToWithdraw
+	 */
+	public double getMoneyToWithdraw() {
+		return moneyToWithdraw;
+	}
+
+
+	/**
+	 * @return the moneyRequired
+	 */
+	public double getMoneyRequired() {
+		return moneyRequired;
+	}
+
+
+	/**
+	 * @return the accountNumber
+	 */
+	public int getAccountNumber() {
+		return accountNumber;
+	}
+
+
+	/**
+	 * @return the tellerNumber
+	 */
+	public int getTellerNumber() {
+		return tellerNumber;
+	}
+
 }

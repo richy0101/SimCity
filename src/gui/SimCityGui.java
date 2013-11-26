@@ -349,7 +349,7 @@ public class SimCityGui {
 	}
 	private void runSuperNorm() {
 		String a = "Test Bank 1";
-		String b = "House4";
+		String b = "House1";
 		String name = "Test Person 1";
 		Role role = new StackWaiterRole("StackRestaurant");
 		PersonAgent p = new PersonAgent(role, a , b, name);
@@ -357,12 +357,20 @@ public class SimCityGui {
 		p.msgWakeUp();
 		
 		String a2 = "StackRestaurant";
-		String b2 = "House3";
+		String b2 = "House2";
 		String name2 = "Test Person 2";
 		Role role2 = new StackWaiterRole("StackRestaurant");
 		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
 		role2.setPerson(p2);
 		p2.msgGoWork();
+		
+		String a3 = "StackRestaurant";
+		String b3 = "House3";
+		String name3 = "Test Person 3";
+		Role role3 = new StackCookRole("StackRestaurant");
+		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
+		role3.setPerson(p3);
+		p3.msgGoWork();
         
 		MarketRole market = new MarketRole("Market1");
 		PersonAgent marketPerson = new PersonAgent(market);

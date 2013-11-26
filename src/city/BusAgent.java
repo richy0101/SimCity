@@ -124,11 +124,13 @@ public class BusAgent extends Agent implements Bus {
 		}
 		
 		public void msgLeavingBus(Transportation person){
+	
 			synchronized(passengersOnBoard) {
 				for(MyPassenger p: passengersOnBoard){
 					if (p.passenger==person){
 						p.status= Status.Leaving;
-//						passengersOnBoard.remove(p);
+						passengersOnBoard.remove(p);
+						break;
 					}			
 				}
 			}
