@@ -42,6 +42,8 @@ public class BankTellerGui implements Gui {
 	
 	BufferedImage personLeft;
 	BufferedImage personRight;
+	BufferedImage personUp;
+	BufferedImage personDown;
 	
 	public BankTellerGui(BankTellerRole tellerAgent) {
 		agent = tellerAgent;
@@ -52,6 +54,8 @@ public class BankTellerGui implements Gui {
         try {
         	personLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
         	personRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));
+        	personUp = ImageIO.read(getClass().getResource("GUIPersonUp.png"));
+        	personDown = ImageIO.read(getClass().getResource("GUIPersonDown.png"));
         }
         catch(IOException e) {
         	System.out.println("Error w/ Person assets");
@@ -95,7 +99,21 @@ public class BankTellerGui implements Gui {
     
 	@Override
 	public void draw(Graphics2D g) {
-		g.drawImage(personRight, xPos, yPos, null);
+		if (xPos < xDestination) {
+			g.drawImage(personRight, xPos, yPos, null);
+		}
+		else if (xPos > xDestination) {
+			g.drawImage(personLeft,  xPos, yPos, null);
+		}
+		else if (yPos < yDestination) {
+			g.drawImage(personDown, xPos, yPos, null);
+		}
+		else if (yPos > yDestination) {
+			g.drawImage(personUp, xPos, yPos, null);
+		}
+		else {
+			g.drawImage(personDown, xPos, yPos, null);
+		}
 	}
     
 	@Override
