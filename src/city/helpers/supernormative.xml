@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>  
+<city>  
+	<Person id=“0”>  
+		<name>Ryan</name>  
+		<job>StackWaiterRole</job>
+		<job_location>StackRestaurant</job_location>
+		<aggressiveness>1</aggressiveness>
+		<startingFunds>1000</startingFunds>
+		<housingStatus>apartment</housingStatus>
+		<vehicleStatus>bus</vehicleStatus>
+	</Person>  
+	<Person id=“1”>  
+		<name>Bob</name>  
+		<job>StackWaiterRole</job>
+		<job_location>StackRestaurant</job_location>
+		<aggressiveness>1</aggressiveness>
+		<startingFunds>1000</startingFunds>
+		<housingStatus>apartment</housingStatus>
+		<vehicleStatus>bus</vehicleStatus>
+	</Person> 
+	<Person id=“2”>  
+		<name>Steve</name>  
+		<job>StackCookRole</job>
+		<job_location>StackRestaurant</job_location>
+		<aggressiveness>1</aggressiveness>
+		<startingFunds>1000</startingFunds>
+		<housingStatus>apartment</housingStatus>
+		<vehicleStatus>bus</vehicleStatus>
+	</Person> 
+	<Person id=“3”>  
+		<name>Ricky</name>  
+		<job>BankTellerRole</job>
+		<job_location>Bank</job_location>
+		<aggressiveness>1</aggressiveness>
+		<startingFunds>1000</startingFunds>
+		<housingStatus>apartment</housingStatus>
+		<vehicleStatus>bus</vehicleStatus>
+	</Person> 
+	<Person id=“4”>  
+		<name>Robert</name>  
+		<job>BankTeller</job>
+		<job_location>Bank</job_location>
+		<aggressiveness>1</aggressiveness>
+		<startingFunds>1000</startingFunds>
+		<housingStatus>apartment</housingStatus>
+		<vehicleStatus>bus</vehicleStatus>
+	</Person> 
+	<Person id=“5”>  
+		<name>Tim</name>  
+		<job>BankTeller</job>
+		<job_location>Bank</job_location>
+		<aggressiveness>1</aggressiveness>
+		<startingFunds>1000</startingFunds>
+		<housingStatus>apartment</housingStatus>
+		<vehicleStatus>bus</vehicleStatus>
+	</Person> 
+	<Person id=“6”>  
+		<name>Jimmy</name>  
+		<job>BankTeller</job>
+		<job_location>Bank</job_location>
+		<aggressiveness>1</aggressiveness>
+		<startingFunds>1000</startingFunds>
+		<housingStatus>apartment</housingStatus>
+		<vehicleStatus>bus</vehicleStatus>
+	</Person> 
+	<Person id=“7”>  
+		<name>John</name>  
+		<job>MarketSeller</job>
+		<job_location>Market1</job_location>
+		<aggressiveness>1</aggressiveness>
+		<startingFunds>1000</startingFunds>
+		<housingStatus>apartment</housingStatus>
+		<vehicleStatus>bus</vehicleStatus>
+	</Person> 
+	<Person id=“8”>  
+		<name>Sandy</name>  
+		<job>MarketSeller</job>
+		<job_location>Market2</job_location>
+		<aggressiveness>1</aggressiveness>
+		<startingFunds>1000</startingFunds>
+		<housingStatus>house1</housingStatus>
+		<vehicleStatus>bus</vehicleStatus>
+	</Person> 
+	<Person id=“9”>  
+		<name>Erica</name>  
+		<job></job>
+		<job_location></job_location>
+		<aggressiveness>1</aggressiveness>
+		<startingFunds>200</startingFunds>
+		<housingStatus>house2</housingStatus>
+		<vehicleStatus>bus</vehicleStatus>
+	</Person> 
+	<Person id=“10”>  
+		<name>Katie</name>  
+		<job></job>
+		<job_location></job_location>
+		<aggressiveness>1</aggressiveness>
+		<startingFunds>100</startingFunds>
+		<housingStatus>house3</housingStatus>
+		<vehicleStatus>bus</vehicleStatus>
+	</Person> 
+	<Person id=“11”>  
+		<name>Alex</name>  
+		<job></job>
+		<job_location></job_location>
+		<aggressiveness>1</aggressiveness>
+		<startingFunds>500</startingFunds>
+		<housingStatus>house4</housingStatus>
+		<vehicleStatus>bus</vehicleStatus>
+	</Person> 
+	<Person id=“12”>  
+		<name>Scott</name>  
+		<job></job>
+		<job_location></job_location>
+		<aggressiveness>1</aggressiveness>
+		<startingFunds>200</startingFunds>
+		<housingStatus>house5</housingStatus>
+		<vehicleStatus>bus</vehicleStatus>
+	</Person> 
+	<Person id=“13”>  
+		<name>Sierra</name>  
+		<job></job>
+		<job_location></job_location>
+		<aggressiveness>1</aggressiveness>
+		<startingFunds>300</startingFunds>
+		<housingStatus>house6</housingStatus>
+		<vehicleStatus>bus</vehicleStatus>
+	</Person> 
+</city> 
