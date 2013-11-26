@@ -111,7 +111,7 @@ public class TransportationRole extends Role implements Transportation  {
 	private void EnterBuilding() {
 		state = TransportationState.Finished;
 		Directory.sharedInstance().getCityGui().getMacroAnimationPanel().removeGui(guiToDestination);
-		getPersonAgent().msgTransportFinished(currentLocation);
+		getPersonAgent().msgTransportFinished(destination);
 		stateChanged();
 	}
 

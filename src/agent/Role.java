@@ -27,7 +27,22 @@ public class Role {
 	protected void Do(String msg) {
 		myPerson.Do(msg);
 	}
+	//Restaurant Methods
 	public void msgGotHungry() {
+		
+	}
+
+	public void setHost(Agent agent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setCashier(Agent agent) {
+		// TODO Auto-generated method stub
+		
+	}
+	//Bank Methods
+	public void setManager(Agent agent) {
 		
 	}
 }
