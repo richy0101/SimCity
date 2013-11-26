@@ -371,40 +371,40 @@ public class SimCityGui {
 //		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
 //		role3.setPerson(p3);
 //		p3.msgGoWork();
-//		
-//		String a4 = "Bank";
-//		String b4 = "House4";
-//		String name4 = "Test Person 4";
-//		Role role4 = new BankTellerRole("Bank");
-//		PersonAgent p4 = new PersonAgent(role4, a4 , b4, name4);
-//		role.setPerson(p4);
-//		p4.msgGoWork();
-//		
-//		String a5 = "Test Bank 5";
-//		String b5 = "House5";
-//		String name5 = "BankDepositPerson5";
-//		Role role5 = new BankTellerRole("Bank");
-//		PersonAgent p5 = new PersonAgent(role5, a5 , b5, name5);
-//		role.setPerson(p5);
-//		p5.msgTestWakeUp();
+	
+		String a4 = "Bank";
+		String b4 = "House4";
+		String name4 = "Test Person 4";
+		Role role4 = new BankTellerRole("Bank");
+		PersonAgent p4 = new PersonAgent(role4, a4 , b4, name4);
+		role4.setPerson(p4);
+		p4.msgGoWork();
+		
+		String a5 = "Bank";
+		String b5 = "House5";
+		String name5 = "BankDepositPerson5";
+		Role role5 = new BankTellerRole("Bank");
+		PersonAgent p5 = new PersonAgent(role5, a5 , b5, name5);
+		role5.setPerson(p5);
+		p5.msgTestWakeUp();
         
-		MarketRole role6 = new MarketRole("Market1");
-		Directory.sharedInstance().marketDirectory.get("Market1").setWorker(role6);
-		
-		String a6 = "Market1";
-		String b6 = "House4";
-		String name6 = "Test Person 6";
-		PersonAgent p6 = new PersonAgent(role6, a6 , b6, name6);
-		role6.setPerson(p6);
-		p6.msgGoWork();
-		
-		String a7 = "Test Bank 5";
-		String b7 = "House5";
-		String name7 = "MarketGoerPerson";
-		Role role7 = new BankTellerRole("Bank");
-		PersonAgent p7 = new PersonAgent(role7, a7 , b7, name7);
-		role7.setPerson(p7);
-		p7.msgTestWakeUp();
+//		MarketRole role6 = new MarketRole("Market1");
+//		Directory.sharedInstance().marketDirectory.get("Market1").setWorker(role6);
+//		
+//		String a6 = "Market1";
+//		String b6 = "House4";
+//		String name6 = "Test Person 6";
+//		PersonAgent p6 = new PersonAgent(role6, a6 , b6, name6);
+//		role6.setPerson(p6);
+//		p6.msgGoWork();
+//		
+//		String a7 = "Test Bank 5";
+//		String b7 = "House5";
+//		String name7 = "MarketGoerPerson";
+//		Role role7 = new BankTellerRole("Bank");
+//		PersonAgent p7 = new PersonAgent(role7, a7 , b7, name7);
+//		role7.setPerson(p7);
+//		p7.msgTestWakeUp();
 		
 		bus = new BusAgent();
 		busGui = new BusGui(bus);

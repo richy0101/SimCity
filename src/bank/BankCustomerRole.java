@@ -105,7 +105,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
     //scheduler---------------------------------------------------------------------------
 	
-	public boolean pickAndExecuteAction(){
+	public boolean pickAndExecuteAnAction(){
 		if(state == CustomerState.DoingNothing){
 			askForAssistance();
 			return true;

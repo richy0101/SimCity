@@ -3,12 +3,14 @@ package bank;
 import gui.Building;
 
 import java.util.ArrayList;
+
 import city.helpers.Directory;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
+import restaurant.stackRestaurant.interfaces.Host;
 import bank.gui.BankTellerGui;
 import bank.helpers.AccountSystem;
 import bank.interfaces.*;
@@ -46,12 +48,11 @@ public class BankTellerRole extends Role implements BankTeller {
     private String myLocation;
     
     public BankTellerRole(String location){
-    	tellerGui = new BankTellerGui(this);
+    	state = TellerState.ArrivedAtWork;
     	myLocation = location;
+    	manager = (BankManager) Directory.sharedInstance().getAgents().get("myLocation");
     	List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
-    	
     	tellerGui = new BankTellerGui(this);
-    	
 		for(Building b : buildings) {
 			if (b.getName() == myLocation) {
 				b.addGui(tellerGui);
@@ -135,8 +136,10 @@ public class BankTellerRole extends Role implements BankTeller {
 		stateChanged();
 	}
     //scheduler---------------------------------------------------------------------------
-	public boolean pickAndExecuteAction(){
+	public boolean pickAndExecuteAnAction(){
+		System.out.println("In teller scheduler");
 		if(state == TellerState.ArrivedAtWork) {
+			System.out.println("At Work as BankTeller");
 			DoGoCheckInWithManager();
 			return true;
 		}
