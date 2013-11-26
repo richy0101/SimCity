@@ -1,8 +1,10 @@
 package city.interfaces;
 
+import java.util.Map;
+
 public interface Person{
 
-	public void clearGroceries();
+	public void clearGroceries(Map<String, Integer> groceries);
 	public double getFunds();
 	public void setFunds(double funds);
 	public String getName();
