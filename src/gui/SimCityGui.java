@@ -205,8 +205,8 @@ public class SimCityGui {
 		
 		occupationComboBox.addItem("None");
 		occupationComboBox.addItem("Bank Teller");
-		occupationComboBox.addItem("Market Seller 1");
-		occupationComboBox.addItem("Market Seller 2");
+		occupationComboBox.addItem("Market 1 Seller");
+		occupationComboBox.addItem("Market 2 Seller");
 		occupationComboBox.addItem("Stack's Restaurant Waiter Normal");
 		occupationComboBox.addItem("Stack's Restaurant Waiter Shared");
 		occupationComboBox.addItem("Stack's Restaurant Cook");

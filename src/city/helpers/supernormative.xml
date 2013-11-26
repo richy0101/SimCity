@@ -3,7 +3,6 @@
 	<Person>  
 		<name>Ryan</name>  
 		<job>StackWaiterRole</job>
-		<job_location>StackRestaurant</job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>1000</startingFunds>
 		<housingStatus>House1</housingStatus>
@@ -11,7 +10,7 @@
 	</Person>  
 	<Person>  
 		<name>Bob</name>  
-		<job>StackWaiterRole</job>
+		<job>StackWaiterNormal</job>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>1000</startingFunds>
 		<housingStatus>House2</housingStatus>
@@ -19,7 +18,7 @@
 	</Person> 
 	<Person>  
 		<name>Steve</name>  
-		<job>StackCookRole</job>
+		<job>StackCook</job>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>1000</startingFunds>
 		<housingStatus>House3</housingStatus>
@@ -59,8 +58,7 @@
 	</Person> 
 	<Person>  
 		<name>John</name>  
-		<job>MarketSeller</job>
-		<job_location>Market1</job_location>
+		<job>Market1</job>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>1000</startingFunds>
 		<housingStatus>House5</housingStatus>
@@ -68,8 +66,7 @@
 	</Person> 
 	<Person>  
 		<name>Sandy</name>  
-		<job>MarketSeller</job>
-		<job_location>Market2</job_location>
+		<job>Market2</job>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>1000</startingFunds>
 		<housingStatus>House1</housingStatus>

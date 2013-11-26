@@ -55,7 +55,7 @@ public class PersonAgent extends Agent implements Person {
 		//Bank Scenario Constants
 		OutToBank, WantsToWithdraw, WantsToGetLoan, WantsToDeposit, WantsToRob, 
 		//Market Scenario Constants
-		NeedsToGoMarket, OutToMarket, EnterHome, OutToWork, Sleeping
+		NeedsToGoMarket, OutToMarket, EnterHome, OutToWork, Sleeping, DoneWorking, TryingToLeaveWork
 		};
 	HouseState houseState;
 	private PersonState personState;
@@ -315,11 +315,13 @@ public class PersonAgent extends Agent implements Person {
 		setPersonState(PersonState.NeedsToWork);
 		stateChanged();
 	}
-//	public void msgDoneWorking() {
-//		print("msgDoneWorking received - Setting state to WantFood.");
-//		setPersonState(PersonState.WantFood);
-//		stateChanged();
-//	}
+	public void msgDoneWorking() {
+		if (getPersonState() == PersonState.OutToWork) {
+			setPersonState(PersonState.DoneWorking);
+			print("msgDoneWorking received - Setting state to Done Working");
+		}
+		stateChanged();
+	}
 	public void msgGoHome() {
 		print("msgGoHome received - Setting state to WantsToGoHome");
 		setPersonState(PersonState.WantsToGoHome);
@@ -364,6 +366,10 @@ public class PersonAgent extends Agent implements Person {
 	 * Scheduler.  Determine what action is called for, and do it. -------------------------------------------------------
 	 */
 	protected boolean pickAndExecuteAnAction() {
+		if (getPersonState() == PersonState.DoneWorking) {
+			leaveWork();
+			return true;
+		}
 		if(!roles.isEmpty()) {
 			//print("STUB IN PERSONAGENT SCHEDULER: INROLESSTACK " + roles.peek().toString());
 			boolean b = false;
@@ -479,6 +485,10 @@ public class PersonAgent extends Agent implements Person {
 		personGui.setPresentTrue();
 		personGui.DoEnterHouse();
 		setPersonState(PersonState.Idle);
+	}
+	private void leaveWork() {
+		setPersonState(PersonState.TryingToLeaveWork);
+		roles.peek().msgJobDone();
 	}
 	/*private void payRent() {
 		roles.clear();
