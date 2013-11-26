@@ -12,21 +12,21 @@ import restaurant.stackRestaurant.interfaces.*;
 import city.helpers.Directory;
 
 public class StackWaiterRole extends Role implements Waiter {
-	private Cook cook;
-	private Host host;
+	protected Cook cook;
+	protected Host host;
 	private Cashier cashier;
 	private List<MyCustomer> customers = new ArrayList<MyCustomer>();
 	
-	private Semaphore doneAnimation = new Semaphore(0,true);
+	protected Semaphore doneAnimation = new Semaphore(0,true);
 	
 	public WaiterGui waiterGui = null;
 	private String myLocation;
 	
-	private enum AgentState
+	protected enum AgentState
 	{Arrived, Working, WantToGoOnBreak, WaitingForNotice, GoingOnBreak, OnBreak, FinishingBreak};
 	AgentState state = AgentState.Working;
 	
-	private enum CustomerState
+	protected enum CustomerState
 	{Waiting, Seated, ReadyToOrder, Ordering, Ordered, AtCook, FoodEmpty, FoodReady, WaitingForReadyFood, Eating, DoneEating, ReadyForCheck, WaitingForCheck, HasCheck, Paying, Gone};
 	
 	public StackWaiterRole(String location) {
@@ -210,17 +210,8 @@ public class StackWaiterRole extends Role implements Waiter {
 		customer.customer.msgHereToTakeOrder();
 	}
 	
-	private void takeOrderToCook(MyCustomer customer) {
-		host.msgWaiterBusy(this);
-		DoGoToCook();
-		print("Taking " + customer.customer + "'s order to cook");
-		try {
-			doneAnimation.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		customer.state = CustomerState.AtCook;
-		cook.msgCookOrder(this, customer.choice, customer.table, customer.seatNum);
+	protected void takeOrderToCook(MyCustomer customer) {
+		
 	}
 	
 	private void goPickUpFood(MyCustomer customer) {
@@ -285,7 +276,7 @@ public class StackWaiterRole extends Role implements Waiter {
 		waiterGui.DoBringToTable(tableNumber);
 	}
 	
-	private void DoGoToCook() {
+	protected void DoGoToCook() {
 		print("Going to cook");
 		waiterGui.DoGoToCook();
 	}
@@ -477,7 +468,7 @@ public class StackWaiterRole extends Role implements Waiter {
 		return waiterGui;
 	}
 
-	private class MyCustomer {
+	protected class MyCustomer {
 		MyCustomer(Customer customer, int table, int seatNum, CustomerState state) {
 			this.customer = customer;
 			this.table = table;

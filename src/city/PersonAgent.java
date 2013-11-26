@@ -51,7 +51,7 @@ public class PersonAgent extends Agent implements Person {
 		//Bank Scenario Constants
 		OutToBank, WantsToWithdraw, WantsToGetLoan, WantsToDeposit, WantsToRob, 
 		//Market Scenario Constants
-		NeedsToGoMarket, OutToMarket, EnterHome, OutToWork
+		NeedsToGoMarket, OutToMarket, EnterHome, OutToWork, Sleeping
 		};
 	HouseState houseState;
 	PersonState personState;
@@ -169,6 +169,11 @@ public class PersonAgent extends Agent implements Person {
 		}
 		else if (this.name.contains("BankL")) {
 			personState = PersonState.WantsToGetLoan;
+		}
+		else if (this.name.contains("MarketG")) {
+			personState = PersonState.NeedsToGoMarket;
+			clearInventory();
+			checkInventory();
 		}
 		startThread();
 	}
@@ -298,6 +303,7 @@ public class PersonAgent extends Agent implements Person {
 	public void msgRoleFinished() {
 		Role r = roles.pop();
 		print("msgRoleFinished received - Popping current Role: " + r.toString() + ".");
+		print ("Current state: " + personState.toString());
 		stateChanged();
 	}
 	public void msgTransportFinished(String location) {
@@ -328,7 +334,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	protected boolean pickAndExecuteAnAction() {
 		if(!roles.isEmpty()) {
-			//print("STUB IN PERSONAGENT SCHEDULER: INROLESSTACK " + roles.peek().toString());
+			print("STUB IN PERSONAGENT SCHEDULER: INROLESSTACK " + roles.peek().toString());
 			boolean b = false;
 			b = roles.peek().pickAndExecuteAnAction();
 			return b;
@@ -354,10 +360,12 @@ public class PersonAgent extends Agent implements Person {
 		//Market Rules
 		if (personState == PersonState.NeedsToGoMarket) {
 			goMarket();
+			return true;
 		}
 		/** Normative Scenario Rules **/
 		if(personState == PersonState.EnterHome) {
 			enterHome();
+			return true;
 		}
 		if (personState == PersonState.WantsToGoHome) {
 			goHome();
@@ -403,7 +411,7 @@ public class PersonAgent extends Agent implements Person {
 	 * 
 	 */
 	private boolean evaluateStatus() {
-		// TODO Auto-generated method stub
+		print("In Eval");
 		if (personState == PersonState.Cooking || personState == PersonState.Eating) {
 			return false;
 		}
@@ -416,6 +424,7 @@ public class PersonAgent extends Agent implements Person {
 			return true;
 		}
 		else if(checkInventory() == false) {
+			//print("Just checked inventory, need to replenish!");
 			personState = PersonState.NeedsToGoMarket;
 			return true;
 		}
@@ -424,9 +433,11 @@ public class PersonAgent extends Agent implements Person {
 			return true;
 		}
 		else if(personState == PersonState.Idle){
+			personState = PersonState.Sleeping;
 			personGui.DoSleep();
 			return false;
 		}
+		personState = PersonState.Sleeping;
 		personGui.DoSleep();
 		return false;
 	}
@@ -551,6 +562,7 @@ public class PersonAgent extends Agent implements Person {
 
 	}
 	private boolean checkInventory() {
+		groceryList.clear();
 		for(Food f : inventory) {
 			if (f.stock <=1) {
 				groceryList.put(f.type, 3);
@@ -559,22 +571,27 @@ public class PersonAgent extends Agent implements Person {
 		return groceryList.isEmpty();
 	}
 	private void goMarket() {
-		Market m = Directory.sharedInstance().getMarkets().get(0);
-		roles.clear();
-		factory.createRole(m.getName(), this);
-		//roles.add(new TransportationRole(m.getName()));
 		print("Action goMarket - State set to OutToMarket");
 		personState = PersonState.OutToMarket;
-		
+		Market m = Directory.sharedInstance().getMarkets().get(0);
+		roles.clear();
+		Role marketCust = factory.createRole(m.getName(), this);
+		marketCust.setMarket(Directory.sharedInstance().marketDirectory.get(m.getName()).getWorker());
+		roles.add(marketCust);
+		Role t = new TransportationRole(m.getName(), currentLocation);
+		t.setPerson(this);
+		roles.add(t);
 	}
 	/** Non Norm Actions **/
 	private void goRob() {
+		/**
 		Bank b = Directory.sharedInstance().getBanks().get(0);
 		roles.clear();
 		roles.add(new BankCustomerRole(personState.toString(), 0.0, 0.0));//Hacked factory LOL
 		//roles.add(new TransportationRole(b.getName()));
 		print("Action goRob - State set to OutBank");
 		personState = PersonState.OutToBank;
+		*/
 		
 	}
 	private void goDeposit() {
@@ -595,6 +612,7 @@ public class PersonAgent extends Agent implements Person {
 		roles.clear();
 		Role bankCustRole = new BankCustomerRole(personState.toString(), deposit, 0.0);
 		bankCustRole.setManager(Directory.sharedInstance().getAgents().get(b.getName()));
+		roles.add(bankCustRole);
 		Role t = new TransportationRole(b.getName(), currentLocation);
 		t.setPerson(this);
 		roles.add(t);
@@ -611,6 +629,7 @@ public class PersonAgent extends Agent implements Person {
 		roles.clear();
 		Role bankCustRole = new BankCustomerRole(personState.toString(), 0.0, 1000.0);
 		bankCustRole.setManager(Directory.sharedInstance().getAgents().get(b.getName()));
+		roles.add(bankCustRole);
 		Role t = new TransportationRole(b.getName(), currentLocation);
 		t.setPerson(this);
 		roles.add(t);
@@ -628,6 +647,7 @@ public class PersonAgent extends Agent implements Person {
 		roles.clear();
 		Role bankCustRole = new BankCustomerRole(personState.toString(), 0.0, 0.0);
 		bankCustRole.setManager(Directory.sharedInstance().getAgents().get(b.getName()));
+		roles.add(bankCustRole);
 		Role t = new TransportationRole(b.getName(), currentLocation);
 		t.setPerson(this);
 		roles.add(t);
@@ -637,9 +657,16 @@ public class PersonAgent extends Agent implements Person {
 		personGui.setPresentFalse();
 		print("Leaving house now.");
 	}
-	
-	
-	public void clearGroceries() {
+	public void clearInventory() {
+		for (Food f : inventory) {
+			f.stock = 0;
+		}
+	}
+	public void clearGroceries(Map<String, Integer> givenGroceries) {
+		for (Food f : inventory) {
+			f.stock += givenGroceries.get(f.type);
+			//print("Increasing inventory from groceries!");
+		}
 		groceryList.clear();
 	}
 	public String getName() {
@@ -663,6 +690,4 @@ public class PersonAgent extends Agent implements Person {
 	public String getTransportationMethod() {
 		return transMethod.toString();
 	}
-
-
 }

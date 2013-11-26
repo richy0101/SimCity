@@ -57,7 +57,7 @@ public class MarketGui implements Gui {
 			System.out.println("Error w/ MarketRoleImage");
 		}
 		
-		isPresent = true;
+		isPresent = false;
 	}
 	
 	@Override
@@ -94,11 +94,17 @@ public class MarketGui implements Gui {
 		else if (yPos > yDestination) {
 			g.drawImage(marketRoleDown, xPos, yPos, null);
 		}
+		else {
+			g.drawImage(marketRoleDown, xPos, yPos, null);		
+		}
 	}
 
 	@Override
 	public boolean isPresent() {
 		return isPresent;
+	}
+	public void setPresent() {
+		isPresent = true;
 	}
 
 	public void DoGetFood() {

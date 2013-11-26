@@ -40,6 +40,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		
 		myGroceryList = groceries;
 		gui = new MarketCustomerGui(this);
+		log = new EventLog();
 		
 		myLocation = location;
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
@@ -60,6 +61,9 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		log = new EventLog();
 	}
 	
+	public void setMarket(MarketRole m) {
+		market = m;
+	}
 	public void setMarket(Market m) {
 		market = m;
 	}
@@ -90,7 +94,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	public void msgHereAreYourGroceries(Map<String, Integer> groceries) {
 		print("Received msgHereAreYourGroceries");
 		
-		getPersonAgent().clearGroceries();
+		myGroceryList = groceries;
 	    roleEvent = Event.GotGroceries;
 
 	    log.add(new LoggedEvent("Received msgHereAreYourGroceries."));
@@ -154,7 +158,11 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+		if(market == null) {
+			print("market null");
+		}
+		else if(myGroceryList == null)
+			print("grocerylist null");
 	    market.msgGetGroceries(this, myGroceryList);
 	    log.add(new LoggedEvent("Ordered groceries."));
 	}
@@ -184,6 +192,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		
 
 	    log.add(new LoggedEvent("Left market."));
+		getPersonAgent().clearGroceries(myGroceryList);
 		getPersonAgent().msgRoleFinished();
 	}
 	

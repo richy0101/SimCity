@@ -70,8 +70,10 @@ public class MarketCustomerGui implements Gui {
 			yPos--;
 		
 		if(xPos == xDestination && yPos == yDestination) {
-			if(command == state.Entering || command == state.Leaving)
+			if(command == state.Entering || command == state.Leaving) {
 				role.msgActionComplete();
+				command = state.NoCommand;
+			}
 		}
 	}
 
@@ -87,6 +89,9 @@ public class MarketCustomerGui implements Gui {
 			g.drawImage(customerUp, xPos, yPos, null);
 		}
 		else if (yPos > yDestination) {
+			g.drawImage(customerDown, xPos, yPos, null);
+		}
+		else {
 			g.drawImage(customerDown, xPos, yPos, null);
 		}
 	}

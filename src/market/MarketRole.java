@@ -94,6 +94,8 @@ public class MarketRole extends Role implements Market {
 		MyOrders = Collections.synchronizedList(new ArrayList<Order>());
 		jobDone = false;
 		
+		log = new EventLog();
+		
 		gui = new MarketGui(this);
 
 		myLocation = location;
@@ -183,6 +185,8 @@ public class MarketRole extends Role implements Market {
 	
 	//scheduler---------------------------------------------------------------------------
 	public boolean pickAndExecuteAnAction() {
+		gui.setPresent();
+		
 		if(MyOrders.isEmpty() && jobDone == true) {
 			LeaveJob();
 			return true;

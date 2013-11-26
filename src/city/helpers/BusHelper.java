@@ -1,6 +1,7 @@
 package city.helpers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -112,16 +113,16 @@ public class BusHelper {
 	public static List<Bank> banks = new ArrayList<Bank>();
 	public static List<Market> markets = new ArrayList<Market>();
 	public static List<PersonAgent> people = new ArrayList<PersonAgent>();
-	public static List<Transportation> waitingPassengersAtStop1 = new ArrayList<Transportation>();
-	public static List<Transportation> waitingPassengersAtStop2 = new ArrayList<Transportation>();
-	public static List<Transportation> waitingPassengersAtStop3 = new ArrayList<Transportation>();
-	public static List<Transportation> waitingPassengersAtStop4 = new ArrayList<Transportation>();
+	public static List<Transportation> waitingPassengersAtStop1 = Collections.synchronizedList(new ArrayList<Transportation>());
+	public static List<Transportation> waitingPassengersAtStop2 = Collections.synchronizedList(new ArrayList<Transportation>());
+	public static List<Transportation> waitingPassengersAtStop3 = Collections.synchronizedList(new ArrayList<Transportation>());
+	public static List<Transportation> waitingPassengersAtStop4 = Collections.synchronizedList(new ArrayList<Transportation>());
 	
 	public Map<String, Coordinate> getDirectory() {
 		return locationDirectory;
 	}
 	public void addWaitingPerson(Transportation t, int stopNumber) {
-		System.out.println("adding waiting person");
+		//System.out.println("adding waiting person");
 		if (stopNumber == 1) {
 			waitingPassengersAtStop1.add(t);
 		}
