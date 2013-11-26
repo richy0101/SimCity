@@ -48,17 +48,17 @@ public class TransportationGui implements Gui {
 	public void updatePosition() {
 		//System.out.println("Updating Pos.");
 		if (xPos < xDestination) {
-			xPos+= 5;
+			xPos+= 1;
 		}
 		else if (xPos > xDestination) {
-			xPos-= 5;
+			xPos-= 1;
 		}
 		
 		if (yPos < yDestination) {
-			yPos+= 5;
+			yPos+= 1;
 		}
 		else if (yPos > yDestination) {
-			yPos-= 5;
+			yPos-= 1;
 		}
 	}
 
@@ -75,6 +75,9 @@ public class TransportationGui implements Gui {
 			g.drawImage(personUp, xPos, yPos, null);
 		}
 		else if (yPos > yDestination) {
+			g.drawImage(personDown, xPos, yPos, null);
+		}
+		else {
 			g.drawImage(personDown, xPos, yPos, null);
 		}
 	}

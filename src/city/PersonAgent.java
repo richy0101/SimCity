@@ -144,7 +144,7 @@ public class PersonAgent extends Agent implements Person {
 		rentDue = false;
 		hasWorked = false;
 		aggressivenessLevel = 1;
-		
+		transMethod = TransportationMethod.TakesTheBus;
 		//Set up inventory
 		Food initialFood = new Food("Chicken");
 		inventory.add(initialFood);
@@ -405,8 +405,11 @@ public class PersonAgent extends Agent implements Person {
 		personState = PersonState.OutToEat;
 		Restaurant r = Directory.sharedInstance().getRestaurants().get(0);
 		roles.clear();
-		roles.add(factory.createRole(r.getName(), this));//Hacked factory LOL
-		//roles.add(new TransportationRole(r.getName()));
+		//roles.add(factory.createRole(r.getName(), this));//Hacked factory LOL
+		Role t = new TransportationRole(homeName, r.getName());
+		t.setPerson(this);
+		roles.add(t);
+		personGui.setPresentFalse();
 		print("Action goRestaurant - State set to OutToEat");
 	}
 	private void decideFood() {
@@ -422,6 +425,7 @@ public class PersonAgent extends Agent implements Person {
 		else {
 			cook = false;
 		}
+		cook = false;
 		//if Stay at home and eat. Alters Cook true or false
 		if (cook == true) {
 			personState = PersonState.CookHome;

@@ -22,6 +22,7 @@ public class PersonGui implements Gui {
 	BufferedImage personRight;
 	BufferedImage personUp;
 	BufferedImage personDown;
+	boolean present = true;
 	public enum CurrentAction {Cooking, Eating, Transition, Idle};
 	CurrentAction currentAction = CurrentAction.Idle;
 	public PersonGui(PersonAgent agent) {
@@ -100,10 +101,15 @@ public class PersonGui implements Gui {
 		}
 	}
 
-	@Override
+	public void setPresentFalse() {
+		present = false;
+	}
+	public void setPresentTrue() {
+		present = true;
+	}
 	public boolean isPresent() {
 		// TODO Auto-generated method stub
-		return true;
+		return present;
 	}
 	public void DoCook() {
 		currentAction = CurrentAction.Cooking;

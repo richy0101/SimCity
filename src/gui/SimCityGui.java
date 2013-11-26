@@ -374,10 +374,10 @@ public class SimCityGui {
 		macroAnimationPanel.addGui(busGui);
 		bus.startThread();
 		
-		TransportationRole transportation = new TransportationRole("House1", "StackRestaurant");
-		PersonAgent transportationPerson = new PersonAgent(transportation);
-		transportation.setPerson(transportationPerson);
-		transportationPerson.startThread();
+//		TransportationRole transportation = new TransportationRole("House1", "StackRestaurant");
+//		PersonAgent transportationPerson = new PersonAgent(transportation);
+//		transportation.setPerson(transportationPerson);
+//		transportationPerson.startThread();
 		
 		Map<String, Integer> groceries = new HashMap<String, Integer>();
 		groceries.put("Steak", 1);
