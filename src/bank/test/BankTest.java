@@ -58,9 +58,16 @@ public class BankTest extends TestCase {
 		//teller receives .msgAssigningCustomer
 		//teller adds customer
 		//mycustomer state should initially be NeedingAssistance
-		
-		
-		
+		//teller messages customer .msgHowCanIHelpYou?
+		//mycustomerstate = AskedAssistance
+		//customerstate = GoingToTeller
+		//customer receives message from gui msgAtTeller
+		//customer state = BeingHelped
+		//customer messages teller msgOpenAccount
+		//account should not exist for user
+		//mycustomerstate == OpeningAccount
+		//teller messages customer .msgHereIsYourAccount
+		//mycustomer state == OpenedAccount	
 		
 	}
 	
