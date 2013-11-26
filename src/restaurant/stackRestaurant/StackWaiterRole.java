@@ -269,6 +269,11 @@ public class StackWaiterRole extends Role implements Waiter {
 	private void leaveRestaurant() {
 		print("Leaving.");
 		waiterGui.DoExitRestaurant();
+		try {
+			doneAnimation.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		getPersonAgent().msgRoleFinished();
 	}
 	
