@@ -79,21 +79,18 @@ public class BankTellerGui implements Gui {
 			&& tellerCommand == Command.GoToRegister) {
 			agent.msgAtRegister();
 		}
-
 		if(xPos == xDestination && yPos == yDestination
 				&& (xDestination == xManager) && (yDestination == yManager) && tellerCommand == Command.GoToManager) {
+			System.out.println("At bank manager, releasing.");
 			agent.msgAtManager();
+			tellerCommand = Command.noCommand;
 		}
 
 		if (xPos == xDestination && yPos == yDestination
 				&& (xDestination == xExit) && (yDestination == yExit) && tellerCommand == Command.LeaveBank) {
 			agent.msgAnimationFinishedLeavingBank();
-		}
-
-		tellerCommand=Command.noCommand;
-		
-		
-
+			tellerCommand = Command.noCommand;
+		}		
 	}
     
 	@Override

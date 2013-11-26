@@ -35,6 +35,7 @@ public class BankCustomerGui implements Gui {
 	private int xPos, yPos;
 	private int xTeller, yTeller;
 	private int xDestination, yDestination;
+
 	private enum Command {noCommand, GoToManager, GoToTeller, LeaveBank};
 	private Command command=Command.noCommand;
 
@@ -69,19 +70,20 @@ public class BankCustomerGui implements Gui {
 		if(xPos == xDestination && yPos == yDestination
 				&& (xDestination == xTeller) && (yDestination == yTeller) && command == Command.GoToTeller) {
 			agent.msgAtTeller();
+			command=Command.noCommand;
 		}
 
 		if(xPos == xDestination && yPos == yDestination
 				&& (xDestination == xManager) && (yDestination == yManager) && command == Command.GoToManager) {
 			agent.msgAtManager();
+			command=Command.noCommand;
 		}
 
 		if (xPos == xDestination && yPos == yDestination
 				&& (xDestination == xExit) && (yDestination == yExit) && command == Command.LeaveBank) {
 			agent.msgAnimationFinishedLeavingBank();
+			command=Command.noCommand;
 		}
-
-		command=Command.noCommand;
 	}
 
 
@@ -115,5 +117,14 @@ public class BankCustomerGui implements Gui {
 		xDestination = xExit;
 		yDestination = yExit;
 		command = Command.LeaveBank;
+	}
+	
+	//Getters for GUI unit test------------------------------------------------
+	public int getxDestination() {
+		return xDestination;
+	}
+	
+	public int getyDestination() {
+		return yDestination;
 	}
 }

@@ -98,6 +98,9 @@ public class BankManagerTest extends TestCase {
 		assertEquals("Manager's first teller in his list of tellers should not be assigned to a register", 
 				manager.getTeller(0).getTellerNum(),-1);
 		
+		assertEquals("Manager's should have 0 customers in his list", 
+				manager.getCustomers().size(),0);
+		
 		manager.pickAndExecuteAnAction();
 		
 		assertEquals("Manager should have 1 tellers in his list of tellers",manager.getTellers().size(),1);

@@ -37,8 +37,8 @@ public class BankTellerRole extends Role implements BankTeller {
 	private int registerNumber = 0;
     private BankManager manager;
     private BankTellerGui tellerGui;
-    private enum TellerState {ArrivedAtWork, AtManager, GoingToRegister, ReadyForCustomers, DoneWorking, Gone};
-    private TellerState state = TellerState.ArrivedAtWork;
+    private enum TellerState {ArrivedAtWork, AtManager, GoingToRegister, ReadyForCustomers, DoneWorking, Gone, ToldManager};
+    private TellerState state;
     
     private enum CustomerState {NeedingAssistance, 
     	AskedAssistance, OpeningAccount, OpenedAccount, 
@@ -212,6 +212,7 @@ public class BankTellerRole extends Role implements BankTeller {
 				}
 			}
 			manager.msgTellerFree(this);
+			return false;
 		}
 		if(state == TellerState.DoneWorking) {
 			LeaveBank();
@@ -223,15 +224,19 @@ public class BankTellerRole extends Role implements BankTeller {
 	//actions-----------------------------------------------------------------------------
 	private void DoGoCheckInWithManager() {
 		tellerGui.DoGoToManager();
+		//print("Before acquire in DoGoCheck.");
 		try {
 			doneAnimation.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		//print("After Acquire in Do GO Check.");
 		state = TellerState.AtManager;
 		stateChanged();
 	}
 	private void TellerAtWork(){
+		print("Telling manager I am at work.");
+		state = TellerState.ToldManager;
 		manager.msgHereForWork(this);
 	}
     private void DoGoToRegister() {
