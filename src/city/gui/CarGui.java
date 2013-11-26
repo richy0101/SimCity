@@ -31,6 +31,8 @@ public class CarGui implements Gui {
 	BufferedImage carDownImage;
 	BufferedImage carLeftImage;
 	BufferedImage carRightImage;
+	boolean driveRequest= false;
+	boolean isPresent=false;
 	
 	private CarAgent agent = null;
 	
@@ -38,6 +40,8 @@ public class CarGui implements Gui {
 	 * Received Messages/Actions
 	 */
 	public void DoGoTo(String place){
+		driveRequest = true;
+		isPresent = true;
 		destination = place;
 				
 			xDestination = getX(destination);
@@ -51,7 +55,9 @@ public class CarGui implements Gui {
 	}
 	
 	public void DoParkCar(){
-		System.out.println("carGui: Parking car.");
+		driveRequest = false;
+		isPresent = false;
+		System.out.println("carGui: Parking car underground.");
 		//send msg to animation panel to remove gui from the list
 	}
 
@@ -86,6 +92,7 @@ public class CarGui implements Gui {
 	@Override
 	public void updatePosition() {		
 		
+		if(driveRequest){
 		//car going Clockwise
 		if ((xPos == LeftCol) && (yPos != BottomRow)) //at left, going up
             yPos--;
@@ -96,10 +103,15 @@ public class CarGui implements Gui {
 		else if ((yPos == BottomRow) && (xPos != RightCol)) //at bottom, going left
             xPos--;
 		
-		//if not at proper position, then keep driving clockwise/ counter clockwise;
-		//if at one of 4 corners, update carImage accordingly to down right left or up
-		//once reached proper coords:
-		//agent.msgAtDestination();
+		if((xPos== getX(destination)) && (yPos==getY(destination))) //leftcol
+			agent.msgAtDestination();
+		}
+		
+		/*
+		 * Likely that getX & getY of destination won't be accurate on each side of the map. One way to do this is to use a range.
+		 * Alternatively, it might be better to just map it out.
+		 */
+		
 
 	}
 
@@ -117,12 +129,22 @@ public class CarGui implements Gui {
 
 	}
 
-	
+	public void setPresentFalse() {
+		isPresent = false;
+	}
+	public void setPresentTrue() {
+		isPresent = true;
+	}
+	public boolean isPresent() {
+		// TODO Auto-generated method stub
+		return isPresent;
+	}
+	/*
 	@Override
 	public boolean isPresent() {
 		// TODO Auto-generated method stub
 		return false;
-	}
+	}*/
 	
 
 }
