@@ -658,7 +658,7 @@ public class PersonAgent extends Agent implements Person {
 	public void clearGroceries(Map<String, Integer> givenGroceries) {
 		for (Food f : inventory) {
 			f.stock += givenGroceries.get(f.type);
-			print("Increasing inventory from groceries!");
+			//print("Increasing inventory from groceries!");
 		}
 		groceryList.clear();
 	}
