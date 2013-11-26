@@ -365,29 +365,6 @@ public class SimCityGui {
 		panel_1.add(lblWorkers);
 	}
 	private void runSuperNorm() {
-//		String a = "Test Bank 1";
-//		String b = "House1";
-//		String name = "Test Person 1";
-//		Role role = new StackWaiterRole("StackRestaurant");
-//		PersonAgent p = new PersonAgent(role, a , b, name);
-//		role.setPerson(p);
-//		p.msgWakeUp();
-//		
-//		String a2 = "StackRestaurant";
-//		String b2 = "House2";
-//		String name2 = "Test Person 2";
-//		Role role2 = new StackWaiterRole("StackRestaurant");
-//		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
-//		role2.setPerson(p2);
-//		p2.msgGoWork();
-//		
-//		String a3 = "StackRestaurant";
-//		String b3 = "House3";
-//		String name3 = "Test Person 3";
-//		Role role3 = new StackCookRole("StackRestaurant");
-//		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
-//		role3.setPerson(p3);
-//		p3.msgGoWork();
 
 		String a = "Test Bank 1";
 		String b = "House1";
@@ -475,29 +452,9 @@ public class SimCityGui {
 		bus2.startThread();
 		
 		
-		
-//		TransportationRole transportation = new TransportationRole("House1", "StackRestaurant");
-//		PersonAgent transportationPerson = new PersonAgent(transportation);
-//		transportation.setPerson(transportationPerson);
-//		transportationPerson.startThread();
-		
 		Map<String, Integer> groceries = new HashMap<String, Integer>();
 		groceries.put("Steak", 1);
-		/*
-         MarketCustomerRole marketCustomer = new MarketCustomerRole(groceries, "Market1");
-         PersonAgent marketCustomerPerson = new PersonAgent(marketCustomer);
-         marketCustomer.setPerson(marketCustomerPerson);
-         marketCustomer.setMarket(market);
-         marketCustomerPerson.setFunds(50.00);
-         
-         marketCustomerPerson.startThread();*/
 		
-		
-		//Example Code
-		//Instantiate directory to have Stack restaurant in it.
-		//Instantiate 1 person to go to stack restaurant. give it an arbitrary name for job and home and role.
-		//Something needs to call this person's msgWakeUp. And scenario should run from there. Person should wake up eat and then idle.
-		//change boolean Cook in person.Decide eat to false to make person go to a restaurant.
 	}
 	
 	public void displayBuildingPanel( BuildingPanel buildingPanel ) { //How is this tied in with the Micro Panel?
