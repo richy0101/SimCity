@@ -30,8 +30,8 @@ public class CustomerGui implements Gui{
 
 	
 	private static final int PERSONSIZEX = 32, PERSONSIZEY = 40;
-	private static final int CASHIERX = 460;
-	private static final int CASHIERY = 34;
+	private static final int CASHIERX = 460, CASHIERY = 34;
+	private static final int xExit = 850, yExit = 450;
 	private int WAITINGX = 725, WAITINGY = 333;
 
 	public CustomerGui(StackCustomerRole c) { 
@@ -135,8 +135,8 @@ public class CustomerGui implements Gui{
 	}
 
 	public void DoExitRestaurant() {
-		xDestination = 850;
-		yDestination = 450;
+		xDestination = xExit;
+		yDestination = yExit;
 		command = Command.LeaveRestaurant;
 	}
 	

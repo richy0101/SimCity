@@ -207,6 +207,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		print("I need to deposit money");
 		teller.msgDepositMoney(accountNumber, moneyToDeposit);
 		getPersonAgent().setFunds(getPersonAgent().getFunds() - moneyToDeposit);
+		moneyToDeposit = 0; 
 	}
 	
 	private void withdrawMoney() {
@@ -226,11 +227,11 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		state = CustomerState.InTransit;
 		print("Going to bank teller");
 		customerGui.DoGoToTeller(tellerNumber);
-		try {
+		/*try {
 			doneAnimation.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}
+		}*/
 		
 	}
     //GUI Actions-------------------------------------------------------------------------
@@ -288,6 +289,13 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	 */
 	public int getTellerNumber() {
 		return tellerNumber;
+	}
+	
+	/**
+	 * @return the task
+	 */
+	public String getTask() {
+		return task;
 	}
 
 }

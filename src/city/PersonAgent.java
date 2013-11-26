@@ -285,11 +285,11 @@ public class PersonAgent extends Agent implements Person {
 		setPersonState(PersonState.NeedsToWork);
 		stateChanged();
 	}
-	public void msgDoneWorking() {
-		print("msgDoneWorking received - Setting state to WantFood.");
-		setPersonState(PersonState.WantFood);
-		stateChanged();
-	}
+//	public void msgDoneWorking() {
+//		print("msgDoneWorking received - Setting state to WantFood.");
+//		setPersonState(PersonState.WantFood);
+//		stateChanged();
+//	}
 	public void msgGoHome() {
 		print("msgGoHome received - Setting state to WantsToGoHome");
 		setPersonState(PersonState.WantsToGoHome);
@@ -385,7 +385,7 @@ public class PersonAgent extends Agent implements Person {
 			return true;
 		}
 		if (getPersonState() == PersonState.WantFood) {
-			//print("STUB IN PERSONAGENT SCHEDULER: WANTFOOD");
+			print("STUB IN PERSONAGENT SCHEDULER: WANTFOOD");
 			decideFood();
 			return true;
 		}
@@ -439,15 +439,10 @@ public class PersonAgent extends Agent implements Person {
 		else if(getPersonState() == PersonState.Idle){
 			setPersonState(PersonState.Sleeping);
 			personGui.DoSleep();
-			actionComplete.acquireUninterruptibly();
 			return false;
 		}
 		else {
-			print("Eval says ELSE!");
-			setPersonState(PersonState.Sleeping);
-			personGui.DoSleep();
-			actionComplete.acquireUninterruptibly();
-			return false;
+			return true;
 		}
 	}
 	private void enterHome() {
@@ -563,12 +558,12 @@ public class PersonAgent extends Agent implements Person {
 		Role t = new TransportationRole(workDetails.workLocation, currentLocation);
 		t.setPerson(this);
 		roles.add(t);
-		personTimer.schedule(new PersonTimerTask(this) {
-			public void run() {
-				p.msgDoneWorking();
-			}
-		},
-		9000000);//time for working
+//		personTimer.schedule(new PersonTimerTask(this) {
+//			public void run() {
+//				p.msgDoneWorking();
+//			}
+//		},
+//		9000000);//time for working
 	}
 	private void cleanRoom() {
 

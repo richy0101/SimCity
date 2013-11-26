@@ -52,5 +52,11 @@ public class Role implements RoleInterface {
 		// TODO Auto-generated method stub
 		
 	}
+	public void msgJobDone() {
+		
+	}
+	public void msgHereIsPaycheck(double funds) {
+		
+	}
 
 }

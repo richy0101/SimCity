@@ -103,4 +103,10 @@ public class MockBankTeller extends Mock implements BankTeller {
 		log.add(new LoggedEvent("Teller is leaving bank"));
 		
 	}
+
+	@Override
+	public void msgHereIsPaycheck(double paycheck) {
+		log.add(new LoggedEvent("Teller is being paid for his work today"));
+		
+	}
 }

@@ -34,7 +34,7 @@ public class BankCustomerTest extends TestCase {
 	
 	//Deposit w/ Account
 	public void testOneBankInteraction(){
-		customer = new BankCustomerRole("WantsToDeposit",300,0,"FakeCustomer");
+		customer = new BankCustomerRole("Deposit",300.0,0,"FakeCustomer");
 		customer.manager = manager;
 		customer.setPerson(person);
 		customer.setAccountNumber(1);
@@ -47,16 +47,36 @@ public class BankCustomerTest extends TestCase {
 		customer.pickAndExecuteAnAction();
 		
 		assertEquals("Customer's state should be waiting ",customer.getState(),"Waiting");
+		assertEquals("Customer's x gui position/destination should be at x manager",customer.customerGui.getxDestination(),400);
+		assertEquals("Customer's y gui position/destination should be at y manager",customer.customerGui.getyDestination(),68);
+		
 		
 		assertEquals("Customer's teller number to go to should be -1 (null)",customer.getTellerNumber(),-1);
 		customer.msgHowCanIHelpYou(teller, 1);
 		assertEquals("Customer's teller number to go to should be 1",customer.getTellerNumber(),1);
-		//assertEquals("Customer's x gui position/destination should be 450",customer.customerGui.getxDestination(),customer.customerGui.getxTeller());
-		//assertEquals("Customer's y gui position/destination should be 450",customer.customerGui.getyDestination(),customer.customerGui.getyTeller());
 		
-		//customer.pickAndExecuteAnAction();
+		customer.pickAndExecuteAnAction();
 		
-		//assertEquals("Customer's state should be waiting ",customer.getState(),"");
+		assertEquals("Customer's x gui position/destination should be x teller",customer.customerGui.getxDestination(),customer.customerGui.getxTeller());
+		assertEquals("Customer's y gui position/destination should be y teller",customer.customerGui.getyDestination(),customer.customerGui.getyTeller());
+		customer.msgAtTeller();
+		assertEquals("Customer's state should be BeingHelped ",customer.getState(),"BeingHelped");
+		assertEquals("Customer's task should be Deposit ",customer.getTask(),"Deposit");
+		
+		assertEquals("Customer's funds should be 300 ",customer.getMoneyToDeposit(),300.0);
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's state should be WaitingForHelpResponse ",customer.getState(),"WaitingForHelpResponse");
+		assertEquals("Customer's funds should be 0 now that hes deposited",customer.getMoneyToDeposit(),0.0);
+		
+		customer.msgDepositSuccessful();
+		
+		assertEquals("Customer's state should be InTransit ",customer.getState(),"InTransit");
+		
+		customer.msgAnimationFinishedLeavingBank();
+		
+		assertEquals("Customer's state should be Gone ",customer.getState(),"Gone");
 		
 		
 		//teller initial state Arrived At Work

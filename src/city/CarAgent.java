@@ -18,7 +18,7 @@ public class CarAgent extends Agent implements Car {
     /**
 	*Data
 	*/
-	private TransportationRole passenger;
+	private Transportation passenger;
 	CarGui carGui;
 	
 	public enum carState
@@ -26,6 +26,7 @@ public class CarAgent extends Agent implements Car {
 	public carState currentState = carState.Idle;
 	
 	private String destination;
+	private String currentLocation;
 	private Semaphore driving = new Semaphore(0,true);
 		
 	/**
@@ -54,13 +55,14 @@ public class CarAgent extends Agent implements Car {
 	 */
 		public void msgTakeMeHere(String myDestination){ //receives msg from passenger
 			currentState = carState.inTransit;
-			destination= myDestination;
+			destination = myDestination;
 			stateChanged();
 		}
 		
 		public void msgAtDestination(){ //from carGui when reached destination
 			driving.release();
-			currentState= carState.atDestination;
+			currentLocation= destination;
+			currentState = carState.atDestination;
 			stateChanged();
 		}
 

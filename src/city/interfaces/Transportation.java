@@ -8,4 +8,6 @@ public interface Transportation {
 
 	void msgGetOnBus(BusAgent busAgent);
 
+	void msgArrivedAtDestination(String destination);
+
 }
