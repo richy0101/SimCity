@@ -13,6 +13,7 @@ public class MockBankTeller extends Mock implements BankTeller {
 	public MarketCustomer customer;
 	public EventLog log;
 	public Map<String, Integer> groceries;
+	public int registerNumber;
 
 	public MockBankTeller(String name) {
 		super(name);

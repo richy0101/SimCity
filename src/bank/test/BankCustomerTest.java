@@ -9,9 +9,7 @@ import bank.interfaces.BankTeller;
 import bank.test.mock.MockBankCustomer;
 import bank.test.mock.MockBankManager;
 import bank.test.mock.MockBankTeller;
-import market.MarketRole;
-import market.MarketRole.orderState;
-import market.test.mock.*;
+import bank.test.mock.*;
 import junit.framework.*;
 
 public class BankTest extends TestCase {
@@ -31,7 +29,7 @@ public class BankTest extends TestCase {
 		super.setUp();
 		manager = new MockBankManager("mockbankmanager");
 		teller = new MockBankTeller("mockbankteller");		
-		customer = new MockBankCustomer("mockcustomer",300,0);
+		//customer = new MockBankCustomer("mockcustomer",300,0);
 	}	
 	
 	//Deposit w/ Account
@@ -77,6 +75,17 @@ public class BankTest extends TestCase {
 	
 	//Deposit w/o Account
 	public void testTwoBankInteraction(){
+		customer = new MockBankCustomer("WantsToDeposit",300,0);
+		teller.registerNumber = -1; //teller not at register
+		
+		assertEquals("Teller should not be at a register",teller.registerNumber, -1);
+		teller.msgGoToRegister(1);
+		assertFalse("Teller scheduler should return true,
+				teller.pickAndExecuteAction(),true);
+		assertEquals("Teller should be at register 1",teller.registerNumber, 1);
+		
+		
+		
 		
 	}
 	

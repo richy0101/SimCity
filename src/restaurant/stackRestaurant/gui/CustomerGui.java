@@ -104,6 +104,9 @@ public class CustomerGui implements Gui{
 			g.drawImage(customerImage, xPos, yPos, null);
 			g.drawImage(saladImage, xPos + 26, yPos + 20, null);
 		}
+		else {
+			g.drawImage(customerImage, xPos, yPos, null);
+		}
 	}
 
 	public void setHungry() {

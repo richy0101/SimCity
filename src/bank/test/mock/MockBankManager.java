@@ -57,7 +57,7 @@ public class MockBankManager extends Mock implements BankManager {
 
 	@Override
 	public void msgTellerLeavingWork(BankTeller teller) {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Teller is leaving work"));
 		
 	}
 }

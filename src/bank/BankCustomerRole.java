@@ -18,7 +18,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	double moneyRequired;
 	
 	int accountNumber;
-	int tellerNumber;
+	int tellerNumber = -1;  //hack initializer for unit tests (-1 as null)
     
 	String task;
 	public BankCustomerRole(String task, double moneyToDeposit, double moneyRequired) {
