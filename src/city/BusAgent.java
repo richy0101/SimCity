@@ -135,7 +135,7 @@ public class BusAgent extends Agent implements Bus {
 		}
 		
 		public void msgAtStopOne(){
-			print("At Stop 1");
+			//print("At Stop 1");
 			driving.release();
 			event= Event.reachedStop;
 			lastStation = Station.Stop1;
@@ -143,21 +143,21 @@ public class BusAgent extends Agent implements Bus {
 		}
 		
 		public void msgAtStopTwo(){
-			print("At Stop 2");
+			//print("At Stop 2");
 			driving.release();
 			event= Event.reachedStop;
 			lastStation = Station.Stop2;
 		}
 
 		public void msgAtStopThree(){
-			print("At Stop 3");
+			//print("At Stop 3");
 			driving.release();
 			event= Event.reachedStop;
 			lastStation = Station.Stop3;
 		}
 		
 		public void msgAtStopFour(){
-			print("At Stop 4");
+			//print("At Stop 4");
 			driving.release();
 			event= Event.reachedStop;
 			lastStation = Station.Stop4;
