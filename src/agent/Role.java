@@ -55,7 +55,7 @@ public class Role implements RoleInterface {
 	public void msgJobDone() {
 		
 	}
-	public void msgHereIsPaycheck() {
+	public void msgHereIsPaycheck(double funds) {
 		
 	}
 
