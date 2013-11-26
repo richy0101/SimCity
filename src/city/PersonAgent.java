@@ -399,6 +399,7 @@ public class PersonAgent extends Agent implements Person {
 			}
 		},
 		inventory.get(desiredFood).preparationTime);//time for cooking
+		leaveHouse();
 	}
 	private void goRestaurant() {
 		print("Action goRestaurant - State set to OutToEat");
@@ -408,6 +409,7 @@ public class PersonAgent extends Agent implements Person {
 		roles.add(factory.createRole(r.getName(), this));//Hacked factory LOL
 		//roles.add(new TransportationRole(r.getName()));
 		print("Action goRestaurant - State set to OutToEat");
+		//leaveHouse();
 	}
 	private void decideFood() {
 		print("Action decideFood - Deciding to eat in or out.");
@@ -449,6 +451,7 @@ public class PersonAgent extends Agent implements Person {
 		roles.clear();
 		roles.add(workDetails.workRole);
 		//roles.add(new TransportationRole(workDetails.workLocation));
+		leaveHouse();
 		
 	}
 	private void cleanRoom() {
@@ -515,6 +518,13 @@ public class PersonAgent extends Agent implements Person {
 		print("Action goWithraw - State set to OutBank");
 		personState = PersonState.OutToBank;
 	}
+	
+	private void leaveHouse() {
+		personGui.setIsPresent(false);
+		print("Leaving house now.");
+	}
+	
+	
 	public void clearGroceries() {
 		groceryList.clear();
 	}
