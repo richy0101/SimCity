@@ -375,7 +375,7 @@ public class SimCityGui {
 //		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
 //		role3.setPerson(p3);
 //		p3.msgGoWork();
-	
+/*	
 		String a = "Test Bank 1";
 		String b = "House1";
 		String name = "Test Person 1";
@@ -389,7 +389,7 @@ public class SimCityGui {
 		PersonAgent p = new PersonAgent(role, a , b, name);
 		role.setPerson(p);
 		p.msgWakeUp();
-		
+	
 		String a2 = "StackRestaurant";
 		String b2 = "House2";
 		String name2 = "Test Person 2";
@@ -403,7 +403,7 @@ public class SimCityGui {
 		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
 		role2.setPerson(p2);
 		p2.msgGoWork();
-		
+
 		String a3 = "StackRestaurant";
 		String b3 = "House3";
 		String name3 = "Test Person 3";
@@ -411,7 +411,7 @@ public class SimCityGui {
 		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
 		role3.setPerson(p3);
 		p3.msgGoWork();
-		
+*/		
 		String a4 = "Bank";
 		String b4 = "House4";
 		String name4 = "Test Person 4";
