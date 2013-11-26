@@ -12,6 +12,7 @@ import city.PersonAgent;
 import city.TransportationRole;
 import city.gui.BusGui;
 import city.helpers.Directory;
+import city.helpers.XMLReader;
 import agent.Role;
 import bank.BankManagerAgent;
 import bank.BankTellerRole;
@@ -148,11 +149,16 @@ public class SimCityGui {
 		SpringLayout sl_panel = new SpringLayout();
 		panel.setLayout(sl_panel);
 		
-		JButton btnPopulateCity = new JButton("Populate City");
+		final JButton btnPopulateCity = new JButton("Populate City");
 		btnPopulateCity.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				// script for populating city
+				XMLReader reader = new XMLReader();
+				ArrayList<PersonAgent> people = reader.initializePeople();
+				for(PersonAgent person : people) {
+					person.startThread();
+				}
+				btnPopulateCity.setEnabled(false);
 				
 			}
 		});

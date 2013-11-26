@@ -44,8 +44,8 @@ public class BankTellerRole extends Role implements BankTeller {
     	LoanRejected, Leaving};
     String myLocation;
     
-    public BankTellerRole(BankTellerGui gui, String location){
-    	this.tellerGui = gui;
+    public BankTellerRole(String location){
+    	tellerGui = new BankTellerGui(this);
     	myLocation = location;
     	List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
