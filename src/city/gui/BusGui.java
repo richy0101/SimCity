@@ -29,6 +29,11 @@ public class BusGui extends CityComponent implements Gui {
 	int LeftCol = 135-15-3;
 	int RightCol = 700-8;	
 	
+	int Stop1xPos = 171;
+	int Stop2xPos = 675;
+	int Stop3xPos = 610;
+	int Stop4xPos = LeftCol;
+	
 	int xStart = LeftCol;
 	int yStart = BottomRow;
 	
@@ -111,13 +116,13 @@ public class BusGui extends CityComponent implements Gui {
             xPos--;
 		
 		
-		if((xPos==LeftCol) && (yPos==BottomRow))
+		if((xPos==Stop1xPos) && (yPos==BottomRow)) //leftcol
 			agent.msgAtStopOne();
-		else if((xPos==RightCol) && (yPos==BottomRow))
+		else if((xPos==Stop2xPos) && (yPos==BottomRow)) //rightcol
 			agent.msgAtStopTwo();
-		else if((xPos==RightCol) && (yPos==TopRow))
+		else if((xPos==Stop3xPos) && (yPos==TopRow)) //xPos==RightCol
 			agent.msgAtStopThree();
-		else if((xPos==LeftCol) && (yPos==TopRow))
+		else if((xPos==Stop4xPos) && (yPos==TopRow)) //LeftCol
 			agent.msgAtStopFour();
 		
 		}
