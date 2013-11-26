@@ -126,4 +126,10 @@ public class BankCustomerGui implements Gui {
 	public int getyDestination() {
 		return yDestination;
 	}
+	public int getxTeller() {
+		return xTeller;
+	}
+	public int getyTeller() {
+		return yTeller;
+	}
 }

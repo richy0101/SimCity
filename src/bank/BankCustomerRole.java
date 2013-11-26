@@ -3,8 +3,10 @@ package bank;
 import gui.Building;
 
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import city.helpers.Directory;
+import city.interfaces.Person;
 import bank.gui.BankCustomerGui;
 import bank.interfaces.*;
 import agent.Agent;
@@ -14,10 +16,12 @@ public class BankCustomerRole extends Role implements BankCustomer {
     //data--------------------------------------------------------------------------------
 	private BankTeller teller;
 	public BankManager manager;
+	public Person person;
 	private enum CustomerState {DoingNothing, Waiting, GoingToTeller, BeingHelped, AtManager, Done, Gone};
 	private CustomerState state = CustomerState.DoingNothing;
 	
 	public BankCustomerGui customerGui;
+	private Semaphore doneAnimation = new Semaphore(0,true);
 	
 	private double moneyToDeposit = 0;
 	private double moneyToWithdraw = 100;
@@ -25,6 +29,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	private int accountNumber = 0;
 	private int tellerNumber = -1;  //hack initializer for unit tests (-1 as null)
+	private String name;
     
 	private String task;
 	private String myLocation = "Bank";
@@ -46,20 +51,32 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		
 	}
 	
+	//Constructor for unit testing
+	public BankCustomerRole(String task, double moneyToDeposit, double moneyRequired, String name) {
+		this.task = task;
+		this.name = name;
+		this.moneyRequired = moneyRequired;
+		this.moneyToDeposit = moneyToDeposit;
+		customerGui = new BankCustomerGui(this);
+	}
+	
 	
     //messages from animation-------------------------------------------------------------
 	public void msgAtTeller() {
 		//from animation
+		doneAnimation.release();
 		state = CustomerState.BeingHelped;
 		stateChanged();
 	}
 	public void msgAtManager() {
 		//from animation
+		doneAnimation.release();
 		state = CustomerState.AtManager;
 		stateChanged();
 	}
 	public void msgAnimationFinishedLeavingBank() {
 		//from animation
+		doneAnimation.release();
 		state = CustomerState.Gone;
 		stateChanged();
 	}
@@ -71,6 +88,9 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	public void setGui(BankCustomerGui gui){
 		customerGui = gui;
 	}
+	/*public void setPerson(Person person){
+		this.person = person;
+	} */
     //messages----------------------------------------------------------------------------
 	public void msgHowCanIHelpYou(BankTeller teller, int tellerNumber) {
 		state = CustomerState.GoingToTeller;
@@ -144,7 +164,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
     //actions-----------------------------------------------------------------------------
 	private void askForAssistance() {
-		print("I need assistance");
+		//print("I need assistance");
 		customerGui.DoGoToManager();
 		if (manager == null) {
 			print("Manager is Null.");
@@ -184,6 +204,11 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	private void goToTeller() {
 		print("Going to bank teller");
 		customerGui.DoGoToTeller(tellerNumber);
+		try {
+			doneAnimation.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
 	}
     //GUI Actions-------------------------------------------------------------------------
