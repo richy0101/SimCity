@@ -42,7 +42,7 @@ public class MarketGui implements Gui {
 //		gui = m;
 		
 		xPos = xStart;
-		yPos = -20;
+		yPos = yStart;
 		xDestination = xStart;
 		yDestination = yStart;
 		
