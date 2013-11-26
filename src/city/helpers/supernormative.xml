@@ -12,7 +12,6 @@
 	<Person>  
 		<name>Bob</name>  
 		<job>StackWaiterRole</job>
-		<job_location>StackRestaurant</job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>1000</startingFunds>
 		<housingStatus>House2</housingStatus>
@@ -21,7 +20,6 @@
 	<Person>  
 		<name>Steve</name>  
 		<job>StackCookRole</job>
-		<job_location>StackRestaurant</job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>1000</startingFunds>
 		<housingStatus>House3</housingStatus>
@@ -30,7 +28,6 @@
 	<Person>  
 		<name>Ricky</name>  
 		<job>BankTellerRole</job>
-		<job_location>Bank</job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>1000</startingFunds>
 		<housingStatus>House4</housingStatus>
@@ -39,7 +36,6 @@
 	<Person>  
 		<name>Robert</name>  
 		<job>BankTeller</job>
-		<job_location>Bank</job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>1000</startingFunds>
 		<housingStatus>House5</housingStatus>
@@ -48,7 +44,6 @@
 	<Person>  
 		<name>Tim</name>  
 		<job>BankTeller</job>
-		<job_location>Bank</job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>1000</startingFunds>
 		<housingStatus>House6</housingStatus>
@@ -57,7 +52,6 @@
 	<Person>  
 		<name>Jimmy</name>  
 		<job>BankTeller</job>
-		<job_location>Bank</job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>1000</startingFunds>
 		<housingStatus>House6</housingStatus>

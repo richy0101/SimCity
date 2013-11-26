@@ -14,7 +14,10 @@ import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import restaurant.Restaurant;
+import restaurant.stackRestaurant.StackCookRole;
 import restaurant.stackRestaurant.StackCustomerRole;
+import restaurant.stackRestaurant.StackWaiterNormalRole;
+import restaurant.stackRestaurant.StackWaiterSharedRole;
 import market.MarketCustomerRole;
 import market.MarketRole;
 import market.Market;
@@ -100,8 +103,24 @@ public class PersonAgent extends Agent implements Person {
 			if(order == "StackRestaurant") {
 				this.newRole = new StackCustomerRole("StackRestaurant");
 			}
-			if(order == "Market1" || order == "Market2") {
+			else if(order == "Market1" || order == "Market2") {
 				this.newRole = new MarketCustomerRole(p.groceryList, order);
+			}
+			else if(order == "StackWaiterNormal") {
+				this.newRole = new StackWaiterNormalRole("StackRestaurant");
+				return newRole;
+			}
+			else if (order == "StackWaiterShared") {
+				this.newRole = new StackWaiterSharedRole("StackRestaurant");
+				return newRole;
+			}
+			else if (order == "StackCook") {
+				this.newRole = new StackCookRole("StackRestaurant");
+				return newRole;
+			}
+			else if (order == "BankTeller") {
+				this.newRole = new BankTellerRole("Bank");
+				return newRole;
 			}
 			newRole.setPerson(p);
 			//print("Set role complete.");
@@ -178,16 +197,27 @@ public class PersonAgent extends Agent implements Person {
 		}
 		startThread();
 	}
-	
-	public PersonAgent(Role job, 
-			String job_location, 
+	/**
+	 * FRONT END CONSTRUCTOR BELOW
+	 * @param job
+	 * @param job_location
+	 * @param name
+	 * @param aggressivenessLevel
+	 * @param initialFunds
+	 * @param housingStatus
+	 * @param vehicleStatus
+	 */
+	public PersonAgent(String job, 
 			String name, 
 			int aggressivenessLevel, 
 			double initialFunds, 
 			String housingStatus, 
 			String vehicleStatus) {
 		this.name = name;
-		workDetails = new WorkDetails(job, job_location);
+		//Set Up Work.
+		Role r = factory.createRole(job, this);
+		workDetails = new WorkDetails(r, Directory.sharedInstance().roleDirectory.get(r.toString()));
+		//finish setting up Work
 		this.aggressivenessLevel = aggressivenessLevel;
 		this.funds = initialFunds;
 		String vehicleStatusNoSpace = vehicleStatus.replaceAll(" ", "");

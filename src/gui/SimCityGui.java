@@ -46,7 +46,7 @@ public class SimCityGui {
 	CardLayout cardLayout;
 	MacroAnimationPanel macroAnimationPanel;
 	private JFrame frame;
-	private Map<String, Role> roles = new HashMap<String, Role>();
+	private Map<String, String> roles = new HashMap<String, String>();
 	private HashMap<String, CityCard> cards = new HashMap<String, CityCard>();
 	BusAgent bus;
 	BusAgent bus2;
@@ -82,6 +82,14 @@ public class SimCityGui {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() { //BUTTONS
+		 
+        roles.put("Bank Teller", "BankTeller");
+        roles.put("Market 1 Seller", "Market1");
+        roles.put("Market 2 Seller", "Market2");
+        roles.put("Stack's Restaurant Waiter Normal", "StackWaiterNormal");
+        roles.put("Stack's Restaurant Waiter Shared", "StackWaiterShared");
+        roles.put("Stack's Restaurant Cook", "StackCook");
+        
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setBounds(0, 0, 1133, 855);
@@ -197,9 +205,10 @@ public class SimCityGui {
 		
 		occupationComboBox.addItem("None");
 		occupationComboBox.addItem("Bank Teller");
-		occupationComboBox.addItem("Market Seller");
-		occupationComboBox.addItem("Landlord");
-		occupationComboBox.addItem("Stack's Restaurant Waiter");
+		occupationComboBox.addItem("Market Seller 1");
+		occupationComboBox.addItem("Market Seller 2");
+		occupationComboBox.addItem("Stack's Restaurant Waiter Normal");
+		occupationComboBox.addItem("Stack's Restaurant Waiter Shared");
 		occupationComboBox.addItem("Stack's Restaurant Cook");
 		
         //		occupationComboBox.addItem("Sheh's Restaurant Host");
@@ -312,10 +321,12 @@ public class SimCityGui {
 		sl_panel.putConstraint(SpringLayout.WEST, housingComboBox, 0, SpringLayout.WEST, nameTextField);
 		sl_panel.putConstraint(SpringLayout.EAST, housingComboBox, 0, SpringLayout.EAST, btnPopulateCity);
 		
-		housingComboBox.addItem("None");
-		housingComboBox.addItem("Owns A House");
-		housingComboBox.addItem("Owns An Apartment");
-		housingComboBox.addItem("Rents An Apartment");
+		housingComboBox.addItem("House1");
+		housingComboBox.addItem("House2");
+		housingComboBox.addItem("House3");
+		housingComboBox.addItem("House4");
+		housingComboBox.addItem("House5");
+		housingComboBox.addItem("House6");
 		
 		panel.add(housingComboBox);
 		
