@@ -438,7 +438,6 @@ public class PersonAgent extends Agent implements Person {
 		print("Action goHome - State set to InTransit. Adding new Transportation Role.");
 		personState = PersonState.InTransit;
 		roles.clear();
-		//roles.add(new TransportationRole(homeName));
 		Role t = new TransportationRole(homeName, currentLocation);
 		t.setPerson(this);
 		roles.add(t);
@@ -459,13 +458,17 @@ public class PersonAgent extends Agent implements Person {
 	private void goRestaurant() {
 		print("Action goRestaurant - State set to OutToEat");
 		personState = PersonState.OutToEat;
+		//Decide Which restaurant to go to
 		Restaurant r = Directory.sharedInstance().getRestaurants().get(0);
+		//End of Decide block
 		personGui.DoLeaveHouse();
 		actionComplete.acquireUninterruptibly();
 		roles.clear();
 		Role custRole = factory.createRole(r.getName(), this);
 		roles.add(custRole);//Hacked factory LOL
 		custRole.msgGotHungry();
+		custRole.setHost(Directory.sharedInstance().getAgents().get(r.getName() + "Host"));
+		custRole.setCashier(Directory.sharedInstance().getAgents().get(r.getName() + "Cashier"));
 		Role t = new TransportationRole(r.getName(), homeName);
 		t.setPerson(this);
 		roles.add(t);

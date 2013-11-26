@@ -3,6 +3,7 @@ package restaurant.stackRestaurant;
 import restaurant.stackRestaurant.gui.CustomerGui;
 import restaurant.stackRestaurant.helpers.Menu;
 import restaurant.stackRestaurant.helpers.Check;
+import agent.Agent;
 import agent.Role;
 import gui.Building;
 
@@ -72,8 +73,8 @@ public class StackCustomerRole extends Role implements Customer {
 	/**
 	 * hack to establish connection to Host agent.
 	 */
-	public void setHost(Host host) {
-		this.host = host;
+	public void setHost(Agent host) {
+		this.host = (Host) host;
 	}
 	
 	public void setFunds(double funds) {
@@ -88,8 +89,8 @@ public class StackCustomerRole extends Role implements Customer {
 		this.waiter = waiter;
 	}
 	
-	public void setCashier(Cashier cashier) {
-		this.cashier = cashier;
+	public void setCashier(Agent cashier) {
+		this.cashier = (Cashier) cashier;
 	}
 
 	// Messages
