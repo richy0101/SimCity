@@ -311,7 +311,7 @@ public class PersonAgent extends Agent implements Person {
 		currentLocation = location;
 		if (currentLocation == homeName) {
 			personState = PersonState.EnterHome;
-			print("msgTransportFinished received - Popping transport role, updating current location to: " + currentLocation + ".");
+			print("msgTransportFinished received - Popping transport role, updating current location to: " + currentLocation + ". At Home.");
 			stateChanged();
 		}
 		else {
@@ -411,15 +411,17 @@ public class PersonAgent extends Agent implements Person {
 	 * 
 	 */
 	private boolean evaluateStatus() {
-		print("In Eval");
-		if (personState == PersonState.Cooking || personState == PersonState.Eating) {
+		print("In Eval: Current Location = " + currentLocation + ".");
+		if (personState == PersonState.Cooking || personState == PersonState.Eating || personState == PersonState.Sleeping) {
 			return false;
 		}
 		else if (hasWorked = false) {
+			//print("Eval says go WORK");
 			personState = PersonState.NeedsToWork;
 			return true;
 		}
-		else if(funds <= 100.00) {
+		else if(funds < 100.00) {
+			//print("Eval says GO WITHDRAW");
 			personState = PersonState.WantsToWithdraw;
 			return true;
 		}
@@ -428,18 +430,24 @@ public class PersonAgent extends Agent implements Person {
 			personState = PersonState.NeedsToGoMarket;
 			return true;
 		}
-		else if (currentLocation != homeName) {
+		else if(currentLocation != homeName) {
+			//print ("Eval says GO HOME");
 			personState = PersonState.WantsToGoHome;
 			return true;
 		}
 		else if(personState == PersonState.Idle){
 			personState = PersonState.Sleeping;
 			personGui.DoSleep();
+			actionComplete.acquireUninterruptibly();
 			return false;
 		}
-		personState = PersonState.Sleeping;
-		personGui.DoSleep();
-		return false;
+		else {
+			//print("Eval says ELSE!");
+			personState = PersonState.Sleeping;
+			personGui.DoSleep();
+			actionComplete.acquireUninterruptibly();
+			return false;
+		}
 	}
 	private void enterHome() {
 		personGui.setPresentTrue();
@@ -478,7 +486,6 @@ public class PersonAgent extends Agent implements Person {
 			}
 		},
 		inventory.get(desiredFood).preparationTime);//time for cooking
-		leaveHouse();
 	}
 	private void goRestaurant() {
 		print("Action goRestaurant - State set to OutToEat");
@@ -486,9 +493,11 @@ public class PersonAgent extends Agent implements Person {
 		//Decide Which restaurant to go to
 		Restaurant r = Directory.sharedInstance().getRestaurants().get(0);
 		//End of Decide block
-		personGui.DoLeaveHouse();
-		actionComplete.acquireUninterruptibly();
-		personGui.setPresentFalse();
+		if(currentLocation == homeName) {
+			personGui.DoLeaveHouse();
+			actionComplete.acquireUninterruptibly();
+			personGui.setPresentFalse();
+		}
 		//Role logic
 		roles.clear();
 		Role custRole = factory.createRole(r.getName(), this);
@@ -496,7 +505,7 @@ public class PersonAgent extends Agent implements Person {
 		custRole.msgGotHungry();
 		custRole.setHost(Directory.sharedInstance().getAgents().get(r.getName() + "Host"));
 		custRole.setCashier(Directory.sharedInstance().getAgents().get(r.getName() + "Cashier"));
-		Role t = new TransportationRole(r.getName(), homeName);
+		Role t = new TransportationRole(r.getName(), currentLocation);
 		t.setPerson(this);
 		roles.add(t);
 	}
@@ -541,9 +550,11 @@ public class PersonAgent extends Agent implements Person {
 		print("Action goWork - hasWorked = true. Going to work.");
 		hasWorked = true;
 		personState = PersonState.OutToWork;
-		personGui.DoLeaveHouse();
-		actionComplete.acquireUninterruptibly();
-		personGui.setPresentFalse();
+		if(currentLocation == homeName) {
+			personGui.DoLeaveHouse();
+			actionComplete.acquireUninterruptibly();
+			personGui.setPresentFalse();
+		}
 		//Role Logic
 		roles.clear();
 		roles.add(workDetails.workRole);
@@ -573,6 +584,11 @@ public class PersonAgent extends Agent implements Person {
 	private void goMarket() {
 		print("Action goMarket - State set to OutToMarket");
 		personState = PersonState.OutToMarket;
+		if(currentLocation == homeName) {
+			personGui.DoLeaveHouse();
+			actionComplete.acquireUninterruptibly();
+			personGui.setPresentFalse();
+		}
 		Market m = Directory.sharedInstance().getMarkets().get(0);
 		roles.clear();
 		Role marketCust = factory.createRole(m.getName(), this);
@@ -602,11 +618,11 @@ public class PersonAgent extends Agent implements Person {
 		else {
 			deposit = 0.0;
 		}
-		print("Action goDeposit - State set to OutBank");
-		personState = PersonState.OutToBank;
-		personGui.DoLeaveHouse();
-		actionComplete.acquireUninterruptibly();
-		personGui.setPresentFalse();
+		if(currentLocation == homeName) {
+			personGui.DoLeaveHouse();
+			actionComplete.acquireUninterruptibly();
+			personGui.setPresentFalse();
+		};
 		//Role logic
 		Bank b = Directory.sharedInstance().getBanks().get(0);
 		roles.clear();
@@ -617,14 +633,15 @@ public class PersonAgent extends Agent implements Person {
 		Role t = new TransportationRole(b.getName(), currentLocation);
 		t.setPerson(this);
 		roles.add(t);
-		
+		print("Action goDeposit - State set to OutBank");
+		personState = PersonState.OutToBank;
 	}
 	private void goLoan() {
-		print("Action goLoan - State set to OutBank");
-		personState = PersonState.OutToBank;
-		personGui.DoLeaveHouse();
-		actionComplete.acquireUninterruptibly();
-		personGui.setPresentFalse();
+		if(currentLocation == homeName) {
+			personGui.DoLeaveHouse();
+			actionComplete.acquireUninterruptibly();
+			personGui.setPresentFalse();
+		}
 		//Role logic
 		Bank b = Directory.sharedInstance().getBanks().get(0);
 		roles.clear();
@@ -635,15 +652,17 @@ public class PersonAgent extends Agent implements Person {
 		Role t = new TransportationRole(b.getName(), currentLocation);
 		t.setPerson(this);
 		roles.add(t);
+		print("Action goLoan - State set to OutBank");
+		personState = PersonState.OutToBank;
 		
 	}
 	
 	private void goWithdraw() {
-		print("Action goWithraw - State set to OutBank");
-		personState = PersonState.OutToBank;
-		personGui.DoLeaveHouse();
-		actionComplete.acquireUninterruptibly();
-		personGui.setPresentFalse();
+		if(currentLocation == homeName) {
+			personGui.DoLeaveHouse();
+			actionComplete.acquireUninterruptibly();
+			personGui.setPresentFalse();
+		}
 		//Role logic
 		Bank b = Directory.sharedInstance().getBanks().get(0);
 		roles.clear();
@@ -654,11 +673,8 @@ public class PersonAgent extends Agent implements Person {
 		Role t = new TransportationRole(b.getName(), currentLocation);
 		t.setPerson(this);
 		roles.add(t);
-	}
-	
-	private void leaveHouse() {
-		personGui.setPresentFalse();
-		print("Leaving house now.");
+		print("Action goWithraw - State set to OutBank");
+		personState = PersonState.OutToBank;
 	}
 	public void clearInventory() {
 		for (Food f : inventory) {
