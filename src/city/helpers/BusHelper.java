@@ -131,7 +131,6 @@ public class BusHelper {
 		}
 		else {
 			waitingPassengersAtStop4.add(t);
-			System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		}
 	}
 	public void removeWaitingPerson(TransportationRole t, int stopNumber) {
