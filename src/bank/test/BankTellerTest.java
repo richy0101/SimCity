@@ -14,12 +14,12 @@ import market.MarketRole.orderState;
 import market.test.mock.*;
 import junit.framework.*;
 
-public class BankTest extends TestCase {
+public class BankTellerTest extends TestCase {
 
 	//these are instantiated for each test separately via the setUp() method.
 	MockBankCustomer customer;
 	MockBankManager manager;
-	MockBankTeller teller;
+	BankTellerRole teller;
 	
 	Map<String, Integer> groceryList;
 	
@@ -30,7 +30,7 @@ public class BankTest extends TestCase {
 	public void setUp() throws Exception{
 		super.setUp();
 		manager = new MockBankManager("mockbankmanager");
-		teller = new MockBankTeller("mockbankteller");		
+		teller = new BankTellerRole("bankteller");		
 		customer = new MockBankCustomer("mockcustomer",300,0);
 	}	
 	
