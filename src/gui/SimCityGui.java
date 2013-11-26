@@ -365,8 +365,102 @@ public class SimCityGui {
 		panel_1.add(lblWorkers);
 	}
 	private void runSuperNorm() {
-
-		String a = "Test Bank 1";
+		/** 
+		 * Start of Hard Code Scenario
+		 * 
+		 */
+//		String a = "Test Bank 1";
+//		String b = "House1";
+//		String name = "Test Person 1";
+//		Role role;
+//		if(rand.nextInt()%2 == 0) {
+//			role = new StackWaiterSharedRole("StackRestaurant");
+//		}
+//		else {
+//			role = new StackWaiterNormalRole("StackRestaurant");
+//		}
+//		PersonAgent p = new PersonAgent(role, a , b, name);
+//		role.setPerson(p);
+//		p.stopThread();
+//		p.msgWakeUp();
+//		p.startThread();
+//	
+//		String a2 = "StackRestaurant";
+//		String b2 = "House2";
+//		String name2 = "Test Person 2";
+//		Role role2;
+//		if(rand.nextInt()%2 == 0) {
+//			role2 = new StackWaiterSharedRole("StackRestaurant");
+//		}
+//		else {
+//			role2 = new StackWaiterNormalRole("StackRestaurant");
+//		}
+//		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
+//		role2.setPerson(p2);
+//		p2.msgGoWork();
+//
+//		String a3 = "StackRestaurant";
+//		String b3 = "House3";
+//		String name3 = "Test Person 3";
+//		Role role3 = new StackCookRole("StackRestaurant");
+//		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
+//		role3.setPerson(p3);
+//		p3.msgGoWork();
+//
+//		String a4 = "Bank";
+//		String b4 = "House4";
+//		String name4 = "Test Person 4";
+//		Role role4 = new BankTellerRole("Bank");
+//		PersonAgent p4 = new PersonAgent(role4, a4 , b4, name4);
+//		role4.setPerson(p4);
+//		p4.msgGoWork();
+//		
+//		String a5 = "Bank";
+//		String b5 = "House5";
+//		String name5 = "BankLoanPerson5";
+//		Role role5 = new BankTellerRole("Bank");
+//		PersonAgent p5 = new PersonAgent(role5, a5 , b5, name5);
+//		role5.setPerson(p5);
+//		p5.msgTestWakeUp();
+//        
+//		MarketRole role6 = new MarketRole("Market1");
+//		Directory.sharedInstance().marketDirectory.get("Market1").setWorker(role6);
+//		
+//		String a6 = "Market1";
+//		String b6 = "House1";
+//		String name6 = "Test Person 6";
+//		PersonAgent p6 = new PersonAgent(role6, a6 , b6, name6);
+//		role6.setPerson(p6);
+//		p6.msgGoWork();
+//		
+//		String a7 = "Test Bank 5";
+//		String b7 = "House2";
+//		String name7 = "MarketGoerPerson";
+//		Role role7 = new BankTellerRole("Bank");
+//		PersonAgent p7 = new PersonAgent(role7, a7 , b7, name7);
+//		role7.setPerson(p7);
+//		p7.msgTestWakeUp();
+//		
+//		bus = new BusAgent(1);
+//		busGui = new BusGui(bus,1); //agent, starting StopNumber
+//		bus.setGui(busGui);
+//		macroAnimationPanel.addGui(busGui);
+//		bus.startThread();
+//		
+//		
+//		bus2 = new BusAgent(2);
+//		busGui2 = new BusGui(bus2,2);
+//		bus2.setGui(busGui2);
+//		macroAnimationPanel.addGui(busGui2);
+//		bus2.startThread();
+		
+		/**
+		 End of Hard Code SuperNorm
+		 */
+		/**
+		 * Start of Fresh SuperNorm = All agents wake up and do normal stuff.
+		 */
+		String a = "StackRestaurant";
 		String b = "House1";
 		String name = "Test Person 1";
 		Role role;
@@ -377,9 +471,8 @@ public class SimCityGui {
 			role = new StackWaiterNormalRole("StackRestaurant");
 		}
 		PersonAgent p = new PersonAgent(role, a , b, name);
-		role.setPerson(p);
-		p.stopThread();
 		p.msgWakeUp();
+		role.setPerson(p);
 		p.startThread();
 	
 		String a2 = "StackRestaurant";
@@ -394,7 +487,8 @@ public class SimCityGui {
 		}
 		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
 		role2.setPerson(p2);
-		p2.msgGoWork();
+		p2.msgWakeUp();
+		p2.startThread();
 
 		String a3 = "StackRestaurant";
 		String b3 = "House3";
@@ -402,7 +496,8 @@ public class SimCityGui {
 		Role role3 = new StackCookRole("StackRestaurant");
 		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
 		role3.setPerson(p3);
-		p3.msgGoWork();
+		p3.msgWakeUp();
+		p3.startThread();
 
 		String a4 = "Bank";
 		String b4 = "House4";
@@ -410,33 +505,37 @@ public class SimCityGui {
 		Role role4 = new BankTellerRole("Bank");
 		PersonAgent p4 = new PersonAgent(role4, a4 , b4, name4);
 		role4.setPerson(p4);
-		p4.msgGoWork();
+		p4.msgWakeUp();
+		p4.startThread();
 		
 		String a5 = "Bank";
 		String b5 = "House5";
-		String name5 = "BankLoanPerson5";
+		String name5 = "Test Person 5";
 		Role role5 = new BankTellerRole("Bank");
 		PersonAgent p5 = new PersonAgent(role5, a5 , b5, name5);
 		role5.setPerson(p5);
-		p5.msgTestWakeUp();
+		p5.msgWakeUp();
+		p5.startThread();
         
 		MarketRole role6 = new MarketRole("Market1");
 		Directory.sharedInstance().marketDirectory.get("Market1").setWorker(role6);
 		
 		String a6 = "Market1";
-		String b6 = "House1";
+		String b6 = "House6";
 		String name6 = "Test Person 6";
 		PersonAgent p6 = new PersonAgent(role6, a6 , b6, name6);
 		role6.setPerson(p6);
-		p6.msgGoWork();
+		p6.msgWakeUp();
+		p6.startThread();
 		
-		String a7 = "Test Bank 5";
+		String a7 = "Bank";
 		String b7 = "House2";
-		String name7 = "MarketGoerPerson";
+		String name7 = "Test Person 7";
 		Role role7 = new BankTellerRole("Bank");
 		PersonAgent p7 = new PersonAgent(role7, a7 , b7, name7);
 		role7.setPerson(p7);
-		p7.msgTestWakeUp();
+		p7.msgWakeUp();
+		p7.startThread();
 		
 		bus = new BusAgent(1);
 		busGui = new BusGui(bus,1); //agent, starting StopNumber
@@ -451,9 +550,6 @@ public class SimCityGui {
 		macroAnimationPanel.addGui(busGui2);
 		bus2.startThread();
 		
-		
-		Map<String, Integer> groceries = new HashMap<String, Integer>();
-		groceries.put("Steak", 1);
 		
 	}
 	

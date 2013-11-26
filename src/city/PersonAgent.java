@@ -145,7 +145,7 @@ public class PersonAgent extends Agent implements Person {
 			else if (this.type == "Pizza") {
 				preparationTime = 7000;
 			}
-			stock = 3;
+			stock = new Random().nextInt(2);
 		}
 	}
 	private List<Food> inventory = Collections.synchronizedList(new ArrayList<Food>());
@@ -195,7 +195,7 @@ public class PersonAgent extends Agent implements Person {
 			clearInventory();
 			checkInventory();
 		}
-		startThread();
+		//startThread();
 	}
 	/**
 	 * FRONT END CONSTRUCTOR BELOW
@@ -421,7 +421,7 @@ public class PersonAgent extends Agent implements Person {
 			return true;
 		}
 		if (getPersonState() == PersonState.WantFood) {
-			print("STUB IN PERSONAGENT SCHEDULER: WANTFOOD");
+			//print("STUB IN PERSONAGENT SCHEDULER: WANTFOOD");
 			decideFood();
 			return true;
 		}
@@ -448,11 +448,11 @@ public class PersonAgent extends Agent implements Person {
 	 * 
 	 */
 	private boolean evaluateStatus() {
-		print("In Eval: Current Location = " + currentLocation + ".");
+		//print("In Eval: Current Location = " + currentLocation + ".");
 		if (getPersonState().toString().contains("ing") || getPersonState().toString().contains("OutTo") || getPersonState().toString().contains("NeedsTo")){
 			return false;
 		}
-		else if (hasWorked = false) {
+		else if (hasWorked == false) {
 			print("Eval says go WORK");
 			setPersonState(PersonState.NeedsToWork);
 			return true;
@@ -550,17 +550,14 @@ public class PersonAgent extends Agent implements Person {
 		personGui.DoDecideEat();
 		actionComplete.acquireUninterruptibly();
 		Random rng = new Random();
-		desiredFood = rng.nextInt();
-		desiredFood = desiredFood % 4;
-		desiredFood = 1;
+		desiredFood = rng.nextInt(4);
 		boolean cook; //cooks at home at the moment
-		if (inventory.get(desiredFood).stock > 0) {
+		if (inventory.get(desiredFood).stock >= 1) {
 			cook = true;
 		}
 		else {
 			cook = false;
 		}
-		cook = false;
 		//if Stay at home and eat. Alters Cook true or false
 		if (cook == true) {
 			setPersonState(PersonState.CookHome);
