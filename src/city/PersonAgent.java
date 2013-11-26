@@ -170,6 +170,11 @@ public class PersonAgent extends Agent implements Person {
 		else if (this.name.contains("BankL")) {
 			personState = PersonState.WantsToGetLoan;
 		}
+		else if (this.name.contains("MarketG")) {
+			personState = PersonState.NeedsToGoMarket;
+			clearInventory();
+			checkInventory();
+		}
 		startThread();
 	}
 	
@@ -569,12 +574,14 @@ public class PersonAgent extends Agent implements Person {
 	}
 	/** Non Norm Actions **/
 	private void goRob() {
+		/**
 		Bank b = Directory.sharedInstance().getBanks().get(0);
 		roles.clear();
 		roles.add(new BankCustomerRole(personState.toString(), 0.0, 0.0));//Hacked factory LOL
 		//roles.add(new TransportationRole(b.getName()));
 		print("Action goRob - State set to OutBank");
 		personState = PersonState.OutToBank;
+		*/
 		
 	}
 	private void goDeposit() {
@@ -640,8 +647,11 @@ public class PersonAgent extends Agent implements Person {
 		personGui.setPresentFalse();
 		print("Leaving house now.");
 	}
-	
-	
+	public void clearInventory() {
+		for (Food f : inventory) {
+			f.stock = 0;
+		}
+	}
 	public void clearGroceries() {
 		groceryList.clear();
 	}
