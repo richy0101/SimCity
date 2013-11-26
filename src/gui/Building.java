@@ -49,6 +49,6 @@ public class Building extends Rectangle2D.Double {
 	}
 	public void addGui(Gui gui) {
 		myBuildingPanel.addGui(gui);
-		System.out.println("Adding GUI step 2");
+		//System.out.println("Adding GUI step 2");
 	}
 }
