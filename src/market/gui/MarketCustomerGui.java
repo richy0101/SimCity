@@ -70,8 +70,10 @@ public class MarketCustomerGui implements Gui {
 			yPos--;
 		
 		if(xPos == xDestination && yPos == yDestination) {
-			if(command == state.Entering || command == state.Leaving)
+			if(command == state.Entering || command == state.Leaving) {
 				role.msgActionComplete();
+				command = state.NoCommand;
+			}
 		}
 	}
 
