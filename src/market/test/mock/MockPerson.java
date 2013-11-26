@@ -18,7 +18,7 @@ public class MockPerson extends Mock implements Person {
 	}
 
 	@Override
-	public void clearGroceries() {
+	public void clearGroceries(Map<String, Integer> groceries) {
 		log.add(new LoggedEvent("ClearGroceries called"));
 		groceryList.clear();
 	}
