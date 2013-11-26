@@ -36,7 +36,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		this.moneyToDeposit = moneyToDeposit;
 		customerGui = new BankCustomerGui(this);
     	List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
-    	manager = (BankManager) Directory.sharedInstance().getAgents().get("myLocation");
+    	this.manager = (BankManager) Directory.sharedInstance().getAgents().get("Bank");
     	
 		for(Building b : buildings) {
 			if (b.getName() == myLocation) {
@@ -143,6 +143,9 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	private void askForAssistance() {
 		print("I need assistance");
 		customerGui.DoGoToManager();
+		if (manager == null) {
+			print("Manager is Null.");
+		}
 		manager.msgINeedAssistance(this);
 		state = CustomerState.Waiting;
 	}

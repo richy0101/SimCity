@@ -50,7 +50,10 @@ public class BankTellerRole extends Role implements BankTeller {
     public BankTellerRole(String location){
     	state = TellerState.ArrivedAtWork;
     	myLocation = location;
-    	manager = (BankManager) Directory.sharedInstance().getAgents().get("myLocation");
+    	manager = (BankManager) Directory.sharedInstance().getAgents().get(myLocation);
+    	if(manager == null) {
+    		System.out.println("Manager is null in TELLER");
+    	}
     	List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
     	tellerGui = new BankTellerGui(this);
 		for(Building b : buildings) {
@@ -137,9 +140,9 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
     //scheduler---------------------------------------------------------------------------
 	public boolean pickAndExecuteAnAction(){
-		System.out.println("In teller scheduler");
+		//System.out.println("In teller scheduler");
 		if(state == TellerState.ArrivedAtWork) {
-			System.out.println("At Work as BankTeller");
+			//System.out.println("At Work as BankTeller");
 			DoGoCheckInWithManager();
 			return true;
 		}

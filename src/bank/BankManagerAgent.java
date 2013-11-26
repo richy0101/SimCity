@@ -70,6 +70,7 @@ public class BankManagerAgent extends Agent implements BankManager {
 	
 	public void msgHereForWork(BankTeller teller) {
 		synchronized(this.tellers){
+			print("A new teller as arrived to work. Adding him to Teller list.");
 			tellers.add(new MyBankTeller(teller, BankTellerState.GotToWork));
 		}
 	}

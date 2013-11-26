@@ -334,7 +334,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	protected boolean pickAndExecuteAnAction() {
 		if(!roles.isEmpty()) {
-			print("STUB IN PERSONAGENT SCHEDULER: INROLESSTACK " + roles.peek().toString());
+			//print("STUB IN PERSONAGENT SCHEDULER: INROLESSTACK " + roles.peek().toString());
 			boolean b = false;
 			b = roles.peek().pickAndExecuteAnAction();
 			return b;
