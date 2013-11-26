@@ -1,27 +1,23 @@
 package bank;
 
+
 public class Bank {
-	private static Bank sharedInstance = null;
-	String name;
-    
-    private Bank() {
-    	
+	String name = "Bank";
+	BankManagerAgent manager;
+    public Bank() {
+    	manager = new BankManagerAgent();
+    	manager.startThread();
     }
     
     public Bank(String buildingName) {
     	name = buildingName;
+    	manager = new BankManagerAgent();
+    	manager.startThread();
     }
     
-    public static Bank sharedInstance() {
-    	if(sharedInstance == null) {
-    		sharedInstance = new Bank();
-    	}
-    	return sharedInstance;
+    public BankManagerAgent getManager() {
+    	return manager;
     }
-    
-	public Object getOwner() {
-		return null;
-	}
 	
 	public String getName() {
 		return name;

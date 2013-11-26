@@ -3,17 +3,19 @@ package restaurant.stackRestaurant.helpers;
 import java.awt.Point;
 import java.util.ArrayList;
 
-public class TableList {
-	
-	private Point originTable = new Point(50,50);
-	private static final int MAXTABLES = 35;
-	
+public class TableList {	
 	@SuppressWarnings("serial")
 	public static ArrayList<Point> tableLocations = new ArrayList<Point>() {
 		{
-            add(new Point(50, 50));
-            add(new Point(150, 50));
-            add(new Point(250, 50));
+            add(new Point(52, 45));
+            add(new Point(52, 181));
+            add(new Point(52, 317));
+            add(new Point(180, 45));
+            add(new Point(180, 181));
+            add(new Point(180, 317));
+            add(new Point(300, 45));
+            add(new Point(300, 181));
+            add(new Point(300, 317));
         }
     };
     
@@ -24,16 +26,4 @@ public class TableList {
     public Point getLastTable() {
     	return getTables().get(getTables().size()-1);
     }
-    
-    public void addTable() {
-    	if(getTables().size() < MAXTABLES) {
-    		if(tableLocations.size()%5 == 0) {
-    			tableLocations.add(new Point((int)originTable.getX(), (int)getLastTable().getY() + 100));
-    		}
-    		else {
-    			tableLocations.add(new Point((int)getLastTable().getX() + 100, (int)getLastTable().getY()));
-    		}
-    	}
-    }
-
 }

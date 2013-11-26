@@ -4,29 +4,42 @@ import restaurant.stackRestaurant.StackCookRole;
 import gui.Gui;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
+import javax.imageio.ImageIO;
 
 public class CookGui implements Gui {
 
     private StackCookRole agent = null;
     
-    private int xHome = 250, yHome = 250;
-    private int xPos = 250, yPos = 250;//default waiter position
-    private int xDestination = 250, yDestination = 250;//default start position
-    private int PLATINGX = 280, PLATINGY = 220 + COOKSIZE;
-    private int COOKTOPX = 280, COOKTOPY = 300 - COOKSIZE;
-    private int FRIDGEX = 310 - COOKSIZE, FRIDGEY = 250;
+    private int xHome = 781, yHome = 35;
+    private int xPos = 850, yPos = 450;//default waiter position
+    private int xDestination = 850, yDestination = 450;//default start position
+    private int PLATINGX = 543, PLATINGY = 70;
+    private int COOKTOPX = 781, COOKTOPY = 35;
+    private int FRIDGEX = 595, FRIDGEY = 35;
+    private static final int xCashier = 460, yCashier = 34;
+	private static final int xExit = 850, yExit = 450;
+    
+    BufferedImage cookImage;
     
     private enum Command 
-    {noCommand, GoToFridge, GoToCooktop, GoToPlating};
+    {noCommand, GoToFridge, GoToCooktop, GoToPlating, GoToCashier, Exit};
 	private Command command=Command.noCommand;
   
-    RestaurantGui gui;
     
-    public static final int COOKSIZE = 20;
+	private static final int PERSONSIZEX = 32, PERSONSIZEY = 40;
 
-    public CookGui(StackCookRole agent, RestaurantGui gui) {
+    public CookGui(StackCookRole agent) {
         this.agent = agent;
-        this.gui = gui;
+
+        try {
+        	cookImage = ImageIO.read(getClass().getResource("stackRestaurantCook.png"));
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ Background");
+        }
     }
 
     public void updatePosition() {
@@ -49,13 +62,19 @@ public class CookGui implements Gui {
         	} else if(xDestination == FRIDGEX && yDestination == FRIDGEY && command == Command.GoToFridge) {
         		agent.msgAtFridge();
         	}
+        	if (xDestination == xCashier && yDestination == yCashier && command == Command.GoToCashier) {
+            	agent.msgAtCashier();
+            	DoGoHome();	
+            }
+            if(xDestination == xExit && yDestination == yExit && command == Command.Exit) {
+            	agent.msgAnimationFinishedLeavingRestaurant();
+            }
         	command = Command.noCommand;
         }   
     }
     
     public void draw(Graphics2D g) {
-        g.setColor(Color.YELLOW);
-        g.fillRect(xPos, yPos, COOKSIZE, COOKSIZE);
+    	g.drawImage(cookImage, xPos, yPos, null);
     }
     
     public void DoGoToFridge() {
@@ -80,6 +99,20 @@ public class CookGui implements Gui {
     	xDestination = xHome;
     	yDestination = yHome;
     }
+    
+    public void DoExitRestaurant() {
+		xDestination = xExit;
+    	yDestination = yExit;
+    	command = Command.Exit;
+		
+	}
+
+	public void DoGoToPaycheck() {
+		xDestination = xCashier;
+    	yDestination = yCashier;
+    	command = Command.GoToCashier;
+		
+	}
     
     public boolean isPresent() {
         return true;

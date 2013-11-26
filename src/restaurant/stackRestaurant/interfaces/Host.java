@@ -18,4 +18,6 @@ public interface Host {
 	
 	public void msgAddWaiter(Waiter waiter);
 
+	public void msgAddCook(Cook cook);
+
 }

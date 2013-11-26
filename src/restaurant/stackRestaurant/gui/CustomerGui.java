@@ -5,17 +5,23 @@ import restaurant.stackRestaurant.helpers.TableList;
 import gui.Gui;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class CustomerGui implements Gui{
 
 	private StackCustomerRole agent = null;
-	private boolean isPresent = false;
 	private boolean isHungry = false;
 	private TableList tableList = new TableList();
 	private String choice = "";
+	BufferedImage customerImage;
+	BufferedImage chickenImage;
+	BufferedImage pizzaImage;
+	BufferedImage saladImage;
+	BufferedImage steakImage;
 
-	//private HostAgent host;
-	RestaurantGui gui;
 
 	private int xPos, yPos;
 	private int xDestination, yDestination;
@@ -23,20 +29,28 @@ public class CustomerGui implements Gui{
 	private Command command=Command.noCommand;
 
 	
-	private static final int CUSTOMERSIZE = 20;
-	private static final int CASHIERX = 100;
-	private static final int CASHIERY = 180;
-	private static final int WAITINGX = 3;
-	private static final int WAITINGY = 3;
+	private static final int PERSONSIZEX = 32, PERSONSIZEY = 40;
+	private static final int CASHIERX = 460, CASHIERY = 34;
+	private static final int xExit = 850, yExit = 450;
+	private int WAITINGX = 725, WAITINGY = 333;
 
-	public CustomerGui(StackCustomerRole c, RestaurantGui gui){ //HostAgent m) {
+	public CustomerGui(StackCustomerRole c) { 
 		agent = c;
-		xPos = -40;
-		yPos = -40;
-		xDestination = -40;
-		yDestination = -40;
-		//maitreD = m;
-		this.gui = gui;
+		xPos = 850;
+		yPos = 450;
+		xDestination = 850;
+		yDestination = 450;
+		
+		try {
+        	customerImage = ImageIO.read(getClass().getResource("stackRestaurantCustomer.png"));
+        	chickenImage = ImageIO.read(getClass().getResource("chicken.png"));
+            pizzaImage = ImageIO.read(getClass().getResource("pizza.png"));
+            saladImage = ImageIO.read(getClass().getResource("salad.png"));
+            steakImage = ImageIO.read(getClass().getResource("steak.png"));
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ Background");
+        }   
 	}
 
 	public void updatePosition() {
@@ -51,11 +65,11 @@ public class CustomerGui implements Gui{
 			yPos--;
 
 		if (xPos == xDestination && yPos == yDestination) {
-			if (command==Command.GoToSeat) agent.msgAnimationFinishedGoToSeat();
+			if (command==Command.GoToSeat) 
+				agent.msgAnimationFinishedGoToSeat();
 			else if (command==Command.LeaveRestaurant) {
 				agent.msgAnimationFinishedLeaveRestaurant();
 				isHungry = false;
-				gui.setCustomerEnabled(agent);
 			}
 			else if (command==Command.GoToCashier) {
 				agent.msgAnimationFinishedGoToCashier();
@@ -72,27 +86,41 @@ public class CustomerGui implements Gui{
 	}
 	
 	public void draw(Graphics2D g) {
-		g.setColor(Color.GREEN);
-		g.fillRect(xPos, yPos, CUSTOMERSIZE, CUSTOMERSIZE);
-		g.setColor(Color.WHITE);
-		g.drawString(choice, xPos + 20, yPos + 20);
+		if(choice.equals("")) {
+			g.drawImage(customerImage, xPos, yPos, null);
+		}
+		else if(choice.equals("St")) {
+			g.drawImage(customerImage, xPos, yPos, null);
+			g.drawImage(steakImage, xPos + 26, yPos + 20, null);
+		}
+		else if(choice.equals("Ch")) {
+			g.drawImage(customerImage, xPos, yPos, null);
+			g.drawImage(chickenImage, xPos + 26, yPos + 20, null);
+		}
+		else if(choice.equals("Pi")) {
+			g.drawImage(customerImage, xPos, yPos, null);
+			g.drawImage(pizzaImage, xPos + 26, yPos + 20, null);
+		}
+		else if(choice.equals("Sa")) {
+			g.drawImage(customerImage, xPos, yPos, null);
+			g.drawImage(saladImage, xPos + 26, yPos + 20, null);
+		}
+		else {
+			g.drawImage(customerImage, xPos, yPos, null);
+		}
 	}
 
-	public boolean isPresent() {
-		return isPresent;
-	}
 	public void setHungry() {
 		isHungry = true;
 		agent.msgGotHungry();
-		setPresent(true);
 	}
 	public boolean isHungry() {
 		return isHungry;
 	}
-
-	public void setPresent(boolean p) {
-		isPresent = p;
-	}
+	
+	public boolean isPresent() {
+        return true;
+    }
 
 	public void DoGoToSeat(int seatnumber, int tableNumber) {//later you will map seatnumber to table coordinates.
 		xDestination = (int)tableList.getTables().get(tableNumber-1).getX(); 
@@ -107,8 +135,8 @@ public class CustomerGui implements Gui{
 	}
 
 	public void DoExitRestaurant() {
-		xDestination = -40;
-		yDestination = -40;
+		xDestination = xExit;
+		yDestination = yExit;
 		command = Command.LeaveRestaurant;
 	}
 	

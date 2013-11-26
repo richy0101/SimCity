@@ -1,5 +1,7 @@
 package restaurant.stackRestaurant.interfaces;
 
+import market.interfaces.*;
+
 
 public interface Cook {
 	

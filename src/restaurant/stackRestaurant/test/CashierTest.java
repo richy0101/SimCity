@@ -1,12 +1,12 @@
 package restaurant.stackRestaurant.test;
 
-import restaurant.stackRestaurant.StackCashierRole;
-import restaurant.stackRestaurant.StackCashierRole.CheckState;
-import restaurant.stackRestaurant.StackCashierRole.CustomerState;
+import restaurant.stackRestaurant.StackCashierAgent;
+import restaurant.stackRestaurant.StackCashierAgent.CheckState;
+import restaurant.stackRestaurant.StackCashierAgent.CustomerState;
 import restaurant.stackRestaurant.helpers.Check;
 import restaurant.stackRestaurant.test.mock.MockCustomer;
 import restaurant.stackRestaurant.test.mock.MockWaiter;
-import restaurant.stackRestaurant.test.mock.MockMarket;
+import market.test.mock.MockMarket;
 import junit.framework.*;
 
 /**
@@ -20,7 +20,7 @@ import junit.framework.*;
 public class CashierTest extends TestCase
 {
 	//these are instantiated for each test separately via the setUp() method.
-	StackCashierRole cashier;
+	StackCashierAgent cashier;
 	MockWaiter waiter;
 	MockCustomer customer;
 	MockCustomer customer2;
@@ -34,7 +34,7 @@ public class CashierTest extends TestCase
 	 */
 	public void setUp() throws Exception{
 		super.setUp();		
-		cashier = new StackCashierRole("cashier");		
+		cashier = new StackCashierAgent();		
 		customer = new MockCustomer("mockcustomer");
 		customer2 = new MockCustomer("mockcustomer2");
 		customer3 = new MockCustomer("mockcustomer3");
@@ -48,9 +48,6 @@ public class CashierTest extends TestCase
 	{
 		//check preconditions
 		assertEquals("Till should be empty. It is not.", cashier.getTill(), 0.0);
-	
-		assertEquals("CashierAgent should have an empty event log before the Cashier's msgGiveBill is called. Instead, the Cashier's event log reads: "
-						+ cashier.log.toString(), 0, cashier.log.size());
 		
 //		//step 1 of the test
 		cashier.msgComputeCheck(waiter, customer, "Pizza");
@@ -81,9 +78,6 @@ public class CashierTest extends TestCase
 	public void testCheapCustomerScenario() {
 		//check preconditions
 		assertEquals("Till should be empty. It is not.", cashier.getTill(), 0.0);
-			
-		assertEquals("CashierAgent should have an empty event log before the Cashier's msgGiveBill is called. Instead, the Cashier's event log reads: "
-								+ cashier.log.toString(), 0, cashier.log.size());
 		//step 1 of the test
 		cashier.msgComputeCheck(waiter, customer, "Pizza");
 		assertEquals("MockWaiter should have an empty event log before the Cashier's scheduler is called. Instead, the MockWaiter's event log reads: "
@@ -116,9 +110,6 @@ public class CashierTest extends TestCase
 		Check check3 = new Check(5.99, customer, "Salad");
 		
 		assertEquals("Till should be empty. It is not.", cashier.getTill(), 0.0);
-		
-		assertEquals("CashierAgent should have an empty event log before the Cashier's msgGiveBill is called. Instead, the Cashier's event log reads: "
-								+ cashier.log.toString(), 0, cashier.log.size());
 		
 		cashier.msgComputeCheck(waiter, customer, "Steak");
 		assertEquals("Cashier should have 1 customer with a check. It doesn't.", cashier.getCustomers().size(), 1);
@@ -188,8 +179,6 @@ public class CashierTest extends TestCase
 	public void testRepeatCheap() {
 		assertEquals("Till should be empty. It is not.", cashier.getTill(), 0.0);
 		
-		assertEquals("CashierAgent should have an empty event log before the Cashier's msgGiveBill is called. Instead, the Cashier's event log reads: "
-								+ cashier.log.toString(), 0, cashier.log.size());
 		//step 1 of the test
 		cashier.msgComputeCheck(waiter, customer, "Pizza");
 		assertEquals("MockWaiter should have an empty event log before the Cashier's scheduler is called. Instead, the MockWaiter's event log reads: "
@@ -232,8 +221,7 @@ public class CashierTest extends TestCase
 //	it goes into debt and will soon make the money back from selling food
 	public void testPayingMarketScenarioNonnorm() {
 		assertEquals("Till should be empty. It is not.", cashier.getTill(), 0.0);
-		assertEquals("CashierAgent should have an empty event log before the Cashier's msgGiveBill is called. Instead, the Cashier's event log reads: "
-				+ cashier.log.toString(), 0, cashier.log.size());
+
 		
 		Check check = new Check(20.0, "Steak");
 		cashier.msgGiveBill(check, market);
@@ -252,8 +240,6 @@ public class CashierTest extends TestCase
 		cashier.setTill(20);
 		assertEquals("Till should be 20. It is not.", cashier.getTill(), 20.0);
 
-		assertEquals("CashierAgent should have an empty event log before the Cashier's msgGiveBill is called. Instead, the Cashier's event log reads: "
-				+ cashier.log.toString(), 0, cashier.log.size());
 		
 		Check check = new Check(20.0, "Steak");
 		cashier.msgGiveBill(check, market);

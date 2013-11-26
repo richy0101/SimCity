@@ -2,30 +2,56 @@ package gui;
 
 import home.LandlordRole;
 
+import java.awt.CardLayout;
 import java.awt.EventQueue;
 
 import javax.swing.*;
 
+import city.BusAgent;
 import city.PersonAgent;
+import city.TransportationRole;
+import city.gui.BusGui;
+import city.helpers.Directory;
+import city.helpers.XMLReader;
 import agent.Role;
-import bank.BankManagerRole;
+import bank.BankCustomerRole;
+import bank.BankManagerAgent;
 import bank.BankTellerRole;
+import bank.gui.*;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
+import market.MarketCustomerRole;
+import market.MarketRole;
 import restaurant.stackRestaurant.StackCookRole;
-import restaurant.stackRestaurant.StackHostRole;
+import restaurant.stackRestaurant.StackHostAgent;
+import restaurant.stackRestaurant.StackWaiterNormalRole;
+import restaurant.stackRestaurant.StackWaiterRole;
+import restaurant.stackRestaurant.StackWaiterSharedRole;
+import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 
 public class SimCityGui {
-
+    
+	//NEW STUFF
+	JPanel buildingPanels;
+	Random rand = new Random();
+	CardLayout cardLayout;
+	MacroAnimationPanel macroAnimationPanel;
 	private JFrame frame;
 	private Map<String, Role> roles = new HashMap<String, Role>();
+	private HashMap<String, CityCard> cards = new HashMap<String, CityCard>();
+	BusAgent bus;
+	BusAgent bus2;
+	BusGui busGui;
+	BusGui busGui2;
 	
 	/**
 	 * Launch the application.
@@ -42,39 +68,79 @@ public class SimCityGui {
 			}
 		});
 	}
-
+    
 	/**
 	 * Create the application.
 	 */
 	public SimCityGui() {
 		initialize();
+		Directory.sharedInstance().setCityGui(this);
 		runSuperNorm();
 	}
-
+    
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize() { //BUTTONS
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setBounds(0, 0, 1133, 855);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		MacroAnimationPanel macroAnimationPanel = new MacroAnimationPanel();
+		macroAnimationPanel = new MacroAnimationPanel(this);
 		macroAnimationPanel.setBounds(5, 5, 827, 406);
 		frame.getContentPane().add(macroAnimationPanel);
 		
 		MicroAnimationPanel microAnimationPanel = new MicroAnimationPanel();
-		microAnimationPanel.setBounds(5, 425, 827, 406);
-		frame.getContentPane().add(microAnimationPanel);
+		buildingPanels = new JPanel();
+		cardLayout = new CardLayout();
+        //		microAnimationPanel.setLayout(cardLayout);
+		buildingPanels.setLayout(cardLayout);
+		
+		
+		//TAKES SQUARES FROM MACRO AND TURNS INTO PANELS IN MICRO
+		ArrayList<Building> buildings = macroAnimationPanel.getBuildings();
+		for ( int i=0; i<buildings.size(); i++ ) {
+			Building b = buildings.get(i);
+            //			BuildingPanel ma = new GUIHome(b, i ,this);
+			
+			
+			BuildingPanel ma = null;
+			
+			
+			if(b.getName().toLowerCase().contains("house")) {
+				b.setBuildingPanel(new GUIHome( b, i, this ));
+			}
+			else if(b.getName().toLowerCase().contains("market")) {
+				b.setBuildingPanel(new GUIMarket( b, i, this ));
+			}
+			else if(b.getName().toLowerCase().contains("bank")) {
+				b.setBuildingPanel(new GUIBank( b, i, this ));
+			}
+			else if(b.getName().toLowerCase().contains("stack")) {
+				b.setBuildingPanel(new StackRestaurantAnimationPanel(b, i, this));
+            }
+			else {//if(b.getName().toLowerCase().contains("stack")) {
+				b.setBuildingPanel(new GUIMarket( b, i, this ));
+			}
+            
+            //			b.setMicroAnimationPanel( ma );
+            //			b.setBuildingPanel( ma );
+            //			microAnimationPanel.add( ma, "" + i );
+			buildingPanels.add( b.myBuildingPanel, "" + i );
+		}
+		
+		buildingPanels.setBounds(5, 425, 827, 406);
+		frame.getContentPane().add(buildingPanels);
+		
 		SpringLayout springLayout = new SpringLayout();
 		springLayout.putConstraint(SpringLayout.NORTH, macroAnimationPanel, 10, SpringLayout.NORTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, macroAnimationPanel, 10, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, macroAnimationPanel, -6, SpringLayout.NORTH, microAnimationPanel);
-		springLayout.putConstraint(SpringLayout.EAST, microAnimationPanel, 0, SpringLayout.EAST, macroAnimationPanel);
-		springLayout.putConstraint(SpringLayout.NORTH, microAnimationPanel, 417, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, microAnimationPanel, 10, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, microAnimationPanel, -10, SpringLayout.SOUTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.SOUTH, macroAnimationPanel, -6, SpringLayout.NORTH, buildingPanels);
+		springLayout.putConstraint(SpringLayout.EAST, buildingPanels, 0, SpringLayout.EAST, macroAnimationPanel);
+		springLayout.putConstraint(SpringLayout.NORTH, buildingPanels, 417, SpringLayout.NORTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, buildingPanels, 10, SpringLayout.WEST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.SOUTH, buildingPanels, -10, SpringLayout.SOUTH, frame.getContentPane());
 		frame.getContentPane().setLayout(springLayout);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -90,11 +156,16 @@ public class SimCityGui {
 		SpringLayout sl_panel = new SpringLayout();
 		panel.setLayout(sl_panel);
 		
-		JButton btnPopulateCity = new JButton("Populate City");
+		final JButton btnPopulateCity = new JButton("Populate City");
 		btnPopulateCity.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				// script for populating city
+				XMLReader reader = new XMLReader();
+				ArrayList<PersonAgent> people = reader.initializePeople();
+				for(PersonAgent person : people) {
+					person.startThread();
+				}
+				btnPopulateCity.setEnabled(false);
 				
 			}
 		});
@@ -125,48 +196,36 @@ public class SimCityGui {
 		sl_panel.putConstraint(SpringLayout.EAST, occupationComboBox, 0, SpringLayout.EAST, btnPopulateCity);
 		
 		occupationComboBox.addItem("None");
-		occupationComboBox.addItem("Bank Manager");
 		occupationComboBox.addItem("Bank Teller");
 		occupationComboBox.addItem("Market Seller");
 		occupationComboBox.addItem("Landlord");
-		occupationComboBox.addItem("Stack's Restaurant Host");
 		occupationComboBox.addItem("Stack's Restaurant Waiter");
 		occupationComboBox.addItem("Stack's Restaurant Cook");
-		occupationComboBox.addItem("Stack's Restaurant Cashier");
 		
-//		occupationComboBox.addItem("Sheh's Restaurant Host");
-//		occupationComboBox.addItem("Sheh's Restaurant Waiter");
-//		occupationComboBox.addItem("Sheh's Restaurant Cook");
-//		occupationComboBox.addItem("Sheh's Restaurant Cashier");
-//		
-//		occupationComboBox.addItem("Philips's Restaurant Host");
-//		occupationComboBox.addItem("Philips's Restaurant Waiter");
-//		occupationComboBox.addItem("Philips's Restaurant Cook");
-//		occupationComboBox.addItem("Philips's Restaurant Cashier");
-//		
-//		occupationComboBox.addItem("Tan's Restaurant Host");
-//		occupationComboBox.addItem("Tan's Restaurant Waiter");
-//		occupationComboBox.addItem("Tan's Restaurant Cook");
-//		occupationComboBox.addItem("Tan's Restaurant Cashier");
-//		
-//		occupationComboBox.addItem("Huang's Restaurant Host");
-//		occupationComboBox.addItem("Huang's Restaurant Waiter");
-//		occupationComboBox.addItem("Huang's Restaurant Cook");
-//		occupationComboBox.addItem("Huang's Restaurant Cashier");
-//		
-//		occupationComboBox.addItem("Nakamura's Restaurant Host");
-//		occupationComboBox.addItem("Nakamura's Restaurant Waiter");
-//		occupationComboBox.addItem("Nakamura's Restaurant Cook");
-//		occupationComboBox.addItem("Nakamura's Restaurant Cashier");
-		
-		roles.put("Bank Manager", new BankManagerRole());
-		roles.put("Bank Teller", new BankTellerRole());
-		roles.put("Market Seller", new BankManagerRole());
-		roles.put("Landlord", new LandlordRole());
-		roles.put("Stack's Restaurant Host", new StackHostRole());
-		roles.put("Stack's Restaurant Waiter", new BankManagerRole());
-		roles.put("Stack's Restaurant Cook", new BankManagerRole());
-		roles.put("Stack's Restaurant Cashier", new BankManagerRole());
+        //		occupationComboBox.addItem("Sheh's Restaurant Host");
+        //		occupationComboBox.addItem("Sheh's Restaurant Waiter");
+        //		occupationComboBox.addItem("Sheh's Restaurant Cook");
+        //		occupationComboBox.addItem("Sheh's Restaurant Cashier");
+        //
+        //		occupationComboBox.addItem("Philips's Restaurant Host");
+        //		occupationComboBox.addItem("Philips's Restaurant Waiter");
+        //		occupationComboBox.addItem("Philips's Restaurant Cook");
+        //		occupationComboBox.addItem("Philips's Restaurant Cashier");
+        //
+        //		occupationComboBox.addItem("Tan's Restaurant Host");
+        //		occupationComboBox.addItem("Tan's Restaurant Waiter");
+        //		occupationComboBox.addItem("Tan's Restaurant Cook");
+        //		occupationComboBox.addItem("Tan's Restaurant Cashier");
+        //
+        //		occupationComboBox.addItem("Huang's Restaurant Host");
+        //		occupationComboBox.addItem("Huang's Restaurant Waiter");
+        //		occupationComboBox.addItem("Huang's Restaurant Cook");
+        //		occupationComboBox.addItem("Huang's Restaurant Cashier");
+        //
+        //		occupationComboBox.addItem("Nakamura's Restaurant Host");
+        //		occupationComboBox.addItem("Nakamura's Restaurant Waiter");
+        //		occupationComboBox.addItem("Nakamura's Restaurant Cook");
+        //		occupationComboBox.addItem("Nakamura's Restaurant Cashier");
 		
 		panel.add(occupationComboBox);
 		
@@ -265,30 +324,24 @@ public class SimCityGui {
 		btnCreatePerson.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(nameTextField.getText() != "" &&
-						occupationComboBox.getSelectedItem() != "None" &&
-						transportationComboBox.getSelectedItem() != "None" &&
-								housingComboBox.getSelectedItem() != "None") {
+                   occupationComboBox.getSelectedItem() != "None" &&
+                   transportationComboBox.getSelectedItem() != "None" &&
+                   housingComboBox.getSelectedItem() != "None") {
 					PersonAgent person = new PersonAgent(roles.get(occupationComboBox.getSelectedItem()),
-							nameTextField.getText(),
-							aggressivenessSlider.getValue(),
-							(double)initialFundsSlider.getValue(),
-							(String)housingComboBox.getSelectedItem(),
-							(String)transportationComboBox.getSelectedItem());
-//					do more stuff here
+                                                         nameTextField.getText(),
+                                                         aggressivenessSlider.getValue(),
+                                                         (double)initialFundsSlider.getValue(),
+                                                         (String)housingComboBox.getSelectedItem(),
+                                                         (String)transportationComboBox.getSelectedItem());
+                    //					do more stuff here
 					
 				}
-				
-				
-				
-				
 			}
 		});
 		sl_panel.putConstraint(SpringLayout.NORTH, btnCreatePerson, 6, SpringLayout.SOUTH, aggressivenessSlider);
 		sl_panel.putConstraint(SpringLayout.WEST, btnCreatePerson, 0, SpringLayout.WEST, btnPopulateCity);
 		sl_panel.putConstraint(SpringLayout.EAST, btnCreatePerson, 0, SpringLayout.EAST, btnPopulateCity);
 		panel.add(btnCreatePerson);
-		
-		
 		
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Current Building", null, panel_1, null);
@@ -301,17 +354,155 @@ public class SimCityGui {
 		panel_1.add(lblWorkers);
 	}
 	private void runSuperNorm() {
+//		String a = "Test Bank 1";
+//		String b = "House1";
+//		String name = "Test Person 1";
+//		Role role = new StackWaiterRole("StackRestaurant");
+//		PersonAgent p = new PersonAgent(role, a , b, name);
+//		role.setPerson(p);
+//		p.msgWakeUp();
+//		
+//		String a2 = "StackRestaurant";
+//		String b2 = "House2";
+//		String name2 = "Test Person 2";
+//		Role role2 = new StackWaiterRole("StackRestaurant");
+//		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
+//		role2.setPerson(p2);
+//		p2.msgGoWork();
+//		
+//		String a3 = "StackRestaurant";
+//		String b3 = "House3";
+//		String name3 = "Test Person 3";
+//		Role role3 = new StackCookRole("StackRestaurant");
+//		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
+//		role3.setPerson(p3);
+//		p3.msgGoWork();
+
 		String a = "Test Bank 1";
-		String b = "Test Home 1";
+		String b = "House1";
 		String name = "Test Person 1";
-		Role role = new BankManagerRole();
+		Role role;
+		if(rand.nextInt()%2 == 0) {
+			role = new StackWaiterSharedRole("StackRestaurant");
+		}
+		else {
+			role = new StackWaiterNormalRole("StackRestaurant");
+		}
 		PersonAgent p = new PersonAgent(role, a , b, name);
 		role.setPerson(p);
+		p.stopThread();
 		p.msgWakeUp();
+		p.startThread();
+	
+		String a2 = "StackRestaurant";
+		String b2 = "House2";
+		String name2 = "Test Person 2";
+		Role role2;
+		if(rand.nextInt()%2 == 0) {
+			role2 = new StackWaiterSharedRole("StackRestaurant");
+		}
+		else {
+			role2 = new StackWaiterNormalRole("StackRestaurant");
+		}
+		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
+		role2.setPerson(p2);
+		p2.msgGoWork();
+
+		String a3 = "StackRestaurant";
+		String b3 = "House3";
+		String name3 = "Test Person 3";
+		Role role3 = new StackCookRole("StackRestaurant");
+		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
+		role3.setPerson(p3);
+		p3.msgGoWork();
+
+		String a4 = "Bank";
+		String b4 = "House4";
+		String name4 = "Test Person 4";
+		Role role4 = new BankTellerRole("Bank");
+		PersonAgent p4 = new PersonAgent(role4, a4 , b4, name4);
+		role4.setPerson(p4);
+		p4.msgGoWork();
+		
+		String a5 = "Bank";
+		String b5 = "House5";
+		String name5 = "BankLoanPerson5";
+		Role role5 = new BankTellerRole("Bank");
+		PersonAgent p5 = new PersonAgent(role5, a5 , b5, name5);
+		role5.setPerson(p5);
+		p5.msgTestWakeUp();
+        
+		MarketRole role6 = new MarketRole("Market1");
+		Directory.sharedInstance().marketDirectory.get("Market1").setWorker(role6);
+		
+		String a6 = "Market1";
+		String b6 = "House1";
+		String name6 = "Test Person 6";
+		PersonAgent p6 = new PersonAgent(role6, a6 , b6, name6);
+		role6.setPerson(p6);
+		p6.msgGoWork();
+		
+		String a7 = "Test Bank 5";
+		String b7 = "House2";
+		String name7 = "MarketGoerPerson";
+		Role role7 = new BankTellerRole("Bank");
+		PersonAgent p7 = new PersonAgent(role7, a7 , b7, name7);
+		role7.setPerson(p7);
+		p7.msgTestWakeUp();
+		
+		bus = new BusAgent(1);
+		busGui = new BusGui(bus,1); //agent, starting StopNumber
+		bus.setGui(busGui);
+		macroAnimationPanel.addGui(busGui);
+		bus.startThread();
+		
+		
+		bus2 = new BusAgent(2);
+		busGui2 = new BusGui(bus2,2);
+		bus2.setGui(busGui2);
+		macroAnimationPanel.addGui(busGui2);
+		bus2.startThread();
+		
+		
+		
+//		TransportationRole transportation = new TransportationRole("House1", "StackRestaurant");
+//		PersonAgent transportationPerson = new PersonAgent(transportation);
+//		transportation.setPerson(transportationPerson);
+//		transportationPerson.startThread();
+		
+		Map<String, Integer> groceries = new HashMap<String, Integer>();
+		groceries.put("Steak", 1);
+		/*
+         MarketCustomerRole marketCustomer = new MarketCustomerRole(groceries, "Market1");
+         PersonAgent marketCustomerPerson = new PersonAgent(marketCustomer);
+         marketCustomer.setPerson(marketCustomerPerson);
+         marketCustomer.setMarket(market);
+         marketCustomerPerson.setFunds(50.00);
+         
+         marketCustomerPerson.startThread();*/
+		
+		
 		//Example Code
-		//Instantiate directory to have Stack restaurant in it. 
+		//Instantiate directory to have Stack restaurant in it.
 		//Instantiate 1 person to go to stack restaurant. give it an arbitrary name for job and home and role.
 		//Something needs to call this person's msgWakeUp. And scenario should run from there. Person should wake up eat and then idle.
 		//change boolean Cook in person.Decide eat to false to make person go to a restaurant.
+	}
+	
+	public void displayBuildingPanel( BuildingPanel buildingPanel ) { //How is this tied in with the Micro Panel?
+		//System.out.println("abc");
+		System.out.println("Accessing " + buildingPanel.getName() + " for MicroAnimation Panel." );
+		cardLayout.show( buildingPanels, buildingPanel.getName());
+	}
+	public MacroAnimationPanel getMacroAnimationPanel() {
+		return macroAnimationPanel;
+	}
+    //	public void displayMicroAnimationPanel(MicroAnimationPanel microAnimationPanel) {
+    //			System.out.println("Accessing " + microAnimationPanel.getName() + " for MicroAnimationPanel.");
+    //			cardLayout.show(buildingPanels, microAnimationPanel.getName());
+    //	}
+	
+	public BusAgent getBus() {
+		return bus;
 	}
 }

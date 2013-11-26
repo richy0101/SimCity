@@ -1,6 +1,7 @@
 package restaurant.stackRestaurant;
 
 import agent.Role;
+import gui.Building;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
@@ -8,30 +9,39 @@ import java.util.concurrent.Semaphore;
 import restaurant.stackRestaurant.gui.WaiterGui;
 import restaurant.stackRestaurant.helpers.Check;
 import restaurant.stackRestaurant.interfaces.*;
-import city.interfaces.Person;
-
-
-
+import city.helpers.Directory;
 
 public class StackWaiterRole extends Role implements Waiter {
-	private Cook cook;
-	private Host host;
+	protected Cook cook;
+	protected Host host;
 	private Cashier cashier;
 	private List<MyCustomer> customers = new ArrayList<MyCustomer>();
 	
-	private Semaphore doneAnimation = new Semaphore(0,true);
+	protected Semaphore doneAnimation = new Semaphore(0,true);
 	
 	public WaiterGui waiterGui = null;
+	private String myLocation;
 	
-	private enum AgentState
-	{Working, WantToGoOnBreak, WaitingForNotice, GoingOnBreak, OnBreak, FinishingBreak};
+	protected enum AgentState
+	{Arrived, Working, WantToGoOnBreak, WaitingForNotice, GoingOnBreak, OnBreak, FinishingBreak, GettingPaycheck, Leaving, WaitingForPaycheck};
 	AgentState state = AgentState.Working;
 	
-	private enum CustomerState
+	protected enum CustomerState
 	{Waiting, Seated, ReadyToOrder, Ordering, Ordered, AtCook, FoodEmpty, FoodReady, WaitingForReadyFood, Eating, DoneEating, ReadyForCheck, WaitingForCheck, HasCheck, Paying, Gone};
 	
-	public StackWaiterRole() {
+	public StackWaiterRole(String location) {
 		super();
+		host = (Host) Directory.sharedInstance().getAgents().get("StackRestaurantHost");
+		cashier = (Cashier) Directory.sharedInstance().getAgents().get("StackRestaurantCashier");
+		waiterGui = new WaiterGui(this);
+		myLocation = location;
+		state = AgentState.Arrived;
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == myLocation) {
+				b.addGui(waiterGui);
+			}
+		}
 	}
 	
 	public String getName() {
@@ -54,6 +64,18 @@ public class StackWaiterRole extends Role implements Waiter {
 	@Override
 	public boolean pickAndExecuteAnAction() {
 		try {
+			if(state == AgentState.Arrived) {
+				tellHostAtWork();
+				return true;
+			}
+			if(state == AgentState.GettingPaycheck) {
+				goGetPaycheck();
+				return true;
+			}
+			if(state == AgentState.Leaving) {
+				leaveRestaurant();
+				return true;
+			}
 			if(state == AgentState.WantToGoOnBreak) {
 				askHostToGoOnBreak();
 				return true;
@@ -125,7 +147,14 @@ public class StackWaiterRole extends Role implements Waiter {
 		return false;
 	}
 	
-//	actions---------------------------------------------------------------------------------------------------------------------------------
+
+	//	actions---------------------------------------------------------------------------------------------------------------------------------
+	private void tellHostAtWork() {
+		host.msgAddWaiter(this);
+		waiterGui.DoGoHome();
+		state = AgentState.Working;
+	}
+	
 	private void giveCustomerCheck(MyCustomer customer) {
 		host.msgWaiterBusy(this);
 		DoGoToCustomerTable(customer, customer.table);
@@ -189,17 +218,8 @@ public class StackWaiterRole extends Role implements Waiter {
 		customer.customer.msgHereToTakeOrder();
 	}
 	
-	private void takeOrderToCook(MyCustomer customer) {
-		host.msgWaiterBusy(this);
-		DoGoToCook();
-		print("Taking " + customer.customer + "'s order to cook");
-		try {
-			doneAnimation.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		customer.state = CustomerState.AtCook;
-		cook.msgCookOrder(this, customer.choice, customer.table, customer.seatNum);
+	protected void takeOrderToCook(MyCustomer customer) {
+		
 	}
 	
 	private void goPickUpFood(MyCustomer customer) {
@@ -245,6 +265,29 @@ public class StackWaiterRole extends Role implements Waiter {
 		customer.state = CustomerState.Gone;
 		host.msgLeavingTable(customer.customer);
 	}
+	
+	private void leaveRestaurant() {
+		print("Leaving.");
+		waiterGui.DoExitRestaurant();
+		try {
+			doneAnimation.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		getPersonAgent().msgRoleFinished();
+	}
+	
+	private void goGetPaycheck() {
+		print("Getting paycheck");
+		waiterGui.DoGoToPaycheck();
+		try {
+			doneAnimation.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		cashier.msgNeedPaycheck(this);
+		state = AgentState.WaitingForPaycheck;
+	}
 
 	
 //	animation---------------------------------------------------------------------------------------------------------------------------------
@@ -264,7 +307,7 @@ public class StackWaiterRole extends Role implements Waiter {
 		waiterGui.DoBringToTable(tableNumber);
 	}
 	
-	private void DoGoToCook() {
+	protected void DoGoToCook() {
 		print("Going to cook");
 		waiterGui.DoGoToCook();
 	}
@@ -280,6 +323,18 @@ public class StackWaiterRole extends Role implements Waiter {
 	
 	
 //	messages---------------------------------------------------------------------------------------------------------------------------------
+	public void msgHereIsPaycheck(double funds) {
+		getPersonAgent().setFunds(getPersonAgent().getFunds() + funds);
+		state = AgentState.Leaving;
+		stateChanged();
+	}
+	
+	public void msgJobDone() {
+		state = AgentState.GettingPaycheck;
+		stateChanged();
+		
+	}
+	
 	public void msgHereIsCheck(Check check) {
 		for(MyCustomer customer : customers) {
 			if(customer.customer.equals(check.getCustomer())) {
@@ -403,6 +458,12 @@ public class StackWaiterRole extends Role implements Waiter {
 		}
 	}
 	
+	@Override
+	public void msgCookHere(Cook cook) {
+		this.cook = cook;
+		stateChanged();
+	}
+	
 	public void msgIWantToGoOnBreak() {//from GUI
 		print("I want to go on break");
 		state = AgentState.WantToGoOnBreak;
@@ -429,14 +490,18 @@ public class StackWaiterRole extends Role implements Waiter {
 		doneAnimation.release();
 	}
 	
-	public void msgAnimationHome() {
-		waiterFree();
+	public void msgAtCashier() {
+		doneAnimation.release();	
+	}
+	
+	public void msgAnimationFinishedLeavingRestaurant() {
+		doneAnimation.release();
 	}
 //	other---------------------------------------------------------------------------------------------------------------------------------
 	
-	public String toString() {
+	/*public String toString() {
 		return getName();
-	}
+	}*/
 	
 	public boolean isOnBreak() {
 		if(state == AgentState.OnBreak) {
@@ -453,7 +518,7 @@ public class StackWaiterRole extends Role implements Waiter {
 		return waiterGui;
 	}
 
-	private class MyCustomer {
+	protected class MyCustomer {
 		MyCustomer(Customer customer, int table, int seatNum, CustomerState state) {
 			this.customer = customer;
 			this.table = table;

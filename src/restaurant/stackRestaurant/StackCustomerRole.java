@@ -3,31 +3,35 @@ package restaurant.stackRestaurant;
 import restaurant.stackRestaurant.gui.CustomerGui;
 import restaurant.stackRestaurant.helpers.Menu;
 import restaurant.stackRestaurant.helpers.Check;
+import agent.Agent;
 import agent.Role;
+import gui.Building;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.Random;
 import java.util.TimerTask;
 
+import city.PersonAgent;
+import city.helpers.Directory;
 import restaurant.stackRestaurant.interfaces.*;
 
 /**
  * Restaurant customer agent.
  */
 public class StackCustomerRole extends Role implements Customer {
-	private String name;
 	private int hungerLevel = 5;        // determines length of meal
 	private int tableNumber;
 	private String choice;
 	Timer timer = new Timer();
 	Random rand = new Random(); 
 	private CustomerGui customerGui;
+	String myLocation;
 	Check check;
 	
 	/**
 	 * change this values for non normative cases
 	 */
-	private double availableFunds = 20.00;
 	private boolean cheapSkate = false;
 	private boolean willingToWait = true;
 	
@@ -43,7 +47,7 @@ public class StackCustomerRole extends Role implements Customer {
 	private AgentState state = AgentState.DoingNothing;//The start state
 
 	public enum AgentEvent 
-	{none, gotHungry, doneEntering, waitingForSeating, followHost, seated, ordered, foodArrived, doneEating, waitingForCheck, gotCheck, gotToCashier, donePaying, doneLeaving};
+	{none, gotHungry, doneEntering, waitingForSeating, followHost, seated, ordered, foodArrived, doneEating, waitingForCheck, gotCheck, gotToCashier, donePaying, doneLeaving, closed};
 	AgentEvent event = AgentEvent.none;
 
 	/**
@@ -52,42 +56,44 @@ public class StackCustomerRole extends Role implements Customer {
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public StackCustomerRole(){
+	public StackCustomerRole(String location){
 		super();
-		if(name.equals("cheap")) {
-			cheapSkate = true;
-		} else if (name.equals("impatient")) {
-			willingToWait = false;
+		customerGui = new CustomerGui(this);
+		
+		myLocation = location;
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == myLocation) {
+				b.addGui(customerGui);
+			}
 		}
 	}
 
 	/**
 	 * hack to establish connection to Host agent.
 	 */
-	public void setHost(Host host) {
-		this.host = host;
+	public void setHost(Agent host) {
+		this.host = (Host) host;
 	}
 	
 	public void setFunds(double funds) {
-		availableFunds = funds;
+		getPersonAgent().setFunds(funds);
 	}
 	
 	public double getFunds() {
-		return availableFunds;
+		return getPersonAgent().getFunds();
 	}
 	
 	public void setWaiter(Waiter waiter) {
 		this.waiter = waiter;
 	}
 	
-	public void setCashier(Cashier cashier) {
-		this.cashier = cashier;
+	public void setCashier(Agent cashier) {
+		this.cashier = (Cashier) cashier;
 	}
 
 	// Messages
-
 	public void msgGotHungry() {//from animation
-		Do("I'm hungry");
 		event = AgentEvent.gotHungry;
 		stateChanged();
 	}
@@ -130,9 +136,15 @@ public class StackCustomerRole extends Role implements Customer {
 	}
 	
 	public void msgHereIsChange(double change) {
-		availableFunds += change;
+		setFunds(getFunds()+change);
 		event = AgentEvent.donePaying;
 		stateChanged();
+	}
+	public void msgRestaurantClosed() {
+		print("restaurant is closed");
+		event = AgentEvent.closed;
+		stateChanged();
+		
 	}
 
 	public void msgAnimationFinishedGoToSeat() {
@@ -158,6 +170,9 @@ public class StackCustomerRole extends Role implements Customer {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
+		if(event == AgentEvent.closed) {
+			leaveClosedRestaurant();
+		}
 		if (state == AgentState.DoingNothing && event == AgentEvent.gotHungry ) {
 			state = AgentState.WaitingInRestaurant;
 			goToRestaurant();
@@ -220,6 +235,7 @@ public class StackCustomerRole extends Role implements Customer {
 		}
 		if (state == AgentState.Leaving && event == AgentEvent.doneLeaving){
 			state = AgentState.DoingNothing;
+			doneRole();
 			return true;
 		}
 		return false;
@@ -227,10 +243,15 @@ public class StackCustomerRole extends Role implements Customer {
 
 	// Actions
 	
+	private void doneRole() {
+		Directory.sharedInstance().getCityGui().getMacroAnimationPanel().removeGui(customerGui);
+		getPersonAgent().msgRoleFinished();
+	}
+
 	private void payCheck() {
 		state = AgentState.Paid;
-		cashier.msgPayCheck(this, check, availableFunds);
-		availableFunds -= check.cost();
+		cashier.msgPayCheck(this, check, getFunds());
+		setFunds(getFunds() - check.cost());
 	}
 	
 	private void updateGui(String choice) {
@@ -242,9 +263,9 @@ public class StackCustomerRole extends Role implements Customer {
 		
 		if(!cheapSkate) {
 			for(Menu.Food food : Menu.sharedInstance().getMenu()) {
-				if(availableFunds > food.getPrice() 
+				if(getFunds() > food.getPrice() 
 						&& Menu.sharedInstance().getInventoryStock(food.getName())) {
-					Do("Ordering food");
+					print("Ordering food");
 					choice = food.getName();
 					waiter.msgGiveOrder(this, choice);
 					updateGui(choice.substring(0, 2) + "?");
@@ -253,13 +274,13 @@ public class StackCustomerRole extends Role implements Customer {
 			}
 			state = AgentState.Paid;
 			event = AgentEvent.donePaying;
-			Do("Too expensive, going home");
+			print("Too expensive, going home");
 		}
 		else {
 			for(int i = 0; i <=4; i++) {
 				choice = Menu.sharedInstance().getMenu().get(rand.nextInt(Menu.sharedInstance().getMenu().size())).getName();
 				if(Menu.sharedInstance().getInventoryStock(choice)) {
-					Do("Ordering food");
+					print("Ordering food");
 					waiter.msgGiveOrder(this, choice);
 					updateGui(choice.substring(0, 2) + "?");
 					return;
@@ -267,17 +288,17 @@ public class StackCustomerRole extends Role implements Customer {
 			}
 			state = AgentState.Paid;
 			event = AgentEvent.donePaying;
-			Do("Going home");	
+			print("Going home");	
 		}
 	}
 	
 	private void readyToOrder() {
-		Do("Telling waiter ready to order");
+		print("Telling waiter ready to order");
 		waiter.msgReadyToOrder(this);
 	}
 
 	private void goToRestaurant() {
-		Do("Going to restaurant");
+		print("Going to restaurant");
 		customerGui.DoEnterRestaurant();
 		
 	}
@@ -288,12 +309,12 @@ public class StackCustomerRole extends Role implements Customer {
 	}
 
 	private void SitDown() {
-		Do("Being seated. Going to table");
+		print("Being seated. Going to table");
 		customerGui.DoGoToSeat(1, tableNumber);
 	}
 
 	private void EatFood() {
-		Do("Eating Food");
+		print("Eating Food");
 		//This next complicated line creates and starts a timer thread.
 		//We schedule a deadline of getHungerLevel()*1000 milliseconds.
 		//When that time elapses, it will call back to the run routine
@@ -317,15 +338,23 @@ public class StackCustomerRole extends Role implements Customer {
 	}
 
 	private void leaveRestaurant() {
-		Do("Leaving.");
+		print("Leaving.");
 		waiter.msgDoneEating(this);
 		customerGui.DoExitRestaurant();
+		getPersonAgent().msgRoleFinished();
 	}
 	
 	private void notWaitingAndLeaving() {
-		Do("Leaving because it's too busy");
+		print("Leaving because it's too busy");
 		host.msgNotWaiting(this);
 		customerGui.DoExitRestaurant();
+		getPersonAgent().msgRoleFinished();
+	}
+	
+	private void leaveClosedRestaurant() {
+		print("Leaving.");
+		customerGui.DoExitRestaurant();
+		getPersonAgent().msgRoleFinished();
 	}
 
 	// Accessors, etc.
@@ -340,8 +369,6 @@ public class StackCustomerRole extends Role implements Customer {
 
 	public void setHungerLevel(int hungerLevel) {
 		this.hungerLevel = hungerLevel;
-		//could be a state change. Maybe you don't
-		//need to eat until hunger lever is > 5?
 	}
 
 	public String toString() {
