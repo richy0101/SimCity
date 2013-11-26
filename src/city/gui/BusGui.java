@@ -24,10 +24,10 @@ public class BusGui extends CityComponent implements Gui {
 	int xDestination = 20;
 	int yDestination = 20;
 	
-	int TopRow = 105;
+	int TopRow = 105-15;
 	int BottomRow = 325;
-	int LeftCol = 135;
-	int RightCol = 700;	
+	int LeftCol = 135-15-3;
+	int RightCol = 700-8;	
 	
 	int xStart = LeftCol;
 	int yStart = BottomRow;
@@ -126,21 +126,6 @@ public class BusGui extends CityComponent implements Gui {
 
 	@Override
 	public void draw(Graphics2D g) {
-		// TODO Auto-generated method stub
-		
-		//if (xPos < xDestination) {
-			g.drawImage(busLeftImage, xPos, yPos, null);
-		/*}
-		else if (xPos > xDestination) {
-			g.drawImage(busRightImage,  xPos, yPos, null);
-		}
-		else if (yPos < yDestination) {
-			g.drawImage(busUpImage, xPos, yPos, null);
-		}
-		else if (yPos > yDestination) {
-			g.drawImage(busDownImage, xPos, yPos, null);
-		}*/
-		/*
 		//counter clockwise
 		if(yPos==BottomRow)
 			g.drawImage(busRightImage, xPos, yPos, null);
@@ -150,7 +135,7 @@ public class BusGui extends CityComponent implements Gui {
 			g.drawImage(busLeftImage, xPos, yPos, null);
 		else if (xPos==LeftCol)
 			g.drawImage(busDownImage, xPos, yPos, null);
-		*/
+		
 	}
 
 	@Override
