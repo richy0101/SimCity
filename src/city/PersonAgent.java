@@ -44,7 +44,6 @@ public class PersonAgent extends Agent implements Person {
 	String homeName;
 	String currentLocation;
 	public enum TransportationMethod {OwnsACar, TakesTheBus, Walks};
-	public enum PersonPosition {AtHome, AtMarket, AtRestaurant, AtBank, City};
 	public enum HouseState {OwnsAHouse, OwnsAnApartment, Homeless, RentsAnApartment};
 	public enum PersonState {
 		//Norm Scenario Constants
@@ -52,9 +51,8 @@ public class PersonAgent extends Agent implements Person {
 		//Bank Scenario Constants
 		OutToBank, WantsToWithdraw, WantsToGetLoan, WantsToDeposit, WantsToRob, 
 		//Market Scenario Constants
-		NeedsToGoMarket, OutToMarket, EnterHome
+		NeedsToGoMarket, OutToMarket, EnterHome, OutToWork
 		};
-	PersonPosition personPosition;
 	HouseState houseState;
 	PersonState personState;
 	public TransportationMethod transMethod;
@@ -135,8 +133,8 @@ public class PersonAgent extends Agent implements Person {
 		this.name = name;
 		workDetails = new WorkDetails(job, job_location);
 		homeName = home;
+		currentLocation = home;
 		houseState = HouseState.OwnsAHouse;
-		personPosition = PersonPosition.AtHome;
 		personState = PersonState.Idle;
 		hungerLevel = 0;
 		dirtynessLevel = 0;
@@ -156,8 +154,6 @@ public class PersonAgent extends Agent implements Person {
 		inventory.add(initialFood);
 		//Set up gui
 		personGui = new PersonGui(this);
-		//homeName = "House1";
-		homeName = "House4";
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
 			if (b.getName() == homeName) {
@@ -181,7 +177,6 @@ public class PersonAgent extends Agent implements Person {
 		this.funds = initialFunds;
 		String vehicleStatusNoSpace = vehicleStatus.replaceAll(" ", "");
 		this.transMethod = TransportationMethod.valueOf(vehicleStatusNoSpace);
-		personPosition = PersonPosition.AtHome;
 		personState = PersonState.Idle;
 		hungerLevel = 0;
 		dirtynessLevel = 0;
@@ -189,8 +184,8 @@ public class PersonAgent extends Agent implements Person {
 		hasWorked = false;
 		Directory.sharedInstance().addPerson(this);
 		personGui = new PersonGui(this);
-		
 		homeName = housingStatus;
+		currentLocation = housingStatus;
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
 			if (b.getName() == homeName) {
@@ -218,7 +213,6 @@ public class PersonAgent extends Agent implements Person {
 		this.transMethod = TransportationMethod.valueOf(vehicleStatusNoSpace);
 		String housingStatusNoSpace = housingStatus.replaceAll(" ", "");
 		this.houseState = HouseState.valueOf(housingStatusNoSpace);
-		personPosition = PersonPosition.AtHome;
 		personState = PersonState.Idle;
 		hungerLevel = 0;
 		dirtynessLevel = 0;
@@ -309,7 +303,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	public void msgAtHome() {
 		print("msgAtHome received - Setting position to AtHome.");
-		personPosition = PersonPosition.AtHome;
+		currentLocation = homeName;
 		stateChanged();
 	}
 	public void msgPayRent() {
@@ -357,7 +351,7 @@ public class PersonAgent extends Agent implements Person {
 			goHome();
 			return true;
 		}
-		if (personState == PersonState.CookHome && personPosition == PersonPosition.AtHome) {
+		if (personState == PersonState.CookHome && currentLocation == homeName) {
 			cookHomeFood();
 			return true;
 		}
@@ -400,6 +394,10 @@ public class PersonAgent extends Agent implements Person {
 		// TODO Auto-generated method stub
 		if (personState == PersonState.Cooking || personState == PersonState.Eating) {
 			return false;
+		}
+		else if (hasWorked = false) {
+			personState = PersonState.NeedsToWork;
+			return true;
 		}
 		else if(funds <= 100.00) {
 			personState = PersonState.WantsToWithdraw;
@@ -519,11 +517,23 @@ public class PersonAgent extends Agent implements Person {
 	private void goWork() {
 		print("Action goWork - hasWorked = true. Going to work.");
 		hasWorked = true;
+		personState = PersonState.OutToWork;
+		personGui.DoLeaveHouse();
+		actionComplete.acquireUninterruptibly();
+		personGui.setPresentFalse();
+		//Role Logic
 		roles.clear();
 		roles.add(workDetails.workRole);
-		//roles.add(new TransportationRole(workDetails.workLocation));
-		leaveHouse();
-		
+		workDetails.workRole.setPerson(this);
+		Role t = new TransportationRole(workDetails.workLocation, currentLocation);
+		t.setPerson(this);
+		roles.add(t);
+		personTimer.schedule(new PersonTimerTask(this) {
+			public void run() {
+				p.msgDoneWorking();
+			}
+		},
+		9000000);//time for working
 	}
 	private void cleanRoom() {
 
