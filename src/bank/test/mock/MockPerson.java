@@ -23,20 +23,14 @@ public class MockPerson extends Mock implements Person {
 	}
 
 	@Override
-	public void clearGroceries() {
-		log.add(new LoggedEvent("ClearGroceries called"));
-		groceryList.clear();
-	}
-
-	@Override
 	public double getFunds() {
-		log.add(new LoggedEvent("GetFunds called"));
+		log.add(new LoggedEvent("Get funds"));
 		return funds;
 	}
 
 	@Override
 	public void setFunds(double funds) {
-		log.add(new LoggedEvent("SetFunds called. Amount = $" + funds));
+		log.add(new LoggedEvent("Set funds to $" + funds));
 		this.funds = funds;		
 	}
 	
@@ -64,7 +58,7 @@ public class MockPerson extends Mock implements Person {
 
 	@Override
 	public void setAccountNumber(int accountNumber) {
-		
+		log.add(new LoggedEvent("Set account number"));
 	}
 
 	@Override
@@ -74,6 +68,12 @@ public class MockPerson extends Mock implements Person {
 
 	@Override
 	public void msgTransportFinished(String currentLocation) {
+		
+	}
+
+	@Override
+	public void clearGroceries(Map<String, Integer> groceries) {
+		// TODO Auto-generated method stub
 		
 	}
 	
