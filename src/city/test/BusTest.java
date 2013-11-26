@@ -24,8 +24,6 @@ public class BusTest extends TestCase{
 		passenger3= new MockTransportation("Person 3");		
 	}	
 	
-	
-	
 	public void testOneFullPassenger(){
 	//preconditions: 
 		assertTrue("should be no passengers at stop 1, but there is, ", BusHelper.sharedInstance().getWaitingPassengersAtStop1().isEmpty());
