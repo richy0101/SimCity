@@ -71,6 +71,12 @@ public class MockCustomer extends Mock implements Customer {
 	public void setFunds(double funds) {
 		log.add(new LoggedEvent("Funds are set to" + funds));
 	}
+
+	@Override
+	public void msgRestaurantClosed() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }
