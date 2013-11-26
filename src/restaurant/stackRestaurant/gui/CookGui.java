@@ -19,11 +19,13 @@ public class CookGui implements Gui {
     private int PLATINGX = 543, PLATINGY = 70;
     private int COOKTOPX = 781, COOKTOPY = 35;
     private int FRIDGEX = 595, FRIDGEY = 35;
+    private static final int xCashier = 460, yCashier = 34;
+	private static final int xExit = 850, yExit = 450;
     
     BufferedImage cookImage;
     
     private enum Command 
-    {noCommand, GoToFridge, GoToCooktop, GoToPlating};
+    {noCommand, GoToFridge, GoToCooktop, GoToPlating, GoToCashier, Exit};
 	private Command command=Command.noCommand;
   
     
@@ -60,6 +62,13 @@ public class CookGui implements Gui {
         	} else if(xDestination == FRIDGEX && yDestination == FRIDGEY && command == Command.GoToFridge) {
         		agent.msgAtFridge();
         	}
+        	if (xDestination == xCashier && yDestination == yCashier && command == Command.GoToCashier) {
+            	agent.msgAtCashier();
+            	DoGoHome();	
+            }
+            if(xDestination == xExit && yDestination == yExit && command == Command.Exit) {
+            	agent.msgAnimationFinishedLeavingRestaurant();
+            }
         	command = Command.noCommand;
         }   
     }
@@ -90,6 +99,20 @@ public class CookGui implements Gui {
     	xDestination = xHome;
     	yDestination = yHome;
     }
+    
+    public void DoExitRestaurant() {
+		xDestination = xExit;
+    	yDestination = yExit;
+    	command = Command.Exit;
+		
+	}
+
+	public void DoGoToPaycheck() {
+		xDestination = xCashier;
+    	yDestination = yCashier;
+    	command = Command.GoToCashier;
+		
+	}
     
     public boolean isPresent() {
         return true;

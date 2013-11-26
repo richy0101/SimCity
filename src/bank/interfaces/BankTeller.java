@@ -15,6 +15,8 @@ public interface BankTeller {
 	
 	public void msgGoToRegister(int registerNumber);
 	
+	public void msgHereIsPaycheck(double paycheck);
+	
 	public void msgDoneWorking();
 	
 	//animation
@@ -24,4 +26,5 @@ public interface BankTeller {
 	public void msgAtManager();
 	
 	public void msgAnimationFinishedLeavingBank();
+
 }

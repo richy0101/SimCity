@@ -1,6 +1,7 @@
 package restaurant.stackRestaurant;
 
 import agent.Agent;
+import agent.Role;
 import restaurant.stackRestaurant.helpers.Check;
 import restaurant.stackRestaurant.helpers.Menu;
 import restaurant.stackRestaurant.interfaces.*;
@@ -12,11 +13,15 @@ public class StackCashierAgent extends Agent implements Cashier {
 	
 	private List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	private List<MyCheck> checks = Collections.synchronizedList(new ArrayList<MyCheck>());
+	private List<MyEmployee> employees = Collections.synchronizedList(new ArrayList<MyEmployee>());
 	
 	public enum CustomerState
 	{NeedComputing, Computed, NeedPaying, Paid};
 	
 	public enum CheckState
+	{NeedPaying, Paid};
+	
+	public enum EmployeeState
 	{NeedPaying, Paid};
 	
 	private double till;
@@ -40,6 +45,7 @@ public class StackCashierAgent extends Agent implements Cashier {
 			for(MyCustomer customer : customers) {
 				if(customer.state == CustomerState.NeedComputing) {
 					computeCheck(customer);
+					return true;
 				}
 			}
 		}
@@ -47,6 +53,7 @@ public class StackCashierAgent extends Agent implements Cashier {
 			for(MyCustomer customer : customers) {
 				if(customer.state == CustomerState.NeedPaying) {
 					handleCustomerPayment(customer);
+					return true;
 				}
 			}
 		}
@@ -54,7 +61,14 @@ public class StackCashierAgent extends Agent implements Cashier {
 			for(MyCheck check : checks) {
 				if(check.state == CheckState.NeedPaying) {
 					payMarket(check);
+					return true;
 				}
+			}
+		}
+		synchronized(employees) {
+			for(MyEmployee employee : employees) {
+				payEmployee(employee);
+				return true;
 			}
 		}
 		return false;
@@ -100,9 +114,12 @@ public class StackCashierAgent extends Agent implements Cashier {
 		customer.state = CustomerState.Paid;
 	}
 	
-	
-	
-	
+	private void payEmployee(MyEmployee employee) {
+		employee.role.msgHereIsPaycheck(100);
+		setTill(getTill() - 100);
+		employees.remove(employee);
+	}
+
 	//messages
 	
 	public void msgComputeCheck(Waiter waiter, Customer cust, String choice) {
@@ -129,6 +146,11 @@ public class StackCashierAgent extends Agent implements Cashier {
 				customer.availableMoney = money;
 			}
 		}
+		stateChanged();
+	}
+	
+	public void msgNeedPaycheck(Role role) {
+		employees.add(new MyEmployee(role));
 		stateChanged();
 	}
 	
@@ -160,6 +182,13 @@ public class StackCashierAgent extends Agent implements Cashier {
 		public double debt = 0;
 		public double availableMoney = 0;
 		public CustomerState state;
+	}
+	
+	public class MyEmployee {
+		MyEmployee(Role role) {
+			this.role = role;
+		}
+		Role role;
 	}
 	
 	public class MyCheck {
