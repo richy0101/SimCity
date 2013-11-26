@@ -1,6 +1,8 @@
 package city.helpers;
 import java.awt.List;
 import java.io.File;  
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;  
@@ -29,8 +31,8 @@ public class XMLReader {
 	
 	public void populateCity() {  
 		 try {  
-	  
-			 File xmlFile = new File("supernormative.xml");  
+
+			 File xmlFile = new File("src/city/helpers/supernormative.xml");
 			 DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();  
 			 DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();  
 			 Document doc = documentBuilder.parse(xmlFile);  
@@ -49,9 +51,6 @@ public class XMLReader {
 				 String transportation = "";
 				 
 				 Node node = nodeList.item(i);  
-	  
-				 System.out.println("\nElement type :" + node.getNodeName());  
-	  
 				 if (node.getNodeType() == Node.ELEMENT_NODE) {  
 					 Element person = (Element) node;   
 					 name = person.getElementsByTagName("name").item(0).getTextContent();

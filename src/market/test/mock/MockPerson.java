@@ -2,33 +2,75 @@ package market.test.mock;
 
 import java.util.Map;
 
+import city.interfaces.Person;
 import market.interfaces.Market;
-import market.interfaces.MarketCustomer;
 
-public class MockPerson extends Mock implements Market {
+public class MockPerson extends Mock implements Person {
 
-	public MarketCustomer customer;
+	public Market market;
 	public EventLog log;
-	public Map<String, Integer> groceries;
+	public Map<String, Integer> groceryList;
+	public double funds;
 
 	public MockPerson(String name) {
 		super(name);
 		log = new EventLog();
 	}
+
+	@Override
+	public void clearGroceries() {
+		log.add(new LoggedEvent("ClearGroceries called"));
+		groceryList.clear();
+	}
+
+	@Override
+	public double getFunds() {
+		log.add(new LoggedEvent("GetFunds called"));
+		return funds;
+	}
+
+	@Override
+	public void setFunds(double funds) {
+		log.add(new LoggedEvent("SetFunds called. Amount = $" + funds));
+		this.funds = funds;		
+	}
 	
 	@Override
-	public void msgGetGroceries(MarketCustomer customer, Map<String, Integer> groceryList) {
-		log.add(new LoggedEvent("Received msgGetGroceries from MarketCustomer"));
-		groceries = groceryList;
+	public void msgRoleFinished() {
+		log.add(new LoggedEvent("msgRoleFinished called"));
 	}
 
 	@Override
-	public void msgHereIsMoney(MarketCustomer customer, double money) {
-		log.add(new LoggedEvent("Received msgHereIsMoney from MarketCustomer. Money = $" + money));
+	public void stateChanged() {
 	}
 
 	@Override
-	public void msgCantAffordGroceries(MarketCustomer customer) {
-		log.add(new LoggedEvent("Received msgCantAffordGroceries from MarketCustomer"));
+	public void print(String msg) {
 	}
+
+	@Override
+	public void Do(String msg) {
+	}
+
+	@Override
+	public String getTransportationMethod() {
+		return null;
+	}
+
+	@Override
+	public void setAccountNumber(int accountNumber) {
+		
+	}
+
+	@Override
+	public int getAccountNumber() {
+		return 0;
+	}
+
+	@Override
+	public void msgTransportFinished(String currentLocation) {
+		
+	}
+	
+
 }

@@ -14,6 +14,7 @@ import city.gui.BusGui;
 import city.helpers.Directory;
 import city.helpers.XMLReader;
 import agent.Role;
+import bank.BankCustomerRole;
 import bank.BankManagerAgent;
 import bank.BankTellerRole;
 import bank.gui.*;
@@ -367,14 +368,11 @@ public class SimCityGui {
 		PersonAgent p = new PersonAgent(role, a , b, name);
 		role.setPerson(p);
 		p.msgWakeUp();
-		
-		//p.msgGoWork();
-		
         
 		MarketRole market = new MarketRole("Market1");
 		PersonAgent marketPerson = new PersonAgent(market);
 		market.setPerson(marketPerson);
-		marketPerson.startThread();
+		marketPerson.startThread();		
 		
 		bus = new BusAgent();
 		busGui = new BusGui(bus);
