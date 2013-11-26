@@ -20,3 +20,13 @@ Reid Nakamura's Contribution:
  * Implemented Market Roles, Market GUI, and unit tests
  * Helped to debug Transportation GUI
  * Worked with Ryan Sheh to set up CardLayout of building animation panels
+
+Ryan Sheh's Contribution
+ * Main Window GUI (w/ help from Ryan Stack)
+ * Bank GUI (w/ Richard & Ryan Stack )
+ * Market GUI (w/ Reid)
+ * Home GUI (w/ Alex)
+ * Implemented CardLayout (w/ help from Reid)
+ * Implemented Directory Class (w/ help from Alex)
+ * Unit Testing Bank Roles (w/ Richard)
+ * Helped Implement Bus Agent & GUI (w/ Ben Tan)
