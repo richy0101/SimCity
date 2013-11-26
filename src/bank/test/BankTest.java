@@ -39,13 +39,43 @@ public class BankTest extends TestCase {
 	}	
 	
 	//Deposit w/ Account
-	//Deposit w/o Account
-	//Withdraw w/ Account
-	//Withdraw w/o Account
-	//Withdraw w/ < $100 in Account
-	//Loan w/ Good Credit (No taking a loan)
-	//Loan w/ Bad Credit (Has taken loan)
-	//Bank tellers are busy
+	public void testOneBankOrder(){
+		
+	}
 	
+	//Deposit w/o Account
+	public void testTwoBankOrder(){
+		
+	}
+	
+	//Withdraw w/ Account
+	public void testThreeBankOrder(){
+		
+	}
+	
+	//Withdraw w/o Account
+	public void testFourBankOrder(){
+		
+	}
+	
+	//Withdraw w/ < $100 in Account
+	public void testFiveBankOrder(){
+		
+	}
+	
+	//Loan w/ Good Credit (No taking a loan)
+	public void testSixBankOrder(){
+		
+	}
+	
+	//Loan w/ Bad Credit (Has taken loan)
+	public void testSevenBankOrder(){
+		
+	}
+	
+	//Bank tellers are busy
+	public void testEightBankOrder(){
+		
+	}
 
 }
