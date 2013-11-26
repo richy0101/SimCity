@@ -9,22 +9,22 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import city.PersonAgent;
+import city.TransportationRole;
 import city.gui.PersonGui.CurrentAction;
 
 public class TransportationGui implements Gui {
-	private PersonAgent agent = null;
+	private TransportationRole agent = null;
 	private int xPos, yPos;
 	private int xDestination, yDestination;
-	private int xBed, yBed, xKitchen, yKitchen, xTable, yTable;
 
 	BufferedImage personLeft;
 	BufferedImage personRight;
 	BufferedImage personUp;
 	BufferedImage personDown;
 	
-	public enum CurrentAction {Cooking, Eating, Transition, Idle};
+	public enum CurrentAction {Travelling, Idle};
 	CurrentAction currentAction = CurrentAction.Idle;
-	public TransportationGui(int startX, int startY, int destX, int destY) {
+	public TransportationGui(TransportationRole agent, int startX, int startY, int destX, int destY) {
 		this.agent = agent;
 		xPos = startX;
 		yPos = startY;
@@ -41,7 +41,7 @@ public class TransportationGui implements Gui {
         	System.out.println("Error w/ Person assets");
         }
 		
-		this.agent = agent;
+		currentAction = CurrentAction.Travelling;
 	}
 	
 	@Override
@@ -59,6 +59,11 @@ public class TransportationGui implements Gui {
 		}
 		else if (yPos > yDestination) {
 			yPos-= 1;
+		}
+		
+		if(yPos == yDestination && xPos == xDestination && currentAction == CurrentAction.Travelling) {
+			agent.msgActionComplete();
+			currentAction = CurrentAction.Idle;
 		}
 	}
 
@@ -86,19 +91,5 @@ public class TransportationGui implements Gui {
 	public boolean isPresent() {
 		// TODO Auto-generated method stub
 		return true;
-	}
-	public void DoCook() {
-		currentAction = CurrentAction.Cooking;
-		xDestination = xKitchen;
-		yDestination = yKitchen;
-	}
-	public void DoEat() {
-		currentAction = CurrentAction.Eating;
-		xDestination = xTable;
-		yDestination = yTable;
-	}
-	public void DoSleep() {
-		xDestination = xBed;
-		yDestination = yBed;
 	}
 }
