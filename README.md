@@ -15,3 +15,8 @@ Ryan Stack's Contribution:
  * Created initial setup for project with interfaces and stubs from all designs
  * Created initial global clock and role class (iterations followed from other team members)
  * Missing functionality for V2: depositing excess money in bank
+
+Reid Nakamura's Contribution:
+ * Implemented Market Roles, Market GUI, and unit tests
+ * Helped to debug Transportation GUI
+ * Worked with Ryan Sheh to set up CardLayout of building animation panels
