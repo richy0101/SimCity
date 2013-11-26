@@ -2,6 +2,7 @@ package bank;
 
 import bank.gui.BankCustomerGui;
 import bank.interfaces.*;
+import agent.Agent;
 import agent.Role;
 
 public class BankCustomerRole extends Role implements BankCustomer {
@@ -50,8 +51,8 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
     
 	//setters----------------------------------------------------------------------------
-	public void setManager(BankManagerAgent agent){
-		manager = agent;
+	public void setManager(Agent agent){
+		manager = (BankManagerAgent) agent;
 	}
     //messages----------------------------------------------------------------------------
 	public void msgHowCanIHelpYou(BankTeller teller, int tellerNumber) {
@@ -91,7 +92,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
     //scheduler---------------------------------------------------------------------------
 	
-	protected boolean pickAndExecuteAction(){
+	public boolean pickAndExecuteAction(){
 		if(state == CustomerState.DoingNothing){
 			askForAssistance();
 			return true;

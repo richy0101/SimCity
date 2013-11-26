@@ -16,7 +16,7 @@ public class BankManagerAgent extends Agent implements BankManager {
 
 		BankTeller teller;
 	    BankTellerState state;
-	    int tellerNum;
+	    int tellerNum = -1; // hack to test unit test for initial state (-1 equivalent to null)
 	    
 	    public MyBankTeller(BankTeller teller, BankTellerState state, int tellerNum){
 	    	this.teller = teller;
@@ -83,7 +83,7 @@ public class BankManagerAgent extends Agent implements BankManager {
     
     //scheduler---------------------------------------------------------------------------
 	@Override
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		synchronized(this.tellers){
 			for(MyBankTeller tempTeller: tellers){
 				if(tempTeller.state == BankTellerState.GotToWork){
