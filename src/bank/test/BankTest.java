@@ -31,7 +31,7 @@ public class BankTest extends TestCase {
 		super.setUp();
 		manager = new MockBankManager("mockbankmanager");
 		teller = new MockBankTeller("mockbankteller");		
-		customer = new MockBankCustomer("mockcustomer");
+		customer = new MockBankCustomer("mockcustomer",300,0);
 		
 		groceryList = new HashMap<String, Integer>();
 		groceryList.put("Steak", 1);

@@ -2,6 +2,7 @@ package bank.test.mock;
 
 import java.util.Map;
 
+import bank.test.mock.LoggedEvent;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.BankTeller;
 import market.interfaces.Market;
@@ -13,10 +14,14 @@ public class MockBankCustomer extends Mock implements BankCustomer {
 	public EventLog log;
 	public double price;
 	public Map<String, Integer> groceries;
+	public double moneyRequired;
+	public double moneyToDeposit;
 
-	public MockBankCustomer (String name) {
+	public MockBankCustomer (String name,double moneyToDeposit,double moneyRequired) {
 		super(name);
 		log = new EventLog();
+		this.moneyRequired = moneyRequired;
+		this.moneyToDeposit = moneyToDeposit;
 	}
 	
 	//MARKET
@@ -50,31 +55,31 @@ public class MockBankCustomer extends Mock implements BankCustomer {
 
 	@Override
 	public void msgLoanDenied() {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Customer's loan was denied"));
 		
 	}
 
 	@Override
 	public void msgHereAreFunds(double funds) {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Customer received his funds"));
 		
 	}
 
 	@Override
 	public void msgHereIsYourAccount(int accountNumber) {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Customer opened new account"));
 		
 	}
 
 	@Override
 	public void msgDepositSuccessful() {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Customer's deposit was successful"));
 		
 	}
 
 	@Override
 	public void msgHowCanIHelpYou(BankTeller teller, int tellerNumber) {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Customer is ready to be helped"));
 		
 	}
 }
