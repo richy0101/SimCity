@@ -1,5 +1,8 @@
 package city.helpers;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import agent.Constants;
 import city.PersonAgent;
 
@@ -9,6 +12,13 @@ public class Clock {
 	
 	private Clock() {
 		startTime = System.currentTimeMillis();
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			public void run() {
+				notifyTimeToWakeUp();
+			}
+		},
+		6000);
 	}
 	
 	public static Clock sharedInstance() {

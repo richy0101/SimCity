@@ -11,6 +11,7 @@ import city.BusAgent;
 import city.PersonAgent;
 import city.TransportationRole;
 import city.gui.BusGui;
+import city.helpers.Clock;
 import city.helpers.Directory;
 import city.helpers.XMLReader;
 import agent.Role;
@@ -471,7 +472,7 @@ public class SimCityGui {
 			role = new StackWaiterNormalRole("StackRestaurant");
 		}
 		PersonAgent p = new PersonAgent(role, a , b, name);
-		p.msgWakeUp();
+//		p.msgWakeUp();
 		role.setPerson(p);
 		p.startThread();
 	
@@ -487,7 +488,7 @@ public class SimCityGui {
 		}
 		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
 		role2.setPerson(p2);
-		p2.msgWakeUp();
+//		p2.msgWakeUp();
 		p2.startThread();
 
 		String a3 = "StackRestaurant";
@@ -496,7 +497,7 @@ public class SimCityGui {
 		Role role3 = new StackCookRole("StackRestaurant");
 		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
 		role3.setPerson(p3);
-		p3.msgWakeUp();
+//		p3.msgWakeUp();
 		p3.startThread();
 
 		String a4 = "Bank";
@@ -505,7 +506,7 @@ public class SimCityGui {
 		Role role4 = new BankTellerRole("Bank");
 		PersonAgent p4 = new PersonAgent(role4, a4 , b4, name4);
 		role4.setPerson(p4);
-		p4.msgWakeUp();
+//		p4.msgWakeUp();
 		p4.startThread();
 		
 		String a5 = "Bank";
@@ -514,7 +515,7 @@ public class SimCityGui {
 		Role role5 = new BankTellerRole("Bank");
 		PersonAgent p5 = new PersonAgent(role5, a5 , b5, name5);
 		role5.setPerson(p5);
-		p5.msgWakeUp();
+//		p5.msgWakeUp();
 		p5.startThread();
         
 		MarketRole role6 = new MarketRole("Market1");
@@ -525,7 +526,7 @@ public class SimCityGui {
 		String name6 = "Test Person 6";
 		PersonAgent p6 = new PersonAgent(role6, a6 , b6, name6);
 		role6.setPerson(p6);
-		p6.msgWakeUp();
+//		p6.msgWakeUp();
 		p6.startThread();
 		
 		String a7 = "Bank";
@@ -534,7 +535,7 @@ public class SimCityGui {
 		Role role7 = new BankTellerRole("Bank");
 		PersonAgent p7 = new PersonAgent(role7, a7 , b7, name7);
 		role7.setPerson(p7);
-		p7.msgWakeUp();
+//		p7.msgWakeUp();
 		p7.startThread();
 		
 		bus = new BusAgent(1);
@@ -550,7 +551,7 @@ public class SimCityGui {
 		macroAnimationPanel.addGui(busGui2);
 		bus2.startThread();
 		
-		
+//		Clock.sharedInstance().notifyTimeToWakeUp();
 	}
 	
 	public void displayBuildingPanel( BuildingPanel buildingPanel ) { //How is this tied in with the Micro Panel?
