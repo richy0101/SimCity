@@ -10,6 +10,7 @@ import city.TransportationRole;
 import city.gui.BusStop;
 import city.gui.StreetCorner;
 import market.Market;
+import agent.Agent;
 import bank.Bank;
 import gui.MacroAnimationPanel;
 import gui.SimCityGui;
@@ -116,10 +117,10 @@ public class Directory {
 	Coordinate house1Location = new Coordinate(350,275);
 	
 	private Home house2 = new Home("House2");
-	Coordinate house2Location = new Coordinate(478,285);
+	Coordinate house2Location = new Coordinate(350,130);
 
 	private Home house3 = new Home("House3");
-	Coordinate house3Location = new Coordinate(594,285);
+	Coordinate house3Location = new Coordinate(520,130);
 	
 	private Home house4 = new Home("House4");
 	Coordinate house4Location = new Coordinate(600,130);
@@ -181,10 +182,18 @@ public class Directory {
 		
 	}
 	
+	public Map <String, Agent> agents =  new HashMap<String, Agent>();{
+		agents.put(stackRestaurant.getName() + "Host", (Agent) stackRestaurant.getHost());
+		agents.put(stackRestaurant.getName() + "Cashier", (Agent) stackRestaurant.getCashier());
+		agents.put( bank.getName(),(Agent) bank.getManager());
+	}
 	public static List<Restaurant> restaurants = new ArrayList<Restaurant>();
 	public static List<Bank> banks = new ArrayList<Bank>();
 	public static List<Market> markets = new ArrayList<Market>();
 	public static List<PersonAgent> people = new ArrayList<PersonAgent>();
+	public Map<String, Agent> getAgents() {
+		return agents;
+	}
 	public Map<String, Coordinate> getDirectory() {
 		return locationDirectory;
 	}

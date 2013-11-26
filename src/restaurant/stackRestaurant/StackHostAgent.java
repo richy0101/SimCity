@@ -1,8 +1,9 @@
 package restaurant.stackRestaurant;
 
-import agent.Role;
+import agent.Agent;
 import restaurant.stackRestaurant.gui.WaiterGui;
 import restaurant.stackRestaurant.helpers.TableList;
+import restaurant.stackRestaurant.interfaces.Cook;
 import restaurant.stackRestaurant.interfaces.Customer;
 import restaurant.stackRestaurant.interfaces.Host;
 import restaurant.stackRestaurant.interfaces.Waiter;
@@ -16,15 +17,17 @@ import java.util.*;
 //does all the rest. Rather than calling the other agent a waiter, we called him
 //the HostAgent. A Host is the manager of a restaurant who sees that all
 //is proceeded as he wishes.
-public class StackHostRole extends Role implements Host {
+public class StackHostAgent extends Agent implements Host {
 	//Notice that we implement waitingCustomers using ArrayList, but type it
 	//with List semantics.
 	public List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	public List<MyWaiter> waiters = Collections.synchronizedList(new ArrayList<MyWaiter>());
 	public Collection<Table> tables;
 	private TableList tableList = new TableList();
+	Cook cook;
 	//note that tables is typed with Collection semantics.
 	//Later we will see how it is implemented
+	private boolean needToNotifyWaiters = false;
 	
 	public enum CustomerState 
 	{WaitingInRestaurant, NotifiedRestaurantFull, Eating, Done};
@@ -33,7 +36,7 @@ public class StackHostRole extends Role implements Host {
 	{Idle, Busy};
 
 
-	public StackHostRole() {
+	public StackHostAgent() {
 		super();
 		// make some tables
 		tables = new ArrayList<Table>(tableList.getTables().size());
@@ -51,7 +54,7 @@ public class StackHostRole extends Role implements Host {
 	}
 	
 	public String getName() {
-		return getPersonAgent().getName();
+		return "Garcon";
 	}
 	
 	// Messages
@@ -128,6 +131,14 @@ public class StackHostRole extends Role implements Host {
 	public void msgAddWaiter(Waiter waiter) {
 		print("adding " +  waiter);
 		waiters.add(new MyWaiter(waiter, WaiterState.Idle));
+		needToNotifyWaiters = true;
+		stateChanged();
+	}
+	
+	public void msgAddCook(Cook cook) {
+		print("adding " +  cook);
+		this.cook = cook;
+		needToNotifyWaiters = true;
 		stateChanged();
 	}
 	
@@ -136,6 +147,10 @@ public class StackHostRole extends Role implements Host {
 	 */
 	@Override
 	public boolean pickAndExecuteAnAction() {
+		if(needToNotifyWaiters) {
+			notifyWaitersOfCook();
+			return true;
+		}
 		synchronized(waiters) {
 			for(MyWaiter waiter : waiters) {
 				if(waiter.askingForBreak) {
@@ -159,6 +174,12 @@ public class StackHostRole extends Role implements Host {
 			}
 		}
 		synchronized(customers) {
+			for(MyCustomer customer : customers) {
+				if(cook == null && customer.state != CustomerState.Done) {
+					tellCustomerRestaurantClosed(customer);
+					return true;
+				}
+			}
 			for(MyCustomer customer : customers) {
 				if(customer.state == CustomerState.WaitingInRestaurant 
 						|| customer.state == CustomerState.NotifiedRestaurantFull) {
@@ -189,7 +210,24 @@ public class StackHostRole extends Role implements Host {
 		return false;
 	}
 
+	
+
+	
+
 	// Actions
+	private void tellCustomerRestaurantClosed(MyCustomer customer) {
+		customer.customer.msgRestaurantClosed();
+		customer.state = CustomerState.Done;
+		
+	}
+	private void notifyWaitersOfCook() {
+		print("we have a cook!");
+		for(MyWaiter waiter : waiters) {
+			waiter.waiter.msgCookHere(cook);
+		}
+		needToNotifyWaiters = false;
+		
+	}
 	private void assignCustomerToWaiter(MyCustomer customer, MyWaiter waiter, Table table) {
 		print("assigning customer to waiter: " + waiter.waiter);
 		waiter.waiter.msgSeatCustomer(customer.customer, table.tableNumber, 0);
@@ -258,5 +296,8 @@ public class StackHostRole extends Role implements Host {
 		boolean onBreak = false;
 	}
 	
+	public Cook getCook() {
+		return cook;
+	}
 }
 

@@ -1,6 +1,5 @@
 package bank;
 
-import city.helpers.Directory;
 import bank.gui.BankCustomerGui;
 import bank.interfaces.*;
 import agent.Role;
@@ -14,12 +13,12 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	BankCustomerGui customerGui;
 	
-	double moneyToDeposit;
+	double moneyToDeposit = 0;
 	double moneyToWithdraw = 100;
-	double moneyRequired;
+	double moneyRequired = 0;
 	
 	int accountNumber;
-	int tellerNumber;
+	int tellerNumber = -1;  //hack initializer for unit tests (-1 as null)
     
 	String task;
 	public BankCustomerRole(String task, double moneyToDeposit, double moneyRequired) {

@@ -8,6 +8,7 @@ import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import agent.Agent;
+import city.interfaces.Transportation;
 import city.BusAgent.MyPassenger.Status;
 import city.gui.BusGui;
 import city.interfaces.Bus;
@@ -42,18 +43,17 @@ public class BusAgent extends Agent implements Bus {
 	
 	public static class MyPassenger{
 
-		MyPassenger(TransportationRole tr){
+		MyPassenger(Transportation tr){
 			passenger= tr;
 			status= Status.none;
 		}
-		TransportationRole passenger;
+		Transportation passenger;
 		enum Status{Riding, requestingStop, Leaving, none};
 		Status status;
 		
 	}
 	
 	public BusAgent(){//constructor
-		print("Bus in city.");
 		busGui = new BusGui(this);
 	}
 		
@@ -74,7 +74,7 @@ public class BusAgent extends Agent implements Bus {
 	{reachedStop, stopped, notifiedPassengersToAlightBus, passengersAlighted, notifiedPassengersToBoardBus, passengersBoarded}
 	public Event event= Event.reachedStop;
 	
-		protected boolean pickAndExecuteAnAction(){
+		public boolean pickAndExecuteAnAction(){
 			if(state==State.driving && event==Event.reachedStop){
 				state=State.stopping;
 				stopBus();//change event to stopped
@@ -119,26 +119,25 @@ public class BusAgent extends Agent implements Bus {
 	 * Messages
 	 * @param myDestination
 	 */
-		public void msgBoardingBus(TransportationRole person){
-			print("Received request from passenger to board bus.");	
+		public void msgBoardingBus(Transportation person){
 					passengersOnBoard.add(new MyPassenger(person));	
 		}
 		
-		public void msgLeavingBus(TransportationRole person){
-			print("Received request from passenger to leave bus.");
-
+		public void msgLeavingBus(Transportation person){
+	
 			synchronized(passengersOnBoard) {
 				for(MyPassenger p: passengersOnBoard){
 					if (p.passenger==person){
 						p.status= Status.Leaving;
-//						passengersOnBoard.remove(p);
+						passengersOnBoard.remove(p);
+						break;
 					}			
 				}
 			}
 		}
 		
 		public void msgAtStopOne(){
-			print("AT STOP 1");
+			//print("At Stop 1");
 			driving.release();
 			event= Event.reachedStop;
 			lastStation = Station.Stop1;
@@ -146,21 +145,21 @@ public class BusAgent extends Agent implements Bus {
 		}
 		
 		public void msgAtStopTwo(){
-			print("AT STOP 2");
+			//print("At Stop 2");
 			driving.release();
 			event= Event.reachedStop;
 			lastStation = Station.Stop2;
 		}
 
 		public void msgAtStopThree(){
-			print("AT STOP 3");
+			//print("At Stop 3");
 			driving.release();
 			event= Event.reachedStop;
 			lastStation = Station.Stop3;
 		}
 		
 		public void msgAtStopFour(){
-			print("AT STOP 4");
+			//print("At Stop 4");
 			driving.release();
 			event= Event.reachedStop;
 			lastStation = Station.Stop4;
@@ -171,32 +170,28 @@ public class BusAgent extends Agent implements Bus {
 	 * @param myDestination
 	 */
 		private void stopBus(){
-			print("Bus is stopping.");
+			//print("Bus is stopping.");
 			busGui.DoStopDriving();
 			event = Event.stopped;
 		}
 		
 		private void alertPassengersToAlightBus(){
 			if((lastStation == Station.Stop1) && (state!=State.driving)){
-				print("Attention passengers: This is bus stop one.");
 				for(MyPassenger person: passengersOnBoard){
 					person.passenger.msgAtStop(1);
 				}
 			}
 			if((lastStation == Station.Stop2) && (state!=State.driving)){
-				print("Attention passengers: This is bus stop two.");
 				for(MyPassenger person: passengersOnBoard){
 					person.passenger.msgAtStop(2);
 				}
 			}
 			if((lastStation == Station.Stop3) && (state!=State.driving)){
-				print("Attention passengers: This is bus stop three.");
 				for(MyPassenger person: passengersOnBoard){
 					person.passenger.msgAtStop(3);
 				}
 			}
 			if((lastStation == Station.Stop4) && (state!=State.driving)){
-				print("Attention passengers: This is bus stop four");
 				for(MyPassenger person: passengersOnBoard){
 					person.passenger.msgAtStop(4);
 				}
@@ -205,7 +200,6 @@ public class BusAgent extends Agent implements Bus {
 		}
 		
 		private void waitForPassengersToAlight(){
-			print("Unloading passengers.");
 			
 			event = Event.passengersAlighted; //temporarily placed here until timer issue is resolved
 			
@@ -221,28 +215,23 @@ public class BusAgent extends Agent implements Bus {
 		}
 		
 		private void alertPassengersToBoardBus(){
-			print("Passengers boarding bus.");
 			if((lastStation == Station.Stop1) && (state!=State.driving)){
-				print("Boarding Stop 1");
-				for(TransportationRole person: BusHelper.sharedInstance().getWaitingPassengersAtStop1()){
+				for(Transportation person: BusHelper.sharedInstance().getWaitingPassengersAtStop1()){
 					person.msgGetOnBus(this);
 				}	
 			}
 			if((lastStation == Station.Stop2) && (state!=State.driving)){
-				print("Boarding Stop 3");
-				for(TransportationRole person: BusHelper.sharedInstance().getWaitingPassengersAtStop2()){
+				for(Transportation person: BusHelper.sharedInstance().getWaitingPassengersAtStop2()){
 					person.msgGetOnBus(this);
 				}	
 			}
 			if((lastStation == Station.Stop3) && (state!=State.driving)){
-				print("Boarding Stop 3");
-				for(TransportationRole person: BusHelper.sharedInstance().getWaitingPassengersAtStop3()){
+				for(Transportation person: BusHelper.sharedInstance().getWaitingPassengersAtStop3()){
 					person.msgGetOnBus(this);
 				}	
 			}
 			if((lastStation == Station.Stop4) && (state!=State.driving)){
-				print("Boarding Stop 4");
-				for(TransportationRole person: BusHelper.sharedInstance().getWaitingPassengersAtStop4()){
+				for(Transportation person: BusHelper.sharedInstance().getWaitingPassengersAtStop4()){
 					person.msgGetOnBus(this);
 				}	
 			}
@@ -250,7 +239,7 @@ public class BusAgent extends Agent implements Bus {
 		}
 		
 		private void waitForPassengersToBoard(){
-			print("Loading passengers.");
+			//print("Loading passengers.");
 			
 			event = Event.passengersBoarded; //TEMPORARILY PLACED UNTIL RESOLVING TIMER ISSUE
 			
@@ -267,7 +256,6 @@ public class BusAgent extends Agent implements Bus {
 		
 		private void keepDriving(){
 			//doGoTo(myDestination); //sets destination in carGui
-			print("Bus is driving.");
 			doKeepDriving();
 			try {
 				driving.acquire(); //to ensure that the gui is uninterrupted on the way

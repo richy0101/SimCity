@@ -10,7 +10,6 @@ public class Bank {
     private Bank() {
     	manager = new BankManagerAgent();
     	manager.startThread();
-    	
     }
     
     public Bank(String buildingName) {

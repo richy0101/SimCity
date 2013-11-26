@@ -23,7 +23,7 @@ public class StackWaiterRole extends Role implements Waiter {
 	private String myLocation;
 	
 	private enum AgentState
-	{Working, WantToGoOnBreak, WaitingForNotice, GoingOnBreak, OnBreak, FinishingBreak};
+	{Arrived, Working, WantToGoOnBreak, WaitingForNotice, GoingOnBreak, OnBreak, FinishingBreak};
 	AgentState state = AgentState.Working;
 	
 	private enum CustomerState
@@ -31,8 +31,11 @@ public class StackWaiterRole extends Role implements Waiter {
 	
 	public StackWaiterRole(String location) {
 		super();
+		host = (Host) Directory.sharedInstance().getAgents().get("StackRestaurantHost");
+		cashier = (Cashier) Directory.sharedInstance().getAgents().get("StackRestaurantCashier");
 		waiterGui = new WaiterGui(this);
 		myLocation = location;
+		state = AgentState.Arrived;
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
 			if (b.getName() == myLocation) {
@@ -61,6 +64,10 @@ public class StackWaiterRole extends Role implements Waiter {
 	@Override
 	public boolean pickAndExecuteAnAction() {
 		try {
+			if(state == AgentState.Arrived) {
+				tellHostAtWork();
+				return true;
+			}
 			if(state == AgentState.WantToGoOnBreak) {
 				askHostToGoOnBreak();
 				return true;
@@ -132,7 +139,14 @@ public class StackWaiterRole extends Role implements Waiter {
 		return false;
 	}
 	
-//	actions---------------------------------------------------------------------------------------------------------------------------------
+
+	//	actions---------------------------------------------------------------------------------------------------------------------------------
+	private void tellHostAtWork() {
+		host.msgAddWaiter(this);
+		waiterGui.DoGoHome();
+		state = AgentState.Working;
+	}
+	
 	private void giveCustomerCheck(MyCustomer customer) {
 		host.msgWaiterBusy(this);
 		DoGoToCustomerTable(customer, customer.table);
@@ -180,7 +194,7 @@ public class StackWaiterRole extends Role implements Waiter {
 	}
 	
 	private void waiterFree() {
-//		host.msgWaiterFree(this);
+		host.msgWaiterFree(this);
 	}
 	
 	private void takeOrderFromCustomer(MyCustomer customer) {
@@ -410,6 +424,12 @@ public class StackWaiterRole extends Role implements Waiter {
 		}
 	}
 	
+	@Override
+	public void msgCookHere(Cook cook) {
+		this.cook = cook;
+		stateChanged();
+	}
+	
 	public void msgIWantToGoOnBreak() {//from GUI
 		print("I want to go on break");
 		state = AgentState.WantToGoOnBreak;
@@ -436,9 +456,6 @@ public class StackWaiterRole extends Role implements Waiter {
 		doneAnimation.release();
 	}
 	
-	public void msgAnimationHome() {
-		waiterFree();
-	}
 //	other---------------------------------------------------------------------------------------------------------------------------------
 	
 	/*public String toString() {

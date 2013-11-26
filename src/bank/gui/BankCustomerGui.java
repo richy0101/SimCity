@@ -47,7 +47,7 @@ public class BankCustomerGui implements Gui {
 		yDestination = 450;
 
 		try {
-			customerImage = ImageIO.read(getClass().getResource("team02/src/restaurant/stackRestaraunt/gui/stackRestaurantCustomer.png"));
+			customerImage = ImageIO.read(getClass().getResource("GUIPersonDown.png"));
 		}
 		catch(IOException e) {
 			System.out.println("Error w/ Background");
