@@ -412,26 +412,26 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private boolean evaluateStatus() {
 		print("In Eval: Current Location = " + currentLocation + ".");
-		if (!getPersonState().toString().contains("ing") || !getPersonState().toString().contains("OutTo")) {
+		if (getPersonState().toString().contains("ing") || getPersonState().toString().contains("OutTo") || getPersonState().toString().contains("NeedsTo")){
 			return false;
 		}
 		else if (hasWorked = false) {
-			//print("Eval says go WORK");
+			print("Eval says go WORK");
 			setPersonState(PersonState.NeedsToWork);
 			return true;
 		}
 		else if(funds < 100.00) {
-			//print("Eval says GO WITHDRAW");
+			print("Eval says GO WITHDRAW");
 			setPersonState(PersonState.WantsToWithdraw);
 			return true;
 		}
 		else if(checkInventory() == false) {
-			//print("Just checked inventory, need to replenish!");
+			print("Just checked inventory, need to replenish!");
 			setPersonState(PersonState.NeedsToGoMarket);
 			return true;
 		}
 		else if(currentLocation != homeName) {
-			//print ("Eval says GO HOME");
+			print ("Eval says GO HOME");
 			setPersonState(PersonState.WantsToGoHome);
 			return true;
 		}
@@ -442,7 +442,7 @@ public class PersonAgent extends Agent implements Person {
 			return false;
 		}
 		else {
-			//print("Eval says ELSE!");
+			print("Eval says ELSE!");
 			setPersonState(PersonState.Sleeping);
 			personGui.DoSleep();
 			actionComplete.acquireUninterruptibly();
