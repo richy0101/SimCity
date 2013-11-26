@@ -167,7 +167,6 @@ public class TransportationRole extends Role implements Transportation  {
 			print("Want bus stop " + startStopNumber);
 		}
 		if(getStartingLocation().equals("Home1")){
-			System.out.println("ASIJF LJKBGDKSJgJ ");
 		}
 		startX = Directory.sharedInstance.getDirectory().get(getStartingLocation()).xCoordinate;
 		startY = Directory.sharedInstance.getDirectory().get(getStartingLocation()).yCoordinate;
