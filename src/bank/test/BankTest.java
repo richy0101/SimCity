@@ -13,7 +13,6 @@ public class MarketTest extends TestCase {
 	//these are instantiated for each test separately via the setUp() method.
 	MarketRole market;
 	MockMarketCustomer customer;
-	MockPerson person;
 	
 	Map<String, Integer> groceryList;
 	
@@ -23,9 +22,7 @@ public class MarketTest extends TestCase {
 	 */
 	public void setUp() throws Exception{
 		super.setUp();		
-		market = new MarketRole();
-		person = new MockPerson("person");
-		market.setPerson(person);
+		market = new MarketRole();		
 		customer = new MockMarketCustomer("mockcustomer");
 		
 		groceryList = new HashMap<String, Integer>();
@@ -66,10 +63,6 @@ public class MarketTest extends TestCase {
 						market.getMyOrders().get(0).getGroceryList(), groceryList);
 
 		//Step 2-----------------------------------------------------------------------------
-		market.msgActionComplete();
-		market.msgActionComplete();
-		market.msgActionComplete();
-		
 		assertTrue("Market scheduler should've returned true. It didn't",
 						market.pickAndExecuteAnAction());
 
