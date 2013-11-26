@@ -165,6 +165,16 @@ public class BusAgent extends Agent implements Bus {
 			lastStation = Station.Stop4;
 		}
 
+		public void msgChangeEventToPassengersAlighted(){
+			event=Event.passengersAlighted;
+			stateChanged();
+		}
+		
+		public void msgChangeEventToPassengersBoarded(){
+			event=Event.passengersBoarded;
+			stateChanged();
+		}
+
 	/**
 	 * Actions	
 	 * @param myDestination
@@ -208,18 +218,12 @@ public class BusAgent extends Agent implements Bus {
 		}
 		
 		private void waitForPassengersToAlight(){
-			
-			event = Event.passengersAlighted; //temporarily placed here until timer issue is resolved
-			
-			//TIMER DOES NOT RUN THIS?
-			/*
 			timer.schedule(new TimerTask() {
 				public void run() {
-					event=Event.passengersAlighted;
+					msgChangeEventToPassengersAlighted();
 				}
 			},
-			1000);
-			*/	
+			350);
 		}
 		
 		private void alertPassengersToBoardBus(){
@@ -255,19 +259,14 @@ public class BusAgent extends Agent implements Bus {
 		}
 		
 		private void waitForPassengersToBoard(){
-			//print("Loading passengers.");
-			
-			event = Event.passengersBoarded; //TEMPORARILY PLACED UNTIL RESOLVING TIMER ISSUE
-			
-			//TIMER ISSUES
-			/*
+			//print("Loading passengers.");			
 			timer.schedule(new TimerTask() {
 				public void run() {
-					event=Event.passengersBoarded;
+					msgChangeEventToPassengersBoarded();
 				}
 			},
-			3000);
-			*/
+			350);
+			
 		}
 		
 		private void keepDriving(){

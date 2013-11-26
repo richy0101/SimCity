@@ -10,6 +10,8 @@ import city.interfaces.Transportation;
 public class MockTransportation extends Mock implements Transportation {
 
 	public EventLog log;
+	public String startingLocation;
+	public String destination;
 
 	public MockTransportation(String name) {
 		super(name);
@@ -17,8 +19,16 @@ public class MockTransportation extends Mock implements Transportation {
 		
 	}
 	
+	public MockTransportation(String Destination, String StartingLocation) {
+		super(Destination); //needs a name
+		log = new EventLog();
+		destination = Destination;
+		startingLocation = StartingLocation;
+		
+	}
+	
 	public void msgActionComplete() {
-		log.add(new LoggedEvent("Received direction to sit at table "));
+		log.add(new LoggedEvent("Reached destination: "+destination));
 	}
 	
 	public void msgGetOnBus(BusAgent b) {

@@ -257,6 +257,12 @@ public class StackWaiterRole extends Role implements Waiter {
 		customer.state = CustomerState.Gone;
 		host.msgLeavingTable(customer.customer);
 	}
+	
+//	private void leaveRestaurant() {
+//		print("Leaving.");
+//		customerGui.DoExitRestaurant();
+//		getPersonAgent().msgRoleFinished();
+//	}
 
 	
 //	animation---------------------------------------------------------------------------------------------------------------------------------
