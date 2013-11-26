@@ -169,9 +169,8 @@ public class StackCookRole extends Role implements Cook {
 		cookGui.DoGoHome();
 		state = AgentState.Working;
 	}
-	
-	
-	
+
+		
 	//messages
 	public void msgCookOrder(Waiter waiter, String choice, int table, int seat) {
 		orders.add(new Order(waiter, choice, table, seat, OrderState.Pending));
