@@ -122,13 +122,13 @@ public class Directory {
 	Coordinate house3Location = new Coordinate(594,285);
 	
 	private Home house4 = new Home("House4");
-	Coordinate house4Location = new Coordinate(370,140);
+	Coordinate house4Location = new Coordinate(600,130);
 	
 	private Home house5 = new Home("House5");
 	Coordinate house5Location = new Coordinate(502,140);
 	
 	private Home house6 = new Home("House6");
-	Coordinate house6Location = new Coordinate(602,140);	
+	Coordinate house6Location = new Coordinate(385,128);	
 	
 		
 //MARKETS

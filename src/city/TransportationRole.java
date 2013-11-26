@@ -91,11 +91,11 @@ public class TransportationRole extends Role implements Transportation  {
 		}
 		if (state == TransportationState.AtFinalStop) {
 			GetOffBus();
-			return false;
+			return true;
 		}
 		if(state == TransportationState.GettingOnBus) {
 			GetOnBus();
-			return false;
+			return true;
 		}	
 		if(state == TransportationState.NeedsToTravel) {
 			GetAVehicle();
@@ -111,7 +111,7 @@ public class TransportationRole extends Role implements Transportation  {
 	private void EnterBuilding() {
 		state = TransportationState.Finished;
 		Directory.sharedInstance().getCityGui().getMacroAnimationPanel().removeGui(guiToDestination);
-		getPersonAgent().msgRoleFinished();
+		getPersonAgent().msgTransportFinished(currentLocation);
 		stateChanged();
 	}
 
@@ -119,8 +119,9 @@ public class TransportationRole extends Role implements Transportation  {
 		state = TransportationState.Walking;
 		int finalDestinationX = Directory.sharedInstance.getDirectory().get(destination).xCoordinate;
 		int finalDestinationY = Directory.sharedInstance.getDirectory().get(destination).yCoordinate;
-		guiToDestination = new TransportationGui(endStopX, endStopY, finalDestinationX, finalDestinationY);
+		guiToDestination = new TransportationGui(this, endStopX, endStopY, finalDestinationX, finalDestinationY);
 		Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToDestination);
+		print("adding gotodestination to macro");
 		actionComplete.acquireUninterruptibly();
 		state = TransportationState.AtDestination;
 		stateChanged();
@@ -166,10 +167,10 @@ public class TransportationRole extends Role implements Transportation  {
 		}
 		startX = Directory.sharedInstance.getDirectory().get(startingLocation).xCoordinate;
 		startY = Directory.sharedInstance.getDirectory().get(startingLocation).yCoordinate;
-		guiToStop = new TransportationGui(startX, startY, startStopX, startStopY);
+		guiToStop = new TransportationGui(this, startX, startY, startStopX, startStopY);
 		Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToStop);
 		print("adding transport gui to macro");
-//		actionComplete.acquireUninterruptibly();
+		actionComplete.acquireUninterruptibly();
 		BusHelper.sharedInstance().addWaitingPerson(this, startStopNumber);
 		state = TransportationState.WaitingForBus;
 		stateChanged();
@@ -177,7 +178,6 @@ public class TransportationRole extends Role implements Transportation  {
 	private void GetOffBus() {
 		print("Getting off bus");
 		bus.msgLeavingBus(this);
-		getPersonAgent().msgTransportFinished(currentLocation);
 		state = TransportationState.JustGotOffBus;
 		stateChanged();
 	}
