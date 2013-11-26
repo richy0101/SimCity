@@ -362,6 +362,8 @@ public class SimCityGui {
 		role.setPerson(p);
 		p.msgWakeUp();
 		
+		//p.msgGoWork();
+		
         
 		MarketRole market = new MarketRole("Market1");
 		PersonAgent marketPerson = new PersonAgent(market);

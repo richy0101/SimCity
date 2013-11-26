@@ -134,8 +134,7 @@ public class BusGui extends CityComponent implements Gui {
 		else if (yPos==TopRow)
 			g.drawImage(busLeftImage, xPos, yPos, null);
 		else if (xPos==LeftCol)
-			g.drawImage(busDownImage, xPos, yPos, null);
-		
+			g.drawImage(busDownImage, xPos, yPos, null);	
 	}
 
 	@Override
