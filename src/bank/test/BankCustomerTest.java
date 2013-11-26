@@ -33,10 +33,29 @@ public class BankCustomerTest extends TestCase {
 	//Deposit w/ Account
 	public void testOneBankInteraction(){
 		customer = new BankCustomerRole("WantsToDeposit",300,0);
+		customer.manager = manager;
+		customer.setAccountNumber(1);
 		
-		//customer
-		assertEquals("Bank should have empty tellers. Instead, the Market's event log reads: "
-				+ market.log.toString(), 1, market.log.size());
+		//precondition
+		assertEquals("Customers account number should be 1", customer.getAccountNumber(),1);
+		assertEquals("Customer should have the manager from setUp()", customer.manager,manager);
+		assertEquals("Customer's state should be DoingNothing ",customer.getState(),"DoingNothing");
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's state should be waiting ",customer.getState(),"Waiting");
+		
+		assertEquals("Customer's teller number to go to should be -1 (null)",customer.getTellerNumber(),-1);
+		customer.msgHowCanIHelpYou(teller, 1);
+		assertEquals("Customer's teller number to go to should be 1",customer.getTellerNumber(),1);
+		assertEquals("Customer's x gui position/destination should be 450",customer.customerGui.getxDestination(),450);
+		assertEquals("Customer's y gui position/destination should be 450",customer.customerGui.getyDestination(),450);
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's state should be waiting ",customer.getState(),"");
+		
+		
 		//teller initial state Arrived At Work
 		//teller state = AtManager 
 		//manager messages msgGoToRegister
@@ -75,7 +94,7 @@ public class BankCustomerTest extends TestCase {
 	
 	//Deposit w/o Account
 	public void testTwoBankInteraction(){
-		customer = new BankCustomerRole("WantsToDeposit",300,0);
+		/*customer = new BankCustomerRole("WantsToDeposit",300,0);
 		
 		assertEquals("Customer should not be assigned a bank teller",customer.registerNumber, -1);
 		assertEquals("Customer should not be at manager ",customer.registerNumber, -1);
@@ -83,7 +102,7 @@ public class BankCustomerTest extends TestCase {
 		assertFalse("Teller scheduler should return true,
 				teller.pickAndExecuteAction(),true);
 		assertEquals("Teller should be at register 1",teller.registerNumber, 1);
-		
+		*/
 		
 		
 		

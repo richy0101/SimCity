@@ -13,11 +13,11 @@ import agent.Role;
 public class BankCustomerRole extends Role implements BankCustomer {
     //data--------------------------------------------------------------------------------
 	private BankTeller teller;
-	private BankManager manager;
+	public BankManager manager;
 	private enum CustomerState {DoingNothing, Waiting, GoingToTeller, BeingHelped, AtManager, Done, Gone};
 	private CustomerState state = CustomerState.DoingNothing;
 	
-	private BankCustomerGui customerGui;
+	public BankCustomerGui customerGui;
 	
 	private double moneyToDeposit = 0;
 	private double moneyToWithdraw = 100;
@@ -66,6 +66,9 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	//setters----------------------------------------------------------------------------
 	public void setManager(Agent agent){
 		manager = (BankManagerAgent) agent;
+	}
+	public void setGui(BankCustomerGui gui){
+		customerGui = gui;
 	}
     //messages----------------------------------------------------------------------------
 	public void msgHowCanIHelpYou(BankTeller teller, int tellerNumber) {
@@ -182,7 +185,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
     //GUI Actions-------------------------------------------------------------------------
 	
 	
-	//Getters for unit tests--------------------------------------------------------------
+	//Getters/Setters for unit tests--------------------------------------------------------------
 	/**
 	 * @return the state
 	 */
@@ -222,7 +225,13 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		return accountNumber;
 	}
 
-
+	/**
+	 * @param the accountNumber
+	 */
+	public void setAccountNumber(int accNum) {
+		accountNumber = accNum;
+	}
+	
 	/**
 	 * @return the tellerNumber
 	 */
