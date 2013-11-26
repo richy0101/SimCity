@@ -30,7 +30,7 @@ public class BankTellerTest extends TestCase {
 		super.setUp();
 		manager = new MockBankManager("mockbankmanager");		
 		customer = new MockBankCustomer("mockcustomer",300,0);
-		//teller = new BankTellerRole("bankteller");
+		
 		teller = new BankTellerRole("bankteller");
 	}	
 	
