@@ -64,6 +64,9 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	public void setMarket(MarketRole m) {
 		market = m;
 	}
+	public void setMarket(Market m) {
+		market = m;
+	}
 	public Market getMarket() {
 		return market;
 	}

@@ -24,6 +24,7 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
@@ -32,13 +33,16 @@ import market.MarketCustomerRole;
 import market.MarketRole;
 import restaurant.stackRestaurant.StackCookRole;
 import restaurant.stackRestaurant.StackHostAgent;
+import restaurant.stackRestaurant.StackWaiterNormalRole;
 import restaurant.stackRestaurant.StackWaiterRole;
+import restaurant.stackRestaurant.StackWaiterSharedRole;
 import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 
 public class SimCityGui {
     
 	//NEW STUFF
 	JPanel buildingPanels;
+	Random rand = new Random();
 	CardLayout cardLayout;
 	MacroAnimationPanel macroAnimationPanel;
 	private JFrame frame;
@@ -372,6 +376,42 @@ public class SimCityGui {
 //		role3.setPerson(p3);
 //		p3.msgGoWork();
 	
+		String a = "Test Bank 1";
+		String b = "House1";
+		String name = "Test Person 1";
+		Role role;
+		if(rand.nextInt()%2 == 0) {
+			role = new StackWaiterSharedRole("StackRestaurant");
+		}
+		else {
+			role = new StackWaiterNormalRole("StackRestaurant");
+		}
+		PersonAgent p = new PersonAgent(role, a , b, name);
+		role.setPerson(p);
+		p.msgWakeUp();
+		
+		String a2 = "StackRestaurant";
+		String b2 = "House2";
+		String name2 = "Test Person 2";
+		Role role2;
+		if(rand.nextInt()%2 == 0) {
+			role2 = new StackWaiterSharedRole("StackRestaurant");
+		}
+		else {
+			role2 = new StackWaiterNormalRole("StackRestaurant");
+		}
+		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
+		role2.setPerson(p2);
+		p2.msgGoWork();
+		
+		String a3 = "StackRestaurant";
+		String b3 = "House3";
+		String name3 = "Test Person 3";
+		Role role3 = new StackCookRole("StackRestaurant");
+		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
+		role3.setPerson(p3);
+		p3.msgGoWork();
+		
 		String a4 = "Bank";
 		String b4 = "House4";
 		String name4 = "Test Person 4";
