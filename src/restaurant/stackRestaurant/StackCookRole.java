@@ -38,6 +38,7 @@ public class StackCookRole extends Role implements Cook {
 	
 	
 	public StackCookRole(String location) {
+		super();
 		foods.put("Steak", new Food(100));
 		foods.put("Chicken", new Food(140));
 		foods.put("Salad", new Food(70));

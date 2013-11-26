@@ -28,6 +28,7 @@ public class StackHostAgent extends Agent implements Host {
 	//note that tables is typed with Collection semantics.
 	//Later we will see how it is implemented
 	private boolean needToNotifyWaiters = false;
+	private boolean needToNotifyNewWaiter = false;
 	
 	public enum CustomerState 
 	{WaitingInRestaurant, NotifiedRestaurantFull, Eating, Done};
@@ -131,7 +132,7 @@ public class StackHostAgent extends Agent implements Host {
 	public void msgAddWaiter(Waiter waiter) {
 		print("adding " +  waiter);
 		waiters.add(new MyWaiter(waiter, WaiterState.Idle));
-		needToNotifyWaiters = true;
+		needToNotifyNewWaiter  = true;
 		stateChanged();
 	}
 	
@@ -148,6 +149,10 @@ public class StackHostAgent extends Agent implements Host {
 	@Override
 	public boolean pickAndExecuteAnAction() {
 		if(needToNotifyWaiters) {
+			notifyWaitersOfCook();
+			return true;
+		}
+		if(needToNotifyNewWaiter && cook != null) {
 			notifyWaitersOfCook();
 			return true;
 		}
@@ -226,7 +231,7 @@ public class StackHostAgent extends Agent implements Host {
 			waiter.waiter.msgCookHere(cook);
 		}
 		needToNotifyWaiters = false;
-		
+		needToNotifyNewWaiter = false;
 	}
 	private void assignCustomerToWaiter(MyCustomer customer, MyWaiter waiter, Table table) {
 		print("assigning customer to waiter: " + waiter.waiter);
