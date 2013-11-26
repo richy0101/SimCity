@@ -16,16 +16,20 @@ public class WaiterGui implements Gui {
     private TableList tableList = new TableList();
     private String choice = "";
     BufferedImage waiterImage;
+    BufferedImage chickenImage;
+    BufferedImage pizzaImage;
+    BufferedImage saladImage;
+    BufferedImage steakImage;
     
     //827 x 406 y
     
-    private int xHome = 50, yHome = 250;
-    private int xPos = -20, yPos = -20;//default waiter position
-    private int xDestination = 50, yDestination = 250;//default start position
+    private int xHome = 413, yHome = 20;
+    private int xPos = 850, yPos = 450;//default waiter position
+    private int xDestination = 413, yDestination = 20;//default start position
     private int xTable = -20, yTable = -20;
     private int xCook = 485, yCook = 70;
-    private int xBreak = 200, yBreak = 300;
-    private int WAITINGX = 3, WAITINGY = 3;
+    private int xBreak = 413, yBreak = 22;
+    private int WAITINGX = 725, WAITINGY = 333;
   
     
     private static final int PERSONSIZEX = 32, PERSONSIZEY = 40;
@@ -35,6 +39,10 @@ public class WaiterGui implements Gui {
         
         try {
         	waiterImage = ImageIO.read(getClass().getResource("stackRestaurantWaiter.png"));
+        	chickenImage = ImageIO.read(getClass().getResource("chicken.png"));
+            pizzaImage = ImageIO.read(getClass().getResource("pizza.png"));
+            saladImage = ImageIO.read(getClass().getResource("salad.png"));
+            steakImage = ImageIO.read(getClass().getResource("steak.png"));
         }
         catch(IOException e) {
         	System.out.println("Error w/ Background");
@@ -65,9 +73,6 @@ public class WaiterGui implements Gui {
         	agent.msgAtCook();
         	DoGoHome();	
         }
-        if(xPos == xHome && yPos == yHome) {
-        	agent.msgAnimationHome();
-        }
     }
 
     public void updateGui(String choice) {
@@ -89,7 +94,25 @@ public class WaiterGui implements Gui {
     }
     
     public void draw(Graphics2D g) {
-    	g.drawImage(waiterImage, xPos, yPos, null);
+    	if(choice == "") {
+			g.drawImage(waiterImage, xPos, yPos, null);
+		}
+		else if(choice == "Steak") {
+			g.drawImage(waiterImage, xPos, yPos, null);
+			g.drawImage(steakImage, xPos + 26, yPos + 20, null);
+		}
+		else if(choice == "Chicken") {
+			g.drawImage(waiterImage, xPos, yPos, null);
+			g.drawImage(chickenImage, xPos + 26, yPos + 20, null);
+		}
+		else if(choice == "Pizza") {
+			g.drawImage(waiterImage, xPos, yPos, null);
+			g.drawImage(pizzaImage, xPos + 26, yPos + 20, null);
+		}
+		else if(choice == "Salad") {
+			g.drawImage(waiterImage, xPos, yPos, null);
+			g.drawImage(saladImage, xPos + 26, yPos + 20, null);
+		}
     }
 
     public boolean isPresent() {

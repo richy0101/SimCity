@@ -180,7 +180,7 @@ public class StackWaiterRole extends Role implements Waiter {
 	}
 	
 	private void waiterFree() {
-//		host.msgWaiterFree(this);
+		host.msgWaiterFree(this);
 	}
 	
 	private void takeOrderFromCustomer(MyCustomer customer) {
@@ -436,9 +436,6 @@ public class StackWaiterRole extends Role implements Waiter {
 		doneAnimation.release();
 	}
 	
-	public void msgAnimationHome() {
-		waiterFree();
-	}
 //	other---------------------------------------------------------------------------------------------------------------------------------
 	
 	/*public String toString() {
