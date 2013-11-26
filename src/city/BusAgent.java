@@ -130,7 +130,7 @@ public class BusAgent extends Agent implements Bus {
 			for(MyPassenger p: passengersOnBoard){
 				if (p.passenger==person){
 					p.status= Status.Leaving;
-					passengersOnBoard.remove(p);
+//					passengersOnBoard.remove(p);
 				}			
 			}
 		}
