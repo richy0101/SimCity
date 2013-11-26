@@ -91,7 +91,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	public void msgHereAreYourGroceries(Map<String, Integer> groceries) {
 		print("Received msgHereAreYourGroceries");
 		
-		getPersonAgent().clearGroceries(groceries);
+		myGroceryList = groceries;
 	    roleEvent = Event.GotGroceries;
 
 	    log.add(new LoggedEvent("Received msgHereAreYourGroceries."));
@@ -189,6 +189,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		
 
 	    log.add(new LoggedEvent("Left market."));
+		getPersonAgent().clearGroceries(myGroceryList);
 		getPersonAgent().msgRoleFinished();
 	}
 	
