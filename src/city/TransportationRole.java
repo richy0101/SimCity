@@ -121,7 +121,7 @@ public class TransportationRole extends Role implements Transportation  {
 		int finalDestinationY = Directory.sharedInstance.getDirectory().get(destination).yCoordinate;
 		guiToDestination = new TransportationGui(this, endStopX, endStopY, finalDestinationX, finalDestinationY);
 		Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToDestination);
-		print("adding gotodestination to macro");
+		//print("adding gotodestination to macro");
 		actionComplete.acquireUninterruptibly();
 		setState(TransportationState.AtDestination);
 		stateChanged();
@@ -172,7 +172,7 @@ public class TransportationRole extends Role implements Transportation  {
 		startY = Directory.sharedInstance.getDirectory().get(getStartingLocation()).yCoordinate;
 		guiToStop = new TransportationGui(this, startX, startY, startStopX, startStopY);
 		Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToStop);
-		print("adding transport gui to macro");
+		//print("adding transport gui to macro");
 		actionComplete.acquireUninterruptibly();
 		BusHelper.sharedInstance().addWaitingPerson(this, startStopNumber);
 		setState(TransportationState.WaitingForBus);
