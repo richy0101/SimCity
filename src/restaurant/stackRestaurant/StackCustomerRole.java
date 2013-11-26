@@ -229,6 +229,7 @@ public class StackCustomerRole extends Role implements Customer {
 		}
 		if (state == AgentState.Leaving && event == AgentEvent.doneLeaving){
 			state = AgentState.DoingNothing;
+			doneRole();
 			return true;
 		}
 		return false;
@@ -236,6 +237,11 @@ public class StackCustomerRole extends Role implements Customer {
 
 	// Actions
 	
+	private void doneRole() {
+		Directory.sharedInstance().getCityGui().getMacroAnimationPanel().removeGui(customerGui);
+		getPersonAgent().msgRoleFinished();
+	}
+
 	private void payCheck() {
 		state = AgentState.Paid;
 		cashier.msgPayCheck(this, check, availableFunds);
