@@ -117,6 +117,9 @@ public class PersonGui implements Gui {
 		else if (xPos == xKitchen && yPos == yKitchen) {
 			g.drawImage(personDown , xPos, yPos, null);
 		}
+		else {
+			g.drawImage(personDown, xPos, yPos, null);
+		}
 	}
 
 	public void setPresentFalse() {
