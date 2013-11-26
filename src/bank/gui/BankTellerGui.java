@@ -31,10 +31,10 @@ public class BankTellerGui implements Gui {
 	BufferedImage customerImage;
 	
 	private static final List<Point> tellerBench = new ArrayList<Point>() {{
-		add(new Point(36, 106));
-		add(new Point(36, 182));
-		add(new Point(36, 265));
-		add(new Point(778, 106));
+		add(new Point(5, 51));
+		add(new Point(5, 182));
+		add(new Point(5, 265));
+		add(new Point(778-30, 106));
 		add(new Point(778, 182));
 		add(new Point(778, 265));
 	}};

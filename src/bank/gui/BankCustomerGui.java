@@ -18,7 +18,7 @@ public class BankCustomerGui implements Gui {
 	private BankCustomerRole agent = null;
 	
 	private static final List<Point> tellerBench = new ArrayList<Point>() {{
-		add(new Point(87, 106));
+		add(new Point(87, 51));
 		add(new Point(87, 182));
 		add(new Point(87, 265));
 		add(new Point(728, 106));
