@@ -34,5 +34,10 @@ public class StackRestaurant extends Restaurant {
 		// TODO Auto-generated method stub
 		return host;
 	}
+	
+	public StackCashierAgent getCashier() {
+		// TODO Auto-generated method stub
+		return cashier;
+	}
 
 }

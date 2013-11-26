@@ -10,6 +10,10 @@ public class Restaurant {
 		return null;
 	}
 	
+	public Object getCashier() {
+		return null;
+	}
+	
 	public String getName() {
 		return "";
 	}
