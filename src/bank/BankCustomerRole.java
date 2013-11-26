@@ -32,7 +32,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	
-    //    //messages from animation-------------------------------------------------------------
+    //messages from animation-------------------------------------------------------------
 	public void msgAtTeller() {
 		//from animation
 		state = CustomerState.BeingHelped;
@@ -49,6 +49,10 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		stateChanged();
 	}
     
+	//setters----------------------------------------------------------------------------
+	public void setManager(BankManagerAgent agent){
+		manager = agent;
+	}
     //messages----------------------------------------------------------------------------
 	public void msgHowCanIHelpYou(BankTeller teller, int tellerNumber) {
 		state = CustomerState.GoingToTeller;
