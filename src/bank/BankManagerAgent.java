@@ -69,10 +69,12 @@ public class BankManagerAgent extends Agent implements BankManager {
 	}
 	
 	public void msgHereForWork(BankTeller teller) {
+		print("MsgHereForWork received");
 		synchronized(this.tellers){
-			print("A new teller as arrived to work. Adding him to Teller list.");
+			print("A new teller has arrived to work. Adding him to Teller list.");
 			tellers.add(new MyBankTeller(teller, BankTellerState.GotToWork));
 		}
+		stateChanged();
 	}
 	
 	public void msgTellerLeavingWork(BankTeller teller) {
@@ -80,6 +82,7 @@ public class BankManagerAgent extends Agent implements BankManager {
 			tellers.remove(teller);
 			tellerNum--;
 		}
+		stateChanged();
 	}
     
     //scheduler---------------------------------------------------------------------------

@@ -69,19 +69,20 @@ public class BankCustomerGui implements Gui {
 		if(xPos == xDestination && yPos == yDestination
 				&& (xDestination == xTeller) && (yDestination == yTeller) && command == Command.GoToTeller) {
 			agent.msgAtTeller();
+			command=Command.noCommand;
 		}
 
 		if(xPos == xDestination && yPos == yDestination
 				&& (xDestination == xManager) && (yDestination == yManager) && command == Command.GoToManager) {
 			agent.msgAtManager();
+			command=Command.noCommand;
 		}
 
 		if (xPos == xDestination && yPos == yDestination
 				&& (xDestination == xExit) && (yDestination == yExit) && command == Command.LeaveBank) {
 			agent.msgAnimationFinishedLeavingBank();
+			command=Command.noCommand;
 		}
-
-		command=Command.noCommand;
 	}
 
 
