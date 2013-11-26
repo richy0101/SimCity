@@ -32,14 +32,37 @@ public class BankTest extends TestCase {
 		manager = new MockBankManager("mockbankmanager");
 		teller = new MockBankTeller("mockbankteller");		
 		customer = new MockBankCustomer("mockcustomer",300,0);
-		
-		groceryList = new HashMap<String, Integer>();
-		groceryList.put("Steak", 1);
-		groceryList.put("Chicken", 5);
 	}	
 	
 	//Deposit w/ Account
 	public void testOneBankInteraction(){
+		//teller size should be empty
+		//teller initial state Arrived At Work
+		//teller state = AtManager 
+		//manager messages msgGoToRegister
+		//teller state = GoingToRegister
+		//teller state = ReadyForCustomers;
+		//customers initial state should be "DoingNothing"
+		//customer messages manager.msgINeedAssistance
+		//customer state = Waiting
+		//managers initial state should be "Idle"
+		//customers.size should be empty
+		//manager adds customer to customers list
+		//customers.size should be one
+		//teller size should be one
+		//myteller initial state should be Idle
+		//manager messages teller .msgAssigningCustomer
+		//myteller state should be busy
+		//manager changes tellerstate busy
+		//manager removes customer from customers
+		//customer size should be empty
+		//teller's customer list should be empty
+		//teller receives .msgAssigningCustomer
+		//teller adds customer
+		//mycustomer state should initially be NeedingAssistance
+		
+		
+		
 		
 	}
 	
@@ -75,6 +98,11 @@ public class BankTest extends TestCase {
 	
 	//Bank tellers are busy
 	public void testEightBankInteraction(){
+		
+	}
+	
+	//No Bank Tellers
+	public void testNineBackInteraction(){
 		
 	}
 
