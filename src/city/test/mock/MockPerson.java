@@ -1,5 +1,7 @@
 package city.test.mock;
 
+import java.util.Map;
+
 import city.PersonAgent.TransportationMethod;
 import city.test.mock.EventLog;
 import city.interfaces.Person;
@@ -18,7 +20,7 @@ public class MockPerson extends Mock implements Person {
 		//String startingLocation=
 	}
 
-	@Override
+	//@Override
 	public void clearGroceries() {
 		// TODO Auto-generated method stub
 		
@@ -79,6 +81,12 @@ public class MockPerson extends Mock implements Person {
 
 	@Override
 	public void msgTransportFinished(String currentLocation) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void clearGroceries(Map<String, Integer> groceries) {
 		// TODO Auto-generated method stub
 		
 	}
