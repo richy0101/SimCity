@@ -2,7 +2,6 @@ package city.test;
 
 import agent.Role;
 import bank.BankTellerRole;
-import bank.test.mock.MockBankTeller;
 import junit.framework.*;
 import city.PersonAgent.PersonState;
 import city.test.mock.MockTransportation;
@@ -19,7 +18,7 @@ public class PersonTest extends TestCase {
 		String a5 = "Bank";
 		String b5 = "House5";
 		String name5 = "BankDepositPerson5";
-		Role role5 = new MockBankTeller("Bank");
+		Role role5 = new BankTellerRole("Bank");
 		PersonAgent person = new PersonAgent(role5, a5 , b5, name5);
 		role5.setPerson(person);
 		MockTransportation trole;

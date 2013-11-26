@@ -36,6 +36,9 @@ public class BusGui implements Gui {
 	int xStart = LeftCol;
 	int yStart = BottomRow;
 	
+	int xStart2= RightCol;
+	int yStart2= TopRow+40;
+	
 	private BusAgent agent = null;
 	
 	BufferedImage busUpImage;
@@ -79,13 +82,21 @@ public class BusGui implements Gui {
 		return Directory.sharedInstance().locationDirectory.get(Destination).yCoordinate;
 	}*/
 	
-	public BusGui(BusAgent agent) {
+	public BusGui(BusAgent agent, int stopNumber) {
         this.agent = agent;
         
+        if(stopNumber==1){
         xPos = xStart;
         yPos = yStart;
         xDestination = xStart;
         yDestination = yStart;
+        }
+        else{
+        	xPos = xStart2;
+        	yPos = yStart2;
+        	xDestination = xStart2;
+        	yDestination = yStart2;
+        }
         
         try {
         	busLeftImage = ImageIO.read(getClass().getResource("busLeft.png"));

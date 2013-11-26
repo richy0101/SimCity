@@ -448,18 +448,18 @@ public class SimCityGui {
 //		role7.setPerson(p7);
 //		p7.msgTestWakeUp();
 		
-		bus = new BusAgent();
-		busGui = new BusGui(bus);
+		bus = new BusAgent(1);
+		busGui = new BusGui(bus,1); //agent, starting StopNumber
 		bus.setGui(busGui);
 		macroAnimationPanel.addGui(busGui);
 		bus.startThread();
 		
-		/*
-		bus2 = new BusAgent();
-		busGui2 = new BusGui(bus2);
+		
+		bus2 = new BusAgent(2);
+		busGui2 = new BusGui(bus2,2);
 		bus2.setGui(busGui2);
 		macroAnimationPanel.addGui(busGui2);
-		bus2.startThread();*/
+		bus2.startThread();
 		
 		
 		
