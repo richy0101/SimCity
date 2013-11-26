@@ -26,6 +26,7 @@ import city.gui.PersonGui;
 import city.helpers.Clock;
 import city.helpers.Directory;
 import city.interfaces.Person;
+import city.interfaces.RoleInterface;
 import agent.Agent;
 import agent.Role;
 
@@ -33,7 +34,7 @@ public class PersonAgent extends Agent implements Person {
 	/**
 	 * Data---------------------------------------------------------------------------------------------------------------
 	 */
-	public Stack<Role> roles = new Stack<Role>();
+	public Stack<RoleInterface> roles = new Stack<RoleInterface>();
 	RoleFactory factory = new RoleFactory();
 	WorkDetails workDetails;
 	//LandLordRole landLord;
@@ -300,13 +301,13 @@ public class PersonAgent extends Agent implements Person {
 		stateChanged();
 	}
 	public void msgRoleFinished() {
-		Role r = roles.pop();
+		RoleInterface r = roles.pop();
 		print("msgRoleFinished received - Popping current Role: " + r.toString() + ".");
 		print ("Current state: " + personState.toString());
 		stateChanged();
 	}
 	public void msgTransportFinished(String location) {
-		Role r = roles.pop();
+		RoleInterface r = roles.pop();
 		currentLocation = location;
 		if (currentLocation == homeName) {
 			personState = PersonState.EnterHome;

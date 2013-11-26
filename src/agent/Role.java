@@ -1,8 +1,9 @@
 package agent;
 import market.MarketRole;
 import city.interfaces.Person;
+import city.interfaces.RoleInterface;
 
-public class Role {
+public class Role implements RoleInterface {
 	Person myPerson;
 	public void setPerson(Person person) {
 		myPerson = person; 
