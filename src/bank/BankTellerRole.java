@@ -132,7 +132,7 @@ public class BankTellerRole extends Role implements BankTeller {
 		stateChanged();
 	}
     //scheduler---------------------------------------------------------------------------
-	protected boolean pickAndExecuteAction(){
+	public boolean pickAndExecuteAction(){
 		if(state == TellerState.ArrivedAtWork) {
 			DoGoCheckInWithManager();
 			return true;

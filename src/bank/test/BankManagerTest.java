@@ -59,8 +59,17 @@ public class BankManagerTest extends TestCase {
 	//Manager assigning bankteller to teller register
 	public void testOneBankMangerInteraction(){
 		assertEquals("Manager should initially have 0 tellers in his list of tellers",manager.getTellers().size(),0);
-		assertEquals("Market should have an empty event log. Instead, the Market's event log reads: "
+		assertEquals("Manager should have an empty event log. Manager's event log reads: "
 				+ manager.log.toString(), 0, manager.log.size());
+		
+		manager.msgHereForWork(teller1);
+		assertEquals("Manager's first teller in his list of tellers should not be assigned to a register",manager.getTellers().get(0).getTellerNum(),-1);
+		assertTrue("Market scheduler should return true. It does", manager.pickAndExecuteAnAction());
+		assertEquals("Manager should have 1 tellers in his list of tellers",manager.getTellers().size(),1);
+		assertEquals("Manager should have event log of 1. Manager's event log reads: "
+				+ manager.log.toString(), 1, manager.log.size());
+		
+		
 		
 	}
 	
