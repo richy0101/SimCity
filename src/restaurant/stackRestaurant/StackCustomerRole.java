@@ -173,7 +173,7 @@ public class StackCustomerRole extends Role implements Customer {
 	 */
 	public boolean pickAndExecuteAnAction() {
 		if(event == AgentEvent.closed) {
-			leaveRestaurant();
+			leaveClosedRestaurant();
 		}
 		if (state == AgentState.DoingNothing && event == AgentEvent.gotHungry ) {
 			state = AgentState.WaitingInRestaurant;
@@ -349,6 +349,12 @@ public class StackCustomerRole extends Role implements Customer {
 	private void notWaitingAndLeaving() {
 		print("Leaving because it's too busy");
 		host.msgNotWaiting(this);
+		customerGui.DoExitRestaurant();
+		getPersonAgent().msgRoleFinished();
+	}
+	
+	private void leaveClosedRestaurant() {
+		print("Leaving.");
 		customerGui.DoExitRestaurant();
 		getPersonAgent().msgRoleFinished();
 	}

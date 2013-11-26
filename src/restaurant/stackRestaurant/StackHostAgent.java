@@ -175,8 +175,9 @@ public class StackHostAgent extends Agent implements Host {
 		}
 		synchronized(customers) {
 			for(MyCustomer customer : customers) {
-				if(cook == null) {
-					customer.customer.msgRestaurantClosed();
+				if(cook == null && customer.state != CustomerState.Done) {
+					tellCustomerRestaurantClosed(customer);
+					return true;
 				}
 			}
 			for(MyCustomer customer : customers) {
@@ -211,7 +212,14 @@ public class StackHostAgent extends Agent implements Host {
 
 	
 
+	
+
 	// Actions
+	private void tellCustomerRestaurantClosed(MyCustomer customer) {
+		customer.customer.msgRestaurantClosed();
+		customer.state = CustomerState.Done;
+		
+	}
 	private void notifyWaitersOfCook() {
 		for(MyWaiter waiter : waiters) {
 			waiter.waiter.msgCookHere(cook);
