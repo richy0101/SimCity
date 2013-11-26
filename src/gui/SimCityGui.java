@@ -372,7 +372,7 @@ public class SimCityGui {
 		role3.setPerson(p3);
 		p3.msgGoWork();
 		
-		String a4 = "Test Bank 4";
+		String a4 = "Bank";
 		String b4 = "House4";
 		String name4 = "Test Person 4";
 		Role role4 = new BankTellerRole("Bank");
