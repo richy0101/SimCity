@@ -51,7 +51,7 @@ public class PersonAgent extends Agent implements Person {
 		//Bank Scenario Constants
 		OutToBank, WantsToWithdraw, WantsToGetLoan, WantsToDeposit, WantsToRob, 
 		//Market Scenario Constants
-		NeedsToGoMarket, OutToMarket, EnterHome, OutToWork
+		NeedsToGoMarket, OutToMarket, EnterHome, OutToWork, Sleeping
 		};
 	HouseState houseState;
 	PersonState personState;
@@ -303,6 +303,7 @@ public class PersonAgent extends Agent implements Person {
 	public void msgRoleFinished() {
 		Role r = roles.pop();
 		print("msgRoleFinished received - Popping current Role: " + r.toString() + ".");
+		print ("Current state: " + personState.toString());
 		stateChanged();
 	}
 	public void msgTransportFinished(String location) {
@@ -359,10 +360,12 @@ public class PersonAgent extends Agent implements Person {
 		//Market Rules
 		if (personState == PersonState.NeedsToGoMarket) {
 			goMarket();
+			return true;
 		}
 		/** Normative Scenario Rules **/
 		if(personState == PersonState.EnterHome) {
 			enterHome();
+			return true;
 		}
 		if (personState == PersonState.WantsToGoHome) {
 			goHome();
@@ -408,7 +411,7 @@ public class PersonAgent extends Agent implements Person {
 	 * 
 	 */
 	private boolean evaluateStatus() {
-		// TODO Auto-generated method stub
+		print("In Eval");
 		if (personState == PersonState.Cooking || personState == PersonState.Eating) {
 			return false;
 		}
@@ -421,7 +424,7 @@ public class PersonAgent extends Agent implements Person {
 			return true;
 		}
 		else if(checkInventory() == false) {
-			print("Just checked inventory, need to replenish!");
+			//print("Just checked inventory, need to replenish!");
 			personState = PersonState.NeedsToGoMarket;
 			return true;
 		}
@@ -430,9 +433,11 @@ public class PersonAgent extends Agent implements Person {
 			return true;
 		}
 		else if(personState == PersonState.Idle){
+			personState = PersonState.Sleeping;
 			personGui.DoSleep();
 			return false;
 		}
+		personState = PersonState.Sleeping;
 		personGui.DoSleep();
 		return false;
 	}
