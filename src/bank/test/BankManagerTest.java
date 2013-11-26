@@ -85,14 +85,36 @@ public class BankManagerTest extends TestCase {
 		assertEquals("Manager's first teller in his list of tellers should still have state Idle since no customers", 
 				manager.getTeller(0).getState(),"Idle");
 		
-		
-		
-		
 	}
 	
 	//Manager assigning bank customer to a bank teller
 	public void testTwoBankManagerInteraction(){
+		assertEquals("Manager should initially have 0 tellers in his list of tellers",
+				manager.getTellers().size(),0);
+		assertEquals("Manager should have an empty event log. Manager's event log reads: "
+				+ manager.log.toString(), 0, manager.log.size());
 		
+		manager.msgHereForWork(teller1);
+		assertEquals("Manager's first teller in his list of tellers should not be assigned to a register", 
+				manager.getTeller(0).getTellerNum(),-1);
+		
+		manager.pickAndExecuteAnAction();
+		
+		assertEquals("Manager should have 1 tellers in his list of tellers",manager.getTellers().size(),1);
+		assertEquals("Manager's first teller in his list of tellers should be assigned to register 0", 
+				manager.getTeller(0).getTellerNum(),0);
+		
+		manager.msgHereForWork(teller2);
+		assertEquals("Manager's second teller in his list of tellers should not be assigned to a register", 
+				manager.getTeller(1).getTellerNum(),-1);
+		
+		manager.pickAndExecuteAnAction();
+		
+		assertEquals("Manager should have 2 tellers in his list of tellers",manager.getTellers().size(),2);
+		assertEquals("Manager's second teller in his list of tellers should be assigned to register 1", 
+				manager.getTeller(1).getTellerNum(),1);
+		assertEquals("Manager's first teller in his list of tellers should still have state Idle since no customers", 
+				manager.getTeller(0).getState(),"Idle");
 	}
 	
 	//Manager not able to assign customer to bank teller because all tellers are full with customers
