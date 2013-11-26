@@ -9,6 +9,7 @@ import city.PersonAgent;
 import city.TransportationRole;
 import city.gui.BusStop;
 import city.gui.StreetCorner;
+import city.interfaces.Transportation;
 import market.Market;
 import bank.Bank;
 import gui.MacroAnimationPanel;
@@ -111,15 +112,15 @@ public class BusHelper {
 	public static List<Bank> banks = new ArrayList<Bank>();
 	public static List<Market> markets = new ArrayList<Market>();
 	public static List<PersonAgent> people = new ArrayList<PersonAgent>();
-	public static List<TransportationRole> waitingPassengersAtStop1 = new ArrayList<TransportationRole>();
-	public static List<TransportationRole> waitingPassengersAtStop2 = new ArrayList<TransportationRole>();
-	public static List<TransportationRole> waitingPassengersAtStop3 = new ArrayList<TransportationRole>();
-	public static List<TransportationRole> waitingPassengersAtStop4 = new ArrayList<TransportationRole>();
+	public static List<Transportation> waitingPassengersAtStop1 = new ArrayList<Transportation>();
+	public static List<Transportation> waitingPassengersAtStop2 = new ArrayList<Transportation>();
+	public static List<Transportation> waitingPassengersAtStop3 = new ArrayList<Transportation>();
+	public static List<Transportation> waitingPassengersAtStop4 = new ArrayList<Transportation>();
 	
 	public Map<String, Coordinate> getDirectory() {
 		return locationDirectory;
 	}
-	public void addWaitingPerson(TransportationRole t, int stopNumber) {
+	public void addWaitingPerson(Transportation t, int stopNumber) {
 		System.out.println("adding waiting person");
 		if (stopNumber == 1) {
 			waitingPassengersAtStop1.add(t);
@@ -134,7 +135,7 @@ public class BusHelper {
 			waitingPassengersAtStop4.add(t);
 		}
 	}
-	public void removeWaitingPerson(TransportationRole t, int stopNumber) {
+	public void removeWaitingPerson(Transportation t, int stopNumber) {
 		if (stopNumber == 1) {
 			waitingPassengersAtStop1.remove(t);
 		}
@@ -148,16 +149,16 @@ public class BusHelper {
 			waitingPassengersAtStop4.remove(t);
 		}
 	}
-	public List<TransportationRole> getWaitingPassengersAtStop1(){
+	public List<Transportation> getWaitingPassengersAtStop1(){
 		return waitingPassengersAtStop1;
 	}
-	public List<TransportationRole> getWaitingPassengersAtStop2(){
+	public List<Transportation> getWaitingPassengersAtStop2(){
 		return waitingPassengersAtStop2;
 	}
-	public List<TransportationRole> getWaitingPassengersAtStop3(){
+	public List<Transportation> getWaitingPassengersAtStop3(){
 		return waitingPassengersAtStop3;
 	}
-	public List<TransportationRole> getWaitingPassengersAtStop4(){
+	public List<Transportation> getWaitingPassengersAtStop4(){
 		return waitingPassengersAtStop4;
 	}
 	public SimCityGui getCityGui() {
