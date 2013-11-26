@@ -10,6 +10,7 @@ import city.TransportationRole;
 import city.gui.BusStop;
 import city.gui.StreetCorner;
 import market.Market;
+import agent.Agent;
 import bank.Bank;
 import gui.MacroAnimationPanel;
 import gui.SimCityGui;
@@ -181,6 +182,11 @@ public class Directory {
 		
 	}
 	
+	public Map <Agent, String> agents =  new HashMap<Agent, String>();{
+		agents.put((Agent) stackRestaurant.getHost(), stackRestaurant.getName());
+		agents.put((Agent) stackRestaurant.getCashier(), stackRestaurant.getName());
+		agents.put((Agent) bank.getManager(), bank.getName());
+	}
 	public static List<Restaurant> restaurants = new ArrayList<Restaurant>();
 	public static List<Bank> banks = new ArrayList<Bank>();
 	public static List<Market> markets = new ArrayList<Market>();
