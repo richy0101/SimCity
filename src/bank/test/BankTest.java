@@ -37,5 +37,15 @@ public class BankTest extends TestCase {
 		groceryList.put("Steak", 1);
 		groceryList.put("Chicken", 5);
 	}	
+	
+	//Deposit w/ Account
+	//Deposit w/o Account
+	//Withdraw w/ Account
+	//Withdraw w/o Account
+	//Withdraw w/ < $100 in Account
+	//Loan w/ Good Credit (No taking a loan)
+	//Loan w/ Bad Credit (Has taken loan)
+	//Bank tellers are busy
+	
 
 }
