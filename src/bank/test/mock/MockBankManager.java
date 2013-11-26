@@ -7,6 +7,7 @@ import bank.interfaces.BankManager;
 import bank.interfaces.BankTeller;
 import market.interfaces.Market;
 import market.interfaces.MarketCustomer;
+import bank.test.mock.LoggedEvent;
 
 public class MockBankManager extends Mock implements BankManager {
 
@@ -38,19 +39,19 @@ public class MockBankManager extends Mock implements BankManager {
 
 	@Override
 	public void msgINeedAssistance(BankCustomer customer) {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Customer needs assistance"));
 		
 	}
 
 	@Override
 	public void msgTellerFree(BankTeller teller) {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Teller is free"));
 		
 	}
 
 	@Override
 	public void msgHereForWork(BankTeller teller) {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Teller is here for work"));
 		
 	}
 }

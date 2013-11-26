@@ -23,7 +23,7 @@ public class BankManagerAgent extends Agent implements BankManager {
 	    	this.tellerNum = tellerNum;
 	    }
 	}
-	public enum BankTellerState {Idle, Busy};
+	public enum BankTellerState {GotToWork, Idle, Busy};
 	private int tellerNum = 0;
 	
 	public BankManagerAgent(){
@@ -45,13 +45,29 @@ public class BankManagerAgent extends Agent implements BankManager {
 	}
 	
 	public void msgHereForWork(BankTeller teller) {
-		tellers.add(new MyBankTeller(teller, BankTellerState.Busy, tellerNum));
-		tellerNum++;
+		synchronized(this.tellers){
+			tellers.add(new MyBankTeller(teller, BankTellerState.GotToWork, tellerNum));
+			tellerNum++;
+		}
+	}
+	
+	public void msgTellerLeavingWork(BankTeller teller) {
+		synchronized(this.tellers) {
+			tellers.remove(teller);
+			tellerNum--;
+		}
 	}
     
     //scheduler---------------------------------------------------------------------------
 	@Override
 	protected boolean pickAndExecuteAnAction() {
+		synchronized(this.tellers){
+			for(MyBankTeller tempTeller: tellers){
+				if(tempTeller.state == BankTellerState.GotToWork){
+					AssignTellerToRegister(tempTeller);
+				}
+			}
+		}
 		synchronized(this.tellers){
 			for(MyBankTeller tempTeller: tellers){
 				if(tempTeller.state == BankTellerState.Idle){
@@ -65,6 +81,13 @@ public class BankManagerAgent extends Agent implements BankManager {
 		return false;
 	}
     //actions-----------------------------------------------------------------------------
+	
+	private void AssignTellerToRegister(MyBankTeller myTeller) {
+		print("Assigning teller to register");
+	    myTeller.teller.msgGoToRegister(myTeller.tellerNum);
+	    myTeller.state = BankTellerState.Idle;
+	}
+	
 	private void AssignCustomerToTeller(BankCustomer customer, MyBankTeller myTeller) {
 		print("Assigning customer to teller");
 	    myTeller.teller.msgAssigningCustomer(customer);

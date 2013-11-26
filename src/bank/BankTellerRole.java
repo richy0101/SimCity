@@ -136,6 +136,10 @@ public class BankTellerRole extends Role implements BankTeller {
 			DoGoCheckInWithManager();
 			return true;
 		}
+		if(state == TellerState.AtManager) {
+			TellerAtWork();
+			return true;
+		}
 		if(state == TellerState.GoingToRegister) {
 			DoGoToRegister();
 			return true;
@@ -215,6 +219,10 @@ public class BankTellerRole extends Role implements BankTeller {
 			e.printStackTrace();
 		}
 		state = TellerState.AtManager;
+		stateChanged();
+	}
+	private void TellerAtWork(){
+		manager.msgHereForWork(this);
 	}
     private void DoGoToRegister() {
 		tellerGui.DoGoToRegister(registerNumber);
@@ -246,8 +254,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	
 	private void WithdrawMoney(MyCustomer myCustomer) {
-		print("Withdrawing money from your account");
-		
+		print("Withdrawing money from your account");	
 		AccountSystem.sharedInstance().getAccounts().get(myCustomer.accountNumber).withdrawMoney(myCustomer.moneyToWithdraw);
 		myCustomer.customer.msgHereAreFunds(myCustomer.moneyToWithdraw);
 		myCustomer.custState = CustomerState.Leaving;
@@ -271,6 +278,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	
 	private void LeaveBank() {
 		tellerGui.DoLeaveBank();
+		manager.msgTellerLeavingWork(this);
 		try {
 			doneAnimation.acquire();
 		} catch (InterruptedException e) {

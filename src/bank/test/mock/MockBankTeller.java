@@ -6,6 +6,7 @@ import bank.interfaces.BankCustomer;
 import bank.interfaces.BankTeller;
 import market.interfaces.Market;
 import market.interfaces.MarketCustomer;
+import bank.test.mock.LoggedEvent;
 
 public class MockBankTeller extends Mock implements BankTeller {
 
@@ -37,67 +38,67 @@ public class MockBankTeller extends Mock implements BankTeller {
 
 	@Override
 	public void msgAssigningCustomer(BankCustomer customer) {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Customer is getting assigned to teller"));
 		
 	}
 
 	@Override
 	public void msgOpenAccount(BankCustomer customer) {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Customer needs account opened"));
 		
 	}
 
 	@Override
 	public void msgDepositMoney(int accountNumber, double money) {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Customer wants to deposit money"));
 		
 	}
 
 	@Override
 	public void msgWithdrawMoney(int accountNumber, double money) {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Customer wants to withdraw money"));
 		
 	}
 
 	@Override
 	public void msgIWantLoan(int accountNumber, double moneyRequest) {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Customer wants to get a loan"));
 		
 	}
 
 	@Override
 	public void msgThankYouForAssistance(BankCustomer bankCustomer) {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Customer is leaving bank"));
 		
 	}
 
 	@Override
 	public void msgGoToRegister(int registerNumber) {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Teller is going to register"));
 		
 	}
 
 	@Override
 	public void msgDoneWorking() {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Teller is done with work for the day"));
 		
 	}
 
 	@Override
 	public void msgAtRegister() {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Teller is at register"));
 		
 	}
 
 	@Override
 	public void msgAtManager() {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Teller is at manager"));
 		
 	}
 
 	@Override
 	public void msgAnimationFinishedLeavingBank() {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Teller is leaving bank"));
 		
 	}
 }
