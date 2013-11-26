@@ -6,7 +6,7 @@ import restaurant.stackRestaurant.StackCashierAgent.CustomerState;
 import restaurant.stackRestaurant.helpers.Check;
 import restaurant.stackRestaurant.test.mock.MockCustomer;
 import restaurant.stackRestaurant.test.mock.MockWaiter;
-import restaurant.stackRestaurant.test.mock.MockMarket;
+import market.test.mock.MockMarket;
 import junit.framework.*;
 
 /**

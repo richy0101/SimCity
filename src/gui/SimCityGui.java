@@ -377,7 +377,7 @@ public class SimCityGui {
 //		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
 //		role3.setPerson(p3);
 //		p3.msgGoWork();
-/*	
+
 		String a = "Test Bank 1";
 		String b = "House1";
 		String name = "Test Person 1";
@@ -390,7 +390,9 @@ public class SimCityGui {
 		}
 		PersonAgent p = new PersonAgent(role, a , b, name);
 		role.setPerson(p);
+		p.stopThread();
 		p.msgWakeUp();
+		p.startThread();
 	
 		String a2 = "StackRestaurant";
 		String b2 = "House2";
@@ -413,7 +415,7 @@ public class SimCityGui {
 		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
 		role3.setPerson(p3);
 		p3.msgGoWork();
-*/		
+
 		String a4 = "Bank";
 		String b4 = "House4";
 		String name4 = "Test Person 4";
@@ -430,36 +432,36 @@ public class SimCityGui {
 		role5.setPerson(p5);
 		p5.msgTestWakeUp();
         
-//		MarketRole role6 = new MarketRole("Market1");
-//		Directory.sharedInstance().marketDirectory.get("Market1").setWorker(role6);
-//		
-//		String a6 = "Market1";
-//		String b6 = "House4";
-//		String name6 = "Test Person 6";
-//		PersonAgent p6 = new PersonAgent(role6, a6 , b6, name6);
-//		role6.setPerson(p6);
-//		p6.msgGoWork();
-//		
-//		String a7 = "Test Bank 5";
-//		String b7 = "House5";
-//		String name7 = "MarketGoerPerson";
-//		Role role7 = new BankTellerRole("Bank");
-//		PersonAgent p7 = new PersonAgent(role7, a7 , b7, name7);
-//		role7.setPerson(p7);
-//		p7.msgTestWakeUp();
+		MarketRole role6 = new MarketRole("Market1");
+		Directory.sharedInstance().marketDirectory.get("Market1").setWorker(role6);
 		
-		bus = new BusAgent();
-		busGui = new BusGui(bus);
+		String a6 = "Market1";
+		String b6 = "House1";
+		String name6 = "Test Person 6";
+		PersonAgent p6 = new PersonAgent(role6, a6 , b6, name6);
+		role6.setPerson(p6);
+		p6.msgGoWork();
+		
+		String a7 = "Test Bank 5";
+		String b7 = "House2";
+		String name7 = "MarketGoerPerson";
+		Role role7 = new BankTellerRole("Bank");
+		PersonAgent p7 = new PersonAgent(role7, a7 , b7, name7);
+		role7.setPerson(p7);
+		p7.msgTestWakeUp();
+		
+		bus = new BusAgent(1);
+		busGui = new BusGui(bus,1); //agent, starting StopNumber
 		bus.setGui(busGui);
 		macroAnimationPanel.addGui(busGui);
 		bus.startThread();
 		
-		/*
-		bus2 = new BusAgent();
-		busGui2 = new BusGui(bus2);
+		
+		bus2 = new BusAgent(2);
+		busGui2 = new BusGui(bus2,2);
 		bus2.setGui(busGui2);
 		macroAnimationPanel.addGui(busGui2);
-		bus2.startThread();*/
+		bus2.startThread();
 		
 		
 		
