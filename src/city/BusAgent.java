@@ -8,6 +8,7 @@ import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import agent.Agent;
+import city.interfaces.Transportation;
 import city.BusAgent.MyPassenger.Status;
 import city.gui.BusGui;
 import city.interfaces.Bus;
@@ -42,11 +43,11 @@ public class BusAgent extends Agent implements Bus {
 	
 	public static class MyPassenger{
 
-		MyPassenger(TransportationRole tr){
+		MyPassenger(Transportation tr){
 			passenger= tr;
 			status= Status.none;
 		}
-		TransportationRole passenger;
+		Transportation passenger;
 		enum Status{Riding, requestingStop, Leaving, none};
 		Status status;
 		
@@ -119,12 +120,12 @@ public class BusAgent extends Agent implements Bus {
 	 * Messages
 	 * @param myDestination
 	 */
-		public void msgBoardingBus(TransportationRole person){
+		public void msgBoardingBus(Transportation person){
 			print("Received request from passenger to board bus.");	
 					passengersOnBoard.add(new MyPassenger(person));	
 		}
 		
-		public void msgLeavingBus(TransportationRole person){
+		public void msgLeavingBus(Transportation person){
 			print("Received request from passenger to leave bus.");
 
 			synchronized(passengersOnBoard) {
