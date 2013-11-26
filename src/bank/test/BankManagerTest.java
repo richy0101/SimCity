@@ -4,18 +4,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 import bank.Bank;
-import bank.BankCustomerRole;
 import bank.BankTellerRole;
 import bank.interfaces.BankTeller;
-import bank.test.mock.*;
+import bank.test.mock.MockBankCustomer;
+import bank.test.mock.MockBankManager;
+import bank.test.mock.MockBankTeller;
+import market.MarketRole;
+import market.MarketRole.orderState;
+import market.test.mock.*;
 import junit.framework.*;
 
-public class BankCustomerTest extends TestCase {
+public class BankTellerTest extends TestCase {
 
 	//these are instantiated for each test separately via the setUp() method.
-	BankCustomerRole customer;
+	MockBankCustomer customer;
 	MockBankManager manager;
-	MockBankTeller teller;
+	BankTellerRole teller;
 	
 	Map<String, Integer> groceryList;
 	
@@ -26,15 +30,13 @@ public class BankCustomerTest extends TestCase {
 	public void setUp() throws Exception{
 		super.setUp();
 		manager = new MockBankManager("mockbankmanager");
-		teller = new MockBankTeller("mockbankteller");		
-		//customer = new MockBankCustomer("mockcustomer",300,0);
+		teller = new BankTellerRole("bankteller");		
+		customer = new MockBankCustomer("mockcustomer",300,0);
 	}	
 	
 	//Deposit w/ Account
 	public void testOneBankInteraction(){
-		customer = new BankCustomerRole("WantsToDeposit",300,0);
-		
-		//customer
+		//teller size should be empty
 		assertEquals("Bank should have empty tellers. Instead, the Market's event log reads: "
 				+ market.log.toString(), 1, market.log.size());
 		//teller initial state Arrived At Work
@@ -75,17 +77,6 @@ public class BankCustomerTest extends TestCase {
 	
 	//Deposit w/o Account
 	public void testTwoBankInteraction(){
-		customer = new BankCustomerRole("WantsToDeposit",300,0);
-		
-		assertEquals("Customer should not be assigned a bank teller",customer.registerNumber, -1);
-		assertEquals("Customer should not be at manager ",customer.registerNumber, -1);
-		customer.msgGoToRegister(1);
-		assertFalse("Teller scheduler should return true,
-				teller.pickAndExecuteAction(),true);
-		assertEquals("Teller should be at register 1",teller.registerNumber, 1);
-		
-		
-		
 		
 	}
 	

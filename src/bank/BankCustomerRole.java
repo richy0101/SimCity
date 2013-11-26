@@ -13,9 +13,9 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	BankCustomerGui customerGui;
 	
-	double moneyToDeposit;
+	double moneyToDeposit = 0;
 	double moneyToWithdraw = 100;
-	double moneyRequired;
+	double moneyRequired = 0;
 	
 	int accountNumber;
 	int tellerNumber = -1;  //hack initializer for unit tests (-1 as null)
