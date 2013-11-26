@@ -52,8 +52,8 @@ public class Directory {
 		roleDirectory.put("home.LandlordRole2", "Appartment2");
 		
 		//Restaurant Roles Stack
-		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "StackRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "StackRestaurant");
+//		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "StackRestaurant");
+//		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "StackRestaurant");
 		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "StackRestaurant");
 		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "StackRestaurant");
 		
