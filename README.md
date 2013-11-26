@@ -2,6 +2,7 @@ team02
 ======
 
 SimCity201 Project Repository for CS 201 students
+
 Missing functionality in V1
  * 
 
@@ -13,3 +14,4 @@ Ryan Stack's Contribution:
  * Created an XML reader to read in scripts for creating scenarios and populating the city (with help from Alex Huang)
  * Created initial setup for project with interfaces and stubs from all designs
  * Created initial global clock and role class (iterations followed from other team members)
+ * Missing functionality for V2: depositing excess money in bank
