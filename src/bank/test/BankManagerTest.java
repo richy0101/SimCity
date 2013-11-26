@@ -95,29 +95,53 @@ public class BankManagerTest extends TestCase {
 				+ manager.log.toString(), 0, manager.log.size());
 		
 		manager.msgHereForWork(teller1);
+		assertEquals("Manager should have 1 tellers in his list of tellers",manager.getTellers().size(),1);
 		assertEquals("Manager's first teller in his list of tellers should not be assigned to a register", 
 				manager.getTeller(0).getTellerNum(),-1);
+		assertEquals("Manager's first teller's state should be GotToWork", 
+				manager.getTeller(0).getState(),"GotToWork");
 		
 		assertEquals("Manager's should have 0 customers in his list", 
 				manager.getCustomers().size(),0);
+		
+		manager.msgINeedAssistance(customer1);
+		manager.msgINeedAssistance(customer2);
+		
+		assertEquals("Manager's should have 2 customers in his list", 
+				manager.getCustomers().size(),2);
 		
 		manager.pickAndExecuteAnAction();
 		
 		assertEquals("Manager should have 1 tellers in his list of tellers",manager.getTellers().size(),1);
 		assertEquals("Manager's first teller in his list of tellers should be assigned to register 0", 
 				manager.getTeller(0).getTellerNum(),0);
+		assertEquals("Manager's first teller's state should be Busy because taking care of 1st customer in customerlist", 
+				manager.getTeller(0).getState(),"Busy");
+		assertEquals("Manager's should have 1 customers in his list since the first teller is taking care of the 1st customer and 1st customer is deleted", 
+				manager.getCustomers().size(),1);
+		
+		
+		manager.pickAndExecuteAnAction();
 		
 		manager.msgHereForWork(teller2);
 		assertEquals("Manager's second teller in his list of tellers should not be assigned to a register", 
 				manager.getTeller(1).getTellerNum(),-1);
+		assertEquals("Manager's second teller's state should be GotToWork", 
+				manager.getTeller(1).getState(),"GotToWork");
+		
+		assertEquals("Manager should have 2 tellers in his list of tellers",manager.getTellers().size(),2);
+		
+		assertEquals("Manager's first teller in his list of tellers should have state Busy since taking care of 1st customer", 
+				manager.getTeller(0).getState(),"Busy");
 		
 		manager.pickAndExecuteAnAction();
 		
-		assertEquals("Manager should have 2 tellers in his list of tellers",manager.getTellers().size(),2);
 		assertEquals("Manager's second teller in his list of tellers should be assigned to register 1", 
 				manager.getTeller(1).getTellerNum(),1);
-		assertEquals("Manager's first teller in his list of tellers should still have state Idle since no customers", 
-				manager.getTeller(0).getState(),"Idle");
+		assertEquals("Manager's second teller in his list of tellers should still have state Busy because taking care of remaining customer", 
+				manager.getTeller(1).getState(),"Busy");
+		assertEquals("Manager's should have 0 customers in his list since the second teller is taking care of the remaining customer", 
+				manager.getCustomers().size(),0);
 	}
 	
 	//Manager not able to assign customer to bank teller because all tellers are full with customers

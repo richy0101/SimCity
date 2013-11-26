@@ -4,6 +4,7 @@ import agent.Agent;
 import restaurant.stackRestaurant.helpers.Check;
 import restaurant.stackRestaurant.helpers.Menu;
 import restaurant.stackRestaurant.interfaces.*;
+import market.interfaces.*;
 
 import java.util.*;
 
@@ -62,7 +63,7 @@ public class StackCashierAgent extends Agent implements Cashier {
 	//actions
 	private void payMarket(MyCheck check) {
 		print("Paying " + check.market + " " + check.check.cost());
-		check.market.msgPayForOrder(check.check.cost());
+		check.market.msgPayForOrder(this, check.check.cost());
 		setTill(getTill() - check.check.cost());
 		print("The till now has: " + till);
 		check.state = CheckState.Paid;

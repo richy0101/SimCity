@@ -1,6 +1,7 @@
 package restaurant.stackRestaurant.interfaces;
 
 import restaurant.stackRestaurant.helpers.Check;
+import market.interfaces.*;
 
 public interface Cashier {
 	

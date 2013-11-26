@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
@@ -36,6 +38,8 @@ public class MarketRole extends Role implements Market {
 	boolean jobDone;
 	Map<String, Food> inventory = new HashMap<String, Food>();
 	double funds;
+	Timer timer = new Timer();
+
 
 	private Semaphore actionComplete = new Semaphore(0,true);
 	private MarketGui gui;
@@ -360,21 +364,31 @@ public class MarketRole extends Role implements Market {
 	}
 
 	//Restaurant Order actions--------------------------------------------------------------
-	private void FillRestaurantOrder(RestaurantOrder o) {
+	private void FillRestaurantOrder(final RestaurantOrder o) {
 		if(inventory.get(o.choice).supply >= o.amount) {
-			inventory.get(o.choice).supply -= o.amount;
-			o.price = o.amount * inventory.get(o.choice).price;
 			o.state = orderState.Billed;
+			timer.schedule(new TimerTask() {
+				public void run() {
+					inventory.get(o.choice).supply -= o.amount;
+					o.price = o.amount * inventory.get(o.choice).price;
+					
 
-			o.cook.msgMarketDeliveringOrder(inventory.get(o.choice).supply, o.choice);
-			o.cashier.msgGiveBill(new Check(o.price, o.choice), this);
+					o.cook.msgMarketDeliveringOrder(inventory.get(o.choice).supply, o.choice);
+					o.cashier.msgGiveBill(new Check(o.price, o.choice), getMe());
+				}
+			},
+			6000);
 		}
 		else {
 			o.cook.msgInventoryOut(this, o.choice);
 			MyRestaurantOrders.remove(o);
 		}
 	}
-
+	
+	private MarketRole getMe() {
+		return this;
+	}
+	
 	//PersonAgent actions--------------------------------------------------------------
 	private void LeaveJob() {
 		log.add(new LoggedEvent("MarketRole leaving job"));
