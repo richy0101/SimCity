@@ -32,7 +32,6 @@ public class StackCustomerRole extends Role implements Customer {
 	/**
 	 * change this values for non normative cases
 	 */
-	private double availableFunds = 20.00;
 	private boolean cheapSkate = false;
 	private boolean willingToWait = true;
 	
@@ -78,11 +77,11 @@ public class StackCustomerRole extends Role implements Customer {
 	}
 	
 	public void setFunds(double funds) {
-		availableFunds = funds;
+		getPersonAgent().setFunds(funds);
 	}
 	
 	public double getFunds() {
-		return availableFunds;
+		return getPersonAgent().getFunds();
 	}
 	
 	public void setWaiter(Waiter waiter) {
@@ -138,7 +137,7 @@ public class StackCustomerRole extends Role implements Customer {
 	}
 	
 	public void msgHereIsChange(double change) {
-		availableFunds += change;
+		setFunds(getFunds()+change);
 		event = AgentEvent.donePaying;
 		stateChanged();
 	}
@@ -252,8 +251,8 @@ public class StackCustomerRole extends Role implements Customer {
 
 	private void payCheck() {
 		state = AgentState.Paid;
-		cashier.msgPayCheck(this, check, availableFunds);
-		availableFunds -= check.cost();
+		cashier.msgPayCheck(this, check, getFunds());
+		setFunds(getFunds() - check.cost());
 	}
 	
 	private void updateGui(String choice) {
@@ -265,7 +264,7 @@ public class StackCustomerRole extends Role implements Customer {
 		
 		if(!cheapSkate) {
 			for(Menu.Food food : Menu.sharedInstance().getMenu()) {
-				if(availableFunds > food.getPrice() 
+				if(getFunds() > food.getPrice() 
 						&& Menu.sharedInstance().getInventoryStock(food.getName())) {
 					print("Ordering food");
 					choice = food.getName();
