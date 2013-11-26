@@ -3,8 +3,8 @@ package gui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-
-public class GUIRestaurant extends CityComponent {
+/*
+public class GUIRestaurant extends  {
 
 	public GUIRestaurant(int x, int y) {
 		super(x, y, Color.red, "Restaurant 1");
@@ -34,5 +34,5 @@ public class GUIRestaurant extends CityComponent {
 //				return true;
 //		return false;
 //	}
-
 }
+*/

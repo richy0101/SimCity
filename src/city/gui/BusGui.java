@@ -1,6 +1,5 @@
 package city.gui;
 
-import gui.CityComponent;
 import gui.Gui;
 import city.BusAgent;
 import city.helpers.Directory;
@@ -12,7 +11,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class BusGui extends CityComponent implements Gui {
+public class BusGui implements Gui {
 	/**
 	 * Data
 	 */
