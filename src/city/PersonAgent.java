@@ -47,7 +47,7 @@ public class PersonAgent extends Agent implements Person {
 	public enum HouseState {OwnsAHouse, OwnsAnApartment, Homeless, RentsAnApartment};
 	public enum PersonState {
 		//Norm Scenario Constants
-		Idle, InTransit, WantsToGoHome, WantFood, CookHome, WaitingForCooking, GoOutEat, StartEating, Eating, NeedsToWork, Cooking, OutToEat,
+		Idle, InTransit, WantsToGoHome, WantFood, CookHome, GoOutEat, StartEating, Eating, NeedsToWork, Cooking, OutToEat,
 		//Bank Scenario Constants
 		OutToBank, WantsToWithdraw, WantsToGetLoan, WantsToDeposit, WantsToRob, 
 		//Market Scenario Constants
@@ -157,7 +157,7 @@ public class PersonAgent extends Agent implements Person {
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
 			if (b.getName() == homeName) {
-				print("Adding GUI");
+				//print("Adding GUI");
 				b.addGui(personGui);
 			}
 		}
@@ -207,8 +207,7 @@ public class PersonAgent extends Agent implements Person {
 			}
 		}
 		startThread();
-		print("I LIVE.");
-		
+		//print("I LIVE.");
 	}
 	
 	
@@ -243,7 +242,7 @@ public class PersonAgent extends Agent implements Person {
 			}
 		}
 		startThread();
-		print("I LIVE.");
+		//print("I LIVE.");
 	}
 	
 	//Hax for testing
@@ -412,7 +411,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private boolean evaluateStatus() {
 		print("In Eval: Current Location = " + currentLocation + ".");
-		if (personState == PersonState.Cooking || personState == PersonState.Eating || personState == PersonState.Sleeping) {
+		if (!personState.toString().contains("ing") || !personState.toString().contains("OutTo")) {
 			return false;
 		}
 		else if (hasWorked = false) {
