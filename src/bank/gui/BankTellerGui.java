@@ -32,11 +32,11 @@ public class BankTellerGui implements Gui {
 	
 	private static final List<Point> tellerBench = new ArrayList<Point>() {{
 		add(new Point(5, 51));
-		add(new Point(5, 182));
-		add(new Point(5, 265));
-		add(new Point(778-30, 106));
-		add(new Point(778, 182));
-		add(new Point(778, 265));
+		add(new Point(5, 127));
+		add(new Point(5, 210));
+		add(new Point(778-30, 51));
+		add(new Point(778, 127));
+		add(new Point(778, 210));
 	}};
 	
 	
