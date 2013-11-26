@@ -16,12 +16,12 @@ public class BankManagerAgent extends Agent implements BankManager {
 
 		BankTeller teller;
 	    BankTellerState state;
-	    int tellerNum = -1; // hack to test unit test for initial state (-1 equivalent to null)
+	    int tellerNum;
 	    
-	    public MyBankTeller(BankTeller teller, BankTellerState state, int tellerNum){
+	    public MyBankTeller(BankTeller teller, BankTellerState state){
 	    	this.teller = teller;
 	    	this.state = state;
-	    	this.tellerNum = tellerNum;
+	    	this.tellerNum = -1; // hack to test unit test for initial state (-1 equivalent to null)
 	    }
 	    /**
 		 * @return the teller
@@ -70,8 +70,7 @@ public class BankManagerAgent extends Agent implements BankManager {
 	
 	public void msgHereForWork(BankTeller teller) {
 		synchronized(this.tellers){
-			tellers.add(new MyBankTeller(teller, BankTellerState.GotToWork, tellerNum));
-			tellerNum++;
+			tellers.add(new MyBankTeller(teller, BankTellerState.GotToWork));
 		}
 	}
 	
@@ -108,6 +107,8 @@ public class BankManagerAgent extends Agent implements BankManager {
 	
 	private void AssignTellerToRegister(MyBankTeller myTeller) {
 		print("Assigning teller to register");
+		myTeller.tellerNum = this.tellerNum;
+		this.tellerNum++;
 	    myTeller.teller.msgGoToRegister(myTeller.tellerNum);
 	    myTeller.state = BankTellerState.Idle;
 	}
