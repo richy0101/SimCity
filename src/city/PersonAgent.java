@@ -156,7 +156,8 @@ public class PersonAgent extends Agent implements Person {
 		inventory.add(initialFood);
 		//Set up gui
 		personGui = new PersonGui(this);
-		homeName = "House1";
+		//homeName = "House1";
+		homeName = "House4";
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
 			if (b.getName() == homeName) {
