@@ -16,7 +16,7 @@ public class PersonGui implements Gui {
 	private PersonAgent agent = null;
 	private int xPos, yPos;
 	private int xDestination, yDestination;
-	private int xBed, yBed, xKitchen, yKitchen, xTable, yTable;
+	private int xBed, yBed, xKitchen, yKitchen, xTable, yTable, xDoor, yDoor, xFridge, yFridge;
 
 	BufferedImage personLeft;
 	BufferedImage personRight;
@@ -25,15 +25,19 @@ public class PersonGui implements Gui {
 	
 	boolean isPresent;
 	
-	public enum CurrentAction {Cooking, Eating, Transition, Idle};
+	public enum CurrentAction {Cooking, Eating, Transition, Idle, Deciding};
 	CurrentAction currentAction = CurrentAction.Idle;
 	public PersonGui(PersonAgent agent) {
 		xBed = 5;
 		yBed = 135;
 		xKitchen = 695;
 		yKitchen = 160;
+		xFridge = 800;
+		yFridge = 130;
 		xTable = 425;
 		yTable = 250;
+		xDoor = 380;
+		yDoor = 105;
 		xPos = xBed;
 		yPos = yBed;
 		xDestination = xBed;
@@ -54,17 +58,17 @@ public class PersonGui implements Gui {
 	public void updatePosition() {
 		//System.out.println("Updating Pos.");
 		if (xPos < xDestination) {
-			xPos+= 5;
+			xPos+= 1;
 		}
 		else if (xPos > xDestination) {
-			xPos-= 5;
+			xPos-= 1;
 		}
 		
 		if (yPos < yDestination) {
-			yPos+= 5;
+			yPos+= 1;
 		}
 		else if (yPos > yDestination) {
-			yPos-= 5;
+			yPos-= 1;
 		}
 		
 		if(xPos == xKitchen && yPos == yKitchen && currentAction == CurrentAction.Cooking) {
@@ -72,6 +76,10 @@ public class PersonGui implements Gui {
 			agent.msgActionComplete();
 		}
 		if(xPos == xTable && yPos == yTable && currentAction == CurrentAction.Eating) {
+			currentAction = CurrentAction.Transition;
+			agent.msgActionComplete();
+		}
+		if(xPos == xFridge && yPos == yFridge && currentAction == CurrentAction.Deciding) {
 			currentAction = CurrentAction.Transition;
 			agent.msgActionComplete();
 		}
@@ -113,7 +121,11 @@ public class PersonGui implements Gui {
 		// TODO Auto-generated method stub
 		return isPresent;
 	}
-	
+	public void DoDecideEat() {
+		currentAction = CurrentAction.Deciding;
+		xDestination = xFridge;
+		yDestination = yFridge;
+	}
 	public void DoCook() {
 		currentAction = CurrentAction.Cooking;
 		xDestination = xKitchen;
@@ -125,6 +137,16 @@ public class PersonGui implements Gui {
 		yDestination = yTable;
 	}
 	public void DoSleep() {
+		xDestination = xBed;
+		yDestination = yBed;
+	}
+	public void DoLeaveHouse() {
+		xDestination = xDoor;
+		yDestination = yDoor;
+	}
+	public void DoEnterHouse() {
+		xPos = xDoor;
+		yPos = yDoor;
 		xDestination = xBed;
 		yDestination = yBed;
 	}

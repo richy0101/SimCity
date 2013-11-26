@@ -169,6 +169,41 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	public PersonAgent(Role job, 
+			String job_location, 
+			String name, 
+			int aggressivenessLevel, 
+			double initialFunds, 
+			String housingStatus, 
+			String vehicleStatus) {
+		this.name = name;
+		workDetails = new WorkDetails(job, job_location);
+		this.aggressivenessLevel = aggressivenessLevel;
+		this.funds = initialFunds;
+		String vehicleStatusNoSpace = vehicleStatus.replaceAll(" ", "");
+		this.transMethod = TransportationMethod.valueOf(vehicleStatusNoSpace);
+		personPosition = PersonPosition.AtHome;
+		personState = PersonState.Idle;
+		hungerLevel = 0;
+		dirtynessLevel = 0;
+		rentDue = false;
+		hasWorked = false;
+		Directory.sharedInstance().addPerson(this);
+		personGui = new PersonGui(this);
+		
+		homeName = housingStatus;
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == homeName) {
+				b.addGui(personGui);
+			}
+		}
+		startThread();
+		print("I LIVE.");
+		
+	}
+	
+	
+	public PersonAgent(Role job, 
 			String name, 
 			int aggressivenessLevel, 
 			double startingFunds,
@@ -192,7 +227,7 @@ public class PersonAgent extends Agent implements Person {
 		Directory.sharedInstance().addPerson(this);
 		personGui = new PersonGui(this);
 		
-		homeName = "House1";
+		homeName = housingStatus;
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
 			if (b.getName() == homeName) {
@@ -406,6 +441,8 @@ public class PersonAgent extends Agent implements Person {
 		print("Action goRestaurant - State set to OutToEat");
 		personState = PersonState.OutToEat;
 		Restaurant r = Directory.sharedInstance().getRestaurants().get(0);
+		personGui.DoLeaveHouse();
+		actionComplete.acquireUninterruptibly();
 		roles.clear();
 		//roles.add(factory.createRole(r.getName(), this));//Hacked factory LOL
 		Role t = new TransportationRole(homeName, r.getName());
@@ -417,6 +454,8 @@ public class PersonAgent extends Agent implements Person {
 	}
 	private void decideFood() {
 		print("Action decideFood - Deciding to eat in or out.");
+		personGui.DoDecideEat();
+		actionComplete.acquireUninterruptibly();
 		Random rng = new Random();
 		desiredFood = rng.nextInt();
 		desiredFood = desiredFood % 4;
