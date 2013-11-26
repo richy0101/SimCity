@@ -94,6 +94,9 @@ public class MarketGui implements Gui {
 		else if (yPos > yDestination) {
 			g.drawImage(marketRoleDown, xPos, yPos, null);
 		}
+		else {
+			g.drawImage(marketRoleDown, xPos, yPos, null);		
+		}
 	}
 
 	@Override

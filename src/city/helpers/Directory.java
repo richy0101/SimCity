@@ -139,6 +139,12 @@ public class Directory {
 	private Market market2 = new Market("Market2"); //secondary market
 	Coordinate market2Location = new Coordinate(397,344);
 	
+	public Map<String, Market> marketDirectory = new HashMap<String, Market>(); {
+		marketDirectory.put("Market1", market1);
+		marketDirectory.put("Market2", market2);
+	}
+	
+	
 //APARTMENTS
 	private Apartment apartment1 = new Apartment("Apartment1"); //smaller limited apartment
 	Coordinate apartment1Location = new Coordinate(236,285);

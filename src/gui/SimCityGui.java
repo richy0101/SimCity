@@ -388,10 +388,23 @@ public class SimCityGui {
 		role.setPerson(p5);
 		p5.msgTestWakeUp();
         
-		MarketRole market = new MarketRole("Market1");
-		PersonAgent marketPerson = new PersonAgent(market);
-		market.setPerson(marketPerson);
-		marketPerson.startThread();		
+		MarketRole role6 = new MarketRole("Market1");
+		Directory.sharedInstance().marketDirectory.get("Market1").setWorker(role6);
+		
+		String a6 = "Market1";
+		String b6 = "House4";
+		String name6 = "Test Person 6";
+		PersonAgent p6 = new PersonAgent(role6, a6 , b6, name6);
+		role.setPerson(p6);
+		p6.msgGoWork();
+		
+		String a7 = "Test Bank 5";
+		String b7 = "House5";
+		String name7 = "MarketGoerPerson";
+		Role role7 = new BankTellerRole("Bank");
+		PersonAgent p7 = new PersonAgent(role7, a7 , b7, name7);
+		role.setPerson(p7);
+		p7.msgTestWakeUp();
 		
 		bus = new BusAgent();
 		busGui = new BusGui(bus);
