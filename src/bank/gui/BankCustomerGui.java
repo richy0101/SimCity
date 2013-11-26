@@ -35,6 +35,7 @@ public class BankCustomerGui implements Gui {
 	private int xPos, yPos;
 	private int xTeller, yTeller;
 	private int xDestination, yDestination;
+
 	private enum Command {noCommand, GoToManager, GoToTeller, LeaveBank};
 	private Command command=Command.noCommand;
 
@@ -116,5 +117,14 @@ public class BankCustomerGui implements Gui {
 		xDestination = xExit;
 		yDestination = yExit;
 		command = Command.LeaveBank;
+	}
+	
+	//Getters for GUI unit test------------------------------------------------
+	public int getxDestination() {
+		return xDestination;
+	}
+	
+	public int getyDestination() {
+		return yDestination;
 	}
 }
