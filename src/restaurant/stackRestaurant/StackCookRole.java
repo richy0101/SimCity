@@ -269,7 +269,7 @@ public class StackCookRole extends Role implements Cook {
 			this.cookingTime = cookingTime;
 		}
 		int cookingTime;
-		int inventory = 1;
+		int inventory = 1000;
 		FoodState state;
 	}
 	
