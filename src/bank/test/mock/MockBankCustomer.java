@@ -2,6 +2,7 @@ package bank.test.mock;
 
 import java.util.Map;
 
+import bank.BankTellerRole;
 import bank.test.mock.LoggedEvent;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.BankTeller;
@@ -16,6 +17,7 @@ public class MockBankCustomer extends Mock implements BankCustomer {
 	public Map<String, Integer> groceries;
 	public double moneyRequired;
 	public double moneyToDeposit;
+	public MockBankTeller teller;
 
 	public MockBankCustomer (String name,double moneyToDeposit,double moneyRequired) {
 		super(name);
