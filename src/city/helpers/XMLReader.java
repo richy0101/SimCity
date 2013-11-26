@@ -44,7 +44,6 @@ public class XMLReader {
 			 for (int i = 0; i < nodeList.getLength(); i++) {  
 				 String name = "";
 				 String job = "";
-				 String jobLocation = "";
 				 int aggressiveness = 0;
 				 int initialFunds = 0;
 				 String housing = "";
@@ -55,27 +54,18 @@ public class XMLReader {
 					 Element person = (Element) node;   
 					 name = person.getElementsByTagName("name").item(0).getTextContent();
 					 job = person.getElementsByTagName("job").item(0).getTextContent();
-					 jobLocation = person.getElementsByTagName("job_location").item(0).getTextContent();
 					 aggressiveness = Integer.parseInt(person.getElementsByTagName("aggressiveness").item(0).getTextContent());
 					 initialFunds = Integer.parseInt(person.getElementsByTagName("startingFunds").item(0).getTextContent());
 					 housing = person.getElementsByTagName("housingStatus").item(0).getTextContent();
 					 transportation = person.getElementsByTagName("vehicleStatus").item(0).getTextContent();
 				 }  
 				 PersonAgent person;
-				 if(job.equals("StackWaiterRole")) {
-					 person = new PersonAgent(new StackWaiterRole(jobLocation), jobLocation, name, aggressiveness, initialFunds, housing, transportation);
+				 if (job!= null) {
+					 person = new PersonAgent(job, name, aggressiveness, initialFunds, housing, transportation);
 					 persons.add(person);
-				 } else if(job.equals("StackCookRole")) {
-					 person = new PersonAgent(new StackCookRole(jobLocation), jobLocation, name, aggressiveness, initialFunds, housing, transportation);
-					 persons.add(person);
-				 } else if(job.equals("BankTeller")) {
-					 person = new PersonAgent(new BankTellerRole(jobLocation), jobLocation, name, aggressiveness, initialFunds, housing, transportation);
-					 persons.add(person);
-				 } else if(job.equals("MarketSeller")) {
-					 person = new PersonAgent(new MarketRole(jobLocation), jobLocation, name, aggressiveness, initialFunds, housing, transportation);
-					 persons.add(person);
-				 } else if(job.equals("")) {
-					 person = new PersonAgent(null, null, name, aggressiveness, initialFunds, housing, transportation);
+				 }
+				 else {
+					 person = new PersonAgent("", name, aggressiveness, initialFunds, housing, transportation);
 					 persons.add(person);
 				 } 
 			 } 
