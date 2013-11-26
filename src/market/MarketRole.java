@@ -31,6 +31,7 @@ public class MarketRole extends Role implements Market {
 	List<Order> MyOrders;
 	boolean jobDone;
 	Map<String, Food> inventory = new HashMap<String, Food>();
+	double funds;
 	
 
 	private Semaphore actionComplete = new Semaphore(0,true);
@@ -93,6 +94,7 @@ public class MarketRole extends Role implements Market {
 		
 		MyOrders = Collections.synchronizedList(new ArrayList<Order>());
 		jobDone = false;
+		funds = 0.00;
 		
 		log = new EventLog();
 		
@@ -115,6 +117,7 @@ public class MarketRole extends Role implements Market {
 		
 		MyOrders = Collections.synchronizedList(new ArrayList<Order>());
 		jobDone = false;
+		funds = 0.00;
 		log = new EventLog();
 		
 		gui = new MarketGui(this);
@@ -151,6 +154,8 @@ public class MarketRole extends Role implements Market {
 		    		o.state = orderState.Paid;  
 		    }
 		}
+		
+		funds += money;
 	    
 	    log.add(new LoggedEvent("Received msgHereIsMoney from MarketCustomer. Amount = $" + money));
 	    stateChanged();
@@ -297,6 +302,7 @@ public class MarketRole extends Role implements Market {
 	}
 	private void LeaveJob() {
 		log.add(new LoggedEvent("MarketRole leaving job"));
+		getPersonAgent().setFunds(getPersonAgent().getFunds() + funds);
 		
 		getPersonAgent().msgRoleFinished();
 	}

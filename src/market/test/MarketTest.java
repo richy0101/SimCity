@@ -623,8 +623,10 @@ public class MarketTest extends TestCase {
 		assertEquals("Market should have 9 logged events. Instead, the Market's event log reads: "
 						+ market.log.toString(), 9, market.log.size());
 
-		assertEquals("Person should have 1 logged events. Instead, the event log reads: "
-						+ person.log.toString(), 1, person.log.size());
+		assertEquals("Person should have 2 logged events. Instead, the event log reads: "
+						+ person.log.toString(), 2, person.log.size());
+		assertEquals("Person should have correct funds. Instead, funds = $"
+						+ person.funds, 7.00, person.funds);
 		
 	}	
 }
