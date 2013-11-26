@@ -19,7 +19,7 @@ import city.PersonAgent;
 public class TransportationRole extends Role implements Transportation  {
 
 	String destination;
-	String startingLocation;
+	private String startingLocation;
 	String currentLocation;
 	//String stopDestination; //for bus stop
 	private Semaphore actionComplete = new Semaphore(0,true);
@@ -34,7 +34,7 @@ public class TransportationRole extends Role implements Transportation  {
 	
 	public enum TransportationState 
 		{Walking, NeedsToTravel, InTransit, AtDestination, None, WaitingForBus, OnBus, GettingOnBus, AtFinalStop, JustGotOffBus, Finished};	
-	TransportationState state = TransportationState.None;
+	private TransportationState state = TransportationState.None;
 	
 	TransportationGui guiToStop;//use for bus stop
 	TransportationGui guiToDestination;
@@ -42,9 +42,9 @@ public class TransportationRole extends Role implements Transportation  {
 	public TransportationRole(String destination, String startingLocation) {
 		super();
 		hasCar = false; //hack for normative
-		state = TransportationState.NeedsToTravel; // hack for normative;
+		setState(TransportationState.NeedsToTravel); // hack for normative;
 		this.destination = destination;
-		this.startingLocation = startingLocation;
+		this.setStartingLocation(startingLocation);
 	}
 	
 	/*
@@ -58,19 +58,19 @@ public class TransportationRole extends Role implements Transportation  {
 	public void msgGetOnBus(BusAgent b) {
 		print("Bus is here");
 		this.bus = b;
-		state = TransportationState.GettingOnBus;
+		setState(TransportationState.GettingOnBus);
 		stateChanged();
 	}
 	
 	public void msgArrivedAtDestination(String destination) {
 		print("Car successfully took me to " + destination + ".");
 		currentLocation= destination;
-		state = TransportationState.AtDestination;
+		setState(TransportationState.AtDestination);
 		stateChanged();
 	}
 	public void msgAtStop(int stopNumber) {
 		if(stopNumber == finalStopNumber) {
-			state = TransportationState.AtFinalStop;
+			setState(TransportationState.AtFinalStop);
 			currentLocation= "BusStop"+stopNumber;
 		}
 		stateChanged();
@@ -81,23 +81,23 @@ public class TransportationRole extends Role implements Transportation  {
 	 * @see agent.Agent#pickAndExecuteAnAction()
 	 */
 	public boolean pickAndExecuteAnAction() {
-		if (state == TransportationState.AtDestination) {
+		if (getState() == TransportationState.AtDestination) {
 			EnterBuilding();
 			return true;
 		}
-		if	(state == TransportationState.JustGotOffBus) {
+		if	(getState() == TransportationState.JustGotOffBus) {
 			WalkToFinalDestination();
 			return true;
 		}
-		if (state == TransportationState.AtFinalStop) {
+		if (getState() == TransportationState.AtFinalStop) {
 			GetOffBus();
 			return true;
 		}
-		if(state == TransportationState.GettingOnBus) {
+		if(getState() == TransportationState.GettingOnBus) {
 			GetOnBus();
 			return true;
 		}	
-		if(state == TransportationState.NeedsToTravel) {
+		if(getState() == TransportationState.NeedsToTravel) {
 			GetAVehicle();
 			return true;
 		}
@@ -109,21 +109,21 @@ public class TransportationRole extends Role implements Transportation  {
 	 */
 	
 	private void EnterBuilding() {
-		state = TransportationState.Finished;
+		setState(TransportationState.Finished);
 		Directory.sharedInstance().getCityGui().getMacroAnimationPanel().removeGui(guiToDestination);
 		getPersonAgent().msgTransportFinished(destination);
 		stateChanged();
 	}
 
 	private void WalkToFinalDestination() {
-		state = TransportationState.Walking;
+		setState(TransportationState.Walking);
 		int finalDestinationX = Directory.sharedInstance.getDirectory().get(destination).xCoordinate;
 		int finalDestinationY = Directory.sharedInstance.getDirectory().get(destination).yCoordinate;
 		guiToDestination = new TransportationGui(this, endStopX, endStopY, finalDestinationX, finalDestinationY);
 		Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToDestination);
 		print("adding gotodestination to macro");
 		actionComplete.acquireUninterruptibly();
-		state = TransportationState.AtDestination;
+		setState(TransportationState.AtDestination);
 		stateChanged();
 	}
 
@@ -132,7 +132,7 @@ public class TransportationRole extends Role implements Transportation  {
 		Directory.sharedInstance().getCityGui().getMacroAnimationPanel().removeGui(guiToStop);
 		BusHelper.sharedInstance().removeWaitingPerson(this, startStopNumber);
 		bus.msgBoardingBus(this);
-		state = TransportationState.OnBus;
+		setState(TransportationState.OnBus);
 		stateChanged();
 	}
 
@@ -140,7 +140,7 @@ public class TransportationRole extends Role implements Transportation  {
 	private void WalkToDestination() {
 		//gui
 		
-		state = TransportationState.None;
+		setState(TransportationState.None);
 		stateChanged();
 	}
 	
@@ -155,30 +155,34 @@ public class TransportationRole extends Role implements Transportation  {
 			
 			//bus.msgINeedARide(destination);
 		}**/
-		state = TransportationState.InTransit;
+		setState(TransportationState.InTransit);
+
 		if (getPersonAgent().getTransportationMethod().contains("Bus")) {
-			startStopX = BusHelper.sharedInstance().busStopEvaluator.get(startingLocation).xCoordinate;
-			startStopY = BusHelper.sharedInstance().busStopEvaluator.get(startingLocation).yCoordinate;
+			startStopX = BusHelper.sharedInstance().busStopEvaluator.get(getStartingLocation()).xCoordinate;
+			startStopY = BusHelper.sharedInstance().busStopEvaluator.get(getStartingLocation()).yCoordinate;
 			endStopX = BusHelper.sharedInstance().busStopEvaluator.get(destination).xCoordinate;
 			endStopY = BusHelper.sharedInstance().busStopEvaluator.get(destination).yCoordinate;
 			finalStopNumber = BusHelper.sharedInstance().busStopToInt.get(destination);
-			startStopNumber = BusHelper.sharedInstance().busStopToInt.get(startingLocation);
+			startStopNumber = BusHelper.sharedInstance().busStopToInt.get(getStartingLocation());
 			print("Want bus stop " + startStopNumber);
 		}
-		startX = Directory.sharedInstance.getDirectory().get(startingLocation).xCoordinate;
-		startY = Directory.sharedInstance.getDirectory().get(startingLocation).yCoordinate;
+		if(getStartingLocation().equals("Home1")){
+			System.out.println("ASIJF LJKBGDKSJgJ ");
+		}
+		startX = Directory.sharedInstance.getDirectory().get(getStartingLocation()).xCoordinate;
+		startY = Directory.sharedInstance.getDirectory().get(getStartingLocation()).yCoordinate;
 		guiToStop = new TransportationGui(this, startX, startY, startStopX, startStopY);
 		Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToStop);
 		print("adding transport gui to macro");
 		actionComplete.acquireUninterruptibly();
 		BusHelper.sharedInstance().addWaitingPerson(this, startStopNumber);
-		state = TransportationState.WaitingForBus;
+		setState(TransportationState.WaitingForBus);
 		stateChanged();
 	}
 	private void GetOffBus() {
 		print("Getting off bus");
 		bus.msgLeavingBus(this);
-		state = TransportationState.JustGotOffBus;
+		setState(TransportationState.JustGotOffBus);
 		stateChanged();
 	}
 	private void GetOffVehicle() {
@@ -191,8 +195,24 @@ public class TransportationRole extends Role implements Transportation  {
 //			//remove transportationrole gui
 //		}
 		
-		state = TransportationState.None;
+		setState(TransportationState.None);
 		getPersonAgent().msgTransportFinished(currentLocation); //haven't implemented updating the currentLoc for cars
 		//change roles
+	}
+
+	public TransportationState getState() {
+		return state;
+	}
+
+	public void setState(TransportationState state) {
+		this.state = state;
+	}
+
+	public String getStartingLocation() {
+		return startingLocation;
+	}
+
+	public void setStartingLocation(String startingLocation) {
+		this.startingLocation = startingLocation;
 	}
 }
