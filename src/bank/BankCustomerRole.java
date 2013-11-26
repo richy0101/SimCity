@@ -1,6 +1,5 @@
 package bank;
 
-import city.helpers.Directory;
 import bank.gui.BankCustomerGui;
 import bank.interfaces.*;
 import agent.Role;

@@ -7,7 +7,6 @@ import bank.interfaces.BankTeller;
 import market.interfaces.Market;
 import market.interfaces.MarketCustomer;
 
-
 public class MockBankCustomer extends Mock implements BankCustomer {
 
 	public Market market;
@@ -18,7 +17,6 @@ public class MockBankCustomer extends Mock implements BankCustomer {
 	public MockBankCustomer (String name) {
 		super(name);
 		log = new EventLog();
-
 	}
 	
 	//MARKET
