@@ -52,7 +52,7 @@ public class PersonAgent extends Agent implements Person {
 		//Bank Scenario Constants
 		OutToBank, WantsToWithdraw, WantsToGetLoan, WantsToDeposit, WantsToRob, 
 		//Market Scenario Constants
-		NeedsToGoMarket, OutToMarket
+		NeedsToGoMarket, OutToMarket, EnterHome
 		};
 	PersonPosition personPosition;
 	HouseState houseState;
@@ -297,8 +297,15 @@ public class PersonAgent extends Agent implements Person {
 	public void msgTransportFinished(String location) {
 		Role r = roles.pop();
 		currentLocation = location;
-		print("msgTransportFinished received - Popping transport role, updating current location to: " + currentLocation + ".");
-		stateChanged();
+		if (currentLocation == homeName) {
+			personState = PersonState.EnterHome;
+			print("msgTransportFinished received - Popping transport role, updating current location to: " + currentLocation + ".");
+			stateChanged();
+		}
+		else {
+			print("msgTransportFinished received - Popping transport role, updating current location to: " + currentLocation + ".");
+			stateChanged();
+		}
 	}
 	public void msgAtHome() {
 		print("msgAtHome received - Setting position to AtHome.");
@@ -343,6 +350,9 @@ public class PersonAgent extends Agent implements Person {
 			goMarket();
 		}
 		/** Normative Scenario Rules **/
+		if(personState == PersonState.EnterHome) {
+			enterHome();
+		}
 		if (personState == PersonState.WantsToGoHome) {
 			goHome();
 			return true;
@@ -380,6 +390,8 @@ public class PersonAgent extends Agent implements Person {
 	}
 
 
+
+
 	/**
 	 * Actions --------------------------------------------------------------------------------------------------------
 	 * 
@@ -403,6 +415,11 @@ public class PersonAgent extends Agent implements Person {
 		}
 		personGui.DoSleep();
 		return false;
+	}
+	private void enterHome() {
+		personGui.setPresentTrue();
+		personGui.DoEnterHouse();
+		personState = PersonState.Idle;
 	}
 	/*private void payRent() {
 		roles.clear();
