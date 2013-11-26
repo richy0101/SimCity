@@ -93,7 +93,6 @@ public class MarketRole extends Role implements Market {
 		
 		MyOrders = Collections.synchronizedList(new ArrayList<Order>());
 		jobDone = false;
-		log = new EventLog();
 		
 		gui = new MarketGui(this);
 
@@ -105,6 +104,18 @@ public class MarketRole extends Role implements Market {
 			}
 		}
 	}
+	
+	public MarketRole() {
+		inventory.put("Chicken", new Food("Chicken", 10, 1.00));
+		inventory.put("Steak", new Food("Steak", 10, 2.00));
+		inventory.put("Pizza", new Food("Pizza", 10, 3.00));
+		inventory.put("Salad", new Food("Salad", 10, 4.00));
+		
+		MyOrders = Collections.synchronizedList(new ArrayList<Order>());
+		jobDone = false;
+		log = new EventLog();
+	}
+		
 	
 	public List<Order> getMyOrders() {
 		return MyOrders;

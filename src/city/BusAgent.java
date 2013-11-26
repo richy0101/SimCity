@@ -136,6 +136,7 @@ public class BusAgent extends Agent implements Bus {
 		}
 		
 		public void msgAtStopOne(){
+			print("AT STOP 1");
 			driving.release();
 			event= Event.reachedStop;
 			lastStation = Station.Stop1;
@@ -143,18 +144,21 @@ public class BusAgent extends Agent implements Bus {
 		}
 		
 		public void msgAtStopTwo(){
+			print("AT STOP 2");
 			driving.release();
 			event= Event.reachedStop;
 			lastStation = Station.Stop2;
 		}
 
 		public void msgAtStopThree(){
+			print("AT STOP 3");
 			driving.release();
 			event= Event.reachedStop;
 			lastStation = Station.Stop3;
 		}
 		
 		public void msgAtStopFour(){
+			print("AT STOP 4");
 			driving.release();
 			event= Event.reachedStop;
 			lastStation = Station.Stop4;
@@ -217,23 +221,27 @@ public class BusAgent extends Agent implements Bus {
 		private void alertPassengersToBoardBus(){
 			print("Passengers boarding bus.");
 			if((lastStation == Station.Stop1) && (state!=State.driving)){
+				print("Boarding Stop 1");
 				for(TransportationRole person: BusHelper.sharedInstance().getWaitingPassengersAtStop1()){
 					person.msgGetOnBus(this);
 				}	
 			}
 			if((lastStation == Station.Stop2) && (state!=State.driving)){
+				print("Boarding Stop 3");
 				for(TransportationRole person: BusHelper.sharedInstance().getWaitingPassengersAtStop2()){
-					person.msgAtStop(2);
+					person.msgGetOnBus(this);
 				}	
 			}
 			if((lastStation == Station.Stop3) && (state!=State.driving)){
+				print("Boarding Stop 3");
 				for(TransportationRole person: BusHelper.sharedInstance().getWaitingPassengersAtStop3()){
-					person.msgAtStop(3);
+					person.msgGetOnBus(this);
 				}	
 			}
 			if((lastStation == Station.Stop4) && (state!=State.driving)){
+				print("Boarding Stop 4");
 				for(TransportationRole person: BusHelper.sharedInstance().getWaitingPassengersAtStop4()){
-					person.msgAtStop(4);
+					person.msgGetOnBus(this);
 				}	
 			}
 			event=Event.notifiedPassengersToBoardBus;

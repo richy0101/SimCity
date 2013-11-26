@@ -111,13 +111,13 @@ public class BusGui extends CityComponent implements Gui {
             xPos--;
 		
 		
-		if((xPos==171) && (yPos==361))
+		if((xPos==LeftCol) && (yPos==BottomRow))
 			agent.msgAtStopOne();
-		else if((xPos==110) && (yPos==73))
+		else if((xPos==RightCol) && (yPos==BottomRow))
 			agent.msgAtStopTwo();
-		else if((xPos==610) && (yPos==73))
+		else if((xPos==RightCol) && (yPos==TopRow))
 			agent.msgAtStopThree();
-		else if((xPos==675) && (yPos==356))
+		else if((xPos==LeftCol) && (yPos==TopRow))
 			agent.msgAtStopFour();
 		
 		}

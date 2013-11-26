@@ -207,6 +207,7 @@ public class PersonAgent extends Agent implements Person {
 		name = "HardCoded " + hardCodeJob.toString();
 		print(name);
 		roles.add(hardCodeJob);
+		transMethod = TransportationMethod.TakesTheBus;
 		personGui = new PersonGui(this);
 	}
 	/**
