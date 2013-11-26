@@ -32,10 +32,10 @@ public class TransportationGui implements Gui {
 		yDestination = destY;
 		
 		try {
-        	personLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
-        	personRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));
-        	personUp = ImageIO.read(getClass().getResource("GUIPersonUp.png"));
-        	personDown = ImageIO.read(getClass().getResource("GUIPersonDown.png"));
+        	personLeft = ImageIO.read(getClass().getResource("GUICITYPersonLeft.png"));
+        	personRight = ImageIO.read(getClass().getResource("GUICITYPersonRight.png"));
+        	personUp = ImageIO.read(getClass().getResource("GUICITYPersonUp.png"));
+        	personDown = ImageIO.read(getClass().getResource("GUICITYPersonDown.png"));
         }
         catch(IOException e) {
         	System.out.println("Error w/ Person assets");
