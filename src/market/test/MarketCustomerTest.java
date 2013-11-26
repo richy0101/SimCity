@@ -139,10 +139,8 @@ public class MarketCustomerTest extends TestCase {
 		assertEquals("MarketCustomer should have event 'WantsGroceries'. Event is instead: " + 
 						marketCustomer.getEvent(), marketCustomer.getEvent(), Event.GotGroceries);
 		
-		assertEquals("Person should have 2 logged events. Instead, the event log reads: "
-						+ person.log.toString(), 2, person.log.size());
-		assertTrue("Person should have cleared groceryList. It doesn't ",
-						person.groceryList.isEmpty());
+		assertEquals("Person should have one logged event. Instead, the event log reads: "
+						+ person.log.toString(), 1, person.log.size());
 		
 		//Step 5-----------------------------------------------------------------------------
 		marketCustomer.msgActionComplete();
@@ -160,6 +158,8 @@ public class MarketCustomerTest extends TestCase {
 
 		assertEquals("Person should have 3 logged events. Instead, the event log reads: "
 						+ person.log.toString(), 3, person.log.size());
+		assertTrue("Person should have cleared groceryList. It doesn't ",
+				person.groceryList.isEmpty());
 		
 	}	
 
@@ -246,8 +246,8 @@ public class MarketCustomerTest extends TestCase {
 		assertEquals("MarketCustomer should have event 'WantsGroceries'. Event is instead: " + 
 						poorMarketCustomer.getEvent(), poorMarketCustomer.getEvent(), Event.GotBill);
 
-		assertEquals("Person should have 1 logged event. Instead, the event log reads: "
-						+ poorPerson.log.toString(), 1, poorPerson.log.size());	
+		assertEquals("Person should have 2 logged event. Instead, the event log reads: "
+						+ poorPerson.log.toString(), 2, poorPerson.log.size());	
 		assertEquals("Person should not have cleared groceryList. It did.",
 						person.groceryList, groceryList);	
 	}	
@@ -315,8 +315,8 @@ public class MarketCustomerTest extends TestCase {
 		assertEquals("MarketCustomer should have event 'TurnedAway'. Event is instead: " + 
 						marketCustomer.getEvent(), marketCustomer.getEvent(), Event.TurnedAway);
 
-		assertEquals("Person should have 1 logged event. Instead, the event log reads: "
-						+ person.log.toString(), 1, person.log.size());
+		assertEquals("Person should have 2 logged event. Instead, the event log reads: "
+						+ person.log.toString(), 2, person.log.size());
 		assertEquals("Person should not have cleared groceryList. It did.",
 						person.groceryList, groceryList);
 		
