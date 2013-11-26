@@ -58,16 +58,33 @@ public class BankManagerTest extends TestCase {
 	
 	//Manager assigning bankteller to teller register
 	public void testOneBankMangerInteraction(){
-		assertEquals("Manager should initially have 0 tellers in his list of tellers",manager.getTellers().size(),0);
+		assertEquals("Manager should initially have 0 tellers in his list of tellers",
+				manager.getTellers().size(),0);
 		assertEquals("Manager should have an empty event log. Manager's event log reads: "
 				+ manager.log.toString(), 0, manager.log.size());
 		
 		manager.msgHereForWork(teller1);
-		assertEquals("Manager's first teller in his list of tellers should not be assigned to a register", manager.getTeller(0).getTellerNum(),-1);
-		assertTrue("Market scheduler should return true. It does", manager.pickAndExecuteAnAction());
+		assertEquals("Manager's first teller in his list of tellers should not be assigned to a register", 
+				manager.getTeller(0).getTellerNum(),-1);
+		
+		manager.pickAndExecuteAnAction();
+		
 		assertEquals("Manager should have 1 tellers in his list of tellers",manager.getTellers().size(),1);
-		assertEquals("Manager should have event log of 1. Manager's event log reads: "
-				+ manager.log.toString(), 1, manager.log.size());
+		assertEquals("Manager's first teller in his list of tellers should be assigned to register 0", 
+				manager.getTeller(0).getTellerNum(),0);
+		
+		manager.msgHereForWork(teller2);
+		assertEquals("Manager's second teller in his list of tellers should not be assigned to a register", 
+				manager.getTeller(1).getTellerNum(),-1);
+		
+		manager.pickAndExecuteAnAction();
+		
+		assertEquals("Manager should have 2 tellers in his list of tellers",manager.getTellers().size(),2);
+		assertEquals("Manager's second teller in his list of tellers should be assigned to register 1", 
+				manager.getTeller(1).getTellerNum(),1);
+		assertEquals("Manager's first teller in his list of tellers should still have state Idle since no customers", 
+				manager.getTeller(0).getState(),"Idle");
+		
 		
 		
 		
