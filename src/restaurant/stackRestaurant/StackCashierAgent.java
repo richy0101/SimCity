@@ -1,14 +1,13 @@
 package restaurant.stackRestaurant;
 
-import agent.Role;
+import agent.Agent;
 import restaurant.stackRestaurant.helpers.Check;
 import restaurant.stackRestaurant.helpers.Menu;
 import restaurant.stackRestaurant.interfaces.*;
-import city.interfaces.Person;
 
 import java.util.*;
 
-public class StackCashierRole extends Role implements Cashier {
+public class StackCashierAgent extends Agent implements Cashier {
 	
 	private List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	private List<MyCheck> checks = Collections.synchronizedList(new ArrayList<MyCheck>());
@@ -22,7 +21,7 @@ public class StackCashierRole extends Role implements Cashier {
 	private double till;
 	
 	public String getName() {
-		return getPersonAgent().getName();
+		return "Money Machine 5000";
 	}
 	
 	public List<MyCustomer> getCustomers() {

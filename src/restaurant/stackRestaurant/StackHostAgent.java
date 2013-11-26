@@ -1,6 +1,6 @@
 package restaurant.stackRestaurant;
 
-import agent.Role;
+import agent.Agent;
 import restaurant.stackRestaurant.gui.WaiterGui;
 import restaurant.stackRestaurant.helpers.TableList;
 import restaurant.stackRestaurant.interfaces.Customer;
@@ -16,7 +16,7 @@ import java.util.*;
 //does all the rest. Rather than calling the other agent a waiter, we called him
 //the HostAgent. A Host is the manager of a restaurant who sees that all
 //is proceeded as he wishes.
-public class StackHostRole extends Role implements Host {
+public class StackHostAgent extends Agent implements Host {
 	//Notice that we implement waitingCustomers using ArrayList, but type it
 	//with List semantics.
 	public List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
@@ -33,7 +33,7 @@ public class StackHostRole extends Role implements Host {
 	{Idle, Busy};
 
 
-	public StackHostRole() {
+	public StackHostAgent() {
 		super();
 		// make some tables
 		tables = new ArrayList<Table>(tableList.getTables().size());
@@ -51,7 +51,7 @@ public class StackHostRole extends Role implements Host {
 	}
 	
 	public String getName() {
-		return getPersonAgent().getName();
+		return "Garcon";
 	}
 	
 	// Messages

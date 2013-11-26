@@ -31,7 +31,7 @@ import javax.swing.event.ChangeEvent;
 import market.MarketCustomerRole;
 import market.MarketRole;
 import restaurant.stackRestaurant.StackCookRole;
-import restaurant.stackRestaurant.StackHostRole;
+import restaurant.stackRestaurant.StackHostAgent;
 import restaurant.stackRestaurant.StackWaiterRole;
 import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 
@@ -190,14 +190,11 @@ public class SimCityGui {
 		sl_panel.putConstraint(SpringLayout.EAST, occupationComboBox, 0, SpringLayout.EAST, btnPopulateCity);
 		
 		occupationComboBox.addItem("None");
-		occupationComboBox.addItem("Bank Manager");
 		occupationComboBox.addItem("Bank Teller");
 		occupationComboBox.addItem("Market Seller");
 		occupationComboBox.addItem("Landlord");
-		occupationComboBox.addItem("Stack's Restaurant Host");
 		occupationComboBox.addItem("Stack's Restaurant Waiter");
 		occupationComboBox.addItem("Stack's Restaurant Cook");
-		occupationComboBox.addItem("Stack's Restaurant Cashier");
 		
         //		occupationComboBox.addItem("Sheh's Restaurant Host");
         //		occupationComboBox.addItem("Sheh's Restaurant Waiter");
@@ -223,16 +220,6 @@ public class SimCityGui {
         //		occupationComboBox.addItem("Nakamura's Restaurant Waiter");
         //		occupationComboBox.addItem("Nakamura's Restaurant Cook");
         //		occupationComboBox.addItem("Nakamura's Restaurant Cashier");
-		
-//		roles.put("Bank Manager", new BankManagerAgent());
-//		//roles.put("Bank Teller", new BankTellerRole());
-//		//roles.put("Bank Customer", new BankCustomerRole());
-//		roles.put("Market Seller", new BankManagerAgent());
-//		roles.put("Landlord", new LandlordRole());
-//		roles.put("Stack's Restaurant Host", new StackHostRole());
-//		roles.put("Stack's Restaurant Waiter", new BankManagerAgent());
-//		roles.put("Stack's Restaurant Cook", new BankManagerAgent());
-//		roles.put("Stack's Restaurant Cashier", new BankManagerAgent());
 		
 		panel.add(occupationComboBox);
 		
