@@ -48,7 +48,7 @@ public class StackCustomerRole extends Role implements Customer {
 	private AgentState state = AgentState.DoingNothing;//The start state
 
 	public enum AgentEvent 
-	{none, gotHungry, doneEntering, waitingForSeating, followHost, seated, ordered, foodArrived, doneEating, waitingForCheck, gotCheck, gotToCashier, donePaying, doneLeaving};
+	{none, gotHungry, doneEntering, waitingForSeating, followHost, seated, ordered, foodArrived, doneEating, waitingForCheck, gotCheck, gotToCashier, donePaying, doneLeaving, closed};
 	AgentEvent event = AgentEvent.none;
 
 	/**
@@ -142,6 +142,12 @@ public class StackCustomerRole extends Role implements Customer {
 		event = AgentEvent.donePaying;
 		stateChanged();
 	}
+	public void msgRestaurantClosed() {
+		print("restaurant is closed");
+		event = AgentEvent.closed;
+		stateChanged();
+		
+	}
 
 	public void msgAnimationFinishedGoToSeat() {
 		//from animation
@@ -166,6 +172,9 @@ public class StackCustomerRole extends Role implements Customer {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
+		if(event == AgentEvent.closed) {
+			leaveRestaurant();
+		}
 		if (state == AgentState.DoingNothing && event == AgentEvent.gotHungry ) {
 			state = AgentState.WaitingInRestaurant;
 			goToRestaurant();
@@ -341,6 +350,7 @@ public class StackCustomerRole extends Role implements Customer {
 		print("Leaving because it's too busy");
 		host.msgNotWaiting(this);
 		customerGui.DoExitRestaurant();
+		getPersonAgent().msgRoleFinished();
 	}
 
 	// Accessors, etc.
@@ -355,8 +365,6 @@ public class StackCustomerRole extends Role implements Customer {
 
 	public void setHungerLevel(int hungerLevel) {
 		this.hungerLevel = hungerLevel;
-		//could be a state change. Maybe you don't
-		//need to eat until hunger lever is > 5?
 	}
 
 	public String toString() {

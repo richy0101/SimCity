@@ -8,7 +8,9 @@ import java.util.concurrent.Semaphore;
 
 import city.helpers.Directory;
 import restaurant.stackRestaurant.helpers.Menu;
+import restaurant.stackRestaurant.interfaces.Cashier;
 import restaurant.stackRestaurant.interfaces.Cook;
+import restaurant.stackRestaurant.interfaces.Host;
 import restaurant.stackRestaurant.interfaces.Market;
 import restaurant.stackRestaurant.interfaces.Waiter;
 import restaurant.stackRestaurant.gui.CookGui;
@@ -21,9 +23,12 @@ public class StackCookRole extends Role implements Cook {
 	private CookGui cookGui;
 	String myLocation;
 	Timer timer = new Timer();
+	Host host;
 	
 	private Semaphore doneAnimation = new Semaphore(0,true);
-	
+	private enum AgentState 
+	{Arrived, Working};
+	AgentState state;
 	
 	private enum OrderState
 	{Pending, Cooking, Done, Notified};
@@ -38,6 +43,8 @@ public class StackCookRole extends Role implements Cook {
 		foods.put("Salad", new Food(70));
 		foods.put("Pizza", new Food(120));
 		cookGui = new CookGui(this);
+		
+		host = (Host) Directory.sharedInstance().getAgents().get("StackRestaurantHost");
 		
 		myLocation = location;
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
@@ -62,6 +69,10 @@ public class StackCookRole extends Role implements Cook {
 	
 	@Override
 	public boolean pickAndExecuteAnAction() {
+		if(state == AgentState.Arrived) {
+			tellHostAtWork();
+			return true;
+		}
 		synchronized(orders) {
 			for(Order order : orders) {
 				if(order.state == OrderState.Done) {
@@ -151,6 +162,12 @@ public class StackCookRole extends Role implements Cook {
 		}
 		foods.get(choice).state = FoodState.PermanentlyEmpty;
 		
+	}
+	
+	private void tellHostAtWork() {
+		host.msgAddCook(this);
+		cookGui.DoGoHome();
+		state = AgentState.Working;
 	}
 	
 	

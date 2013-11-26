@@ -15,7 +15,7 @@ public class CookGui implements Gui {
     
     private int xHome = 250, yHome = 250;
     private int xPos = 250, yPos = 250;//default waiter position
-    private int xDestination = 250, yDestination = 250;//default start position
+    private int xDestination = 850, yDestination = 450;//default start position
     private int PLATINGX = 543, PLATINGY = 70;
     private int COOKTOPX = 781, COOKTOPY = 35;
     private int FRIDGEX = 595, FRIDGEY = 35;

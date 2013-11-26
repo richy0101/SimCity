@@ -28,4 +28,6 @@ public interface Customer {
 	public void msgAnimationFinishedGoToCashier();
 	
 	public void setFunds(double funds);
+
+	public void msgRestaurantClosed();
 }
