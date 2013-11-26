@@ -38,6 +38,8 @@ public class BankCustomerTest extends TestCase {
 		customer.manager = manager;
 		customer.setPerson(person);
 		customer.setAccountNumber(1);
+		assertTrue(customer.getPersonAgent().equals(person));
+		customer.getPersonAgent().setFunds(400.0);
 		
 		//precondition
 		assertEquals("Customers account number should be 1", customer.getAccountNumber(),1);
@@ -63,12 +65,12 @@ public class BankCustomerTest extends TestCase {
 		assertEquals("Customer's state should be BeingHelped ",customer.getState(),"BeingHelped");
 		assertEquals("Customer's task should be Deposit ",customer.getTask(),"Deposit");
 		
-		assertEquals("Customer's funds should be 300 ",customer.getMoneyToDeposit(),300.0);
+		assertEquals("Customer's funds should be 400 before depositing",customer.getPersonAgent().getFunds(),400.0);
 		
 		customer.pickAndExecuteAnAction();
 		
 		assertEquals("Customer's state should be WaitingForHelpResponse ",customer.getState(),"WaitingForHelpResponse");
-		assertEquals("Customer's funds should be 0 now that hes deposited",customer.getMoneyToDeposit(),0.0);
+		assertEquals("Customer's funds should be 100 now that hes deposited",customer.getPersonAgent().getFunds(),100.0);
 		
 		customer.msgDepositSuccessful();
 		
@@ -78,54 +80,17 @@ public class BankCustomerTest extends TestCase {
 		
 		assertEquals("Customer's state should be Gone ",customer.getState(),"Gone");
 		
-		
-		//teller initial state Arrived At Work
-		//teller state = AtManager 
-		//manager messages msgGoToRegister
-		//teller state = GoingToRegister
-		//teller state = ReadyForCustomers;
-		//customers initial state should be "DoingNothing"
-		//customer messages manager.msgINeedAssistance
-		//customer state = Waiting
-		//managers initial state should be "Idle"
-		//customers.size should be empty
-		//manager adds customer to customers list
-		//customers.size should be one
-		//teller size should be one
-		//myteller initial state should be Idle
-		//manager messages teller .msgAssigningCustomer
-		//myteller state should be busy
-		//manager changes tellerstate busy
-		//manager removes customer from customers
-		//customer size should be empty
-		//teller's customer list should be empty
-		//teller receives .msgAssigningCustomer
-		//teller adds customer
-		//mycustomer state should initially be NeedingAssistance
-		//teller messages customer .msgHowCanIHelpYou?
-		//mycustomerstate = AskedAssistance
-		//customerstate = GoingToTeller
-		//customer receives message from gui msgAtTeller
-		//customer state = BeingHelped
-		//customer messages teller msgOpenAccount
-		//account should not exist for user
-		//mycustomerstate == OpeningAccount
-		//teller messages customer .msgHereIsYourAccount
-		//mycustomer state == OpenedAccount	
-		
 	}
 	
 	//Deposit w/o Account
 	public void testTwoBankInteraction(){
-		/*customer = new BankCustomerRole("WantsToDeposit",300,0);
+		customer = new BankCustomerRole("Deposit",300,0.0);
 		
-		assertEquals("Customer should not be assigned a bank teller",customer.registerNumber, -1);
-		assertEquals("Customer should not be at manager ",customer.registerNumber, -1);
-		customer.msgGoToRegister(1);
-		assertFalse("Teller scheduler should return true,
-				teller.pickAndExecuteAction(),true);
+		assertEquals("Customer should not be assigned a bank teller",customer.getTellerNumber(), -1);
+		//customer.msgGoToRegister(1);
+		customer.pickAndExecuteAnAction();
 		assertEquals("Teller should be at register 1",teller.registerNumber, 1);
-		*/
+		
 		
 		
 		
