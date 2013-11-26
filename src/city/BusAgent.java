@@ -53,7 +53,7 @@ public class BusAgent extends Agent implements Bus {
 	}
 	
 	public BusAgent(){//constructor
-		print("Bus created.");
+		print("Bus in city.");
 		busGui = new BusGui(this);
 	}
 		
@@ -120,10 +120,13 @@ public class BusAgent extends Agent implements Bus {
 	 * @param myDestination
 	 */
 		public void msgBoardingBus(TransportationRole person){
+			print("Received request from passenger to board bus.");	
 					passengersOnBoard.add(new MyPassenger(person));	
 		}
 		
 		public void msgLeavingBus(TransportationRole person){
+			print("Received request from passenger to leave bus.");
+			
 			for(MyPassenger p: passengersOnBoard){
 				if (p.passenger==person){
 					p.status= Status.Leaving;
@@ -164,30 +167,30 @@ public class BusAgent extends Agent implements Bus {
 		private void stopBus(){
 			print("Bus is stopping.");
 			busGui.DoStopDriving();
-			event=Event.stopped;
+			event = Event.stopped;
 		}
 		
 		private void alertPassengersToAlightBus(){
 			if((lastStation == Station.Stop1) && (state!=State.driving)){
-				print("This is bus stop one.");
+				print("Attention passengers: This is bus stop one.");
 				for(MyPassenger person: passengersOnBoard){
 					person.passenger.msgAtStop(1);
 				}
 			}
 			if((lastStation == Station.Stop2) && (state!=State.driving)){
-				print("This is bus stop two.");
+				print("Attention passengers: This is bus stop two.");
 				for(MyPassenger person: passengersOnBoard){
 					person.passenger.msgAtStop(2);
 				}
 			}
 			if((lastStation == Station.Stop3) && (state!=State.driving)){
-				print("This is bus stop three.");
+				print("Attention passengers: This is bus stop three.");
 				for(MyPassenger person: passengersOnBoard){
 					person.passenger.msgAtStop(3);
 				}
 			}
 			if((lastStation == Station.Stop4) && (state!=State.driving)){
-				print("This is bus stop four");
+				print("Attention passengers: This is bus stop four");
 				for(MyPassenger person: passengersOnBoard){
 					person.passenger.msgAtStop(4);
 				}
