@@ -221,6 +221,7 @@ public class StackHostAgent extends Agent implements Host {
 		
 	}
 	private void notifyWaitersOfCook() {
+		print("we have a cook!");
 		for(MyWaiter waiter : waiters) {
 			waiter.waiter.msgCookHere(cook);
 		}
