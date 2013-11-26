@@ -18,6 +18,7 @@ public class MockBankTeller extends Mock implements BankTeller {
 		super(name);
 		log = new EventLog();
 	}
+	
 	/*
 	@Override
 	public void msgGetGroceries(MarketCustomer customer, Map<String, Integer> groceryList) {

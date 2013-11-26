@@ -182,15 +182,18 @@ public class Directory {
 		
 	}
 	
-	public Map <Agent, String> agents =  new HashMap<Agent, String>();{
-		agents.put((Agent) stackRestaurant.getHost(), stackRestaurant.getName());
-		agents.put((Agent) stackRestaurant.getCashier(), stackRestaurant.getName());
-		agents.put((Agent) bank.getManager(), bank.getName());
+	public Map <String, Agent> agents =  new HashMap<String, Agent>();{
+		agents.put(stackRestaurant.getName() + "Host", (Agent) stackRestaurant.getHost());
+		agents.put(stackRestaurant.getName() + "Cashier", (Agent) stackRestaurant.getCashier());
+		agents.put( bank.getName(),(Agent) bank.getManager());
 	}
 	public static List<Restaurant> restaurants = new ArrayList<Restaurant>();
 	public static List<Bank> banks = new ArrayList<Bank>();
 	public static List<Market> markets = new ArrayList<Market>();
 	public static List<PersonAgent> people = new ArrayList<PersonAgent>();
+	public Map<String, Agent> getAgents() {
+		return agents;
+	}
 	public Map<String, Coordinate> getDirectory() {
 		return locationDirectory;
 	}

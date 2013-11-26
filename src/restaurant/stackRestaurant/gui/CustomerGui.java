@@ -17,6 +17,10 @@ public class CustomerGui implements Gui{
 	private TableList tableList = new TableList();
 	private String choice = "";
 	BufferedImage customerImage;
+	BufferedImage chickenImage;
+	BufferedImage pizzaImage;
+	BufferedImage saladImage;
+	BufferedImage steakImage;
 
 
 	private int xPos, yPos;
@@ -28,8 +32,7 @@ public class CustomerGui implements Gui{
 	private static final int PERSONSIZEX = 32, PERSONSIZEY = 40;
 	private static final int CASHIERX = 460;
 	private static final int CASHIERY = 34;
-	private static final int WAITINGX = 3;
-	private static final int WAITINGY = 3;
+	private int WAITINGX = 725, WAITINGY = 333;
 
 	public CustomerGui(StackCustomerRole c) { 
 		agent = c;
@@ -40,10 +43,14 @@ public class CustomerGui implements Gui{
 		
 		try {
         	customerImage = ImageIO.read(getClass().getResource("stackRestaurantCustomer.png"));
+        	chickenImage = ImageIO.read(getClass().getResource("chicken.png"));
+            pizzaImage = ImageIO.read(getClass().getResource("pizza.png"));
+            saladImage = ImageIO.read(getClass().getResource("salad.png"));
+            steakImage = ImageIO.read(getClass().getResource("steak.png"));
         }
         catch(IOException e) {
         	System.out.println("Error w/ Background");
-        }
+        }   
 	}
 
 	public void updatePosition() {
@@ -62,7 +69,6 @@ public class CustomerGui implements Gui{
 			else if (command==Command.LeaveRestaurant) {
 				agent.msgAnimationFinishedLeaveRestaurant();
 				isHungry = false;
-//				gui.setCustomerEnabled(agent);
 			}
 			else if (command==Command.GoToCashier) {
 				agent.msgAnimationFinishedGoToCashier();
@@ -79,7 +85,25 @@ public class CustomerGui implements Gui{
 	}
 	
 	public void draw(Graphics2D g) {
-		g.drawImage(customerImage, xPos, yPos, null);
+		if(choice == "") {
+			g.drawImage(customerImage, xPos, yPos, null);
+		}
+		else if(choice == "Steak") {
+			g.drawImage(customerImage, xPos, yPos, null);
+			g.drawImage(steakImage, xPos + 26, yPos + 20, null);
+		}
+		else if(choice == "Chicken") {
+			g.drawImage(customerImage, xPos, yPos, null);
+			g.drawImage(chickenImage, xPos + 26, yPos + 20, null);
+		}
+		else if(choice == "Pizza") {
+			g.drawImage(customerImage, xPos, yPos, null);
+			g.drawImage(pizzaImage, xPos + 26, yPos + 20, null);
+		}
+		else if(choice == "Salad") {
+			g.drawImage(customerImage, xPos, yPos, null);
+			g.drawImage(saladImage, xPos + 26, yPos + 20, null);
+		}
 	}
 
 	public void setHungry() {

@@ -409,6 +409,10 @@ public class PersonAgent extends Agent implements Person {
 			personState = PersonState.NeedsToGoMarket;
 			return true;
 		}
+		else if (currentLocation != homeName) {
+			personState = PersonState.WantsToGoHome;
+			return true;
+		}
 		else if(personState == PersonState.Idle){
 			personGui.DoSleep();
 			return false;
@@ -438,7 +442,6 @@ public class PersonAgent extends Agent implements Person {
 		print("Action goHome - State set to InTransit. Adding new Transportation Role.");
 		personState = PersonState.InTransit;
 		roles.clear();
-		//roles.add(new TransportationRole(homeName));
 		Role t = new TransportationRole(homeName, currentLocation);
 		t.setPerson(this);
 		roles.add(t);
@@ -459,19 +462,22 @@ public class PersonAgent extends Agent implements Person {
 	private void goRestaurant() {
 		print("Action goRestaurant - State set to OutToEat");
 		personState = PersonState.OutToEat;
+		//Decide Which restaurant to go to
 		Restaurant r = Directory.sharedInstance().getRestaurants().get(0);
+		//End of Decide block
 		personGui.DoLeaveHouse();
 		actionComplete.acquireUninterruptibly();
+		personGui.setPresentFalse();
+		//Role logic
 		roles.clear();
 		Role custRole = factory.createRole(r.getName(), this);
 		roles.add(custRole);//Hacked factory LOL
 		custRole.msgGotHungry();
+		custRole.setHost(Directory.sharedInstance().getAgents().get(r.getName() + "Host"));
+		custRole.setCashier(Directory.sharedInstance().getAgents().get(r.getName() + "Cashier"));
 		Role t = new TransportationRole(r.getName(), homeName);
 		t.setPerson(this);
 		roles.add(t);
-		personGui.setPresentFalse();
-		print("Action goRestaurant - State set to OutToEat");
-		//leaveHouse();
 	}
 	private void decideFood() {
 		print("Action decideFood - Deciding to eat in or out.");
