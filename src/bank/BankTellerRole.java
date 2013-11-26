@@ -32,17 +32,18 @@ public class BankTellerRole extends Role implements BankTeller {
 	
 	private static final int MAXLOAN = 1000;
 	private Semaphore doneAnimation = new Semaphore(0,true);
-    public int registerNumber = 0;
-    BankManager manager;
+	private int registerNumber = 0;
+    private BankManager manager;
     private BankTellerGui tellerGui;
     private enum TellerState {ArrivedAtWork, AtManager, GoingToRegister, ReadyForCustomers, DoneWorking, Gone};
-    TellerState state = TellerState.ArrivedAtWork;
+    private TellerState state = TellerState.ArrivedAtWork;
     
     private enum CustomerState {NeedingAssistance, 
     	AskedAssistance, OpeningAccount, OpenedAccount, 
     	DepositingMoney, WithdrawingMoney, LoanAccepted, 
     	LoanRejected, Leaving};
-    String myLocation;
+    	
+    private String myLocation;
     
     public BankTellerRole(String location){
     	tellerGui = new BankTellerGui(this);
@@ -297,4 +298,27 @@ public class BankTellerRole extends Role implements BankTeller {
 	public void msgAnimationFinishedLeavingBank() {
 		doneAnimation.release();
 	}
+	
+	//Getters for unit testing--------------------------------------------------------------
+	/**
+	 * @return the customers
+	 */
+	public List<MyCustomer> getCustomers() {
+		return customers;
+	}
+
+	/**
+	 * @return the registerNumber
+	 */
+	public int getRegisterNumber() {
+		return registerNumber;
+	}
+
+	/**
+	 * @return the state
+	 */
+	public String getState() {
+		return state.toString();
+	}
+
 }

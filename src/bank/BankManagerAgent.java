@@ -13,7 +13,8 @@ public class BankManagerAgent extends Agent implements BankManager {
 	private List<BankCustomer> customers = Collections.synchronizedList(new ArrayList<BankCustomer>());
 	private List<MyBankTeller> tellers = Collections.synchronizedList(new ArrayList<MyBankTeller>());
 	private class MyBankTeller {
-	    BankTeller teller;
+
+		BankTeller teller;
 	    BankTellerState state;
 	    int tellerNum;
 	    
@@ -22,11 +23,33 @@ public class BankManagerAgent extends Agent implements BankManager {
 	    	this.state = state;
 	    	this.tellerNum = tellerNum;
 	    }
+	    /**
+		 * @return the teller
+		 */
+		public BankTeller getTeller() {
+			return teller;
+		}
+
+		/**
+		 * @return the state
+		 */
+		public String getState() {
+			return state.toString();
+		}
+
+		/**
+		 * @return the tellerNum
+		 */
+		public int getTellerNum() {
+			return tellerNum;
+		}
 	}
 	public enum BankTellerState {GotToWork, Idle, Busy};
 	private int tellerNum = 0;
+	private String name;
 	
 	public BankManagerAgent(){
+		this.name = "siri";
 	}
 	
     //messages----------------------------------------------------------------------------
@@ -34,7 +57,7 @@ public class BankManagerAgent extends Agent implements BankManager {
 		customers.add(customer);
 	    stateChanged();
 	}
-	
+
 	public void msgTellerFree(BankTeller teller) {
 		for(MyBankTeller tempTeller : tellers){
 			if(tempTeller.teller == teller){
@@ -95,4 +118,27 @@ public class BankManagerAgent extends Agent implements BankManager {
 	    customers.remove(customer);
 	    stateChanged();
 	}
+	
+	//getters for unit test-----------------------------------------------------------------
+	/**
+	 * @return the tellerNum
+	 */
+	public int getTellerNum() {
+		return tellerNum;
+	}
+
+	/**
+	 * @return the customers
+	 */
+	public List<BankCustomer> getCustomers() {
+		return customers;
+	}
+
+	/**
+	 * @return the tellers
+	 */
+	public List<MyBankTeller> getTellers() {
+		return tellers;
+	}
+	
 }
