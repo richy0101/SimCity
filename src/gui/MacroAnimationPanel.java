@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -30,21 +31,18 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
    
     private final int DELAY = 5;
 
-    private List<Gui> guis = new ArrayList<Gui>();
-    ArrayList<Building> buildings;
+    private List<Gui> guis = Collections.synchronizedList(new ArrayList<Gui>());
+    ArrayList<Building> buildings = new ArrayList<Building>();
     BusAgent bus;
     BusGui busGui;
     
     //SimCityPanel
     protected SimCityGui city;
-    protected ArrayList<CityComponent> statics, movings;
     protected Color background;
     protected Timer timer;
 
     public MacroAnimationPanel(SimCityGui city) {
     	this.city = city;
-    	statics = new ArrayList<CityComponent>();
-    	movings = new ArrayList<CityComponent>();
     	
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
@@ -53,7 +51,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     	Timer timer = new Timer(DELAY, this);
     	timer.start();
     	
-    	buildings = new ArrayList<Building>();
+    	//buildings = new ArrayList<Building>();
 
     //RESTAURANT
     	Building stackRestaurant = new Building(0, 240, 105, 120);
@@ -138,9 +136,11 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
 	public void actionPerformed(ActionEvent e) {
 		repaint();  //Will have paintComponent called
 		this.repaint();
-		for(Building b : this.buildings) {
-			if(b.hasBuildingPanel()) {
-				b.getBuildingPanel().updateGui();
+		synchronized(buildings) {
+			for(Building b : this.buildings) {
+				if(b.hasBuildingPanel()) {
+					b.getBuildingPanel().updateGui();
+				}
 			}
 		}
 	}
@@ -151,9 +151,11 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
         
         //PLACED ONTOP FOR BUILDING REFERENCE PURPOSES
         
-        for(int i = 0; i < buildings.size(); i++) {
-        	Building b = buildings.get(i);
-        	g2.fill(b);
+	    synchronized(buildings) {
+	        for(int i = 0; i < buildings.size(); i++) {
+	        	Building b = buildings.get(i);
+	        	g2.fill(b);
+	        }
         }
         
         
@@ -191,36 +193,14 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
 
     //if click on building, then building displayed
 	public void mouseClicked(MouseEvent e) {
-		for(int i = 0; i < buildings.size(); i++) {
-			Building b = buildings.get(i);
-			if(b.contains(e.getX(), e.getY())) {
-				b.displayBuilding();
+		synchronized(buildings) {
+			for(int i = 0; i < buildings.size(); i++) {
+				Building b = buildings.get(i);
+				if(b.contains(e.getX(), e.getY())) {
+					b.displayBuilding();
+				}
 			}
 		}
-	}
-	
-	public void drawComponents(Graphics g) {
-		for (CityComponent c:statics) {
-			c.paint(g);
-		}
-		
-		for (CityComponent c:movings) {
-			c.paint(g);
-		}
-	}
-	
-	public void moveComponents() {
-		for (CityComponent c:movings) {
-			c.updatePosition();
-		}
-	}
-	
-	public void addStatic(CityComponent c) {
-		statics.add(c);
-	}
-	
-	public void addMoving(CityComponent c) {
-		movings.add(c);
 	}
 
 	@Override
