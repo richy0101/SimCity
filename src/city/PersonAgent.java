@@ -181,8 +181,6 @@ public class PersonAgent extends Agent implements Person {
 		this.funds = initialFunds;
 		String vehicleStatusNoSpace = vehicleStatus.replaceAll(" ", "");
 		this.transMethod = TransportationMethod.valueOf(vehicleStatusNoSpace);
-		String housingStatusNoSpace = housingStatus.replaceAll(" ", "");
-		this.houseState = HouseState.valueOf(housingStatusNoSpace);
 		personPosition = PersonPosition.AtHome;
 		personState = PersonState.Idle;
 		hungerLevel = 0;
@@ -443,6 +441,8 @@ public class PersonAgent extends Agent implements Person {
 		print("Action goRestaurant - State set to OutToEat");
 		personState = PersonState.OutToEat;
 		Restaurant r = Directory.sharedInstance().getRestaurants().get(0);
+		personGui.DoLeaveHouse();
+		actionComplete.acquireUninterruptibly();
 		roles.clear();
 		//roles.add(factory.createRole(r.getName(), this));//Hacked factory LOL
 		Role t = new TransportationRole(homeName, r.getName());
@@ -454,6 +454,8 @@ public class PersonAgent extends Agent implements Person {
 	}
 	private void decideFood() {
 		print("Action decideFood - Deciding to eat in or out.");
+		personGui.DoDecideEat();
+		actionComplete.acquireUninterruptibly();
 		Random rng = new Random();
 		desiredFood = rng.nextInt();
 		desiredFood = desiredFood % 4;
@@ -588,8 +590,6 @@ public class PersonAgent extends Agent implements Person {
 	public void setAccountNumber(int accountNumber) {
 		this.accountNumber = accountNumber;
 	}
-
-	@Override
 	public String getTransportationMethod() {
 		return transMethod.toString();
 	}
