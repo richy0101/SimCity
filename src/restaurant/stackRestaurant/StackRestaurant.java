@@ -15,7 +15,10 @@ public class StackRestaurant extends Restaurant {
 	private String name;
 	StackHostAgent host;
 	StackCashierAgent cashier;
+	double till = 10000;
 	
+	
+
 	public StackRestaurant(String name) {
 		super();
 		this.name = name;
@@ -31,13 +34,19 @@ public class StackRestaurant extends Restaurant {
 	
 	@Override
 	public StackHostAgent getHost() {
-		// TODO Auto-generated method stub
 		return host;
 	}
 	
 	public StackCashierAgent getCashier() {
-		// TODO Auto-generated method stub
 		return cashier;
+	}
+	
+	public double getTill() {
+		return till;
+	}
+
+	public void setTill(double till) {
+		this.till = till;
 	}
 
 }
