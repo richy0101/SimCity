@@ -23,9 +23,9 @@ public class PersonGui implements Gui {
 	BufferedImage personUp;
 	BufferedImage personDown;
 	
-	boolean isPresent;
+	boolean isPresent = true;
 	
-	public enum CurrentAction {Cooking, Eating, Transition, Idle, Deciding};
+	public enum CurrentAction {Cooking, Eating, Transition, Idle, Deciding, Leaving};
 	CurrentAction currentAction = CurrentAction.Idle;
 	public PersonGui(PersonAgent agent) {
 		xBed = 5;
@@ -37,7 +37,7 @@ public class PersonGui implements Gui {
 		xTable = 425;
 		yTable = 250;
 		xDoor = 380;
-		yDoor = 105;
+		yDoor = 160;
 		xPos = xBed;
 		yPos = yBed;
 		xDestination = xBed;
@@ -80,6 +80,10 @@ public class PersonGui implements Gui {
 			agent.msgActionComplete();
 		}
 		if(xPos == xFridge && yPos == yFridge && currentAction == CurrentAction.Deciding) {
+			currentAction = CurrentAction.Transition;
+			agent.msgActionComplete();
+		}
+		if(xPos == xDoor && yPos == yDoor && currentAction == CurrentAction.Leaving) {
 			currentAction = CurrentAction.Transition;
 			agent.msgActionComplete();
 		}
@@ -141,6 +145,7 @@ public class PersonGui implements Gui {
 		yDestination = yBed;
 	}
 	public void DoLeaveHouse() {
+		currentAction = CurrentAction.Leaving;
 		xDestination = xDoor;
 		yDestination = yDoor;
 	}
