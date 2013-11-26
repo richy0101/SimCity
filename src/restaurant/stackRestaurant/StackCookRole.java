@@ -6,11 +6,12 @@ import gui.Building;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import market.interfaces.Market;
 import city.helpers.Directory;
 import restaurant.stackRestaurant.helpers.Menu;
+import restaurant.stackRestaurant.interfaces.Cashier;
 import restaurant.stackRestaurant.interfaces.Cook;
 import restaurant.stackRestaurant.interfaces.Host;
-import restaurant.stackRestaurant.interfaces.Market;
 import restaurant.stackRestaurant.interfaces.Waiter;
 import restaurant.stackRestaurant.gui.CookGui;
 
@@ -23,6 +24,8 @@ public class StackCookRole extends Role implements Cook {
 	String myLocation;
 	Timer timer = new Timer();
 	Host host;
+	Market market1;
+	Cashier cashier;
 	
 	private Semaphore doneAnimation = new Semaphore(0,true);
 	private enum AgentState 
@@ -50,6 +53,10 @@ public class StackCookRole extends Role implements Cook {
 		state = AgentState.Arrived;
 		
 		host = (Host) Directory.sharedInstance().getAgents().get("StackRestaurantHost");
+		cashier = (Cashier) Directory.sharedInstance().getRestaurants().get(0).getCashier();
+		market1 = (Market) Directory.sharedInstance().marketDirectory.get("Market1").getWorker();
+		markets.add(new MyMarket(market1));
+		
 		
 		myLocation = location;
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
@@ -178,11 +185,13 @@ public class StackCookRole extends Role implements Cook {
 	
 	private void orderIt(String choice) {
 		for(MyMarket market : markets) {
-			if(market.foodStock.get(choice)) {
-				print("finding food from market: " + market.market);
-				market.market.msgOrderFood(this, choice);
-				foods.get(choice).state = FoodState.Ordered;
-				return;
+			if(market.market != null) {
+				if(market.foodStock.get(choice)) {
+					print("finding food from market: " + market.market);
+					market.market.msgOrderFood(this, cashier, choice);
+					foods.get(choice).state = FoodState.Ordered;
+					return;
+				}
 			}
 		}
 		foods.get(choice).state = FoodState.PermanentlyEmpty;
