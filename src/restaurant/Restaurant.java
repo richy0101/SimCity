@@ -1,9 +1,12 @@
 package restaurant;
 
+import restaurant.stackRestaurant.ProducerConsumerMonitor;
+
 public class Restaurant {
 
+	private ProducerConsumerMonitor monitor;
 	public Restaurant() {
-		
+		monitor = new ProducerConsumerMonitor();
 	}
 	
 	public Object getHost() {
@@ -16,6 +19,10 @@ public class Restaurant {
 	
 	public String getName() {
 		return "";
+	}
+	
+	public ProducerConsumerMonitor getMonitor() {
+		return monitor;
 	}
 
 }

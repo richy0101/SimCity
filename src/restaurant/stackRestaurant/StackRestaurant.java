@@ -17,12 +17,12 @@ public class StackRestaurant extends Restaurant {
 	StackCashierAgent cashier;
 	
 	public StackRestaurant(String name) {
+		super();
 		this.name = name;
 		host = new StackHostAgent();
 		cashier = new StackCashierAgent();
 		host.startThread();
-		cashier.startThread();
-		
+		cashier.startThread();	
 	}
 	
 	public String getName() {
