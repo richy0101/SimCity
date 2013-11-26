@@ -159,16 +159,20 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
         
         g2.drawImage(cityImage, 0, 0, null);
         
-        for(Gui gui : guis) {
-            if (gui.isPresent()) {
-                gui.updatePosition();
-            }
+        synchronized(guis) {
+	        for(Gui gui : guis) {
+	            if (gui.isPresent()) {
+	                gui.updatePosition();
+	            }
+	        }
         }
 
-        for(Gui gui : guis) {
-            if (gui.isPresent()) {
-                gui.draw(g2);
-            }
+        synchronized(guis) {
+	        for(Gui gui : guis) {
+	            if (gui.isPresent()) {
+	                gui.draw(g2);
+	            }
+	        }
         }
         
         //moveComponents();
