@@ -385,7 +385,7 @@ public class PersonAgent extends Agent implements Person {
 			return true;
 		}
 		if (getPersonState() == PersonState.WantFood) {
-			//print("STUB IN PERSONAGENT SCHEDULER: WANTFOOD");
+			print("STUB IN PERSONAGENT SCHEDULER: WANTFOOD");
 			decideFood();
 			return true;
 		}
@@ -439,15 +439,10 @@ public class PersonAgent extends Agent implements Person {
 		else if(getPersonState() == PersonState.Idle){
 			setPersonState(PersonState.Sleeping);
 			personGui.DoSleep();
-			actionComplete.acquireUninterruptibly();
 			return false;
 		}
 		else {
-			print("Eval says ELSE!");
-			setPersonState(PersonState.Sleeping);
-			personGui.DoSleep();
-			actionComplete.acquireUninterruptibly();
-			return false;
+			return true;
 		}
 	}
 	private void enterHome() {

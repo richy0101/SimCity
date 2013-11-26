@@ -87,10 +87,10 @@ public class PersonGui implements Gui {
 			currentAction = CurrentAction.Transition;
 			agent.msgActionComplete();
 		}
-		if(xPos == xBed && yPos == yBed && currentAction == CurrentAction.Sleeping) {
-			currentAction = CurrentAction.Transition;
-			agent.msgActionComplete();
-		}
+//		if(xPos == xBed && yPos == yBed && currentAction == CurrentAction.Sleeping) {
+//			currentAction = CurrentAction.Transition;
+//			agent.msgActionComplete();
+//		}
 	}
 
 	@Override
