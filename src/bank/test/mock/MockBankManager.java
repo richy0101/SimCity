@@ -13,7 +13,7 @@ public class MockBankManager extends Mock implements BankManager {
 
 	public MarketCustomer customer;
 	public EventLog log;
-	public Map<String, Integer> groceries;
+	public Object tellers;
 
 	public MockBankManager(String name) {
 		super(name);
@@ -52,6 +52,12 @@ public class MockBankManager extends Mock implements BankManager {
 	@Override
 	public void msgHereForWork(BankTeller teller) {
 		log.add(new LoggedEvent("Teller is here for work"));
+		
+	}
+
+	@Override
+	public void msgTellerLeavingWork(BankTeller teller) {
+		// TODO Auto-generated method stub
 		
 	}
 }

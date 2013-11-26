@@ -37,6 +37,8 @@ public class BankTest extends TestCase {
 	//Deposit w/ Account
 	public void testOneBankInteraction(){
 		//teller size should be empty
+		assertEquals("Bank should have empty tellers. Instead, the Market's event log reads: "
+				+ market.log.toString(), 1, market.log.size());
 		//teller initial state Arrived At Work
 		//teller state = AtManager 
 		//manager messages msgGoToRegister
