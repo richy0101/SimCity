@@ -103,10 +103,10 @@ public class BankCustomerGui implements Gui {
 			g.drawImage(customerLeft,  xPos, yPos, null);
 		}
 		else if (yPos < yDestination) {
-			g.drawImage(customerUp, xPos, yPos, null);
+			g.drawImage(customerDown, xPos, yPos, null);
 		}
 		else if (yPos > yDestination) {
-			g.drawImage(customerDown, xPos, yPos, null);
+			g.drawImage(customerUp, xPos, yPos, null);
 		}
 		else {
 			g.drawImage(customerDown, xPos, yPos, null);

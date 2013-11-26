@@ -106,10 +106,10 @@ public class BankTellerGui implements Gui {
 			g.drawImage(personLeft,  xPos, yPos, null);
 		}
 		else if (yPos < yDestination) {
-			g.drawImage(personUp, xPos, yPos, null);
+			g.drawImage(personDown, xPos, yPos, null);
 		}
 		else if (yPos > yDestination) {
-			g.drawImage(personDown, xPos, yPos, null);
+			g.drawImage(personUp, xPos, yPos, null);
 		}
 		else {
 			g.drawImage(personDown, xPos, yPos, null);
