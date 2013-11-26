@@ -44,6 +44,7 @@ public class StackCookRole extends Role implements Cook {
 		foods.put("Salad", new Food(70));
 		foods.put("Pizza", new Food(120));
 		cookGui = new CookGui(this);
+		state = AgentState.Arrived;
 		
 		host = (Host) Directory.sharedInstance().getAgents().get("StackRestaurantHost");
 		
