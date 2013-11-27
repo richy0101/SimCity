@@ -68,6 +68,15 @@ Ryan Sheh's Contribution
  * Implemented Directory Class for References (w/ help from Alex)
  * Unit Testing Bank Roles (w/ Richard)
  * Helped Implement Bus Agent & GUI (w/ Ben Tan)
+ 
+ Ben Tan's Contribution
+ * Design of Car Agent & interaction with Transportation Role
+ * Design and implementation of Bus Agent & GUI (w/ Ryan Sheh)
+ * Unit testing for Bus Agent scenarios
+ * Helped update Directory & Bus Helpers classes and supporting files (w/ Ryan Sheh & Alex Huang)
+ * Helped hook up Transportation Role with Bus Agent (w/ Alex Huang)
+ * Missing functionality: Cars in the city
+
 
 Alex Huang's Contribution:
  * Designed and implemented Person Agent and PersonGUI
