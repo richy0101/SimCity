@@ -46,7 +46,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     	
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
-        setBackground(Color.green);
+        setBackground(Color.LIGHT_GRAY);
         
     	Timer timer = new Timer(DELAY, this);
     	timer.start();
