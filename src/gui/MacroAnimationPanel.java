@@ -160,10 +160,10 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
 	        }
         }
         
-        if(Clock.sharedInstance().getTime() < 10000) 
-        	g2.drawImage(cityImage, 0, 0, null);
-        else 
-        	g2.drawImage(cityImageNight, 0, 0, null);
+//        if(Clock.sharedInstance().getTime() < 10000) 
+       	g2.drawImage(cityImage, 0, 0, null);
+//        else 
+//        	g2.drawImage(cityImageNight, 0, 0, null);
         
         synchronized(guis) {
 	        for(Gui gui : guis) {
@@ -184,10 +184,10 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
         //moveComponents();
         //drawComponents(g);
         
-        if(Clock.sharedInstance().getTime() < 10000) 
+        //if(Clock.sharedInstance().getTime() < 10000) 
         	g2.drawImage(cityImageTop, 0, 0, null);
-        else 
-        	g2.drawImage(cityImageNightTop, 0, 0, null);
+        //else 
+        	//g2.drawImage(cityImageNightTop, 0, 0, null);
            
     }
     
