@@ -3,13 +3,19 @@ team02
 
 SimCity201 Project Repository for CS 201 students
 
+How TO play:
+ *Run Program
+ *Observe hardcoded persons who have a preset beginning scenario
+ *Use Create a Person to create people to interact with the city.
+ *Read below for limitations and known bugs.
+
 Running Normative Scenario
- * Create a person works. 
+ * Create a person works. Select None for occupation to create an unemployed person to see how he interacts
  * Can only instantiate people who take the bus as their transportation method. 
  * Initial funds sets their starting money. 
  * Aggressiveness sets their personality for how long they work and sleep.
  * When selecting occupation, market 2 seller does not work. 
- * Market Role is hardcoded. Do not assign person as Market Role job. 
+ * Market Role1 and 2 have already set up person as its job. Do not reassign them in Create a person.
  * Only one restaurant.
  * Multiple people live in homes.
  * All guis for restaurants (other than functional Ryan Stack's designated restaurant) is using market GUI.
@@ -17,7 +23,7 @@ Running Normative Scenario
  * (Ex. Busses sometimes stop stopping after running a long time on Mac computers)
 
 Missing functionality in V1
- * We do not have two markets.
+ * Only one market running.
  * No intersections.
  * No cars.
  * No collision detection.
@@ -62,3 +68,13 @@ Ryan Sheh's Contribution
  * Implemented Directory Class for References (w/ help from Alex)
  * Unit Testing Bank Roles (w/ Richard)
  * Helped Implement Bus Agent & GUI (w/ Ben Tan)
+Alex Huang's Contribution
+ *Designed and implemented Person Agent and PersonGUI
+ *Integrated all roles and gui animations with Person Agent(contributions from respective implementers).
+ *Debugged all Bank roles and fixed interactions within it as they were broken initially during integration.
+ *Fixed Bank Role GUI's for interactions (with help from Stack, Sheh, Phillips).
+ *Implemented Directory class and its data(contribution from whole team)
+ *Polish superNorm test with help from Reid and Sheh
+ *Implemented Transportation Role and TransportationRoleGUI
+ *Missing Complete Unit Tests for PersonAgent and PersonGUI because of sharedInstance issues in Directory. Pushing back this req for V2 delivery. 
+
