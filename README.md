@@ -37,6 +37,12 @@ Ryan Stack's Contribution:
  * Created initial global clock and role class (iterations followed from other team members)
  * Missing functionality for V2: depositing excess money in bank
 
+Richard Phillip's Contribution:
+ * Implementation for bank roles
+ * Implementation for bank GUI
+ * Extensive unit testing for bank norm and some non norm scenarios
+ * Missing functionality for V2: no robber interaction, no database (EC)
+
 Reid Nakamura's Contribution:
  * Implemented Market Roles
  * Implemented Market GUI
