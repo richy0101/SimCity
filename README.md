@@ -13,6 +13,8 @@ Running Normative Scenario
  * Only one restaurant.
  * Multiple people live in homes.
  * All guis for restaurants (other than functional Ryan Stack's designated restaurant) is using market GUI.
+ * Potential inconsistencies w/ different computers 
+ * (Ex. Busses sometimes stop stopping after running a long time on Mac computers)
 
 Missing functionality in V1
  * We do not have two markets.
