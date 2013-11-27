@@ -31,6 +31,21 @@ public class BankTellerRole extends Role implements BankTeller {
 	    	this.customer = customer;
 	    	this.custState = state;
 	    }
+	    public String getState(){
+	    	return custState.toString();
+	    }
+	    public void setAccount(int i){
+	    	accountNumber = i;
+	    }
+	    public int getAccount(){
+	    	return accountNumber;
+	    }
+	    public double getMoneyToWithdraw(){
+	    	return moneyToWithdraw;
+	    }
+	    public double getMoneyToDeposit(){
+	    	return moneyToDeposit;
+	    }
     }
 	
 	private static final int MAXLOAN = 1000;
@@ -39,8 +54,8 @@ public class BankTellerRole extends Role implements BankTeller {
     public BankManager manager;
     public BankTellerGui tellerGui;
     public Person person;
-    private enum TellerState {ArrivedAtWork, AtManager, GoingToRegister, ReadyForCustomers, DoneWorking, GettingPaycheck, ReceivedPaycheck, Gone, ToldManager};
-    private TellerState state;
+    public enum TellerState {ArrivedAtWork, AtManager, GoingToRegister, ReadyForCustomers, DoneWorking, GettingPaycheck, ReceivedPaycheck, Gone, ToldManager};
+    public TellerState state;
     
     private enum CustomerState {NeedingAssistance, 
     	AskedAssistance, OpeningAccount, OpenedAccount, 
@@ -67,7 +82,7 @@ public class BankTellerRole extends Role implements BankTeller {
     
     //Constructor for unit test
     public BankTellerRole(){
-    	state = TellerState.ArrivedAtWork;
+    	state = TellerState.ReadyForCustomers;
     	tellerGui = new BankTellerGui(this);
     }
     
@@ -292,6 +307,7 @@ public class BankTellerRole extends Role implements BankTeller {
 		print("Withdrawing money from your account");	
 		AccountSystem.sharedInstance().getAccounts().get(myCustomer.accountNumber).withdrawMoney(myCustomer.moneyToWithdraw);
 		myCustomer.customer.msgHereAreFunds(myCustomer.moneyToWithdraw);
+		myCustomer.moneyToWithdraw = 0;
 		myCustomer.custState = CustomerState.Leaving;
 	}
 	
