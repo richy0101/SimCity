@@ -31,29 +31,5 @@ public class MockRole extends Mock implements RoleInterface {
 		
 	}
 
-	@Override
-	public void msgGotHungry() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setHost(Agent agent) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setCashier(Agent agent) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setMarket(MarketRole worker) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	
 }
