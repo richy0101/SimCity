@@ -40,7 +40,8 @@ Ryan Stack's Contribution:
 Richard Phillip's Contribution:
  * Implementation for bank roles
  * Implementation for bank GUI
- * Extensive unit testing for bank norm and some non norm scenarios
+ * Unit testing for bank roles for norm/some non-norm scenarios
+ * Unit testing for bank GUI for norm/some non-norm scenarios
  * Missing functionality for V2: no robber interaction, no database (EC)
 
 Reid Nakamura's Contribution:

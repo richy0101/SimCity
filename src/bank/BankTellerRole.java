@@ -5,6 +5,7 @@ import gui.Building;
 import java.util.ArrayList;
 
 import city.helpers.Directory;
+import city.interfaces.Person;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,6 +38,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	private int registerNumber = 0;
     private BankManager manager;
     private BankTellerGui tellerGui;
+    public Person person;
     private enum TellerState {ArrivedAtWork, AtManager, GoingToRegister, ReadyForCustomers, DoneWorking, GettingPaycheck, ReceivedPaycheck, Gone, ToldManager};
     private TellerState state;
     
@@ -134,16 +136,18 @@ public class BankTellerRole extends Role implements BankTeller {
 		
 	}
 	
+	public void msgDoneWorking() {
+		state = TellerState.DoneWorking;
+		stateChanged();
+	}
+	
 	public void msgHereIsPaycheck(double paycheck){
 		getPersonAgent().setFunds(getPersonAgent().getFunds() + paycheck);
 		state = TellerState.ReceivedPaycheck;
 		stateChanged();
 	}
 	
-	public void msgDoneWorking() {
-		state = TellerState.DoneWorking;
-		stateChanged();
-	}
+	
     //scheduler---------------------------------------------------------------------------
 	public boolean pickAndExecuteAnAction(){
 		//System.out.println("In teller scheduler");
@@ -300,6 +304,7 @@ public class BankTellerRole extends Role implements BankTeller {
 		myCustomer.customer.msgLoanDenied();
 		myCustomer.custState = CustomerState.Leaving;
 	}
+	
 	private void GetPayCheck(){
 		tellerGui.DoGoToManager();
 		manager.msgCollectPay(this);
@@ -335,12 +340,19 @@ public class BankTellerRole extends Role implements BankTeller {
 	
 	//Getters for unit testing--------------------------------------------------------------
 	/**
-	 * @return the customers
+	 * @return a customer
 	 */
 	public MyCustomer getCustomer(int customerInstance) {
 		return customers.get(customerInstance);
 	}
 
+	/**
+	 * @return the customers
+	 */
+	public List<MyCustomer> getCustomers() {
+		return customers;
+	}
+	
 	/**
 	 * @return the registerNumber
 	 */

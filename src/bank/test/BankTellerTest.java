@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import bank.Bank;
+import bank.BankCustomerRole;
 import bank.BankTellerRole;
 import bank.interfaces.BankTeller;
 import bank.test.mock.MockBankCustomer;
@@ -19,6 +20,7 @@ public class BankTellerTest extends TestCase {
 	//these are instantiated for each test separately via the setUp() method.
 	MockBankCustomer customer;
 	MockBankManager manager;
+	MockPerson person;
 	
 	BankTellerRole teller;
 	
@@ -30,7 +32,7 @@ public class BankTellerTest extends TestCase {
 		super.setUp();
 		manager = new MockBankManager("mockbankmanager");		
 		customer = new MockBankCustomer("mockcustomer",300,0);
-		
+		person = new MockPerson("mockperson");
 		teller = new BankTellerRole("bankteller");
 	}	
 	
@@ -61,8 +63,18 @@ public class BankTellerTest extends TestCase {
 	
 	//Deposit w/ Account
 	public void testOneBankInteraction(){	
+		teller.setPerson(person);
+		teller.getPersonAgent().setFunds(400.0);
 		
-		customer.teller = teller; 
+		//precondition
+		assertEquals("Teller state should be DoingNothing.", teller.getState(), "DoingNothing");
+		assertEquals("Teller's person funds should be 400.0.", teller.getPersonAgent().getFunds(), 400.0);
+		
+		teller.msgDoneWorking();
+		
+		assertEquals("Teller state should be DoneWorking.", teller.getState(), "DoneWorking");
+		
+		teller.pickAndExecuteAnAction();
 		
 			//empty customers
 			assertEquals("Teller should have 0 customers in it. It doesn't.", teller.getCustomers().size(), 0);
