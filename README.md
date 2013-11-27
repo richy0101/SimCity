@@ -3,11 +3,11 @@ team02
 
 SimCity201 Project Repository for CS 201 students
 
-How TO play:
- *Run Program
- *Observe hardcoded persons who have a preset beginning scenario
- *Use Create a Person to create people to interact with the city.
- *Read below for limitations and known bugs.
+How TO play/Grade(?):
+ * Run Program
+ * Observe hardcoded persons who have a preset beginning scenario
+ * Use Create a Person to create people to interact with the city.
+ * Read below for limitations and known bugs.
 
 Running Normative Scenario
  * Create a person works. Select None for occupation to create an unemployed person to see how he interacts
