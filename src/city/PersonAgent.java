@@ -42,6 +42,7 @@ public class PersonAgent extends Agent implements Person {
 	WorkDetails workDetails;
 	//LandLordRole landLord;
 	double funds;
+	public boolean unemployed = false;
 	public boolean hasWorked;
 	boolean rentDue;
 	public String name;
@@ -122,6 +123,10 @@ public class PersonAgent extends Agent implements Person {
 				this.newRole = new BankTellerRole("Bank");
 				return newRole;
 			}
+			else if (order == "Unemployed") {
+				this.newRole = new UnemployedRole();
+				return newRole;
+			}
 			newRole.setPerson(p);
 			//print("Set role complete.");
 			return newRole;
@@ -151,7 +156,13 @@ public class PersonAgent extends Agent implements Person {
 	private List<Food> inventory = Collections.synchronizedList(new ArrayList<Food>());
 	public PersonAgent(RoleInterface job, String job_location, String home, String name) {
 		this.name = name;
-		workDetails = new WorkDetails(job, job_location);
+		if (job.getClass().getName().contains("employ")) {
+			print("I am unemployed!");
+			this.unemployed = true;
+		}
+		else {
+			workDetails = new WorkDetails(job, job_location);
+		}
 		homeName = home;
 		currentLocation = home;
 		houseState = HouseState.OwnsAHouse;
@@ -211,7 +222,13 @@ public class PersonAgent extends Agent implements Person {
 		this.homeName = houseName;
 		this.name = name;
 		//Set Up Work.
-		workDetails = new WorkDetails(job, job_location);
+		if (job.getClass().getName().contains("employ")) {
+			print("I am unemployed!");
+			this.unemployed = true;
+		}
+		else {
+			workDetails = new WorkDetails(job, job_location);
+		}
 		this.aggressivenessLevel = aggressivenessLevel;
 		this.transMethod = TransportationMethod.TakesTheBus;
 		this.funds = 1000;
@@ -246,10 +263,16 @@ public class PersonAgent extends Agent implements Person {
 			String vehicleStatus) {
 		this.name = name;
 		//Set Up Work.
-		Role r = factory.createRole(job, this);
-		//print("Role created from front end: " + r.getClass().getName());
-		workDetails = new WorkDetails(r, Directory.sharedInstance().roleDirectory.get(r.getClass().getName()));
-		//finish setting up Work
+		if (job.contains("employ")) {
+			print("I am unemployed!");
+			this.unemployed = true;
+		}
+		else {
+			Role r = factory.createRole(job, this);
+			//print("Role created from front end: " + r.getClass().getName());
+			workDetails = new WorkDetails(r, Directory.sharedInstance().roleDirectory.get(r.getClass().getName()));
+			//finish setting up Work
+		}
 		this.aggressivenessLevel = aggressivenessLevel;
 		this.funds = initialFunds;
 		String vehicleStatusNoSpace = vehicleStatus.replaceAll(" ", "");
@@ -297,7 +320,13 @@ public class PersonAgent extends Agent implements Person {
 			String vehicleStatus) {
 		
 		this.name = name;
-		workDetails = new WorkDetails(job, Directory.sharedInstance().roleDirectory.get(job.toString()));
+		if (job.getClass().getName().contains("employ")) {
+			print("I am unemployed!");
+			this.unemployed = true;
+		}
+		else {
+			workDetails = new WorkDetails(job, Directory.sharedInstance().roleDirectory.get(job.getClass().getName()));
+		}
 		this.aggressivenessLevel = aggressivenessLevel;
 		this.funds = startingFunds;
 		String vehicleStatusNoSpace = vehicleStatus.replaceAll(" ", "");
@@ -374,8 +403,10 @@ public class PersonAgent extends Agent implements Person {
 		stateChanged();
 	}
 	public void msgGoWork() {
-		print("msgGoWork received - Setting state to NeedsToWork.");
-		setPersonState(PersonState.NeedsToWork);
+		if(unemployed == false) {
+			print("msgGoWork received - Setting state to NeedsToWork.");
+			setPersonState(PersonState.NeedsToWork);
+		}
 		stateChanged();
 	}
 	public void msgDoneWorking() {
@@ -515,7 +546,7 @@ public class PersonAgent extends Agent implements Person {
 		if (getPersonState().toString().contains("ing") || getPersonState().toString().contains("OutTo") || getPersonState().toString().contains("NeedsTo")){
 			return false;
 		}
-		else if (hasWorked == false) {
+		else if (hasWorked == false && unemployed == false) {
 			print("Eval says go WORK");
 			setPersonState(PersonState.NeedsToWork);
 			return true;
@@ -669,7 +700,7 @@ public class PersonAgent extends Agent implements Person {
 				p.msgDoneWorking();
 			}
 		},
-		50000);//time for working
+		30000 * aggressivenessLevel);//time for working
 	}
 	private void cleanRoom() {
 
