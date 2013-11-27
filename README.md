@@ -15,3 +15,9 @@ Ryan Stack's Contribution:
  * Created initial setup for project with interfaces and stubs from all designs
  * Created initial global clock and role class (iterations followed from other team members)
  * Missing functionality for V2: depositing excess money in bank
+
+Richard Phillip's Contribution:
+ * Headed implementation for bank roles
+ * Implementation for bank gui
+ * Extensive unit testing for bank norm and some non norm scenarios
+ * Missing functionality for V2: no robber interaction, no database (EC)
