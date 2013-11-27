@@ -75,6 +75,15 @@ public class WaiterGui implements Gui {
         	agent.msgAtCook();
         	DoGoHome();	
         }
+        if (xPos == xCashier && yPos == yCashier
+        		&& (xDestination == xCashier && yDestination == yCashier)) {
+        	agent.msgAtCashier();
+        	DoGoHome();	
+        }
+        if(xPos == xExit && yPos == yExit
+        		&& (xDestination == xExit && yDestination == yExit)) {
+        	agent.msgAnimationFinishedLeavingRestaurant();
+        }
     }
 
     public void updateGui(String choice) {
