@@ -10,6 +10,8 @@ import market.interfaces.MarketCustomer;
 public class MockMarket extends Mock implements Market {
 
 	public MarketCustomer customer;
+	public Cook cook;
+	public Cashier cashier;
 	public EventLog log;
 	public Map<String, Integer> groceries;
 	public double money;
@@ -38,13 +40,14 @@ public class MockMarket extends Mock implements Market {
 
 	@Override
 	public void msgOrderFood(Cook cook, Cashier cashier, String choice) {
-		log.add(new LoggedEvent("Received msgOrderFood from cook"));
-		
+		log.add(new LoggedEvent("Received msgOrderFood from cook. Ordered: " + choice));
+		this.cook = cook;
+		this.cashier = cashier;
 	}
 
 	@Override
 	public void msgPayForOrder(Cashier cashier, double funds) {
-		log.add(new LoggedEvent("Received msgPayForOrder from cook"));
-		
+		log.add(new LoggedEvent("Received msgPayForOrder from cook. Money = $" + funds));
+		this.money = funds;		
 	}
 }

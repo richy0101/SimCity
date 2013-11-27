@@ -5,6 +5,7 @@ import gui.Building;
 import java.util.ArrayList;
 
 import city.helpers.Directory;
+import city.interfaces.Person;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,15 +31,31 @@ public class BankTellerRole extends Role implements BankTeller {
 	    	this.customer = customer;
 	    	this.custState = state;
 	    }
+	    public String getState(){
+	    	return custState.toString();
+	    }
+	    public void setAccount(int i){
+	    	accountNumber = i;
+	    }
+	    public int getAccount(){
+	    	return accountNumber;
+	    }
+	    public double getMoneyToWithdraw(){
+	    	return moneyToWithdraw;
+	    }
+	    public double getMoneyToDeposit(){
+	    	return moneyToDeposit;
+	    }
     }
 	
 	private static final int MAXLOAN = 1000;
 	private Semaphore doneAnimation = new Semaphore(0,true);
 	private int registerNumber = 0;
-    private BankManager manager;
-    private BankTellerGui tellerGui;
-    private enum TellerState {ArrivedAtWork, AtManager, GoingToRegister, ReadyForCustomers, DoneWorking, GettingPaycheck, ReceivedPaycheck, Gone, ToldManager};
-    private TellerState state;
+    public BankManager manager;
+    public BankTellerGui tellerGui;
+    public Person person;
+    public enum TellerState {ArrivedAtWork, AtManager, GoingToRegister, ReadyForCustomers, DoneWorking, GettingPaycheck, ReceivedPaycheck, Gone, ToldManager};
+    public TellerState state;
     
     private enum CustomerState {NeedingAssistance, 
     	AskedAssistance, OpeningAccount, OpenedAccount, 
@@ -61,6 +78,12 @@ public class BankTellerRole extends Role implements BankTeller {
 				b.addGui(tellerGui);
 			}
 		}
+    }
+    
+    //Constructor for unit test
+    public BankTellerRole(){
+    	state = TellerState.ReadyForCustomers;
+    	tellerGui = new BankTellerGui(this);
     }
     
     public void setGui(BankTellerGui tellerGui){
@@ -134,16 +157,18 @@ public class BankTellerRole extends Role implements BankTeller {
 		
 	}
 	
+	public void msgDoneWorking() {
+		state = TellerState.DoneWorking;
+		stateChanged();
+	}
+	
 	public void msgHereIsPaycheck(double paycheck){
 		getPersonAgent().setFunds(getPersonAgent().getFunds() + paycheck);
 		state = TellerState.ReceivedPaycheck;
 		stateChanged();
 	}
 	
-	public void msgDoneWorking() {
-		state = TellerState.DoneWorking;
-		stateChanged();
-	}
+	
     //scheduler---------------------------------------------------------------------------
 	public boolean pickAndExecuteAnAction(){
 		//System.out.println("In teller scheduler");
@@ -282,6 +307,7 @@ public class BankTellerRole extends Role implements BankTeller {
 		print("Withdrawing money from your account");	
 		AccountSystem.sharedInstance().getAccounts().get(myCustomer.accountNumber).withdrawMoney(myCustomer.moneyToWithdraw);
 		myCustomer.customer.msgHereAreFunds(myCustomer.moneyToWithdraw);
+		myCustomer.moneyToWithdraw = 0;
 		myCustomer.custState = CustomerState.Leaving;
 	}
 	
@@ -291,34 +317,38 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	
 	private void GiveLoan(MyCustomer myCustomer) {
+		print("Giving loan");
 		AccountSystem.sharedInstance().getAccounts().get(myCustomer.accountNumber).loanAccepted(MAXLOAN);
 		myCustomer.customer.msgHereAreFunds(MAXLOAN);
 		myCustomer.custState = CustomerState.Leaving;
 	}
 	
 	private void RejectLoan(MyCustomer myCustomer) {
+		print("Rejecting loan");
 		myCustomer.customer.msgLoanDenied();
 		myCustomer.custState = CustomerState.Leaving;
 	}
+	
 	private void GetPayCheck(){
+		print("Receiving paycheck");
 		tellerGui.DoGoToManager();
 		manager.msgCollectPay(this);
-		try {
-			doneAnimation.acquire();
+		/*	doneAnimation.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}
+		}*/
 		state = TellerState.GettingPaycheck;
 	}
 	
 	private void LeaveBank() {
+		print("Leaving Bank");
 		tellerGui.DoLeaveBank();
 		manager.msgTellerLeavingWork(this);
-		try {
+		/*try {
 			doneAnimation.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}
+		}*/
 		state = TellerState.Gone;
 		getPersonAgent().msgRoleFinished();
 	}
@@ -335,12 +365,19 @@ public class BankTellerRole extends Role implements BankTeller {
 	
 	//Getters for unit testing--------------------------------------------------------------
 	/**
-	 * @return the customers
+	 * @return a customer
 	 */
 	public MyCustomer getCustomer(int customerInstance) {
 		return customers.get(customerInstance);
 	}
 
+	/**
+	 * @return the customers
+	 */
+	public List<MyCustomer> getCustomers() {
+		return customers;
+	}
+	
 	/**
 	 * @return the registerNumber
 	 */
@@ -354,5 +391,13 @@ public class BankTellerRole extends Role implements BankTeller {
 	public String getState() {
 		return state.toString();
 	}
+	
+	/**
+	 * @param ManagerAgent
+	 */
+	public void setManager(BankManagerAgent agent){
+		manager = agent;
+	}
+	 
 
 }

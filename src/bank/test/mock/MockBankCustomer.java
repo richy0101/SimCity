@@ -18,6 +18,7 @@ public class MockBankCustomer extends Mock implements BankCustomer {
 	public double moneyRequired;
 	public double moneyToDeposit;
 	public MockBankTeller teller;
+	public int accountNum;
 
 	public MockBankCustomer (String name,double moneyToDeposit,double moneyRequired) {
 		super(name);

@@ -62,11 +62,13 @@ public class StackHostAgent extends Agent implements Host {
 
 	public void msgIWantFood(Customer cust) {
 		boolean doesContainCustomer = false;
-		for(MyCustomer mCustomer : customers) {
-			if(mCustomer.customer.equals(cust)) {
-				mCustomer.state = CustomerState.WaitingInRestaurant;
-				doesContainCustomer = true;
-				break;
+		synchronized(customers) {
+			for(MyCustomer mCustomer : customers) {
+				if(mCustomer.customer.equals(cust)) {
+					mCustomer.state = CustomerState.WaitingInRestaurant;
+					doesContainCustomer = true;
+					break;
+				}
 			}
 		}
 		if(!doesContainCustomer) {
@@ -76,55 +78,67 @@ public class StackHostAgent extends Agent implements Host {
 	}
 	
 	public void msgWaiterFree(Waiter waiter) {
-		for(MyWaiter mWaiter : waiters) {
-			if(mWaiter.waiter.equals(waiter)) {
-				mWaiter.state = WaiterState.Idle;
-				stateChanged();
+		synchronized(waiters) {
+			for(MyWaiter mWaiter : waiters) {
+				if(mWaiter.waiter.equals(waiter)) {
+					mWaiter.state = WaiterState.Idle;
+					stateChanged();
+				}
 			}
 		}
 	}
 	
 	public void msgWaiterBusy(Waiter waiter) {
-		for(MyWaiter mWaiter : waiters) {
-			if(mWaiter.waiter.equals(waiter)) {
-				mWaiter.state = WaiterState.Busy;
-				stateChanged();
+		synchronized(waiters) {
+	 		for(MyWaiter mWaiter : waiters) {
+				if(mWaiter.waiter.equals(waiter)) {
+					mWaiter.state = WaiterState.Busy;
+					stateChanged();
+				}
 			}
 		}
 	}
 	
 	public void msgWaiterWantsToGoOnBreak(Waiter waiter) {
-		for(MyWaiter mWaiter : waiters) {
-			if(mWaiter.waiter.equals(waiter)) {
-				mWaiter.askingForBreak = true;
-				stateChanged();
+		synchronized(waiters) {
+			for(MyWaiter mWaiter : waiters) {
+				if(mWaiter.waiter.equals(waiter)) {
+					mWaiter.askingForBreak = true;
+					stateChanged();
+				}
 			}
 		}
 	}
 	
 	public void msgWaiterComingOffBreak(Waiter waiter) {
-		for(MyWaiter mWaiter : waiters) {
-			if(mWaiter.waiter.equals(waiter)) {
-				mWaiter.onBreak = false;
-				stateChanged();
+		synchronized(waiters) {
+			for(MyWaiter mWaiter : waiters) {
+				if(mWaiter.waiter.equals(waiter)) {
+					mWaiter.onBreak = false;
+					stateChanged();
+				}
 			}
 		}
 	}
 	
 	public void msgLeavingTable(Customer cust) {
-		for (Table table : tables) {
-			if (table.getOccupant() == cust) {
-				print(cust + " leaving " + table);
-				table.setUnoccupied();
-				stateChanged();
+		synchronized(tables) {
+			for (Table table : tables) {
+				if (table.getOccupant() == cust) {
+					print(cust + " leaving " + table);
+					table.setUnoccupied();
+					stateChanged();
+				}
 			}
 		}
 	}
 	
 	public void msgNotWaiting(Customer cust) {
-		for(MyCustomer customer : customers) {
-			if(customer.customer.equals(cust)) {
-				customer.state = CustomerState.Done;
+		synchronized(customers) {
+			for(MyCustomer customer : customers) {
+				if(customer.customer.equals(cust)) {
+					customer.state = CustomerState.Done;
+				}
 			}
 		}
 	}

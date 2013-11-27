@@ -14,7 +14,10 @@ import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import restaurant.Restaurant;
+import restaurant.stackRestaurant.StackCookRole;
 import restaurant.stackRestaurant.StackCustomerRole;
+import restaurant.stackRestaurant.StackWaiterNormalRole;
+import restaurant.stackRestaurant.StackWaiterSharedRole;
 import market.MarketCustomerRole;
 import market.MarketRole;
 import market.Market;
@@ -39,6 +42,7 @@ public class PersonAgent extends Agent implements Person {
 	WorkDetails workDetails;
 	//LandLordRole landLord;
 	double funds;
+	public boolean unemployed = false;
 	public boolean hasWorked;
 	boolean rentDue;
 	public String name;
@@ -52,7 +56,7 @@ public class PersonAgent extends Agent implements Person {
 		//Bank Scenario Constants
 		OutToBank, WantsToWithdraw, WantsToGetLoan, WantsToDeposit, WantsToRob, 
 		//Market Scenario Constants
-		NeedsToGoMarket, OutToMarket, EnterHome, OutToWork, Sleeping
+		NeedsToGoMarket, OutToMarket, EnterHome, OutToWork, Sleeping, DoneWorking, TryingToLeaveWork
 		};
 	HouseState houseState;
 	private PersonState personState;
@@ -66,7 +70,7 @@ public class PersonAgent extends Agent implements Person {
 	Timer personTimer = new Timer();
 	
 	//bank information
-	int accountNumber;
+	int accountNumber = 0;
 	
 	//Animation Semaphores
 	private Semaphore actionComplete = new Semaphore(0,true);
@@ -84,9 +88,9 @@ public class PersonAgent extends Agent implements Person {
 	};
 	
 	private class WorkDetails {
-		Role workRole;
+		RoleInterface workRole;
 		String workLocation;
-		WorkDetails(Role job, String location) {
+		WorkDetails(RoleInterface job, String location) {
 			this.workRole = job;
 			this.workLocation = location;
 		}
@@ -100,8 +104,28 @@ public class PersonAgent extends Agent implements Person {
 			if(order == "StackRestaurant") {
 				this.newRole = new StackCustomerRole("StackRestaurant");
 			}
-			if(order == "Market1" || order == "Market2") {
+			else if(order == "Market1" || order == "Market2") {
 				this.newRole = new MarketCustomerRole(p.groceryList, order);
+			}
+			else if(order == "StackWaiterNormal") {
+				this.newRole = new StackWaiterNormalRole("StackRestaurant");
+				return newRole;
+			}
+			else if (order == "StackWaiterShared") {
+				this.newRole = new StackWaiterSharedRole("StackRestaurant");
+				return newRole;
+			}
+			else if (order == "StackCook") {
+				this.newRole = new StackCookRole("StackRestaurant");
+				return newRole;
+			}
+			else if (order == "BankTeller") {
+				this.newRole = new BankTellerRole("Bank");
+				return newRole;
+			}
+			else if (order == "Unemployed") {
+				this.newRole = new UnemployedRole();
+				return newRole;
 			}
 			newRole.setPerson(p);
 			//print("Set role complete.");
@@ -118,32 +142,39 @@ public class PersonAgent extends Agent implements Person {
 				preparationTime = 5000;
 			}
 			else if (this.type == "Steak") {
-				preparationTime = 9000;
+				preparationTime = 10000;
 			}
 			else if (this.type == "Salad") {
-				preparationTime = 4000;
+				preparationTime = 20000;
 			}
 			else if (this.type == "Pizza") {
-				preparationTime = 7000;
+				preparationTime = 40000;
 			}
-			stock = 3;
+			stock = new Random().nextInt(2);
 		}
 	}
 	private List<Food> inventory = Collections.synchronizedList(new ArrayList<Food>());
-	public PersonAgent(Role job, String job_location, String home, String name) {
+	public PersonAgent(RoleInterface job, String job_location, String home, String name) {
 		this.name = name;
-		workDetails = new WorkDetails(job, job_location);
+		if (job.getClass().getName().contains("employ")) {
+			print("I am unemployed!");
+			this.unemployed = true;
+		}
+		else {
+			workDetails = new WorkDetails(job, job_location);
+		}
 		homeName = home;
 		currentLocation = home;
 		houseState = HouseState.OwnsAHouse;
-		setPersonState(PersonState.Idle);
+		setPersonState(PersonState.Sleeping);
 		hungerLevel = 0;
 		dirtynessLevel = 0;
-		funds = 10000.00;
+		funds = 500.00;
 		rentDue = false;
 		hasWorked = false;
 		aggressivenessLevel = 1;
 		transMethod = TransportationMethod.TakesTheBus;
+		Directory.sharedInstance().addPerson(this);
 		//Set up inventory
 		Food initialFood = new Food("Chicken");
 		inventory.add(initialFood);
@@ -162,6 +193,7 @@ public class PersonAgent extends Agent implements Person {
 				b.addGui(personGui);
 			}
 		}
+		//print("In hack for set task");
 		if (this.name.contains("BankD")) {
 			setPersonState(PersonState.WantsToDeposit);
 		}
@@ -176,23 +208,79 @@ public class PersonAgent extends Agent implements Person {
 			clearInventory();
 			checkInventory();
 		}
+		else {
+			personTimer.schedule(new PersonTimerTask(this) {
+				public void run() {
+					p.msgWakeUp();
+				}
+			},
+			aggressivenessLevel * 1000);//time for cooking
+		}
 		startThread();
 	}
-	
-	public PersonAgent(Role job, 
-			String job_location, 
+	/**
+	 * UNIT TESTING CONSTRUCTOR W/o Reference to Directory
+	 */
+	public PersonAgent(RoleInterface job, String job_location, String houseName, String name, int aggressivenessLevel) {
+		this.homeName = houseName;
+		this.name = name;
+		//Set Up Work.
+		if (job.getClass().getName().contains("employ")) {
+			print("I am unemployed!");
+			this.unemployed = true;
+		}
+		else {
+			workDetails = new WorkDetails(job, job_location);
+		}
+		this.aggressivenessLevel = aggressivenessLevel;
+		this.transMethod = TransportationMethod.TakesTheBus;
+		this.funds = 1000;
+		this.personState = PersonState.Sleeping;
+		hasWorked = false;
+		
+		//Set up inventory
+				Food initialFood = new Food("Chicken");
+				inventory.add(initialFood);
+				initialFood = new Food ("Steak");
+				inventory.add(initialFood);
+				initialFood = new Food ("Salad");
+				inventory.add(initialFood);
+				initialFood = new Food ("Pizza");
+				inventory.add(initialFood);
+	}
+	/**
+	 * FRONT END CONSTRUCTOR BELOW
+	 * @param job
+	 * @param job_location
+	 * @param name
+	 * @param aggressivenessLevel
+	 * @param initialFunds
+	 * @param housingStatus
+	 * @param vehicleStatus
+	 */
+	public PersonAgent(String job, 
 			String name, 
 			int aggressivenessLevel, 
 			double initialFunds, 
 			String housingStatus, 
 			String vehicleStatus) {
 		this.name = name;
-		workDetails = new WorkDetails(job, job_location);
+		//Set Up Work.
+		if (job.contains("employ")) {
+			print("I am unemployed!");
+			this.unemployed = true;
+		}
+		else {
+			Role r = factory.createRole(job, this);
+			//print("Role created from front end: " + r.getClass().getName());
+			workDetails = new WorkDetails(r, Directory.sharedInstance().roleDirectory.get(r.getClass().getName()));
+			//finish setting up Work
+		}
 		this.aggressivenessLevel = aggressivenessLevel;
 		this.funds = initialFunds;
 		String vehicleStatusNoSpace = vehicleStatus.replaceAll(" ", "");
 		this.transMethod = TransportationMethod.valueOf(vehicleStatusNoSpace);
-		setPersonState(PersonState.Idle);
+		setPersonState(PersonState.Sleeping);
 		hungerLevel = 0;
 		dirtynessLevel = 0;
 		rentDue = false;
@@ -207,6 +295,21 @@ public class PersonAgent extends Agent implements Person {
 				b.addGui(personGui);
 			}
 		}
+		//Set up inventory
+		Food initialFood = new Food("Chicken");
+		inventory.add(initialFood);
+		initialFood = new Food ("Steak");
+		inventory.add(initialFood);
+		initialFood = new Food ("Salad");
+		inventory.add(initialFood);
+		initialFood = new Food ("Pizza");
+		inventory.add(initialFood);
+		personTimer.schedule(new PersonTimerTask(this) {
+			public void run() {
+				p.msgWakeUp();
+			}
+		},
+		aggressivenessLevel * 1000);//time for cooking
 		startThread();
 		//print("I LIVE.");
 	}
@@ -220,14 +323,20 @@ public class PersonAgent extends Agent implements Person {
 			String vehicleStatus) {
 		
 		this.name = name;
-		workDetails = new WorkDetails(job, Directory.sharedInstance().roleDirectory.get(job.toString()));
+		if (job.getClass().getName().contains("employ")) {
+			print("I am unemployed!");
+			this.unemployed = true;
+		}
+		else {
+			workDetails = new WorkDetails(job, Directory.sharedInstance().roleDirectory.get(job.getClass().getName()));
+		}
 		this.aggressivenessLevel = aggressivenessLevel;
 		this.funds = startingFunds;
 		String vehicleStatusNoSpace = vehicleStatus.replaceAll(" ", "");
 		this.transMethod = TransportationMethod.valueOf(vehicleStatusNoSpace);
 		String housingStatusNoSpace = housingStatus.replaceAll(" ", "");
 		this.houseState = HouseState.valueOf(housingStatusNoSpace);
-		setPersonState(PersonState.Idle);
+		setPersonState(PersonState.Sleeping);
 		hungerLevel = 0;
 		dirtynessLevel = 0;
 		rentDue = false;
@@ -242,6 +351,22 @@ public class PersonAgent extends Agent implements Person {
 				b.addGui(personGui);
 			}
 		}
+		//Set up inventory
+		Food initialFood = new Food("Chicken");
+		inventory.add(initialFood);
+		initialFood = new Food ("Steak");
+		inventory.add(initialFood);
+		initialFood = new Food ("Salad");
+		inventory.add(initialFood);
+		initialFood = new Food ("Pizza");
+		inventory.add(initialFood);
+		
+		personTimer.schedule(new PersonTimerTask(this) {
+			public void run() {
+				p.msgWakeUp();
+			}
+		},
+		aggressivenessLevel * 1000);//time for cooking
 		startThread();
 		//print("I LIVE.");
 	}
@@ -281,15 +406,19 @@ public class PersonAgent extends Agent implements Person {
 		stateChanged();
 	}
 	public void msgGoWork() {
-		print("msgGoWork received - Setting state to NeedsToWork.");
-		setPersonState(PersonState.NeedsToWork);
+		if(unemployed == false) {
+			print("msgGoWork received - Setting state to NeedsToWork.");
+			setPersonState(PersonState.NeedsToWork);
+		}
 		stateChanged();
 	}
-//	public void msgDoneWorking() {
-//		print("msgDoneWorking received - Setting state to WantFood.");
-//		setPersonState(PersonState.WantFood);
-//		stateChanged();
-//	}
+	public void msgDoneWorking() {
+		if (getPersonState() == PersonState.OutToWork) {
+			setPersonState(PersonState.DoneWorking);
+			print("msgDoneWorking received - Setting state to Done Working");
+		}
+		stateChanged();
+	}
 	public void msgGoHome() {
 		print("msgGoHome received - Setting state to WantsToGoHome");
 		setPersonState(PersonState.WantsToGoHome);
@@ -333,7 +462,11 @@ public class PersonAgent extends Agent implements Person {
 	/**
 	 * Scheduler.  Determine what action is called for, and do it. -------------------------------------------------------
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
+		if (getPersonState() == PersonState.DoneWorking) {
+			leaveWork();
+			return true;
+		}
 		if(!roles.isEmpty()) {
 			//print("STUB IN PERSONAGENT SCHEDULER: INROLESSTACK " + roles.peek().toString());
 			boolean b = false;
@@ -385,7 +518,7 @@ public class PersonAgent extends Agent implements Person {
 			return true;
 		}
 		if (getPersonState() == PersonState.WantFood) {
-			print("STUB IN PERSONAGENT SCHEDULER: WANTFOOD");
+			//print("STUB IN PERSONAGENT SCHEDULER: WANTFOOD");
 			decideFood();
 			return true;
 		}
@@ -412,18 +545,28 @@ public class PersonAgent extends Agent implements Person {
 	 * 
 	 */
 	private boolean evaluateStatus() {
-		print("In Eval: Current Location = " + currentLocation + ".");
+		//print("In Eval: Current Location = " + currentLocation + ".");
 		if (getPersonState().toString().contains("ing") || getPersonState().toString().contains("OutTo") || getPersonState().toString().contains("NeedsTo")){
 			return false;
 		}
-		else if (hasWorked = false) {
+		else if (hasWorked == false && unemployed == false) {
 			print("Eval says go WORK");
 			setPersonState(PersonState.NeedsToWork);
 			return true;
 		}
-		else if(funds < 100.00) {
+		else if (funds > 1000.00) {
+			print("Eval says GO DEPOSIT YOU RICH MAN/WOMAN");
+			setPersonState(PersonState.WantsToDeposit);
+			return true;
+		}
+		else if(funds < 50.00 && accountNumber != 0) {
 			print("Eval says GO WITHDRAW");
 			setPersonState(PersonState.WantsToWithdraw);
+			return true;
+		}
+		else if (funds < 50.00) {
+			print("Eval says GO GET LOAN");
+			setPersonState(PersonState.WantsToGetLoan);
 			return true;
 		}
 		else if(checkInventory() == false) {
@@ -438,6 +581,12 @@ public class PersonAgent extends Agent implements Person {
 		}
 		else if(getPersonState() == PersonState.Idle){
 			setPersonState(PersonState.Sleeping);
+			personTimer.schedule(new PersonTimerTask(this) {
+				public void run() {
+					p.msgWakeUp();
+				}
+			},
+			10000 * aggressivenessLevel);//time for cooking
 			personGui.DoSleep();
 			return false;
 		}
@@ -449,6 +598,10 @@ public class PersonAgent extends Agent implements Person {
 		personGui.setPresentTrue();
 		personGui.DoEnterHouse();
 		setPersonState(PersonState.Idle);
+	}
+	private void leaveWork() {
+		setPersonState(PersonState.TryingToLeaveWork);
+		roles.peek().msgJobDone();
 	}
 	/*private void payRent() {
 		roles.clear();
@@ -510,17 +663,14 @@ public class PersonAgent extends Agent implements Person {
 		personGui.DoDecideEat();
 		actionComplete.acquireUninterruptibly();
 		Random rng = new Random();
-		desiredFood = rng.nextInt();
-		desiredFood = desiredFood % 4;
-		desiredFood = 1;
+		desiredFood = rng.nextInt(4);
 		boolean cook; //cooks at home at the moment
-		if (inventory.get(desiredFood).stock > 0) {
+		if (inventory.get(desiredFood).stock >= 1) {
 			cook = true;
 		}
 		else {
 			cook = false;
 		}
-		cook = false;
 		//if Stay at home and eat. Alters Cook true or false
 		if (cook == true) {
 			setPersonState(PersonState.CookHome);
@@ -558,12 +708,12 @@ public class PersonAgent extends Agent implements Person {
 		Role t = new TransportationRole(workDetails.workLocation, currentLocation);
 		t.setPerson(this);
 		roles.add(t);
-//		personTimer.schedule(new PersonTimerTask(this) {
-//			public void run() {
-//				p.msgDoneWorking();
-//			}
-//		},
-//		9000000);//time for working
+		personTimer.schedule(new PersonTimerTask(this) {
+			public void run() {
+				p.msgDoneWorking();
+			}
+		},
+		20000 * aggressivenessLevel);//time for working
 	}
 	private void cleanRoom() {
 

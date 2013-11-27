@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -23,7 +24,7 @@ public class StackRestaurantAnimationPanel extends BuildingPanel implements Acti
     private final int WINDOWY = 406;
     BufferedImage restaurantImage;
     private final int DELAY = 10;
-    private List<Gui> guis = new ArrayList<Gui>();
+    private List<Gui> guis = Collections.synchronizedList(new ArrayList<Gui>());
 //    private static StackRestaurantAnimationPanel sharedInstance = null;
     
 		
@@ -62,16 +63,19 @@ public class StackRestaurantAnimationPanel extends BuildingPanel implements Acti
         //Clear the screen by painting a rectangle the size of the frame
         g2.drawImage(restaurantImage, 0, 0, null);
 
-        for(Gui gui : guis) {
-            if (gui.isPresent()) {
-           gui.updatePosition();
+        synchronized(guis) {
+	        for(Gui gui : guis) {
+	            if (gui.isPresent()) {
+	           gui.updatePosition();
+	            }
+	        }
         }
-        }
-
-        for(Gui gui : guis) {
-            if (gui.isPresent()) {
-           gui.draw(g2);
-        }
+        synchronized(guis) {
+	        for(Gui gui : guis) {
+	            if (gui.isPresent()) {
+	           gui.draw(g2);
+	        }
+	    }
     }
     }
 	

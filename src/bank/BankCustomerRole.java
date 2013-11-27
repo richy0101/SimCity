@@ -17,7 +17,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	private BankTeller teller;
 	public BankManager manager;
 
-	public Person person;
+	//public Person person;
 	private enum CustomerState {DoingNothing, Waiting, GoingToTeller, BeingHelped, AtManager, Done, Gone, WaitingForHelpResponse, InTransit, FinishedRole};
 
 	private CustomerState state = CustomerState.DoingNothing;

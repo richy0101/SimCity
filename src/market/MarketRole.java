@@ -31,7 +31,7 @@ import market.interfaces.MarketCustomer;
 public class MarketRole extends Role implements Market {
 
 	//data--------------------------------------------------------------------------------
-	public enum orderState {Ordered, CantFill, Filled, Billed, Paid, CantPay};
+	public enum orderState {Ordered, CantFill, Filled, Billed, ReadyToDeliver, Paid, CantPay};
 	
 	List<Order> MyOrders;
 	List<RestaurantOrder> MyRestaurantOrders;
@@ -61,6 +61,22 @@ public class MarketRole extends Role implements Market {
 			this.choice = choice;
 			this.amount = amount;
 			state = orderState.Ordered;
+		}
+
+		public orderState getState() {
+			return state;
+		}
+
+		public Cook getCook() {
+			return cook;
+		}
+
+		public String getChoice() {
+			return choice;
+		}
+
+		public double getPrice() {
+			return price;
 		}
 	}
 	
@@ -100,14 +116,22 @@ public class MarketRole extends Role implements Market {
 
 	public class Food {
 	    String name;
-	    int supply;
+	    private int supply;
 	    double price;
 	    
 	    Food(String n, int s, double p) {
 	    	name = n;
-	    	supply = s;
+	    	setSupply(s);
 	    	price = p;
 	    }
+
+		public int getSupply() {
+			return supply;
+		}
+
+		public void setSupply(int supply) {
+			this.supply = supply;
+		}
 	}
 	
 	public MarketRole(String location) {
@@ -142,6 +166,7 @@ public class MarketRole extends Role implements Market {
 		inventory.put("Salad", new Food("Salad", 10, 4.00));
 		
 		MyOrders = Collections.synchronizedList(new ArrayList<Order>());
+		MyRestaurantOrders = Collections.synchronizedList(new ArrayList<RestaurantOrder>());
 		jobDone = false;
 		funds = 0.00;
 		log = new EventLog();
@@ -153,11 +178,17 @@ public class MarketRole extends Role implements Market {
 	public List<Order> getMyOrders() {
 		return MyOrders;
 	}
+	public List<RestaurantOrder> getMyRestaurantOrders() {
+		return MyRestaurantOrders;
+	}
 	public Map<String, Food> getInventory() {
 		return inventory;
 	}
 	public boolean getJobDone() {
 		return jobDone;
+	}
+	public double getFunds() {
+		return funds;
 	}
 	
 	//MarketCustomer messages-------------------------------------------------------------
@@ -205,6 +236,14 @@ public class MarketRole extends Role implements Market {
 	public void msgOrderFood(Cook cook, Cashier cashier, String choice) {
 		MyRestaurantOrders.add(new RestaurantOrder(cook, cashier, choice, 5));
 		
+		log.add(new LoggedEvent("Received msgOrderFood from Cook. Choice = " + choice));
+		stateChanged();
+	}
+	
+	public void msgDeliverOrder(RestaurantOrder o) {
+		o.state = orderState.ReadyToDeliver;
+		
+		log.add(new LoggedEvent("Received msgDeliverOrder from Timer."));
 		stateChanged();
 	}
 	
@@ -215,6 +254,7 @@ public class MarketRole extends Role implements Market {
 				o.state = orderState.Paid;
 		}
 		
+		log.add(new LoggedEvent("Receieved msgPayFor Order from Cashier. Amount = $" + funds));
 		stateChanged();
 	}
 	
@@ -249,10 +289,19 @@ public class MarketRole extends Role implements Market {
 					return true;
 				}
 			}
+
+			for(RestaurantOrder o : MyRestaurantOrders) {
+				if(o.state == orderState.ReadyToDeliver) {
+					DeliverOrder(o);
+					return true;
+				}
+			}
 			
 			for(RestaurantOrder o : MyRestaurantOrders) {
 				if(o.state == orderState.Paid) {
 					MyRestaurantOrders.remove(o);
+					
+					log.add(new LoggedEvent("Removing RestaurantOrder."));
 					return true;
 				}
 			}
@@ -314,7 +363,7 @@ public class MarketRole extends Role implements Market {
 	    	choice = (String) i.next();
 	    	amount = o.groceryList.get(choice);
 	    	
-	    	if(inventory.get(choice).supply >= amount) {
+	    	if(inventory.get(choice).getSupply() >= amount) {
 	    		o.price += inventory.get(choice).price * amount;
 	    		o.retrievedGroceries.put(choice, amount);
 	    		
@@ -325,7 +374,7 @@ public class MarketRole extends Role implements Market {
 	    			e.printStackTrace();
 	    		}
 	    		
-	    		inventory.get(choice).supply -= amount;
+	    		inventory.get(choice).setSupply(inventory.get(choice).getSupply() - amount);
 	    	}
 	    }
 		
@@ -365,24 +414,33 @@ public class MarketRole extends Role implements Market {
 
 	//Restaurant Order actions--------------------------------------------------------------
 	private void FillRestaurantOrder(final RestaurantOrder o) {
-		if(inventory.get(o.choice).supply >= o.amount) {
-			o.state = orderState.Billed;
+		if(inventory.get(o.choice).getSupply() >= o.amount) {
+			o.state = orderState.Filled;
+			log.add(new LoggedEvent("Filling Restaurant Order."));
 			timer.schedule(new TimerTask() {
 				public void run() {
-					inventory.get(o.choice).supply -= o.amount;
-					o.price = o.amount * inventory.get(o.choice).price;
-					
-
-					o.cook.msgMarketDeliveringOrder(inventory.get(o.choice).supply, o.choice);
-					o.cashier.msgGiveBill(new Check(o.price, o.choice), getMe());
+					msgDeliverOrder(o);
 				}
 			},
 			6000);
 		}
 		else {
+			log.add(new LoggedEvent("Can't fill RestaurantOrder."));
 			o.cook.msgInventoryOut(this, o.choice);
 			MyRestaurantOrders.remove(o);
 		}
+	}
+	
+	private void DeliverOrder(RestaurantOrder o) {
+		o.state = orderState.Billed;
+		inventory.get(o.choice).setSupply(inventory.get(o.choice).getSupply() - o.amount);
+		o.price = o.amount * inventory.get(o.choice).price;
+		
+
+		o.cook.msgMarketDeliveringOrder(inventory.get(o.choice).getSupply(), o.choice);
+		o.cashier.msgGiveBill(new Check(o.price, o.choice), getMe());
+		
+		log.add(new LoggedEvent("Delivered order."));
 	}
 	
 	private MarketRole getMe() {

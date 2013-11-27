@@ -44,7 +44,7 @@ public class BankManagerAgent extends Agent implements BankManager {
 			return tellerNum;
 		}
 	}
-	public enum BankTellerState {GotToWork, Idle, Busy, GivingPay, ReceivedPay};
+	public enum BankTellerState {GotToWork, Idle, Busy, GettingPay, ReceivedPay};
 	private int tellerNum = 0;
 	private String name;
 	
@@ -60,6 +60,7 @@ public class BankManagerAgent extends Agent implements BankManager {
 	}
 
 	public void msgTellerFree(BankTeller teller) {
+		print("Bank Teller is now free");
 		for(MyBankTeller tempTeller : tellers){
 			if(tempTeller.teller == teller){
 				tempTeller.state = BankTellerState.Idle;
@@ -80,14 +81,19 @@ public class BankManagerAgent extends Agent implements BankManager {
 	public void msgCollectPay(BankTeller teller){
 		for(MyBankTeller tempTeller: tellers){
 			if(tempTeller.teller == teller){
-				tempTeller.state = BankTellerState.GivingPay;
+				tempTeller.state = BankTellerState.GettingPay;
 			}
 		}
 	}
 	
 	public void msgTellerLeavingWork(BankTeller teller) {
 		synchronized(this.tellers) {
-			tellers.remove(teller);
+			for(MyBankTeller tempTeller: tellers){
+				if(tempTeller.teller == teller){
+					tellers.remove(tempTeller);
+					break;
+				}
+			}
 			tellerNum--;
 		}
 		stateChanged();
@@ -115,7 +121,7 @@ public class BankManagerAgent extends Agent implements BankManager {
 		}
 		synchronized(this.tellers){
 			for(MyBankTeller tempTeller: tellers){
-				if(tempTeller.state == BankTellerState.GivingPay){
+				if(tempTeller.state == BankTellerState.GettingPay){
 					GiveTellerPay(tempTeller);
 				}
 			}
