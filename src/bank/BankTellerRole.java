@@ -317,11 +317,11 @@ public class BankTellerRole extends Role implements BankTeller {
 		print("Receiving paycheck");
 		tellerGui.DoGoToManager();
 		manager.msgCollectPay(this);
-		/*try {
+		try {
 			doneAnimation.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}*/
+		}
 		state = TellerState.GettingPaycheck;
 	}
 	
@@ -329,11 +329,11 @@ public class BankTellerRole extends Role implements BankTeller {
 		print("Leaving Bank");
 		tellerGui.DoLeaveBank();
 		manager.msgTellerLeavingWork(this);
-		/*try {
+		try {
 			doneAnimation.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}*/
+		}
 		state = TellerState.Gone;
 		getPersonAgent().msgRoleFinished();
 	}
