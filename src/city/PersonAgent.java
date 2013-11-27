@@ -163,6 +163,7 @@ public class PersonAgent extends Agent implements Person {
 		hasWorked = false;
 		aggressivenessLevel = 1;
 		transMethod = TransportationMethod.TakesTheBus;
+		Directory.sharedInstance().addPerson(this);
 		//Set up inventory
 		Food initialFood = new Food("Chicken");
 		inventory.add(initialFood);
@@ -195,7 +196,13 @@ public class PersonAgent extends Agent implements Person {
 			clearInventory();
 			checkInventory();
 		}
-		//startThread();
+		personTimer.schedule(new PersonTimerTask(this) {
+			public void run() {
+				p.msgWakeUp();
+			}
+		},
+		aggressivenessLevel * 1000);//time for cooking
+		startThread();
 	}
 	/**
 	 * FRONT END CONSTRUCTOR BELOW
@@ -237,6 +244,12 @@ public class PersonAgent extends Agent implements Person {
 				b.addGui(personGui);
 			}
 		}
+		personTimer.schedule(new PersonTimerTask(this) {
+			public void run() {
+				p.msgWakeUp();
+			}
+		},
+		aggressivenessLevel * 1000);//time for cooking
 		startThread();
 		//print("I LIVE.");
 	}
@@ -272,6 +285,12 @@ public class PersonAgent extends Agent implements Person {
 				b.addGui(personGui);
 			}
 		}
+		personTimer.schedule(new PersonTimerTask(this) {
+			public void run() {
+				p.msgWakeUp();
+			}
+		},
+		aggressivenessLevel * 1000);//time for cooking
 		startThread();
 		//print("I LIVE.");
 	}
@@ -474,6 +493,12 @@ public class PersonAgent extends Agent implements Person {
 		}
 		else if(getPersonState() == PersonState.Idle){
 			setPersonState(PersonState.Sleeping);
+			personTimer.schedule(new PersonTimerTask(this) {
+				public void run() {
+					p.msgWakeUp();
+				}
+			},
+			10000 * aggressivenessLevel);//time for cooking
 			personGui.DoSleep();
 			return false;
 		}

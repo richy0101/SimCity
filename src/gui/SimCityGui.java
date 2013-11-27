@@ -489,7 +489,7 @@ public class SimCityGui {
 		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
 		role2.setPerson(p2);
 //		p2.msgWakeUp();
-		p2.startThread();
+		//p2.startThread();
 
 		String a3 = "StackRestaurant";
 		String b3 = "House3";
@@ -498,7 +498,7 @@ public class SimCityGui {
 		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
 		role3.setPerson(p3);
 //		p3.msgWakeUp();
-		p3.startThread();
+		//p3.startThread();
 
 		String a4 = "Bank";
 		String b4 = "House4";
@@ -507,7 +507,7 @@ public class SimCityGui {
 		PersonAgent p4 = new PersonAgent(role4, a4 , b4, name4);
 		role4.setPerson(p4);
 //		p4.msgWakeUp();
-		p4.startThread();
+		//p4.startThread();
 		
 		String a5 = "Bank";
 		String b5 = "House5";
@@ -516,7 +516,7 @@ public class SimCityGui {
 		PersonAgent p5 = new PersonAgent(role5, a5 , b5, name5);
 		role5.setPerson(p5);
 //		p5.msgWakeUp();
-		p5.startThread();
+		//p5.startThread();
         
 		MarketRole role6 = new MarketRole("Market1");
 		Directory.sharedInstance().marketDirectory.get("Market1").setWorker(role6);
@@ -527,7 +527,7 @@ public class SimCityGui {
 		PersonAgent p6 = new PersonAgent(role6, a6 , b6, name6);
 		role6.setPerson(p6);
 //		p6.msgWakeUp();
-		p6.startThread();
+		//p6.startThread();
 		
 		String a7 = "Bank";
 		String b7 = "House2";
@@ -536,7 +536,7 @@ public class SimCityGui {
 		PersonAgent p7 = new PersonAgent(role7, a7 , b7, name7);
 		role7.setPerson(p7);
 //		p7.msgWakeUp();
-		p7.startThread();
+		//p7.startThread();
 		
 		bus = new BusAgent(1);
 		busGui = new BusGui(bus,1); //agent, starting StopNumber
