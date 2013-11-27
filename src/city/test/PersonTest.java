@@ -6,6 +6,9 @@ import junit.framework.*;
 import city.PersonAgent.PersonState;
 import city.test.mock.MockTransportation;
 import city.PersonAgent;
+import city.test.mock.*;
+
+
 
 public class PersonTest extends TestCase {
 	
@@ -15,13 +18,12 @@ public class PersonTest extends TestCase {
 
 	public void setUp() throws Exception{
 		super.setUp();	
-		String a5 = "Bank";
-		String b5 = "House5";
-		String name5 = "BankDepositPerson5";
-		Role role5 = new BankTellerRole("Bank");
-		PersonAgent person = new PersonAgent(role5, a5 , b5, name5);
-		role5.setPerson(person);
-		MockTransportation trole;
+		String jobLocation = "Bank";
+		String house = "House5";
+		String name = "JUNITTestPersonTeller";
+		MockRole transport;
+		MockRole job = new MockRole("jobLocation");
+		PersonAgent person = new PersonAgent(job, jobLocation, house, name);
 			
 	}	
 	
