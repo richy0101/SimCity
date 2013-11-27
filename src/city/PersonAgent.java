@@ -193,6 +193,7 @@ public class PersonAgent extends Agent implements Person {
 				b.addGui(personGui);
 			}
 		}
+		//print("In hack for set task");
 		if (this.name.contains("BankD")) {
 			setPersonState(PersonState.WantsToDeposit);
 		}
@@ -207,12 +208,14 @@ public class PersonAgent extends Agent implements Person {
 			clearInventory();
 			checkInventory();
 		}
-		personTimer.schedule(new PersonTimerTask(this) {
-			public void run() {
-				p.msgWakeUp();
-			}
-		},
-		aggressivenessLevel * 1000);//time for cooking
+		else {
+			personTimer.schedule(new PersonTimerTask(this) {
+				public void run() {
+					p.msgWakeUp();
+				}
+			},
+			aggressivenessLevel * 1000);//time for cooking
+		}
 		startThread();
 	}
 	/**
@@ -710,7 +713,7 @@ public class PersonAgent extends Agent implements Person {
 				p.msgDoneWorking();
 			}
 		},
-		30000 * aggressivenessLevel);//time for working
+		20000 * aggressivenessLevel);//time for working
 	}
 	private void cleanRoom() {
 
