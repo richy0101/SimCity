@@ -7,6 +7,9 @@ How TO play/Grade(?):
  * Run Program
  * Observe hardcoded persons who have a preset beginning scenario
  * Use Create a Person to create people to interact with the city.
+ * Poor people (0 money) will take out loans first
+ * Rich people will want to deposit
+ * Everyone's starting food amount is randomized
  * Read below for limitations and known bugs.
 
 Running Normative Scenario
