@@ -3,6 +3,9 @@ team02
 
 SimCity201 Project Repository for CS 201 students
 
+Running Normative Scenario
+ *
+
 Missing functionality in V1
  * 
 
@@ -17,9 +20,11 @@ Ryan Stack's Contribution:
  * Missing functionality for V2: depositing excess money in bank
 
 Reid Nakamura's Contribution:
- * Implemented Market Roles, Market GUI, and unit tests
+ * Implemented Market Roles
+ * Implemented Market GUI
+ * Implement Market Role Unit Test
  * Helped to debug Transportation GUI
- * Worked with Ryan Sheh to set up CardLayout of building animation panels
+ * Resolved issue with Ryan Sheh to set up CardLayout of building animation panels
 
 Ryan Sheh's Contribution
  * Main Window GUI (w/ help from Ryan Stack)
@@ -27,6 +32,6 @@ Ryan Sheh's Contribution
  * Market GUI (w/ Reid)
  * Home GUI (w/ Alex)
  * Implemented CardLayout (w/ help from Reid)
- * Implemented Directory Class (w/ help from Alex)
+ * Implemented Directory Class for References (w/ help from Alex)
  * Unit Testing Bank Roles (w/ Richard)
  * Helped Implement Bus Agent & GUI (w/ Ben Tan)
