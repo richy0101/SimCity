@@ -169,7 +169,7 @@ public class PersonAgent extends Agent implements Person {
 		setPersonState(PersonState.Sleeping);
 		hungerLevel = 0;
 		dirtynessLevel = 0;
-		funds = 10000.00;
+		funds = 500.00;
 		rentDue = false;
 		hasWorked = false;
 		aggressivenessLevel = 1;
