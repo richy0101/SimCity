@@ -1,5 +1,6 @@
 package agent;
 import market.MarketRole;
+import city.PersonAgent;
 import city.interfaces.Person;
 import city.interfaces.RoleInterface;
 
@@ -56,6 +57,13 @@ public class Role implements RoleInterface {
 		
 	}
 	public void msgHereIsPaycheck(double funds) {
+		
+	}
+
+	@Override
+	public void setPerson(PersonAgent personAgent) {
+		myPerson = personAgent; 
+		//System.out.println(myPerson.getName() + "WOAH");
 		
 	}
 

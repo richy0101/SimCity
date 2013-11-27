@@ -87,9 +87,9 @@ public class PersonAgent extends Agent implements Person {
 	};
 	
 	private class WorkDetails {
-		Role workRole;
+		RoleInterface workRole;
 		String workLocation;
-		WorkDetails(Role job, String location) {
+		WorkDetails(RoleInterface job, String location) {
 			this.workRole = job;
 			this.workLocation = location;
 		}
@@ -149,7 +149,7 @@ public class PersonAgent extends Agent implements Person {
 		}
 	}
 	private List<Food> inventory = Collections.synchronizedList(new ArrayList<Food>());
-	public PersonAgent(Role job, String job_location, String home, String name) {
+	public PersonAgent(RoleInterface job, String job_location, String home, String name) {
 		this.name = name;
 		workDetails = new WorkDetails(job, job_location);
 		homeName = home;

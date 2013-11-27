@@ -21,7 +21,7 @@ public class PersonTest extends TestCase {
 		String jobLocation = "Bank";
 		String house = "House5";
 		String name = "JUNITTestPersonTeller";
-		MockRole transport;
+		MockRole transport = new MockRole("jobLocation");
 		MockRole job = new MockRole("jobLocation");
 		PersonAgent person = new PersonAgent(job, jobLocation, house, name);
 			
