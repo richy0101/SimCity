@@ -17,7 +17,7 @@ public abstract class BuildingPanel extends JPanel implements ActionListener{
 		myRectangle = r;
 		myName = "" + i;
 		myCity = sc;
-		
+		/*
 		if(i == 0) {
 			myName = "Stack's Restaurant (1)";
 		}
@@ -63,7 +63,7 @@ public abstract class BuildingPanel extends JPanel implements ActionListener{
 		if(i == 7) {
 			myName = "House (6)";
 		}
-		
+		*/
 		JLabel j = new JLabel( myName );
 		j.setForeground(Color.white);
 		add( j );

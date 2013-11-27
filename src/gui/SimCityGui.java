@@ -100,7 +100,7 @@ public class SimCityGui {
 		macroAnimationPanel.setBounds(5, 5, 827, 406);
 		frame.getContentPane().add(macroAnimationPanel);
 		
-		MicroAnimationPanel microAnimationPanel = new MicroAnimationPanel();
+		//MicroAnimationPanel microAnimationPanel = new MicroAnimationPanel();
 		buildingPanels = new JPanel();
 		cardLayout = new CardLayout();
         //		microAnimationPanel.setLayout(cardLayout);

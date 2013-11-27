@@ -42,11 +42,33 @@ public class MicroAnimationPanel extends JPanel implements ActionListener, Mouse
     public MicroAnimationPanel() {
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
+        //setBackground(Color.BLUE);
  
         addMouseListener(this);
         
     	Timer timer = new Timer(DELAY, this);
     	timer.start();
+    	
+    	cards.put("null", new CityCard(myCity, Color.green));
+    	
+    	cards.put("stackRestaurant", new CityCard(myCity, Color.pink));
+    	cards.put("huangRestaurant", new CityCard(myCity, Color.pink));
+    	cards.put("phillipsRestaurant", new CityCard(myCity, Color.pink));
+    	cards.put("nakamuraRestaurant", new CityCard(myCity, Color.pink));
+    	cards.put("shehRestaurant", new CityCard(myCity, Color.pink));
+    	cards.put("tanRestaurant", new CityCard(myCity, Color.pink));
+    	
+    	cards.put("house1", new CityCard(myCity, Color.pink));
+    	cards.put("house2", new CityCard(myCity, Color.pink));
+    	cards.put("house3", new CityCard(myCity, Color.pink));
+    	cards.put("house4", new CityCard(myCity, Color.pink));
+    	cards.put("house5", new CityCard(myCity, Color.pink));
+    	cards.put("house6", new CityCard(myCity, Color.pink));
+    	
+    	cards.put("market1", new CityCard(myCity, Color.yellow));
+    	cards.put("market2", new CityCard(myCity, Color.yellow));
+    	
+    	cards.put("bank", new CityCard(myCity, Color.yellow));
     	
     	layout = new CardLayout();
     	this.setLayout(layout);
@@ -149,4 +171,3 @@ public class MicroAnimationPanel extends JPanel implements ActionListener, Mouse
 		
 	}
 }
-
