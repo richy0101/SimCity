@@ -4,10 +4,28 @@ team02
 SimCity201 Project Repository for CS 201 students
 
 Running Normative Scenario
- *
+ * Create a person works. 
+ * Can only instantiate people who take the bus as their transportation method. 
+ * Initial funds sets their starting money. 
+ * Aggressiveness sets their personality for how long they work and sleep.
+ * When selecting occupation, market 2 seller does not work. 
+ * Market Role is hardcoded. Do not assign person as Market Role job. 
+ * Only one restaurant.
+ * Multiple people live in homes.
+ * All guis for restaurants (other than functional Ryan Stack's designated restaurant) is using market GUI.
 
 Missing functionality in V1
- * 
+ * We do not have two markets.
+ * No intersections.
+ * No cars.
+ * No collision detection.
+ * No A*
+ * No apartments.
+ * Populate City does not work.
+ * No animation for markets to deliver.
+ * No walking as sole form of transportation.
+ * No bank robberies.
+ * No weekends.
 
 Ryan Stack's Contribution:
  * Implemented restaurant with added shared data, market interactions, and payment from cashier
