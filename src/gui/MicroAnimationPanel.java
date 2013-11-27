@@ -42,33 +42,11 @@ public class MicroAnimationPanel extends JPanel implements ActionListener, Mouse
     public MicroAnimationPanel() {
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
-        //setBackground(Color.BLUE);
  
         addMouseListener(this);
         
     	Timer timer = new Timer(DELAY, this);
     	timer.start();
-    	
-    	cards.put("null", new CityCard(myCity, Color.green));
-    	
-    	cards.put("stackRestaurant", new CityCard(myCity, Color.pink));
-    	cards.put("huangRestaurant", new CityCard(myCity, Color.pink));
-    	cards.put("phillipsRestaurant", new CityCard(myCity, Color.pink));
-    	cards.put("nakamuraRestaurant", new CityCard(myCity, Color.pink));
-    	cards.put("shehRestaurant", new CityCard(myCity, Color.pink));
-    	cards.put("tanRestaurant", new CityCard(myCity, Color.pink));
-    	
-    	cards.put("house1", new CityCard(myCity, Color.pink));
-    	cards.put("house2", new CityCard(myCity, Color.pink));
-    	cards.put("house3", new CityCard(myCity, Color.pink));
-    	cards.put("house4", new CityCard(myCity, Color.pink));
-    	cards.put("house5", new CityCard(myCity, Color.pink));
-    	cards.put("house6", new CityCard(myCity, Color.pink));
-    	
-    	cards.put("market1", new CityCard(myCity, Color.yellow));
-    	cards.put("market2", new CityCard(myCity, Color.yellow));
-    	
-    	cards.put("bank", new CityCard(myCity, Color.yellow));
     	
     	layout = new CardLayout();
     	this.setLayout(layout);
@@ -78,15 +56,6 @@ public class MicroAnimationPanel extends JPanel implements ActionListener, Mouse
     	}
     	
     	layout.show(this, "null");
-    	
-    	/*
-    	try { //STACK RESTAURANT BACKGROUND
-        	restaurantImage = ImageIO.read(getClass().getResource("stackRestaurant.png"));
-        }
-        catch(IOException e) {
-        	System.out.println("Error w/ Background");
-        } 
-        */
     }
     
 	public MicroAnimationPanel( Rectangle2D r, int i, SimCityGui sc ) {
@@ -116,15 +85,6 @@ public class MicroAnimationPanel extends JPanel implements ActionListener, Mouse
     		layout.show(this,key);
     	}
     }
-    /*
-    public boolean contains() {
-    	for(CityComponent c: statics) {
-    		if(c.contains(arg0.getX(), arg0.getY())) {
-    			myCity.view.setView(c.ID);
-    		}
-    	}
-    }
-    */
 
 	public void actionPerformed(ActionEvent e) {
 		repaint();  //Will have paintComponent called
@@ -189,3 +149,4 @@ public class MicroAnimationPanel extends JPanel implements ActionListener, Mouse
 		
 	}
 }
+
