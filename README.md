@@ -68,13 +68,14 @@ Ryan Sheh's Contribution
  * Implemented Directory Class for References (w/ help from Alex)
  * Unit Testing Bank Roles (w/ Richard)
  * Helped Implement Bus Agent & GUI (w/ Ben Tan)
-Alex Huang's Contribution
- *Designed and implemented Person Agent and PersonGUI
- *Integrated all roles and gui animations with Person Agent(contributions from respective implementers).
- *Debugged all Bank roles and fixed interactions within it as they were broken initially during integration.
- *Fixed Bank Role GUI's for interactions (with help from Stack, Sheh, Phillips).
- *Implemented Directory class and its data(contribution from whole team)
- *Polish superNorm test with help from Reid and Sheh
- *Implemented Transportation Role and TransportationRoleGUI
- *Missing Complete Unit Tests for PersonAgent and PersonGUI because of sharedInstance issues in Directory. Pushing back this req for V2 delivery. 
+
+Alex Huang's Contribution:
+ * Designed and implemented Person Agent and PersonGUI
+ * Integrated all roles and gui animations with Person Agent(contributions from respective implementers).
+ * Debugged all Bank roles and fixed interactions within it as they were broken initially during integration.
+ * Fixed Bank Role GUI's for interactions (with help from Stack, Sheh, Phillips).
+ * Implemented Directory class and its data(contribution from whole team)
+ * Polish superNorm test with help from Reid and Sheh
+ * Implemented Transportation Role and TransportationRoleGUI
+ * Missing Complete Unit Tests for PersonAgent and PersonGUI because of sharedInstance issues in Directory. Pushing back this req for V2 delivery. 
 
