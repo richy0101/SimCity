@@ -18,11 +18,6 @@ public abstract class BuildingPanel extends JPanel implements ActionListener{
 		myName = "" + i;
 		myCity = sc;
 		
-//		setBackground(Color.BLUE);
-		//setMinimumSize( new Dimension( 500, 250 ) ); //DO WE NEED MIN/MAX SIZE? WHAT IS PURPOSE?
-		//setMaximumSize( new Dimension( 500, 250 ) );
-		//setPreferredSize( new Dimension( 500, 250 ) );
-		
 		if(i == 0) {
 			myName = "Stack's Restaurant (1)";
 		}
@@ -68,7 +63,6 @@ public abstract class BuildingPanel extends JPanel implements ActionListener{
 		if(i == 7) {
 			myName = "House (6)";
 		}
-
 		
 		JLabel j = new JLabel( myName );
 		j.setForeground(Color.white);
