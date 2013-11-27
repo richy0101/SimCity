@@ -6,6 +6,8 @@ import java.util.Map;
 import bank.Bank;
 import bank.BankCustomerRole;
 import bank.BankTellerRole;
+import bank.BankTellerRole.TellerState;
+import bank.helpers.AccountSystem;
 import bank.interfaces.BankTeller;
 import bank.test.mock.MockBankCustomer;
 import bank.test.mock.MockBankManager;
@@ -63,46 +65,105 @@ public class BankTellerTest extends TestCase {
 	
 	//Deposit w/ Account
 	public void testOneBankInteraction(){	
-		
-	}
-	
-	//Deposit w/o Account
-	public void testTwoBankInteraction(){
-		
-	}
-	
-	//Withdraw w/ Account
-	public void testThreeBankInteraction(){
-		
-	}
-	
-	//Withdraw w/o Account
-	public void testFourBankInteraction(){
-		
-	}
-	
-	
-	//Loan w/ Good Credit (No taking a loan)
-	public void testSixBankInteraction(){
-		
-	}
-	
-	//Loan w/ Bad Credit (Has taken loan)
-	public void testSevenBankInteraction(){
-		
-	}
-	
-	//Bank Tellers get paid for the day and leave work
-	public void testNineBackInteraction(){
 		teller.setPerson(person);
 		teller.getPersonAgent().setFunds(400.0);
 		teller.manager = manager;
+		AccountSystem.sharedInstance().addAccount(1);
 		
 		//precondition
 		//empty customer log
 		assertEquals("MockCustomer should have an empty event log before the Teller scheduler is called. Instead the MockWaiter's "
 				+ "event log reads: " + customer.log.toString(), 0, customer.log.size());
-		assertEquals("Teller state should be ArrivedAtWork.", teller.getState(), "ArrivedAtWork");
+		assertEquals("Teller state should be ReadyForCustomers.", teller.getState(), "ReadyForCustomers");
+		assertEquals("Teller's person funds should be 400.0.", teller.getPersonAgent().getFunds(), 400.0);
+		assertEquals("Teller's list of customers should be empty", teller.getCustomers().size(), 0);
+		
+		teller.msgAssigningCustomer(customer);
+		
+		assertEquals("Teller's list of customers size should now be 1", teller.getCustomers().size(), 1);
+		assertEquals("Teller's first customer in the list should have state NeedingAssistance", 
+				teller.getCustomer(0).getState(), "NeedingAssistance");
+		teller.getCustomers().get(0).setAccount(1);
+		
+		teller.pickAndExecuteAnAction();
+		
+		assertEquals("Teller's first customer in the list should have the state AskedAssistance", 
+				teller.getCustomer(0).getState(), "AskedAssistance");
+		assertEquals("Teller's first customer in the list should have 0 dollars in his account", 
+				teller.getCustomer(0).getMoneyToDeposit(),0.0);
+				
+		teller.msgDepositMoney(1,100.0);
+		
+		assertEquals("Teller's first customer in the list should have the state DepositingMoney", 
+				teller.getCustomer(0).getState(), "DepositingMoney");
+		assertEquals("Teller's first customer in the list should have account number 1", 
+				teller.getCustomer(0).getAccount(), 1);
+		assertEquals("Teller's first customer in the list should have 100 dollars in his account", 
+				teller.getCustomer(0).getMoneyToDeposit(), 100.0);
+		
+		
+	}
+	
+	
+	//Withdraw w/ Account
+	public void testTwoBankInteraction(){
+		teller.setPerson(person);
+		teller.getPersonAgent().setFunds(400.0);
+		teller.manager = manager;
+		AccountSystem.sharedInstance().addAccount(1);
+		
+		//precondition
+		//empty customer log
+		assertEquals("MockCustomer should have an empty event log before the Teller scheduler is called. Instead the MockWaiter's "
+				+ "event log reads: " + customer.log.toString(), 0, customer.log.size());
+		assertEquals("Teller state should be ReadyForCustomers.", teller.getState(), "ReadyForCustomers");
+		assertEquals("Teller's person funds should be 400.0.", teller.getPersonAgent().getFunds(), 400.0);
+		assertEquals("Teller's list of customers should be empty", teller.getCustomers().size(), 0);
+		
+		teller.msgAssigningCustomer(customer);
+		
+		assertEquals("Teller's list of customers size should now be 1", teller.getCustomers().size(), 1);
+		assertEquals("Teller's first customer in the list should have state NeedingAssistance", 
+				teller.getCustomer(0).getState(), "NeedingAssistance");
+		teller.getCustomers().get(0).setAccount(1);
+		
+		teller.pickAndExecuteAnAction();
+		
+		assertEquals("Teller's first customer in the list should have the state AskedAssistance", 
+				teller.getCustomer(0).getState(), "AskedAssistance");
+				
+		teller.msgWithdrawMoney(1,100.0);
+		
+		assertEquals("Teller's first customer in the list should have 100 dollars in his account", 
+				teller.getCustomer(0).getMoneyToWithdraw(),100.0);
+		assertEquals("Teller's first customer in the list should have the state WithdrawingMoney", 
+				teller.getCustomer(0).getState(), "WithdrawingMoney");
+		assertEquals("Teller's first customer in the list should have account number 1", 
+				teller.getCustomer(0).getAccount(), 1);
+		
+		teller.pickAndExecuteAnAction();
+		
+		assertEquals("Teller's first customer in the list should have the state Leaving", 
+				teller.getCustomer(0).getState(), "Leaving");
+		
+		assertEquals("Teller's first customer in the list should have 0 dollars in his account now", 
+				teller.getCustomer(0).getMoneyToWithdraw(),0.0);
+		
+	}
+	
+	
+	//Bank Tellers get paid for the day and leave work
+	public void testThreeBackInteraction(){
+		teller.setPerson(person);
+		teller.getPersonAgent().setFunds(400.0);
+		teller.manager = manager;
+		teller.state = TellerState.ReadyForCustomers;
+		
+		//precondition
+		//empty customer log
+		assertEquals("MockCustomer should have an empty event log before the Teller scheduler is called. Instead the MockWaiter's "
+				+ "event log reads: " + customer.log.toString(), 0, customer.log.size());
+		assertEquals("Teller state should be ReadyForCustomers.", teller.getState(), "ReadyForCustomers");
 		assertEquals("Teller's person funds should be 400.0.", teller.getPersonAgent().getFunds(), 400.0);
 		
 		teller.msgDoneWorking();
