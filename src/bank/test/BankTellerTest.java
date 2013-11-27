@@ -33,7 +33,7 @@ public class BankTellerTest extends TestCase {
 		manager = new MockBankManager("mockbankmanager");		
 		customer = new MockBankCustomer("mockcustomer",300,0);
 		person = new MockPerson("mockperson");
-		teller = new BankTellerRole("bankteller");
+		teller = new BankTellerRole();
 	}	
 	
 	//teller initial state Arrived At Work
@@ -63,28 +63,7 @@ public class BankTellerTest extends TestCase {
 	
 	//Deposit w/ Account
 	public void testOneBankInteraction(){	
-		teller.setPerson(person);
-		teller.getPersonAgent().setFunds(400.0);
 		
-		//precondition
-		assertEquals("Teller state should be DoingNothing.", teller.getState(), "DoingNothing");
-		assertEquals("Teller's person funds should be 400.0.", teller.getPersonAgent().getFunds(), 400.0);
-		
-		teller.msgDoneWorking();
-		
-		assertEquals("Teller state should be DoneWorking.", teller.getState(), "DoneWorking");
-		
-		teller.pickAndExecuteAnAction();
-		
-			//empty customers
-			assertEquals("Teller should have 0 customers in it. It doesn't.", teller.getCustomers().size(), 0);
-			
-			//empty customer log
-			assertEquals("MockCustomer should have an empty event log before the Teller scheduler is called. Instead the MockWaiter's "
-					+ "event log reads: " + customer.log.toString(), 0, customer.log.size());
-			
-			assertFalse("Market scheduler should've returned false. It didn't",
-					teller.pick());
 	}
 	
 	//Deposit w/o Account
@@ -102,10 +81,6 @@ public class BankTellerTest extends TestCase {
 		
 	}
 	
-	//Withdraw w/ < $100 in Account
-	public void testFiveBankInteraction(){
-		
-	}
 	
 	//Loan w/ Good Credit (No taking a loan)
 	public void testSixBankInteraction(){
@@ -117,14 +92,44 @@ public class BankTellerTest extends TestCase {
 		
 	}
 	
-	//Bank tellers are busy
-	public void testEightBankInteraction(){
-		
-	}
-	
-	//No Bank Tellers
+	//Bank Tellers get paid for the day and leave work
 	public void testNineBackInteraction(){
+		teller.setPerson(person);
+		teller.getPersonAgent().setFunds(400.0);
+		teller.manager = manager;
 		
+		//precondition
+		//empty customer log
+		assertEquals("MockCustomer should have an empty event log before the Teller scheduler is called. Instead the MockWaiter's "
+				+ "event log reads: " + customer.log.toString(), 0, customer.log.size());
+		assertEquals("Teller state should be ArrivedAtWork.", teller.getState(), "ArrivedAtWork");
+		assertEquals("Teller's person funds should be 400.0.", teller.getPersonAgent().getFunds(), 400.0);
+		
+		teller.msgDoneWorking();
+		
+		assertEquals("Teller state should be DoneWorking.", teller.getState(), "DoneWorking");
+		
+		teller.pickAndExecuteAnAction();
+		
+		assertEquals("Teller state should be GettingPaycheck.", teller.getState(), "GettingPaycheck");
+		assertEquals("Customer's x gui position/destination should be x teller",
+				teller.tellerGui.getxDestination(),teller.tellerGui.getXmanager());
+		assertEquals("Customer's y gui position/destination should be y teller",
+				teller.tellerGui.getyDestination(),teller.tellerGui.getYmanager());
+		
+		teller.msgHereIsPaycheck(100.0);
+		
+		assertEquals("Teller's person funds should be 500.0 now since he was paid 100 for his day's work", teller.getPersonAgent().getFunds(), 500.0);
+		assertEquals("Teller state should be ReceivedPaycheck.", teller.getState(), "ReceivedPaycheck");
+		
+		teller.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's x gui position/destination should be x exit",
+				teller.tellerGui.getxDestination(),teller.tellerGui.getXexit());
+		assertEquals("Customer's y gui position/destination should be y exit",
+				teller.tellerGui.getyDestination(),teller.tellerGui.getYexit());
+		assertEquals("Teller state should be Done.", teller.getState(), "Gone");
+			
 	}
 
 }

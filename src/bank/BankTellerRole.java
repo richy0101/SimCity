@@ -36,8 +36,8 @@ public class BankTellerRole extends Role implements BankTeller {
 	private static final int MAXLOAN = 1000;
 	private Semaphore doneAnimation = new Semaphore(0,true);
 	private int registerNumber = 0;
-    private BankManager manager;
-    private BankTellerGui tellerGui;
+    public BankManager manager;
+    public BankTellerGui tellerGui;
     public Person person;
     private enum TellerState {ArrivedAtWork, AtManager, GoingToRegister, ReadyForCustomers, DoneWorking, GettingPaycheck, ReceivedPaycheck, Gone, ToldManager};
     private TellerState state;
@@ -63,6 +63,12 @@ public class BankTellerRole extends Role implements BankTeller {
 				b.addGui(tellerGui);
 			}
 		}
+    }
+    
+    //Constructor for unit test
+    public BankTellerRole(){
+    	state = TellerState.ArrivedAtWork;
+    	tellerGui = new BankTellerGui(this);
     }
     
     public void setGui(BankTellerGui tellerGui){
@@ -295,35 +301,38 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	
 	private void GiveLoan(MyCustomer myCustomer) {
+		print("Giving loan");
 		AccountSystem.sharedInstance().getAccounts().get(myCustomer.accountNumber).loanAccepted(MAXLOAN);
 		myCustomer.customer.msgHereAreFunds(MAXLOAN);
 		myCustomer.custState = CustomerState.Leaving;
 	}
 	
 	private void RejectLoan(MyCustomer myCustomer) {
+		print("Rejecting loan");
 		myCustomer.customer.msgLoanDenied();
 		myCustomer.custState = CustomerState.Leaving;
 	}
 	
 	private void GetPayCheck(){
+		print("Receiving paycheck");
 		tellerGui.DoGoToManager();
 		manager.msgCollectPay(this);
-		try {
-			doneAnimation.acquire();
+		/*	doneAnimation.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}
+		}*/
 		state = TellerState.GettingPaycheck;
 	}
 	
 	private void LeaveBank() {
+		print("Leaving Bank");
 		tellerGui.DoLeaveBank();
 		manager.msgTellerLeavingWork(this);
-		try {
+		/*try {
 			doneAnimation.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}
+		}*/
 		state = TellerState.Gone;
 		getPersonAgent().msgRoleFinished();
 	}
@@ -366,5 +375,13 @@ public class BankTellerRole extends Role implements BankTeller {
 	public String getState() {
 		return state.toString();
 	}
+	
+	/**
+	 * @param ManagerAgent
+	 */
+	public void setManager(BankManagerAgent agent){
+		manager = agent;
+	}
+	 
 
 }

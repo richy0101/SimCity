@@ -83,6 +83,7 @@ public class BankTellerGui implements Gui {
 		if(xPos == xDestination && yPos == yDestination
 			&& tellerCommand == Command.GoToRegister) {
 			agent.msgAtRegister();
+			tellerCommand = Command.noCommand;
 		}
 		if(xPos == xDestination && yPos == yDestination
 				&& (xDestination == xManager) && (yDestination == yManager) && tellerCommand == Command.GoToManager) {
