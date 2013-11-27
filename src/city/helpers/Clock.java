@@ -15,7 +15,7 @@ public class Clock {
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 			public void run() {
-				notifyTimeToWakeUp();
+				//notifyTimeToWakeUp();
 			}
 		},
 		6000);
@@ -28,7 +28,13 @@ public class Clock {
 	public long getTime() {
 		return System.currentTimeMillis() - startTime;
 	}
-	
+	/*
+	public boolean checkIsDay() {
+		if(timer % 10000 = 0)
+		return true;
+	}
+	*/
+/*	
 	private void notifyTimeToWakeUp() {
 		for(PersonAgent personAgent : Directory.sharedInstance().getPeople()) {
 			if(getTime()%Constants.DAY == 5) {
@@ -37,4 +43,5 @@ public class Clock {
 			}
 		}
 	}
+*/
 }
