@@ -49,8 +49,10 @@ public class BankCustomerTest extends TestCase {
 		customer.pickAndExecuteAnAction();
 		
 		assertEquals("Customer's state should be waiting ",customer.getState(),"Waiting");
-		assertEquals("Customer's x gui position/destination should be at x manager",customer.customerGui.getxDestination(),400);
-		assertEquals("Customer's y gui position/destination should be at y manager",customer.customerGui.getyDestination(),68);
+		assertEquals("Customer's x gui position/destination should be at x manager",
+				customer.customerGui.getxDestination(),400);
+		assertEquals("Customer's y gui position/destination should be at y manager",
+				customer.customerGui.getyDestination(),68);
 		
 		
 		assertEquals("Customer's teller number to go to should be -1 (null)",customer.getTellerNumber(),-1);
@@ -59,18 +61,95 @@ public class BankCustomerTest extends TestCase {
 		
 		customer.pickAndExecuteAnAction();
 		
-		assertEquals("Customer's x gui position/destination should be x teller",customer.customerGui.getxDestination(),customer.customerGui.getxTeller());
-		assertEquals("Customer's y gui position/destination should be y teller",customer.customerGui.getyDestination(),customer.customerGui.getyTeller());
+		assertEquals("Customer's x gui position/destination should be x teller",
+				customer.customerGui.getxDestination(),customer.customerGui.getxTeller());
+		assertEquals("Customer's y gui position/destination should be y teller",
+				customer.customerGui.getyDestination(),customer.customerGui.getyTeller());
+		
 		customer.msgAtTeller();
+		
 		assertEquals("Customer's state should be BeingHelped ",customer.getState(),"BeingHelped");
 		assertEquals("Customer's task should be Deposit ",customer.getTask(),"Deposit");
 		
-		assertEquals("Customer's funds should be 400 before depositing",customer.getPersonAgent().getFunds(),400.0);
+		assertEquals("Customer's funds should be 400 before depositing",
+				customer.getPersonAgent().getFunds(),400.0);
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's state should be WaitingForHelpResponse ",
+				customer.getState(),"WaitingForHelpResponse");
+		assertEquals("Customer's funds should be 100 now that hes deposited",
+				customer.getPersonAgent().getFunds(),100.0);
+		
+		customer.msgDepositSuccessful();
+		
+		assertEquals("Customer's state should be InTransit ",customer.getState(),"InTransit");
+		
+		customer.msgAnimationFinishedLeavingBank();
+		
+		assertEquals("Customer's x gui position/destination should be at x exit",
+				customer.customerGui.getxDestination(),customer.customerGui.getxExit());
+		assertEquals("Customer's y gui position/destination should be at y exit",
+				customer.customerGui.getyDestination(),customer.customerGui.getyExit());
+		assertEquals("Customer's state should be Gone ",customer.getState(),"Gone");
+		
+	}
+	
+	//Deposit w/o Account
+	public void testTwoBankInteraction(){
+		customer = new BankCustomerRole("Deposit",300.0,0,"FakeCustomer");
+		customer.manager = manager;
+		customer.setPerson(person);
+		customer.setAccountNumber(0);
+		assertTrue(customer.getPersonAgent().equals(person));
+		customer.getPersonAgent().setFunds(400.0);
+		
+		//precondition
+		assertEquals("Customers account number should not be set- 0", customer.getAccountNumber(),0);
+		assertEquals("Customer should have the manager from setUp()", customer.manager,manager);
+		assertEquals("Customer's state should be DoingNothing ",customer.getState(),"DoingNothing");
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's state should be waiting ",customer.getState(),"Waiting");
+		assertEquals("Customer's x gui position/destination should be at x manager",
+				customer.customerGui.getxDestination(),400);
+		assertEquals("Customer's y gui position/destination should be at y manager",
+				customer.customerGui.getyDestination(),68);
+		
+		
+		assertEquals("Customer's teller number to go to should be -1 (null)",customer.getTellerNumber(),-1);
+		
+		customer.msgHowCanIHelpYou(teller, 1);
+		
+		assertEquals("Customer's teller number to go to should be 1",customer.getTellerNumber(),1);
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's x gui position/destination should be x teller",
+				customer.customerGui.getxDestination(),customer.customerGui.getxTeller());
+		assertEquals("Customer's y gui position/destination should be y teller",
+				customer.customerGui.getyDestination(),customer.customerGui.getyTeller());
+		
+		customer.msgAtTeller();
+		
+		assertEquals("Customer's state should be BeingHelped ",customer.getState(),"BeingHelped");
+		assertEquals("Customer's task should be Deposit ",customer.getTask(),"Deposit");
+		
+		assertEquals("Customer's funds should be 400 before depositing",
+				customer.getPersonAgent().getFunds(),400.0);
 		
 		customer.pickAndExecuteAnAction();
 		
 		assertEquals("Customer's state should be WaitingForHelpResponse ",customer.getState(),"WaitingForHelpResponse");
-		assertEquals("Customer's funds should be 100 now that hes deposited",customer.getPersonAgent().getFunds(),100.0);
+		assertNotSame("Customer's funds should not be 100 because he doesn't have an open account",customer.getPersonAgent().getFunds(),100.0);
+		
+		customer.msgHereIsYourAccount(1);
+		
+		assertEquals("Customer's account number should now be 1 ",customer.getAccountNumber(),1);
+		assertEquals("Customer's state should now be BeingHelped ",customer.getState(),"BeingHelped");
+		
+		customer.pickAndExecuteAnAction();
 		
 		customer.msgDepositSuccessful();
 		
@@ -79,17 +158,6 @@ public class BankCustomerTest extends TestCase {
 		customer.msgAnimationFinishedLeavingBank();
 		
 		assertEquals("Customer's state should be Gone ",customer.getState(),"Gone");
-		
-	}
-	
-	//Deposit w/o Account
-	public void testTwoBankInteraction(){
-		customer = new BankCustomerRole("Deposit",300,0.0);
-		
-		assertEquals("Customer should not be assigned a bank teller",customer.getTellerNumber(), -1);
-		//customer.msgGoToRegister(1);
-		customer.pickAndExecuteAnAction();
-		assertEquals("Teller should be at register 1",teller.registerNumber, 1);
 		
 		
 		
@@ -126,8 +194,9 @@ public class BankCustomerTest extends TestCase {
 		
 	}
 	
-	//No Bank Tellers
+	//Bank Tellers leave work and get paid
 	public void testNineBackInteraction(){
+		
 		
 	}
 

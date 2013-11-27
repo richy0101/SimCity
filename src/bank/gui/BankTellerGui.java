@@ -63,6 +63,7 @@ public class BankTellerGui implements Gui {
 
     }
 	
+
 	public void setAgent(BankTellerRole agent){
 		this.agent = agent;
 	}
@@ -139,6 +140,48 @@ public class BankTellerGui implements Gui {
 		xDestination = xExit;
 		yDestination = yExit;
 		tellerCommand = Command.LeaveBank;
+	}
+	
+	/**
+	 * @return the xDestination
+	 */
+	public int getxDestination() {
+		return xDestination;
+	}
+
+	/**
+	 * @return the yDestination
+	 */
+	public int getyDestination() {
+		return yDestination;
+	}
+
+	/**
+	 * @return the xmanager
+	 */
+	public static int getXmanager() {
+		return xManager;
+	}
+
+	/**
+	 * @return the ymanager
+	 */
+	public static int getYmanager() {
+		return yManager;
+	}
+
+	/**
+	 * @return the xexit
+	 */
+	public static int getXexit() {
+		return xExit;
+	}
+
+	/**
+	 * @return the yexit
+	 */
+	public static int getYexit() {
+		return yExit;
 	}
     
 }
