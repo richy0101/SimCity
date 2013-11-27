@@ -137,13 +137,13 @@ public class PersonAgent extends Agent implements Person {
 				preparationTime = 5000;
 			}
 			else if (this.type == "Steak") {
-				preparationTime = 9000;
+				preparationTime = 10000;
 			}
 			else if (this.type == "Salad") {
-				preparationTime = 4000;
+				preparationTime = 20000;
 			}
 			else if (this.type == "Pizza") {
-				preparationTime = 7000;
+				preparationTime = 40000;
 			}
 			stock = new Random().nextInt(2);
 		}
@@ -155,7 +155,7 @@ public class PersonAgent extends Agent implements Person {
 		homeName = home;
 		currentLocation = home;
 		houseState = HouseState.OwnsAHouse;
-		setPersonState(PersonState.Idle);
+		setPersonState(PersonState.Sleeping);
 		hungerLevel = 0;
 		dirtynessLevel = 0;
 		funds = 10000.00;
@@ -222,7 +222,7 @@ public class PersonAgent extends Agent implements Person {
 		this.funds = initialFunds;
 		String vehicleStatusNoSpace = vehicleStatus.replaceAll(" ", "");
 		this.transMethod = TransportationMethod.valueOf(vehicleStatusNoSpace);
-		setPersonState(PersonState.Idle);
+		setPersonState(PersonState.Sleeping);
 		hungerLevel = 0;
 		dirtynessLevel = 0;
 		rentDue = false;
@@ -257,7 +257,7 @@ public class PersonAgent extends Agent implements Person {
 		this.transMethod = TransportationMethod.valueOf(vehicleStatusNoSpace);
 		String housingStatusNoSpace = housingStatus.replaceAll(" ", "");
 		this.houseState = HouseState.valueOf(housingStatusNoSpace);
-		setPersonState(PersonState.Idle);
+		setPersonState(PersonState.Sleeping);
 		hungerLevel = 0;
 		dirtynessLevel = 0;
 		rentDue = false;
@@ -595,12 +595,12 @@ public class PersonAgent extends Agent implements Person {
 		Role t = new TransportationRole(workDetails.workLocation, currentLocation);
 		t.setPerson(this);
 		roles.add(t);
-//		personTimer.schedule(new PersonTimerTask(this) {
-//			public void run() {
-//				p.msgDoneWorking();
-//			}
-//		},
-//		9000000);//time for working
+		personTimer.schedule(new PersonTimerTask(this) {
+			public void run() {
+				p.msgDoneWorking();
+			}
+		},
+		50000);//time for working
 	}
 	private void cleanRoom() {
 
