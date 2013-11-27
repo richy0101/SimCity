@@ -70,7 +70,7 @@ public class PersonAgent extends Agent implements Person {
 	Timer personTimer = new Timer();
 	
 	//bank information
-	int accountNumber;
+	int accountNumber = 0;
 	
 	//Animation Semaphores
 	private Semaphore actionComplete = new Semaphore(0,true);
@@ -193,6 +193,7 @@ public class PersonAgent extends Agent implements Person {
 				b.addGui(personGui);
 			}
 		}
+		//print("In hack for set task");
 		if (this.name.contains("BankD")) {
 			setPersonState(PersonState.WantsToDeposit);
 		}
@@ -207,12 +208,14 @@ public class PersonAgent extends Agent implements Person {
 			clearInventory();
 			checkInventory();
 		}
-		personTimer.schedule(new PersonTimerTask(this) {
-			public void run() {
-				p.msgWakeUp();
-			}
-		},
-		aggressivenessLevel * 1000);//time for cooking
+		else {
+			personTimer.schedule(new PersonTimerTask(this) {
+				public void run() {
+					p.msgWakeUp();
+				}
+			},
+			aggressivenessLevel * 1000);//time for cooking
+		}
 		startThread();
 	}
 	/**
@@ -551,9 +554,19 @@ public class PersonAgent extends Agent implements Person {
 			setPersonState(PersonState.NeedsToWork);
 			return true;
 		}
-		else if(funds < 100.00) {
+		else if (funds > 1000.00) {
+			print("Eval says GO DEPOSIT YOU RICH MAN/WOMAN");
+			setPersonState(PersonState.WantsToDeposit);
+			return true;
+		}
+		else if(funds < 50.00 && accountNumber != 0) {
 			print("Eval says GO WITHDRAW");
 			setPersonState(PersonState.WantsToWithdraw);
+			return true;
+		}
+		else if (funds < 50.00) {
+			print("Eval says GO GET LOAN");
+			setPersonState(PersonState.WantsToGetLoan);
 			return true;
 		}
 		else if(checkInventory() == false) {
@@ -700,7 +713,7 @@ public class PersonAgent extends Agent implements Person {
 				p.msgDoneWorking();
 			}
 		},
-		30000 * aggressivenessLevel);//time for working
+		20000 * aggressivenessLevel);//time for working
 	}
 	private void cleanRoom() {
 
