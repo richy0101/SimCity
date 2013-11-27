@@ -223,7 +223,8 @@ public class PersonAgent extends Agent implements Person {
 		this.name = name;
 		//Set Up Work.
 		Role r = factory.createRole(job, this);
-		workDetails = new WorkDetails(r, Directory.sharedInstance().roleDirectory.get(r.toString()));
+		//print("Role created from front end: " + r.getClass().getName());
+		workDetails = new WorkDetails(r, Directory.sharedInstance().roleDirectory.get(r.getClass().getName()));
 		//finish setting up Work
 		this.aggressivenessLevel = aggressivenessLevel;
 		this.funds = initialFunds;
@@ -244,6 +245,15 @@ public class PersonAgent extends Agent implements Person {
 				b.addGui(personGui);
 			}
 		}
+		//Set up inventory
+		Food initialFood = new Food("Chicken");
+		inventory.add(initialFood);
+		initialFood = new Food ("Steak");
+		inventory.add(initialFood);
+		initialFood = new Food ("Salad");
+		inventory.add(initialFood);
+		initialFood = new Food ("Pizza");
+		inventory.add(initialFood);
 		personTimer.schedule(new PersonTimerTask(this) {
 			public void run() {
 				p.msgWakeUp();
@@ -285,6 +295,16 @@ public class PersonAgent extends Agent implements Person {
 				b.addGui(personGui);
 			}
 		}
+		//Set up inventory
+		Food initialFood = new Food("Chicken");
+		inventory.add(initialFood);
+		initialFood = new Food ("Steak");
+		inventory.add(initialFood);
+		initialFood = new Food ("Salad");
+		inventory.add(initialFood);
+		initialFood = new Food ("Pizza");
+		inventory.add(initialFood);
+		
 		personTimer.schedule(new PersonTimerTask(this) {
 			public void run() {
 				p.msgWakeUp();
