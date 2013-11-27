@@ -16,6 +16,10 @@ public class Clock {
 		timer.schedule(new TimerTask() {
 			public void run() {
 				//notifyTimeToWakeUp();
+				if(getTime() % 10000 == 0)
+					isDayTime();
+				else
+					isNightTime();
 			}
 		},
 		6000);
@@ -28,12 +32,15 @@ public class Clock {
 	public long getTime() {
 		return System.currentTimeMillis() - startTime;
 	}
-	/*
-	public boolean checkIsDay() {
-		if(timer % 10000 = 0)
+	
+	public boolean isDayTime() {
 		return true;
 	}
-	*/
+	
+	public boolean isNightTime() {
+		return true;
+	}
+	
 /*	
 	private void notifyTimeToWakeUp() {
 		for(PersonAgent personAgent : Directory.sharedInstance().getPeople()) {
