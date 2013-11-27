@@ -163,6 +163,7 @@ public class PersonAgent extends Agent implements Person {
 		hasWorked = false;
 		aggressivenessLevel = 1;
 		transMethod = TransportationMethod.TakesTheBus;
+		Directory.sharedInstance().addPerson(this);
 		//Set up inventory
 		Food initialFood = new Food("Chicken");
 		inventory.add(initialFood);
@@ -195,7 +196,7 @@ public class PersonAgent extends Agent implements Person {
 			clearInventory();
 			checkInventory();
 		}
-		//startThread();
+		startThread();
 	}
 	/**
 	 * FRONT END CONSTRUCTOR BELOW
