@@ -7,6 +7,7 @@ import market.test.mock.MockPerson;
 import bank.Bank;
 import bank.BankCustomerRole;
 import bank.BankTellerRole;
+import bank.helpers.AccountSystem;
 import bank.interfaces.BankTeller;
 import bank.test.mock.*;
 import junit.framework.*;
@@ -38,6 +39,8 @@ public class BankCustomerTest extends TestCase {
 		customer.manager = manager;
 		customer.setPerson(person);
 		customer.setAccountNumber(1);
+		assertTrue(customer.getPersonAgent().equals(person));
+		customer.getPersonAgent().setFunds(400.0);
 		
 		//precondition
 		assertEquals("Customers account number should be 1", customer.getAccountNumber(),1);
@@ -47,8 +50,10 @@ public class BankCustomerTest extends TestCase {
 		customer.pickAndExecuteAnAction();
 		
 		assertEquals("Customer's state should be waiting ",customer.getState(),"Waiting");
-		assertEquals("Customer's x gui position/destination should be at x manager",customer.customerGui.getxDestination(),400);
-		assertEquals("Customer's y gui position/destination should be at y manager",customer.customerGui.getyDestination(),68);
+		assertEquals("Customer's x gui position/destination should be at x manager",
+				customer.customerGui.getxDestination(),400);
+		assertEquals("Customer's y gui position/destination should be at y manager",
+				customer.customerGui.getyDestination(),68);
 		
 		
 		assertEquals("Customer's teller number to go to should be -1 (null)",customer.getTellerNumber(),-1);
@@ -57,18 +62,95 @@ public class BankCustomerTest extends TestCase {
 		
 		customer.pickAndExecuteAnAction();
 		
-		assertEquals("Customer's x gui position/destination should be x teller",customer.customerGui.getxDestination(),customer.customerGui.getxTeller());
-		assertEquals("Customer's y gui position/destination should be y teller",customer.customerGui.getyDestination(),customer.customerGui.getyTeller());
+		assertEquals("Customer's x gui position/destination should be x teller",
+				customer.customerGui.getxDestination(),customer.customerGui.getxTeller());
+		assertEquals("Customer's y gui position/destination should be y teller",
+				customer.customerGui.getyDestination(),customer.customerGui.getyTeller());
+		
 		customer.msgAtTeller();
+		
 		assertEquals("Customer's state should be BeingHelped ",customer.getState(),"BeingHelped");
 		assertEquals("Customer's task should be Deposit ",customer.getTask(),"Deposit");
 		
-		assertEquals("Customer's funds should be 300 ",customer.getMoneyToDeposit(),300.0);
+		assertEquals("Customer's funds should be 400 before depositing",
+				customer.getPersonAgent().getFunds(),400.0);
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's state should be WaitingForHelpResponse ",
+				customer.getState(),"WaitingForHelpResponse");
+		assertEquals("Customer's funds should be 100 now that hes deposited",
+				customer.getPersonAgent().getFunds(),100.0);
+		
+		customer.msgDepositSuccessful();
+		
+		assertEquals("Customer's state should be InTransit ",customer.getState(),"InTransit");
+		
+		customer.msgAnimationFinishedLeavingBank();
+		
+		assertEquals("Customer's x gui position/destination should be at x exit",
+				customer.customerGui.getxDestination(),customer.customerGui.getxExit());
+		assertEquals("Customer's y gui position/destination should be at y exit",
+				customer.customerGui.getyDestination(),customer.customerGui.getyExit());
+		assertEquals("Customer's state should be Gone ",customer.getState(),"Gone");
+		
+	}
+	
+	//Deposit w/o Account
+	public void testTwoBankInteraction(){
+		customer = new BankCustomerRole("Deposit",300.0,0,"FakeCustomer");
+		customer.manager = manager;
+		customer.setPerson(person);
+		customer.setAccountNumber(0);
+		assertTrue(customer.getPersonAgent().equals(person));
+		customer.getPersonAgent().setFunds(400.0);
+		
+		//precondition
+		assertEquals("Customers account number should not be set- 0", customer.getAccountNumber(),0);
+		assertEquals("Customer should have the manager from setUp()", customer.manager,manager);
+		assertEquals("Customer's state should be DoingNothing ",customer.getState(),"DoingNothing");
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's state should be waiting ",customer.getState(),"Waiting");
+		assertEquals("Customer's x gui position/destination should be at x manager",
+				customer.customerGui.getxDestination(),400);
+		assertEquals("Customer's y gui position/destination should be at y manager",
+				customer.customerGui.getyDestination(),68);
+		
+		
+		assertEquals("Customer's teller number to go to should be -1 (null)",customer.getTellerNumber(),-1);
+		
+		customer.msgHowCanIHelpYou(teller, 1);
+		
+		assertEquals("Customer's teller number to go to should be 1",customer.getTellerNumber(),1);
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's x gui position/destination should be x teller",
+				customer.customerGui.getxDestination(),customer.customerGui.getxTeller());
+		assertEquals("Customer's y gui position/destination should be y teller",
+				customer.customerGui.getyDestination(),customer.customerGui.getyTeller());
+		
+		customer.msgAtTeller();
+		
+		assertEquals("Customer's state should be BeingHelped ",customer.getState(),"BeingHelped");
+		assertEquals("Customer's task should be Deposit ",customer.getTask(),"Deposit");
+		
+		assertEquals("Customer's funds should be 400 before depositing",
+				customer.getPersonAgent().getFunds(),400.0);
 		
 		customer.pickAndExecuteAnAction();
 		
 		assertEquals("Customer's state should be WaitingForHelpResponse ",customer.getState(),"WaitingForHelpResponse");
-		assertEquals("Customer's funds should be 0 now that hes deposited",customer.getMoneyToDeposit(),0.0);
+		assertNotSame("Customer's funds should not be 100 because he doesn't have an open account",customer.getPersonAgent().getFunds(),100.0);
+		
+		customer.msgHereIsYourAccount(1);
+		
+		assertEquals("Customer's account number should now be 1 ",customer.getAccountNumber(),1);
+		assertEquals("Customer's state should now be BeingHelped ",customer.getState(),"BeingHelped");
+		
+		customer.pickAndExecuteAnAction();
 		
 		customer.msgDepositSuccessful();
 		
@@ -79,91 +161,284 @@ public class BankCustomerTest extends TestCase {
 		assertEquals("Customer's state should be Gone ",customer.getState(),"Gone");
 		
 		
-		//teller initial state Arrived At Work
-		//teller state = AtManager 
-		//manager messages msgGoToRegister
-		//teller state = GoingToRegister
-		//teller state = ReadyForCustomers;
-		//customers initial state should be "DoingNothing"
-		//customer messages manager.msgINeedAssistance
-		//customer state = Waiting
-		//managers initial state should be "Idle"
-		//customers.size should be empty
-		//manager adds customer to customers list
-		//customers.size should be one
-		//teller size should be one
-		//myteller initial state should be Idle
-		//manager messages teller .msgAssigningCustomer
-		//myteller state should be busy
-		//manager changes tellerstate busy
-		//manager removes customer from customers
-		//customer size should be empty
-		//teller's customer list should be empty
-		//teller receives .msgAssigningCustomer
-		//teller adds customer
-		//mycustomer state should initially be NeedingAssistance
-		//teller messages customer .msgHowCanIHelpYou?
-		//mycustomerstate = AskedAssistance
-		//customerstate = GoingToTeller
-		//customer receives message from gui msgAtTeller
-		//customer state = BeingHelped
-		//customer messages teller msgOpenAccount
-		//account should not exist for user
-		//mycustomerstate == OpeningAccount
-		//teller messages customer .msgHereIsYourAccount
-		//mycustomer state == OpenedAccount	
-		
-	}
-	
-	//Deposit w/o Account
-	public void testTwoBankInteraction(){
-		/*customer = new BankCustomerRole("WantsToDeposit",300,0);
-		
-		assertEquals("Customer should not be assigned a bank teller",customer.registerNumber, -1);
-		assertEquals("Customer should not be at manager ",customer.registerNumber, -1);
-		customer.msgGoToRegister(1);
-		assertFalse("Teller scheduler should return true,
-				teller.pickAndExecuteAction(),true);
-		assertEquals("Teller should be at register 1",teller.registerNumber, 1);
-		*/
-		
 		
 		
 	}
 	
 	//Withdraw w/ Account
 	public void testThreeBankInteraction(){
+		customer = new BankCustomerRole("Withdraw",300.0,0,"FakeCustomer");
+		customer.manager = manager;
+		customer.setPerson(person);
+		customer.setAccountNumber(1);
+		assertTrue(customer.getPersonAgent().equals(person));
+		customer.getPersonAgent().setFunds(400.0);
 		
+		//precondition
+		assertEquals("Customers account number should be 1", customer.getAccountNumber(),1);
+		assertEquals("Customer should have the manager from setUp()", customer.manager,manager);
+		assertEquals("Customer's state should be DoingNothing ",customer.getState(),"DoingNothing");
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's state should be waiting ",customer.getState(),"Waiting");
+		assertEquals("Customer's x gui position/destination should be at x manager",
+				customer.customerGui.getxDestination(),400);
+		assertEquals("Customer's y gui position/destination should be at y manager",
+				customer.customerGui.getyDestination(),68);
+		
+		
+		assertEquals("Customer's teller number to go to should be -1 (null)",customer.getTellerNumber(),-1);
+		customer.msgHowCanIHelpYou(teller, 1);
+		assertEquals("Customer's teller number to go to should be 1",customer.getTellerNumber(),1);
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's x gui position/destination should be x teller",
+				customer.customerGui.getxDestination(),customer.customerGui.getxTeller());
+		assertEquals("Customer's y gui position/destination should be y teller",
+				customer.customerGui.getyDestination(),customer.customerGui.getyTeller());
+		
+		customer.msgAtTeller();
+		
+		assertEquals("Customer's state should be BeingHelped ",customer.getState(),"BeingHelped");
+		assertEquals("Customer's task should be Withdraw ",customer.getTask(),"Withdraw");
+		
+		assertEquals("Customer's funds should be 400 before withdrawing",
+				customer.getPersonAgent().getFunds(),400.0);
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's state should be WaitingForHelpResponse ",
+				customer.getState(),"WaitingForHelpResponse");
+		
+		customer.msgHereAreFunds(customer.getMoneyToWithdraw());
+		
+		assertEquals("Customer's funds should be 500 now that hes withdrawn 100",
+				customer.getPersonAgent().getFunds(),500.0);
+		assertEquals("Customer's state should be InTransit ",customer.getState(),"InTransit");
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's x gui position/destination should be at x exit",
+				customer.customerGui.getxDestination(),customer.customerGui.getxExit());
+		assertEquals("Customer's y gui position/destination should be at y exit",
+				customer.customerGui.getyDestination(),customer.customerGui.getyExit());
+		
+		customer.msgAnimationFinishedLeavingBank();
+		
+		assertEquals("Customer's state should be Gone ",customer.getState(),"Gone");
 	}
 	
 	//Withdraw w/o Account
 	public void testFourBankInteraction(){
+		customer = new BankCustomerRole("Withdraw",300.0,0,"FakeCustomer");
+		customer.manager = manager;
+		customer.setPerson(person);
+		customer.setAccountNumber(0);
+		assertTrue(customer.getPersonAgent().equals(person));
+		customer.getPersonAgent().setFunds(400.0);
 		
-	}
-	
-	//Withdraw w/ < $100 in Account
-	public void testFiveBankInteraction(){
+		//precondition
+		assertEquals("Customers account number should be 0", customer.getAccountNumber(),0);
+		assertEquals("Customer should have the manager from setUp()", customer.manager,manager);
+		assertEquals("Customer's state should be DoingNothing ",customer.getState(),"DoingNothing");
 		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's state should be waiting ",customer.getState(),"Waiting");
+		assertEquals("Customer's x gui position/destination should be at x manager",
+				customer.customerGui.getxDestination(),400);
+		assertEquals("Customer's y gui position/destination should be at y manager",
+				customer.customerGui.getyDestination(),68);
+		
+		
+		assertEquals("Customer's teller number to go to should be -1 (null)",customer.getTellerNumber(),-1);
+		customer.msgHowCanIHelpYou(teller, 1);
+		assertEquals("Customer's teller number to go to should be 1",customer.getTellerNumber(),1);
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's x gui position/destination should be x teller",
+				customer.customerGui.getxDestination(),customer.customerGui.getxTeller());
+		assertEquals("Customer's y gui position/destination should be y teller",
+				customer.customerGui.getyDestination(),customer.customerGui.getyTeller());
+		
+		customer.msgAtTeller();
+		
+		assertEquals("Customer's state should be BeingHelped ",customer.getState(),"BeingHelped");
+		assertEquals("Customer's task should be Withdraw ",customer.getTask(),"Withdraw");
+		
+		assertEquals("Customer's funds should be 400 before withdrawing",
+				customer.getPersonAgent().getFunds(),400.0);
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's state should be WaitingForHelpResponse ",
+				customer.getState(),"WaitingForHelpResponse");
+		assertNotSame("Customer's funds should not be 500 because he doesn't have an open account",
+				customer.getPersonAgent().getFunds(),500.0);
+		
+		customer.msgHereIsYourAccount(1);
+		
+		assertEquals("Customer's account number should now be 1 ",customer.getAccountNumber(),1);
+		assertEquals("Customer's state should now be BeingHelped ",customer.getState(),"BeingHelped");
+		
+		customer.pickAndExecuteAnAction();
+		
+		customer.msgHereAreFunds(customer.getMoneyToWithdraw());
+		
+		assertEquals("Customer's funds should be 500 now that hes withdrawn 100",
+				customer.getPersonAgent().getFunds(),500.0);
+		assertEquals("Customer's state should be InTransit ",customer.getState(),"InTransit");
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's x gui position/destination should be at x exit",
+				customer.customerGui.getxDestination(),customer.customerGui.getxExit());
+		assertEquals("Customer's y gui position/destination should be at y exit",
+				customer.customerGui.getyDestination(),customer.customerGui.getyExit());
+		
+		customer.msgAnimationFinishedLeavingBank();
+		
+		assertEquals("Customer's state should be Gone ",customer.getState(),"Gone");
 	}
 	
 	//Loan w/ Good Credit (No taking a loan)
 	public void testSixBankInteraction(){
+		customer = new BankCustomerRole("Loan",0,1000.0,"FakeCustomer");
+		customer.manager = manager;
+		customer.setPerson(person);
+		customer.setAccountNumber(1);
+		assertTrue(customer.getPersonAgent().equals(person));
+		customer.getPersonAgent().setFunds(400.0);
 		
+		//precondition
+		assertEquals("Customers account number should be 1", customer.getAccountNumber(),1);
+		assertEquals("Customer should have the manager from setUp()", customer.manager,manager);
+		assertEquals("Customer's state should be DoingNothing ",customer.getState(),"DoingNothing");
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's state should be waiting ",customer.getState(),"Waiting");
+		assertEquals("Customer's x gui position/destination should be at x manager",
+				customer.customerGui.getxDestination(),400);
+		assertEquals("Customer's y gui position/destination should be at y manager",
+				customer.customerGui.getyDestination(),68);
+		
+		
+		assertEquals("Customer's teller number to go to should be -1 (null)",customer.getTellerNumber(),-1);
+		customer.msgHowCanIHelpYou(teller, 4);
+		assertEquals("Customer's teller number to go to should be 4",customer.getTellerNumber(),4);
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's x gui position/destination should be x teller",
+				customer.customerGui.getxDestination(),customer.customerGui.getxTeller());
+		assertEquals("Customer's y gui position/destination should be y teller",
+				customer.customerGui.getyDestination(),customer.customerGui.getyTeller());
+		
+		customer.msgAtTeller();
+		
+		assertEquals("Customer's state should be BeingHelped ",customer.getState(),"BeingHelped");
+		assertEquals("Customer's task should be Loan ",customer.getTask(),"Loan");
+		
+		assertEquals("Customer's funds should be 400 before attempting to get a loan",
+				customer.getPersonAgent().getFunds(),400.0);
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's state should be WaitingForHelpResponse ",
+				customer.getState(),"WaitingForHelpResponse");
+		
+		customer.msgHereAreFunds(customer.getMoneyRequired());
+		
+		assertEquals("Customer's funds should be 1400 now that hes gotten a loan of $1000",
+				customer.getPersonAgent().getFunds(),1400.0);
+		assertEquals("Customer's state should be InTransit ",customer.getState(),"InTransit");
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's x gui position/destination should be at x exit",
+				customer.customerGui.getxDestination(),customer.customerGui.getxExit());
+		assertEquals("Customer's y gui position/destination should be at y exit",
+				customer.customerGui.getyDestination(),customer.customerGui.getyExit());
+		
+		customer.msgAnimationFinishedLeavingBank();
+		
+		assertEquals("Customer's state should be Gone ",customer.getState(),"Gone");
 	}
 	
 	//Loan w/ Bad Credit (Has taken loan)
 	public void testSevenBankInteraction(){
+		customer = new BankCustomerRole("Loan",0,1000.0,"FakeCustomer");
+		customer.manager = manager;
+		customer.setPerson(person);
+		customer.setAccountNumber(1);
+		assertTrue(customer.getPersonAgent().equals(person));
+		customer.getPersonAgent().setFunds(400.0);
+		AccountSystem.sharedInstance().addAccount(1);
+		AccountSystem.sharedInstance().getAccounts().get(1).elligibleForLoan = false;
+		boolean badCredit = AccountSystem.sharedInstance().getAccounts().get(1).elligibleForLoan;
 		
+		//precondition
+		assertEquals("Customers account number should be 1", customer.getAccountNumber(),1);
+		assertEquals("Customer should have the manager from setUp()", customer.manager,manager);
+		assertEquals("Customer's state should be DoingNothing ",customer.getState(),"DoingNothing");
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's state should be waiting ",customer.getState(),"Waiting");
+		assertEquals("Customer's x gui position/destination should be at x manager",
+				customer.customerGui.getxDestination(),400);
+		assertEquals("Customer's y gui position/destination should be at y manager",
+				customer.customerGui.getyDestination(),68);
+		
+		
+		assertEquals("Customer's teller number to go to should be -1 (null)",customer.getTellerNumber(),-1);
+		customer.msgHowCanIHelpYou(teller, 4);
+		assertEquals("Customer's teller number to go to should be 4",customer.getTellerNumber(),4);
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's x gui position/destination should be x teller",
+				customer.customerGui.getxDestination(),customer.customerGui.getxTeller());
+		assertEquals("Customer's y gui position/destination should be y teller",
+				customer.customerGui.getyDestination(),customer.customerGui.getyTeller());
+		
+		customer.msgAtTeller();
+		
+		assertEquals("Customer's state should be BeingHelped ",customer.getState(),"BeingHelped");
+		assertEquals("Customer's task should be Loan ",customer.getTask(),"Loan");
+		
+		assertEquals("Customer's funds should be 400 before attempting to get a loan with bad credit",
+				customer.getPersonAgent().getFunds(),400.0);
+		
+		assertEquals("Customer's funds should be 400 before attempting to get a loan with bad credit",
+				badCredit,AccountSystem.sharedInstance().getAccounts().get(customer.getAccountNumber()).elligibleForLoan);
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's state should be WaitingForHelpResponse ",
+				customer.getState(),"WaitingForHelpResponse");
+		
+		customer.msgLoanDenied();
+		
+		assertEquals("Customer's funds should be 400 still now because his loan was denied",
+				customer.getPersonAgent().getFunds(),400.0);
+		assertEquals("Customer's state should be Done ",customer.getState(),"Done");
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's state should be InTransit ",customer.getState(),"InTransit");
+		assertEquals("Customer's x gui position/destination should be at x exit",
+				customer.customerGui.getxDestination(),customer.customerGui.getxExit());
+		assertEquals("Customer's y gui position/destination should be at y exit",
+				customer.customerGui.getyDestination(),customer.customerGui.getyExit());
+		
+		customer.msgAnimationFinishedLeavingBank();
+		
+		assertEquals("Customer's state should be Gone ",customer.getState(),"Gone");
 	}
 	
-	//Bank tellers are busy
-	public void testEightBankInteraction(){
-		
-	}
-	
-	//No Bank Tellers
-	public void testNineBackInteraction(){
-		
-	}
-
 }

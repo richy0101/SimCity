@@ -6,6 +6,10 @@ import junit.framework.*;
 import city.PersonAgent.PersonState;
 import city.test.mock.MockTransportation;
 import city.PersonAgent;
+import city.test.mock.*;
+import city.helpers.*;
+
+
 
 public class PersonTest extends TestCase {
 	
@@ -15,13 +19,13 @@ public class PersonTest extends TestCase {
 
 	public void setUp() throws Exception{
 		super.setUp();	
-		String a5 = "Bank";
-		String b5 = "House5";
-		String name5 = "BankDepositPerson5";
-		Role role5 = new BankTellerRole("Bank");
-		PersonAgent person = new PersonAgent(role5, a5 , b5, name5);
-		role5.setPerson(person);
-		MockTransportation trole;
+		String jobLocation = "Bank";
+		String house = "House5";
+		String name = "JUNITTestPersonTeller";
+		int aggroLevel = 3;
+		MockRole transport = new MockRole("jobLocation");
+		MockRole job = new MockRole("jobLocation");
+		person = new PersonAgent(job, jobLocation, house, name, 3);
 			
 	}	
 	
@@ -33,6 +37,8 @@ public class PersonTest extends TestCase {
 		person.msgWakeUp();
 		assertFalse("person's hasWorked should be false but is true", person.hasWorked);
 		assertTrue("person's state should be wantfood but isn't", person.getPersonState() == PersonState.WantFood);
+		assertTrue("Person should complete one action to decide food.", person.pickAndExecuteAnAction());
+		assertTrue("Person should now have decided eat in or out.", person.getPersonState() == PersonState.GoOutEat || person.getPersonState() == PersonState.CookHome);
 
 	}
 }

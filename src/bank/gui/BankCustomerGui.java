@@ -153,4 +153,10 @@ public class BankCustomerGui implements Gui {
 	public int getyTeller() {
 		return yTeller;
 	}
+	public int getxExit() {
+		return xExit;
+	}
+	public int getyExit() {
+		return yExit;
+	}
 }

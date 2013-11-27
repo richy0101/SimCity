@@ -31,8 +31,8 @@ public class MarketGui implements Gui {
 	
 	public static final int xCounter = 118;
 	public static final int yCounter = 170;
-	public static final int xStart = 118;
-	public static final int yStart = 170;
+	public static final int xStart = 102;
+	public static final int yStart = -50;
 	public static final int xShelf = 39;
 	public static final int yShelf = 46;
 	
@@ -43,8 +43,8 @@ public class MarketGui implements Gui {
 		
 		xPos = xStart;
 		yPos = yStart;
-		xDestination = xStart;
-		yDestination = yStart;
+		xDestination = xCounter;
+		yDestination = yCounter;
 		
 	
 		try {

@@ -78,15 +78,6 @@ public class MicroAnimationPanel extends JPanel implements ActionListener, Mouse
     	}
     	
     	layout.show(this, "null");
-    	
-    	/*
-    	try { //STACK RESTAURANT BACKGROUND
-        	restaurantImage = ImageIO.read(getClass().getResource("stackRestaurant.png"));
-        }
-        catch(IOException e) {
-        	System.out.println("Error w/ Background");
-        } 
-        */
     }
     
 	public MicroAnimationPanel( Rectangle2D r, int i, SimCityGui sc ) {
@@ -116,15 +107,6 @@ public class MicroAnimationPanel extends JPanel implements ActionListener, Mouse
     		layout.show(this,key);
     	}
     }
-    /*
-    public boolean contains() {
-    	for(CityComponent c: statics) {
-    		if(c.contains(arg0.getX(), arg0.getY())) {
-    			myCity.view.setView(c.ID);
-    		}
-    	}
-    }
-    */
 
 	public void actionPerformed(ActionEvent e) {
 		repaint();  //Will have paintComponent called

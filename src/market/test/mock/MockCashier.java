@@ -1,4 +1,4 @@
-package restaurant.stackRestaurant.test.mock;
+package market.test.mock;
 
 import agent.Role;
 import restaurant.stackRestaurant.helpers.Check;
@@ -8,23 +8,32 @@ import restaurant.stackRestaurant.interfaces.Waiter;
 import market.interfaces.Market;
 
 public class MockCashier extends Mock implements Cashier {
-	
+
+	public EventLog log;
+	public Check check;
+	public Market market;
 
 	public MockCashier(String name) {
 		super(name);
+		log = new EventLog();
 	}
 	
+	@Override
 	public void msgComputeCheck(Waiter waiter, Customer cust, String choice) {
 		
 	}
 	
+	@Override
 	public void msgPayCheck(Customer cust, Check check, double money) {
 		
 	}
 
+	@Override
 	public void msgGiveBill(Check check, Market market) {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Received msgGiveBill from Market"));
 		
+		this.check = check;
+		this.market = market;		
 	}
 
 	@Override
