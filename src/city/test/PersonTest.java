@@ -7,6 +7,7 @@ import city.PersonAgent.PersonState;
 import city.test.mock.MockTransportation;
 import city.PersonAgent;
 import city.test.mock.*;
+import city.helpers.*;
 
 
 
@@ -21,9 +22,10 @@ public class PersonTest extends TestCase {
 		String jobLocation = "Bank";
 		String house = "House5";
 		String name = "JUNITTestPersonTeller";
+		int aggroLevel = 3;
 		MockRole transport = new MockRole("jobLocation");
 		MockRole job = new MockRole("jobLocation");
-		PersonAgent person = new PersonAgent(job, jobLocation, house, name);
+		person = new PersonAgent(job, jobLocation, house, name, 3);
 			
 	}	
 	
@@ -35,6 +37,8 @@ public class PersonTest extends TestCase {
 		person.msgWakeUp();
 		assertFalse("person's hasWorked should be false but is true", person.hasWorked);
 		assertTrue("person's state should be wantfood but isn't", person.getPersonState() == PersonState.WantFood);
+		assertTrue("Person should complete one action to decide food.", person.pickAndExecuteAnAction());
+		assertTrue("Person should now have decided eat in or out.", person.getPersonState() == PersonState.GoOutEat || person.getPersonState() == PersonState.CookHome);
 
 	}
 }

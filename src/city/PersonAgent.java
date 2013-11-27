@@ -205,6 +205,30 @@ public class PersonAgent extends Agent implements Person {
 		startThread();
 	}
 	/**
+	 * UNIT TESTING CONSTRUCTOR W/o Reference to Directory
+	 */
+	public PersonAgent(RoleInterface job, String job_location, String houseName, String name, int aggressivenessLevel) {
+		this.homeName = houseName;
+		this.name = name;
+		//Set Up Work.
+		workDetails = new WorkDetails(job, job_location);
+		this.aggressivenessLevel = aggressivenessLevel;
+		this.transMethod = TransportationMethod.TakesTheBus;
+		this.funds = 1000;
+		this.personState = PersonState.Sleeping;
+		hasWorked = false;
+		
+		//Set up inventory
+				Food initialFood = new Food("Chicken");
+				inventory.add(initialFood);
+				initialFood = new Food ("Steak");
+				inventory.add(initialFood);
+				initialFood = new Food ("Salad");
+				inventory.add(initialFood);
+				initialFood = new Food ("Pizza");
+				inventory.add(initialFood);
+	}
+	/**
 	 * FRONT END CONSTRUCTOR BELOW
 	 * @param job
 	 * @param job_location
@@ -404,7 +428,7 @@ public class PersonAgent extends Agent implements Person {
 	/**
 	 * Scheduler.  Determine what action is called for, and do it. -------------------------------------------------------
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		if (getPersonState() == PersonState.DoneWorking) {
 			leaveWork();
 			return true;

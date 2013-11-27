@@ -34,7 +34,7 @@ public class MockPerson extends Mock implements Person {
 
 	@Override
 	public void setFunds(double funds) {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Setting funds to " + funds));
 		
 	}
 
@@ -46,6 +46,7 @@ public class MockPerson extends Mock implements Person {
 	@Override
 	public void setAccountNumber(int accountNumber) {
 		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Setting account number to " + accountNumber));
 		
 	}
 
@@ -75,13 +76,13 @@ public class MockPerson extends Mock implements Person {
 
 	@Override
 	public void msgRoleFinished() {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Popping current role, role finished received."));
 		
 	}
 
 	@Override
 	public void msgTransportFinished(String currentLocation) {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Transportation finished, updating location to: " + currentLocation));
 		
 	}
 
