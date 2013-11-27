@@ -196,6 +196,12 @@ public class PersonAgent extends Agent implements Person {
 			clearInventory();
 			checkInventory();
 		}
+		personTimer.schedule(new PersonTimerTask(this) {
+			public void run() {
+				p.msgWakeUp();
+			}
+		},
+		aggressivenessLevel * 1000);//time for cooking
 		startThread();
 	}
 	/**
@@ -238,6 +244,12 @@ public class PersonAgent extends Agent implements Person {
 				b.addGui(personGui);
 			}
 		}
+		personTimer.schedule(new PersonTimerTask(this) {
+			public void run() {
+				p.msgWakeUp();
+			}
+		},
+		aggressivenessLevel * 1000);//time for cooking
 		startThread();
 		//print("I LIVE.");
 	}
@@ -273,6 +285,12 @@ public class PersonAgent extends Agent implements Person {
 				b.addGui(personGui);
 			}
 		}
+		personTimer.schedule(new PersonTimerTask(this) {
+			public void run() {
+				p.msgWakeUp();
+			}
+		},
+		aggressivenessLevel * 1000);//time for cooking
 		startThread();
 		//print("I LIVE.");
 	}
@@ -475,6 +493,12 @@ public class PersonAgent extends Agent implements Person {
 		}
 		else if(getPersonState() == PersonState.Idle){
 			setPersonState(PersonState.Sleeping);
+			personTimer.schedule(new PersonTimerTask(this) {
+				public void run() {
+					p.msgWakeUp();
+				}
+			},
+			10000 * aggressivenessLevel);//time for cooking
 			personGui.DoSleep();
 			return false;
 		}
