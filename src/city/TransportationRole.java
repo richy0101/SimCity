@@ -165,9 +165,28 @@ public class TransportationRole extends Role implements Transportation  {
 			finalStopNumber = BusHelper.sharedInstance().busStopToInt.get(destination);
 			startStopNumber = BusHelper.sharedInstance().busStopToInt.get(getStartingLocation());
 			print("Want bus stop " + startStopNumber);
+			
+			startX = Directory.sharedInstance.getDirectory().get(getStartingLocation()).xCoordinate;
+			startY = Directory.sharedInstance.getDirectory().get(getStartingLocation()).yCoordinate;
+			guiToStop = new TransportationGui(this, startX, startY, startStopX, startStopY);
+			Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToStop);
+			//print("adding transport gui to macro");
+			actionComplete.acquireUninterruptibly();
+			BusHelper.sharedInstance().addWaitingPerson(this, startStopNumber);
+			setState(TransportationState.WaitingForBus);
+		}
+		if (getPersonAgent().getTransportationMethod().contains("Car")) {
+			startStopX = BusHelper.sharedInstance().busStopEvaluator.get(getStartingLocation()).xCoordinate;
+			startStopY = BusHelper.sharedInstance().busStopEvaluator.get(getStartingLocation()).yCoordinate;
+			endStopX = BusHelper.sharedInstance().busStopEvaluator.get(destination).xCoordinate;
+			endStopY = BusHelper.sharedInstance().busStopEvaluator.get(destination).yCoordinate;
+			finalStopNumber = BusHelper.sharedInstance().busStopToInt.get(destination);
+			startStopNumber = BusHelper.sharedInstance().busStopToInt.get(getStartingLocation());
+			print("Want bus stop " + startStopNumber);
 		}
 		if(getStartingLocation().equals("Home1")){
 		}
+		/*
 		startX = Directory.sharedInstance.getDirectory().get(getStartingLocation()).xCoordinate;
 		startY = Directory.sharedInstance.getDirectory().get(getStartingLocation()).yCoordinate;
 		guiToStop = new TransportationGui(this, startX, startY, startStopX, startStopY);
@@ -175,7 +194,7 @@ public class TransportationRole extends Role implements Transportation  {
 		//print("adding transport gui to macro");
 		actionComplete.acquireUninterruptibly();
 		BusHelper.sharedInstance().addWaitingPerson(this, startStopNumber);
-		setState(TransportationState.WaitingForBus);
+		setState(TransportationState.WaitingForBus);*/
 		stateChanged();
 	}
 	private void GetOffBus() {

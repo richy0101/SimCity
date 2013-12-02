@@ -23,10 +23,10 @@ public class BusGui implements Gui {
 	int xDestination = 20;
 	int yDestination = 20;
 	
-	int TopRow = 105-15;
-	int BottomRow = 325;
-	int LeftCol = 135-15-3;
-	int RightCol = 700-8;	
+	int TopRow = 105-12;
+	int BottomRow = 325+10;
+	int LeftCol = 135-15-1;
+	int RightCol = 700-8+10;	
 	
 	int Stop1xPos = 171;
 	int Stop2xPos = 675;
