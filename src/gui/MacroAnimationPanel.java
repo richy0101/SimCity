@@ -55,61 +55,61 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     	//buildings = new ArrayList<Building>();
 
     //RESTAURANT
-    	Building stackRestaurant = new Building(0, 240, 105, 120);
+    	Building stackRestaurant = new Building(0, 222, 105, 150);
     	stackRestaurant.setName("StackRestaurant");
     	buildings.add(stackRestaurant);
     	
-    	Building huangRestaurant = new Building(183, 6, 134, 80);
+    	Building huangRestaurant = new Building(162, 8, 285, 92);
     	huangRestaurant.setName("HuangRestaurant");
     	buildings.add(huangRestaurant);
     	
-    	Building nakamuraRestaurant = new Building(321, 6, 138, 77);
+    	Building nakamuraRestaurant = new Building(287, 9, 127, 73);
     	nakamuraRestaurant.setName("NakamuraRestaurant");
     	buildings.add(nakamuraRestaurant);
     	
-    	Building phillipsRestaurant = new Building(729, 263, 107, 93);
+    	Building phillipsRestaurant = new Building(724, 276, 108, 96);
     	phillipsRestaurant.setName("PhillipsRestaurant");
     	buildings.add(phillipsRestaurant);
     	
-    	Building shehRestaurant = new Building(523, 326, 142, 74);
+    	Building shehRestaurant = new Building(572, 333, 123, 81);
     	shehRestaurant.setName("ShehRestaurant");
     	buildings.add(shehRestaurant);
     	
-    	Building tanRestaurant = new Building(185, 325, 158, 75);
+    	Building tanRestaurant = new Building(240, 332, 159, 83);
     	tanRestaurant.setName("TanRestaurant");
     	buildings.add(tanRestaurant);
     
     //HOUSES
-    	Building house1 = new Building(326, 196, 129, 99);
+    	Building house1 = new Building(275, 212, 105, 94);
     	house1.setName("House1");
     	buildings.add(house1);
     	
-    	Building house2 = new Building(330, 132, 145, 69);
+    	Building house2 = new Building(275, 133, 105, 83);
     	house2.setName("House2");
     	buildings.add(house2);
     	
-    	Building house3 = new Building(473, 133, 85, 73);
+    	Building house3 = new Building(448, 138, 98, 80);
     	house3.setName("House3");
     	buildings.add(house3);
     	
-    	Building house4 = new Building(564, 133, 104, 41);
+    	Building house4 = new Building(551, 137, 126, 55);
     	house4.setName("House4");
     	buildings.add(house4);
     	
-    	Building house5 = new Building(564, 178, 104, 117);
+    	Building house5 = new Building(570, 192, 105, 117);
     	house5.setName("House5");
     	buildings.add(house5);
 
-    	Building house6 = new Building(458, 210, 107, 86);
+    	Building house6 = new Building(449, 214, 120, 91);
     	house6.setName("House6");
     	buildings.add(house6);
     	
     //MARKET
-    	Building market1 = new Building(459, 8, 200, 70);
+    	Building market1 = new Building(432, 8, 136, 82);
     	market1.setName("Market1");
     	buildings.add(market1);
     	
-    	Building market2 = new Building(347, 329, 175, 71);
+    	Building market2 = new Building(432, 333, 137, 81);
     	market2.setName("Market2");
     	buildings.add(market2);
     	
@@ -152,13 +152,14 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
         g2.setColor(Color.black);
         
         //PLACED ONTOP FOR BUILDING REFERENCE PURPOSES
-        
+/*        
 	    synchronized(buildings) {
 	        for(int i = 0; i < buildings.size(); i++) {
 	        	Building b = buildings.get(i);
 	        	g2.fill(b);
 	        }
         }
+*/
         
 //        if(Clock.sharedInstance().getTime() < 10000) 
        	g2.drawImage(cityImage, 0, 0, null);
@@ -188,6 +189,13 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
         	g2.drawImage(cityImageTop, 0, 0, null);
         //else 
         	//g2.drawImage(cityImageNightTop, 0, 0, null);
+        	
+    	    synchronized(buildings) {
+    	        for(int i = 0; i < buildings.size(); i++) {
+    	        	Building b = buildings.get(i);
+    	        	g2.fill(b);
+    	        }
+            }
            
     }
     
