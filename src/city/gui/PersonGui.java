@@ -3,6 +3,7 @@ package city.gui;
 import gui.Gui;
 import city.helpers.Clock;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -22,6 +23,7 @@ public class PersonGui implements Gui {
 	BufferedImage personRight;
 	BufferedImage personUp;
 	BufferedImage personDown;
+	String info;
 	
 	boolean isPresent = true;
 	
@@ -120,6 +122,10 @@ public class PersonGui implements Gui {
 		else {
 			g.drawImage(personDown, xPos, yPos, null);
 		}
+		
+		info = agent.getName() + "(" + agent.getPersonState() + ")";
+		g.drawString(info, xPos, yPos);
+		
 	}
 
 	public void setPresentFalse() {

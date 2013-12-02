@@ -16,6 +16,7 @@ public class MarketCustomerGui implements Gui {
 
 	private MarketCustomerRole role = null;
 	GUIMarket gui;
+	private String info;
 	
 	private boolean isPresent = false;
 	private int xPos, yPos;
@@ -94,6 +95,9 @@ public class MarketCustomerGui implements Gui {
 		else {
 			g.drawImage(customerDown, xPos, yPos, null);
 		}
+		
+		info = role.getPersonAgent().getName() + "(" + role.getState() + ")";
+		g.drawString(info, xPos, yPos);
 	}
 
 	@Override

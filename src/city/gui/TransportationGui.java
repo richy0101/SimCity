@@ -21,6 +21,7 @@ public class TransportationGui implements Gui {
 	BufferedImage personRight;
 	BufferedImage personUp;
 	BufferedImage personDown;
+	private String info;
 	
 	public enum CurrentAction {Travelling, Idle};
 	CurrentAction currentAction = CurrentAction.Idle;
@@ -85,6 +86,9 @@ public class TransportationGui implements Gui {
 		else {
 			g.drawImage(personDown, xPos, yPos, null);
 		}
+		
+		info = agent.getPersonAgent().getName() + "(" + agent.getState() + ")";
+		g.drawString(info, xPos, yPos);
 	}
 
 	@Override
