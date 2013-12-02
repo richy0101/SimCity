@@ -2,6 +2,7 @@ package city.gui;
 
 import gui.Gui;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -88,6 +89,7 @@ public class TransportationGui implements Gui {
 		}
 		
 		info = agent.getPersonAgent().getName() + "(" + agent.getState() + ")";
+		g.setColor(Color.magenta);
 		g.drawString(info, xPos, yPos);
 	}
 
