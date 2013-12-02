@@ -99,47 +99,47 @@ public class Directory {
 	
 	/*
 	private Restaurant huangRestaurant = new HuangRestaurant("HuangRestaurant"); //restaurant 2
-	Coordinate huangRestaurantLocation = new Coordinate(255,78);
+	Coordinate huangRestaurantLocation = new Coordinate(227,76);
 	
 	private Restaurant nakamuraRestaurant = new NakamuraRestaurant("NakamuraRestaurant"); //restaurant 3
-	Coordinate nakamuraRestaurantLocation = new Coordinate(383,69);
+	Coordinate nakamuraRestaurantLocation = new Coordinate(334,64);
 	
 	private Restaurant phillipsRestaurant = new PhillipsRestaurant("PhillipsRestaurant"); //restaurant 4
-	Coordinate phillipsRestaurantLocation = new Coordinate(779,340);
+	Coordinate phillipsRestaurantLocation = new Coordinate(768,346);
 	
 	private Restaurant shehRestaurant = new ShehRestaurant("ShehRestaurant"); //restaurant 5
-	Coordinate shehRestaurantLocation = new Coordinate(576,310);
+	Coordinate shehRestaurantLocation = new Coordinate(621,331);
 	
 	private Restaurant tanRestaurant = new TanRestaurant("TanRestaurant"); //restaurant 6
-	Coordinate tanRestaurantLocation = new Coordinate(258,307);
+	Coordinate tanRestaurantLocation = new Coordinate(380,361);
 	*/
 	
 //HOUSES
 	private Home house1 = new Home("House1");
-	Coordinate house1Location = new Coordinate(350,275);
+	Coordinate house1Location = new Coordinate(290,272);
 	
 	private Home house2 = new Home("House2");
-	Coordinate house2Location = new Coordinate(350,130);
+	Coordinate house2Location = new Coordinate(367,168);
 
 	private Home house3 = new Home("House3");
-	Coordinate house3Location = new Coordinate(520,130);
+	Coordinate house3Location = new Coordinate(449,163);
 	
 	private Home house4 = new Home("House4");
-	Coordinate house4Location = new Coordinate(600,130);
+	Coordinate house4Location = new Coordinate(597,279);
 	
 	private Home house5 = new Home("House5");
-	Coordinate house5Location = new Coordinate(600,275);
+	Coordinate house5Location = new Coordinate(480,283);
 	
 	private Home house6 = new Home("House6");
-	Coordinate house6Location = new Coordinate(420,275);	
+	Coordinate house6Location = new Coordinate(290,272);	
 	
 		
 //MARKETS
 	private Market market1 = new Market("Market1"); //priority market
-	Coordinate market1Location = new Coordinate(523,72);
+	Coordinate market1Location = new Coordinate(494,69);
 	
 	private Market market2 = new Market("Market2"); //secondary market
-	Coordinate market2Location = new Coordinate(397,344);
+	Coordinate market2Location = new Coordinate(488,333);
 	
 	public Map<String, Market> marketDirectory = new HashMap<String, Market>(); {
 		marketDirectory.put("Market1", market1);
@@ -149,14 +149,17 @@ public class Directory {
 	
 //APARTMENTS
 	private Apartment apartment1 = new Apartment("Apartment1"); //smaller limited apartment
-	Coordinate apartment1Location = new Coordinate(236,285);
+	Coordinate apartment1Location = new Coordinate(211,281);
 	
 	private Apartment apartment2 = new Apartment("Apartment2"); //larger infinite apartment
-	Coordinate apartment2Location = new Coordinate(771,259);
+	Coordinate apartment2Location = new Coordinate(668,66);
+	
+	private Apartment apartment3 = new Apartment("Apartment3"); //larger infinite apartment
+	Coordinate apartment3Location = new Coordinate(730,197);
 
 //BANKS
 	private Bank bank = new Bank("Bank");
-	Coordinate bankLocation = new Coordinate(108,151);
+	Coordinate bankLocation = new Coordinate(89,160);
 	
 //LOCATION DIRECTORY
 	public Map<String, Coordinate> locationDirectory = new HashMap<String, Coordinate>(); {
@@ -170,6 +173,7 @@ public class Directory {
 		//Apartments
 		locationDirectory.put(apartment1.getName(), apartment1Location);
 		locationDirectory.put(apartment2.getName(), apartment2Location);
+		locationDirectory.put(apartment3.getName(), apartment3Location);
 		
 		//Homes
 		locationDirectory.put(house1.getName(), house1Location);

@@ -152,14 +152,13 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
         g2.setColor(Color.black);
         
         //PLACED ONTOP FOR BUILDING REFERENCE PURPOSES
-/*        
+       
 	    synchronized(buildings) {
 	        for(int i = 0; i < buildings.size(); i++) {
 	        	Building b = buildings.get(i);
 	        	g2.fill(b);
 	        }
         }
-*/
         
 //        if(Clock.sharedInstance().getTime() < 10000) 
        	g2.drawImage(cityImage, 0, 0, null);
@@ -189,14 +188,6 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
         	g2.drawImage(cityImageTop, 0, 0, null);
         //else 
         	//g2.drawImage(cityImageNightTop, 0, 0, null);
-        	
-    	    synchronized(buildings) {
-    	        for(int i = 0; i < buildings.size(); i++) {
-    	        	Building b = buildings.get(i);
-    	        	g2.fill(b);
-    	        }
-            }
-           
     }
     
     public ArrayList<Building> getBuildings() {
