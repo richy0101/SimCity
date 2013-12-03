@@ -1,6 +1,7 @@
 package restaurant.shehRestaurant;
 
 import agent.Agent;
+import agent.Role;
 import restaurant.shehRestaurant.gui.Bill;
 import restaurant.shehRestaurant.gui.Menu;
 import restaurant.shehRestaurant.gui.Order.OrderCookState;
@@ -17,7 +18,7 @@ import java.util.concurrent.Semaphore;
 /**
  * Restaurant Waiter Agent
  */
-public class WaiterAgent extends Agent implements Waiter {
+public class WaiterAgent extends Role implements Waiter {
 	static final int NTABLES = 3;
 	public List<CustomerAgent> waitingCustomers = Collections.synchronizedList(new ArrayList<CustomerAgent>());
 	private List<myCustomer> customers = Collections.synchronizedList(new ArrayList<myCustomer>());
@@ -210,7 +211,7 @@ public class WaiterAgent extends Agent implements Waiter {
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		synchronized(customers) {
 			for (myCustomer c : customers) {
 				if (c.s == CustomerState.WaitingInRestaurant) {

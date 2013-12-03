@@ -9,8 +9,6 @@ import restaurant.shehRestaurant.interfaces.Cashier;
 import restaurant.shehRestaurant.interfaces.Customer;
 import restaurant.shehRestaurant.interfaces.Market;
 import restaurant.shehRestaurant.interfaces.Waiter;
-import restaurant.shehRestaurant.MarketAgent;
-
 import restaurant.shehRestaurant.gui.Bill.OrderBillState;
 
 import restaurant.shehRestaurant.test.mock.EventLog;
@@ -18,7 +16,7 @@ import restaurant.shehRestaurant.test.mock.EventLog;
 import java.util.*;
 
 /**
- * Restaurant Cook Agent
+ * Restaurant Cashier Agent
  */
 public class CashierAgent extends Agent implements Cashier {
 	public List<myCustomer> myCustomers = Collections.synchronizedList(new ArrayList<myCustomer>());

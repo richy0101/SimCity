@@ -1,6 +1,7 @@
 package restaurant.shehRestaurant;
 
 import agent.Agent;
+import agent.Role;
 import restaurant.shehRestaurant.gui.CookGui;
 import restaurant.shehRestaurant.gui.FoodData;
 import restaurant.shehRestaurant.gui.Menu;
@@ -19,7 +20,7 @@ import java.util.concurrent.Semaphore;
 /**
  * Restaurant Cook Agent
  */
-public class CookAgent extends Agent implements Cook {
+public class CookAgent extends Role implements Cook {
 	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
 	Timer timer = new Timer();
 	Menu menu = new Menu();
@@ -101,7 +102,7 @@ public class CookAgent extends Agent implements Cook {
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		for (Order o : orders) {
 			if (o.cs == OrderCookState.Pending) {
 				CookingOrder(o);

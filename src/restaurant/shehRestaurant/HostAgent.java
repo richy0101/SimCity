@@ -1,6 +1,7 @@
 package restaurant.shehRestaurant;
 
 import agent.Agent;
+import agent.Role;
 import restaurant.shehRestaurant.gui.HostGui;
 import restaurant.shehRestaurant.gui.Table;
 
