@@ -43,10 +43,10 @@ public class BusHelper {
 	Coordinate busStop2Location = new Coordinate(675,356);
 	
 	private BusStop busStop3 = new BusStop("BusStop3"); //top right
-	Coordinate busStop3Location = new Coordinate(729,370);
+	Coordinate busStop3Location = new Coordinate(729, 102);//370);
 	
 	private BusStop busStop4 = new BusStop("BusStop4"); //top left
-	Coordinate busStop4Location = new Coordinate(737,107);
+	Coordinate busStop4Location = new Coordinate(118,77);//(737,107);
 	
 	public Map<String, Coordinate> busStopEvaluator = new HashMap<String, Coordinate>(); {
 		busStopEvaluator.put("Bank", busStop4Location);

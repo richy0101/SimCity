@@ -30,7 +30,7 @@ public class BusGui implements Gui {
 	
 	int Stop1xPos = 171;
 	int Stop2xPos = 675;
-	int Stop3xPos = 610;
+	int Stop3xPos = RightCol;//610;
 	int Stop4xPos = LeftCol;
 	
 	int xStart = LeftCol;

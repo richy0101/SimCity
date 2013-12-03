@@ -17,6 +17,11 @@ public class TransportationGui implements Gui {
 	private int xPos, yPos;
 	private int xDestination, yDestination;
 
+	int TopRow = 85;//105-12;
+	int BottomRow = 325+10;
+	int LeftCol = 135-15-1;
+	int RightCol = 700-8+10;
+	
 	BufferedImage personLeft;
 	BufferedImage personRight;
 	BufferedImage personUp;
@@ -47,7 +52,7 @@ public class TransportationGui implements Gui {
 	@Override
 	public void updatePosition() {
 		//System.out.println("Updating Pos.");
-		if (xPos < xDestination) {
+		if ((xPos < xDestination)){ //&& ((yPos<TopRow+20 && yPos>TopRow-20)||(yPos == BottomRow))) {
 			xPos+= 1;
 		}
 		else if (xPos > xDestination) {
