@@ -35,6 +35,7 @@ public class BusHelper {
     	}
     	return sharedInstance;
 	}
+	
 //BUS STOPS
 	private BusStop busStop1 = new BusStop("BusStop1"); //bottom left
 	Coordinate busStop1Location = new Coordinate(171,361);
