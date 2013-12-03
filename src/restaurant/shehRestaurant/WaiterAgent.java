@@ -1,0 +1,455 @@
+package restaurant.shehRestaurant;
+
+import agent.Agent;
+import restaurant.shehRestaurant.gui.Bill;
+import restaurant.shehRestaurant.gui.Menu;
+import restaurant.shehRestaurant.gui.Order.OrderCookState;
+import restaurant.shehRestaurant.gui.WaiterGui;
+import restaurant.shehRestaurant.gui.Table;
+import restaurant.shehRestaurant.gui.Order;
+import restaurant.shehRestaurant.gui.FoodData;
+import restaurant.shehRestaurant.interfaces.Cashier;
+import restaurant.shehRestaurant.interfaces.Waiter;
+
+import java.util.*;
+import java.util.concurrent.Semaphore;
+
+/**
+ * Restaurant Waiter Agent
+ */
+public class WaiterAgent extends Agent implements Waiter {
+	static final int NTABLES = 3;
+	public List<CustomerAgent> waitingCustomers = Collections.synchronizedList(new ArrayList<CustomerAgent>());
+	private List<myCustomer> customers = Collections.synchronizedList(new ArrayList<myCustomer>());
+	private CookAgent cook;
+	private HostAgent host;
+	private Cashier cashier;
+	public ArrayList<Table> tables;
+	private Boolean breakGranted = false;
+
+	private Menu menu;
+
+	private String name;
+	private Semaphore atTable = new Semaphore(0,true);
+	private Semaphore atKiosk = new Semaphore(0,true);
+	private Semaphore atKitchen = new Semaphore(0,true);
+	private Bill bill;
+	private int homePosition = 0;
+
+	public WaiterGui waiterGui = null;
+
+	public class myCustomer {
+		CustomerAgent c;
+		Table t;
+		String o;
+		CustomerState s;
+
+		public myCustomer(CustomerAgent customer, Table table, CustomerState state) {
+			c = customer;
+			t = table;
+			s = state;
+			o = null;
+		}
+	}
+
+	public enum CustomerState
+	{WaitingInRestaurant, BeingSeated, Seated, ReadyToOrder, Ordering, ReOrdering, DoneOrdering, Waiting, ReceivingFood, Eating, AskingForBill, WaitingForBill, BeingBilled,
+		Paying, Gone};
+	
+	
+	public WaiterAgent(String name, Cashier ca, CookAgent co, HostAgent h) {
+		super();
+
+		this.name = name;
+		
+		cashier = ca;
+		cook = co;
+		host = h;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public ArrayList<Table> getTables() {
+		return tables;
+	}
+	
+	// Messages
+	/*public void msgIWantFood(CustomerAgent cust) {
+		waitingCustomers.add(cust);
+		stateChanged();
+	}*/
+	
+	public void msgHomePosition(int num) {
+		homePosition = num;
+	}
+
+	
+	public void msgSeatThisCustomer(CustomerAgent cust, Table table) {
+		customers.add(new myCustomer(cust, table, CustomerState.WaitingInRestaurant));
+		stateChanged();
+	}
+	
+	public void msgImReadyToOrder(CustomerAgent cust) {
+		synchronized(customers) {
+			for(myCustomer c : customers) {
+				if(c.c == cust) {
+					c.s = CustomerState.ReadyToOrder;
+					stateChanged();
+				}
+			}
+		}
+	}
+
+	public void msgOrderFood(CustomerAgent cust, String choice) {
+		synchronized(customers) {	
+			for(myCustomer c : customers) {
+				if(c.c == cust) {
+					c.s = CustomerState.DoneOrdering;
+					c.o = choice;
+					stateChanged();
+				}
+			}
+		}
+	}
+	
+	public void msgOutOfFood(int t, String o) {
+		synchronized(customers) {
+			for(myCustomer c : customers) {
+				if(c.t.getTableNumber() == t) {
+					c.s = CustomerState.ReOrdering;
+					stateChanged();
+				}
+			}
+		}
+	}
+	
+	public void msgOrderIsCooked(int t, String o) {
+		synchronized(customers) {	
+			for(myCustomer c : customers) {
+				if(c.t.getTableNumber() == t) {
+					c.s = CustomerState.ReceivingFood;
+					stateChanged();
+				}
+			}
+		}
+	}
+	
+	public void msgBillPlease(CustomerAgent cust) {
+		synchronized(customers) {
+			for(myCustomer c : customers) {
+				if(c.c == cust) {
+					c.s = CustomerState.AskingForBill;
+					stateChanged();
+				}
+			}
+		}
+	}
+	
+	public void msgCollectBill(Bill b) {
+		bill = b; //necessary?'
+		synchronized(customers) {
+			for(myCustomer c : customers) {
+				if(c.c == b.c) {
+					c.s = CustomerState.WaitingForBill;
+					stateChanged();
+				}
+			}	
+		}
+	}
+
+	public void msgLeavingTable(CustomerAgent cust) {
+		synchronized(tables) {
+			for (Table table : tables) {
+				if (table.getOccupant() == cust) {
+					print(cust + " leaving " + table);
+					table.setUnoccupied();
+					stateChanged();
+				}
+			}
+		}
+	}
+
+	public void msgAtTable() {//from animation
+		//print("msgAtTable() called");
+		atTable.release();// = true;
+		stateChanged();
+	}
+	
+	public void msgAtKiosk() {
+		atKiosk.release();
+		stateChanged();
+	}
+	
+	public void msgAtKitchen() {
+		atKitchen.release();
+		stateChanged();
+	}
+	
+	public void msgImTired() {
+		print("I want to go on break");
+		host.msgIWantToGoOnBreak(this);
+	}
+	
+	public void msgBackFromBreak() {
+		print("I'm back from my break");
+		host.msgImBackFromBreak(this);
+	}
+	
+	public void msgBreakRequestAccepted() {
+		print("I'll go on break after serving all my customers.");
+		breakGranted = true;
+	}
+	
+	public void msgBreakRequestDenied() {
+		print("Aww, I'm so tired.");
+		breakGranted = false;
+	}
+	
+	/**
+	 * Scheduler.  Determine what action is called for, and do it.
+	 */
+	protected boolean pickAndExecuteAnAction() {
+		synchronized(customers) {
+			for (myCustomer c : customers) {
+				if (c.s == CustomerState.WaitingInRestaurant) {
+					seatCustomer(c);
+					return true;
+				}
+			}
+		}
+		
+		synchronized(customers) {
+			for (myCustomer c : customers) {
+				if (c.s == CustomerState.ReadyToOrder) {
+					WhatWouldYouLike(c);
+					return true;
+				}
+			}
+		}
+		
+		synchronized(customers) {	
+			for (myCustomer c : customers) {
+				if (c.s == CustomerState.ReOrdering) {
+					OrderSomethingElse(c);
+					return true;
+				}
+			}
+		}
+		
+		synchronized(customers) {
+			for (myCustomer c : customers) {
+				if (c.s == CustomerState.DoneOrdering) {
+					CookThisOrder(c);
+					return true;
+				}
+			}
+		}
+		
+		synchronized(customers) {
+			for (myCustomer c : customers) {
+				if (c.s == CustomerState.ReceivingFood) {
+					HereIsYourFood(c);
+					return true;
+				}
+			}
+		}
+		
+		synchronized(customers) {
+			for (myCustomer c : customers) {
+				if (c.s == CustomerState.AskingForBill) {
+					RequestBill(c);
+					return true;
+				}
+			}
+		}
+		
+		synchronized(customers) {
+			for (myCustomer c: customers) {
+				if (c.s == CustomerState.WaitingForBill) {
+					DeliverBill(c);
+					return true;
+				}
+			}
+		}
+		
+		synchronized(customers) {
+			for (myCustomer c : customers) {
+				if(c.s == CustomerState.Paying) {
+					checkWaiterAvailability(c);
+					return true;
+				}
+			}
+		}
+		
+		synchronized(customers) {
+			for (myCustomer c : customers) {
+				if(c.s == CustomerState.Gone) 
+					return true;
+			}
+		}
+		
+		waiterGui.DoStandby(homePosition);
+		return false;
+	}
+
+	// Actions
+
+	private void seatCustomer(myCustomer c) {
+		waiterGui.DoGoToKiosk();
+		try {
+			atKiosk.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		Do("I'm your waiter.");
+		c.c.msgSitAtTable(c.t, new Menu());
+		//host.msgRemoveWaitingCustomer(c.c);
+		DoSeatCustomer(c.c, c.t);
+		try {
+			atTable.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		waiterGui.DoStandby(homePosition);
+		c.s = CustomerState.Seated;
+		stateChanged();
+	}
+	
+	private void WhatWouldYouLike(myCustomer c) {
+		DoTakeOrder(c.t);
+		try {
+			atTable.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		Do("What would you like to order?");
+		c.c.msgWhatWouldYouLike();
+		c.s = CustomerState.Ordering;
+		stateChanged();
+	}
+	
+	private void OrderSomethingElse(myCustomer c) {
+		DoTakeOrder(c.t);
+		try {
+			atTable.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		Do("I'm sorry, we're out of that order, please order something else");
+		c.c.msgOrderSomethingElse();
+		c.s = CustomerState.Ordering;
+		stateChanged();
+	}
+	
+	private void CookThisOrder(myCustomer c) {
+		waiterGui.DoGoToKitchen(); //change to cooking area later
+		try {
+			atKitchen.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		cook.msgCookThisOrder(this, c.o, c.t.getTableNumber(), cashier);
+		c.s = CustomerState.Waiting;
+		stateChanged();
+	}
+	
+	private void HereIsYourFood(myCustomer c) {
+		waiterGui.DoGoToKitchen(); //THIS ISN'T WORKING
+		try {
+			atKitchen.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		DoDeliverFood(c.t, c.o); 
+		try {
+			atTable.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		Do("Here is your food");
+		c.c.msgHereIsYourFood();
+		c.s = CustomerState.Eating;
+		stateChanged();
+		
+		//waiterGui.DoLeaveCustomer();
+		waiterGui.DoStandby(homePosition);
+	}
+	
+	private void RequestBill(myCustomer c) {
+		waiterGui.GoToTable(c.t); //change location to cashier's location
+		try {
+			atTable.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		Do("I need a bill for " + c.t + ".");
+		cashier.msgProcessThisBill(c.o, c.c, this);
+		c.s = CustomerState.BeingBilled;
+		stateChanged();
+	}
+	
+	private void DeliverBill(myCustomer c) {
+		waiterGui.GoToTable(c.t);
+		try {
+			atTable.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		Do("Here is your bill");
+		c.c.msgHereIsYourBill(bill, cashier);
+		c.s = CustomerState.Paying;
+		stateChanged();
+	
+		waiterGui.DoStandby(homePosition);
+	}
+	
+	private void checkWaiterAvailability(myCustomer c) {
+		if(customers.size() == 1 && breakGranted) {
+			print("I finished serving all my customers.");
+			host.msgFreeOfCustomers(this);
+			c.s = CustomerState.Gone;
+			stateChanged();
+			
+			waiterGui.DoGoOnBreak();
+			try {
+				atKiosk.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		customers.remove(c);
+	}
+
+	//Animation
+	private void DoSeatCustomer(CustomerAgent customer, Table table) {
+		print("Seating " + customer + " at " + table);
+		waiterGui.DoBringToTable(customer, table);
+	}
+	
+	private void DoTakeOrder(Table table) {
+		waiterGui.GoToTable(table);
+	}
+	
+	private void DoDeliverFood(Table table, String order) {
+		waiterGui.DeliverFoodToTable(table, order/*, null*/);
+	}
+
+	//Utilities
+
+	public void setGui(WaiterGui gui) {
+		waiterGui = gui;
+	}
+
+	public WaiterGui getGui() {
+		return waiterGui;
+	}
+
+
+	public void setCook(CookAgent cook) {
+		this.cook = cook;	
+	}
+	
+}

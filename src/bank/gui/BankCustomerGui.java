@@ -16,6 +16,7 @@ import bank.*;
 public class BankCustomerGui implements Gui {
     
 	private BankCustomerRole agent = null;
+	String info;
 	
 	private static final List<Point> tellerBench = new ArrayList<Point>() {{
 		add(new Point(87, 51));
@@ -111,6 +112,9 @@ public class BankCustomerGui implements Gui {
 		else {
 			g.drawImage(customerDown, xPos, yPos, null);
 		}
+		
+		info = agent.getPersonAgent().getName() + "(" + agent.getState() + ")";
+		g.drawString(info, xPos, yPos);
 	}
 
 	@Override

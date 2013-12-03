@@ -145,16 +145,6 @@ public class TransportationRole extends Role implements Transportation  {
 	}
 	
 	private void GetAVehicle() {
-		/**if(hasCar) {
-			//create car gui in mainwindow gui just outside of source
-			car.msgTakeMeHere(destination);
-		}
-		else if (!hasCar) {
-			//create transportationrole gui in mainwindow
-			//have transportationrole gui walk to bus stop
-			
-			//bus.msgINeedARide(destination);
-		}**/
 		setState(TransportationState.InTransit);
 
 		if (getPersonAgent().getTransportationMethod().contains("Bus")) {
@@ -176,13 +166,12 @@ public class TransportationRole extends Role implements Transportation  {
 			setState(TransportationState.WaitingForBus);
 		}
 		if (getPersonAgent().getTransportationMethod().contains("Car")) {
-			startStopX = BusHelper.sharedInstance().busStopEvaluator.get(getStartingLocation()).xCoordinate;
-			startStopY = BusHelper.sharedInstance().busStopEvaluator.get(getStartingLocation()).yCoordinate;
-			endStopX = BusHelper.sharedInstance().busStopEvaluator.get(destination).xCoordinate;
-			endStopY = BusHelper.sharedInstance().busStopEvaluator.get(destination).yCoordinate;
-			finalStopNumber = BusHelper.sharedInstance().busStopToInt.get(destination);
-			startStopNumber = BusHelper.sharedInstance().busStopToInt.get(getStartingLocation());
-			print("Want bus stop " + startStopNumber);
+			
+			//create car outside at spawn
+			//travel along roads towards destination
+			//A*?
+			//
+			
 		}
 		if(getStartingLocation().equals("Home1")){
 		}

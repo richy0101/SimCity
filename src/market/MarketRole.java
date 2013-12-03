@@ -463,4 +463,9 @@ public class MarketRole extends Role implements Market {
 	private void DoGoToCounter() {
 		gui.DoGoToCounter();
 	}
+
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
