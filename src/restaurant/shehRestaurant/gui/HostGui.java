@@ -1,8 +1,8 @@
-package restaurant.gui;
+package restaurant.shehRestaurant.gui;
 
 
-import restaurant.CustomerAgent;
-import restaurant.HostAgent; 
+import restaurant.shehRestaurant.CustomerAgent;
+import restaurant.shehRestaurant.HostAgent; 
 //import restaurant.gui.Table;
 
 import java.awt.*;

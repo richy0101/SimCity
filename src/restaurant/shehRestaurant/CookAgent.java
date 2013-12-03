@@ -1,17 +1,17 @@
-package restaurant;
+package restaurant.shehRestaurant;
 
 import agent.Agent;
-import restaurant.gui.CookGui;
-import restaurant.gui.FoodData;
-import restaurant.gui.Menu;
-import restaurant.gui.Order;
-import restaurant.gui.WaiterGui;
-import restaurant.gui.Order.OrderCookState;
-import restaurant.gui.Bill;
-import restaurant.gui.Order.OrderMarketState;
-import restaurant.interfaces.Cashier;
-import restaurant.interfaces.Cook;
-import restaurant.interfaces.Market;
+import restaurant.shehRestaurant.gui.CookGui;
+import restaurant.shehRestaurant.gui.FoodData;
+import restaurant.shehRestaurant.gui.Menu;
+import restaurant.shehRestaurant.gui.Order;
+import restaurant.shehRestaurant.gui.WaiterGui;
+import restaurant.shehRestaurant.gui.Order.OrderCookState;
+import restaurant.shehRestaurant.gui.Bill;
+import restaurant.shehRestaurant.gui.Order.OrderMarketState;
+import restaurant.shehRestaurant.interfaces.Cashier;
+import restaurant.shehRestaurant.interfaces.Cook;
+import restaurant.shehRestaurant.interfaces.Market;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;

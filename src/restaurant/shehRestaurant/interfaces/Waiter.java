@@ -1,6 +1,6 @@
-package restaurant.interfaces;
+package restaurant.shehRestaurant.interfaces;
 
-import restaurant.gui.Bill;
+import restaurant.shehRestaurant.gui.Bill;
 
 public interface Waiter {
 

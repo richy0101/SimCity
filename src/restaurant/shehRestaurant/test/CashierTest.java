@@ -1,11 +1,11 @@
-package restaurant.test;
+package restaurant.shehRestaurant.test;
 
-import restaurant.CashierAgent;
-import restaurant.gui.Bill;
-import restaurant.gui.Bill.OrderBillState;
-import restaurant.test.mock.MockCustomer;
-import restaurant.test.mock.MockMarket;
-import restaurant.test.mock.MockWaiter;
+import restaurant.shehRestaurant.CashierAgent;
+import restaurant.shehRestaurant.gui.Bill;
+import restaurant.shehRestaurant.gui.Bill.OrderBillState;
+import restaurant.shehRestaurant.test.mock.MockCustomer;
+import restaurant.shehRestaurant.test.mock.MockMarket;
+import restaurant.shehRestaurant.test.mock.MockWaiter;
 import junit.framework.*;
 
 public class CashierTest extends TestCase

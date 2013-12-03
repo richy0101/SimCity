@@ -1,4 +1,4 @@
-package restaurant.gui;
+package restaurant.shehRestaurant.gui;
 
 import javax.swing.*;
 

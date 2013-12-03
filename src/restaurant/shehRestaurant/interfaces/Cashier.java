@@ -1,9 +1,8 @@
-package restaurant.interfaces;
+package restaurant.shehRestaurant.interfaces;
 
-import restaurant.gui.Bill;
-import restaurant.test.mock.EventLog;
-//import restaurant.test.mock.MockCustomer;
-//import restaurant.test.mock.MockWaiter;
+import restaurant.shehRestaurant.gui.Bill;
+import restaurant.shehRestaurant.test.mock.EventLog;
+
 
 
 public interface Cashier {

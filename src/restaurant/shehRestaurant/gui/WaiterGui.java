@@ -1,8 +1,8 @@
-package restaurant.gui;
+package restaurant.shehRestaurant.gui;
 
 
-import restaurant.CustomerAgent;
-import restaurant.WaiterAgent; 
+import restaurant.shehRestaurant.CustomerAgent;
+import restaurant.shehRestaurant.WaiterAgent; 
 //import restaurant.gui.Table;
 
 

@@ -1,6 +1,6 @@
-package restaurant.gui;
+package restaurant.shehRestaurant.gui;
 
-import restaurant.CookAgent;
+import restaurant.shehRestaurant.CookAgent;
 
 import java.awt.*;
 import java.util.ArrayList;

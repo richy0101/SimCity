@@ -1,6 +1,6 @@
-package restaurant.gui;
+package restaurant.shehRestaurant.gui;
 
-import restaurant.CustomerAgent;
+import restaurant.shehRestaurant.CustomerAgent;
 
 
 public class Table {

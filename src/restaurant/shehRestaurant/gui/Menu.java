@@ -1,10 +1,10 @@
-package restaurant.gui;
+package restaurant.shehRestaurant.gui;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import restaurant.WaiterAgent;
+import restaurant.shehRestaurant.WaiterAgent;
 
 public class Menu {
 	

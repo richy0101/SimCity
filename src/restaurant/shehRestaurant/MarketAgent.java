@@ -1,16 +1,16 @@
-package restaurant;
+package restaurant.shehRestaurant;
 
 import agent.Agent;
-import restaurant.CashierAgent;
-import restaurant.gui.Bill.OrderBillState;
-import restaurant.gui.Menu;
-import restaurant.gui.Order;
-import restaurant.gui.Order.OrderMarketState;
-import restaurant.gui.Bill;
-import restaurant.gui.FoodData;
-import restaurant.interfaces.Cashier;
-import restaurant.interfaces.Cook;
-import restaurant.interfaces.Market;
+import restaurant.shehRestaurant.CashierAgent;
+import restaurant.shehRestaurant.gui.Bill.OrderBillState;
+import restaurant.shehRestaurant.gui.Menu;
+import restaurant.shehRestaurant.gui.Order;
+import restaurant.shehRestaurant.gui.Order.OrderMarketState;
+import restaurant.shehRestaurant.gui.Bill;
+import restaurant.shehRestaurant.gui.FoodData;
+import restaurant.shehRestaurant.interfaces.Cashier;
+import restaurant.shehRestaurant.interfaces.Cook;
+import restaurant.shehRestaurant.interfaces.Market;
 
 import java.util.*;
 /**

@@ -1,4 +1,4 @@
-package restaurant.test.mock;
+package restaurant.shehRestaurant.test.mock;
 
 /**
  * This is the base class for all mocks.

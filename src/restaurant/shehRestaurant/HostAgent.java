@@ -1,8 +1,8 @@
-package restaurant;
+package restaurant.shehRestaurant;
 
 import agent.Agent;
-import restaurant.gui.HostGui;
-import restaurant.gui.Table;
+import restaurant.shehRestaurant.gui.HostGui;
+import restaurant.shehRestaurant.gui.Table;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;

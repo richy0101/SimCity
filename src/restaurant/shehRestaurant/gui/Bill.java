@@ -1,7 +1,7 @@
-package restaurant.gui;
+package restaurant.shehRestaurant.gui;
 
-import restaurant.interfaces.Customer;
-import restaurant.interfaces.Waiter;
+import restaurant.shehRestaurant.interfaces.Customer;
+import restaurant.shehRestaurant.interfaces.Waiter;
 
 public class Bill {
 		public double m = 0; //money

@@ -1,13 +1,13 @@
-package restaurant;
+package restaurant.shehRestaurant;
 
-import restaurant.gui.Bill;
-import restaurant.gui.CustomerGui;
-import restaurant.gui.Menu;
-import restaurant.gui.RestaurantGui;
+import restaurant.shehRestaurant.gui.Bill;
+import restaurant.shehRestaurant.gui.CustomerGui;
+import restaurant.shehRestaurant.gui.Menu;
+import restaurant.shehRestaurant.gui.RestaurantGui;
 import agent.Agent;
-import restaurant.gui.Table;
-import restaurant.interfaces.Cashier;
-import restaurant.interfaces.Customer;
+import restaurant.shehRestaurant.gui.Table;
+import restaurant.shehRestaurant.interfaces.Cashier;
+import restaurant.shehRestaurant.interfaces.Customer;
 
 import java.util.Timer;
 import java.util.TimerTask;

@@ -1,7 +1,7 @@
-package restaurant.interfaces;
+package restaurant.shehRestaurant.interfaces;
 
-import restaurant.test.mock.MockCashier;
-import restaurant.gui.Bill;
+import restaurant.shehRestaurant.test.mock.MockCashier;
+import restaurant.shehRestaurant.gui.Bill;
 
 public interface Customer {
 	/**

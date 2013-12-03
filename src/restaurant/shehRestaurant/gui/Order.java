@@ -1,12 +1,12 @@
-package restaurant.gui;
+package restaurant.shehRestaurant.gui;
 
 //import restaurant.WaiterAgent.OrderState;
 import java.util.Vector;
 
-import restaurant.WaiterAgent;
-import restaurant.CustomerAgent;
+import restaurant.shehRestaurant.WaiterAgent;
+import restaurant.shehRestaurant.CustomerAgent;
 //import restaurant.gui.Order.OrderBillState;
-import restaurant.interfaces.Customer;
+import restaurant.shehRestaurant.interfaces.Customer;
 
 public class Order {
 	public WaiterAgent w;

@@ -1,10 +1,10 @@
-package restaurant.test.mock;
+package restaurant.shehRestaurant.test.mock;
 
-import restaurant.gui.Bill;
-import restaurant.interfaces.Cashier;
-import restaurant.interfaces.Customer;
-import restaurant.interfaces.Market;
-import restaurant.interfaces.Waiter;
+import restaurant.shehRestaurant.gui.Bill;
+import restaurant.shehRestaurant.interfaces.Cashier;
+import restaurant.shehRestaurant.interfaces.Customer;
+import restaurant.shehRestaurant.interfaces.Market;
+import restaurant.shehRestaurant.interfaces.Waiter;
 
 public class MockCashier extends Mock implements Cashier {
 	

@@ -1,12 +1,12 @@
-package restaurant.gui;
+package restaurant.shehRestaurant.gui;
 
-import restaurant.CustomerAgent;
-import restaurant.HostAgent;
-import restaurant.WaiterAgent;
-import restaurant.CookAgent;
-import restaurant.MarketAgent;
-import restaurant.CashierAgent;
-import restaurant.interfaces.Cook;
+import restaurant.shehRestaurant.CustomerAgent;
+import restaurant.shehRestaurant.HostAgent;
+import restaurant.shehRestaurant.WaiterAgent;
+import restaurant.shehRestaurant.CookAgent;
+import restaurant.shehRestaurant.MarketAgent;
+import restaurant.shehRestaurant.CashierAgent;
+import restaurant.shehRestaurant.interfaces.Cook;
 
 import javax.swing.*;
 

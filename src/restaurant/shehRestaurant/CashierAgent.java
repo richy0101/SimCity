@@ -1,16 +1,19 @@
-package restaurant;
+package restaurant.shehRestaurant;
 
 import agent.Agent;
-import restaurant.gui.Bill.OrderBillState;
-import restaurant.gui.Menu;
-import restaurant.gui.Table;
-import restaurant.gui.Bill;
-import restaurant.MarketAgent;
-import restaurant.interfaces.Cashier;
-import restaurant.interfaces.Customer;
-import restaurant.interfaces.Market;
-import restaurant.interfaces.Waiter;
-import restaurant.test.mock.EventLog;
+
+import restaurant.shehRestaurant.gui.Bill;
+import restaurant.shehRestaurant.gui.Menu;
+import restaurant.shehRestaurant.gui.Table;
+import restaurant.shehRestaurant.interfaces.Cashier;
+import restaurant.shehRestaurant.interfaces.Customer;
+import restaurant.shehRestaurant.interfaces.Market;
+import restaurant.shehRestaurant.interfaces.Waiter;
+import restaurant.shehRestaurant.MarketAgent;
+
+import restaurant.shehRestaurant.gui.Bill.OrderBillState;
+
+import restaurant.shehRestaurant.test.mock.EventLog;
 
 import java.util.*;
 
@@ -212,6 +215,5 @@ public class CashierAgent extends Agent implements Cashier {
 		b.s = OrderBillState.Complete;
 		
 	}
-
 
 }
