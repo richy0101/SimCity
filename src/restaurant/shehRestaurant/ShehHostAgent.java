@@ -3,7 +3,7 @@ package restaurant.shehRestaurant;
 import agent.Agent;
 import agent.Role;
 import restaurant.shehRestaurant.gui.HostGui;
-import restaurant.shehRestaurant.gui.Table;
+import restaurant.shehRestaurant.helpers.Table;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
@@ -12,10 +12,10 @@ import java.util.concurrent.Semaphore;
  * Restaurant Host Agent
  */  
 
-public class HostAgent extends Agent {
+public class ShehHostAgent extends Agent {
 	static final int NTABLES = 3;
-	public List<CustomerAgent> waitingCustomers = Collections.synchronizedList(new ArrayList<CustomerAgent>());
-	public List<WaiterAgent> waiters;
+	public List<ShehCustomerRole> waitingCustomers = Collections.synchronizedList(new ArrayList<ShehCustomerRole>());
+	public List<ShehWaiterRole> waiters;
 	
 	public List<myWaiter> breakWaiters = Collections.synchronizedList(new ArrayList<myWaiter>());
 	private List<myCustomer> customers = Collections.synchronizedList(new ArrayList<myCustomer>());
@@ -31,7 +31,7 @@ public class HostAgent extends Agent {
 	private int availableTables = NTABLES;
 	private int numOfCustomers = 0, numOfWaiters = 0;
 
-	public HostAgent(String name, Vector<WaiterAgent> w) {
+	public ShehHostAgent(String name, Vector<ShehWaiterRole> w) {
 		super();
 
 		this.name = name;
@@ -45,20 +45,20 @@ public class HostAgent extends Agent {
 	}
 	
 	public class myCustomer {
-		CustomerAgent c;
+		ShehCustomerRole c;
 		CustomerState s;
 
-		public myCustomer(CustomerAgent customer, CustomerState state) {
+		public myCustomer(ShehCustomerRole customer, CustomerState state) {
 			c = customer;
 			s = state;
 		}
 	}
 	
 	public class myWaiter {
-		WaiterAgent w;
+		ShehWaiterRole w;
 		WaiterState s;
 		
-		public myWaiter(WaiterAgent waiter, WaiterState state) {
+		public myWaiter(ShehWaiterRole waiter, WaiterState state) {
 			w = waiter;
 			s = state;
 		}
@@ -83,25 +83,25 @@ public class HostAgent extends Agent {
 	}
 	
 	// Messages
-	public void msgIWantFood(CustomerAgent cust) {
+	public void msgIWantFood(ShehCustomerRole cust) {
 		waitingCustomers.add(cust);
 		stateChanged();
 		//numOfCustomers++;
 	}
 	
-	public void msgIWantToGoOnBreak(WaiterAgent waiter) {
+	public void msgIWantToGoOnBreak(ShehWaiterRole waiter) {
 		print("Let's me check if you can go on break right now.");
 		breakWaiters.add(new myWaiter(waiter, WaiterState.WantBreak));
 		stateChanged();
 	}
 	
-	public void msgImBackFromBreak(WaiterAgent waiter) {
+	public void msgImBackFromBreak(ShehWaiterRole waiter) {
 		print("Welcome back, I'll assign customers to you.");
 		breakWaiters.remove(waiter);
 		waiters.add(waiter);
 	}
 	
-	public void msgFreeOfCustomers(WaiterAgent waiter) {
+	public void msgFreeOfCustomers(ShehWaiterRole waiter) {
 		print("You may go on break");
 		for(myWaiter w : breakWaiters) {
 			if(w.w == waiter) {
@@ -112,7 +112,7 @@ public class HostAgent extends Agent {
 	
 	}
 
-	public void msgLeavingTable(CustomerAgent cust) {
+	public void msgLeavingTable(ShehCustomerRole cust) {
 		for (Table table : tables) {
 			if (table.getOccupant() == cust) {
 				print(cust + " leaving " + table);
@@ -214,7 +214,7 @@ public class HostAgent extends Agent {
 		waitingCustomers.get(waitingCustomers.size()-1).msgThisIsYourNumber(num); //causes indexing errors
 	}
 	
-	private void assignWaiterToCustomer(CustomerAgent customer, List<WaiterAgent> w, Table table) {
+	private void assignWaiterToCustomer(ShehCustomerRole customer, List<ShehWaiterRole> w, Table table) {
 		//organizeCustomers();
 		Do("Welcome, I'll assign a waiter to you.");
 		int waiterIndex = w.size() + counter;
@@ -222,7 +222,7 @@ public class HostAgent extends Agent {
 		counter++;
 		numOfCustomers++;
 
-		WaiterAgent waiter = w.get(queue);
+		ShehWaiterRole waiter = w.get(queue);
 		
 		waiter.msgSeatThisCustomer(customer, table);
 		table.setOccupant(customer);
@@ -239,7 +239,7 @@ public class HostAgent extends Agent {
 		availableTables--;
 	}
 	
-	private void tablesAreFull(CustomerAgent customer) {
+	private void tablesAreFull(ShehCustomerRole customer) {
 		Do("We're at capacity. Would you like to put your name down?");
 
 		//customer.msgTablesAreFull();

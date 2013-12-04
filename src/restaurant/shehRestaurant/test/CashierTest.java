@@ -1,8 +1,8 @@
 package restaurant.shehRestaurant.test;
 
-import restaurant.shehRestaurant.CashierAgent;
-import restaurant.shehRestaurant.gui.Bill;
-import restaurant.shehRestaurant.gui.Bill.OrderBillState;
+import restaurant.shehRestaurant.ShehCashierAgent;
+import restaurant.shehRestaurant.helpers.Bill;
+import restaurant.shehRestaurant.helpers.Bill.OrderBillState;
 import restaurant.shehRestaurant.test.mock.MockCustomer;
 import restaurant.shehRestaurant.test.mock.MockMarket;
 import restaurant.shehRestaurant.test.mock.MockWaiter;
@@ -11,7 +11,7 @@ import junit.framework.*;
 public class CashierTest extends TestCase
 {
 	// are instantiated for each test separately via the setUp() method.
-	CashierAgent cashier;
+	ShehCashierAgent cashier;
 	MockWaiter waiter;
 	MockCustomer customer;
 	MockMarket market;
@@ -19,7 +19,7 @@ public class CashierTest extends TestCase
 	
 	public void setUp() throws Exception{
 		super.setUp();		
-		cashier = new CashierAgent("cashier");		
+		cashier = new ShehCashierAgent("cashier");		
 		customer = new MockCustomer("mockcustomer");		
 		waiter = new MockWaiter("mockwaiter");
 		market = new MockMarket("mockmarket");

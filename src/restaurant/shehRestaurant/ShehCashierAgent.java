@@ -2,14 +2,14 @@ package restaurant.shehRestaurant;
 
 import agent.Agent;
 
-import restaurant.shehRestaurant.gui.Bill;
-import restaurant.shehRestaurant.gui.Menu;
-import restaurant.shehRestaurant.gui.Table;
+import restaurant.shehRestaurant.helpers.Bill;
+import restaurant.shehRestaurant.helpers.Menu;
+import restaurant.shehRestaurant.helpers.Table;
 import restaurant.shehRestaurant.interfaces.Cashier;
 import restaurant.shehRestaurant.interfaces.Customer;
 import restaurant.shehRestaurant.interfaces.Market;
 import restaurant.shehRestaurant.interfaces.Waiter;
-import restaurant.shehRestaurant.gui.Bill.OrderBillState;
+import restaurant.shehRestaurant.helpers.Bill.OrderBillState;
 
 import restaurant.shehRestaurant.test.mock.EventLog;
 
@@ -18,7 +18,7 @@ import java.util.*;
 /**
  * Restaurant Cashier Agent
  */
-public class CashierAgent extends Agent implements Cashier {
+public class ShehCashierAgent extends Agent implements Cashier {
 	public List<myCustomer> myCustomers = Collections.synchronizedList(new ArrayList<myCustomer>());
 	Bill bill;
 	public List<Bill> bills = Collections.synchronizedList(new ArrayList<Bill>());
@@ -69,7 +69,7 @@ public class CashierAgent extends Agent implements Cashier {
 		inventory.put("Vegetarian", vegetarian);
 	}
 	
-	public CashierAgent(String n) {
+	public ShehCashierAgent(String n) {
 		super();
 		this.name = "Cashier";
 		name = n;

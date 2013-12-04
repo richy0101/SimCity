@@ -1,7 +1,7 @@
 package restaurant.shehRestaurant.interfaces;
 
 import java.util.Vector;
-import restaurant.shehRestaurant.gui.Bill;
+import restaurant.shehRestaurant.helpers.Bill;
 
 public interface Market {
 

@@ -1,7 +1,8 @@
 package restaurant.shehRestaurant.gui;
 
-import restaurant.shehRestaurant.CustomerAgent;
+import restaurant.shehRestaurant.CustomerRole;
 import restaurant.shehRestaurant.HostAgent;
+import restaurant.shehRestaurant.helpers.Table;
 
 import java.awt.*;
 
@@ -9,7 +10,7 @@ import javax.swing.*;
 
 public class CustomerGui implements Gui{
 
-	private CustomerAgent agent = null;
+	private CustomerRole agent = null;
 	private boolean isPresent = false;
 	private boolean isHungry = false;
 
@@ -26,7 +27,7 @@ public class CustomerGui implements Gui{
 	public int xTable;
 	public static final int yTable = 250;
 
-	public CustomerGui(CustomerAgent c, RestaurantGui gui){ //HostAgent m) {
+	public CustomerGui(CustomerRole c, RestaurantGui gui){ //HostAgent m) {
 		agent = c;
 		xPos = -40;
 		yPos = -40;

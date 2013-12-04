@@ -1,6 +1,6 @@
 package restaurant.shehRestaurant.interfaces;
 
-import restaurant.shehRestaurant.gui.Bill;
+import restaurant.shehRestaurant.helpers.Bill;
 import restaurant.shehRestaurant.test.mock.EventLog;
 
 

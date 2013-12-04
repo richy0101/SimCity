@@ -1,15 +1,15 @@
-package restaurant.shehRestaurant.gui;
+package restaurant.shehRestaurant.helpers;
 
 //import restaurant.WaiterAgent.OrderState;
 import java.util.Vector;
 
-import restaurant.shehRestaurant.WaiterAgent;
-import restaurant.shehRestaurant.CustomerAgent;
+import restaurant.shehRestaurant.ShehWaiterRole;
+import restaurant.shehRestaurant.ShehCustomerRole;
 //import restaurant.gui.Order.OrderBillState;
 import restaurant.shehRestaurant.interfaces.Customer;
 
 public class Order {
-	public WaiterAgent w;
+	public ShehWaiterRole w;
 	public Customer c;
 	public String o;
 	public Vector<String> list;
@@ -17,7 +17,7 @@ public class Order {
 	public OrderCookState cs;
 	public OrderMarketState ms;
 
-	public Order(WaiterAgent waiter, String choice, int table, OrderCookState state) {
+	public Order(ShehWaiterRole waiter, String choice, int table, OrderCookState state) {
 		w = waiter;
 		o = choice;
 		t = table;

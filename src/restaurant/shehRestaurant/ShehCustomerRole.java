@@ -1,11 +1,11 @@
 package restaurant.shehRestaurant;
 
-import restaurant.shehRestaurant.gui.Bill;
+import restaurant.shehRestaurant.helpers.Bill;
 import restaurant.shehRestaurant.gui.CustomerGui;
-import restaurant.shehRestaurant.gui.Menu;
-import restaurant.shehRestaurant.gui.RestaurantGui;
+import restaurant.shehRestaurant.helpers.Menu;
+//import restaurant.shehRestaurant.helpers.RestaurantGui;
 import agent.Agent;
-import restaurant.shehRestaurant.gui.Table;
+import restaurant.shehRestaurant.helpers.Table;
 import restaurant.shehRestaurant.interfaces.Cashier;
 import restaurant.shehRestaurant.interfaces.Customer;
 
@@ -15,7 +15,7 @@ import java.util.TimerTask;
 /**
  * Restaurant customer agent.
  */
-public class CustomerAgent extends Agent implements Customer {
+public class ShehCustomerRole extends Agent implements Customer {
 	//MONEY~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	private double money = 50;
 	
@@ -32,8 +32,8 @@ public class CustomerAgent extends Agent implements Customer {
 	Boolean reordering = false;
 	Boolean cheapestItem = false;
 
-	private HostAgent host;
-	private WaiterAgent waiter;
+	private ShehHostAgent host;
+	private ShehWaiterRole waiter;
 	private Cashier cashier;
 
 	public enum AgentState
@@ -54,7 +54,7 @@ public class CustomerAgent extends Agent implements Customer {
 	 * @param name name of the customer
 	 * @param gui  reference to the customer gui so the customer can send it messages
 	 */
-	public CustomerAgent(String name){
+	public ShehCustomerRole(String name){
 		super();
 		this.name = name;
 	}
@@ -370,11 +370,11 @@ public class CustomerAgent extends Agent implements Customer {
 		return customerGui;
 	}
 	
-	public void setHost(HostAgent host) {
+	public void setHost(ShehHostAgent host) {
 		this.host = host;
 	}
 	
-	public void setWaiter(WaiterAgent waiter) {
+	public void setWaiter(ShehWaiterRole waiter) {
 		this.waiter = waiter;
 	}
 

@@ -1,17 +1,17 @@
-package restaurant.shehRestaurant.gui;
+package restaurant.shehRestaurant.helpers;
 
-import restaurant.shehRestaurant.CustomerAgent;
+import restaurant.shehRestaurant.ShehCustomerRole;
 
 
 public class Table {
-	CustomerAgent occupiedBy;
+	ShehCustomerRole occupiedBy;
 	int tableNumber;
 
 	public Table(int tableNumber) {
 		this.tableNumber = tableNumber;
 	}
 
-	public void setOccupant(CustomerAgent cust) {
+	public void setOccupant(ShehCustomerRole cust) {
 		occupiedBy = cust;
 	}
 
@@ -19,7 +19,7 @@ public class Table {
 		occupiedBy = null;
 	}
 
-	public CustomerAgent getOccupant() {
+	public ShehCustomerRole getOccupant() {
 		return occupiedBy;
 	}
 

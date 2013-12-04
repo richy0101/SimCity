@@ -1,13 +1,14 @@
 package restaurant.shehRestaurant.gui;
 
-import restaurant.shehRestaurant.CookAgent;
+import restaurant.shehRestaurant.ShehCookRole;
+import restaurant.shehRestaurant.helpers.Table;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 public class CookGui implements Gui {
 
-    private CookAgent agent = null;
+    private ShehCookRole agent = null;
 
     private int xPos = 400, yPos = 160;//default waiter position
     private int xDestination = 400, yDestination = 160;//default start position
@@ -24,7 +25,7 @@ public class CookGui implements Gui {
 
 	private RestaurantGui gui;
 
-    public CookGui(CookAgent agent) {
+    public CookGui(ShehCookRole agent) {
         this.agent = agent;
         this.gui = gui;
     }

@@ -1,4 +1,4 @@
-package restaurant.shehRestaurant.gui;
+package restaurant.shehRestaurant.helpers;
 
 import restaurant.shehRestaurant.interfaces.Customer;
 import restaurant.shehRestaurant.interfaces.Waiter;

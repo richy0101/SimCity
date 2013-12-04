@@ -2,13 +2,13 @@ package restaurant.shehRestaurant;
 
 import agent.Agent;
 import agent.Role;
-import restaurant.shehRestaurant.gui.Bill;
-import restaurant.shehRestaurant.gui.Menu;
-import restaurant.shehRestaurant.gui.Order.OrderCookState;
+import restaurant.shehRestaurant.helpers.Bill;
+import restaurant.shehRestaurant.helpers.Menu;
+import restaurant.shehRestaurant.helpers.Order.OrderCookState;
 import restaurant.shehRestaurant.gui.WaiterGui;
-import restaurant.shehRestaurant.gui.Table;
-import restaurant.shehRestaurant.gui.Order;
-import restaurant.shehRestaurant.gui.FoodData;
+import restaurant.shehRestaurant.helpers.Table;
+import restaurant.shehRestaurant.helpers.Order;
+import restaurant.shehRestaurant.helpers.FoodData;
 import restaurant.shehRestaurant.interfaces.Cashier;
 import restaurant.shehRestaurant.interfaces.Waiter;
 
@@ -18,12 +18,12 @@ import java.util.concurrent.Semaphore;
 /**
  * Restaurant Waiter Agent
  */
-public class WaiterAgent extends Role implements Waiter {
+public class ShehWaiterRole extends Role implements Waiter {
 	static final int NTABLES = 3;
-	public List<CustomerAgent> waitingCustomers = Collections.synchronizedList(new ArrayList<CustomerAgent>());
+	public List<ShehCustomerRole> waitingCustomers = Collections.synchronizedList(new ArrayList<ShehCustomerRole>());
 	private List<myCustomer> customers = Collections.synchronizedList(new ArrayList<myCustomer>());
-	private CookAgent cook;
-	private HostAgent host;
+	private ShehCookRole cook;
+	private ShehHostAgent host;
 	private Cashier cashier;
 	public ArrayList<Table> tables;
 	private Boolean breakGranted = false;
@@ -40,12 +40,12 @@ public class WaiterAgent extends Role implements Waiter {
 	public WaiterGui waiterGui = null;
 
 	public class myCustomer {
-		CustomerAgent c;
+		ShehCustomerRole c;
 		Table t;
 		String o;
 		CustomerState s;
 
-		public myCustomer(CustomerAgent customer, Table table, CustomerState state) {
+		public myCustomer(ShehCustomerRole customer, Table table, CustomerState state) {
 			c = customer;
 			t = table;
 			s = state;
@@ -58,7 +58,7 @@ public class WaiterAgent extends Role implements Waiter {
 		Paying, Gone};
 	
 	
-	public WaiterAgent(String name, Cashier ca, CookAgent co, HostAgent h) {
+	public ShehWaiterRole(String name, Cashier ca, ShehCookRole co, ShehHostAgent h) {
 		super();
 
 		this.name = name;
@@ -87,12 +87,12 @@ public class WaiterAgent extends Role implements Waiter {
 	}
 
 	
-	public void msgSeatThisCustomer(CustomerAgent cust, Table table) {
+	public void msgSeatThisCustomer(ShehCustomerRole cust, Table table) {
 		customers.add(new myCustomer(cust, table, CustomerState.WaitingInRestaurant));
 		stateChanged();
 	}
 	
-	public void msgImReadyToOrder(CustomerAgent cust) {
+	public void msgImReadyToOrder(ShehCustomerRole cust) {
 		synchronized(customers) {
 			for(myCustomer c : customers) {
 				if(c.c == cust) {
@@ -103,7 +103,7 @@ public class WaiterAgent extends Role implements Waiter {
 		}
 	}
 
-	public void msgOrderFood(CustomerAgent cust, String choice) {
+	public void msgOrderFood(ShehCustomerRole cust, String choice) {
 		synchronized(customers) {	
 			for(myCustomer c : customers) {
 				if(c.c == cust) {
@@ -137,7 +137,7 @@ public class WaiterAgent extends Role implements Waiter {
 		}
 	}
 	
-	public void msgBillPlease(CustomerAgent cust) {
+	public void msgBillPlease(ShehCustomerRole cust) {
 		synchronized(customers) {
 			for(myCustomer c : customers) {
 				if(c.c == cust) {
@@ -160,7 +160,7 @@ public class WaiterAgent extends Role implements Waiter {
 		}
 	}
 
-	public void msgLeavingTable(CustomerAgent cust) {
+	public void msgLeavingTable(ShehCustomerRole cust) {
 		synchronized(tables) {
 			for (Table table : tables) {
 				if (table.getOccupant() == cust) {
@@ -425,7 +425,7 @@ public class WaiterAgent extends Role implements Waiter {
 	}
 
 	//Animation
-	private void DoSeatCustomer(CustomerAgent customer, Table table) {
+	private void DoSeatCustomer(ShehCustomerRole customer, Table table) {
 		print("Seating " + customer + " at " + table);
 		waiterGui.DoBringToTable(customer, table);
 	}
@@ -449,7 +449,7 @@ public class WaiterAgent extends Role implements Waiter {
 	}
 
 
-	public void setCook(CookAgent cook) {
+	public void setCook(ShehCookRole cook) {
 		this.cook = cook;	
 	}
 	

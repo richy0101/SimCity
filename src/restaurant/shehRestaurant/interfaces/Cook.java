@@ -1,6 +1,6 @@
 package restaurant.shehRestaurant.interfaces;
 
-import restaurant.shehRestaurant.gui.Order;
+import restaurant.shehRestaurant.helpers.Order;
 
 public interface Cook {
 

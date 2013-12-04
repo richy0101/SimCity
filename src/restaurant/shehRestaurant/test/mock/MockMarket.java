@@ -3,8 +3,8 @@ package restaurant.shehRestaurant.test.mock;
 
 import java.util.Vector;
 
-import restaurant.shehRestaurant.CashierAgent;
-import restaurant.shehRestaurant.gui.Bill;
+import restaurant.shehRestaurant.ShehCashierAgent;
+import restaurant.shehRestaurant.helpers.Bill;
 import restaurant.shehRestaurant.interfaces.Cashier;
 import restaurant.shehRestaurant.interfaces.Cook;
 import restaurant.shehRestaurant.interfaces.Customer;
@@ -18,7 +18,7 @@ public class MockMarket extends Mock implements Market {
 	}
 	
 	public EventLog log = new EventLog();
-	public CashierAgent cashier;
+	public ShehCashierAgent cashier;
 
 	@Override
 	public void msgHereIsPayment(Bill b) {

@@ -1,9 +1,9 @@
 package restaurant.shehRestaurant.gui;
 
 
-import restaurant.shehRestaurant.CustomerAgent;
-import restaurant.shehRestaurant.HostAgent; 
-//import restaurant.gui.Table;
+import restaurant.shehRestaurant.ShehCustomerRole;
+import restaurant.shehRestaurant.ShehHostAgent; 
+import restaurant.shehRestaurant.helpers.Table;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.Collection;
 
 public class HostGui implements Gui {
 
-    private HostAgent agent = null;
+    private ShehHostAgent agent = null;
 
     private int xPos = -20, yPos = -20;//default waiter position
     private int xDestination = -20, yDestination = -20;//default start position
@@ -22,7 +22,7 @@ public class HostGui implements Gui {
     public static final int yTable = 250; 
     public ArrayList<Table> table; //Declaration of Table
 
-    public HostGui(HostAgent agent) {
+    public HostGui(ShehHostAgent agent) {
         this.agent = agent;
         table = agent.getTables();
     }
@@ -53,7 +53,7 @@ public class HostGui implements Gui {
         return true;
     }
 
-    public void DoBringToTable(CustomerAgent customer, Table table) { //SEATING AT TABLE
+    public void DoBringToTable(ShehCustomerRole customer, Table table) { //SEATING AT TABLE
     		if(table.getTableNumber() == 1){
     			xTable = 200;
     		}

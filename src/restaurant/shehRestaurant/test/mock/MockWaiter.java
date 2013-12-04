@@ -1,7 +1,7 @@
 package restaurant.shehRestaurant.test.mock;
 
 
-import restaurant.shehRestaurant.gui.Bill;
+import restaurant.shehRestaurant.helpers.Bill;
 import restaurant.shehRestaurant.interfaces.Cashier;
 import restaurant.shehRestaurant.interfaces.Customer;
 import restaurant.shehRestaurant.interfaces.Waiter;

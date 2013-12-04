@@ -1,9 +1,9 @@
 package restaurant.shehRestaurant.gui;
 
 
-import restaurant.shehRestaurant.CustomerAgent;
-import restaurant.shehRestaurant.WaiterAgent; 
-//import restaurant.gui.Table;
+import restaurant.shehRestaurant.ShehCustomerRole;
+import restaurant.shehRestaurant.ShehWaiterRole; 
+import restaurant.shehRestaurant.helpers.Table;
 
 
 
@@ -14,7 +14,7 @@ import java.util.Collection;
 
 public class WaiterGui implements Gui {
 
-    private WaiterAgent agent = null;
+    private ShehWaiterRole agent = null;
 
     private int xPos = 450, yPos = -20;//default waiter position
     private int xDestination = -20, yDestination = -20;//default start position
@@ -32,7 +32,7 @@ public class WaiterGui implements Gui {
 
 	private RestaurantGui gui;
 
-    public WaiterGui(WaiterAgent agent, RestaurantGui gui) {
+    public WaiterGui(ShehWaiterRole agent, RestaurantGui gui) {
         this.agent = agent;
         table = agent.getTables();
         
@@ -82,7 +82,7 @@ public class WaiterGui implements Gui {
         return true;
     }
 
-    public void DoBringToTable(CustomerAgent customer, Table table) { //SEATING AT TABLE
+    public void DoBringToTable(ShehCustomerRole customer, Table table) { //SEATING AT TABLE
     		if(table.getTableNumber() == 1){
     			xTable = 100;
     		}

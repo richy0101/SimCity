@@ -3,13 +3,13 @@ package restaurant.shehRestaurant;
 import agent.Agent;
 import agent.Role;
 import restaurant.shehRestaurant.gui.CookGui;
-import restaurant.shehRestaurant.gui.FoodData;
-import restaurant.shehRestaurant.gui.Menu;
-import restaurant.shehRestaurant.gui.Order;
+import restaurant.shehRestaurant.helpers.FoodData;
+import restaurant.shehRestaurant.helpers.Menu;
+import restaurant.shehRestaurant.helpers.Order;
 import restaurant.shehRestaurant.gui.WaiterGui;
-import restaurant.shehRestaurant.gui.Order.OrderCookState;
-import restaurant.shehRestaurant.gui.Bill;
-import restaurant.shehRestaurant.gui.Order.OrderMarketState;
+import restaurant.shehRestaurant.helpers.Order.OrderCookState;
+import restaurant.shehRestaurant.helpers.Bill;
+import restaurant.shehRestaurant.helpers.Order.OrderMarketState;
 import restaurant.shehRestaurant.interfaces.Cashier;
 import restaurant.shehRestaurant.interfaces.Cook;
 import restaurant.shehRestaurant.interfaces.Market;
@@ -20,7 +20,7 @@ import java.util.concurrent.Semaphore;
 /**
  * Restaurant Cook Agent
  */
-public class CookAgent extends Role implements Cook {
+public class ShehCookRole extends Role implements Cook {
 	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
 	Timer timer = new Timer();
 	Menu menu = new Menu();
@@ -50,7 +50,7 @@ public class CookAgent extends Role implements Cook {
 	private Market market1, market2; 
 	private Cashier cashier;
 
-	public CookAgent(String n, Market m1, Market m2) {
+	public ShehCookRole(String n, Market m1, Market m2) {
 		super();
 
 		name = n;
@@ -59,7 +59,7 @@ public class CookAgent extends Role implements Cook {
 	}
 
 	// tMessages
-	public void msgCookThisOrder(WaiterAgent w, String o, int t, Cashier ca) {
+	public void msgCookThisOrder(ShehWaiterRole w, String o, int t, Cashier ca) {
 		cashier = ca;
 		
 		print("Received order");
