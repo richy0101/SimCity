@@ -30,13 +30,11 @@ public class WaiterGui implements Gui {
     public ArrayList<Table> table; //Declaration of Table
     private Boolean wantsBreak = false;
 
-	private RestaurantGui gui;
-
-    public WaiterGui(ShehWaiterRole agent, RestaurantGui gui) {
+    public WaiterGui(ShehWaiterRole agent) {
         this.agent = agent;
         table = agent.getTables();
         
-        this.gui = gui;
+        //IMAGE STUFF
     }
 
     public void updatePosition() {

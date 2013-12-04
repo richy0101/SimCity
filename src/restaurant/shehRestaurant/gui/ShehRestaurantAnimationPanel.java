@@ -2,16 +2,22 @@ package restaurant.shehRestaurant.gui;
 
 import javax.swing.*;
 
+import gui.BuildingPanel;
+import gui.Gui;
+import gui.SimCityGui;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Rectangle2D;
 import java.util.List;
 import java.util.ArrayList;
 
-public class ShehRestaurantAnimationPanel extends JPanel implements ActionListener {
+@SuppressWarnings("serial")
+public class ShehRestaurantAnimationPanel extends BuildingPanel implements ActionListener {
 
-    private final int WINDOWX = 450;
-    private final int WINDOWY = 350;
+    private final int WINDOWX = 827;
+    private final int WINDOWY = 406;
     
     private final int FIRSTCOLUMNTABLES = 100;
     private final int SECONDCOLUMNTABLES = 200;
@@ -32,7 +38,8 @@ public class ShehRestaurantAnimationPanel extends JPanel implements ActionListen
 
     private List<Gui> guis = new ArrayList<Gui>();
 
-    public ShehRestaurantAnimationPanel() {
+    public ShehRestaurantAnimationPanel(Rectangle2D r, int i, SimCityGui sc) {
+    	super(r, i, sc);
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
         
@@ -40,6 +47,8 @@ public class ShehRestaurantAnimationPanel extends JPanel implements ActionListen
  
     	Timer timer = new Timer(speed, this );
     	timer.start();
+    	
+    	//IMAGE
     }
 
 	public void actionPerformed(ActionEvent e) {
@@ -97,4 +106,20 @@ public class ShehRestaurantAnimationPanel extends JPanel implements ActionListen
     public void addGui(WaiterGui gui) {
     	guis.add(gui);
     }
+    
+    public void displayBuildingPanel() {
+        myCity.displayBuildingPanel(this);
+    }
+
+	@Override
+	public void addGui(Gui gui) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateGui() {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -1,7 +1,7 @@
 package restaurant.shehRestaurant.gui;
 
-import restaurant.shehRestaurant.CustomerRole;
-import restaurant.shehRestaurant.HostAgent;
+import restaurant.shehRestaurant.ShehCustomerRole;
+import restaurant.shehRestaurant.ShehHostAgent;
 import restaurant.shehRestaurant.helpers.Table;
 
 import java.awt.*;
@@ -10,13 +10,12 @@ import javax.swing.*;
 
 public class CustomerGui implements Gui{
 
-	private CustomerRole agent = null;
+	private ShehCustomerRole agent = null;
 	private boolean isPresent = false;
 	private boolean isHungry = false;
 
 	//private HostAgent host;
 	Table table; //from CustomerAgent
-	RestaurantGui gui;
 
 	private int xPos, yPos, agentSize;
 	private int xDestination, yDestination;
@@ -27,7 +26,7 @@ public class CustomerGui implements Gui{
 	public int xTable;
 	public static final int yTable = 250;
 
-	public CustomerGui(CustomerRole c, RestaurantGui gui){ //HostAgent m) {
+	public CustomerGui(ShehCustomerRole c){ //HostAgent m) {
 		agent = c;
 		xPos = -40;
 		yPos = -40;
@@ -35,9 +34,6 @@ public class CustomerGui implements Gui{
 		yDestination = -40;
 		
 		agentSize = 20;
-		
-		//maitreD = m;
-		this.gui = gui;
 	}
 
 	public void updatePosition() {
@@ -55,9 +51,9 @@ public class CustomerGui implements Gui{
 			if (command==Command.GoToSeat) agent.msgAnimationFinishedGoToSeat();
 			else if (command==Command.LeaveRestaurant) {
 				agent.msgAnimationFinishedLeaveRestaurant();
-				System.out.println("about to call gui.setCustomerEnabled(agent);");
+				//System.out.println("about to call gui.setCustomerEnabled(agent);");
 				isHungry = false;
-				gui.setCustomerEnabled(agent);
+				//gui.setCustomerEnabled(agent);
 			}
 			command=Command.noCommand;
 		}

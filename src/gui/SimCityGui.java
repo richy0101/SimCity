@@ -32,6 +32,7 @@ import javax.swing.event.ChangeEvent;
 
 import market.MarketCustomerRole;
 import market.MarketRole;
+import restaurant.shehRestaurant.gui.ShehRestaurantAnimationPanel;
 import restaurant.stackRestaurant.StackCookRole;
 import restaurant.stackRestaurant.StackHostAgent;
 import restaurant.stackRestaurant.StackWaiterNormalRole;
@@ -130,6 +131,9 @@ public class SimCityGui {
 			else if(b.getName().toLowerCase().contains("stack")) {
 				b.setBuildingPanel(new StackRestaurantAnimationPanel(b, i, this));
             }
+			else if(b.getName().toLowerCase().contains("sheh")) {
+				b.setBuildingPanel(new ShehRestaurantAnimationPanel(b, i, this));
+			}
 			else {//if(b.getName().toLowerCase().contains("stack")) {
 				b.setBuildingPanel(new GUIMarket( b, i, this ));
 			}

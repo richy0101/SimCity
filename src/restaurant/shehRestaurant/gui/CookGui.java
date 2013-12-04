@@ -23,11 +23,15 @@ public class CookGui implements Gui {
     public static final int yTable = 250; 
     public ArrayList<Table> table; //Declaration of Table
 
-	private RestaurantGui gui;
+	//private RestaurantGui gui;
 
     public CookGui(ShehCookRole agent) {
         this.agent = agent;
-        this.gui = gui;
+        //this.gui = gui;
+        
+        //IMAGE STUFF
+        
+        
     }
 
 	public void updatePosition() {

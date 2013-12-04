@@ -17,6 +17,8 @@ public abstract class BuildingPanel extends JPanel implements ActionListener{
 		myRectangle = r;
 		myName = "" + i;
 		myCity = sc;
+		
+		//Changes label in card microwindow
 		/*
 		if(i == 0) {
 			myName = "Stack's Restaurant (1)";

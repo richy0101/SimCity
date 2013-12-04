@@ -2,12 +2,7 @@ package restaurant.shehRestaurant;
 
 import java.util.Vector;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
 import restaurant.Restaurant;
-import restaurant.shehRestaurant.*;
-import city.PersonAgent;
 
 
 public class ShehRestaurant extends Restaurant {
@@ -16,14 +11,15 @@ public class ShehRestaurant extends Restaurant {
 	ShehHostAgent host;
 	ShehCashierAgent cashier;
 	double till = 10000;
+	Vector<ShehWaiterRole> waiters = new Vector<ShehWaiterRole>();
 	
 	
 
 	public ShehRestaurant(String name) {
 		super();
 		this.name = name;
-		host = new ShehHostAgent();
-		cashier = new ShehCashierAgent();
+		host = new ShehHostAgent("Host", waiters);
+		cashier = new ShehCashierAgent("Cashier");
 		host.startThread();
 		cashier.startThread();	
 	}
