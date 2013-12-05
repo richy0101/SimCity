@@ -14,30 +14,24 @@ import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import restaurant.Restaurant;
-import restaurant.stackRestaurant.StackCookRole;
-import restaurant.stackRestaurant.StackCustomerRole;
-import restaurant.stackRestaurant.StackWaiterNormalRole;
-import restaurant.stackRestaurant.StackWaiterSharedRole;
-import market.MarketCustomerRole;
-import market.MarketRole;
 import market.Market;
 import bank.Bank;
 import bank.BankCustomerRole;
-import bank.BankManagerAgent;
-import bank.BankTellerRole;
 import city.gui.PersonGui;
-import city.helpers.Clock;
 import city.helpers.Directory;
+import city.helpers.WorkDetails;
 import city.interfaces.Person;
 import city.interfaces.RoleInterface;
 import agent.Agent;
 import agent.Role;
+import city.helpers.RoleFactory;
 
 public class PersonAgent extends Agent implements Person {
 	/**
 	 * Data---------------------------------------------------------------------------------------------------------------
 	 */
 	public Stack<RoleInterface> roles = new Stack<RoleInterface>();
+	//Utilities
 	RoleFactory factory = new RoleFactory();
 	WorkDetails workDetails;
 	//LandLordRole landLord;
@@ -87,51 +81,6 @@ public class PersonAgent extends Agent implements Person {
 		}	
 	};
 	
-	private class WorkDetails {
-		RoleInterface workRole;
-		String workLocation;
-		WorkDetails(RoleInterface job, String location) {
-			this.workRole = job;
-			this.workLocation = location;
-		}
-	};
-	private class RoleFactory {
-		Role newRole;
-		RoleFactory() {
-			newRole = null;
-		}
-		Role createRole(String order, PersonAgent p) {
-			if(order == "StackRestaurant") {
-				this.newRole = new StackCustomerRole("StackRestaurant");
-			}
-			else if(order == "Market1" || order == "Market2") {
-				this.newRole = new MarketCustomerRole(p.groceryList, order);
-			}
-			else if(order == "StackWaiterNormal") {
-				this.newRole = new StackWaiterNormalRole("StackRestaurant");
-				return newRole;
-			}
-			else if (order == "StackWaiterShared") {
-				this.newRole = new StackWaiterSharedRole("StackRestaurant");
-				return newRole;
-			}
-			else if (order == "StackCook") {
-				this.newRole = new StackCookRole("StackRestaurant");
-				return newRole;
-			}
-			else if (order == "BankTeller") {
-				this.newRole = new BankTellerRole("Bank");
-				return newRole;
-			}
-			else if (order == "Unemployed") {
-				this.newRole = new UnemployedRole();
-				return newRole;
-			}
-			newRole.setPerson(p);
-			//print("Set role complete.");
-			return newRole;
-		}
-	};
 	private class Food {
 		public String type;
 		public int preparationTime;
@@ -250,13 +199,12 @@ public class PersonAgent extends Agent implements Person {
 	}
 	/**
 	 * FRONT END CONSTRUCTOR BELOW
-	 * @param job
-	 * @param job_location
-	 * @param name
-	 * @param aggressivenessLevel
-	 * @param initialFunds
-	 * @param housingStatus
-	 * @param vehicleStatus
+	 * @param job Name of his job
+	 * @param name Name of person
+	 * @param aggressivenessLevel Level of aggressiveness: 1 - normal, 2 - cheap at restaurants, 3 - robs banks, also determines length of work
+	 * @param initialFunds How much money he starts out with
+	 * @param housingStatus Whether he lives in an apartment or house
+	 * @param vehicleStatus Whether he takes the bus or owns a car
 	 */
 	public PersonAgent(String job, 
 			String name, 
@@ -266,6 +214,7 @@ public class PersonAgent extends Agent implements Person {
 			String vehicleStatus) {
 		this.name = name;
 		//Set Up Work.
+		//TODO do we need this if statement?
 		if (job.contains("employ")) {
 			print("I am unemployed!");
 			this.unemployed = true;
@@ -276,6 +225,7 @@ public class PersonAgent extends Agent implements Person {
 			workDetails = new WorkDetails(r, Directory.sharedInstance().roleDirectory.get(r.getClass().getName()));
 			//finish setting up Work
 		}
+		print("created someone");
 		this.aggressivenessLevel = aggressivenessLevel;
 		this.funds = initialFunds;
 		String vehicleStatusNoSpace = vehicleStatus.replaceAll(" ", "");
@@ -291,7 +241,7 @@ public class PersonAgent extends Agent implements Person {
 		currentLocation = housingStatus;
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
-			if (b.getName() == homeName) {
+			if (b.getName().equals(homeName)) {
 				b.addGui(personGui);
 			}
 		}
@@ -382,6 +332,9 @@ public class PersonAgent extends Agent implements Person {
 	/**
 	 * Messages
 	 */
+	public void msgCheckTime(int hour, int day) {
+		
+	}
 	public void msgTestWakeUp() {
 		stateChanged();
 	}
@@ -437,7 +390,7 @@ public class PersonAgent extends Agent implements Person {
 		stateChanged();
 	}
 	public void msgTransportFinished(String location) {
-		RoleInterface r = roles.pop();
+		roles.pop();
 		currentLocation = location;
 		if (currentLocation == homeName) {
 			setPersonState(PersonState.EnterHome);
@@ -708,15 +661,13 @@ public class PersonAgent extends Agent implements Person {
 		Role t = new TransportationRole(workDetails.workLocation, currentLocation);
 		t.setPerson(this);
 		roles.add(t);
+		/*
 		personTimer.schedule(new PersonTimerTask(this) {
 			public void run() {
 				p.msgDoneWorking();
 			}
 		},
-		20000 * aggressivenessLevel);//time for working
-	}
-	private void cleanRoom() {
-
+		20000 * aggressivenessLevel);//time for working*/
 	}
 	private boolean checkInventory() {
 		groceryList.clear();
@@ -834,6 +785,9 @@ public class PersonAgent extends Agent implements Person {
 		}
 		groceryList.clear();
 	}
+	public String toString() {
+		return name;
+	}
 	public String getName() {
 		return name;
 	}
@@ -855,12 +809,13 @@ public class PersonAgent extends Agent implements Person {
 	public String getTransportationMethod() {
 		return transMethod.toString();
 	}
-
 	public PersonState getPersonState() {
 		return personState;
 	}
-
 	public void setPersonState(PersonState personState) {
 		this.personState = personState;
+	}
+	public Map<String, Integer> getGroceriesList() {
+		return groceryList;
 	}
 }
