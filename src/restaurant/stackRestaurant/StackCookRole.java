@@ -216,7 +216,7 @@ public class StackCookRole extends Role implements Cook {
 	
 	private void leaveRestaurant() {
 		print("Leaving.");
-		cookGui.DoExitRestaurant();
+		DoLeaveRestaurant();
 		try {
 			doneAnimation.acquire();
 		} catch (InterruptedException e) {
@@ -224,7 +224,7 @@ public class StackCookRole extends Role implements Cook {
 		}
 		getPersonAgent().msgRoleFinished();
 	}
-	
+
 	private void goGetPaycheck() {
 		print("Getting paycheck");
 		cookGui.DoGoToPaycheck();
@@ -237,6 +237,10 @@ public class StackCookRole extends Role implements Cook {
 		state = AgentState.WaitingForPaycheck;
 	}
 
+	private void DoLeaveRestaurant() {
+		host.msgCookLeaving(this);
+		cookGui.DoExitRestaurant();
+	}
 		
 	//messages
 	public void msgHereIsPaycheck(double funds) {

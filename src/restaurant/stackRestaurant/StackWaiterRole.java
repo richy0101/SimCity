@@ -68,14 +68,6 @@ public class StackWaiterRole extends Role implements Waiter {
 				tellHostAtWork();
 				return true;
 			}
-			if(state == AgentState.GettingPaycheck) {
-				goGetPaycheck();
-				return true;
-			}
-			if(state == AgentState.Leaving) {
-				leaveRestaurant();
-				return true;
-			}
 			if(state == AgentState.WantToGoOnBreak) {
 				askHostToGoOnBreak();
 				return true;
@@ -129,6 +121,14 @@ public class StackWaiterRole extends Role implements Waiter {
 					seatCustomer(customer, customer.table, customer.seatNum);
 					return true;
 				}
+			}
+			if(state == AgentState.GettingPaycheck) {
+				goGetPaycheck();
+				return true;
+			}
+			if(state == AgentState.Leaving) {
+				leaveRestaurant();
+				return true;
 			}
 			if(state == AgentState.GoingOnBreak) {
 				goOnBreak();
@@ -268,7 +268,7 @@ public class StackWaiterRole extends Role implements Waiter {
 	
 	private void leaveRestaurant() {
 		print("Leaving.");
-		waiterGui.DoExitRestaurant();
+		DoLeaveRestaurant();
 		try {
 			doneAnimation.acquire();
 		} catch (InterruptedException e) {
@@ -285,6 +285,7 @@ public class StackWaiterRole extends Role implements Waiter {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		print("telling cashier I need my paycheck");
 		cashier.msgNeedPaycheck(this);
 		state = AgentState.WaitingForPaycheck;
 	}
@@ -319,6 +320,11 @@ public class StackWaiterRole extends Role implements Waiter {
 	
 	private void updateGui(String choice) {
 		waiterGui.updateGui(choice);
+	}
+	
+	private void DoLeaveRestaurant() {
+		host.msgWaiterLeaving(this);
+		waiterGui.DoExitRestaurant();
 	}
 	
 	

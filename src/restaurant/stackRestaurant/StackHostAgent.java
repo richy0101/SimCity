@@ -157,6 +157,18 @@ public class StackHostAgent extends Agent implements Host {
 		stateChanged();
 	}
 	
+	public void msgCookLeaving(Cook cook) {
+		print("removing " + cook);
+		cook = null;
+		stateChanged();
+	}
+
+	public void msgWaiterLeaving(Waiter waiter) {
+		print("removing " + waiter);
+		waiters.remove(waiter);
+		stateChanged();
+	}
+	
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
