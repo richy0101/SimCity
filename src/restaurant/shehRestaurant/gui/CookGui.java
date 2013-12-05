@@ -2,6 +2,7 @@ package restaurant.shehRestaurant.gui;
 
 import restaurant.shehRestaurant.ShehCookRole;
 import restaurant.shehRestaurant.helpers.Table;
+import gui.Gui;
 
 import java.awt.*;
 import java.util.ArrayList;

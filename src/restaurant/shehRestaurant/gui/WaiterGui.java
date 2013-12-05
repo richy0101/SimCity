@@ -1,16 +1,13 @@
 package restaurant.shehRestaurant.gui;
 
-
 import restaurant.shehRestaurant.ShehCustomerRole;
 import restaurant.shehRestaurant.ShehWaiterRole; 
 import restaurant.shehRestaurant.helpers.Table;
 
-
-
+import gui.Gui;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class WaiterGui implements Gui {
 

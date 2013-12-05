@@ -1,5 +1,6 @@
 package restaurant.shehRestaurant.gui;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import gui.BuildingPanel;
@@ -10,6 +11,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -33,8 +36,7 @@ public class ShehRestaurantAnimationPanel extends BuildingPanel implements Actio
     
     private final int speed = 8;
     
-    private Image bufferImage;
-    private Dimension bufferSize;
+    private BufferedImage restaurantImage;
 
     private List<Gui> guis = new ArrayList<Gui>();
 
@@ -42,13 +44,17 @@ public class ShehRestaurantAnimationPanel extends BuildingPanel implements Actio
     	super(r, i, sc);
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
-        
-        bufferSize = this.getSize();
  
     	Timer timer = new Timer(speed, this );
     	timer.start();
     	
     	//IMAGE
+    	try {
+        	restaurantImage = ImageIO.read(getClass().getResource("shehRestaurant.png"));
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ Background");
+        }
     }
 
 	public void actionPerformed(ActionEvent e) {
@@ -77,6 +83,8 @@ public class ShehRestaurantAnimationPanel extends BuildingPanel implements Actio
         
         g2.setColor(Color.GRAY);
         g2.fillRect(CHEFSKITCHEN, CHEFSCOOKING, TABLELENGTH, TABLELENGTH);
+        
+        g2.drawImage(restaurantImage, 0, 0, null);
 
         for(Gui gui : guis) {
             if (gui.isPresent()) {
