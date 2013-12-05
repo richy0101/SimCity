@@ -507,6 +507,11 @@ public class PersonAgent extends Agent implements Person {
 			setPersonState(PersonState.NeedsToWork);
 			return true;
 		}
+		else if (funds < 50.00 && aggressivenessLevel > 2) {
+			print("Eval says GO ROB BANK YOU CROOK");
+			setPersonState(PersonState.WantsToRob);
+			return true;
+		}
 		else if (funds > 1000.00) {
 			print("Eval says GO DEPOSIT YOU RICH MAN/WOMAN");
 			setPersonState(PersonState.WantsToDeposit);
