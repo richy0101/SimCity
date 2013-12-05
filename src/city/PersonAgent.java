@@ -14,24 +14,19 @@ import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import restaurant.Restaurant;
-import restaurant.stackRestaurant.StackCookRole;
-import restaurant.stackRestaurant.StackCustomerRole;
-import restaurant.stackRestaurant.StackWaiterNormalRole;
-import restaurant.stackRestaurant.StackWaiterSharedRole;
-import market.MarketCustomerRole;
-import market.MarketRole;
+
 import market.Market;
 import bank.Bank;
 import bank.BankCustomerRole;
-import bank.BankManagerAgent;
-import bank.BankTellerRole;
+
 import city.gui.PersonGui;
-import city.helpers.Clock;
+
 import city.helpers.Directory;
 import city.interfaces.Person;
 import city.interfaces.RoleInterface;
 import agent.Agent;
 import agent.Role;
+import city.helpers.RoleFactory;
 
 public class PersonAgent extends Agent implements Person {
 	/**
@@ -95,43 +90,7 @@ public class PersonAgent extends Agent implements Person {
 			this.workLocation = location;
 		}
 	};
-	private class RoleFactory {
-		Role newRole;
-		RoleFactory() {
-			newRole = null;
-		}
-		Role createRole(String order, PersonAgent p) {
-			if(order == "StackRestaurant") {
-				this.newRole = new StackCustomerRole("StackRestaurant");
-			}
-			else if(order == "Market1" || order == "Market2") {
-				this.newRole = new MarketCustomerRole(p.groceryList, order);
-			}
-			else if(order == "StackWaiterNormal") {
-				this.newRole = new StackWaiterNormalRole("StackRestaurant");
-				return newRole;
-			}
-			else if (order == "StackWaiterShared") {
-				this.newRole = new StackWaiterSharedRole("StackRestaurant");
-				return newRole;
-			}
-			else if (order == "StackCook") {
-				this.newRole = new StackCookRole("StackRestaurant");
-				return newRole;
-			}
-			else if (order == "BankTeller") {
-				this.newRole = new BankTellerRole("Bank");
-				return newRole;
-			}
-			else if (order == "Unemployed") {
-				this.newRole = new UnemployedRole();
-				return newRole;
-			}
-			newRole.setPerson(p);
-			//print("Set role complete.");
-			return newRole;
-		}
-	};
+	
 	private class Food {
 		public String type;
 		public int preparationTime;
@@ -382,6 +341,9 @@ public class PersonAgent extends Agent implements Person {
 	/**
 	 * Messages
 	 */
+	public void msgCheckTime() {
+		
+	}
 	public void msgTestWakeUp() {
 		stateChanged();
 	}
@@ -437,7 +399,7 @@ public class PersonAgent extends Agent implements Person {
 		stateChanged();
 	}
 	public void msgTransportFinished(String location) {
-		RoleInterface r = roles.pop();
+		roles.pop();
 		currentLocation = location;
 		if (currentLocation == homeName) {
 			setPersonState(PersonState.EnterHome);
@@ -715,9 +677,6 @@ public class PersonAgent extends Agent implements Person {
 		},
 		20000 * aggressivenessLevel);//time for working
 	}
-	private void cleanRoom() {
-
-	}
 	private boolean checkInventory() {
 		groceryList.clear();
 		for(Food f : inventory) {
@@ -855,12 +814,13 @@ public class PersonAgent extends Agent implements Person {
 	public String getTransportationMethod() {
 		return transMethod.toString();
 	}
-
 	public PersonState getPersonState() {
 		return personState;
 	}
-
 	public void setPersonState(PersonState personState) {
 		this.personState = personState;
+	}
+	public Map<String, Integer> getGroceriesList() {
+		return groceryList;
 	}
 }
