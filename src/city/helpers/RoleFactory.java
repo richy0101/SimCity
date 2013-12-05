@@ -12,31 +12,32 @@ public class RoleFactory {
 	public RoleFactory() {
 		newRole = null;
 	}
-	public Role createRole(String order, PersonAgent p) {
-		if(order == "StackRestaurant") {
-			this.newRole = new StackCustomerRole("StackRestaurant");
+	public Role createRole(String role, PersonAgent p) {
+		System.out.println(role);
+		if(role.equals("StackRestaurant")) {
+			newRole = new StackCustomerRole("StackRestaurant");
 		}
-		else if(order == "Market1" || order == "Market2") {
-			this.newRole = new MarketCustomerRole(p.getGroceriesList(), order);
+		else if(role.equals("Market1") || role.equals("Market2")) {
+			newRole = new MarketCustomerRole(p.getGroceriesList(), role);
 		}
-		else if(order == "StackWaiterNormal") {
-			this.newRole = new StackWaiterNormalRole("StackRestaurant");
+		else if(role.equals("StackWaiterNormal")) {
+			newRole = new StackWaiterNormalRole("StackRestaurant");
 			return newRole;
 		}
-		else if (order == "StackWaiterShared") {
-			this.newRole = new StackWaiterSharedRole("StackRestaurant");
+		else if (role.equals("StackWaiterShared")) {
+			newRole = new StackWaiterSharedRole("StackRestaurant");
 			return newRole;
 		}
-		else if (order == "StackCook") {
-			this.newRole = new StackCookRole("StackRestaurant");
+		else if (role.equals("StackCook")) {
+			newRole = new StackCookRole("StackRestaurant");
 			return newRole;
 		}
-		else if (order == "BankTeller") {
-			this.newRole = new BankTellerRole("Bank");
+		else if (role.equals("BankTeller")) {
+			newRole = new BankTellerRole("Bank");
 			return newRole;
 		}
-		else if (order == "Unemployed") {
-			this.newRole = new UnemployedRole();
+		else if (role.equals("Unemployed")) {
+			newRole = new UnemployedRole();
 			return newRole;
 		}
 		newRole.setPerson(p);

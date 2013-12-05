@@ -209,13 +209,12 @@ public class PersonAgent extends Agent implements Person {
 	}
 	/**
 	 * FRONT END CONSTRUCTOR BELOW
-	 * @param job
-	 * @param job_location
-	 * @param name
-	 * @param aggressivenessLevel
-	 * @param initialFunds
-	 * @param housingStatus
-	 * @param vehicleStatus
+	 * @param job Name of his job
+	 * @param name Name of person
+	 * @param aggressivenessLevel Level of aggressiveness: 1 - normal, 2 - cheap at restaurants, 3 - robs banks, also determines length of work
+	 * @param initialFunds How much money he starts out with
+	 * @param housingStatus Whether he lives in an apartment or house
+	 * @param vehicleStatus Whether he takes the bus or owns a car
 	 */
 	public PersonAgent(String job, 
 			String name, 
@@ -225,6 +224,7 @@ public class PersonAgent extends Agent implements Person {
 			String vehicleStatus) {
 		this.name = name;
 		//Set Up Work.
+		//TODO do we need this if statement?
 		if (job.contains("employ")) {
 			print("I am unemployed!");
 			this.unemployed = true;
@@ -235,6 +235,7 @@ public class PersonAgent extends Agent implements Person {
 			workDetails = new WorkDetails(r, Directory.sharedInstance().roleDirectory.get(r.getClass().getName()));
 			//finish setting up Work
 		}
+		print("created someone");
 		this.aggressivenessLevel = aggressivenessLevel;
 		this.funds = initialFunds;
 		String vehicleStatusNoSpace = vehicleStatus.replaceAll(" ", "");
@@ -250,7 +251,7 @@ public class PersonAgent extends Agent implements Person {
 		currentLocation = housingStatus;
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
-			if (b.getName() == homeName) {
+			if (b.getName().equals(homeName)) {
 				b.addGui(personGui);
 			}
 		}
@@ -792,6 +793,9 @@ public class PersonAgent extends Agent implements Person {
 			//print("Increasing inventory from groceries!");
 		}
 		groceryList.clear();
+	}
+	public String toString() {
+		return name;
 	}
 	public String getName() {
 		return name;

@@ -113,9 +113,6 @@ public class SimCityGui {
 		ArrayList<Building> buildings = macroAnimationPanel.getBuildings();
 		for ( int i=0; i<buildings.size(); i++ ) {
 			Building b = buildings.get(i);
-            //			BuildingPanel ma = new GUIHome(b, i ,this);
-			
-			
 			BuildingPanel ma = null;
 			
 			
@@ -134,13 +131,9 @@ public class SimCityGui {
 			else if(b.getName().toLowerCase().contains("sheh")) {
 				b.setBuildingPanel(new ShehRestaurantAnimationPanel(b, i, this));
 			}
-			else {//if(b.getName().toLowerCase().contains("stack")) {
+			else {
 				b.setBuildingPanel(new GUIMarket( b, i, this ));
 			}
-            
-            //			b.setMicroAnimationPanel( ma );
-            //			b.setBuildingPanel( ma );
-            //			microAnimationPanel.add( ma, "" + i );
 			buildingPanels.add( b.myBuildingPanel, "" + i );
 		}
 		
@@ -173,12 +166,7 @@ public class SimCityGui {
 		final JButton btnPopulateCity = new JButton("Populate City");
 		btnPopulateCity.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				XMLReader reader = new XMLReader();
-				ArrayList<PersonAgent> people = reader.initializePeople();
-				for(PersonAgent person : people) {
-					person.startThread();
-				}
+				populateCity();	
 				btnPopulateCity.setEnabled(false);
 				
 			}
@@ -349,8 +337,6 @@ public class SimCityGui {
                                                          (double)initialFundsSlider.getValue(),
                                                          (String)housingComboBox.getSelectedItem(),
                                                          (String)transportationComboBox.getSelectedItem());
-                    //					do more stuff here
-					//System.out.println(roles.get(occupationComboBox.getSelectedItem()));
 				}
 			}
 		});
@@ -369,6 +355,15 @@ public class SimCityGui {
 		sl_panel_1.putConstraint(SpringLayout.WEST, lblWorkers, 10, SpringLayout.WEST, panel_1);
 		panel_1.add(lblWorkers);
 	}
+	
+	private void populateCity() {
+		XMLReader reader = new XMLReader();
+		ArrayList<PersonAgent> people = reader.initializePeople();
+		for(PersonAgent person : people) {
+			person.startThread();
+		}	
+	}
+	
 	private void runSuperNorm() {
 		/** 
 		 * Start of Hard Code Scenario
