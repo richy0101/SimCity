@@ -31,6 +31,11 @@ public class BankTellerRole extends Role implements BankTeller {
 	    	this.customer = customer;
 	    	this.custState = state;
 	    }
+	    public MyCustomer(BankCustomer customer, CustomerState state, double moneyDemanded){
+	    	this.customer = customer;
+	    	this.custState = state;
+	    	this.moneyToWithdraw = moneyDemanded;
+	    }
 	    public String getState(){
 	    	return custState.toString();
 	    }
@@ -60,7 +65,7 @@ public class BankTellerRole extends Role implements BankTeller {
     private enum CustomerState {NeedingAssistance, 
     	AskedAssistance, OpeningAccount, OpenedAccount, 
     	DepositingMoney, WithdrawingMoney, LoanAccepted, 
-    	LoanRejected, Leaving};
+    	LoanRejected, Robbing, Leaving};
     	
     private String myLocation;
     
@@ -98,7 +103,9 @@ public class BankTellerRole extends Role implements BankTeller {
 		
 	}
 	public void msgAssigningCustomer(BankCustomer customer) {
-		customers.add(new MyCustomer(customer, CustomerState.NeedingAssistance));
+		synchronized(this.customers){
+			customers.add(new MyCustomer(customer, CustomerState.NeedingAssistance));
+		}
 	    stateChanged();
 	}
 	
@@ -148,13 +155,23 @@ public class BankTellerRole extends Role implements BankTeller {
 		stateChanged();
 	}
 	
+	public void msgHoldUpBank(double moneyDemanded,BankCustomer person) {
+		for(MyCustomer tempCustomer : customers) {
+			if(tempCustomer.customer == person) {
+				tempCustomer.moneyToWithdraw = moneyDemanded;
+				tempCustomer.custState = CustomerState.Robbing;
+			}
+		}
+		stateChanged();
+		//person.getPersonAgent().setFunds(person.getPersonAgent().getFunds() + moneyDemanded);
+	}
+	
 	public void msgThankYouForAssistance(BankCustomer customer) {
 		for(MyCustomer tempCustomer : customers) {
 			if(tempCustomer.equals(customer)) {
 				tempCustomer.custState = CustomerState.Leaving;
 			}
-		}
-		
+		}	
 	}
 	
 	public void msgDoneWorking() {
@@ -186,6 +203,14 @@ public class BankTellerRole extends Role implements BankTeller {
 			return true;
 		}
 		if(state == TellerState.ReadyForCustomers) {
+			synchronized(customers){
+				for(MyCustomer tempCustomer: customers){
+					if(tempCustomer.custState == CustomerState.Robbing){
+						GiveUpMoney(tempCustomer);
+						return true;
+					}
+				}
+			}
 			synchronized(customers){
 				for(MyCustomer tempCustomer: customers){
 					if(tempCustomer.custState == CustomerState.NeedingAssistance){
@@ -326,6 +351,12 @@ public class BankTellerRole extends Role implements BankTeller {
 	private void RejectLoan(MyCustomer myCustomer) {
 		print("Rejecting loan");
 		myCustomer.customer.msgLoanDenied();
+		myCustomer.custState = CustomerState.Leaving;
+	}
+	
+	private void GiveUpMoney(MyCustomer myCustomer) {
+		print("Giving up bank's money to robber");
+		myCustomer.customer.msgHereAreFunds(myCustomer.moneyToWithdraw);
 		myCustomer.custState = CustomerState.Leaving;
 	}
 	
