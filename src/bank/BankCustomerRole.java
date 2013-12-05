@@ -39,12 +39,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	public BankCustomerRole(String task, double moneyToDeposit, double moneyRequired) {
 		this.task = task;
 		//this.manager = Directory.sharedInstance().getBanks().get(0).getManager();
-		if(task == "Rob"){
-			this.moneyRequired = 1000;
-		}
-		else{
-			this.moneyRequired = moneyRequired;
-		}
+		this.moneyRequired = moneyRequired;		
 		this.moneyToDeposit = moneyToDeposit;
 		customerGui = new BankCustomerGui(this);
     	List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();

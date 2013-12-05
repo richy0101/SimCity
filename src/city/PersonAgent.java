@@ -697,14 +697,22 @@ public class PersonAgent extends Agent implements Person {
 	}
 	/** Non Norm Actions **/
 	private void goRob() {
-		/**
+		if(currentLocation == homeName) {
+			personGui.DoLeaveHouse();
+			actionComplete.acquireUninterruptibly();
+			personGui.setPresentFalse();
+		};
 		Bank b = Directory.sharedInstance().getBanks().get(0);
 		roles.clear();
-		roles.add(new BankCustomerRole(personState.toString(), 0.0, 0.0));//Hacked factory LOL
-		//roles.add(new TransportationRole(b.getName()));
+		Role bankCustRole = new BankCustomerRole(getPersonState().toString(), 0.0, 1000.0);
+		bankCustRole.setPerson(this);
+		roles.add(bankCustRole);
+		Role t = new TransportationRole(b.getName(), currentLocation);
+		t.setPerson(this);
+		roles.add(t);
 		print("Action goRob - State set to OutBank");
-		personState = PersonState.OutToBank;
-		*/
+		setPersonState(PersonState.OutToBank);
+		
 		
 	}
 	private void goDeposit() {
