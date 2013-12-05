@@ -14,14 +14,12 @@ import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import restaurant.Restaurant;
-
 import market.Market;
 import bank.Bank;
 import bank.BankCustomerRole;
-
 import city.gui.PersonGui;
-
 import city.helpers.Directory;
+import city.helpers.WorkDetails;
 import city.interfaces.Person;
 import city.interfaces.RoleInterface;
 import agent.Agent;
@@ -33,6 +31,7 @@ public class PersonAgent extends Agent implements Person {
 	 * Data---------------------------------------------------------------------------------------------------------------
 	 */
 	public Stack<RoleInterface> roles = new Stack<RoleInterface>();
+	//Utilities
 	RoleFactory factory = new RoleFactory();
 	WorkDetails workDetails;
 	//LandLordRole landLord;
@@ -80,15 +79,6 @@ public class PersonAgent extends Agent implements Person {
 			// TODO Auto-generated method stub
 			
 		}	
-	};
-	
-	private class WorkDetails {
-		RoleInterface workRole;
-		String workLocation;
-		WorkDetails(RoleInterface job, String location) {
-			this.workRole = job;
-			this.workLocation = location;
-		}
 	};
 	
 	private class Food {
@@ -342,7 +332,7 @@ public class PersonAgent extends Agent implements Person {
 	/**
 	 * Messages
 	 */
-	public void msgCheckTime() {
+	public void msgCheckTime(int hour, int day) {
 		
 	}
 	public void msgTestWakeUp() {
@@ -671,12 +661,13 @@ public class PersonAgent extends Agent implements Person {
 		Role t = new TransportationRole(workDetails.workLocation, currentLocation);
 		t.setPerson(this);
 		roles.add(t);
+		/*
 		personTimer.schedule(new PersonTimerTask(this) {
 			public void run() {
 				p.msgDoneWorking();
 			}
 		},
-		20000 * aggressivenessLevel);//time for working
+		20000 * aggressivenessLevel);//time for working*/
 	}
 	private boolean checkInventory() {
 		groceryList.clear();
