@@ -10,7 +10,7 @@ import city.PersonAgent;
 
 public class Clock implements ActionListener{
 	public static final Clock sharedInstance = new Clock();
-	private final int DELAY = 30000;
+	private final int DELAY = 15000;
 	int hour;
 	int day;
 	Timer timer = new Timer(DELAY, this);
@@ -28,6 +28,10 @@ public class Clock implements ActionListener{
 	public void setDelay(int delay) {
 		timer.setDelay(delay);		
 	}
+	
+	public boolean isDay() {
+		return hour > 6 && hour < 18;
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -43,6 +47,7 @@ public class Clock implements ActionListener{
 			else
 				day++;
 		}
+		
 		else
 			hour++;
 		

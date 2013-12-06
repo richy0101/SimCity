@@ -343,7 +343,37 @@ public class SimCityGui {
 		sl_panel.putConstraint(SpringLayout.NORTH, btnCreatePerson, 6, SpringLayout.SOUTH, aggressivenessSlider);
 		sl_panel.putConstraint(SpringLayout.WEST, btnCreatePerson, 0, SpringLayout.WEST, btnPopulateCity);
 		sl_panel.putConstraint(SpringLayout.EAST, btnCreatePerson, 0, SpringLayout.EAST, btnPopulateCity);
-		panel.add(btnCreatePerson);
+		panel.add(btnCreatePerson);	
+		
+		
+		JLabel lblSpeed = new JLabel("Animation Speed");
+		sl_panel.putConstraint(SpringLayout.NORTH, lblSpeed, 50, SpringLayout.SOUTH, btnCreatePerson);
+		sl_panel.putConstraint(SpringLayout.WEST, lblSpeed, 0, SpringLayout.WEST, btnCreatePerson);
+		panel.add(lblSpeed);
+		
+		final JLabel lblSpeedMeter = new JLabel("3");
+		sl_panel.putConstraint(SpringLayout.NORTH, lblSpeedMeter, 0, SpringLayout.NORTH, lblSpeed);
+		sl_panel.putConstraint(SpringLayout.EAST, lblSpeedMeter, 0, SpringLayout.EAST, btnCreatePerson);
+		panel.add(lblSpeedMeter);
+		
+		int beginningSpeedMin = 1;
+		int beginningSpeedMax = 5;
+		int beginningSpeedStart = 3;
+		final JSlider speedSlider = new JSlider(beginningSpeedMin, beginningSpeedMax, beginningSpeedStart);
+		speedSlider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				lblSpeedMeter.setText(speedSlider.getValue()+"");
+//				macroAnimationPanel.setSpeed(speedSlider.getValue());
+			}
+		});
+		sl_panel.putConstraint(SpringLayout.NORTH, speedSlider, 6, SpringLayout.SOUTH, lblSpeedMeter);
+		sl_panel.putConstraint(SpringLayout.WEST, speedSlider, 0, SpringLayout.WEST, btnCreatePerson);
+		sl_panel.putConstraint(SpringLayout.EAST, speedSlider, 0, SpringLayout.EAST, btnCreatePerson);
+		
+		speedSlider.setMajorTickSpacing(1);
+		speedSlider.setPaintTicks(true);
+		
+		panel.add(speedSlider);
 		
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Current Building", null, panel_1, null);

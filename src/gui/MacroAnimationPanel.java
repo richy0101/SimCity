@@ -49,7 +49,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
         setVisible(true);
         setBackground(Color.LIGHT_GRAY);
         
-    	Timer timer = new Timer(DELAY, this);
+    	timer = new Timer(DELAY, this);
     	timer.start();
     	
     	//buildings = new ArrayList<Building>();
@@ -160,7 +160,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
 	        }
         }
         
-//        if(Clock.sharedInstance().getTime() < 10000) 
+//        if(Clock.sharedInstance().isDay()) 
        	g2.drawImage(cityImage, 0, 0, null);
 //        else 
 //        	g2.drawImage(cityImageNight, 0, 0, null);
@@ -184,10 +184,10 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
         //moveComponents();
         //drawComponents(g);
         
-        //if(Clock.sharedInstance().getTime() < 10000) 
+//        if(Clock.sharedInstance().isDay()) 
         	g2.drawImage(cityImageTop, 0, 0, null);
-        //else 
-        	//g2.drawImage(cityImageNightTop, 0, 0, null);
+//        else 
+//        	g2.drawImage(cityImageNightTop, 0, 0, null);
     }
     
     public ArrayList<Building> getBuildings() {
@@ -236,5 +236,9 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
 
 	public void removeGui(Gui gui) {
 		guis.remove(gui);
+	}
+	
+	public void setSpeed(int speed) {
+		timer.setDelay(speed);
 	}
 }
