@@ -14,7 +14,7 @@ public class LandlordRole extends Role implements Landlord {
 	 	double moneyOwed;
 	 	PayState state;
 	 	
-	 	public void Tenant(HomePersonRole tenant, double money, PayState state){
+	 	public MyTenant(HomePersonRole tenant, double money, PayState state) {
 	 		this.inhabitant = tenant;
 	 		this.moneyOwed = money;
 	 		this.state = state;

@@ -9,9 +9,10 @@ import city.interfaces.Person;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-import restaurant.stackRestaurant.interfaces.Host;
 import bank.gui.BankTellerGui;
 import bank.helpers.AccountSystem;
 import bank.interfaces.*;
@@ -30,6 +31,11 @@ public class BankTellerRole extends Role implements BankTeller {
 	    public MyCustomer(BankCustomer customer, CustomerState state){
 	    	this.customer = customer;
 	    	this.custState = state;
+	    }
+	    public MyCustomer(BankCustomer customer, CustomerState state, double moneyDemanded){
+	    	this.customer = customer;
+	    	this.custState = state;
+	    	this.moneyToWithdraw = moneyDemanded;
 	    }
 	    public String getState(){
 	    	return custState.toString();
@@ -51,6 +57,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	private static final int MAXLOAN = 1000;
 	private Semaphore doneAnimation = new Semaphore(0,true);
 	private int registerNumber = 0;
+	Timer timer = new Timer();
     public BankManager manager;
     public BankTellerGui tellerGui;
     public Person person;
@@ -60,7 +67,7 @@ public class BankTellerRole extends Role implements BankTeller {
     private enum CustomerState {NeedingAssistance, 
     	AskedAssistance, OpeningAccount, OpenedAccount, 
     	DepositingMoney, WithdrawingMoney, LoanAccepted, 
-    	LoanRejected, Leaving};
+    	LoanRejected, Robbing, Leaving};
     	
     private String myLocation;
     
@@ -98,7 +105,9 @@ public class BankTellerRole extends Role implements BankTeller {
 		
 	}
 	public void msgAssigningCustomer(BankCustomer customer) {
-		customers.add(new MyCustomer(customer, CustomerState.NeedingAssistance));
+		synchronized(this.customers){
+			customers.add(new MyCustomer(customer, CustomerState.NeedingAssistance));
+		}
 	    stateChanged();
 	}
 	
@@ -148,13 +157,23 @@ public class BankTellerRole extends Role implements BankTeller {
 		stateChanged();
 	}
 	
+	public void msgHoldUpBank(double moneyDemanded,BankCustomer person) {
+		for(MyCustomer tempCustomer : customers) {
+			if(tempCustomer.customer == person) {
+				tempCustomer.moneyToWithdraw = moneyDemanded;
+				tempCustomer.custState = CustomerState.Robbing;
+			}
+		}
+		stateChanged();
+		//person.getPersonAgent().setFunds(person.getPersonAgent().getFunds() + moneyDemanded);
+	}
+	
 	public void msgThankYouForAssistance(BankCustomer customer) {
 		for(MyCustomer tempCustomer : customers) {
 			if(tempCustomer.equals(customer)) {
 				tempCustomer.custState = CustomerState.Leaving;
 			}
-		}
-		
+		}	
 	}
 	
 	public void msgDoneWorking() {
@@ -186,6 +205,14 @@ public class BankTellerRole extends Role implements BankTeller {
 			return true;
 		}
 		if(state == TellerState.ReadyForCustomers) {
+			synchronized(customers){
+				for(MyCustomer tempCustomer: customers){
+					if(tempCustomer.custState == CustomerState.Robbing){
+						GiveUpMoney(tempCustomer);
+						return true;
+					}
+				}
+			}
 			synchronized(customers){
 				for(MyCustomer tempCustomer: customers){
 					if(tempCustomer.custState == CustomerState.NeedingAssistance){
@@ -298,6 +325,12 @@ public class BankTellerRole extends Role implements BankTeller {
 	
 	private void DepositMoney(MyCustomer myCustomer) {
 		print("Depositing your money into your account");
+		timer.schedule(new TimerTask() {
+			public void run() {
+				//run timer for gui to stop
+			}
+		},
+		5000);
 		AccountSystem.sharedInstance().getAccounts().get(myCustomer.accountNumber).depositMoney(myCustomer.moneyToDeposit);
 		myCustomer.customer.msgDepositSuccessful();
 		myCustomer.custState = CustomerState.Leaving;
@@ -305,6 +338,12 @@ public class BankTellerRole extends Role implements BankTeller {
 	
 	private void WithdrawMoney(MyCustomer myCustomer) {
 		print("Withdrawing money from your account");	
+		timer.schedule(new TimerTask() {
+			public void run() {
+				//run timer for gui to stop
+			}
+		},
+		5000);
 		AccountSystem.sharedInstance().getAccounts().get(myCustomer.accountNumber).withdrawMoney(myCustomer.moneyToWithdraw);
 		myCustomer.customer.msgHereAreFunds(myCustomer.moneyToWithdraw);
 		myCustomer.moneyToWithdraw = 0;
@@ -318,6 +357,12 @@ public class BankTellerRole extends Role implements BankTeller {
 	
 	private void GiveLoan(MyCustomer myCustomer) {
 		print("Giving loan");
+		timer.schedule(new TimerTask() {
+			public void run() {
+				//run timer for gui to stop
+			}
+		},
+		5000);
 		AccountSystem.sharedInstance().getAccounts().get(myCustomer.accountNumber).loanAccepted(MAXLOAN);
 		myCustomer.customer.msgHereAreFunds(MAXLOAN);
 		myCustomer.custState = CustomerState.Leaving;
@@ -325,7 +370,19 @@ public class BankTellerRole extends Role implements BankTeller {
 	
 	private void RejectLoan(MyCustomer myCustomer) {
 		print("Rejecting loan");
+		timer.schedule(new TimerTask() {
+			public void run() {
+				//run timer for gui to stop
+			}
+		},
+		5000);
 		myCustomer.customer.msgLoanDenied();
+		myCustomer.custState = CustomerState.Leaving;
+	}
+	
+	private void GiveUpMoney(MyCustomer myCustomer) {
+		print("Giving up bank's money to robber");
+		myCustomer.customer.msgHereAreFunds(myCustomer.moneyToWithdraw);
 		myCustomer.custState = CustomerState.Leaving;
 	}
 	

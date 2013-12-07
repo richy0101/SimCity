@@ -27,4 +27,7 @@ public interface BankTeller {
 	
 	public void msgAnimationFinishedLeavingBank();
 
+	public void msgHoldUpBank(double moneyRequired,
+			BankCustomer person);
+
 }

@@ -113,9 +113,6 @@ public class SimCityGui {
 		ArrayList<Building> buildings = macroAnimationPanel.getBuildings();
 		for ( int i=0; i<buildings.size(); i++ ) {
 			Building b = buildings.get(i);
-            //			BuildingPanel ma = new GUIHome(b, i ,this);
-			
-			
 			BuildingPanel ma = null;
 			
 			
@@ -137,13 +134,9 @@ public class SimCityGui {
 			else if(b.getName().toLowerCase().contains("sheh")) {
 				b.setBuildingPanel(new ShehRestaurantAnimationPanel(b, i, this));
 			}
-			else {//if(b.getName().toLowerCase().contains("stack")) {
+			else {
 				b.setBuildingPanel(new GUIMarket( b, i, this ));
 			}
-            
-            //			b.setMicroAnimationPanel( ma );
-            //			b.setBuildingPanel( ma );
-            //			microAnimationPanel.add( ma, "" + i );
 			buildingPanels.add( b.myBuildingPanel, "" + i );
 		}
 		
@@ -176,12 +169,7 @@ public class SimCityGui {
 		final JButton btnPopulateCity = new JButton("Populate City");
 		btnPopulateCity.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				XMLReader reader = new XMLReader();
-				ArrayList<PersonAgent> people = reader.initializePeople();
-				for(PersonAgent person : people) {
-					person.startThread();
-				}
+				populateCity();	
 				btnPopulateCity.setEnabled(false);
 				
 			}
@@ -352,15 +340,43 @@ public class SimCityGui {
                                                          (double)initialFundsSlider.getValue(),
                                                          (String)housingComboBox.getSelectedItem(),
                                                          (String)transportationComboBox.getSelectedItem());
-                    //					do more stuff here
-					//System.out.println(roles.get(occupationComboBox.getSelectedItem()));
 				}
 			}
 		});
 		sl_panel.putConstraint(SpringLayout.NORTH, btnCreatePerson, 6, SpringLayout.SOUTH, aggressivenessSlider);
 		sl_panel.putConstraint(SpringLayout.WEST, btnCreatePerson, 0, SpringLayout.WEST, btnPopulateCity);
 		sl_panel.putConstraint(SpringLayout.EAST, btnCreatePerson, 0, SpringLayout.EAST, btnPopulateCity);
-		panel.add(btnCreatePerson);
+		panel.add(btnCreatePerson);	
+		
+		
+		JLabel lblSpeed = new JLabel("Animation Speed");
+		sl_panel.putConstraint(SpringLayout.NORTH, lblSpeed, 50, SpringLayout.SOUTH, btnCreatePerson);
+		sl_panel.putConstraint(SpringLayout.WEST, lblSpeed, 0, SpringLayout.WEST, btnCreatePerson);
+		panel.add(lblSpeed);
+		
+		final JLabel lblSpeedMeter = new JLabel("3");
+		sl_panel.putConstraint(SpringLayout.NORTH, lblSpeedMeter, 0, SpringLayout.NORTH, lblSpeed);
+		sl_panel.putConstraint(SpringLayout.EAST, lblSpeedMeter, 0, SpringLayout.EAST, btnCreatePerson);
+		panel.add(lblSpeedMeter);
+		
+		int beginningSpeedMin = 1;
+		int beginningSpeedMax = 5;
+		int beginningSpeedStart = 3;
+		final JSlider speedSlider = new JSlider(beginningSpeedMin, beginningSpeedMax, beginningSpeedStart);
+		speedSlider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				lblSpeedMeter.setText(speedSlider.getValue()+"");
+//				macroAnimationPanel.setSpeed(speedSlider.getValue());
+			}
+		});
+		sl_panel.putConstraint(SpringLayout.NORTH, speedSlider, 6, SpringLayout.SOUTH, lblSpeedMeter);
+		sl_panel.putConstraint(SpringLayout.WEST, speedSlider, 0, SpringLayout.WEST, btnCreatePerson);
+		sl_panel.putConstraint(SpringLayout.EAST, speedSlider, 0, SpringLayout.EAST, btnCreatePerson);
+		
+		speedSlider.setMajorTickSpacing(1);
+		speedSlider.setPaintTicks(true);
+		
+		panel.add(speedSlider);
 		
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Current Building", null, panel_1, null);
@@ -372,6 +388,15 @@ public class SimCityGui {
 		sl_panel_1.putConstraint(SpringLayout.WEST, lblWorkers, 10, SpringLayout.WEST, panel_1);
 		panel_1.add(lblWorkers);
 	}
+	
+	private void populateCity() {
+		XMLReader reader = new XMLReader();
+		ArrayList<PersonAgent> people = reader.initializePeople();
+		for(PersonAgent person : people) {
+			person.startThread();
+		}	
+	}
+	
 	private void runSuperNorm() {
 		/** 
 		 * Start of Hard Code Scenario

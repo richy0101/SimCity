@@ -157,6 +157,24 @@ public class StackHostAgent extends Agent implements Host {
 		stateChanged();
 	}
 	
+	public void msgCookLeaving(Cook cook) {
+		print("removing " + cook);
+		cook = null;
+		stateChanged();
+	}
+
+	public void msgWaiterLeaving(Waiter waiter) {
+		print("removing " + waiter);
+		for(MyWaiter myWaiter : waiters) {
+			if(myWaiter.waiter.equals(waiter)) {
+				waiters.remove(myWaiter);
+				print("found and removed waiter");
+				return;
+			}
+		}
+		stateChanged();
+	}
+	
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
@@ -194,7 +212,7 @@ public class StackHostAgent extends Agent implements Host {
 		}
 		synchronized(customers) {
 			for(MyCustomer customer : customers) {
-				if(cook == null && customer.state != CustomerState.Done) {
+				if((cook == null || waiters.size() == 0) && customer.state != CustomerState.Done) {
 					tellCustomerRestaurantClosed(customer);
 					return true;
 				}

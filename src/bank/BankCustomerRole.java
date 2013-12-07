@@ -3,6 +3,8 @@ package bank;
 import gui.Building;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import city.helpers.Directory;
@@ -24,6 +26,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	public BankCustomerGui customerGui;
 	private Semaphore doneAnimation = new Semaphore(0,true);
+	private Timer timer;
 	
 	private double moneyToDeposit = 0;
 	private double moneyToWithdraw = 100;
@@ -39,7 +42,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	public BankCustomerRole(String task, double moneyToDeposit, double moneyRequired) {
 		this.task = task;
 		//this.manager = Directory.sharedInstance().getBanks().get(0).getManager();
-		this.moneyRequired = moneyRequired;
+		this.moneyRequired = moneyRequired;		
 		this.moneyToDeposit = moneyToDeposit;
 		customerGui = new BankCustomerGui(this);
     	List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
@@ -95,6 +98,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	} */
     //messages----------------------------------------------------------------------------
 	public void msgHowCanIHelpYou(BankTeller teller, int tellerNumber) {
+		
 		state = CustomerState.GoingToTeller;
 		this.teller = teller;
 		this.tellerNumber = tellerNumber;
@@ -105,14 +109,11 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		state = CustomerState.Done;
 		teller.msgThankYouForAssistance(this);
 		stateChanged();
-		
 	}
 	
 	public void msgHereAreFunds(double funds) {
 		getPersonAgent().setFunds(getPersonAgent().getFunds() + funds);
 		state = CustomerState.Done;
-		teller.msgThankYouForAssistance(this);
-		leaveBank();
 		stateChanged();
 	}
 	
@@ -126,9 +127,9 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	public void msgDepositSuccessful() {
 		state = CustomerState.Done;
 		teller.msgThankYouForAssistance(this);
-		leaveBank();
 		stateChanged();
 	}
+	
 	
     //scheduler---------------------------------------------------------------------------
 	
@@ -139,6 +140,10 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		}
 		if(state == CustomerState.GoingToTeller) {
 			goToTeller();
+			return true;
+		}
+		if(state == CustomerState.BeingHelped && task.contains("Rob")) {
+			robBank();
 			return true;
 		}
 		if(state == CustomerState.BeingHelped && accountNumber == 0){
@@ -169,6 +174,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		}
 		if(state == CustomerState.Gone) {
 			roleDone();
+			return true;
 		}
 		return false;
 	}
@@ -187,6 +193,9 @@ public class BankCustomerRole extends Role implements BankCustomer {
 			print("Manager is Null.");
 		}
 		manager.msgINeedAssistance(this);
+		if(task.contains("Rob")){
+			customerGui.DoExplodeBank();
+		}
 		state = CustomerState.Waiting;
 	}
 	
@@ -216,11 +225,19 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		teller.msgWithdrawMoney(accountNumber, moneyToWithdraw);
 	}
 	
+	private void robBank() {
+		state = CustomerState.WaitingForHelpResponse;
+		print("I'm robbing the bank");
+		teller.msgHoldUpBank(moneyRequired,this);
+	}
+	
 	private void leaveBank() {
 		state = CustomerState.InTransit;
 		print("Leaving bank");
+		if(task != "Rob"){
+			teller.msgThankYouForAssistance(this);
+		}
 		customerGui.DoLeaveBank();
-		
 	}
 	
 	private void goToTeller() {
