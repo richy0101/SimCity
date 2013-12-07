@@ -28,12 +28,17 @@ public class CarAgent extends Agent implements Car {
 	private String destination;
 	private String currentLocation;
 	private Semaphore driving = new Semaphore(0,true);
+	
+	CarAgent() {
+		
+	}
 		
 	/**
 	*Scheduler
 	*/	
 		protected boolean pickAndExecuteAnAction(){
 			if (currentState == carState.inTransit){
+				print("STUBPICKANDEXECUTEANACTION");
 				goTo(destination);
 				return true;
 			}
@@ -54,12 +59,15 @@ public class CarAgent extends Agent implements Car {
 	 * @param myDestination
 	 */
 		public void msgTakeMeHere(String myDestination){ //receives msg from passenger
-			currentState = carState.inTransit;
 			destination = myDestination;
+			print("Car Destination: " + myDestination + ".");
+			
+			currentState = carState.inTransit;
 			stateChanged();
 		}
 		
 		public void msgAtDestination(){ //from carGui when reached destination
+			print("Car arrived to destination.");
 			driving.release();
 			currentLocation= destination;
 			currentState = carState.atDestination;
@@ -71,6 +79,7 @@ public class CarAgent extends Agent implements Car {
 	 * @param myDestination
 	 */
 		private void goTo(String myDestination){
+			print("Starting car.");
 			doGoTo(myDestination); //sets destination in carGui
 			try {
 				driving.acquire(); //to ensure that the gui is uninterrupted on the way
@@ -87,6 +96,7 @@ public class CarAgent extends Agent implements Car {
 		
 		private void parkCar(){
 		//msg gives passenger the destination so its gui can reappear at an appropriate place
+			print("Car is parking.");
 			passenger.msgArrivedAtDestination(destination);
 			carGui.DoParkCar();
 			currentState = carState.Idle;
@@ -96,7 +106,7 @@ public class CarAgent extends Agent implements Car {
 		 * Utilities
 		 */
 		public void setGui(CarGui gui){
-			carGui= gui;
+			carGui = gui;
 		}
 
 
