@@ -54,8 +54,9 @@ public class Directory {
 		roleDirectory.put("market.MarketRole2", "Market2");
 		
 		//LandLord Roles
-		roleDirectory.put("home.LandlordRole1", "Appartment1");
-		roleDirectory.put("home.LandlordRole2", "Appartment2");
+		roleDirectory.put("home.LandlordRoleA", "ApartmentA");
+		roleDirectory.put("home.LandlordRoleB", "ApartmentB");
+		roleDirectory.put("home.LandlordRoleC", "ApartmentC");
 		
 		//Restaurant Roles Stack
 //		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "StackRestaurant");
@@ -153,14 +154,14 @@ public class Directory {
 	
 	
 //APARTMENTS
-	private Apartment apartment1 = new Apartment("Apartment1"); //smaller limited apartment
-	Coordinate apartment1Location = new Coordinate(211,281);
+	private Apartment apartmentA = new Apartment("ApartmentA"); //smaller limited apartment
+	Coordinate apartmentALocation = new Coordinate(211,281);
 	
-	private Apartment apartment2 = new Apartment("Apartment2"); //larger infinite apartment
-	Coordinate apartment2Location = new Coordinate(668,66);
+	private Apartment apartmentB = new Apartment("ApartmentB"); //larger infinite apartment
+	Coordinate apartmentBLocation = new Coordinate(668,66);
 	
-	private Apartment apartment3 = new Apartment("Apartment3"); //larger infinite apartment
-	Coordinate apartment3Location = new Coordinate(730,197);
+	private Apartment apartmentC = new Apartment("ApartmentC"); //larger infinite apartment
+	Coordinate apartmentCLocation = new Coordinate(730,197);
 
 //BANKS
 	private Bank bank = new Bank("Bank");
@@ -179,9 +180,9 @@ public class Directory {
 		locationDirectory.put(market2.getName(), market2Location);
 		
 		//Apartments
-		locationDirectory.put(apartment1.getName(), apartment1Location);
-		locationDirectory.put(apartment2.getName(), apartment2Location);
-		locationDirectory.put(apartment3.getName(), apartment3Location);
+		locationDirectory.put(apartmentA.getName(), apartmentALocation);
+		locationDirectory.put(apartmentB.getName(), apartmentBLocation);
+		locationDirectory.put(apartmentC.getName(), apartmentCLocation);
 		
 		//Homes
 		locationDirectory.put(house1.getName(), house1Location);

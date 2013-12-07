@@ -30,6 +30,7 @@ public class PersonGui implements Gui {
 	public enum CurrentAction {Cooking, Eating, Transition, Idle, Deciding, Leaving, Sleeping};
 	CurrentAction currentAction = CurrentAction.Idle;
 	public PersonGui(PersonAgent agent) {
+		//HOME
 		xBed = 5;
 		yBed = 135;
 		xKitchen = 695;
@@ -44,6 +45,8 @@ public class PersonGui implements Gui {
 		yPos = yBed;
 		xDestination = xBed;
 		yDestination = yBed;
+		
+		//APARTMENT
 		try {
         	personLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
         	personRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));

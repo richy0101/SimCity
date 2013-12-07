@@ -1,11 +1,18 @@
 package home.gui;
 
 import gui.Gui;
+import home.interfaces.Landlord;
 
 import java.awt.Graphics2D;
 
 public class LandlordGui implements Gui {
 
+	Landlord agent;
+	
+	public LandlordGui(Landlord landlord){
+		this.agent = landlord;
+	}
+	
 	@Override
 	public void updatePosition() {
 		// TODO Auto-generated method stub
