@@ -322,29 +322,106 @@ public class SimCityGui {
 		sl_panel.putConstraint(SpringLayout.NORTH, housingComboBox, 6, SpringLayout.SOUTH, transportationComboBox);
 		sl_panel.putConstraint(SpringLayout.WEST, housingComboBox, 0, SpringLayout.WEST, nameTextField);
 		sl_panel.putConstraint(SpringLayout.EAST, housingComboBox, 0, SpringLayout.EAST, btnPopulateCity);
-		
+		/*
 		housingComboBox.addItem("House1");
 		housingComboBox.addItem("House2");
 		housingComboBox.addItem("House3");
 		housingComboBox.addItem("House4");
 		housingComboBox.addItem("House5");
 		housingComboBox.addItem("House6");
+		*/
+		
+		housingComboBox.addItem("LandLordA");
+		housingComboBox.addItem("LandLordB");
+		housingComboBox.addItem("LandLordC");
+		
+		housingComboBox.addItem("ApartmentA1");
+		housingComboBox.addItem("ApartmentA2");
+		housingComboBox.addItem("ApartmentA3");
+		housingComboBox.addItem("ApartmentA4");
+		housingComboBox.addItem("ApartmentA5");
+		housingComboBox.addItem("ApartmentA6");
+		housingComboBox.addItem("ApartmentA7");
+		housingComboBox.addItem("ApartmentA8");
+		housingComboBox.addItem("ApartmentA9");
+		housingComboBox.addItem("ApartmentA10");
+		housingComboBox.addItem("ApartmentA11");
+		housingComboBox.addItem("ApartmentA12");
+		housingComboBox.addItem("ApartmentA13");
+		housingComboBox.addItem("ApartmentA14");
+		housingComboBox.addItem("ApartmentA15");
+		
+		housingComboBox.addItem("ApartmentB1");
+		housingComboBox.addItem("ApartmentB2");
+		housingComboBox.addItem("ApartmentB3");
+		housingComboBox.addItem("ApartmentB4");
+		housingComboBox.addItem("ApartmentB5");
+		housingComboBox.addItem("ApartmentB6");
+		housingComboBox.addItem("ApartmentB7");
+		housingComboBox.addItem("ApartmentB8");
+		housingComboBox.addItem("ApartmentB9");
+		housingComboBox.addItem("ApartmentB10");
+		housingComboBox.addItem("ApartmentB11");
+		housingComboBox.addItem("ApartmentB12");
+		housingComboBox.addItem("ApartmentB13");
+		housingComboBox.addItem("ApartmentB14");
+		housingComboBox.addItem("ApartmentB15");
+		
+		housingComboBox.addItem("ApartmentC1");
+		housingComboBox.addItem("ApartmentC2");
+		housingComboBox.addItem("ApartmentC3");
+		housingComboBox.addItem("ApartmentC4");
+		housingComboBox.addItem("ApartmentC5");
+		housingComboBox.addItem("ApartmentC6");
+		housingComboBox.addItem("ApartmentC7");
+		housingComboBox.addItem("ApartmentC8");
+		housingComboBox.addItem("ApartmentC9");
+		housingComboBox.addItem("ApartmentC10");
+		housingComboBox.addItem("ApartmentC11");
+		housingComboBox.addItem("ApartmentC12");
+		housingComboBox.addItem("ApartmentC13");
+		housingComboBox.addItem("ApartmentC14");
+		housingComboBox.addItem("ApartmentC15");
+		
 		
 		panel.add(housingComboBox);
 		
 		
 		JButton btnCreatePerson = new JButton("Create Person");
+		
 		btnCreatePerson.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(nameTextField.getText() != "" &&
-                   transportationComboBox.getSelectedItem() != "None" &&
-                   housingComboBox.getSelectedItem() != "None") {
-					PersonAgent person = new PersonAgent(roles.get(occupationComboBox.getSelectedItem()),
-                                                         nameTextField.getText(),
-                                                         aggressivenessSlider.getValue(),
-                                                         (double)initialFundsSlider.getValue(),
-                                                         (String)housingComboBox.getSelectedItem(),
-                                                         (String)transportationComboBox.getSelectedItem());
+                    transportationComboBox.getSelectedItem() != "None" &&
+                    housingComboBox.getSelectedItem() != "None") {
+					
+					/*
+					//CREATE CONDITION WHERE IFF HOUSING COMBO BOX IS LANDLORD THEN JOB IS LAND LORD AND VICE VERSA
+					if(housingComboBox.getSelectedItem().toString().toLowerCase().contains("landlord")) {
+						String string = housingComboBox.getSelectedItem().toString();
+						String [] parts = string.split("LandLord");
+						String part2 = parts[1];
+						
+						System.out.println(housingComboBox.getSelectedItem().toString());
+						System.out.println(part2);
+						
+						
+						PersonAgent person = new PersonAgent(roles.get("home.LandLord" + part2),
+                                nameTextField.getText(),
+                                aggressivenessSlider.getValue(),
+                                (double)initialFundsSlider.getValue(),
+                                (String)housingComboBox.getSelectedItem(),
+                                (String)transportationComboBox.getSelectedItem());
+					}
+					else {
+					*/
+						PersonAgent person = new PersonAgent(roles.get(occupationComboBox.getSelectedItem()),
+                                nameTextField.getText(),
+                                aggressivenessSlider.getValue(),
+                                (double)initialFundsSlider.getValue(),
+                                (String)housingComboBox.getSelectedItem(),
+                                (String)transportationComboBox.getSelectedItem());
+					//}
 				}
 			}
 		});
