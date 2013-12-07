@@ -134,6 +134,10 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     	Building bank = new Building(0, 0, 104, 214);
     	bank.setName("Bank");
     	buildings.add(bank);
+    	
+    	Building bank2 = new Building(718, 0, 117, 101);
+    	bank2.setName("Bank2");
+    	buildings.add(bank2);
 
     	addMouseListener(this);
     	
