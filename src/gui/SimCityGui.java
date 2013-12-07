@@ -87,6 +87,7 @@ public class SimCityGui {
 		 
 		roles.put("None", "Unemployed");
 		roles.put("Bank Teller", "BankTeller");
+		roles.put("Bank 2 Teller", "BankTeller2");
         roles.put("Market 1 Seller", "Market1");
         roles.put("Market 2 Seller", "Market2");
         roles.put("Stack's Restaurant Waiter Normal", "StackWaiterNormal");
@@ -126,6 +127,9 @@ public class SimCityGui {
 				b.setBuildingPanel(new GUIApartment(b, i, this));
 			}
 			else if(b.getName().toLowerCase().contains("bank")) {
+				b.setBuildingPanel(new GUIBank( b, i, this ));
+			}
+			else if(b.getName().toLowerCase().contains("bank2")) {
 				b.setBuildingPanel(new GUIBank( b, i, this ));
 			}
 			else if(b.getName().toLowerCase().contains("stack")) {
