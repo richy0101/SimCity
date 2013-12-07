@@ -130,7 +130,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     	buildings.add(apartment3);
     	
     	
-    //BANK 
+    //BANKS 
     	Building bank = new Building(0, 0, 104, 214);
     	bank.setName("Bank");
     	buildings.add(bank);

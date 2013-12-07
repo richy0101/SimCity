@@ -36,6 +36,10 @@ public class RoleFactory {
 			newRole = new BankTellerRole("Bank");
 			return newRole;
 		}
+		else if (role.equals("BankTeller2")) {
+			newRole = new BankTellerRole("Bank2");
+			return newRole;
+		}
 		else if (role.equals("Unemployed")) {
 			newRole = new UnemployedRole();
 			return newRole;
