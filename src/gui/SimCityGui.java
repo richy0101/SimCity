@@ -206,6 +206,7 @@ public class SimCityGui {
 		
 		occupationComboBox.addItem("None");
 		occupationComboBox.addItem("Bank Teller");
+		occupationComboBox.addItem("Bank 2 Teller");
 		occupationComboBox.addItem("Market 1 Seller");
 		occupationComboBox.addItem("Market 2 Seller");
 		occupationComboBox.addItem("Stack's Restaurant Waiter Normal");
@@ -445,7 +446,7 @@ public class SimCityGui {
 		String a4 = "Bank";
 		String b4 = "House4";
 		String name4 = "Test Person 4";
-		Role role4 = new BankTellerRole("Bank");
+		Role role4 = new BankTellerRole("Bank2");
 		PersonAgent p4 = new PersonAgent(role4, a4 , b4, name4);
 		role4.setPerson(p4);
 		//p4.msgGoWork();
@@ -453,7 +454,7 @@ public class SimCityGui {
 		String a5 = "Bank";
 		String b5 = "House5";
 		String name5 = "BankLoanPerson5";
-		Role role5 = new BankTellerRole("Bank");
+		Role role5 = new BankTellerRole("Bank2");
 		PersonAgent p5 = new PersonAgent(role5, a5 , b5, name5);
 		role5.setPerson(p5);
 		p5.msgTestWakeUp();
@@ -471,7 +472,7 @@ public class SimCityGui {
 		String a7 = "Bank";
 		String b7 = "House2";
 		String name7 = "MarketGoerPerson";
-		Role role7 = new BankTellerRole("Bank");
+		Role role7 = new BankTellerRole("Bank2");
 		PersonAgent p7 = new PersonAgent(role7, a7 , b7, name7);
 		role7.setPerson(p7);
 		p7.msgTestWakeUp();

@@ -27,6 +27,7 @@ public class Directory {
 	Directory() {
 		restaurants.add(stackRestaurant);
 		banks.add(bank);
+		banks.add(bank2);
 		markets.add(market1);
 		markets.add(market2);
 	}
@@ -43,6 +44,10 @@ public class Directory {
 		roleDirectory.put("bank.BankCustomerRole", "Bank");
 		roleDirectory.put("bank.BankManagerRole", "Bank");
 		roleDirectory.put("bank.BankTellerRole", "Bank");
+		
+		roleDirectory.put("bank.BankCustomerRole", "Bank2");
+		roleDirectory.put("bank.BankManagerRole", "Bank2");
+		roleDirectory.put("bank.BankTellerRole", "Bank2");
 		
 		//Market Roles
 		roleDirectory.put("market.MarketRole1" , "Market1");
@@ -161,10 +166,13 @@ public class Directory {
 	private Bank bank = new Bank("Bank");
 	Coordinate bankLocation = new Coordinate(89,160);
 	
+	private Bank bank2 = new Bank("Bank2");
+	Coordinate bankLocation2 = new Coordinate(789,75);
 //LOCATION DIRECTORY
 	public Map<String, Coordinate> locationDirectory = new HashMap<String, Coordinate>(); {
 		//Bank
 		locationDirectory.put(bank.getName(), bankLocation);
+		locationDirectory.put(bank2.getName(), bankLocation2);
 		
 		//Markets
 		locationDirectory.put(market1.getName(), market1Location);
@@ -198,6 +206,7 @@ public class Directory {
 		agents.put(stackRestaurant.getName() + "Host", (Agent) stackRestaurant.getHost());
 		agents.put(stackRestaurant.getName() + "Cashier", (Agent) stackRestaurant.getCashier());
 		agents.put( bank.getName(),(Agent) bank.getManager());
+		agents.put( bank2.getName(),(Agent) bank2.getManager());
 	}
 	public static List<Restaurant> restaurants = new ArrayList<Restaurant>();
 	public static List<Bank> banks = new ArrayList<Bank>();
