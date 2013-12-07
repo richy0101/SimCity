@@ -9,12 +9,11 @@ package city;
 import java.util.concurrent.Semaphore;
 
 import agent.Role;
-import city.PersonAgent.TransportationMethod;
+import city.gui.CarGui;
 import city.gui.TransportationGui;
 import city.helpers.BusHelper;
 import city.helpers.Directory;
 import city.interfaces.Transportation;
-import city.PersonAgent;
 
 public class TransportationRole extends Role implements Transportation  {
 
@@ -38,6 +37,7 @@ public class TransportationRole extends Role implements Transportation  {
 	
 	TransportationGui guiToStop;//use for bus stop
 	TransportationGui guiToDestination;
+	CarGui carGui;
 	
 	public TransportationRole(String destination, String startingLocation) {
 		super();
@@ -159,6 +159,7 @@ public class TransportationRole extends Role implements Transportation  {
 			startX = Directory.sharedInstance.getDirectory().get(getStartingLocation()).xCoordinate;
 			startY = Directory.sharedInstance.getDirectory().get(getStartingLocation()).yCoordinate;
 			guiToStop = new TransportationGui(this, startX, startY, startStopX, startStopY);
+			
 			Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToStop);
 			//print("adding transport gui to macro");
 			actionComplete.acquireUninterruptibly();
@@ -166,11 +167,20 @@ public class TransportationRole extends Role implements Transportation  {
 			setState(TransportationState.WaitingForBus);
 		}
 		if (getPersonAgent().getTransportationMethod().contains("Car")) {
+			print("Getting my car.");
 			
-			//create car outside at spawn
-			//travel along roads towards destination
-			//A*?
-			//
+			
+			//set car agent
+			car = new CarAgent();
+			car.startThread();
+			//set destination
+			car.msgTakeMeHere(destination);
+			//create car gui
+			carGui = new CarGui(car);
+			car.setGui(carGui);
+			Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(carGui);
+			//setState(TransportationState.InTransit); //SET STATE
+			
 			
 		}
 		if(getStartingLocation().equals("Home1")){
