@@ -1,30 +1,47 @@
 package home;
 
 import java.util.*;
-import agent.Role;
 
+import city.helpers.Directory;
 import agent.Role;
+import gui.Building;
+import home.gui.LandlordGui;
+import home.helpers.TenantList;
+import home.helpers.TenantList.Tenant;
+import home.interfaces.HomePerson;
 import home.interfaces.Landlord;
 import home.*;
 
 public class LandlordRole extends Role implements Landlord {
     
-	private class MyTenant{
-		HomePersonRole inhabitant;
-	 	double moneyOwed;
-	 	PayState state;
-	 	
-	 	public MyTenant(HomePersonRole tenant, double money, PayState state) {
-	 		this.inhabitant = tenant;
-	 		this.moneyOwed = money;
-	 		this.state = state;
-	 	}
+	private List<Tenant> tenants = new ArrayList<Tenant>();//Collections.synchronizedList(new ArrayList<MyTenant>());
+	public enum PayState {NeedsToPay,WaitingForPayment,OwesMoney,PayLater,NothingOwed};
+	int apartmentNum;
+	String myLocation;
+	
+	LandlordGui gui;
+	
+	public LandlordRole(String location,int apartment){
+    	myLocation = location;
+    	this.apartmentNum = apartment;
+    	tenants = TenantList.sharedInstance().getTenants(apartment);
+    	
+    	List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+    	gui = new LandlordGui(this);
+		for(Building b : buildings) {
+			if (b.getName() == myLocation) {
+				b.addGui(gui);
+			}
+		}
 	}
-	private List<MyTenant> tenants = new ArrayList<MyTenant>();//Collections.synchronizedList(new ArrayList<MyTenant>());
-	public enum PayState {NeedsToPay,WaitingForPayment,OwesMoney,PayLater,NothingOwed}
-	private double funds = 0;
 	
 	//Messages
+	public void msgTimeToCollectRent(){
+		for(int i=0;i<TenantList.sharedInstance().getTenants(apartmentNum).size();i++){
+			TenantList.sharedInstance().getTenant(i,apartmentNum).setPayState(PayState.NeedsToPay);
+			TenantList.sharedInstance().getTenant(i,apartmentNum).setMoneyOwed(50);
+		}
+	}
 	public void msgNeedsToPayRent(HomePersonRole person, double moneyOwed){
 		/*** How do we add new tenants to the list? ***
          bool newTenant = true;
@@ -37,6 +54,7 @@ public class LandlordRole extends Role implements Landlord {
          tenants.add(person,moneyOwed,PayState.NeedsToPay);
          }
          */
+		AccountSystem.sharedInstance().addAccount(uniqueNum);
 		for(MyTenant t : tenants){
 			if(t.inhabitant == person){
 				t.state = PayState.NeedsToPay;
