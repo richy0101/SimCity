@@ -125,6 +125,9 @@ public class SimCityGui {
 			else if(b.getName().toLowerCase().contains("market")) {
 				b.setBuildingPanel(new GUIMarket( b, i, this ));
 			}
+			else if(b.getName().toLowerCase().contains("apartment")) {
+				b.setBuildingPanel(new GUIApartment(b, i, this));
+			}
 			else if(b.getName().toLowerCase().contains("bank")) {
 				b.setBuildingPanel(new GUIBank( b, i, this ));
 			}

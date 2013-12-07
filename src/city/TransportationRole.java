@@ -10,6 +10,7 @@ import java.util.concurrent.Semaphore;
 
 import agent.Role;
 import city.PersonAgent.TransportationMethod;
+import city.gui.CarGui;
 import city.gui.TransportationGui;
 import city.helpers.BusHelper;
 import city.helpers.Directory;
@@ -38,6 +39,7 @@ public class TransportationRole extends Role implements Transportation  {
 	
 	TransportationGui guiToStop;//use for bus stop
 	TransportationGui guiToDestination;
+	CarGui carGui;
 	
 	public TransportationRole(String destination, String startingLocation) {
 		super();
@@ -159,6 +161,7 @@ public class TransportationRole extends Role implements Transportation  {
 			startX = Directory.sharedInstance.getDirectory().get(getStartingLocation()).xCoordinate;
 			startY = Directory.sharedInstance.getDirectory().get(getStartingLocation()).yCoordinate;
 			guiToStop = new TransportationGui(this, startX, startY, startStopX, startStopY);
+			
 			Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToStop);
 			//print("adding transport gui to macro");
 			actionComplete.acquireUninterruptibly();
@@ -166,11 +169,15 @@ public class TransportationRole extends Role implements Transportation  {
 			setState(TransportationState.WaitingForBus);
 		}
 		if (getPersonAgent().getTransportationMethod().contains("Car")) {
+			print("Getting my car.");
 			
-			//create car outside at spawn
-			//travel along roads towards destination
-			//A*?
-			//
+			/*
+			//set car agent
+			car = new CarAgent();
+			carGui = new CarGui(car);
+			Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(carGui);
+			this.setState(TransportationState.) //SET STATE
+			*/
 			
 		}
 		if(getStartingLocation().equals("Home1")){

@@ -1,5 +1,7 @@
 package gui;
 
+import home.Apartment;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -114,6 +116,19 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     	buildings.add(market2);
     	
     //APARTMENT
+    	
+    	Building apartment1 = new Building(162,136,113, 166);
+    	apartment1.setName("Apartment1");
+    	buildings.add(apartment1);
+    	
+    	Building apartment2 = new Building(570, 0, 145, 84);
+    	apartment2.setName("Apartment2");
+    	buildings.add(apartment2);
+    	
+    	Building apartment3 = new Building(729, 127,106, 150);
+    	apartment3.setName("Apartment3");
+    	buildings.add(apartment3);
+    	
     	
     //BANK 
     	Building bank = new Building(0, 0, 104, 214);
