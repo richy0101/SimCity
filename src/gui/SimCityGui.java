@@ -484,6 +484,11 @@ public class SimCityGui {
 		 * Start of Hard Code Scenario
 		 * 
 		 */
+		if(Clock.sharedInstance().isDay()) {
+			
+		}
+		
+	
 		String a = "StackRestaurant";
 		String b = "House1";
 		String name = "Test Person 1";
