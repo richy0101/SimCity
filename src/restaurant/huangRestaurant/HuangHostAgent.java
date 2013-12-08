@@ -1,6 +1,7 @@
 package restaurant.huangRestaurant;
 
 import agent.Agent;
+import agent.Role;
 import restaurant.huangRestaurant.HuangWaiterRole.CustomerState;
 import restaurant.huangRestaurant.gui.HostGui;
 
@@ -15,6 +16,10 @@ import java.util.concurrent.Semaphore;
 //the HostAgent. A Host is the manager of a restaurant who sees that all
 //is proceeded as he wishes.
 public class HuangHostAgent extends Agent {
+	public enum HostState {
+		
+	}
+	HostState state;
 	static final int NTABLES = 4;//a global for the number of tables.
 	//Notice that we implement waitingCustomers using ArrayList, but type it
 	//with List semantics.
@@ -31,33 +36,38 @@ public class HuangHostAgent extends Agent {
 	}
 	public List<HuangCustomerRole> customers = new ArrayList<HuangCustomerRole>();
 	public List<HungryCustomer> hungryCustomers = new ArrayList<HungryCustomer>();
+	public List<MyCook> cooks = new ArrayList<MyCook>();
 	public List<MyWaiter> waiters = new ArrayList<MyWaiter>();
 	public Collection<Table> tables;
 	
-	private HuangCookRole cook;
 	private HuangCashierAgent ca;
 	
 	public enum WaiterState {Free, Busy};
-	public enum WaiterEvent {Working, wantsBreak, onBreak, breakAllowed};
+	public enum WaiterEvent {Working, wantsBreak, onBreak, breakAllowed, DoneWorking};
 	private class MyWaiter {
 		HuangWaiterRole w;
 		WaiterState state;
 		WaiterEvent event;
-		HuangHostAgent host;
 		
-		MyWaiter(String name, HuangHostAgent host, HuangWaiterRole w) {
+		MyWaiter(HuangHostAgent host, HuangWaiterRole w) {
 			this.w = w;
-			this.host = host;
 			state = WaiterState.Free;
 			event = WaiterEvent.Working;
 		}
 	}
-	
+	public enum CookState {JustArrived, OnShift, OffShift, DoneWorking};
+	private class MyCook {
+		CookState state;
+		HuangCookRole c;
+		MyCook(HuangCookRole c) {
+			state = CookState.JustArrived;
+			this.c = c;
+		}
+	}
 	//note that tables is typed with Collection semantics.
-    private static final int tableSpawnX = 100;
-	private static final int tableSpawnY = 200;
-	private static final int tableOffSetX = 100;
-	private static final int tableOffSetY = 100;
+    private static final int tableSpawnX = 160;
+	private static final int tableSpawnY = 170;
+	private static final int tableOffSetX = 180;
 	//Later we will see how it is implemented
 	
 	private class Table {
@@ -107,7 +117,6 @@ public class HuangHostAgent extends Agent {
 
 	public HuangHostAgent(String name) {
 		super();
-		cook = new HuangCookRole("Cook", this);
 		ca = new HuangCashierAgent("Cashier");
 		this.name = name;
 		// make some tables
@@ -128,7 +137,7 @@ public class HuangHostAgent extends Agent {
 		return customers;
 	}
 	public void addWaiter(HuangWaiterRole w) {
-		waiters.add(new MyWaiter ((w.getName()), this, w));
+		waiters.add(new MyWaiter (this, w));
 		stateChanged();
 	}
 	public Collection getTables() {
@@ -216,6 +225,25 @@ public class HuangHostAgent extends Agent {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	protected boolean pickAndExecuteAnAction() {
+		for (MyCook mc : cooks) {
+			if(mc.state == CookState.DoneWorking) {
+				cooks.remove(mc);
+				return true;
+			}
+		}
+		for (MyWaiter mw : waiters) {
+			if(mw.event == WaiterEvent.DoneWorking) {
+				waiters.remove(mw);
+				return true;
+			}
+		}
+		for (MyCook mc : cooks) {
+			if(mc.state == CookState.JustArrived) {
+				mc.state = CookState.OnShift;
+				tellWaitersCookHere(mc.c);
+				return true;
+			}
+		}
 		for (MyWaiter w : waiters) {
 			int waitersWantBreak = 0;
 			for(MyWaiter w1: waiters) {
@@ -236,38 +264,41 @@ public class HuangHostAgent extends Agent {
 		}
 		if (!hungryCustomers.isEmpty()) {
 			for (HungryCustomer hc: hungryCustomers) {
-				for (Table table : tables) {
-					if (!table.isOccupied()) {
-						if(!waiters.isEmpty()) {
-							for (MyWaiter w : waiters) {
-								if(w.state.equals(WaiterState.Free) && w.w.getCustomers().isEmpty() && !w.event.equals(WaiterEvent.onBreak)) {
-									seatCustomerAtTable(hc, table, w);
-									hc.state = CustomerState.hasWaiter;
-									return true;
+				if(!cooks.isEmpty()) {
+					for (Table table : tables) {
+						if (!table.isOccupied()) {
+							if(!waiters.isEmpty()) {
+								for (MyWaiter w : waiters) {
+									if(w.state.equals(WaiterState.Free) && w.w.getCustomers().isEmpty() && !w.event.equals(WaiterEvent.onBreak)) {
+										seatCustomerAtTable(hc, table, w);
+										hc.state = CustomerState.hasWaiter;
+										return true;
+									}
 								}
-							}
-							for (MyWaiter w1: waiters) {
-								if (w1.state.equals(WaiterState.Free) && !w1.event.equals(WaiterEvent.onBreak)) {
-									seatCustomerAtTable(hc, table, w1);
-									hc.state = CustomerState.hasWaiter;
-									return true;
+								for (MyWaiter w1: waiters) {
+									if (w1.state.equals(WaiterState.Free) && !w1.event.equals(WaiterEvent.onBreak)) {
+										seatCustomerAtTable(hc, table, w1);
+										hc.state = CustomerState.hasWaiter;
+										return true;
+									}
 								}
-							}
-							for (MyWaiter w2 : waiters) {
-								if (!w2.event.equals(WaiterEvent.onBreak)) {
-									seatCustomerAtTable(hc, table, w2);
-									hc.state = CustomerState.hasWaiter;
-									return true;
+								for (MyWaiter w2 : waiters) {
+									if (!w2.event.equals(WaiterEvent.onBreak)) {
+										seatCustomerAtTable(hc, table, w2);
+										hc.state = CustomerState.hasWaiter;
+										return true;
+									}
 								}
 							}
 						}
 					}
+					if (!waiters.isEmpty() && hc.state.equals(CustomerState.noWaiter)) {
+						hc.state = CustomerState.toldFull;
+						tellCustomerFull(hc.c);
+						return true;
+					}
 				}
-				if (!waiters.isEmpty() && hc.state.equals(CustomerState.noWaiter)) {
-					hc.state = CustomerState.toldFull;
-					tellCustomerFull(hc.c);
-					return true;
-				}
+				tellCustomerClosed(hc.c);
 			}
 		}
 
@@ -278,7 +309,15 @@ public class HuangHostAgent extends Agent {
 	}
 
 	// Actions
+	private void tellCustomerClosed(HuangCustomerRole c) {
+		c.msgGetOut();
+	}
 
+	private void tellWaitersCookHere(HuangCookRole c) {
+		for (MyWaiter w : waiters) {
+			w.w.msgCookHere(c);
+		}
+	}
 	private void tellCustomerFull(HuangCustomerRole c) {
 		c.msgRestaurantFull();
 	}
@@ -305,7 +344,12 @@ public class HuangHostAgent extends Agent {
 		}
 	}
 	public HuangCookRole getCook() {
-		return cook;
+		for(MyCook mc : cooks) {
+			if (mc.state == CookState.OnShift) {
+				return mc.c;
+			}
+		}
+		return cooks.get(0).c;
 	}
 	public void setGui(HostGui gui) {
 		hostGui = gui;
@@ -316,6 +360,32 @@ public class HuangHostAgent extends Agent {
 	}
 	public HuangCashierAgent getCashier() {
 		return ca;
+	}
+	public void msgArrivedToWork(Role r) {
+		if(r.getClass().toString().contains("Cook")) {
+			cooks.add(new MyCook((HuangCookRole) r));
+		}
+		else if(r.getClass().toString().contains("Waiter")) {
+			waiters.add(new MyWaiter (this, (HuangWaiterRole) r));
+			stateChanged();
+		}
+	}
+	public void msgDoneWorking(Role r) {
+		if(r.getClass().toString().contains("Cook")) {
+			for(MyCook mc : cooks) {
+				if (mc.c == r) {
+					mc.state = CookState.DoneWorking;
+				}
+			}
+		}
+		else if(r.getClass().toString().contains("Waiter")) {
+			for(MyWaiter mw : waiters) {
+				if (mw.w == r) {
+					mw.event = WaiterEvent.DoneWorking;
+				}
+			}
+		}
+		stateChanged();
 	}
 
 }

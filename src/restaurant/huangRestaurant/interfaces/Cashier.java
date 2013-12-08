@@ -1,5 +1,8 @@
 package restaurant.huangRestaurant.interfaces;
 
+import agent.Role;
+
+
 
 
 
@@ -15,4 +18,5 @@ public interface Cashier {
 	public void msgHereIsMoney(Customer c);
 	public void msgNotEnoughMoney(Customer c);
 	public void msgAskForCheck(Customer c);
+	public void msgAskForPayCheck(Role r);
 }

@@ -2,8 +2,12 @@ package restaurant.huangRestaurant.gui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import restaurant.huangRestaurant.HuangWaiterRole;
 import restaurant.huangRestaurant.interfaces.Customer;
@@ -22,6 +26,16 @@ public class WaiterGui implements Gui {
 	private int xExit = 0, yExit = 450;//Exit
     private int xHome = 120, yHome = 30;//waiter Home positions
     private int xCWaitArea = 120, yCWaitArea = 30;//Customer Waiting area.
+	private static final int cookX = 640; 
+	private static final int cookY = 270;
+	private static final int cashierX = 780; 
+	private static final int cashierY = 40;
+	private static final int hostX = 27, hostY = 48;
+    public int xTable = 160;
+    public int yTable = 170;
+    private static final int tableSpawnX = 160;
+	private static final int tableSpawnY = 170;
+	private static final int tableOffSetX = 180;
     
     private class ServedFood {;
     	String food;
@@ -36,21 +50,19 @@ public class WaiterGui implements Gui {
     	}
     }
     private List<ServedFood>foodOnTable = new ArrayList<ServedFood>();
-    public int xTable = 160;
-    public int yTable = 170;
-    private static final int tableSpawnX = 160;
-	private static final int tableSpawnY = 170;
-	private static final int tableOffSetX = 180;
-	
-	private static final int cookX = 640; 
-	private static final int cookY = 270;
-	private static final int cashierX = 780; 
-	private static final int cashierY = 40;
+
 
 	//private HostAgent host;
+	BufferedImage waiterImage;
 
     public WaiterGui(HuangWaiterRole huangWaiterRole) {
-		// TODO Auto-generated constructor stub
+		this.agent = agent;
+        try {
+        	waiterImage = ImageIO.read(getClass().getResource("huangRestaurantWaiter.png"));
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ Background");
+        }
 	}
 	public void updatePosition() {
 
@@ -81,6 +93,9 @@ public class WaiterGui implements Gui {
         if (xPos == cashierX && yPos == cashierY) {
         	agent.msgAtCashier();
         }
+        if (xPos == hostX && yPos == hostY) {
+        	agent.msgAtHost();
+        }
     	if (xPos == 40 && yPos == 20 && seatingNew == true) {
     		agent.msgCanSeatNew();
     		seatingNew = false;
@@ -89,8 +104,7 @@ public class WaiterGui implements Gui {
 
     public void draw(Graphics2D g) {
     	if (carryingFood == true) {
-	        g.setColor(Color.MAGENTA);
-	        g.fillRect(xPos, yPos, 20, 20);
+    		g.drawImage(waiterImage, xPos, yPos, null);
 	        g.drawString(currentDish, xPos, yPos);
 	        if(!foodOnTable.isEmpty()) {
     			for(ServedFood served : foodOnTable) {
@@ -100,13 +114,12 @@ public class WaiterGui implements Gui {
 	        
     	}
     	else {
-    		g.setColor(Color.MAGENTA);
     		if(!foodOnTable.isEmpty()) {
     			for(ServedFood served : foodOnTable) {
     				g.drawString(served.food, served.xPos, served.yPos);
     			}
     		}
-	        g.fillRect(xPos, yPos, 20, 20);
+    		g.drawImage(waiterImage, xPos, yPos, null);
     	}
     }
     public boolean isPresent() {
@@ -196,8 +209,16 @@ public class WaiterGui implements Gui {
     public int getXPos() {
         return xPos;
     }
-
     public int getYPos() {
         return yPos;
     }
+    public void DoGoToHost() {
+    	xDestination = hostX;
+    	yDestination = hostY;
+    }
+	public void DoLeaveRestaurant() {
+    	xDestination = xExit;
+    	yDestination = yExit;
+		
+	}
 }

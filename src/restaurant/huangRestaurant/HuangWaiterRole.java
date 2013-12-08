@@ -51,29 +51,30 @@ public class HuangWaiterRole extends Role implements Waiter {
 	}
 	private Semaphore atTable = new Semaphore(0,true);
 	protected Semaphore atCook = new Semaphore(0, true);
+	private Semaphore atHost = new Semaphore(0, true);
 	private Semaphore seatNew = new Semaphore(0, true);
 	private Semaphore atCashier = new Semaphore(0, true);
 	private Semaphore grabbingCheck = new Semaphore(0, true);
 	public WaiterGui gui;
 	private HuangHostAgent host;
-	private HuangCashierAgent cashier;
 	protected HuangCookRole cook;
 	private Cashier ca;
 	private boolean canBeFree = false;
 	private boolean wantsBreak = false;
 	private boolean askedBreak = false;
 	private boolean onBreak = false;
+	private boolean doneWorking = false;
 	private MyCustomer currentCustomer;
 	private String myLocation;
 
 	public enum WaiterState{
-		Arrived, 
+		Arrived, Working, DoneWorking, CollectPay, InTransit, ReceivedPay
 	};
 	public WaiterState state;
 	public HuangWaiterRole(String location) {
 		super();
 		host = (HuangHostAgent) Directory.sharedInstance().getAgents().get("HuangRestaurantHost");
-		cashier = (HuangCashierAgent) Directory.sharedInstance().getAgents().get("HuangRestaurantCashier");
+		ca = host.getCashier();
 		gui = new WaiterGui(this);
 		myLocation = location;
 		state = WaiterState.Arrived;
@@ -101,6 +102,20 @@ public class HuangWaiterRole extends Role implements Waiter {
 	}
 
 	// Messages
+	public void msgHereIsPayCheck(double payCheck) {
+		state = WaiterState.ReceivedPay;
+		getPersonAgent().setFunds(getPersonAgent().getFunds() + payCheck);
+		stateChanged();
+	}
+	public void msgJobDone() {
+		doneWorking = true;
+		state = WaiterState.DoneWorking;
+		stateChanged();
+	}
+	public void msgCookHere(HuangCookRole c) {
+		this.cook = c;
+		stateChanged();
+	}
 	public void msgWantsBreak() {
 		System.out.println(name + ": msgWantsBreak received: Waiter: I want to go on Break");
 		wantsBreak = true;
@@ -201,6 +216,9 @@ public class HuangWaiterRole extends Role implements Waiter {
 		atCook.release();
 		stateChanged();
 	}
+	public void msgAtHost() {
+		atHost.release();
+	}
 	public void msgAtCashier() {
 		atCashier.release();
 		stateChanged();
@@ -233,6 +251,9 @@ public class HuangWaiterRole extends Role implements Waiter {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
+		if (state == WaiterState.Arrived) {
+			tellHostAtWork();
+		}
 		if (onBreak == true && customers.isEmpty()) {
 			tellHostOnBreak();
 			breakTimer(this);
@@ -346,7 +367,18 @@ public class HuangWaiterRole extends Role implements Waiter {
 				}
 			}
 		}	
-		if(canBeFree == true && onBreak == false) {
+		if (state == WaiterState.ReceivedPay) {
+			leaveWork();
+		}
+		if (state == WaiterState.CollectPay) {
+			collectPay();
+			return true;
+		}
+		if(state == WaiterState.DoneWorking) {
+			tellHostDoneWorking();
+			return true;
+		}
+		if(canBeFree == true && onBreak == false && doneWorking == false) {
 			tellHostFree();
 		}
 		return false;
@@ -356,7 +388,32 @@ public class HuangWaiterRole extends Role implements Waiter {
 	}
 	
 
+
+
+
+
 	// Actions
+	private void leaveWork() {
+		getPersonAgent().msgRoleFinished();
+		state = WaiterState.Arrived;
+		gui.DoLeaveRestaurant();	
+	}
+	private void collectPay() {
+		state = WaiterState.InTransit;
+		gui.DoGoToCashier();
+		atCashier.acquireUninterruptibly();
+		ca.msgAskForPayCheck(this);
+	}
+	private void tellHostDoneWorking() {
+		state = WaiterState.CollectPay;
+		host.msgDoneWorking(this);
+	}
+	private void tellHostAtWork() {
+		state = WaiterState.InTransit;
+		gui.DoGoToHost();
+		atHost.acquireUninterruptibly();
+		host.msgArrivedToWork(this);
+	}
 	private void enableGuiBreak() {
 		gui.endBreakSequence();
 	}
@@ -399,7 +456,7 @@ public class HuangWaiterRole extends Role implements Waiter {
 		gui.DoGoToCustomer(mc.table);
 		atTable.acquireUninterruptibly();
 		mc.state = CustomerState.checkDelivered;
-		mc.c.msgHereIsYourCheck(cashier, mc.cx);
+		mc.c.msgHereIsYourCheck(ca, mc.cx);
 	}
 	private void getCheckFromCashier(MyCustomer mc) {
 		mc.state = CustomerState.waiterGettingCheck;
@@ -461,5 +518,7 @@ public class HuangWaiterRole extends Role implements Waiter {
 	public WaiterGui getGui() {
 		return gui;
 	}
+
+
 }
 

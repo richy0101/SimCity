@@ -2,8 +2,12 @@ package restaurant.huangRestaurant.gui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import restaurant.huangRestaurant.HuangCookRole;
 
@@ -19,7 +23,10 @@ public class CookGui implements Gui {
     private int xCookArea = xHome + 70, yCookArea = yHome;//Customer Waiting area.
     private int xPlateArea = xHome + 120, yPlateArea = yHome -80;
     private int xCashier = 780, yCashier = 40;
+    private static final int hostX = 27, hostY = 48;
     private int xExit = 0, yExit = 450;//Exit
+    public enum Command { GoToHost, GoToStove, GoToStorage, InTransit, LeaveRestaurant, GoToCashier};
+    Command command;
     public class CookingFood {;
     	String food;
     	int xPos;
@@ -47,12 +54,19 @@ public class CookGui implements Gui {
     private List<PlatedFood> pFood = new ArrayList<PlatedFood>();
     private List<CookingFood> cFood = new ArrayList<CookingFood>();
 	private static final int dishOffSetX = 20;
-	
+	BufferedImage cookImage;
 
 	//private HostAgent host;
 	
     public CookGui(HuangCookRole agent) {
         this.agent = agent;
+
+        try {
+        	cookImage = ImageIO.read(getClass().getResource("huangRestaurantCook.png"));
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ Background");
+        }
     }
     public void updatePosition() {
 
@@ -65,15 +79,27 @@ public class CookGui implements Gui {
             yPos++;
         else if (yPos > yDestination)
             yPos--;
+        
+       if(xPos == xCookArea && yPos == yCookArea && command == Command.GoToStove) {
+    	   agent.msgActionComplete();
+    	   command = Command.InTransit;
+       }
+       if(xPos == hostX && yPos == hostY && command == Command.GoToHost) {
+    	   agent.msgActionComplete();
+    	   command = Command.InTransit;
+       }
+       if(xPos == xExit && yPos == yExit && command == Command.LeaveRestaurant) {
+    	   agent.msgActionComplete();
+    	   command = Command.InTransit;
+       }
+       if(xPos == xCashier && yPos == yCashier && command == Command.GoToCashier) {
+    	   agent.msgActionComplete();
+    	   command = Command.InTransit;
+       }
     }
 
     public void draw(Graphics2D g) {
-    	g.setColor(Color.RED);
-	    g.fillRect(xPos, yPos, 20, 20);
-	    //Plate area
-	    g.fillRect(xPlateArea, yPlateArea, 100, 20);
-	    //cook area
-	    g.fillRect(xCookArea, yCookArea, 100, 20);
+    	g.drawImage(cookImage, xPos, yPos, null);
 	    
 	    if(!cFood.isEmpty()) {
 	    	for(CookingFood cf : cFood) {
@@ -120,4 +146,26 @@ public class CookGui implements Gui {
     public int getYPos() {
         return yPos;
     }
+	public void DoGoToHost() {
+		command = Command.GoToHost;
+		xDestination = hostX;
+		yDestination = hostY;
+	}
+	public void DoLeaveRestaurant() {
+		command = Command.LeaveRestaurant;
+		xDestination = xExit;
+		yDestination = yExit;
+	}
+	public void DoGoToStove() {
+		command = Command.GoToStove;
+		xDestination = xCookArea;
+		yDestination = yCookArea;
+	}
+	public void DoGoToCashier() {
+		command = Command.GoToCashier;
+		xDestination = xCashier;
+		yDestination = yCashier;
+		
+	}
+	
 }

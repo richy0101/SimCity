@@ -4,6 +4,10 @@ import restaurant.huangRestaurant.HuangCustomerRole;
 import restaurant.huangRestaurant.HuangWaiterRole;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class CustomerGui implements Gui{
 
@@ -14,6 +18,7 @@ public class CustomerGui implements Gui{
 
 	private int xPos = 35, yPos = 450;
 	private int xDestination = 35, yDestination = 450;
+    private static final int hostX = 27, hostY = 48;
 	private int xWait = 35;
 	private int yWait = 100;
 	public int currentSpot = 0;
@@ -22,14 +27,17 @@ public class CustomerGui implements Gui{
 	private int xExit = 0, yExit = 450;//Exit
 	private enum Command {noCommand, GoToSeat, GoToPay, LeaveRestaurant};
 	private Command command=Command.noCommand;
+	BufferedImage customerImage;
 
 	public CustomerGui(HuangCustomerRole c){ //HostAgent m) {
-		agent = c;
-		xPos = 20;
-		yPos = 0;
-		xDestination = 20;
-		yDestination = 0;
-		//maitreD = m;
+		 this.agent = agent;
+
+	        try {
+	        	customerImage = ImageIO.read(getClass().getResource("huangRestaurantCustomer.png"));
+	        }
+	        catch(IOException e) {
+	        	System.out.println("Error w/ Background");
+	        }
 	}
 
 	public void updatePosition() {
@@ -60,8 +68,7 @@ public class CustomerGui implements Gui{
 	}
 
 	public void draw(Graphics2D g) {
-		g.setColor(Color.GREEN);
-		g.fillRect(xPos, yPos, 20, 20);
+		g.drawImage(customerImage, xPos, yPos, null);
 	}
 
 	public boolean isPresent() {
@@ -119,5 +126,9 @@ public class CustomerGui implements Gui{
 		yDestination = yWait;
 		xPos = xWait;
 		xDestination = xWait;
+	}
+	public void DoGoToHost() {
+		xDestination = hostX;
+		yDestination = hostY;
 	}
 }

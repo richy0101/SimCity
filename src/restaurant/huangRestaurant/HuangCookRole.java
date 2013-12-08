@@ -2,12 +2,19 @@ package restaurant.huangRestaurant;
 
 
 import agent.Role;
+import gui.Building;
+import gui.Gui;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
 
+
+
+import city.helpers.Directory;
+import restaurant.huangRestaurant.HuangWaiterRole.WaiterState;
 import restaurant.huangRestaurant.gui.CookGui;
+import restaurant.huangRestaurant.gui.WaiterGui;
 
 
 
@@ -20,6 +27,7 @@ import restaurant.huangRestaurant.gui.CookGui;
 //the HostAgent. A Host is the manager of a restaurant who sees that all
 //is proceeded as he wishes.
 public class HuangCookRole extends Role {
+	private Semaphore actionComplete = new Semaphore(0, true);
 	public HuangHostAgent host;
 	public CookGui gui;
 	private enum OrderState {Pending, Cooking, Done, Plated, out};
@@ -121,9 +129,46 @@ public class HuangCookRole extends Role {
 	//private Semaphore removingOrders = new Semaphore(0, true);
 	//private Semaphore removingOrders = new Semaphore(0, true);
 	private String name;
+	public String myLocation;
+	private boolean doneWorking = false;
+	public enum CookState {
+		Arrived, Working, ShiftEnded, WantsToLeave, Leaving, InTransit, DoneWorking, GoToStation, CollectPay, ReceivedPay;
+	}
+	CookState state;
+	public HuangCookRole(String location) {
+		super();
+		host = (HuangHostAgent) Directory.sharedInstance().getAgents().get("HuangRestaurantHost");
+		gui = new CookGui(this);
+		myLocation = location;
+		state = CookState.Arrived;
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == myLocation) {
+				b.addGui((Gui) gui);
+			}
+		}
+		//Set up inventory
+		Food initialFood = new Food("Chicken");
+		inventory.add(initialFood);
+		initialFood = new Food ("Steak");
+		inventory.add(initialFood);
+		initialFood = new Food ("Salad");
+		inventory.add(initialFood);
+		initialFood = new Food ("Pizza");
+		inventory.add(initialFood);
+		//Set up markets
+		MarketAgent market;
+		MyMarket mm;
+		for(int i = 0; i < totalMarkets; i++ ) {
+			market = new MarketAgent(this, String.valueOf(i));
+			mm = new MyMarket(market, i);
+			markets.add(mm);
+		}
+	}
 	public HuangCookRole(String name, HuangHostAgent host) {
 		this.host = host;
 		this.name = name;
+		this.state = CookState.Arrived;
 		//Set up inventory
 		Food initialFood = new Food("Chicken");
 		inventory.add(initialFood);
@@ -148,6 +193,9 @@ public class HuangCookRole extends Role {
 	}
 
 	// Messages
+	public void msgActionComplete() {
+		actionComplete.release();
+	}
 	public void msgHereIsDelivery(String type, int resupply) {
 		System.out.println(name + ": msgHereIsDelivery received: Cook: Kitchen inventory replenished!");
 		for (Food i : inventory) {
@@ -288,6 +336,16 @@ public class HuangCookRole extends Role {
 		}
 		stateChanged();*/
 	}
+	public void msgHereIsPayCheck(double payCheck) {
+		state = CookState.ReceivedPay;
+		getPersonAgent().setFunds(getPersonAgent().getFunds() + payCheck);
+		stateChanged();
+	}
+	public void msgJobDone() {
+		doneWorking = true;
+		state = CookState.DoneWorking;
+		stateChanged();
+	}
 	public void msgHereIsOrder(HuangWaiterRole w, String choice, int table) {
 		orders.add(new Order(w, choice, table));
 		System.out.println(name + ": msgHereIsOrder received: Cook: Got the Order!");
@@ -310,6 +368,22 @@ public class HuangCookRole extends Role {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
+		if (state == CookState.Arrived) {
+			tellHostArrivedAtWork();
+			return true;
+		}
+		if (state == CookState.ReceivedPay) {
+			leaveWork();
+			return true;
+		}
+		if (state == CookState.GoToStation) {
+			goToStove();
+			return true;
+		}
+		if (state == CookState.CollectPay) {
+			collectPay();
+			return true;
+		}
 		//rule 1
 		synchronized(orders) {
 			for (Order o: orders) {
@@ -382,7 +456,9 @@ public class HuangCookRole extends Role {
 				}
 			}
 		}
-		
+		if (state == CookState.DoneWorking) {
+			tellHostDoneWorking();
+		}
 		//rule 2
 		checkInventory();
 		return false;
@@ -392,7 +468,39 @@ public class HuangCookRole extends Role {
 	}
 
 
+
+
+
+
+
 	// Actions	
+	private void leaveWork() {
+		getPersonAgent().msgRoleFinished();
+		state = CookState.Arrived;
+		gui.DoLeaveRestaurant();
+	}
+	private void collectPay() {
+		state = CookState.InTransit;
+		gui.DoGoToCashier();
+		actionComplete.acquireUninterruptibly();
+		host.getCashier().msgAskForPayCheck(this);
+		
+	}
+	private void tellHostDoneWorking() {
+		state = CookState.CollectPay;
+		host.msgDoneWorking(this);
+	}
+	private void goToStove() {
+		state = CookState.InTransit;
+		gui.DoGoToStove();
+		actionComplete.acquireUninterruptibly();
+	}
+	private void tellHostArrivedAtWork() {
+		state = CookState.GoToStation;
+		gui.DoGoToHost();
+		actionComplete.acquireUninterruptibly();
+		host.msgArrivedToWork(this);
+	}
 	private void DoCook(Order o) {
 		gui.DoCookDish(o.choice, o.table);
 	}

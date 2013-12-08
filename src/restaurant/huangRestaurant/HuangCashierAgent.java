@@ -1,6 +1,7 @@
 package restaurant.huangRestaurant;
 
 import agent.Agent;
+import agent.Role;
 
 import java.util.*;
 
@@ -84,7 +85,16 @@ public class HuangCashierAgent extends Agent implements Cashier {
 		}
 	}
 	public List<FreeLoader> freeLoaders = Collections.synchronizedList(new ArrayList<FreeLoader>());
-	
+	public enum EmployeeState {AskedForPay, Paid};
+	private class MyEmployee {
+		Role r;
+		public EmployeeState state;
+		MyEmployee(Role r) {
+			this.r = r;
+			state = EmployeeState.AskedForPay;
+		}
+	}
+	public List<MyEmployee> employees = new ArrayList<MyEmployee>();
 	private String name;
 	public HuangCashierAgent(String name) {
 		this.name = name;
@@ -138,11 +148,22 @@ public class HuangCashierAgent extends Agent implements Cashier {
 		}
 		stateChanged();
 	}
+	public void msgAskForPayCheck(Role r) {
+		employees.add(new MyEmployee(r));
+		stateChanged();
+	}
+		
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
 		//rule 1
+			for(MyEmployee me : employees) {
+				if (me.state == EmployeeState.AskedForPay) {
+					payEmployee(me);
+					return true;
+				}
+			}
 		//synchronized(bills) {
 			for(MarketBill mb : bills) {
 				if (mb.state.equals(BillState.unpaid)) {
@@ -185,7 +206,18 @@ public class HuangCashierAgent extends Agent implements Cashier {
 
 
 
+
 	// Actions
+
+	private void payEmployee(MyEmployee me) {
+		me.state = EmployeeState.Paid;
+		if(me.r.getClass().toString().contains("ter")) {
+			me.r.msgHereIsPaycheck(25.00);
+		}
+		else {
+			me.r.msgHereIsPaycheck(50);
+		}
+	}
 	private void payBill(MarketBill mb) {
 		System.out.println("Paying Bill.");
 		if(wallet - mb.b.price >=0) {
@@ -211,6 +243,7 @@ public class HuangCashierAgent extends Agent implements Cashier {
 		o.state = OrderState.withWaiter;
 	}
 	//utilities
+
 
 
 }

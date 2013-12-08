@@ -141,6 +141,7 @@ public class HuangCustomerRole extends Role implements Customer {
 	}
 	public void msgAnimationFinishedLeaveRestaurant() {
 		//from animation
+		getPersonAgent().msgRoleFinished();
 		event = AgentEvent.doneLeaving;
 		System.out.println(name + ": msgLeavingFinished received: Peace l8");
 		stateChanged();
