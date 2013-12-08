@@ -56,16 +56,16 @@ public class HuangWaiterRole extends Role implements Waiter {
 	private Semaphore atCashier = new Semaphore(0, true);
 	private Semaphore grabbingCheck = new Semaphore(0, true);
 	public WaiterGui gui;
-	private HuangHostAgent host;
+	protected HuangHostAgent host;
 	protected HuangCookRole cook;
-	private Cashier ca;
+	protected Cashier ca;
 	private boolean canBeFree = false;
 	private boolean wantsBreak = false;
 	private boolean askedBreak = false;
 	private boolean onBreak = false;
 	private boolean doneWorking = false;
 	private MyCustomer currentCustomer;
-	private String myLocation;
+	protected String myLocation;
 
 	public enum WaiterState{
 		Arrived, Working, DoneWorking, CollectPay, InTransit, ReceivedPay
