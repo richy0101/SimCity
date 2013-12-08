@@ -13,11 +13,12 @@ public class Clock implements ActionListener{
 	private final int DELAY = 15000;
 	int hour;
 	int day;
-	Timer timer = new Timer(DELAY, this);
+	Timer timer;
 	
 	private Clock() {
 		hour = 1;
 		day = 1;
+		timer = new Timer(DELAY, this);
 		timer.start();
 	}
 	

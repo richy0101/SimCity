@@ -15,7 +15,7 @@ public class StackWaiterRole extends Role implements Waiter {
 	protected Cook cook;
 	protected Host host;
 	private Cashier cashier;
-	private List<MyCustomer> customers = new ArrayList<MyCustomer>();
+	private List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	
 	protected Semaphore doneAnimation = new Semaphore(0,true);
 	

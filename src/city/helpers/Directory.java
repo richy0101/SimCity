@@ -18,6 +18,7 @@ import home.Apartment;
 import home.Home;
 import restaurant.Restaurant;
 import restaurant.stackRestaurant.*;
+import restaurant.tanRestaurant.TanRestaurant;
 
 public class Directory {
 	public static Directory sharedInstance;
@@ -26,7 +27,9 @@ public class Directory {
 	
 	Directory() {
 		restaurants.add(stackRestaurant);
+		restaurants.add(tanRestaurant); //should be added last to be 5th on the list
 		banks.add(bank);
+		banks.add(bank2);
 		markets.add(market1);
 		markets.add(market2);
 	}
@@ -37,6 +40,7 @@ public class Directory {
     	}
     	return sharedInstance;
 	}
+	
 //ROLES
 	public Map<String, String> roleDirectory = new HashMap<String, String>(); {
 		//Bank Roles
@@ -44,13 +48,18 @@ public class Directory {
 		roleDirectory.put("bank.BankManagerRole", "Bank");
 		roleDirectory.put("bank.BankTellerRole", "Bank");
 		
+		roleDirectory.put("bank.BankCustomerRole", "Bank2");
+		roleDirectory.put("bank.BankManagerRole", "Bank2");
+		roleDirectory.put("bank.BankTellerRole", "Bank2");
+		
 		//Market Roles
 		roleDirectory.put("market.MarketRole1" , "Market1");
 		roleDirectory.put("market.MarketRole2", "Market2");
 		
 		//LandLord Roles
-		roleDirectory.put("home.LandlordRole1", "Appartment1");
-		roleDirectory.put("home.LandlordRole2", "Appartment2");
+		roleDirectory.put("home.LandlordRoleA", "ApartmentA");
+		roleDirectory.put("home.LandlordRoleB", "ApartmentB");
+		roleDirectory.put("home.LandlordRoleC", "ApartmentC");
 		
 		//Restaurant Roles Stack
 //		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "StackRestaurant");
@@ -109,10 +118,11 @@ public class Directory {
 	
 	private Restaurant shehRestaurant = new ShehRestaurant("ShehRestaurant"); //restaurant 5
 	Coordinate shehRestaurantLocation = new Coordinate(621,331);
+	*/
 	
 	private Restaurant tanRestaurant = new TanRestaurant("TanRestaurant"); //restaurant 6
 	Coordinate tanRestaurantLocation = new Coordinate(380,361);
-	*/
+	
 	
 //HOUSES
 	private Home house1 = new Home("House1");
@@ -148,32 +158,35 @@ public class Directory {
 	
 	
 //APARTMENTS
-	private Apartment apartment1 = new Apartment("Apartment1"); //smaller limited apartment
-	Coordinate apartment1Location = new Coordinate(211,281);
+	private Apartment apartmentA = new Apartment("ApartmentA"); //smaller limited apartment
+	Coordinate apartmentALocation = new Coordinate(211,281);
 	
-	private Apartment apartment2 = new Apartment("Apartment2"); //larger infinite apartment
-	Coordinate apartment2Location = new Coordinate(668,66);
+	private Apartment apartmentB = new Apartment("ApartmentB"); //larger infinite apartment
+	Coordinate apartmentBLocation = new Coordinate(668,66);
 	
-	private Apartment apartment3 = new Apartment("Apartment3"); //larger infinite apartment
-	Coordinate apartment3Location = new Coordinate(730,197);
+	private Apartment apartmentC = new Apartment("ApartmentC"); //larger infinite apartment
+	Coordinate apartmentCLocation = new Coordinate(730,197);
 
 //BANKS
 	private Bank bank = new Bank("Bank");
 	Coordinate bankLocation = new Coordinate(89,160);
 	
+	private Bank bank2 = new Bank("Bank2");
+	Coordinate bankLocation2 = new Coordinate(789,75);
 //LOCATION DIRECTORY
 	public Map<String, Coordinate> locationDirectory = new HashMap<String, Coordinate>(); {
 		//Bank
 		locationDirectory.put(bank.getName(), bankLocation);
+		locationDirectory.put(bank2.getName(), bankLocation2);
 		
 		//Markets
 		locationDirectory.put(market1.getName(), market1Location);
 		locationDirectory.put(market2.getName(), market2Location);
 		
 		//Apartments
-		locationDirectory.put(apartment1.getName(), apartment1Location);
-		locationDirectory.put(apartment2.getName(), apartment2Location);
-		locationDirectory.put(apartment3.getName(), apartment3Location);
+		locationDirectory.put(apartmentA.getName(), apartmentALocation);
+		locationDirectory.put(apartmentB.getName(), apartmentBLocation);
+		locationDirectory.put(apartmentC.getName(), apartmentCLocation);
 		
 		//Homes
 		locationDirectory.put(house1.getName(), house1Location);
@@ -198,11 +211,13 @@ public class Directory {
 		agents.put(stackRestaurant.getName() + "Host", (Agent) stackRestaurant.getHost());
 		agents.put(stackRestaurant.getName() + "Cashier", (Agent) stackRestaurant.getCashier());
 		agents.put( bank.getName(),(Agent) bank.getManager());
+		agents.put( bank2.getName(),(Agent) bank2.getManager());
 	}
 	public static List<Restaurant> restaurants = new ArrayList<Restaurant>();
 	public static List<Bank> banks = new ArrayList<Bank>();
 	public static List<Market> markets = new ArrayList<Market>();
 	public static List<PersonAgent> people = new ArrayList<PersonAgent>();
+	
 	public Map<String, Agent> getAgents() {
 		return agents;
 	}

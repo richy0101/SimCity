@@ -34,6 +34,7 @@ import market.MarketCustomerRole;
 import market.MarketRole;
 import restaurant.nakamuraRestaurant.gui.NakamuraRestaurantAnimationPanel;
 import restaurant.shehRestaurant.gui.ShehRestaurantAnimationPanel;
+import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
 import restaurant.stackRestaurant.StackCookRole;
 import restaurant.stackRestaurant.StackHostAgent;
 import restaurant.stackRestaurant.StackWaiterNormalRole;
@@ -88,11 +89,16 @@ public class SimCityGui {
 		 
 		roles.put("None", "Unemployed");
 		roles.put("Bank Teller", "BankTeller");
+		roles.put("Bank 2 Teller", "BankTeller2");
         roles.put("Market 1 Seller", "Market1");
         roles.put("Market 2 Seller", "Market2");
         roles.put("Stack's Restaurant Waiter Normal", "StackWaiterNormal");
         roles.put("Stack's Restaurant Waiter Shared", "StackWaiterShared");
         roles.put("Stack's Restaurant Cook", "StackCook");
+        
+        roles.put("Sheh Restaurant Waiter Normal", "ShehWaiterNormal");
+        //roles.put("Sheh Restaurant Waiter Shared", "ShehWaiter");
+        roles.put("Sheh Restaurant Cook", "ShehCook");
         
 		frame = new JFrame();
 		frame.setResizable(false);
@@ -123,7 +129,13 @@ public class SimCityGui {
 			else if(b.getName().toLowerCase().contains("market")) {
 				b.setBuildingPanel(new GUIMarket( b, i, this ));
 			}
+			else if(b.getName().toLowerCase().contains("apartment")) {
+				b.setBuildingPanel(new GUIApartment(b, i, this));
+			}
 			else if(b.getName().toLowerCase().contains("bank")) {
+				b.setBuildingPanel(new GUIBank( b, i, this ));
+			}
+			else if(b.getName().toLowerCase().contains("bank2")) {
 				b.setBuildingPanel(new GUIBank( b, i, this ));
 			}
 			else if(b.getName().toLowerCase().contains("stack")) {
@@ -134,6 +146,9 @@ public class SimCityGui {
 			}
 			else if(b.getName().toLowerCase().contains("nakamura")) {
 				b.setBuildingPanel(new NakamuraRestaurantAnimationPanel(b, i, this));
+			}
+			else if(b.getName().toLowerCase().contains("tan")) {
+				b.setBuildingPanel(new TanRestaurantAnimationPanel(b, i, this));
 			}
 			else {
 				b.setBuildingPanel(new GUIMarket( b, i, this ));
@@ -167,10 +182,22 @@ public class SimCityGui {
 		SpringLayout sl_panel = new SpringLayout();
 		panel.setLayout(sl_panel);
 		
+		JPanel panel_1 = new JPanel();
+		tabbedPane.addTab("Current Building", null, panel_1, null);
+		SpringLayout sl_panel_1 = new SpringLayout();
+		panel_1.setLayout(sl_panel_1);
+		
+		JPanel panel_2 = new JPanel();
+		sl_panel_1.putConstraint(SpringLayout.NORTH, panel_2, 0, SpringLayout.NORTH, panel_1);
+		sl_panel_1.putConstraint(SpringLayout.WEST, panel_2, 0, SpringLayout.WEST, panel_1);
+		sl_panel_1.putConstraint(SpringLayout.SOUTH, panel_2, 689, SpringLayout.NORTH, panel_1);
+		sl_panel_1.putConstraint(SpringLayout.EAST, panel_2, 259, SpringLayout.WEST, panel_1);
+		panel_1.add(panel_2);
+		
 		final JButton btnPopulateCity = new JButton("Populate City");
 		btnPopulateCity.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				populateCity();	
+				populateCity("src/city/helpers/supernormative.xml");	
 				btnPopulateCity.setEnabled(false);
 				
 			}
@@ -203,17 +230,21 @@ public class SimCityGui {
 		
 		occupationComboBox.addItem("None");
 		occupationComboBox.addItem("Bank Teller");
+		occupationComboBox.addItem("Bank 2 Teller");
 		occupationComboBox.addItem("Market 1 Seller");
 		occupationComboBox.addItem("Market 2 Seller");
+		
+		//Sheh
+		occupationComboBox.addItem("Sheh's Restaurant Waiter Normal");
+		occupationComboBox.addItem("Sheh's Restaurant Waiter Shared");
+		occupationComboBox.addItem("Sheh's Restaurant Cook");
+		
+		//Stack
 		occupationComboBox.addItem("Stack's Restaurant Waiter Normal");
 		occupationComboBox.addItem("Stack's Restaurant Waiter Shared");
 		occupationComboBox.addItem("Stack's Restaurant Cook");
 		
-        //		occupationComboBox.addItem("Sheh's Restaurant Host");
-        //		occupationComboBox.addItem("Sheh's Restaurant Waiter");
-        //		occupationComboBox.addItem("Sheh's Restaurant Cook");
-        //		occupationComboBox.addItem("Sheh's Restaurant Cashier");
-        //
+
         //		occupationComboBox.addItem("Philips's Restaurant Host");
         //		occupationComboBox.addItem("Philips's Restaurant Waiter");
         //		occupationComboBox.addItem("Philips's Restaurant Cook");
@@ -326,21 +357,98 @@ public class SimCityGui {
 		housingComboBox.addItem("House5");
 		housingComboBox.addItem("House6");
 		
+		
+		housingComboBox.addItem("LandLordA");
+		housingComboBox.addItem("LandLordB");
+		housingComboBox.addItem("LandLordC");
+		
+		housingComboBox.addItem("ApartmentA01");
+		housingComboBox.addItem("ApartmentA02");
+		housingComboBox.addItem("ApartmentA03");
+		housingComboBox.addItem("ApartmentA04");
+		housingComboBox.addItem("ApartmentA05");
+		housingComboBox.addItem("ApartmentA06");
+		housingComboBox.addItem("ApartmentA07");
+		housingComboBox.addItem("ApartmentA08");
+		housingComboBox.addItem("ApartmentA09");
+		housingComboBox.addItem("ApartmentA10");
+		housingComboBox.addItem("ApartmentA11");
+		housingComboBox.addItem("ApartmentA12");
+		housingComboBox.addItem("ApartmentA13");
+		housingComboBox.addItem("ApartmentA14");
+		housingComboBox.addItem("ApartmentA15");
+		
+		housingComboBox.addItem("ApartmentB01");
+		housingComboBox.addItem("ApartmentB02");
+		housingComboBox.addItem("ApartmentB03");
+		housingComboBox.addItem("ApartmentB04");
+		housingComboBox.addItem("ApartmentB05");
+		housingComboBox.addItem("ApartmentB06");
+		housingComboBox.addItem("ApartmentB07");
+		housingComboBox.addItem("ApartmentB08");
+		housingComboBox.addItem("ApartmentB09");
+		housingComboBox.addItem("ApartmentB10");
+		housingComboBox.addItem("ApartmentB11");
+		housingComboBox.addItem("ApartmentB12");
+		housingComboBox.addItem("ApartmentB13");
+		housingComboBox.addItem("ApartmentB14");
+		housingComboBox.addItem("ApartmentB15");
+		
+		housingComboBox.addItem("ApartmentC01");
+		housingComboBox.addItem("ApartmentC02");
+		housingComboBox.addItem("ApartmentC03");
+		housingComboBox.addItem("ApartmentC04");
+		housingComboBox.addItem("ApartmentC05");
+		housingComboBox.addItem("ApartmentC06");
+		housingComboBox.addItem("ApartmentC07");
+		housingComboBox.addItem("ApartmentC08");
+		housingComboBox.addItem("ApartmentC09");
+		housingComboBox.addItem("ApartmentC10");
+		housingComboBox.addItem("ApartmentC11");
+		housingComboBox.addItem("ApartmentC12");
+		housingComboBox.addItem("ApartmentC13");
+		housingComboBox.addItem("ApartmentC14");
+		housingComboBox.addItem("ApartmentC15");
+		
 		panel.add(housingComboBox);
 		
 		
 		JButton btnCreatePerson = new JButton("Create Person");
+		
 		btnCreatePerson.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(nameTextField.getText() != "" &&
-                   transportationComboBox.getSelectedItem() != "None" &&
-                   housingComboBox.getSelectedItem() != "None") {
-					PersonAgent person = new PersonAgent(roles.get(occupationComboBox.getSelectedItem()),
-                                                         nameTextField.getText(),
-                                                         aggressivenessSlider.getValue(),
-                                                         (double)initialFundsSlider.getValue(),
-                                                         (String)housingComboBox.getSelectedItem(),
-                                                         (String)transportationComboBox.getSelectedItem());
+                    transportationComboBox.getSelectedItem() != "None" &&
+                    housingComboBox.getSelectedItem() != "None") {
+					
+					/*
+					//CREATE CONDITION WHERE IFF HOUSING COMBO BOX IS LANDLORD THEN JOB IS LAND LORD AND VICE VERSA
+					if(housingComboBox.getSelectedItem().toString().toLowerCase().contains("landlord")) {
+						String string = housingComboBox.getSelectedItem().toString();
+						String [] parts = string.split("LandLord");
+						String part2 = parts[1];
+						
+						System.out.println(housingComboBox.getSelectedItem().toString());
+						System.out.println(part2);
+						
+						
+						PersonAgent person = new PersonAgent(roles.get("home.LandLord" + part2),
+                                nameTextField.getText(),
+                                aggressivenessSlider.getValue(),
+                                (double)initialFundsSlider.getValue(),
+                                (String)housingComboBox.getSelectedItem(),
+                                (String)transportationComboBox.getSelectedItem());
+					}
+					else {
+					*/
+					housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
+						PersonAgent person = new PersonAgent(roles.get(occupationComboBox.getSelectedItem()),
+                                nameTextField.getText(),
+                                aggressivenessSlider.getValue(),
+                                (double)initialFundsSlider.getValue(),
+                                (String)housingComboBox.getSelectedItem(),
+                                (String)transportationComboBox.getSelectedItem());
+					//}
 				}
 			}
 		});
@@ -355,19 +463,19 @@ public class SimCityGui {
 		sl_panel.putConstraint(SpringLayout.WEST, lblSpeed, 0, SpringLayout.WEST, btnCreatePerson);
 		panel.add(lblSpeed);
 		
-		final JLabel lblSpeedMeter = new JLabel("3");
+		final JLabel lblSpeedMeter = new JLabel("5");
 		sl_panel.putConstraint(SpringLayout.NORTH, lblSpeedMeter, 0, SpringLayout.NORTH, lblSpeed);
 		sl_panel.putConstraint(SpringLayout.EAST, lblSpeedMeter, 0, SpringLayout.EAST, btnCreatePerson);
 		panel.add(lblSpeedMeter);
 		
 		int beginningSpeedMin = 1;
-		int beginningSpeedMax = 5;
-		int beginningSpeedStart = 3;
+		int beginningSpeedMax = 10;
+		int beginningSpeedStart = 5;
 		final JSlider speedSlider = new JSlider(beginningSpeedMin, beginningSpeedMax, beginningSpeedStart);
 		speedSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				lblSpeedMeter.setText(speedSlider.getValue()+"");
-//				macroAnimationPanel.setSpeed(speedSlider.getValue());
+				macroAnimationPanel.setSpeed(speedSlider.getValue());
 			}
 		});
 		sl_panel.putConstraint(SpringLayout.NORTH, speedSlider, 6, SpringLayout.SOUTH, lblSpeedMeter);
@@ -379,20 +487,12 @@ public class SimCityGui {
 		
 		panel.add(speedSlider);
 		
-		JPanel panel_1 = new JPanel();
-		tabbedPane.addTab("Current Building", null, panel_1, null);
-		SpringLayout sl_panel_1 = new SpringLayout();
-		panel_1.setLayout(sl_panel_1);
 		
-		JLabel lblWorkers = new JLabel("Workers");
-		sl_panel_1.putConstraint(SpringLayout.NORTH, lblWorkers, 10, SpringLayout.NORTH, panel_1);
-		sl_panel_1.putConstraint(SpringLayout.WEST, lblWorkers, 10, SpringLayout.WEST, panel_1);
-		panel_1.add(lblWorkers);
 	}
 	
-	private void populateCity() {
+	private void populateCity(String source) {
 		XMLReader reader = new XMLReader();
-		ArrayList<PersonAgent> people = reader.initializePeople();
+		ArrayList<PersonAgent> people = reader.initializePeople(source);
 		for(PersonAgent person : people) {
 			person.startThread();
 		}	
@@ -403,6 +503,11 @@ public class SimCityGui {
 		 * Start of Hard Code Scenario
 		 * 
 		 */
+		if(Clock.sharedInstance().isDay()) {
+			
+		}
+		
+	
 		String a = "StackRestaurant";
 		String b = "House1";
 		String name = "Test Person 1";
@@ -442,7 +547,7 @@ public class SimCityGui {
 		String a4 = "Bank";
 		String b4 = "House4";
 		String name4 = "Test Person 4";
-		Role role4 = new BankTellerRole("Bank");
+		Role role4 = new BankTellerRole("Bank2");
 		PersonAgent p4 = new PersonAgent(role4, a4 , b4, name4);
 		role4.setPerson(p4);
 		//p4.msgGoWork();
@@ -450,7 +555,7 @@ public class SimCityGui {
 		String a5 = "Bank";
 		String b5 = "House5";
 		String name5 = "BankLoanPerson5";
-		Role role5 = new BankTellerRole("Bank");
+		Role role5 = new BankTellerRole("Bank2");
 		PersonAgent p5 = new PersonAgent(role5, a5 , b5, name5);
 		role5.setPerson(p5);
 		p5.msgTestWakeUp();
@@ -468,7 +573,7 @@ public class SimCityGui {
 		String a7 = "Bank";
 		String b7 = "House2";
 		String name7 = "MarketGoerPerson";
-		Role role7 = new BankTellerRole("Bank");
+		Role role7 = new BankTellerRole("Bank2");
 		PersonAgent p7 = new PersonAgent(role7, a7 , b7, name7);
 		role7.setPerson(p7);
 		p7.msgTestWakeUp();

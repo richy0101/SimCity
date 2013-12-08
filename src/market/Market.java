@@ -7,6 +7,7 @@ public class Market {
 
 	private String name;
 	private MarketRole worker;
+	private boolean open;
 
 	
 	public Market() {
@@ -14,7 +15,8 @@ public class Market {
 	}
 	
 	public Market(String buildingName) {
-		name = buildingName;	
+		name = buildingName;
+		open = false;
 
 		
 //
@@ -31,6 +33,18 @@ public class Market {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public void setOpen() {
+		open = true;
+	}
+	
+	public void setClosed() {
+		open = false;
+	}
+	
+	public boolean getOpen() {
+		return open;
 	}
 
 }

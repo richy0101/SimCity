@@ -20,4 +20,8 @@ public class Apartment {
 		return name;
 	}
 
+	public void setName(String string) {
+		name = string;
+	}
+
 }

@@ -382,13 +382,6 @@ public class BankTellerRole extends Role implements BankTeller {
 	
 	private void GiveUpMoney(MyCustomer myCustomer) {
 		print("Giving up bank's money to robber");
-		timer.schedule(new TimerTask() {
-			public void run() {
-				//run timer for gui to stop
-				//GUI BLOWS UP
-			}
-		},
-		5000);
 		myCustomer.customer.msgHereAreFunds(myCustomer.moneyToWithdraw);
 		myCustomer.custState = CustomerState.Leaving;
 	}

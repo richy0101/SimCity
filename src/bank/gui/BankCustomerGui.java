@@ -33,14 +33,16 @@ public class BankCustomerGui implements Gui {
 	BufferedImage customerDown;
 	BufferedImage customerLeft;
 	BufferedImage customerRight;
+	BufferedImage explosion;
 
 	//BankGui gui;
 
 	private int xPos, yPos;
 	private int xTeller, yTeller;
 	private int xDestination, yDestination;
+	private boolean explosionScene = false;
 
-	private enum Command {noCommand, GoToManager, GoToTeller, LeaveBank};
+	private enum Command {noCommand, GoToManager, GoToTeller, ExplodeBank, LeaveBank};
 	private Command command=Command.noCommand;
 
 
@@ -56,6 +58,7 @@ public class BankCustomerGui implements Gui {
         	customerRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));
         	customerUp = ImageIO.read(getClass().getResource("GUIPersonUp.png"));
         	customerDown = ImageIO.read(getClass().getResource("GUIPersonDown.png"));
+        	explosion = ImageIO.read(getClass().getResource("explosion1.png"));
 		}
 		catch(IOException e) {
 			System.out.println("Error w/ Background");
@@ -97,20 +100,48 @@ public class BankCustomerGui implements Gui {
 
 	@Override
 	public void draw(Graphics2D g) {
+		int randX = (int) Math.random()*500+200;
+		int randY = (int) Math.random()*200+50;
+		
 		if (xPos < xDestination) {
 			g.drawImage(customerRight, xPos, yPos, null);
+			if(explosionScene == true){
+				g.drawImage(explosion, randX,randY,null);
+				g.drawImage(explosion, randX+100,randY+70,null);
+				g.drawImage(explosion, randX-150,randY-50,null);
+			}
 		}
 		else if (xPos > xDestination) {
 			g.drawImage(customerLeft,  xPos, yPos, null);
+			if(explosionScene == true){
+				g.drawImage(explosion, randX,randY,null);
+				g.drawImage(explosion, randX+100,randY+70,null);
+				g.drawImage(explosion, randX-150,randY-50,null);
+			}
 		}
 		else if (yPos < yDestination) {
 			g.drawImage(customerDown, xPos, yPos, null);
+			if(explosionScene == true){
+				g.drawImage(explosion, randX,randY,null);
+				g.drawImage(explosion, randX+100,randY+70,null);
+				g.drawImage(explosion, randX-150,randY-50,null);
+			}
 		}
 		else if (yPos > yDestination) {
 			g.drawImage(customerUp, xPos, yPos, null);
+			if(explosionScene == true){
+				g.drawImage(explosion, randX,randY,null);
+				g.drawImage(explosion, randX+100,randY+70,null);
+				g.drawImage(explosion, randX-150,randY-50,null);
+			}
 		}
 		else {
 			g.drawImage(customerDown, xPos, yPos, null);
+			if(explosionScene == true){
+				g.drawImage(explosion, randX,randY,null);
+				g.drawImage(explosion, randX+100,randY+70,null);
+				g.drawImage(explosion, randX-150,randY-50,null);
+			}
 		}
 		
 		info = agent.getPersonAgent().getName() + "(" + agent.getState() + ")";
@@ -136,8 +167,18 @@ public class BankCustomerGui implements Gui {
 		yDestination = yManager;
 		command = Command.GoToManager;
 	}
+	
+	public void DoExplodeBank() {
+		//command = Command.ExplodeBank;
+		explosionScene = true;
+	}
+	
+	public void DoStopExplodingBank() {
+		explosionScene = false;	
+	}
 
 	public void DoLeaveBank() {
+		explosionScene = false;
 		xDestination = xExit;
 		yDestination = yExit;
 		command = Command.LeaveBank;
@@ -163,4 +204,5 @@ public class BankCustomerGui implements Gui {
 	public int getyExit() {
 		return yExit;
 	}
+
 }

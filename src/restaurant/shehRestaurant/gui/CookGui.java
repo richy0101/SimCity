@@ -5,33 +5,42 @@ import restaurant.shehRestaurant.helpers.Table;
 import gui.Gui;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 public class CookGui implements Gui {
 
     private ShehCookRole agent = null;
 
-    private int xPos = 400, yPos = 160;//default waiter position
-    private int xDestination = 400, yDestination = 160;//default start position
-    private int XHOME = 400, YHOME = 160;
-    private int agentSize = 20; //default agent size
+    private int xPos = 705, yPos = 63;//default waiter position
+    private int XHOME = 72, YHOME = 157;
+    private int xDestination = XHOME;
+    private int yDestination = YHOME;//default start position
+
+    private final int XPLATING = 245;
+    private final int YPLATING = 262;
+    private final int XCOOKING = 164;
+    private final int YCOOKING = 8;
     
-    private final int CHEFSKITCHEN = 400; 
-    private final int CHEFSPLATING = 200;
-    private final int CHEFSCOOKING = 100;
-     
     public int xTable;
     public static final int yTable = 250; 
     public ArrayList<Table> table; //Declaration of Table
 
-	//private RestaurantGui gui;
+    BufferedImage cookImage;
 
     public CookGui(ShehCookRole agent) {
         this.agent = agent;
-        //this.gui = gui;
         
         //IMAGE STUFF
-        
+        try {
+        	cookImage = ImageIO.read(getClass().getResource("shehRestaurantCook.png"));
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ Background");
+        }
         
     }
 
@@ -45,26 +54,19 @@ public class CookGui implements Gui {
             yPos++;
         else if (yPos > yDestination)
             yPos--;
-/*
-        if (xPos == xDestination && yPos == yDestination
-        		& (xDestination == xTable + agentSize) & (yDestination == yTable - agentSize)) { 
-           //agent.msgCooking(); //CHANGE FOR SEMAPHORES
-        }
-*/
         
-        if(xPos == CHEFSKITCHEN && yPos == CHEFSPLATING){
+        if(xPos == XPLATING && yPos == YPLATING){
         	agent.msgPlating();
     	}
    
-        if(xPos == CHEFSKITCHEN && yPos == CHEFSCOOKING){
+        if(xPos == XCOOKING && yPos == YCOOKING){
     		agent.msgCooking();
         }
        
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.DARK_GRAY);
-        g.fillRect(xPos, yPos, agentSize, agentSize);
+       g.drawImage(cookImage, xPos, yPos, null);
     }
     
     public void label(Graphics g, String label, int xLoc, int yLoc) {
@@ -74,19 +76,23 @@ public class CookGui implements Gui {
     }
     
     public void DoCooking() {
-        xDestination = CHEFSKITCHEN;
-        yDestination = CHEFSCOOKING;
+        xDestination = XCOOKING;
+        yDestination = YCOOKING;
     }
     
     public void DoPlating() {
-    	xDestination = CHEFSKITCHEN;
-    	yDestination = CHEFSPLATING;
+    	xDestination = XPLATING;
+    	yDestination = YPLATING;
     }
     
     public void DoStandby() {
     	//xDestination = xDestination + (num * 10);
     	xDestination = XHOME;
     	yDestination = YHOME;
+    }
+    
+    public boolean isPresent() {
+        return true;
     }
 
     public int getXPos() {
@@ -95,9 +101,5 @@ public class CookGui implements Gui {
 
     public int getYPos() {
         return yPos;
-    }
-
-    public boolean isPresent() {
-        return true;
     }
 }

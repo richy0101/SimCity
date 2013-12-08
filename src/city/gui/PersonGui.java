@@ -1,7 +1,9 @@
 package city.gui;
 
 import gui.Gui;
+import city.helpers.ApartmentHelper;
 import city.helpers.Clock;
+import city.helpers.Directory;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -15,6 +17,10 @@ import city.PersonAgent;
 public class PersonGui implements Gui {
 	
 	private PersonAgent agent = null;
+	private String apartmentLetter = null;
+	private int xMult = 0;
+	private int yMult = 0;
+	
 	private int xPos, yPos;
 	private int xDestination, yDestination;
 	private int xBed, yBed, xKitchen, yKitchen, xTable, yTable, xDoor, yDoor, xFridge, yFridge;
@@ -30,20 +36,40 @@ public class PersonGui implements Gui {
 	public enum CurrentAction {Cooking, Eating, Transition, Idle, Deciding, Leaving, Sleeping};
 	CurrentAction currentAction = CurrentAction.Idle;
 	public PersonGui(PersonAgent agent) {
-		xBed = 5;
-		yBed = 135;
-		xKitchen = 695;
-		yKitchen = 160;
-		xFridge = 800;
-		yFridge = 130;
-		xTable = 425;
-		yTable = 250;
-		xDoor = 380;
-		yDoor = 160;
-		xPos = xBed;
-		yPos = yBed;
-		xDestination = xBed;
-		yDestination = yBed;
+		String address = agent.getAddress();
+		
+		apartmentLetter = ApartmentHelper.sharedInstance().getApartmentLetter(address);
+		xMult = ApartmentHelper.sharedInstance().getXMultiplier(address);
+		yMult = ApartmentHelper.sharedInstance().getYMultiplier(address);
+		
+		//HOME
+		//if(address.toLowerCase().contains("house")) {
+			xBed = 5;
+			yBed = 135;
+			xKitchen = 695;
+			yKitchen = 160;
+			xFridge = 800;
+			yFridge = 130;
+			xTable = 425;
+			yTable = 250;
+			xDoor = 380;
+			yDoor = 160;
+			xPos = xBed;
+			yPos = yBed;
+			xDestination = xBed;
+			yDestination = yBed;
+		//}
+		//APARTMENT
+		/*
+		else if(location.toLowerCase().contains("apartment")) {
+			String [] parts = location.split("Apartment");
+			String part2 = parts[1];
+			
+			System.out.println(housingComboBox.getSelectedItem().toString());
+			System.out.println(part2);
+			
+		}
+		*/
 		try {
         	personLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
         	personRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));

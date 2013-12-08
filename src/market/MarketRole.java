@@ -35,6 +35,7 @@ public class MarketRole extends Role implements Market {
 	
 	List<Order> MyOrders;
 	List<RestaurantOrder> MyRestaurantOrders;
+	boolean atWork;
 	boolean jobDone;
 	Map<String, Food> inventory = new HashMap<String, Food>();
 	double funds;
@@ -144,6 +145,7 @@ public class MarketRole extends Role implements Market {
 		MyRestaurantOrders = Collections.synchronizedList(new ArrayList<RestaurantOrder>());
 		
 		jobDone = false;
+		atWork = false;
 		funds = 0.00;
 		
 		log = new EventLog();
@@ -168,6 +170,7 @@ public class MarketRole extends Role implements Market {
 		MyOrders = Collections.synchronizedList(new ArrayList<Order>());
 		MyRestaurantOrders = Collections.synchronizedList(new ArrayList<RestaurantOrder>());
 		jobDone = false;
+		atWork = false;
 		funds = 0.00;
 		log = new EventLog();
 		
@@ -275,7 +278,10 @@ public class MarketRole extends Role implements Market {
 	
 	//scheduler---------------------------------------------------------------------------
 	public boolean pickAndExecuteAnAction() {
-		gui.setPresent();
+		if(atWork == false) {
+			ArriveAtJob();
+			return true;
+		}
 		
 		if(MyOrders.isEmpty() && MyRestaurantOrders.isEmpty() && jobDone == true) {
 			LeaveJob();
@@ -447,15 +453,32 @@ public class MarketRole extends Role implements Market {
 		return this;
 	}
 	
-	//PersonAgent actions--------------------------------------------------------------
+	//PersonAgent actions----------------------------------------------------------------
+	private void ArriveAtJob() {
+		DoEnterMarket();
+		
+		try {
+			actionComplete.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		Directory.sharedInstance().marketDirectory.get(myLocation).setOpen();
+		atWork = true;
+	}
 	private void LeaveJob() {
 		log.add(new LoggedEvent("MarketRole leaving job"));
 		getPersonAgent().setFunds(getPersonAgent().getFunds() + funds);
+		Directory.sharedInstance().marketDirectory.get(myLocation).setClosed();
 		
 		getPersonAgent().msgRoleFinished();
 	}
 
 	//GUI Actions-------------------------------------------------------------------------
+	private void DoEnterMarket() {
+		gui.setPresent();
+		gui.DoEnterMarket();
+	}
 	private void DoGetItem(String s) {
 		gui.DoGetFood();		
 	}

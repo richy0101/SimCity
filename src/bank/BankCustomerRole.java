@@ -3,6 +3,8 @@ package bank;
 import gui.Building;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import city.helpers.Directory;
@@ -24,6 +26,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	public BankCustomerGui customerGui;
 	private Semaphore doneAnimation = new Semaphore(0,true);
+	private Timer timer;
 	
 	private double moneyToDeposit = 0;
 	private double moneyToWithdraw = 100;
@@ -95,6 +98,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	} */
     //messages----------------------------------------------------------------------------
 	public void msgHowCanIHelpYou(BankTeller teller, int tellerNumber) {
+		
 		state = CustomerState.GoingToTeller;
 		this.teller = teller;
 		this.tellerNumber = tellerNumber;
@@ -189,6 +193,9 @@ public class BankCustomerRole extends Role implements BankCustomer {
 			print("Manager is Null.");
 		}
 		manager.msgINeedAssistance(this);
+		if(task.contains("Rob")){
+			customerGui.DoExplodeBank();
+		}
 		state = CustomerState.Waiting;
 	}
 	

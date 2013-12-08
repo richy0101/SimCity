@@ -1,25 +1,38 @@
 package restaurant.shehRestaurant.gui;
 
 import restaurant.shehRestaurant.ShehCustomerRole;
-import restaurant.shehRestaurant.ShehHostAgent;
 import restaurant.shehRestaurant.helpers.Table;
 import gui.Gui;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
-import javax.swing.*;
+import javax.imageio.ImageIO;
 
 public class CustomerGui implements Gui{
 
 	private ShehCustomerRole agent = null;
 	private boolean isPresent = false;
 	private boolean isHungry = false;
+	
+	BufferedImage customerImage;
 
 	//private HostAgent host;
 	Table table; //from CustomerAgent
 
 	private int xPos, yPos, agentSize;
 	private int xDestination, yDestination;
+	private int XTABLE1 = 422;
+	private int YTABLE1 = 126;
+	private int XTABLE2 = 332;
+	private int YTABLE2 = 274;
+	private int XTABLE3 = 513;
+	private int YTABLE3 = 279;
+	
+	private int XDOOR = 707;
+	private int YDOOR = 53;
+	
 	private enum Command {noCommand, GoToSeat, LeaveRestaurant};
 	private Command command=Command.noCommand;
 
@@ -35,6 +48,19 @@ public class CustomerGui implements Gui{
 		yDestination = -40;
 		
 		agentSize = 20;
+		
+		try {
+        	customerImage = ImageIO.read(getClass().getResource("shehRestaurantCustomer.png"));
+        	/*
+        	chickenImage = ImageIO.read(getClass().getResource("chicken.png"));
+            pizzaImage = ImageIO.read(getClass().getResource("pizza.png"));
+            saladImage = ImageIO.read(getClass().getResource("salad.png"));
+            steakImage = ImageIO.read(getClass().getResource("steak.png"));
+            */ 
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ Background");
+        }
 	}
 
 	public void updatePosition() {
@@ -59,12 +85,10 @@ public class CustomerGui implements Gui{
 			command=Command.noCommand;
 		}
 	}
+	
 
 	public void draw(Graphics2D g) {
-		g.setColor(Color.GREEN);
-		g.fillRect(xPos, yPos, agentSize, agentSize);
-		//customerLabel.setHorizontalTextPosition(JLabel.CENTER);
-		//customerLabel.setVerticalTextPosition(JLabel.CENTER);
+		g.drawImage(customerImage, xPos, yPos, null);
 	}
 
 	public boolean isPresent() {
@@ -82,15 +106,8 @@ public class CustomerGui implements Gui{
 	public void setPresent(boolean p) {
 		isPresent = p;
 	}
-	/*
-	public void Queue(int num) {
-		queue = num;
-		System.out.println("q" + queue);
-		
-	}
-	*/
+	
 	public void DoWaitInRestaurant(int queue) {
-		//System.out.println("do" + queue);
 		xDestination = 10 + (queue * 40);
 		yDestination = 10;
 		
@@ -98,23 +115,24 @@ public class CustomerGui implements Gui{
 
 	public void DoGoToSeat(int seatnumber, Table table) {//later you will map seat number to table coordinates.
 		if(table.getTableNumber() == 1) {
-			xTable = 100;
+			xDestination = XTABLE1;
+			yDestination = YTABLE1;
 		}
 		if(table.getTableNumber() == 2) {
-			xTable = 200;
+			xDestination = XTABLE2;
+			yDestination = YTABLE2;
 		}
 		if(table.getTableNumber() == 3) {
-			xTable = 300;
+			xDestination = XTABLE3;
+			yDestination = YTABLE3;
 		}
-		
-		xDestination = xTable;
-		yDestination = yTable;
+
 		command = Command.GoToSeat;
 	}
 
 	public void DoExitRestaurant() {
-		xDestination = -40;
-		yDestination = -40;
+		xDestination = XDOOR;
+		yDestination = YDOOR;
 		command = Command.LeaveRestaurant;
 	}
 }
