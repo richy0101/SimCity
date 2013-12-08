@@ -15,6 +15,7 @@ import city.PersonAgent;
 public class PersonGui implements Gui {
 	
 	private PersonAgent agent = null;
+	
 	private int xPos, yPos;
 	private int xDestination, yDestination;
 	private int xBed, yBed, xKitchen, yKitchen, xTable, yTable, xDoor, yDoor, xFridge, yFridge;
@@ -30,20 +31,36 @@ public class PersonGui implements Gui {
 	public enum CurrentAction {Cooking, Eating, Transition, Idle, Deciding, Leaving, Sleeping};
 	CurrentAction currentAction = CurrentAction.Idle;
 	public PersonGui(PersonAgent agent) {
-		xBed = 5;
-		yBed = 135;
-		xKitchen = 695;
-		yKitchen = 160;
-		xFridge = 800;
-		yFridge = 130;
-		xTable = 425;
-		yTable = 250;
-		xDoor = 380;
-		yDoor = 160;
-		xPos = xBed;
-		yPos = yBed;
-		xDestination = xBed;
-		yDestination = yBed;
+		//private String location = agent.getAddress();
+		
+		//HOME
+		//if(location.toLowerCase().contains("house")) {
+			xBed = 5;
+			yBed = 135;
+			xKitchen = 695;
+			yKitchen = 160;
+			xFridge = 800;
+			yFridge = 130;
+			xTable = 425;
+			yTable = 250;
+			xDoor = 380;
+			yDoor = 160;
+			xPos = xBed;
+			yPos = yBed;
+			xDestination = xBed;
+			yDestination = yBed;
+	//	}
+		//APARTMENT
+		/*
+		else if(location.toLowerCase().contains("apartment")) {
+			String [] parts = location.split("Apartment");
+			String part2 = parts[1];
+			
+			System.out.println(housingComboBox.getSelectedItem().toString());
+			System.out.println(part2);
+			
+		}
+		*/
 		try {
         	personLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
         	personRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));

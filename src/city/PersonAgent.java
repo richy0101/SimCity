@@ -59,6 +59,8 @@ public class PersonAgent extends Agent implements Person {
 	int aggressivenessLevel;
 	int dirtynessLevel;
 	int desiredFood;
+	int currentHour;
+	int currentDay;
 	PersonGui personGui;
 	Map<String, Integer> groceryList = new HashMap<String, Integer>();
 	Timer personTimer = new Timer();
@@ -157,14 +159,6 @@ public class PersonAgent extends Agent implements Person {
 			clearInventory();
 			checkInventory();
 		}
-		else {
-			personTimer.schedule(new PersonTimerTask(this) {
-				public void run() {
-					p.msgWakeUp();
-				}
-			},
-			aggressivenessLevel * 1000);//time for cooking
-		}
 		startThread();
 	}
 	/**
@@ -233,6 +227,8 @@ public class PersonAgent extends Agent implements Person {
 		setPersonState(PersonState.Sleeping);
 		hungerLevel = 0;
 		dirtynessLevel = 0;
+		currentHour = 0;
+		currentDay = 0;
 		rentDue = false;
 		hasWorked = false;
 		Directory.sharedInstance().addPerson(this);
@@ -254,12 +250,6 @@ public class PersonAgent extends Agent implements Person {
 		inventory.add(initialFood);
 		initialFood = new Food ("Pizza");
 		inventory.add(initialFood);
-		personTimer.schedule(new PersonTimerTask(this) {
-			public void run() {
-				p.msgWakeUp();
-			}
-		},
-		aggressivenessLevel * 1000);//time for cooking
 		startThread();
 		//print("I LIVE.");
 	}
@@ -311,12 +301,6 @@ public class PersonAgent extends Agent implements Person {
 		initialFood = new Food ("Pizza");
 		inventory.add(initialFood);
 		
-		personTimer.schedule(new PersonTimerTask(this) {
-			public void run() {
-				p.msgWakeUp();
-			}
-		},
-		aggressivenessLevel * 1000);//time for cooking
 		startThread();
 		//print("I LIVE.");
 	}
@@ -333,7 +317,25 @@ public class PersonAgent extends Agent implements Person {
 	 * Messages
 	 */
 	public void msgCheckTime(int hour, int day) {
-		
+		this.currentHour = hour;
+		this.currentDay = day;
+		print("Msg CheckTime receieved.");
+		if(!(workDetails.offDays.contains(day))) {
+			if (hour == workDetails.workEndHour && getPersonState() == PersonState.OutToWork) {
+				 setPersonState(PersonState.DoneWorking);
+                 print("I am done working for today.");
+                 stateChanged();
+			}
+			else if((hour >= workDetails.workStartHour - 1) && getPersonState() == PersonState.Sleeping) {
+				print("Waking up to get ready for a working day.");
+				setPersonState(PersonState.WantFood);
+				this.hasWorked = false;
+				stateChanged();
+			}
+		}
+		else if (getPersonState() == PersonState.Sleeping){
+			stateChanged();
+		}
 	}
 	public void msgTestWakeUp() {
 		stateChanged();
@@ -366,10 +368,8 @@ public class PersonAgent extends Agent implements Person {
 		stateChanged();
 	}
 	public void msgDoneWorking() {
-		if (getPersonState() == PersonState.OutToWork) {
-			setPersonState(PersonState.DoneWorking);
-			print("msgDoneWorking received - Setting state to Done Working");
-		}
+		print("Left work! I want Dinner.");
+		setPersonState(PersonState.WantFood);
 		stateChanged();
 	}
 	public void msgGoHome() {
@@ -385,8 +385,6 @@ public class PersonAgent extends Agent implements Person {
 	public void msgRoleFinished() {
 		RoleInterface r = roles.pop();
 		print("msgRoleFinished received - Popping current Role: " + r.toString() + ".");
-		//print ("Current state: " + personState.toString());
-		personState = PersonState.InTransit;
 		stateChanged();
 	}
 	public void msgTransportFinished(String location) {
@@ -502,7 +500,7 @@ public class PersonAgent extends Agent implements Person {
 		if (getPersonState().toString().contains("ing") || getPersonState().toString().contains("OutTo") || getPersonState().toString().contains("NeedsTo")){
 			return false;
 		}
-		else if (hasWorked == false && unemployed == false) {
+		else if (hasWorked == false && unemployed == false && !(workDetails.offDays.contains(currentDay))) {
 			print("Eval says go WORK");
 			setPersonState(PersonState.NeedsToWork);
 			return true;
@@ -539,12 +537,6 @@ public class PersonAgent extends Agent implements Person {
 		}
 		else if(getPersonState() == PersonState.Idle){
 			setPersonState(PersonState.Sleeping);
-			personTimer.schedule(new PersonTimerTask(this) {
-				public void run() {
-					p.msgWakeUp();
-				}
-			},
-			10000 * aggressivenessLevel);//time for cooking
 			personGui.DoSleep();
 			return false;
 		}
@@ -608,7 +600,7 @@ public class PersonAgent extends Agent implements Person {
 		//Role logic
 		roles.clear();
 		Role custRole = factory.createRole(r.getName(), this);
-		roles.add(custRole);//Hacked factory LOL
+		roles.add(custRole);
 		custRole.msgGotHungry();
 		custRole.setHost(Directory.sharedInstance().getAgents().get(r.getName() + "Host"));
 		custRole.setCashier(Directory.sharedInstance().getAgents().get(r.getName() + "Cashier"));
@@ -651,7 +643,7 @@ public class PersonAgent extends Agent implements Person {
 
 	}
 	private void goWork() {
-		print("Action goWork - hasWorked = true. Going to work.");
+		print("Action goWork. Going to work.");
 		hasWorked = true;
 		setPersonState(PersonState.OutToWork);
 		if(currentLocation == homeName) {
@@ -666,13 +658,6 @@ public class PersonAgent extends Agent implements Person {
 		Role t = new TransportationRole(workDetails.workLocation, currentLocation);
 		t.setPerson(this);
 		roles.add(t);
-		/*
-		personTimer.schedule(new PersonTimerTask(this) {
-			public void run() {
-				p.msgDoneWorking();
-			}
-		},
-		20000 * aggressivenessLevel);//time for working*/
 	}
 	private boolean checkInventory() {
 		groceryList.clear();
@@ -830,5 +815,8 @@ public class PersonAgent extends Agent implements Person {
 	}
 	public Map<String, Integer> getGroceriesList() {
 		return groceryList;
+	}
+	public String getAddress() {
+		return homeName; 
 	}
 }
