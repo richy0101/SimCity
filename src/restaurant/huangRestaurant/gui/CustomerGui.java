@@ -8,17 +8,18 @@ import java.awt.*;
 public class CustomerGui implements Gui{
 
 	private HuangCustomerRole agent = null;
-	private boolean isPresent = false;
+	private boolean isPresent = true;
 	private boolean isHungry = false;
 
 
-	private int xPos, yPos;
-	private int xDestination, yDestination;
-	private int xWait = 20;
-	private int yWait = 40;
+	private int xPos = 35, yPos = 450;
+	private int xDestination = 35, yDestination = 450;
+	private int xWait = 35;
+	private int yWait = 100;
 	public int currentSpot = 0;
-	private static final int cashierX = 200; 
-	private static final int cashierY = 500;
+	private static final int cashierX = 780; 
+	private static final int cashierY = 40;
+	private int xExit = 0, yExit = 450;//Exit
 	private enum Command {noCommand, GoToSeat, GoToPay, LeaveRestaurant};
 	private Command command=Command.noCommand;
 
@@ -108,7 +109,6 @@ public class CustomerGui implements Gui{
 		yWait = yWait + iterate * 40;
 		yPos = yWait;
 		yDestination = yWait;
-		xWait = 20;
 		xPos = xWait;
 		xDestination = xWait;
 	}
@@ -117,7 +117,6 @@ public class CustomerGui implements Gui{
 		yWait = currentSpot * 40;
 		yPos = yWait;
 		yDestination = yWait;
-		xWait = 20;
 		xPos = xWait;
 		xDestination = xWait;
 	}

@@ -13,11 +13,13 @@ import restaurant.huangRestaurant.HuangCookRole;
 public class CookGui implements Gui {
 	private HuangCookRole agent = null;
 	private String currentDish;
-    private int xPos = 320, yPos = 415;//default waiter position
-    private int xDestination = 320, yDestination = 415;//default start position
-    private int xHome = 320, yHome = 415;//Cook Home positions
-    private int xCookArea = xHome - 40, yCookArea = yHome + 30;//Customer Waiting area.
-    private int xPlateArea = xHome - 40, yPlateArea = yHome -25;
+    private int xPos = 35, yPos = 450;//default cook position
+    private int xDestination = 35, yDestination = 450;//default start position
+    private int xHome = 630, yHome = 360;//Cook Home positions
+    private int xCookArea = xHome + 70, yCookArea = yHome;//Customer Waiting area.
+    private int xPlateArea = xHome + 120, yPlateArea = yHome -80;
+    private int xCashier = 780, yCashier = 40;
+    private int xExit = 0, yExit = 450;//Exit
     public class CookingFood {;
     	String food;
     	int xPos;
@@ -44,8 +46,6 @@ public class CookGui implements Gui {
     }
     private List<PlatedFood> pFood = new ArrayList<PlatedFood>();
     private List<CookingFood> cFood = new ArrayList<CookingFood>();
-    public int xTable = 100;
-    public int yTable = 200;
 	private static final int dishOffSetX = 20;
 	
 
@@ -65,10 +65,6 @@ public class CookGui implements Gui {
             yPos++;
         else if (yPos > yDestination)
             yPos--;
-
-        if (xPos == xDestination && yPos == yDestination & (xDestination == xTable + 20) & (yDestination == yTable - 20)) {
-        	
-        }
     }
 
     public void draw(Graphics2D g) {

@@ -17,10 +17,11 @@ public class WaiterGui implements Gui {
 	private boolean wantsBreak = false;
 	private boolean onBreak = false;
 	private String currentDish;
-    private int xPos = -20, yPos = -20;//default waiter position
-    private int xDestination = -20, yDestination = -20;//default start position
-    private int xHome = 100, yHome = 50;//waiter Home positions
-    private int xCWaitArea = 40, yCWaitArea = 20;//Customer Waiting area.
+	private int xPos = 0, yPos = 450;//default cook position
+	private int xDestination = 0, yDestination = 450;//default start position
+	private int xExit = 0, yExit = 450;//Exit
+    private int xHome = 120, yHome = 30;//waiter Home positions
+    private int xCWaitArea = 120, yCWaitArea = 30;//Customer Waiting area.
     
     private class ServedFood {;
     	String food;
@@ -35,16 +36,16 @@ public class WaiterGui implements Gui {
     	}
     }
     private List<ServedFood>foodOnTable = new ArrayList<ServedFood>();
-    public int xTable = 100;
-    public int yTable = 200;
-    private static final int tableSpawnX = 100;
-	private static final int tableSpawnY = 200;
-	private static final int tableOffSetX = 100;
+    public int xTable = 160;
+    public int yTable = 170;
+    private static final int tableSpawnX = 160;
+	private static final int tableSpawnY = 170;
+	private static final int tableOffSetX = 180;
 	
-	private static final int cookX = 300; 
-	private static final int cookY = 400;
-	private static final int cashierX = 50; 
-	private static final int cashierY = 500;
+	private static final int cookX = 640; 
+	private static final int cookY = 270;
+	private static final int cashierX = 780; 
+	private static final int cashierY = 40;
 
 	//private HostAgent host;
 
