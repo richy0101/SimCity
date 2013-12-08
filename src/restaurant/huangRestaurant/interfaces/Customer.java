@@ -2,7 +2,7 @@ package restaurant.huangRestaurant.interfaces;
 
 import restaurant.huangRestaurant.Check;
 import restaurant.huangRestaurant.Menu;
-import restaurant.huangRestaurant.WaiterAgent;
+import restaurant.huangRestaurant.HuangWaiterRole;
 import restaurant.huangRestaurant.gui.CustomerGui;
 
 
@@ -17,7 +17,7 @@ public interface Customer {
 	public void msgGetOut();
 	public void msgOutOfChoice();
 	public void msgHereIsYourCheck(Cashier ca, Check cx);
-	public void msgFollowMe(WaiterAgent w, Menu m, int table);
+	public void msgFollowMe(HuangWaiterRole w, Menu m, int table);
 	public void msgWhatDoYouWant();
 	public void msgHereIsYourFood();
 	public void msgAnimationFinishedPay();

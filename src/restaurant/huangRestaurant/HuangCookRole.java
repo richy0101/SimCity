@@ -1,0 +1,573 @@
+package restaurant.huangRestaurant;
+
+
+import agent.Role;
+
+import java.util.*;
+import java.util.concurrent.Semaphore;
+
+
+import restaurant.huangRestaurant.gui.CookGui;
+
+
+
+
+/**
+ * Restaurant Cook Agent
+ */
+//We only have 2 types of agents in this prototype. A customer and an agent that
+//does all the rest. Rather than calling the other agent a waiter, we called him
+//the HostAgent. A Host is the manager of a restaurant who sees that all
+//is proceeded as he wishes.
+public class HuangCookRole extends Role {
+	public HuangHostAgent host;
+	public CookGui gui;
+	private enum OrderState {Pending, Cooking, Done, Plated, out};
+	private class Order {
+		private HuangWaiterRole w;
+		public String choice;
+		public int table;
+		private OrderState state;
+		Order(HuangWaiterRole w, String choice, int table) {
+			this.w = w;
+			this.choice = choice;
+			this.table = table;
+			this.state = OrderState.Pending;
+		}
+	}
+	public List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
+	
+	Timer timer = new Timer();
+	private class CookTimerTask extends TimerTask {
+		Order o;
+		HuangCookRole cook;
+		public CookTimerTask(Order o, HuangCookRole cook) {
+			this.o = o;
+			this.cook = cook;
+		}
+		@Override
+		public void run() {
+	
+		}
+	}
+
+	public static class Food {
+		public String type;
+		public int preparationTime;
+		public int stock;
+		public Food(String type) {
+			this.type = type;
+			if (this.type == "Chicken") {
+				preparationTime = 5000;
+			}
+			else if (this.type == "Steak") {
+				preparationTime = 9000;
+			}
+			else if (this.type == "Salad") {
+				preparationTime = 4000;
+			}
+			else if (this.type == "Pizza") {
+				preparationTime = 7000;
+			}
+			stock = 0;
+		}
+	}
+	private List<Food> inventory = Collections.synchronizedList(new ArrayList<Food>());
+	
+	private enum MarketReqState {notSent,pending, canBeFulfilled, canBeHalfAssed, cannotBeFulfilled, Requested, Received}
+	private class MarketRequest {
+		private MarketReqState state;
+		String request;
+		public MarketAgent m;
+		public int requirement;
+		
+		public MarketRequest(String request, int requestStock) {
+			this.request = request;
+			this.requirement = requestStock;
+			this.state = MarketReqState.notSent;
+		}
+		public void setMarket(MarketAgent m) {
+			this.m = m;
+		}
+	}
+	private List<MarketRequest> marketRequests = Collections.synchronizedList(new ArrayList<MarketRequest>());
+	
+	private enum MarketState {inStock, outOfStock, delivering, delivered, accept, reject, uncalled};
+	private class MyMarket {
+		private int number;
+		private MarketAgent m;
+		private MarketState state;
+		private boolean Chicken;
+		private boolean Steak;
+		private boolean Pizza;
+		private boolean Salad;
+		private Stack<String> rejected = new Stack<String>();
+		public MyMarket(MarketAgent m, int i) {
+			this.number = i;
+			this.m = m;
+			this.Chicken = true;
+			this.Steak = true;
+			this.Pizza = true;
+			this.Salad = true;
+			state = MarketState.inStock;
+		}
+	}
+	private List<MyMarket> markets = Collections.synchronizedList(new ArrayList<MyMarket>());
+	private static final int requestStock = 5;
+	private static final int totalMarkets = 3;
+	private static final int threshold = 2;
+	
+	private Semaphore processingMarketResponse = new Semaphore(1, true);
+	//private Semaphore removingOrders = new Semaphore(0, true);
+	//private Semaphore removingOrders = new Semaphore(0, true);
+	private String name;
+	public HuangCookRole(String name, HuangHostAgent host) {
+		this.host = host;
+		this.name = name;
+		//Set up inventory
+		Food initialFood = new Food("Chicken");
+		inventory.add(initialFood);
+		initialFood = new Food ("Steak");
+		inventory.add(initialFood);
+		initialFood = new Food ("Salad");
+		inventory.add(initialFood);
+		initialFood = new Food ("Pizza");
+		inventory.add(initialFood);
+		//Set up markets
+		MarketAgent market;
+		MyMarket mm;
+		for(int i = 0; i < totalMarkets; i++ ) {
+			market = new MarketAgent(this, String.valueOf(i));
+			mm = new MyMarket(market, i);
+			markets.add(mm);
+		}
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	// Messages
+	public void msgHereIsDelivery(String type, int resupply) {
+		System.out.println(name + ": msgHereIsDelivery received: Cook: Kitchen inventory replenished!");
+		for (Food i : inventory) {
+			if (i.type.equals(type)) {
+				i.stock += resupply;
+				break;
+			}
+		}
+		for (MarketRequest mr: marketRequests) {
+			if (mr.request.equals(type)) {
+				if(mr.requirement - resupply <= 0) {
+					mr.state = MarketReqState.Received;
+					break;
+				}
+				else {
+					mr.requirement -= resupply;
+					mr.state = MarketReqState.notSent;
+					break;
+				}
+			}
+			
+		}
+		stateChanged();
+	}
+	public void msgRequestGood(String request, MarketAgent m) {
+		processingMarketResponse.acquireUninterruptibly();
+		for (MarketRequest mr: marketRequests) {
+			if(mr.request.equals(request)) {
+				if(!mr.state.equals(MarketReqState.canBeFulfilled) && !mr.state.equals(MarketReqState.Requested)) {
+					System.out.println(name + ": msgRequestGood received: Cook: Market has good stock.");
+					mr.setMarket(m);
+					mr.state = MarketReqState.canBeFulfilled;
+					break;
+				}
+				else if (mr.state.equals(MarketReqState.canBeFulfilled)){
+					for (MyMarket mm: markets) {
+						if (mm.m.equals(m)) {
+							mm.state = MarketState.reject;
+							mm.rejected.add(request);
+							break;
+						}
+					}
+					break;
+				}
+			}
+		}
+		processingMarketResponse.release();
+		stateChanged();
+	}
+	public void msgRequestBad(String request, MarketAgent m) {
+		System.out.println(name + ": msgRequestBad received: Cook: Market is out of that food");
+		if(request == "Chicken") {
+			synchronized(markets) {
+				for(MyMarket mm: markets) {
+					if (mm.m.equals(m)) {
+						mm.Chicken = false;
+					}
+				}
+			}
+		}
+		else if(request == "Steak") {
+			synchronized(markets) {
+				for(MyMarket mm: markets) {
+					if (mm.m.equals(m)) {
+						mm.Steak = false;
+					}
+				}
+			}
+		}
+		else if(request == "Pizza") {
+			synchronized(markets) {
+				for(MyMarket mm: markets) {
+					if (mm.m.equals(m)) {
+						mm.Pizza = false;
+					}
+				}
+			}
+		}
+		else if(request == "Salad") {
+			synchronized(markets) {
+				for(MyMarket mm: markets) {
+					if (mm.m.equals(m)) {
+						mm.Salad = false;
+					}
+				}
+			}
+		}
+		synchronized(marketRequests) {
+			for (MarketRequest mr: marketRequests) {
+				if(mr.request.equals(request)) {
+					if(mr.state.equals(MarketReqState.pending)) {
+						mr.setMarket(m);
+						mr.state = MarketReqState.cannotBeFulfilled;
+						break;
+					}
+				}
+			}
+		}
+		stateChanged();
+	}
+	public void msgRequestHalf(String request, MarketAgent m, int stock) {
+		processingMarketResponse.acquireUninterruptibly();
+		for (MarketRequest mr: marketRequests) {
+			if(mr.request.equals(request)) {
+				if(!mr.state.equals(MarketReqState.canBeFulfilled) && !mr.state.equals(MarketReqState.canBeHalfAssed) && !mr.state.equals(MarketReqState.Requested)) {
+					System.out.println(name + ": msgRequestHalf received: Cook: Market can somewhat fulfill my order.");
+					mr.setMarket(m);
+					mr.state = MarketReqState.canBeHalfAssed;
+					break;
+				}
+				else if (mr.state.equals(MarketReqState.canBeHalfAssed) || mr.state.equals(MarketReqState.canBeFulfilled) || mr.state.equals(MarketReqState.Requested)){
+					for (MyMarket mm: markets) {
+						if (mm.m.equals(m)) {
+							mm.state = MarketState.reject;
+							mm.rejected.add(request);
+							break;
+						}
+					}
+					break;
+				}
+			}
+		}
+		processingMarketResponse.release();
+		stateChanged();
+		/*
+		System.out.println(name + ": msgRequestHalf received: Cook: Cannot fully fulfill my order");
+		synchronized(marketRequests) {
+			for (MarketRequest mr: marketRequests) {
+				if(mr.request.equals(request)) {
+					if(!mr.state.equals("canBeFulfilled")) {
+						mr.setMarket(m);
+						mr.state = MarketReqState.canBeHalfAssed;
+						mr.requirement -= stock;
+						break;
+					}
+				}
+			}
+		}
+		stateChanged();*/
+	}
+	public void msgHereIsOrder(HuangWaiterRole w, String choice, int table) {
+		orders.add(new Order(w, choice, table));
+		System.out.println(name + ": msgHereIsOrder received: Cook: Got the Order!");
+		stateChanged();
+	}
+
+	public void msgFoodDone(Order o){
+		o.state = OrderState.Done;
+		System.out.println(name + ": msgFoodDone received: This dish is done!");
+		stateChanged();
+	}
+	public void msgHereIsRestock(List<Food> currentOrder) {
+		inventory.clear();
+		inventory = currentOrder;
+		System.out.println(name + ": msgHereIsRestock received: More vespene gas recieved!");
+		stateChanged();
+	}
+
+	/**
+	 * Scheduler.  Determine what action is called for, and do it.
+	 */
+	public boolean pickAndExecuteAnAction() {
+		//rule 1
+		synchronized(orders) {
+			for (Order o: orders) {
+				if(o.state.equals(OrderState.Pending)) {
+					tryCook(o);
+					return true;
+				}
+			}
+		}
+		synchronized(orders) {
+			for (Order o: orders) {
+				if(o.state.equals(OrderState.Done)) {
+					plateIt(o);
+					return true;
+				}
+			}
+		}
+		synchronized(markets) {
+			for (MyMarket mm: markets) {
+					if (mm.state.equals(MarketState.reject)) {
+						//removingOrders.release();
+						tellMarketCancelOrder(mm);
+						mm.state = MarketState.uncalled;
+						//mm.rejected.clear();
+						return true;
+					}
+			}
+		}
+		synchronized(marketRequests) {
+			for (MarketRequest mr: marketRequests) {
+				if (mr.state.equals(MarketReqState.notSent)) {
+					callForRestock(mr.request, mr.requirement);
+					mr.state = MarketReqState.pending;
+					return true;
+				}
+			}
+		}
+		synchronized(marketRequests) {
+			for (MarketRequest mr: marketRequests) {
+				if (mr.state.equals(MarketReqState.canBeFulfilled)) {
+					mr.state = MarketReqState.Requested;
+					askForDelivery(mr);
+					return true;
+				}
+			}
+		}
+		synchronized(marketRequests) {
+			for (MarketRequest mr: marketRequests) {
+				if (mr.state.equals(MarketReqState.canBeHalfAssed)) {
+					askForDelivery(mr);
+					mr.state = MarketReqState.Requested;
+					return true;
+				}
+			}
+		}
+		synchronized(marketRequests) {
+			for (MarketRequest mr: marketRequests) {
+				if (mr.state.equals(MarketReqState.cannotBeFulfilled)) {
+					/** Perhaps tell host that this item is now off the menu? */
+					marketRequests.remove(mr);
+					return true;
+				}
+			}
+		}
+		synchronized(marketRequests) {
+			for (MarketRequest mr: marketRequests) {
+				if (mr.state.equals(MarketReqState.Received)) {
+					marketRequests.remove(mr);
+					return true;
+				}
+			}
+		}
+		
+		//rule 2
+		checkInventory();
+		return false;
+		//we have tried all our rules and found
+		//nothing to do. So return false to main loop of abstract agent
+		//and wait.
+	}
+
+
+	// Actions	
+	private void DoCook(Order o) {
+		gui.DoCookDish(o.choice, o.table);
+	}
+	private void DoPlate(Order o) {
+		gui.DoPlateDish(o.table);
+	}
+	private void tellMarketCancelOrder(MyMarket mm) {
+		if(!mm.rejected.isEmpty()) {
+					mm.m.msgCancelOrder(mm.rejected.pop());
+		}
+	}
+	private void askForDelivery(MarketRequest mr) {
+		mr.m.msgPlsDeliverRequest(mr.request);	
+	}
+	private void callForRestock(String foodType, int requirement) {
+		/*int reportedStock = 0;
+		for (Food f: inventory) {
+			if(f.type.equals(foodType)) {
+				reportedStock = f.stock;
+				break;
+			}
+		}*/
+		for (MyMarket m: markets) {
+			if(foodType == "Chicken") {
+				if (m.Chicken == true) {
+					m.m.msgWhatIsYourStockState(foodType, requirement);
+				}
+			}
+			else if(foodType == "Steak") {
+				if (m.Steak == true) {
+					m.m.msgWhatIsYourStockState(foodType, requirement);
+				}
+			}
+			else if(foodType == "Salad") {
+				if (m.Salad == true) {
+					m.m.msgWhatIsYourStockState(foodType, requirement);
+				}
+			}
+			else if(foodType == "Pizza") {
+				if (m.Pizza == true) {
+					m.m.msgWhatIsYourStockState(foodType, requirement);
+				}
+			}
+		}
+	}
+	private void checkInventory() {
+		boolean exists = false;
+		synchronized(inventory) {
+			for (Food f: inventory) {
+				if ((int)f.stock <= threshold) {
+					if (!marketRequests.isEmpty()) {
+						synchronized(marketRequests) {
+							for (MarketRequest m: marketRequests) {
+								if(m.request.equals(f.type)) {
+									exists = true;
+									break;
+								}
+							}
+						}
+						if (exists == true) {
+							exists = false;
+							continue;
+						}
+						MarketRequest mr = new MarketRequest(f.type, requestStock);
+						marketRequests.add(mr);
+					}
+				}
+			}
+		}
+	}
+
+	private void tryCook(Order o) {
+		int time;
+		synchronized(inventory) {
+			for (Food f: inventory) {
+				if (f.type.equals(o.choice)) {
+					if ((int) f.stock > threshold) {
+						f.stock--;
+						time = f.preparationTime;
+						timer.schedule(new CookTimerTask(o, this) {
+							public void run() {
+								cook.msgFoodDone(o);
+							}
+						},
+						time);//time for cooking
+						o.state = OrderState.Cooking;
+						DoCook(o);
+						break;
+					}
+					else if((int) f.stock <= threshold) {
+						if ((int) f.stock > 0) {
+							f.stock--;
+							time = f.preparationTime;
+							timer.schedule(new CookTimerTask(o, this) {
+								public void run() {
+									cook.msgFoodDone(o);
+								}
+							},
+							time);//time for cooking
+							o.state = OrderState.Cooking;
+							DoCook(o);
+							if (!marketRequests.isEmpty()) {
+								for (MarketRequest m: marketRequests) {
+									if(m.request.equals(o.choice)) {
+										break;
+									}
+								}
+								break;
+							}
+							MarketRequest mr = new MarketRequest(o.choice, requestStock);
+							marketRequests.add(mr);
+						}
+						else if ((int) f.stock <= 0) {
+							o.state = OrderState.out;
+							o.w.msgOutOfChoice(o.choice, o.table);
+							if (!marketRequests.isEmpty()) {
+								for (MarketRequest m: marketRequests) {
+									if(m.request.equals(o.choice)) {
+										break;
+									}
+								}
+								break;
+							}
+							MarketRequest mr = new MarketRequest(o.choice, requestStock);
+							marketRequests.add(mr);
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void plateIt(Order o) {
+		o.w.msgOrderDone(o.choice, o.table);
+		o.state = OrderState.Plated;
+		DoPlate(o);
+	}
+	//utilities
+	public void setGui(CookGui gui) {
+		this.gui = gui;
+	}
+	public void emptyRandomMarket() {
+		Random rng = new Random();
+		int r = rng.nextInt();
+		if(r % 3 == 0) {
+			synchronized(markets) {
+				for (MyMarket mm: markets) {
+					if (mm.number == 0) {
+						mm.m.emptyMarket();
+						break;
+					}
+				}
+			}
+		}
+		else if(r % 3 == 1) {
+			synchronized(markets) {
+				for (MyMarket mm: markets) {
+					if (mm.number == 1) {
+						mm.m.emptyMarket();
+						break;
+					}
+				}
+			}
+		}
+		else {
+			synchronized(markets) {
+				for (MyMarket mm: markets) {
+					if (mm.number == 2) {
+						mm.m.emptyMarket();
+						break;
+					}
+				}	
+			}
+		}
+	}
+}
+

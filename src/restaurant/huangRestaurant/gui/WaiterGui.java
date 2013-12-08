@@ -5,13 +5,13 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import restaurant.huangRestaurant.WaiterAgent;
+import restaurant.huangRestaurant.HuangWaiterRole;
 import restaurant.huangRestaurant.interfaces.Customer;
 
 
 
 public class WaiterGui implements Gui {
-	private WaiterAgent agent = null;
+	private HuangWaiterRole agent = null;
 	private boolean seatingNew = false;
 	private boolean carryingFood = false;
 	private boolean wantsBreak = false;
@@ -47,14 +47,11 @@ public class WaiterGui implements Gui {
 	private static final int cashierY = 500;
 
 	//private HostAgent host;
-	RestaurantGui gui;
-	
-    public WaiterGui(WaiterAgent agent, RestaurantGui gui, int iterator) {
-        this.agent = agent;
-		this.gui = gui;
-		this.setHome(iterator);
-    }
-    public void updatePosition() {
+
+    public WaiterGui(HuangWaiterRole huangWaiterRole) {
+		// TODO Auto-generated constructor stub
+	}
+	public void updatePosition() {
 
         if (xPos < xDestination)
             xPos++;

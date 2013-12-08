@@ -78,9 +78,9 @@ public class MarketAgent extends Agent implements Market {
 	}
 	
 	public List<MarketFood> inventory = Collections.synchronizedList(new ArrayList<MarketFood>());
-	private CookAgent cook;
+	private HuangCookRole cook;
 	private String name;
-	public MarketAgent(CookAgent c, String name) {
+	public MarketAgent(HuangCookRole c, String name) {
 		this.cook = c;
 		this.name = name;
 		MarketFood initialMarketFood = new MarketFood("Chicken");

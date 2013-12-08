@@ -1,18 +1,16 @@
 package restaurant.huangRestaurant.gui;
 
-import restaurant.huangRestaurant.CustomerAgent;
-import restaurant.huangRestaurant.WaiterAgent;
+import restaurant.huangRestaurant.HuangCustomerRole;
+import restaurant.huangRestaurant.HuangWaiterRole;
 
 import java.awt.*;
 
 public class CustomerGui implements Gui{
 
-	private CustomerAgent agent = null;
+	private HuangCustomerRole agent = null;
 	private boolean isPresent = false;
 	private boolean isHungry = false;
 
-	
-	RestaurantGui gui;
 
 	private int xPos, yPos;
 	private int xDestination, yDestination;
@@ -24,14 +22,13 @@ public class CustomerGui implements Gui{
 	private enum Command {noCommand, GoToSeat, GoToPay, LeaveRestaurant};
 	private Command command=Command.noCommand;
 
-	public CustomerGui(CustomerAgent c, RestaurantGui gui){ //HostAgent m) {
+	public CustomerGui(HuangCustomerRole c){ //HostAgent m) {
 		agent = c;
 		xPos = 20;
 		yPos = 0;
 		xDestination = 20;
 		yDestination = 0;
 		//maitreD = m;
-		this.gui = gui;
 	}
 
 	public void updatePosition() {
@@ -56,7 +53,6 @@ public class CustomerGui implements Gui{
 				agent.msgAnimationFinishedLeaveRestaurant();
 				System.out.println("about to call gui.setCustomerEnabled(agent);");
 				isHungry = false;
-				gui.setCustomerEnabled(agent);
 			}
 			command=Command.noCommand;
 		}

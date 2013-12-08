@@ -3,7 +3,7 @@ package restaurant.huangRestaurant.test.mock;
 
 import restaurant.huangRestaurant.Check;
 import restaurant.huangRestaurant.Menu;
-import restaurant.huangRestaurant.WaiterAgent;
+import restaurant.huangRestaurant.HuangWaiterRole;
 import restaurant.huangRestaurant.gui.CustomerGui;
 import restaurant.huangRestaurant.interfaces.Cashier;
 import restaurant.huangRestaurant.interfaces.Customer;
@@ -44,7 +44,7 @@ public class MockCustomer extends Mock implements Customer {
 		
 	}
 	@Override
-	public void msgFollowMe(WaiterAgent w, Menu m, int table) {
+	public void msgFollowMe(HuangWaiterRole w, Menu m, int table) {
 		
 	}
 	@Override

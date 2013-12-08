@@ -5,18 +5,13 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import restaurant.huangRestaurant.CookAgent;
-import restaurant.huangRestaurant.WaiterAgent;
-import restaurant.huangRestaurant.interfaces.Customer;
+import restaurant.huangRestaurant.HuangCookRole;
+
 
 
 
 public class CookGui implements Gui {
-	private CookAgent agent = null;
-	private boolean seatingNew = false;
-	private boolean carryingFood = false;
-	private boolean wantsBreak = false;
-	private boolean onBreak = false;
+	private HuangCookRole agent = null;
 	private String currentDish;
     private int xPos = 320, yPos = 415;//default waiter position
     private int xDestination = 320, yDestination = 415;//default start position
@@ -55,11 +50,9 @@ public class CookGui implements Gui {
 	
 
 	//private HostAgent host;
-	RestaurantGui gui;
 	
-    public CookGui(CookAgent agent, RestaurantGui gui) {
+    public CookGui(HuangCookRole agent) {
         this.agent = agent;
-		this.gui = gui;
     }
     public void updatePosition() {
 

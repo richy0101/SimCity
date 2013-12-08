@@ -1,12 +1,12 @@
 package restaurant.huangRestaurant.test;
 
-import restaurant.huangRestaurant.CashierAgent;
+import restaurant.huangRestaurant.HuangCashierAgent;
 import restaurant.huangRestaurant.Check;
 import restaurant.huangRestaurant.FoodBill;
-import restaurant.huangRestaurant.CashierAgent.BillState;
-import restaurant.huangRestaurant.CashierAgent.Order;
-import restaurant.huangRestaurant.CashierAgent.OrderState;
-import restaurant.huangRestaurant.CashierAgent.freeLoaderState;
+import restaurant.huangRestaurant.HuangCashierAgent.BillState;
+import restaurant.huangRestaurant.HuangCashierAgent.Order;
+import restaurant.huangRestaurant.HuangCashierAgent.OrderState;
+import restaurant.huangRestaurant.HuangCashierAgent.freeLoaderState;
 import restaurant.huangRestaurant.interfaces.Customer;
 import restaurant.huangRestaurant.interfaces.Waiter;
 import restaurant.huangRestaurant.test.mock.MockCustomer;
@@ -25,7 +25,7 @@ import junit.framework.*;
 public class CashierTest extends TestCase
 {
 	//these are instantiated for each test separately via the setUp() method.
-	CashierAgent cashier;
+	HuangCashierAgent cashier;
 	MockWaiter waiter;
 	MockCustomer customer;
 	MockCustomer customer2;
@@ -42,7 +42,7 @@ public class CashierTest extends TestCase
 	 */
 	public void setUp() throws Exception{
 		super.setUp();		
-		cashier = new CashierAgent("cashier");		
+		cashier = new HuangCashierAgent("cashier");		
 		customer = new MockCustomer("mockcustomer");
 		customer2 = new MockCustomer("mockcustomer");
 		customer3 = new MockCustomer("mockcustomer");

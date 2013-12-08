@@ -8,7 +8,7 @@ import java.util.List;
 import restaurant.huangRestaurant.Check;
 import restaurant.huangRestaurant.FoodBill;
 import restaurant.huangRestaurant.Menu;
-import restaurant.huangRestaurant.WaiterAgent;
+import restaurant.huangRestaurant.HuangWaiterRole;
 import restaurant.huangRestaurant.MarketAgent.MarketFood;
 import restaurant.huangRestaurant.MarketAgent.MyBill;
 import restaurant.huangRestaurant.gui.CustomerGui;

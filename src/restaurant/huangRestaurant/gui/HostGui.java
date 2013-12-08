@@ -1,14 +1,14 @@
 package restaurant.huangRestaurant.gui;
 
 
-import restaurant.huangRestaurant.CustomerAgent;
-import restaurant.huangRestaurant.HostAgent;
+import restaurant.huangRestaurant.HuangCustomerRole;
+import restaurant.huangRestaurant.HuangHostAgent;
 
 import java.awt.*;
 
 public class HostGui implements Gui {
 
-    private HostAgent agent = null;
+    private HuangHostAgent agent = null;
 
     private int xPos = -20, yPos = -20;//default waiter position
     private int xDestination = -20, yDestination = -20;//default start position
@@ -16,7 +16,7 @@ public class HostGui implements Gui {
     public int xTable = 200;
     public int yTable = 250;
 
-    public HostGui(HostAgent agent) {
+    public HostGui(HuangHostAgent agent) {
         this.agent = agent;
     }
 
