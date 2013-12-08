@@ -69,6 +69,9 @@ public class CurrentBuildingPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.EAST, steakSlider, 0, SpringLayout.EAST, btnCloseBuilding);
 		add(steakSlider);
 		
+		steakSlider.setMajorTickSpacing(5);
+		steakSlider.setPaintTicks(true);
+		
 		int beginningChickenMin = 0;
 		int beginningChickenMax = 100;
 		int beginningChickenStart = 50;
@@ -82,6 +85,9 @@ public class CurrentBuildingPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.WEST, chickenSlider, 0, SpringLayout.WEST, btnCloseBuilding);
 		springLayout.putConstraint(SpringLayout.EAST, chickenSlider, 0, SpringLayout.EAST, btnCloseBuilding);
 		add(chickenSlider);
+		
+		chickenSlider.setMajorTickSpacing(5);
+		chickenSlider.setPaintTicks(true);
 		
 		int beginningPizzaMin = 0;
 		int beginningPizzaMax = 100;
@@ -97,6 +103,9 @@ public class CurrentBuildingPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.EAST, pizzaSlider, 0, SpringLayout.EAST, btnCloseBuilding);
 		add(pizzaSlider);
 		
+		pizzaSlider.setMajorTickSpacing(5);
+		pizzaSlider.setPaintTicks(true);
+		
 		int beginningSaladMin = 0;
 		int beginningSaladMax = 100;
 		int beginningSaladStart = 50;
@@ -110,22 +119,25 @@ public class CurrentBuildingPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.EAST, saladSlider, 0, SpringLayout.EAST, btnCloseBuilding);
 		add(saladSlider);
 		
-		JLabel saladNumber = new JLabel("0");
+		saladSlider.setMajorTickSpacing(5);
+		saladSlider.setPaintTicks(true);
+		
+		JLabel saladNumber = new JLabel("50");
 		springLayout.putConstraint(SpringLayout.NORTH, saladNumber, 0, SpringLayout.NORTH, lblSalad);
 		springLayout.putConstraint(SpringLayout.EAST, saladNumber, 0, SpringLayout.EAST, btnCloseBuilding);
 		add(saladNumber);
 		
-		JLabel pizzaNumber = new JLabel("0");
+		JLabel pizzaNumber = new JLabel("50");
 		springLayout.putConstraint(SpringLayout.SOUTH, pizzaNumber, 0, SpringLayout.SOUTH, lblPizza);
 		springLayout.putConstraint(SpringLayout.EAST, pizzaNumber, 0, SpringLayout.EAST, btnCloseBuilding);
 		add(pizzaNumber);
 		
-		JLabel chickenNumber = new JLabel("0");
+		JLabel chickenNumber = new JLabel("50");
 		springLayout.putConstraint(SpringLayout.WEST, chickenNumber, 0, SpringLayout.WEST, saladNumber);
 		springLayout.putConstraint(SpringLayout.SOUTH, chickenNumber, 0, SpringLayout.SOUTH, lblChicken);
 		add(chickenNumber);
 		
-		JLabel steakNumber = new JLabel("0");
+		JLabel steakNumber = new JLabel("50");
 		springLayout.putConstraint(SpringLayout.SOUTH, steakNumber, 0, SpringLayout.SOUTH, lblSteak);
 		springLayout.putConstraint(SpringLayout.EAST, steakNumber, 0, SpringLayout.EAST, btnCloseBuilding);
 		add(steakNumber);

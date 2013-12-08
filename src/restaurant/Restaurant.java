@@ -1,8 +1,12 @@
 package restaurant;
 
+import java.util.HashMap;
+
 import restaurant.stackRestaurant.ProducerConsumerMonitor;
 
 public class Restaurant {
+	
+	private HashMap<String, FoodData> foodInventory = new HashMap<String, FoodData>();
 
 	private ProducerConsumerMonitor monitor;
 	public Restaurant() {
@@ -23,6 +27,18 @@ public class Restaurant {
 	
 	public ProducerConsumerMonitor getMonitor() {
 		return monitor;
+	}
+	
+	public void msgChangeFoodInventory(String type, int quantity) {
+		
+	}
+	
+	public HashMap<String, FoodData> getFoodInventory() {
+		return foodInventory;
+	}
+	
+	private class FoodData {
+		
 	}
 
 }

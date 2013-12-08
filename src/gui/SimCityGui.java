@@ -51,10 +51,10 @@ public class SimCityGui {
 	private JFrame frame;
 	private Map<String, String> roles = new HashMap<String, String>();
 	private HashMap<String, CityCard> cards = new HashMap<String, CityCard>();
-//	BusAgent bus;
-//	BusAgent bus2;
-//	BusGui busGui;
-//	BusGui busGui2;
+	BusAgent bus;
+	BusAgent bus2;
+	BusGui busGui;
+	BusGui busGui2;
 	
 	/**
 	 * Launch the application.
