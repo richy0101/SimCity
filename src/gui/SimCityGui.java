@@ -189,7 +189,7 @@ public class SimCityGui {
 		final JButton btnPopulateCity = new JButton("Populate City");
 		btnPopulateCity.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				populateCity();	
+				populateCity("src/city/helpers/supernormative.xml");	
 				btnPopulateCity.setEnabled(false);
 				
 			}
@@ -452,14 +452,14 @@ public class SimCityGui {
 		sl_panel.putConstraint(SpringLayout.WEST, lblSpeed, 0, SpringLayout.WEST, btnCreatePerson);
 		panel.add(lblSpeed);
 		
-		final JLabel lblSpeedMeter = new JLabel("3");
+		final JLabel lblSpeedMeter = new JLabel("5");
 		sl_panel.putConstraint(SpringLayout.NORTH, lblSpeedMeter, 0, SpringLayout.NORTH, lblSpeed);
 		sl_panel.putConstraint(SpringLayout.EAST, lblSpeedMeter, 0, SpringLayout.EAST, btnCreatePerson);
 		panel.add(lblSpeedMeter);
 		
 		int beginningSpeedMin = 1;
-		int beginningSpeedMax = 5;
-		int beginningSpeedStart = 3;
+		int beginningSpeedMax = 10;
+		int beginningSpeedStart = 5;
 		final JSlider speedSlider = new JSlider(beginningSpeedMin, beginningSpeedMax, beginningSpeedStart);
 		speedSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -479,9 +479,9 @@ public class SimCityGui {
 		
 	}
 	
-	private void populateCity() {
+	private void populateCity(String source) {
 		XMLReader reader = new XMLReader();
-		ArrayList<PersonAgent> people = reader.initializePeople();
+		ArrayList<PersonAgent> people = reader.initializePeople(source);
 		for(PersonAgent person : people) {
 			person.startThread();
 		}	

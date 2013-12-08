@@ -5,13 +5,31 @@ import javax.swing.JLabel;
 import javax.swing.SpringLayout;
 import javax.swing.JButton;
 import javax.swing.JSlider;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
+import bank.Bank;
+import market.interfaces.Market;
+import restaurant.Restaurant;
+
 public class CurrentBuildingPanel extends JPanel {
 	String type;
+	Restaurant restaurant;
+	Bank bank;
+	Market market;
+	private JLabel steakNumber;
+	private JLabel chickenNumber;
+	private JLabel pizzaNumber;
+	private JLabel saladNumber;
+	private JSlider saladSlider;
+	private JSlider pizzaSlider;
+	private JSlider chickenSlider;
+	private JSlider steakSlider;
+	
 	public CurrentBuildingPanel(String type) {
 		this.type = type;
 //		if(type.contains("restaurant")) {
@@ -26,6 +44,9 @@ public class CurrentBuildingPanel extends JPanel {
 		JButton btnCloseBuilding = new JButton("Close Building");
 		btnCloseBuilding.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(restaurant != null) {
+					restaurant.msgChangeOpen();
+				}
 			}
 		});
 		springLayout.putConstraint(SpringLayout.WEST, btnCloseBuilding, 10, SpringLayout.WEST, this);
@@ -58,9 +79,12 @@ public class CurrentBuildingPanel extends JPanel {
 		int beginningSteakMin = 0;
 		int beginningSteakMax = 100;
 		int beginningSteakStart = 50;
-		JSlider steakSlider = new JSlider(beginningSteakMin, beginningSteakMax, beginningSteakStart);
+		steakSlider = new JSlider(beginningSteakMin, beginningSteakMax, beginningSteakStart);
 		steakSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
+				if(restaurant != null) {
+					restaurant.msgChangeFoodInventory("Steak", steakSlider.getValue());
+				}
 			}
 		});
 		springLayout.putConstraint(SpringLayout.NORTH, lblChicken, 6, SpringLayout.SOUTH, steakSlider);
@@ -75,9 +99,12 @@ public class CurrentBuildingPanel extends JPanel {
 		int beginningChickenMin = 0;
 		int beginningChickenMax = 100;
 		int beginningChickenStart = 50;
-		JSlider chickenSlider = new JSlider(beginningChickenMin, beginningChickenMax, beginningChickenStart);
+		chickenSlider = new JSlider(beginningChickenMin, beginningChickenMax, beginningChickenStart);
 		chickenSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
+				if(restaurant != null) {
+					restaurant.msgChangeFoodInventory("Chicken", chickenSlider.getValue());
+				}
 			}
 		});
 		springLayout.putConstraint(SpringLayout.NORTH, lblPizza, 6, SpringLayout.SOUTH, chickenSlider);
@@ -92,9 +119,12 @@ public class CurrentBuildingPanel extends JPanel {
 		int beginningPizzaMin = 0;
 		int beginningPizzaMax = 100;
 		int beginningPizzaStart = 50;
-		JSlider pizzaSlider = new JSlider(beginningPizzaMin, beginningPizzaMax, beginningPizzaStart);
+		pizzaSlider = new JSlider(beginningPizzaMin, beginningPizzaMax, beginningPizzaStart);
 		pizzaSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
+				if(restaurant != null) {
+					restaurant.msgChangeFoodInventory("Pizza", pizzaSlider.getValue());
+				}
 			}
 		});
 		springLayout.putConstraint(SpringLayout.NORTH, lblSalad, 6, SpringLayout.SOUTH, pizzaSlider);
@@ -109,9 +139,12 @@ public class CurrentBuildingPanel extends JPanel {
 		int beginningSaladMin = 0;
 		int beginningSaladMax = 100;
 		int beginningSaladStart = 50;
-		JSlider saladSlider = new JSlider(beginningSaladMin, beginningSaladMax, beginningSaladStart);
+		saladSlider = new JSlider(beginningSaladMin, beginningSaladMax, beginningSaladStart);
 		saladSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
+				if(restaurant != null) {
+					restaurant.msgChangeFoodInventory("Salad", saladSlider.getValue());
+				}
 			}
 		});
 		springLayout.putConstraint(SpringLayout.NORTH, saladSlider, 6, SpringLayout.SOUTH, lblSalad);
@@ -122,25 +155,45 @@ public class CurrentBuildingPanel extends JPanel {
 		saladSlider.setMajorTickSpacing(5);
 		saladSlider.setPaintTicks(true);
 		
-		JLabel saladNumber = new JLabel("50");
+		saladNumber = new JLabel("50");
 		springLayout.putConstraint(SpringLayout.NORTH, saladNumber, 0, SpringLayout.NORTH, lblSalad);
 		springLayout.putConstraint(SpringLayout.EAST, saladNumber, 0, SpringLayout.EAST, btnCloseBuilding);
 		add(saladNumber);
 		
-		JLabel pizzaNumber = new JLabel("50");
+		pizzaNumber = new JLabel("50");
 		springLayout.putConstraint(SpringLayout.SOUTH, pizzaNumber, 0, SpringLayout.SOUTH, lblPizza);
 		springLayout.putConstraint(SpringLayout.EAST, pizzaNumber, 0, SpringLayout.EAST, btnCloseBuilding);
 		add(pizzaNumber);
 		
-		JLabel chickenNumber = new JLabel("50");
+		chickenNumber = new JLabel("50");
 		springLayout.putConstraint(SpringLayout.WEST, chickenNumber, 0, SpringLayout.WEST, saladNumber);
 		springLayout.putConstraint(SpringLayout.SOUTH, chickenNumber, 0, SpringLayout.SOUTH, lblChicken);
 		add(chickenNumber);
 		
-		JLabel steakNumber = new JLabel("50");
+		steakNumber = new JLabel("50");
 		springLayout.putConstraint(SpringLayout.SOUTH, steakNumber, 0, SpringLayout.SOUTH, lblSteak);
 		springLayout.putConstraint(SpringLayout.EAST, steakNumber, 0, SpringLayout.EAST, btnCloseBuilding);
 		add(steakNumber);
 		
+	}
+	
+	public void msgChangeSteakInventory(int steakInventory) {
+		steakSlider.setValue(steakInventory);
+		steakNumber.setText(String.valueOf(steakInventory));
+	}
+	
+	public void msgChangeChickenInventory(int chickenInventory) {
+		chickenSlider.setValue(chickenInventory);
+		chickenNumber.setText(String.valueOf(chickenInventory));
+	}
+
+	public void msgChangePizzaInventory(int pizzaInventory) {
+		pizzaSlider.setValue(pizzaInventory);
+		pizzaNumber.setText(String.valueOf(pizzaInventory));
+	}
+
+	public void msgChangeSaladInventory(int saladInventory) {
+		saladSlider.setValue(saladInventory);
+		saladNumber.setText(String.valueOf(saladInventory));
 	}
 }
