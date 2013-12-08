@@ -33,6 +33,7 @@ import javax.swing.event.ChangeEvent;
 import market.MarketCustomerRole;
 import market.MarketRole;
 import restaurant.shehRestaurant.gui.ShehRestaurantAnimationPanel;
+import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
 import restaurant.stackRestaurant.StackCookRole;
 import restaurant.stackRestaurant.StackHostAgent;
 import restaurant.stackRestaurant.StackWaiterNormalRole;
@@ -142,6 +143,9 @@ public class SimCityGui {
 			else if(b.getName().toLowerCase().contains("sheh")) {
 				b.setBuildingPanel(new ShehRestaurantAnimationPanel(b, i, this));
 			}
+			else if(b.getName().toLowerCase().contains("tan")) {
+				b.setBuildingPanel(new TanRestaurantAnimationPanel(b, i, this));
+			}
 			else {
 				b.setBuildingPanel(new GUIMarket( b, i, this ));
 			}
@@ -174,10 +178,22 @@ public class SimCityGui {
 		SpringLayout sl_panel = new SpringLayout();
 		panel.setLayout(sl_panel);
 		
+		JPanel panel_1 = new JPanel();
+		tabbedPane.addTab("Current Building", null, panel_1, null);
+		SpringLayout sl_panel_1 = new SpringLayout();
+		panel_1.setLayout(sl_panel_1);
+		
+		JPanel panel_2 = new JPanel();
+		sl_panel_1.putConstraint(SpringLayout.NORTH, panel_2, 0, SpringLayout.NORTH, panel_1);
+		sl_panel_1.putConstraint(SpringLayout.WEST, panel_2, 0, SpringLayout.WEST, panel_1);
+		sl_panel_1.putConstraint(SpringLayout.SOUTH, panel_2, 689, SpringLayout.NORTH, panel_1);
+		sl_panel_1.putConstraint(SpringLayout.EAST, panel_2, 259, SpringLayout.WEST, panel_1);
+		panel_1.add(panel_2);
+		
 		final JButton btnPopulateCity = new JButton("Populate City");
 		btnPopulateCity.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				populateCity();	
+				populateCity("src/city/helpers/supernormative.xml");	
 				btnPopulateCity.setEnabled(false);
 				
 			}
@@ -443,19 +459,19 @@ public class SimCityGui {
 		sl_panel.putConstraint(SpringLayout.WEST, lblSpeed, 0, SpringLayout.WEST, btnCreatePerson);
 		panel.add(lblSpeed);
 		
-		final JLabel lblSpeedMeter = new JLabel("3");
+		final JLabel lblSpeedMeter = new JLabel("5");
 		sl_panel.putConstraint(SpringLayout.NORTH, lblSpeedMeter, 0, SpringLayout.NORTH, lblSpeed);
 		sl_panel.putConstraint(SpringLayout.EAST, lblSpeedMeter, 0, SpringLayout.EAST, btnCreatePerson);
 		panel.add(lblSpeedMeter);
 		
 		int beginningSpeedMin = 1;
-		int beginningSpeedMax = 5;
-		int beginningSpeedStart = 3;
+		int beginningSpeedMax = 10;
+		int beginningSpeedStart = 5;
 		final JSlider speedSlider = new JSlider(beginningSpeedMin, beginningSpeedMax, beginningSpeedStart);
 		speedSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				lblSpeedMeter.setText(speedSlider.getValue()+"");
-//				macroAnimationPanel.setSpeed(speedSlider.getValue());
+				macroAnimationPanel.setSpeed(speedSlider.getValue());
 			}
 		});
 		sl_panel.putConstraint(SpringLayout.NORTH, speedSlider, 6, SpringLayout.SOUTH, lblSpeedMeter);
@@ -467,20 +483,12 @@ public class SimCityGui {
 		
 		panel.add(speedSlider);
 		
-		JPanel panel_1 = new JPanel();
-		tabbedPane.addTab("Current Building", null, panel_1, null);
-		SpringLayout sl_panel_1 = new SpringLayout();
-		panel_1.setLayout(sl_panel_1);
 		
-		JLabel lblWorkers = new JLabel("Workers");
-		sl_panel_1.putConstraint(SpringLayout.NORTH, lblWorkers, 10, SpringLayout.NORTH, panel_1);
-		sl_panel_1.putConstraint(SpringLayout.WEST, lblWorkers, 10, SpringLayout.WEST, panel_1);
-		panel_1.add(lblWorkers);
 	}
 	
-	private void populateCity() {
+	private void populateCity(String source) {
 		XMLReader reader = new XMLReader();
-		ArrayList<PersonAgent> people = reader.initializePeople();
+		ArrayList<PersonAgent> people = reader.initializePeople(source);
 		for(PersonAgent person : people) {
 			person.startThread();
 		}	
@@ -491,6 +499,11 @@ public class SimCityGui {
 		 * Start of Hard Code Scenario
 		 * 
 		 */
+		if(Clock.sharedInstance().isDay()) {
+			
+		}
+		
+	
 		String a = "StackRestaurant";
 		String b = "House1";
 		String name = "Test Person 1";

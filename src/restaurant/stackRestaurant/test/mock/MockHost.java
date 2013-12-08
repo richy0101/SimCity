@@ -43,9 +43,15 @@ public class MockHost extends Mock implements Host {
 		
 	}
 
-	@Override
 	public void msgAddCook(Cook cook) {
-		// TODO Auto-generated method stub
+		
+	}
+
+	public void msgCookLeaving(Cook cook) {
+		
+	}
+
+	public void msgWaiterLeaving(Waiter waiter) {
 		
 	}
 

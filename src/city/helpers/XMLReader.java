@@ -24,15 +24,15 @@ public class XMLReader {
 
 	private ArrayList<PersonAgent> persons = new ArrayList<PersonAgent>();
 	
-	public ArrayList<PersonAgent> initializePeople() {
-		populateCity();
+	public ArrayList<PersonAgent> initializePeople(String source) {
+		populateCity(source);
 		return persons;
 	}
 	
-	public void populateCity() {  
+	public void populateCity(String source) {  
 		 try {  
 
-			 File xmlFile = new File("src/city/helpers/supernormative.xml");
+			 File xmlFile = new File(source);
 			 DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();  
 			 DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();  
 			 Document doc = documentBuilder.parse(xmlFile);  

@@ -83,16 +83,16 @@ public class MarketGui implements Gui {
 
 	@Override
 	public void draw(Graphics2D g) {
-		if (xPos < xDestination) {
+		if (xPos > xDestination) {
 			g.drawImage(marketRoleLeft, xPos, yPos, null);
 		}
-		else if (xPos > xDestination) {
+		else if (xPos < xDestination) {
 			g.drawImage(marketRoleRight,  xPos, yPos, null);
 		}
-		else if (yPos < yDestination) {
+		else if (yPos > yDestination) {
 			g.drawImage(marketRoleUp, xPos, yPos, null);
 		}
-		else if (yPos > yDestination) {
+		else if (yPos < yDestination) {
 			g.drawImage(marketRoleDown, xPos, yPos, null);
 		}
 		else {
@@ -109,6 +109,12 @@ public class MarketGui implements Gui {
 	}
 	public void setPresent() {
 		isPresent = true;
+	}
+	
+	public void DoEnterMarket() {
+		xDestination = xCounter;
+		yDestination = yCounter;
+		command = state.GoingToCounter;		
 	}
 
 	public void DoGetFood() {
