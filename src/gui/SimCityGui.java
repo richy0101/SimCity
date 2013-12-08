@@ -189,7 +189,7 @@ public class SimCityGui {
 		final JButton btnPopulateCity = new JButton("Populate City");
 		btnPopulateCity.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				populateCity();	
+				populateCity("src/city/helpers/supernormative.xml");	
 				btnPopulateCity.setEnabled(false);
 				
 			}
@@ -479,9 +479,9 @@ public class SimCityGui {
 		
 	}
 	
-	private void populateCity() {
+	private void populateCity(String source) {
 		XMLReader reader = new XMLReader();
-		ArrayList<PersonAgent> people = reader.initializePeople();
+		ArrayList<PersonAgent> people = reader.initializePeople(source);
 		for(PersonAgent person : people) {
 			person.startThread();
 		}	
