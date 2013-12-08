@@ -32,6 +32,14 @@ package agent;
  * Constants of general use
  */
 public interface Constants {
+	/**
+	 * Constants for movement tiles
+	 */
+	public static final int ROAD = 1;
+	public static final int SIDEWALK = 2;
+	public static final int CROSSWALK = 3;
+	
+	
 	public static final int MONDAY = 1;
 	public static final int TUESDAY = 2;
 	public static final int WEDNESDAY = 3;
