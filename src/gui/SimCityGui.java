@@ -452,14 +452,14 @@ public class SimCityGui {
 		sl_panel.putConstraint(SpringLayout.WEST, lblSpeed, 0, SpringLayout.WEST, btnCreatePerson);
 		panel.add(lblSpeed);
 		
-		final JLabel lblSpeedMeter = new JLabel("3");
+		final JLabel lblSpeedMeter = new JLabel("5");
 		sl_panel.putConstraint(SpringLayout.NORTH, lblSpeedMeter, 0, SpringLayout.NORTH, lblSpeed);
 		sl_panel.putConstraint(SpringLayout.EAST, lblSpeedMeter, 0, SpringLayout.EAST, btnCreatePerson);
 		panel.add(lblSpeedMeter);
 		
 		int beginningSpeedMin = 1;
-		int beginningSpeedMax = 5;
-		int beginningSpeedStart = 3;
+		int beginningSpeedMax = 10;
+		int beginningSpeedStart = 5;
 		final JSlider speedSlider = new JSlider(beginningSpeedMin, beginningSpeedMax, beginningSpeedStart);
 		speedSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
