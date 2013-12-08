@@ -13,8 +13,6 @@ public class ShehRestaurant extends Restaurant {
 	double till = 10000;
 	Vector<ShehWaiterRole> waiters = new Vector<ShehWaiterRole>();
 	
-	
-
 	public ShehRestaurant(String name) {
 		super();
 		this.name = name;
@@ -36,7 +34,7 @@ public class ShehRestaurant extends Restaurant {
 	public ShehCashierAgent getCashier() {
 		return cashier;
 	}
-	
+	//till?
 	public double getTill() {
 		return till;
 	}

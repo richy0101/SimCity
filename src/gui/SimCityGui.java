@@ -94,6 +94,10 @@ public class SimCityGui {
         roles.put("Stack's Restaurant Waiter Shared", "StackWaiterShared");
         roles.put("Stack's Restaurant Cook", "StackCook");
         
+        roles.put("Sheh Restaurant Waiter Normal", "ShehWaiterNormal");
+        //roles.put("Sheh Restaurant Waiter Shared", "ShehWaiter");
+        roles.put("Sheh Restaurant Cook", "ShehCook");
+        
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setBounds(0, 0, 1133, 855);
@@ -209,15 +213,18 @@ public class SimCityGui {
 		occupationComboBox.addItem("Bank 2 Teller");
 		occupationComboBox.addItem("Market 1 Seller");
 		occupationComboBox.addItem("Market 2 Seller");
+		
+		//Sheh
+		occupationComboBox.addItem("Sheh's Restaurant Waiter Normal");
+		occupationComboBox.addItem("Sheh's Restaurant Waiter Shared");
+		occupationComboBox.addItem("Sheh's Restaurant Cook");
+		
+		//Stack
 		occupationComboBox.addItem("Stack's Restaurant Waiter Normal");
 		occupationComboBox.addItem("Stack's Restaurant Waiter Shared");
 		occupationComboBox.addItem("Stack's Restaurant Cook");
 		
-        //		occupationComboBox.addItem("Sheh's Restaurant Host");
-        //		occupationComboBox.addItem("Sheh's Restaurant Waiter");
-        //		occupationComboBox.addItem("Sheh's Restaurant Cook");
-        //		occupationComboBox.addItem("Sheh's Restaurant Cashier");
-        //
+
         //		occupationComboBox.addItem("Philips's Restaurant Host");
         //		occupationComboBox.addItem("Philips's Restaurant Waiter");
         //		occupationComboBox.addItem("Philips's Restaurant Cook");
@@ -335,15 +342,15 @@ public class SimCityGui {
 		housingComboBox.addItem("LandLordB");
 		housingComboBox.addItem("LandLordC");
 		
-		housingComboBox.addItem("ApartmentA1");
-		housingComboBox.addItem("ApartmentA2");
-		housingComboBox.addItem("ApartmentA3");
-		housingComboBox.addItem("ApartmentA4");
-		housingComboBox.addItem("ApartmentA5");
-		housingComboBox.addItem("ApartmentA6");
-		housingComboBox.addItem("ApartmentA7");
-		housingComboBox.addItem("ApartmentA8");
-		housingComboBox.addItem("ApartmentA9");
+		housingComboBox.addItem("ApartmentA01");
+		housingComboBox.addItem("ApartmentA02");
+		housingComboBox.addItem("ApartmentA03");
+		housingComboBox.addItem("ApartmentA04");
+		housingComboBox.addItem("ApartmentA05");
+		housingComboBox.addItem("ApartmentA06");
+		housingComboBox.addItem("ApartmentA07");
+		housingComboBox.addItem("ApartmentA08");
+		housingComboBox.addItem("ApartmentA09");
 		housingComboBox.addItem("ApartmentA10");
 		housingComboBox.addItem("ApartmentA11");
 		housingComboBox.addItem("ApartmentA12");
@@ -351,15 +358,15 @@ public class SimCityGui {
 		housingComboBox.addItem("ApartmentA14");
 		housingComboBox.addItem("ApartmentA15");
 		
-		housingComboBox.addItem("ApartmentB1");
-		housingComboBox.addItem("ApartmentB2");
-		housingComboBox.addItem("ApartmentB3");
-		housingComboBox.addItem("ApartmentB4");
-		housingComboBox.addItem("ApartmentB5");
-		housingComboBox.addItem("ApartmentB6");
-		housingComboBox.addItem("ApartmentB7");
-		housingComboBox.addItem("ApartmentB8");
-		housingComboBox.addItem("ApartmentB9");
+		housingComboBox.addItem("ApartmentB01");
+		housingComboBox.addItem("ApartmentB02");
+		housingComboBox.addItem("ApartmentB03");
+		housingComboBox.addItem("ApartmentB04");
+		housingComboBox.addItem("ApartmentB05");
+		housingComboBox.addItem("ApartmentB06");
+		housingComboBox.addItem("ApartmentB07");
+		housingComboBox.addItem("ApartmentB08");
+		housingComboBox.addItem("ApartmentB09");
 		housingComboBox.addItem("ApartmentB10");
 		housingComboBox.addItem("ApartmentB11");
 		housingComboBox.addItem("ApartmentB12");
@@ -367,15 +374,15 @@ public class SimCityGui {
 		housingComboBox.addItem("ApartmentB14");
 		housingComboBox.addItem("ApartmentB15");
 		
-		housingComboBox.addItem("ApartmentC1");
-		housingComboBox.addItem("ApartmentC2");
-		housingComboBox.addItem("ApartmentC3");
-		housingComboBox.addItem("ApartmentC4");
-		housingComboBox.addItem("ApartmentC5");
-		housingComboBox.addItem("ApartmentC6");
-		housingComboBox.addItem("ApartmentC7");
-		housingComboBox.addItem("ApartmentC8");
-		housingComboBox.addItem("ApartmentC9");
+		housingComboBox.addItem("ApartmentC01");
+		housingComboBox.addItem("ApartmentC02");
+		housingComboBox.addItem("ApartmentC03");
+		housingComboBox.addItem("ApartmentC04");
+		housingComboBox.addItem("ApartmentC05");
+		housingComboBox.addItem("ApartmentC06");
+		housingComboBox.addItem("ApartmentC07");
+		housingComboBox.addItem("ApartmentC08");
+		housingComboBox.addItem("ApartmentC09");
 		housingComboBox.addItem("ApartmentC10");
 		housingComboBox.addItem("ApartmentC11");
 		housingComboBox.addItem("ApartmentC12");

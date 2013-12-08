@@ -1,7 +1,9 @@
 package city.gui;
 
 import gui.Gui;
+import city.helpers.ApartmentHelper;
 import city.helpers.Clock;
+import city.helpers.Directory;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -15,6 +17,9 @@ import city.PersonAgent;
 public class PersonGui implements Gui {
 	
 	private PersonAgent agent = null;
+	private String apartmentLetter = null;
+	private int xMult = 0;
+	private int yMult = 0;
 	
 	private int xPos, yPos;
 	private int xDestination, yDestination;
@@ -31,10 +36,14 @@ public class PersonGui implements Gui {
 	public enum CurrentAction {Cooking, Eating, Transition, Idle, Deciding, Leaving, Sleeping};
 	CurrentAction currentAction = CurrentAction.Idle;
 	public PersonGui(PersonAgent agent) {
-		//private String location = agent.getAddress();
+		String address = agent.getAddress();
+		
+		apartmentLetter = ApartmentHelper.sharedInstance().getApartmentLetter(address);
+		xMult = ApartmentHelper.sharedInstance().getXMultiplier(address);
+		yMult = ApartmentHelper.sharedInstance().getYMultiplier(address);
 		
 		//HOME
-		//if(location.toLowerCase().contains("house")) {
+		//if(address.toLowerCase().contains("house")) {
 			xBed = 5;
 			yBed = 135;
 			xKitchen = 695;
@@ -49,7 +58,7 @@ public class PersonGui implements Gui {
 			yPos = yBed;
 			xDestination = xBed;
 			yDestination = yBed;
-	//	}
+		//}
 		//APARTMENT
 		/*
 		else if(location.toLowerCase().contains("apartment")) {

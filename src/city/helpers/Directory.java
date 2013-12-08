@@ -214,37 +214,6 @@ public class Directory {
 	public static List<Market> markets = new ArrayList<Market>();
 	public static List<PersonAgent> people = new ArrayList<PersonAgent>();
 	
-	/*
-	private String parser(String str, char separator, int index) {
-		String string = "";
-		int count = 0;
-		
-		for(int i = 0; i < str.length(); i++) { //index ea letter
-			if(str.charAt(i) == separator) {
-				count++;
-				if(count == index) {
-					break;
-				}
-			}
-			else {
-				if(count == index-1) {
-					string += str.charAt(i);
-				}
-			}
-		}
-		
-		return string;
-	}
-	
-	public char getApartmentLetter() {
-		char letter;
-		
-		
-		return letter;
-	}
-	*/
-	
-	
 	public Map<String, Agent> getAgents() {
 		return agents;
 	}

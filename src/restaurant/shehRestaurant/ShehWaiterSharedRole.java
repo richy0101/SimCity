@@ -14,7 +14,7 @@ import java.util.concurrent.Semaphore;
 /**
  * Restaurant Waiter Agent
  */
-public class ShehWaiterRole extends Role implements Waiter {
+public class ShehWaiterSharedRole extends Role implements Waiter {
 	static final int NTABLES = 3;
 	public List<ShehCustomerRole> waitingCustomers = Collections.synchronizedList(new ArrayList<ShehCustomerRole>());
 	private List<myCustomer> customers = Collections.synchronizedList(new ArrayList<myCustomer>());
