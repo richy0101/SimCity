@@ -51,10 +51,10 @@ public class SimCityGui {
 	private JFrame frame;
 	private Map<String, String> roles = new HashMap<String, String>();
 	private HashMap<String, CityCard> cards = new HashMap<String, CityCard>();
-	BusAgent bus;
-	BusAgent bus2;
-	BusGui busGui;
-	BusGui busGui2;
+//	BusAgent bus;
+//	BusAgent bus2;
+//	BusGui busGui;
+//	BusGui busGui2;
 	
 	/**
 	 * Launch the application.
@@ -173,6 +173,18 @@ public class SimCityGui {
 		tabbedPane.addTab("Create Person", null, panel, null);
 		SpringLayout sl_panel = new SpringLayout();
 		panel.setLayout(sl_panel);
+		
+		JPanel panel_1 = new JPanel();
+		tabbedPane.addTab("Current Building", null, panel_1, null);
+		SpringLayout sl_panel_1 = new SpringLayout();
+		panel_1.setLayout(sl_panel_1);
+		
+		JPanel panel_2 = new JPanel();
+		sl_panel_1.putConstraint(SpringLayout.NORTH, panel_2, 0, SpringLayout.NORTH, panel_1);
+		sl_panel_1.putConstraint(SpringLayout.WEST, panel_2, 0, SpringLayout.WEST, panel_1);
+		sl_panel_1.putConstraint(SpringLayout.SOUTH, panel_2, 689, SpringLayout.NORTH, panel_1);
+		sl_panel_1.putConstraint(SpringLayout.EAST, panel_2, 259, SpringLayout.WEST, panel_1);
+		panel_1.add(panel_2);
 		
 		final JButton btnPopulateCity = new JButton("Populate City");
 		btnPopulateCity.addActionListener(new ActionListener() {
@@ -452,7 +464,7 @@ public class SimCityGui {
 		speedSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				lblSpeedMeter.setText(speedSlider.getValue()+"");
-//				macroAnimationPanel.setSpeed(speedSlider.getValue());
+				macroAnimationPanel.setSpeed(speedSlider.getValue());
 			}
 		});
 		sl_panel.putConstraint(SpringLayout.NORTH, speedSlider, 6, SpringLayout.SOUTH, lblSpeedMeter);
@@ -464,15 +476,7 @@ public class SimCityGui {
 		
 		panel.add(speedSlider);
 		
-		JPanel panel_1 = new JPanel();
-		tabbedPane.addTab("Current Building", null, panel_1, null);
-		SpringLayout sl_panel_1 = new SpringLayout();
-		panel_1.setLayout(sl_panel_1);
 		
-		JLabel lblWorkers = new JLabel("Workers");
-		sl_panel_1.putConstraint(SpringLayout.NORTH, lblWorkers, 10, SpringLayout.NORTH, panel_1);
-		sl_panel_1.putConstraint(SpringLayout.WEST, lblWorkers, 10, SpringLayout.WEST, panel_1);
-		panel_1.add(lblWorkers);
 	}
 	
 	private void populateCity() {
