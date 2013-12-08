@@ -67,21 +67,37 @@ public class BusAgent extends Agent implements Bus {
 	 * @see agent.Agent#pickAndExecuteAnAction()
 	 */
 	public enum State
-	{driving, stopping, notifyingPassengersToAlightBus, waitForAlighting, notifyingPassengersToBoardBus, waitForBoarding}
+	{driving, stopping, notifyingPassengersToAlightBus, waitForAlighting, notifyingPassengersToBoardBus, waitForBoarding, stoppingForStop}
 	public State state= State.driving;
 	
 	public enum Event
-	{reachedStop, stopped, notifiedPassengersToAlightBus, passengersAlighted, notifiedPassengersToBoardBus, passengersBoarded}
+	{reachedStop, stopped, notifiedPassengersToAlightBus, passengersAlighted, notifiedPassengersToBoardBus, passengersBoarded, reachedIntersection}
 	public Event event= Event.reachedStop;
 	
 		public boolean pickAndExecuteAnAction(){
 			if(state==State.driving && event==Event.reachedStop){
-				state=State.stopping;
+				state=State.stoppingForStop;
 				stopBus();//change event to stopped
 				return true;
 			}
+			/*
+			if(state==State.driving && event==Event.reachedIntersection){
+				state= State.stoppingForIntersection;
+				stopBus();
+				return true;
+			}
 			
-			if(state==State.stopping && event==Event.stopped){
+			if(state==State.stoppingForIntersection && event==Event.stopped){
+				state= State.waitingForGreen;
+				alertAtIntersection(); //pass control to trafficLight who will 
+			}
+			
+			if(state==State.waitingForGreen && event==Event.givenGreen){
+				state= State.driving;
+				keepDriving();
+			}*/
+			
+			if(state==State.stoppingForStop && event==Event.stopped){
 				state=State.notifyingPassengersToAlightBus;
 				alertPassengersToAlightBus(); //change event to notified passengers
 				return true;
@@ -149,6 +165,7 @@ public class BusAgent extends Agent implements Bus {
 			driving.release();
 			event= Event.reachedStop;
 			lastStation = Station.Stop2;
+			stateChanged();
 		}
 
 		public void msgAtStopThree(){
@@ -156,6 +173,7 @@ public class BusAgent extends Agent implements Bus {
 			driving.release();
 			event= Event.reachedStop;
 			lastStation = Station.Stop3;
+			stateChanged();
 		}
 		
 		public void msgAtStopFour(){
@@ -163,6 +181,13 @@ public class BusAgent extends Agent implements Bus {
 			driving.release();
 			event= Event.reachedStop;
 			lastStation = Station.Stop4;
+			stateChanged();
+		}
+		
+		public void msgAtIntersection(){
+			driving.release();
+			event= Event.reachedIntersection;
+			stateChanged();
 		}
 
 		public void msgChangeEventToPassengersAlighted(){
