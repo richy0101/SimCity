@@ -1,15 +1,22 @@
 package restaurant.huangRestaurant;
 
+import restaurant.huangRestaurant.HuangCookRole.CookState;
+import restaurant.huangRestaurant.gui.CookGui;
 import restaurant.huangRestaurant.gui.CustomerGui;
 import restaurant.huangRestaurant.interfaces.Cashier;
 import restaurant.huangRestaurant.interfaces.Customer;
 import agent.Agent;
 import agent.Role;
+import gui.Building;
+import gui.Gui;
 
+import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
+
+import city.helpers.Directory;
 
 /**
  * Restaurant customer agent.
@@ -47,17 +54,25 @@ public class HuangCustomerRole extends Role implements Customer {
 	public enum AgentEvent 
 	{none, gotHungry, followWaiter, seated, choiceSelected, waitingForWaiter, waiterArrived, orderSaid, receivedFood, doneEating, donePaying, doneLeaving};
 	AgentEvent event = AgentEvent.none;
-
+	String myLocation;
 	/**
 	 * Constructor for CustomerAgent class
 	 *
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public HuangCustomerRole(String name){
+	public HuangCustomerRole(String location) {
 		super();
-		this.name = name;
-		this.Cash = 20;
+		host = (HuangHostAgent) Directory.sharedInstance().getAgents().get("HuangRestaurantHost");
+		customerGui = new CustomerGui(this);
+		myLocation = location;
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == myLocation) {
+				b.addGui((Gui) customerGui);
+			}
+		}
+		Cash = getPersonAgent().getFunds();
 	}
 	/**
 	 * hack to establish connection to Host agent.
@@ -292,7 +307,7 @@ public class HuangCustomerRole extends Role implements Customer {
 		atCashier.acquireUninterruptibly();
 		if (Cash >= cx.price) {
 			print("I have " + Cash + " for " + cx.price);
-			Cash -= cx.price;
+			getPersonAgent().setFunds(Cash-=cx.price);
 			ca.msgHereIsMoney(this);
 		}
 		else {
