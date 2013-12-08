@@ -639,9 +639,17 @@ public class TanWaiterRole extends Role implements Waiter{
 	}
 
 
-	protected void PassOrderToCook(int table, MyCustomer myc,
+	@Override
+	public void PassOrderToCook(int table, MyCustomer myc,
 			restaurant.tanRestaurant.Order o) {
 		// TODO Auto-generated method stub
 		
 	}
+
+
+	/*protected void PassOrderToCook(int table, MyCustomer myc,
+			restaurant.tanRestaurant.Order o) {
+		// TODO Auto-generated method stub
+		
+	}*/
 }

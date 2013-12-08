@@ -9,7 +9,9 @@ public class TanWaiterNormalRole extends TanWaiterRole{
 			super(location);
 		}
 
+		/*
 		@Override
+		
 		protected void PassOrderToCook(int table, MyCustomer myc, Order o){
 			waiterGui.DoGoToCook();
 			try {
@@ -22,8 +24,9 @@ public class TanWaiterNormalRole extends TanWaiterRole{
 			cook.msgHereIsAnOrder(table, o, this);
 			c.s=state.waitingForFood;
 			waiterGui.DoLeaveCustomer();
-		}
+		}*/
 		
+		/*
 		protected void takeOrderToCook(MyCustomer customer) {
 			host.msgWaiterBusy(this);
 			DoGoToCook();
@@ -35,6 +38,6 @@ public class TanWaiterNormalRole extends TanWaiterRole{
 			}
 			customer.state = CustomerState.AtCook;
 			cook.msgCookOrder(this, customer.choice, customer.table, customer.seatNum);
-		}
+		}*/
 
 }

@@ -7,9 +7,9 @@ import city.helpers.Directory;
 import restaurant.tanRestaurant.TanCookRole.MyOrder;
 import restaurant.tanRestaurant.TanCookRole.SharedOrderState;
 import restaurant.tanRestaurant.TanCookRole.MyMarket.shipmentState;
-import restaurant.tanRestaurant.TanCustomerRole.Order;
+//import restaurant.tanRestaurant.TanCustomerRole.Order;
 import restaurant.tanRestaurant.TanCookRole.MyOrder.orderState;
-import restaurant.tanRestaurant.MarketAgent;
+import market.interfaces.Market;
 import restaurant.tanRestaurant.TanCustomerRole.AgentEvent;
 import restaurant.tanRestaurant.TanWaiterRole.MyCustomer;
 import restaurant.tanRestaurant.TanWaiterRole.MyCustomer.state;
@@ -78,7 +78,7 @@ public class TanCookRole extends Role {
 	}
 
 	public static class MyMarket{
-		MyMarket(MarketAgent m){
+		MyMarket(Market m){
 			ma= m;
 			//order= o;
 			s=shipmentState.orderedShipment;
@@ -86,7 +86,7 @@ public class TanCookRole extends Role {
 			
 		}
 		
-		MarketAgent ma; //to be implemented later with multiple waiters
+		Market ma; //to be implemented later with multiple waiters
 		//Order order;
 		shipmentState s;
 		enum shipmentState{orderedShipment, outOfSteak, outOfChicken, outOfSalad, outOfPizza};
@@ -140,12 +140,12 @@ public class TanCookRole extends Role {
 	}
 	// Messages
 	
-	public void msgAddMarket(MarketAgent m){
+	public void msgAddMarket(Market m){
 		Markets.add(new MyMarket(m));
 	}
 	
 	public void msgHereIsAnOrder(int tableNum, Order o, TanWaiterRole w){
-		print("added cook order "+ o.getName());
+		print("added cook order "+ o.choice);
 		Orders.add(new MyOrder(tableNum,o,w));
 		stateChanged(); //added
 	}
@@ -174,11 +174,11 @@ public class TanCookRole extends Role {
 	
 	public void msgHereIsShipment(Order o, int amt){
 		
-		if(o.getName().equals("Chicken"))
+		if(o.choice.equals("Chicken"))
 			amtChicken+= amt;
-		else if(o.getName().equals("Steak"))
+		else if(o.choice.equals("Steak"))
 			amtSteak+= amt;
-		else if(o.getName().equals("Salad"))
+		else if(o.choice.equals("Salad"))
 			amtSalad+= amt;
 		else //if(o.getName().equals("Pizza"))
 			amtPizza+= amt;
@@ -186,20 +186,20 @@ public class TanCookRole extends Role {
 	}
 	
 	
-	public void msgFailedOrder(MarketAgent ma, Order o, int amt){
-		print(ma.getName()+" has insufficient "+ o.getName());
-		if (o.getName().equals("Steak")){
+	public void msgFailedOrder(Market ma, Order o, int amt){
+		//print(ma.getName()+" has insufficient "+ o.choice);
+		if (o.choice.equals("Steak")){
 			amtSteak += amt;
-			print("received "+ amt+ " "+ o.getName() +" from " + ma.getName());
+			//print("received "+ amt+ " "+ o.choice +" from " + ma.getName());
 			for(MyMarket mym:Markets){
 				if (mym.ma==ma){
 					mym.s = shipmentState.outOfSteak;
 				}
 			}
 		}
-		else if (o.getName().equals("Chicken")){
+		else if (o.choice.equals("Chicken")){
 			amtChicken += amt;
-			print("received "+ amt+ " "+ o.getName() +" from " + ma.getName());
+			//print("received "+ amt+ " "+ o.choice +" from " + ma.getName());
 			synchronized(Markets){
 			for(MyMarket mym:Markets){
 				if (mym.ma==ma){
@@ -208,9 +208,9 @@ public class TanCookRole extends Role {
 			}
 			}
 		}
-		else if (o.getName().equals("Salad")){
+		else if (o.choice.equals("Salad")){
 			amtSalad += amt;
-			print("received "+ amt+ " "+ o.getName() +" from " + ma.getName());
+			//print("received "+ amt+ " "+ o.choice +" from " + ma.getName());
 			synchronized(Markets){
 			for(MyMarket mym:Markets){
 				if (mym.ma==ma){
@@ -221,7 +221,7 @@ public class TanCookRole extends Role {
 		}
 		else //if (s.order.getName().equals("Pizza")){
 			{amtPizza += amt;
-			print("received "+ amt+ " "+ o.getName() +" from " + ma.getName());
+			//print("received "+ amt+ " "+ o.choice +" from " + ma.getName());
 			synchronized(Markets){
 			for(MyMarket mym:Markets){
 				if (mym.ma==ma){
@@ -303,16 +303,16 @@ public class TanCookRole extends Role {
 	// Actions
 	
 	private void addSharedOrders() {
-		Order order = Directory.sharedInstance().getRestaurants().get(1).getMonitor().remove();
-		if(order != null) {
-			orders.add(new MyOrder(order));
-		}
+		//Order order = Directory.sharedInstance().getRestaurants().get(1).getMonitor().remove();
+		//if(order != null) {
+			//orders.add(new MyOrder(order));
+		//}
 	}
 
 	private void cookIt(MyOrder o){
 		if (getAmount(o)==0){
 			o.s=orderState.Removed;
-			o.waiter.msgOutOfFood(o.order);
+			//o.waiter.msgOutOfFood(o.order); need this
 			orderFromMarket(o);
 			}
 		
@@ -322,10 +322,10 @@ public class TanCookRole extends Role {
 			}
 		
 		
-			print("Start cooking "+o.order.getName());
+			print("Start cooking "+o.order.choice);
 			o.s=orderState.Cooking;
 			subtractAmount(o);
-			print(o.order.getName()+ " remaining : " + getAmount(o));
+			print(o.order.choice+ " remaining : " + getAmount(o));
 			timer.schedule(new TimerTask() {
 				public void run() {
 					//print("Done cooking.");
@@ -339,14 +339,14 @@ public class TanCookRole extends Role {
 	private void plateIt(MyOrder o){
 		//do animation
 		o.s= orderState.Plated;
-		print("Done cooking " + o.order.getName()+". Calling waiter "+ o.waiter.getName());
+		print("Done cooking " + o.order.choice+". Calling waiter "+ o.waiter.getName());
 		o.waiter.msgOrderIsReady(o.tableNumber);
 		//o.w.msgOrderIsReady(o.choice, o.table);
 	}
 	
 	private void orderFromMarket(MyOrder o){
 		print("Ordering from preferred market");
-		Markets.get(0).ma.msgOrderFromMarket(o.order, 5);
+		//Markets.get(0).ma.msgOrderFromMarket(o.order, 5);
 		//preferredmarket.msgOrderFromMarket(o, getAmount(o)+2)
 		/*
 		 * cycles through food options and orders a certain amount of required food from market
@@ -358,20 +358,20 @@ public class TanCookRole extends Role {
 		// for mym, if o.getName=steak and s!=shipmentState.outOfSteak
 		MyMarket preferred= Markets.get(0);
 		for(MyMarket mym: Markets){
-			if (o.getName().equals("Steak") && mym.s!=shipmentState.outOfSteak){
+			if (o.choice.equals("Steak") && mym.s!=shipmentState.outOfSteak){
 				preferred= mym;
 			}
-			else if (o.getName().equals("Salad") && mym.s!=shipmentState.outOfSalad){
+			else if (o.choice.equals("Salad") && mym.s!=shipmentState.outOfSalad){
 				preferred= mym;
 			}
-			else if (o.getName().equals("Chicken") && mym.s!=shipmentState.outOfChicken){
+			else if (o.choice.equals("Chicken") && mym.s!=shipmentState.outOfChicken){
 				preferred= mym;
 			}
-			else if (o.getName().equals("Pizza") && mym.s!=shipmentState.outOfPizza){
+			else if (o.choice.equals("Pizza") && mym.s!=shipmentState.outOfPizza){
 				preferred= mym;
 			}
 		}
-		preferred.ma.msgOrderFromMarket(o, amt);
+		//preferred.ma.msgOrderFromMarket(o, amt);
 		
 	}
 
@@ -390,13 +390,13 @@ public class TanCookRole extends Role {
 	}
 	
 	public int getAmount(MyOrder o){
-		if (o.order.getName().equals("Chicken")){
+		if (o.order.choice.equals("Chicken")){
 			return amtChicken;
 		}
-		else if (o.order.getName().equals("Steak")){
+		else if (o.order.choice.equals("Steak")){
 			return amtSteak;
 		}
-		else if (o.order.getName().equals("Salad")){
+		else if (o.order.choice.equals("Salad")){
 			return amtSalad;
 		}
 		else //if (o.order.getName().equals("Pizza")){
@@ -405,13 +405,13 @@ public class TanCookRole extends Role {
 	}
 	
 	public void subtractAmount(MyOrder o){
-		if (o.order.getName().equals("Chicken")){
+		if (o.order.choice.equals("Chicken")){
 			amtChicken--;
 		}
-		else if (o.order.getName().equals("Steak")){
+		else if (o.order.choice.equals("Steak")){
 			amtSteak--;
 		}
-		else if (o.order.getName().equals("Salad")){
+		else if (o.order.choice.equals("Salad")){
 			amtSalad--;
 		}
 		else //if (o.order.getName().equals("Pizza")){

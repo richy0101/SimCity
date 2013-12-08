@@ -2,13 +2,13 @@ package restaurant.tanRestaurant;
 
 import agent.Agent;
 import restaurant.tanRestaurant.TanCashierAgent.Bill.billState;
-import restaurant.tanRestaurant.TanCashierAgent.MyBill.marketBS;
+//import restaurant.tanRestaurant.TanCashierAgent.MyBill.marketBS;
 import restaurant.tanRestaurant.TanCashierAgent.Table;
-import restaurant.tanRestaurant.MarketAgent.MarketBill;
+//import restaurant.tanRestaurant.MarketAgent.MarketBill;
 import restaurant.tanRestaurant.TanCookRole.MyMarket.shipmentState;
 import restaurant.tanRestaurant.TanCustomerRole.Order;
 import restaurant.tanRestaurant.TanCookRole.MyOrder.orderState;
-import restaurant.tanRestaurant.MarketAgent;
+//import restaurant.tanRestaurant.MarketAgent;
 import restaurant.tanRestaurant.TanCustomerRole.AgentEvent;
 import restaurant.tanRestaurant.TanWaiterRole.MyCustomer;
 import restaurant.tanRestaurant.TanWaiterRole.MyCustomer.state;
@@ -33,7 +33,7 @@ public class TanCashierAgent extends Agent implements Cashier{
 	public List<Customer> waitingCustomers
 	= Collections.synchronizedList(new ArrayList<Customer>());
 	public List<Bill> Bills = Collections.synchronizedList(new ArrayList<Bill>());
-	public List<MyBill> MyBills = Collections.synchronizedList(new ArrayList<MyBill>());
+	//public List<MyBill> MyBills = Collections.synchronizedList(new ArrayList<MyBill>());
 	public Collection<Table> tables;
 	private String name;
 	Timer timer = new Timer();
@@ -59,7 +59,7 @@ public class TanCashierAgent extends Agent implements Cashier{
 	}
 
 	public static class MyMarket{
-		MyMarket(MarketAgent m){
+		MyMarket(Market m){
 			ma= m;
 			//order= o;
 			s=shipmentState.orderedShipment;
@@ -67,12 +67,13 @@ public class TanCashierAgent extends Agent implements Cashier{
 			
 		}
 		
-		MarketAgent ma; //to be implemented later with multiple waiters
+		Market ma; //to be implemented later with multiple waiters
 		shipmentState s;
 		enum shipmentState{orderedShipment, outOfSteak, outOfChicken, outOfSalad, outOfPizza};
 
 	}
 	
+	/*
 	public static class MyBill{
 		MyBill(MarketBill b){
 			mb=b;
@@ -83,7 +84,7 @@ public class TanCashierAgent extends Agent implements Cashier{
 		Market market;
 		public marketBS mbs;
 		public enum marketBS{received, paying, paid }
-	}
+	}*/
 	
 	public static class Bill{
 		Bill(String food, Waiter w, Customer c){
@@ -149,11 +150,12 @@ public class TanCashierAgent extends Agent implements Cashier{
 		stateChanged();
 	}
 	
+	/*
 	public void msgHereIsMarketBill(MarketBill b){
 		//print("received bill to pay "+b.market.getName()+" $"+b.bill);
 		MyBills.add(new MyBill(b));	
 		stateChanged();// recently added
-	}
+	}*/
 	
 	public void msgHereIsMyMoney(Customer c, double cash){
 		print("received customer's money"); //prolly need to pass in cust to give him his change OR pass bill which has cust
@@ -216,6 +218,8 @@ public class TanCashierAgent extends Agent implements Cashier{
             so that table is unoccupied and customer is waiting.
             If so seat him at the table.
 		 */
+		
+		/*
 		if(!MyBills.isEmpty()){
 			synchronized(MyBills){
 			for(MyBill mb: MyBills){
@@ -226,7 +230,7 @@ public class TanCashierAgent extends Agent implements Cashier{
 				}
 			}
 			}
-		}
+		}*/
 		
 		if(!Bills.isEmpty()){
 			synchronized(Bills){
@@ -257,6 +261,7 @@ public class TanCashierAgent extends Agent implements Cashier{
 
 	// Actions
 
+	/*
 	private void payMarket(MyBill mb){
 		double payment= 0;
 		double debt= 0;
@@ -275,7 +280,7 @@ public class TanCashierAgent extends Agent implements Cashier{
 		mb.market.msgHereIsPayment(payment, debt);
 		mb.mbs= marketBS.paid;
 		//MyBills.remove(mb);
-	}
+	}*/
 	
 	private void passBillToWaiter(Bill b){
 		b.waiter.msgHereIsBill(b);
