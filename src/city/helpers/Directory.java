@@ -38,6 +38,7 @@ public class Directory {
     	}
     	return sharedInstance;
 	}
+	
 //ROLES
 	public Map<String, String> roleDirectory = new HashMap<String, String>(); {
 		//Bank Roles
