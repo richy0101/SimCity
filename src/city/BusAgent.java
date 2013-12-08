@@ -9,6 +9,7 @@ import java.util.concurrent.Semaphore;
 
 import agent.Agent;
 import city.interfaces.Transportation;
+import city.interfaces.Vehicle;
 import city.BusAgent.MyPassenger.Status;
 import city.gui.BusGui;
 import city.interfaces.Bus;
@@ -16,7 +17,7 @@ import city.helpers.Directory;
 import city.helpers.BusHelper;
 
 
-public class BusAgent extends Agent implements Bus {
+public class BusAgent extends Agent implements Vehicle {
 	
     /**
 	*Data
