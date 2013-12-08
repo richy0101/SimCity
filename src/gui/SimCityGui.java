@@ -414,6 +414,7 @@ public class SimCityGui {
 					}
 					else {
 					*/
+					housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
 						PersonAgent person = new PersonAgent(roles.get(occupationComboBox.getSelectedItem()),
                                 nameTextField.getText(),
                                 aggressivenessSlider.getValue(),
