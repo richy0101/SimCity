@@ -322,14 +322,14 @@ public class SimCityGui {
 		sl_panel.putConstraint(SpringLayout.NORTH, housingComboBox, 6, SpringLayout.SOUTH, transportationComboBox);
 		sl_panel.putConstraint(SpringLayout.WEST, housingComboBox, 0, SpringLayout.WEST, nameTextField);
 		sl_panel.putConstraint(SpringLayout.EAST, housingComboBox, 0, SpringLayout.EAST, btnPopulateCity);
-		/*
+		
 		housingComboBox.addItem("House1");
 		housingComboBox.addItem("House2");
 		housingComboBox.addItem("House3");
 		housingComboBox.addItem("House4");
 		housingComboBox.addItem("House5");
 		housingComboBox.addItem("House6");
-		*/
+		
 		
 		housingComboBox.addItem("LandLordA");
 		housingComboBox.addItem("LandLordB");
@@ -382,7 +382,6 @@ public class SimCityGui {
 		housingComboBox.addItem("ApartmentC13");
 		housingComboBox.addItem("ApartmentC14");
 		housingComboBox.addItem("ApartmentC15");
-		
 		
 		panel.add(housingComboBox);
 		
