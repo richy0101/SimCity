@@ -2,6 +2,10 @@ package restaurant.tanRestaurant;
 
 import agent.Agent;
 import agent.Role;
+import city.helpers.Directory;
+
+import restaurant.tanRestaurant.TanCookRole.MyOrder;
+import restaurant.tanRestaurant.TanCookRole.SharedOrderState;
 import restaurant.tanRestaurant.TanCookRole.MyMarket.shipmentState;
 import restaurant.tanRestaurant.TanCustomerRole.Order;
 import restaurant.tanRestaurant.TanCookRole.MyOrder.orderState;
@@ -15,6 +19,8 @@ import restaurant.tanRestaurant.test.mock.EventLog;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
+
+import city.helpers.Directory;
 
 /**
  * Restaurant Cook Agent
@@ -48,6 +54,10 @@ public class TanCookRole extends Role {
 	int amtSalad;
 	int amtPizza;
 	int order=5;
+	
+	public enum SharedOrderState
+	{Checked, NeedsChecking};
+	SharedOrderState sharedState = SharedOrderState.NeedsChecking;
 	
 	
 
@@ -87,8 +97,11 @@ public class TanCookRole extends Role {
 			order= o;
 			s=orderState.Pending;
 			tableNumber= t;
-			waiter= w;
-			
+			waiter= w;		
+		}
+		
+		MyOrder(Order o){
+			s=orderState.Pending;
 		}
 		
 		/*
@@ -252,6 +265,19 @@ public class TanCookRole extends Role {
 			}
 		}
 		
+		if(sharedState == SharedOrderState.NeedsChecking) {
+			timer.schedule(new TimerTask() {
+				public void run() {
+					addSharedOrders();
+					sharedState = SharedOrderState.NeedsChecking;
+					stateChanged();
+				}
+			},
+			5000);
+			sharedState = SharedOrderState.Checked;
+			return true;
+		}
+		
 		//if there exists o in orders such that o.state=pending then
 		    //cookIt(o);
 		//if there exists o in orders such that o.state=done then
@@ -275,6 +301,13 @@ public class TanCookRole extends Role {
 
 	
 	// Actions
+	
+	private void addSharedOrders() {
+		Order order = Directory.sharedInstance().getRestaurants().get(1).getMonitor().remove();
+		if(order != null) {
+			orders.add(new MyOrder(order));
+		}
+	}
 
 	private void cookIt(MyOrder o){
 		if (getAmount(o)==0){

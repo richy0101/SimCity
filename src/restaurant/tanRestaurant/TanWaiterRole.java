@@ -5,6 +5,7 @@ import agent.Role;
 import restaurant.tanRestaurant.TanCustomerRole.Order;
 import restaurant.tanRestaurant.TanCustomerRole.AgentEvent;
 import restaurant.tanRestaurant.TanCustomerRole.AgentState;
+import restaurant.tanRestaurant.TanWaiterRole.MyCustomer;
 import restaurant.tanRestaurant.TanWaiterRole.MyCustomer.state;
 import restaurant.tanRestaurant.TanCashierAgent.Bill;
 import restaurant.tanRestaurant.TanCashierAgent.Bill.billState;
@@ -41,7 +42,7 @@ public class TanWaiterRole extends Role implements Waiter{
 	private String name;
 	private Semaphore atTable = new Semaphore(0,true);
 	private Semaphore atCashier = new Semaphore(0,true);
-	private Semaphore atCook = new Semaphore(0,true);
+	public Semaphore atCook = new Semaphore(0,true);
 	private Semaphore atWaitingCustomer = new Semaphore(0,true);
 	public EventLog log = new EventLog();
 
@@ -538,8 +539,9 @@ public class TanWaiterRole extends Role implements Waiter{
 		stateChanged();
 	}
 
-	private void PassOrderToCook(int tablenum, MyCustomer c, Order o){ //implement param order
-		waiterGui.DoGoToCook();
+	protected void PassOrderToCook(int tablenum, MyCustomer c, Order o){ //implement param order
+		
+		/*waiterGui.DoGoToCook();
 		try {
 			atCook.acquire();
 		} catch (InterruptedException e) {
@@ -549,7 +551,7 @@ public class TanWaiterRole extends Role implements Waiter{
 		//print("Cook, please cook "+ o.getName());
 		cook.msgHereIsAnOrder(tablenum, o, this);
 		c.s=state.waitingForFood;
-		waiterGui.DoLeaveCustomer();
+		waiterGui.DoLeaveCustomer();*/
 
 		//stateChanged(); //added
 	}
@@ -634,5 +636,12 @@ public class TanWaiterRole extends Role implements Waiter{
 		public String toString() {
 			return "table " + tableNumber;
 		}
+	}
+
+
+	protected void PassOrderToCook(int table, MyCustomer myc,
+			restaurant.tanRestaurant.Order o) {
+		// TODO Auto-generated method stub
+		
 	}
 }
