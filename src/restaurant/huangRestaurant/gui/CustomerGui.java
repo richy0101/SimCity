@@ -25,7 +25,7 @@ public class CustomerGui implements Gui{
 	private static final int cashierX = 780; 
 	private static final int cashierY = 40;
 	private int xExit = 0, yExit = 450;//Exit
-	private enum Command {noCommand, GoToSeat, GoToPay, LeaveRestaurant};
+	private enum Command {noCommand, GoToSeat, GoToPay, LeaveRestaurant, GoToHost};
 	private Command command=Command.noCommand;
 	BufferedImage customerImage;
 
@@ -60,6 +60,11 @@ public class CustomerGui implements Gui{
 			}
 			else if (command == Command.LeaveRestaurant) {
 				agent.msgAnimationFinishedLeaveRestaurant();
+				System.out.println("about to call gui.setCustomerEnabled(agent);");
+				isHungry = false;
+			}
+			else if (command == Command.GoToHost) {
+				agent.msgAnimationAtHost();
 				System.out.println("about to call gui.setCustomerEnabled(agent);");
 				isHungry = false;
 			}
@@ -128,6 +133,7 @@ public class CustomerGui implements Gui{
 		xDestination = xWait;
 	}
 	public void DoGoToHost() {
+		command = Command.GoToHost;
 		xDestination = hostX;
 		yDestination = hostY;
 	}
