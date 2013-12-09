@@ -238,8 +238,8 @@ public class PersonAgent extends Agent implements Person {
 		rentDue = false;
 		hasWorked = false;
 		Directory.sharedInstance().addPerson(this);
-		personGui = new PersonGui(this);
 		homeName = housingStatus;
+		personGui = new PersonGui(this);
 		currentLocation = housingStatus;
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {

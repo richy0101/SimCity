@@ -36,16 +36,19 @@ public class PersonGui implements Gui {
 	public enum CurrentAction {Cooking, Eating, Transition, Idle, Deciding, Leaving, Sleeping};
 	CurrentAction currentAction = CurrentAction.Idle;
 	public PersonGui(PersonAgent agent) {
-/*
 		String address = agent.getAddress();
-		System.out.println(agent.getAddress());
 		
 		apartmentLetter = ApartmentHelper.sharedInstance().getApartmentLetter(address);
 		xMult = ApartmentHelper.sharedInstance().getXMultiplier(address) * 212;
-		yMult = ApartmentHelper.sharedInstance().getYMultiplier(address) * 88;
-*/
+		yMult = ApartmentHelper.sharedInstance().getYMultiplier(address) * 96;
+		
+		System.out.println(address);
+		System.out.println(xMult);
+		System.out.println(yMult);
+		
 		//HOME
-		//if(address.toLowerCase().contains("house")) {
+		if(address.toLowerCase().contains("house")) {
+			System.out.println("HOUSEstub");
 			xBed = 5;
 			yBed = 135;
 			xKitchen = 695;
@@ -70,21 +73,32 @@ public class PersonGui implements Gui {
 	        catch(IOException e) {
 	        	System.out.println("Error w/ Person assets");
 	        }
-		//}
+		}
 		//APARTMENT
-		/*
 		else if(address.toLowerCase().contains("apartment")) {
-			xBed = 184 * xMult;
-			yBed = 29 * yMult;
-			xKitchen = 9 * xMult;
-			yKitchen = 29 * yMult;
-			xTable = 17 * xMult;
-			yTable = 61 * yMult;
-			xDoor = 72 * xMult;
-			yDoor = 22 * yMult;
+			System.out.println("APARTMENTSTUB");
+			
+			xBed = 184 + xMult;
+			yBed = 29 + yMult;
+			xKitchen = 9 + xMult;
+			yKitchen = 29 + yMult;
+			xTable = 17 + xMult;
+			yTable = 61 + yMult;
+			xDoor = 72 + xMult;
+			yDoor = 22 + yMult;
 			xDestination = xBed;
 			yDestination = yBed;
 			
+			try {
+	        	personLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
+	        	personRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));
+	        	personUp = ImageIO.read(getClass().getResource("GUIPersonUp.png"));
+	        	personDown = ImageIO.read(getClass().getResource("GUIPersonDown.png"));
+	        }
+	        catch(IOException e) {
+	        	System.out.println("Error w/ Person assets");
+	        }
+			/*
 			try {
 	        	personLeft = ImageIO.read(getClass().getResource("GUICITYPersonLeft.png"));
 	        	personRight = ImageIO.read(getClass().getResource("GUICITYPersonRight.png"));
@@ -94,8 +108,8 @@ public class PersonGui implements Gui {
 	        catch(IOException e) {
 	        	System.out.println("Error w/ Person assets");
 	        }
+	        */
 		}
-		*/
 
 		this.agent = agent;
 	}

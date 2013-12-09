@@ -16,7 +16,7 @@ public class Clock implements ActionListener{
 	Timer timer;
 	
 	private Clock() {
-		hour = 1;
+		hour = 5;
 		day = 1;
 		timer = new Timer(DELAY, this);
 		timer.start();

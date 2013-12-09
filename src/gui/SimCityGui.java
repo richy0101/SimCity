@@ -437,14 +437,19 @@ public class SimCityGui {
 					}
 					else {
 					*/
-					housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
+					//housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
+					
 						PersonAgent person = new PersonAgent(roles.get(occupationComboBox.getSelectedItem()),
                                 nameTextField.getText(),
                                 aggressivenessSlider.getValue(),
                                 (double)initialFundsSlider.getValue(),
                                 (String)housingComboBox.getSelectedItem(),
                                 (String)transportationComboBox.getSelectedItem());
+						
+						
+						housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
 					//}
+						
 				}
 			}
 		});
