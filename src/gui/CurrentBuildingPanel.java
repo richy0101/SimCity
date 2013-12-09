@@ -16,6 +16,7 @@ import bank.Bank;
 import market.interfaces.Market;
 import restaurant.Restaurant;
 
+@SuppressWarnings("serial")
 public class CurrentBuildingPanel extends JPanel {
 	String type;
 	Restaurant restaurant;
@@ -30,13 +31,15 @@ public class CurrentBuildingPanel extends JPanel {
 	private JSlider chickenSlider;
 	private JSlider steakSlider;
 	
-	public CurrentBuildingPanel(String type) {
-		this.type = type;
-//		if(type.contains("restaurant")) {
-			initializeRestaurant();
+	public CurrentBuildingPanel(Object building) {
+		super();
+//		if(building.getClass().equals(restaurant.getClass())) {
+//			building = restaurant;
 //		}
+		
+		initializeRestaurant();
 	}
-	
+
 	private void initializeRestaurant() {
 		SpringLayout springLayout = new SpringLayout();
 		setLayout(springLayout);

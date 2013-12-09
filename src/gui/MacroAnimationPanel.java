@@ -275,6 +275,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
 				Building b = buildings.get(i);
 				if(b.contains(e.getX(), e.getY())) {
 					b.displayBuilding();
+					city.setUniqueBuildingPanel(b.getName());
 				}
 			}
 		}
