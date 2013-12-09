@@ -366,7 +366,9 @@ public class HuangCustomerRole extends Role implements Customer {
 	}
 	private void leaveTable() {
 		Do("Leaving.");
-		myWaiter.msgLeavingTable(this);
+		if (myWaiter!= null) {
+			myWaiter.msgLeavingTable(this);
+		}
 		customerGui.DoExitRestaurant();
 	}
 

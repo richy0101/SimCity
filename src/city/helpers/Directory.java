@@ -73,10 +73,10 @@ public class Directory {
 		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "StackRestaurant");
 		
 		//Restaurant Roles Huang
-		roleDirectory.put("restaurant.stackRestaurant.HuangWaiterSharedRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.HuangHostRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.HuangWaiterNormalRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.HuangCookRole", "HuangRestaurant");	
+		roleDirectory.put("restaurant.huangRestaurant.HuangWaiterSharedRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.huangRestaurant.HuangHostRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.huangRestaurant.HuangWaiterNormalRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.huangRestaurant.HuangCookRole", "HuangRestaurant");	
 		/*
 		//Restaurant Roles Tan
 		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");

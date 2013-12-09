@@ -1,7 +1,6 @@
 package restaurant.huangRestaurant.gui;
 
 import restaurant.huangRestaurant.HuangCustomerRole;
-import restaurant.huangRestaurant.HuangWaiterRole;
 import gui.Gui;
 
 import java.awt.*;
@@ -31,7 +30,7 @@ public class CustomerGui implements Gui{
 	BufferedImage customerImage;
 
 	public CustomerGui(HuangCustomerRole c){ //HostAgent m) {
-		 this.agent = agent;
+		 this.agent = c;
 
 	        try {
 	        	customerImage = ImageIO.read(getClass().getResource("huangRestaurantCustomer.png"));
@@ -53,18 +52,18 @@ public class CustomerGui implements Gui{
 			yPos--;
 
 		if (xPos == xDestination && yPos == yDestination) {
-			if (command==Command.GoToSeat){
+			if (command == Command.GoToSeat){
 				agent.msgAnimationFinishedGoToSeat();
 			}
-			else if (command == command.GoToPay) {
+			else if (command == Command.GoToPay) {
 				agent.msgAnimationFinishedPay();
 			}
-			else if (command==Command.LeaveRestaurant) {
+			else if (command == Command.LeaveRestaurant) {
 				agent.msgAnimationFinishedLeaveRestaurant();
 				System.out.println("about to call gui.setCustomerEnabled(agent);");
 				isHungry = false;
 			}
-			command=Command.noCommand;
+			command = Command.noCommand;
 		}
 	}
 
@@ -77,7 +76,7 @@ public class CustomerGui implements Gui{
 	}
 	public void setHungry() {
 		isHungry = true;
-		agent.gotHungry();
+		agent.msgGotHungry();
 		setPresent(true);
 	}
 	public boolean isHungry() {
@@ -97,18 +96,18 @@ public class CustomerGui implements Gui{
 	public void DoGoToPay() {
 		xDestination = cashierX;
 		yDestination = cashierY;
-		command =command.GoToPay;
+		command = Command.GoToPay;
 	}
 
 	public void DoExitRestaurant() {
-		xDestination = -40;
-		yDestination = -40;
+		xDestination = xExit;
+		yDestination = yExit;
 		command = Command.LeaveRestaurant;
 	}
 
 	public void FullCaseExitRestaurant() {
-		xDestination = -41;
-		yDestination = -41;
+		xDestination = xExit;
+		yDestination = yExit;
 		command = Command.LeaveRestaurant;
 	}
 
