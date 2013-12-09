@@ -338,7 +338,6 @@ public class PersonAgent extends Agent implements Person {
 	public void msgCheckTime(int hour, int day) {
 		this.currentHour = hour;
 		this.currentDay = day;
-		print("Msg CheckTime receieved.");
 		if(!(workDetails.offDays.contains(day))) {
 			if (hour == workDetails.workEndHour && getPersonState() == PersonState.OutToWork) {
 				 setPersonState(PersonState.DoneWorking);
