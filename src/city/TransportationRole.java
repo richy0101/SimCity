@@ -41,7 +41,8 @@ public class TransportationRole extends Role implements Transportation  {
 	
 	public TransportationRole(String destination, String startingLocation) {
 		super();
-		hasCar = false; //hack for normative
+		//hasCar = false; //hack for normative
+		hasCar = true; //testing for CarAgent
 		setState(TransportationState.NeedsToTravel); // hack for normative;
 		this.destination = destination;
 		this.setStartingLocation(startingLocation);
@@ -176,7 +177,10 @@ public class TransportationRole extends Role implements Transportation  {
 			//set destination
 			car.msgTakeMeHere(destination);
 			//create car gui
-			carGui = new CarGui(car);
+			System.out.println("before carGui creation");
+			carGui = new CarGui(car, currentLocation);
+			System.out.println("setting gui");
+
 			car.setGui(carGui);
 			Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(carGui);
 			//setState(TransportationState.InTransit); //SET STATE

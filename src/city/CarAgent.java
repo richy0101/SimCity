@@ -1,6 +1,7 @@
 package city;
 
 import city.interfaces.Car;
+import city.interfaces.Vehicle;
 
 import city.interfaces.Person;
 import city.interfaces.Transportation;
@@ -13,13 +14,13 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class CarAgent extends Agent implements Car {
+public class CarAgent extends Agent implements Vehicle {
 	
     /**
 	*Data
 	*/
 	private Transportation passenger;
-	CarGui carGui;
+	CarGui carGui = null;
 	
 	public enum carState
 	{inTransit, atDestination, Idle}
@@ -30,7 +31,7 @@ public class CarAgent extends Agent implements Car {
 	private Semaphore driving = new Semaphore(0,true);
 	
 	CarAgent() {
-		
+		carGui= new CarGui(this, currentLocation);
 	}
 		
 	/**

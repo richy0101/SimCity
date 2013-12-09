@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.*;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -43,9 +44,59 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     protected SimCityGui city;
     protected Color background;
     protected Timer timer;
+    
+    //creating animation
+    
+    //number of grids in X and in Y
+    static int gridX= 42; // 42 checking if works faster with less grids
+    static int gridY= 21; // 21 to accommodate all pixels in blocks of 20
+     
+    
+    Semaphore[][] grid = new Semaphore[gridX+1][gridY+1]; 
 
-    public MacroAnimationPanel(SimCityGui city) {
+    public MacroAnimationPanel(SimCityGui city) { 
+    	
     	this.city = city;
+    	
+    	//initializing semaphore grid
+    	for (int i= 0; i<gridX+1; i++){
+    		for (int j= 0; j<gridY+1; j++){
+    			grid[i][j]= new Semaphore(1,true);
+    		}
+    	}
+    	try{
+    		System.out.println("making row 0 and col 0 unavailable");
+    		for(int i=0; i<gridY+1; i++){
+    			grid[0][0+i].acquire();
+    		}
+    		for(int i=1; i<gridX+1; i++){ //because 0th one is already taken
+    			grid[0+i][0].acquire();	
+    		}
+    		
+    		System.out.println("making first 4 rows (top buildings) unavailable");
+    		for(int i=1;i<gridX+1; i++){
+    			grid[0+i][1].acquire();
+    			grid[0+i][2].acquire();
+    			grid[0+i][3].acquire();
+    			grid[0+i][4].acquire();
+
+    		}
+    		
+    		//x=5, y=18 grids
+    		
+    		System.out.println("making first 5x18 grids unavailable for left buildings");
+    		for(int i=1; i<=5; i++){ //first 5 columns
+    			for(int j=5; j<= 18; j++){ //start from 5 bc first top 4 rows were already acquired
+    				grid[i][j].acquire();
+    			}
+    		}
+  		
+    	}
+    	catch(Exception e){
+    		System.out.println("Caught unexpected exception during grid setup: "+ e);
+    	}
+    	
+    	System.out.println("Reached here");
     	
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);

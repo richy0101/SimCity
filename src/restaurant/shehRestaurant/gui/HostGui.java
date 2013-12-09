@@ -13,16 +13,20 @@ import java.util.Collection;
 public class HostGui implements Gui {
 
     private ShehHostAgent agent = null;
-
-    private int xPos = -20, yPos = -20;//default waiter position
-    private int xDestination = -20, yDestination = -20;//default start position
+    
+    private int xPos = 766, yPos = 266;//default waiter position
+    private int xDestination = 766, yDestination = 266;//default start position
     private int agentSize = 20; //default agent size
-
-    //public static final int xTable = 200; //HARDCODE  
-    public int xTable;
-    public static final int yTable = 250; 
-    public ArrayList<Table> table; //Declaration of Table
-
+ 
+	private int XTABLE1 = 422;
+	private int YTABLE1 = 126;
+	private int XTABLE2 = 332;
+	private int YTABLE2 = 274;
+	private int XTABLE3 = 513;
+	private int YTABLE3 = 279;
+	
+    public ArrayList<Table> table; 
+    
     public HostGui(ShehHostAgent agent) {
         this.agent = agent;
         table = agent.getTables();

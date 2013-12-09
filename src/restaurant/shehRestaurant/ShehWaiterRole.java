@@ -1,14 +1,10 @@
 package restaurant.shehRestaurant;
 
-import agent.Agent;
 import agent.Role;
 import restaurant.shehRestaurant.helpers.Bill;
 import restaurant.shehRestaurant.helpers.Menu;
-import restaurant.shehRestaurant.helpers.Order.OrderCookState;
 import restaurant.shehRestaurant.gui.WaiterGui;
 import restaurant.shehRestaurant.helpers.Table;
-import restaurant.shehRestaurant.helpers.Order;
-import restaurant.shehRestaurant.helpers.FoodData;
 import restaurant.shehRestaurant.interfaces.Cashier;
 import restaurant.shehRestaurant.interfaces.Waiter;
 

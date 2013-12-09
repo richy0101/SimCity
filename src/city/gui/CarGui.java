@@ -73,7 +73,7 @@ public class CarGui implements Gui {
 		return Directory.sharedInstance().locationDirectory.get(Destination).yCoordinate;
 	}
 	
-	public CarGui(CarAgent agent) {
+	public CarGui(CarAgent agent, String currentLocation) {
         this.agent = agent;
         
         //check the x/y coord on the grid to know which side it's on and outputs appropriate car image.

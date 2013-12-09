@@ -18,6 +18,7 @@ import home.Apartment;
 import home.Home;
 import restaurant.Restaurant;
 import restaurant.stackRestaurant.*;
+import restaurant.tanRestaurant.TanRestaurant;
 
 public class Directory {
 	public static Directory sharedInstance;
@@ -26,6 +27,7 @@ public class Directory {
 	
 	Directory() {
 		restaurants.add(stackRestaurant);
+		restaurants.add(tanRestaurant); //should be added last to be 5th on the list
 		banks.add(bank);
 		banks.add(bank2);
 		markets.add(market1);
@@ -38,6 +40,7 @@ public class Directory {
     	}
     	return sharedInstance;
 	}
+	
 //ROLES
 	public Map<String, String> roleDirectory = new HashMap<String, String>(); {
 		//Bank Roles
@@ -115,10 +118,11 @@ public class Directory {
 	
 	private Restaurant shehRestaurant = new ShehRestaurant("ShehRestaurant"); //restaurant 5
 	Coordinate shehRestaurantLocation = new Coordinate(621,331);
+	*/
 	
 	private Restaurant tanRestaurant = new TanRestaurant("TanRestaurant"); //restaurant 6
 	Coordinate tanRestaurantLocation = new Coordinate(380,361);
-	*/
+	
 	
 //HOUSES
 	private Home house1 = new Home("House1");
@@ -213,6 +217,7 @@ public class Directory {
 	public static List<Bank> banks = new ArrayList<Bank>();
 	public static List<Market> markets = new ArrayList<Market>();
 	public static List<PersonAgent> people = new ArrayList<PersonAgent>();
+	
 	public Map<String, Agent> getAgents() {
 		return agents;
 	}
