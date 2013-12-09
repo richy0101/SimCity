@@ -43,7 +43,7 @@ public class Market {
 		open = false;
 	}
 	
-	public boolean getOpen() {
+	public boolean isOpen() {
 		return open;
 	}
 

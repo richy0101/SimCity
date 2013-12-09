@@ -41,8 +41,8 @@ public class TransportationRole extends Role implements Transportation  {
 	
 	public TransportationRole(String destination, String startingLocation) {
 		super();
-		//hasCar = false; //hack for normative
-		hasCar = true; //testing for CarAgent
+		hasCar = false; //hack for normative
+//		hasCar = true; //testing for CarAgent
 		setState(TransportationState.NeedsToTravel); // hack for normative;
 		this.destination = destination;
 		this.setStartingLocation(startingLocation);
