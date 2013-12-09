@@ -254,10 +254,8 @@ public class PersonAgent extends Agent implements Person {
 				homeName = "ApartmentC";
 			}
 			
-			
 			if (b.getName().equals(homeName)) {
 				b.addGui(personGui);
-				print(homeName + "STUB PERSONAGENT LINE 244");
 			}
 		}
 		//Set up inventory
