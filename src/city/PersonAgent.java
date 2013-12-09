@@ -129,8 +129,8 @@ public class PersonAgent extends Agent implements Person {
 		rentDue = false;
 		hasWorked = false;
 		aggressivenessLevel = 1;
-		//transMethod = TransportationMethod.TakesTheBus;
-		transMethod = TransportationMethod.OwnsACar;
+		transMethod = TransportationMethod.TakesTheBus;
+//		transMethod = TransportationMethod.OwnsACar;
 		Directory.sharedInstance().addPerson(this);
 		//Set up inventory
 		Food initialFood = new Food("Chicken");
@@ -146,6 +146,7 @@ public class PersonAgent extends Agent implements Person {
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
 			if (b.getName() == homeName) {
+				print(homeName);
 				//print("Adding GUI");
 				b.addGui(personGui);
 			}
@@ -243,6 +244,16 @@ public class PersonAgent extends Agent implements Person {
 		currentLocation = housingStatus;
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
+			if(homeName.toLowerCase().contains("apartmenta")){
+				homeName = "ApartmentA";
+			}
+			else if(homeName.toLowerCase().contains("apartmentb")) {
+				homeName = "ApartmentB";
+			}
+			else if(homeName.toLowerCase().contains("apartmentc")) {
+				homeName = "ApartmentC";
+			}
+			
 			if (b.getName().equals(homeName)) {
 				b.addGui(personGui);
 			}
@@ -325,7 +336,6 @@ public class PersonAgent extends Agent implements Person {
 	public void msgCheckTime(int hour, int day) {
 		this.currentHour = hour;
 		this.currentDay = day;
-		print("Msg CheckTime receieved.");
 		if(!(workDetails.offDays.contains(day))) {
 			if (hour == workDetails.workEndHour && getPersonState() == PersonState.OutToWork) {
 				 setPersonState(PersonState.DoneWorking);
@@ -626,7 +636,7 @@ public class PersonAgent extends Agent implements Person {
 		print("Action goRestaurant - State set to OutToEat");
 		setPersonState(PersonState.OutToEat);
 		//Decide Which restaurant to go to
-		Restaurant r = Directory.sharedInstance().getRestaurants().get(0);
+		Restaurant r = Directory.sharedInstance().getRestaurants().get(1);
 		//End of Decide block
 		if(currentLocation == homeName) {
 			personGui.DoLeaveHouse();
@@ -704,22 +714,33 @@ public class PersonAgent extends Agent implements Person {
 		}
 		return groceryList.isEmpty();
 	}
-	private void goMarket() {
-		print("Action goMarket - State set to OutToMarket");
-		setPersonState(PersonState.OutToMarket);
-		if(currentLocation == homeName) {
-			personGui.DoLeaveHouse();
-			actionComplete.acquireUninterruptibly();
-			personGui.setPresentFalse();
+	private void goMarket() {		
+		Market m = null;
+		for(Market market : Directory.sharedInstance().getMarkets()) {
+			if(market.isOpen()) {
+				m = market;
+				break;
+			}				
 		}
-		Market m = Directory.sharedInstance().getMarkets().get(0);
-		roles.clear();
-		Role marketCust = factory.createRole(m.getName(), this);
-		marketCust.setMarket(Directory.sharedInstance().marketDirectory.get(m.getName()).getWorker());
-		roles.add(marketCust);
-		Role t = new TransportationRole(m.getName(), currentLocation);
-		t.setPerson(this);
-		roles.add(t);
+		
+		if(m != null) {
+			print("Action goMarket - State set to OutToMarket");
+			setPersonState(PersonState.OutToMarket);
+			
+			if(currentLocation == homeName) {
+				personGui.DoLeaveHouse();
+				actionComplete.acquireUninterruptibly();
+				personGui.setPresentFalse();
+			}
+			m = Directory.sharedInstance().getMarkets().get(0);
+			roles.clear();
+			Role marketCust = factory.createRole(m.getName(), this);
+			marketCust.setMarket(Directory.sharedInstance().marketDirectory.get(m.getName()).getWorker());
+			roles.add(marketCust);
+			Role t = new TransportationRole(m.getName(), currentLocation);
+			t.setPerson(this);
+			roles.add(t);
+		}
 	}
 	/** Non Norm Actions **/
 	private void goRob() {

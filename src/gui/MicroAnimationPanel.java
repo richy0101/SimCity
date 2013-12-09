@@ -65,9 +65,9 @@ public class MicroAnimationPanel extends JPanel implements ActionListener, Mouse
     	cards.put("house5", new CityCard(myCity, Color.pink));
     	cards.put("house6", new CityCard(myCity, Color.pink));
     	
-    	cards.put("apartmenta", new CityCard(myCity, Color.pink));
-    	cards.put("apartmentb", new CityCard(myCity, Color.pink));
-    	cards.put("apartmentc", new CityCard(myCity, Color.pink));
+    	cards.put("apartmentA", new CityCard(myCity, Color.pink));
+    	cards.put("apartmentB", new CityCard(myCity, Color.pink));
+    	cards.put("apartmentC", new CityCard(myCity, Color.pink));
     	
     	cards.put("market1", new CityCard(myCity, Color.yellow));
     	cards.put("market2", new CityCard(myCity, Color.yellow));
