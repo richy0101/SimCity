@@ -90,16 +90,6 @@ public class PersonGui implements Gui {
 			yDestination = yBed;
 			
 			try {
-	        	personLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
-	        	personRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));
-	        	personUp = ImageIO.read(getClass().getResource("GUIPersonUp.png"));
-	        	personDown = ImageIO.read(getClass().getResource("GUIPersonDown.png"));
-	        }
-	        catch(IOException e) {
-	        	System.out.println("Error w/ Person assets");
-	        }
-			/*
-			try {
 	        	personLeft = ImageIO.read(getClass().getResource("GUICITYPersonLeft.png"));
 	        	personRight = ImageIO.read(getClass().getResource("GUICITYPersonRight.png"));
 	        	personDown = ImageIO.read(getClass().getResource("GUICITYPersonDown.png"));
@@ -108,7 +98,6 @@ public class PersonGui implements Gui {
 	        catch(IOException e) {
 	        	System.out.println("Error w/ Person assets");
 	        }
-	        */
 		}
 
 		this.agent = agent;
