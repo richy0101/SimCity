@@ -36,12 +36,14 @@ public class PersonGui implements Gui {
 	public enum CurrentAction {Cooking, Eating, Transition, Idle, Deciding, Leaving, Sleeping};
 	CurrentAction currentAction = CurrentAction.Idle;
 	public PersonGui(PersonAgent agent) {
+
 		String address = agent.getAddress();
+		System.out.println(agent.getAddress());
 		
 		apartmentLetter = ApartmentHelper.sharedInstance().getApartmentLetter(address);
 		xMult = ApartmentHelper.sharedInstance().getXMultiplier(address) * 212;
 		yMult = ApartmentHelper.sharedInstance().getYMultiplier(address) * 88;
-		
+
 		//HOME
 		if(address.toLowerCase().contains("house")) {
 			xBed = 5;
@@ -70,6 +72,7 @@ public class PersonGui implements Gui {
 	        }
 		}
 		//APARTMENT
+		/*
 		else if(address.toLowerCase().contains("apartment")) {
 			xBed = 184 * xMult;
 			yBed = 29 * yMult;
@@ -92,6 +95,7 @@ public class PersonGui implements Gui {
 	        	System.out.println("Error w/ Person assets");
 	        }
 		}
+		*/
 
 		this.agent = agent;
 	}
