@@ -23,7 +23,7 @@ public class TanRestaurant extends Restaurant {
 	public TanRestaurant(String name) {
 		super();
 		this.name = name;
-		host = new TanHostAgent();
+		host = new TanHostAgent("Host");
 		cashier = new TanCashierAgent("Cashier");
 		host.startThread();
 		cashier.startThread();	
