@@ -96,9 +96,13 @@ public class SimCityGui {
         roles.put("Stack's Restaurant Waiter Shared", "StackWaiterShared");
         roles.put("Stack's Restaurant Cook", "StackCook");
         
-        roles.put("Sheh Restaurant Waiter Normal", "ShehWaiterNormal");
+        roles.put("Sheh's Restaurant Waiter Normal", "ShehWaiterNormal");
         //roles.put("Sheh Restaurant Waiter Shared", "ShehWaiter");
-        roles.put("Sheh Restaurant Cook", "ShehCook");
+        roles.put("Sheh's Restaurant Cook", "ShehCook");
+        
+        roles.put("Huang's Restaurant Waiter Normal", "HuangWaiterNormal");
+        roles.put("Huang's Restaurant Waiter Shared", "HuangWaiterShared");
+        roles.put("Huang's Restaurant Cook", "HuangCook");
         
 		frame = new JFrame();
 		frame.setResizable(false);
@@ -243,6 +247,11 @@ public class SimCityGui {
 		occupationComboBox.addItem("Stack's Restaurant Waiter Normal");
 		occupationComboBox.addItem("Stack's Restaurant Waiter Shared");
 		occupationComboBox.addItem("Stack's Restaurant Cook");
+		
+		//Huang
+		occupationComboBox.addItem("Huang's Restaurant Waiter Normal");
+		occupationComboBox.addItem("Huang's Restaurant Waiter Shared");
+		occupationComboBox.addItem("Huang's Restaurant Cook");
 		
 
         //		occupationComboBox.addItem("Philips's Restaurant Host");
