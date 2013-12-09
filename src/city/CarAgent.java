@@ -20,7 +20,7 @@ public class CarAgent extends Agent implements Vehicle {
 	*Data
 	*/
 	private Transportation passenger;
-	CarGui carGui;
+	CarGui carGui = null;
 	
 	public enum carState
 	{inTransit, atDestination, Idle}
@@ -31,7 +31,7 @@ public class CarAgent extends Agent implements Vehicle {
 	private Semaphore driving = new Semaphore(0,true);
 	
 	CarAgent() {
-		
+		carGui= new CarGui(this, currentLocation);
 	}
 		
 	/**
