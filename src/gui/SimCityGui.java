@@ -125,14 +125,16 @@ public class SimCityGui {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() { //BUTTONS
-		
-		
-		 
 		roles.put("None", "Unemployed");
 		roles.put("Bank Teller", "BankTeller");
 		roles.put("Bank 2 Teller", "BankTeller2");
         roles.put("Market 1 Seller", "Market1");
         roles.put("Market 2 Seller", "Market2");
+        
+        roles.put("Landlord A", "LandlordA");
+        roles.put("Landlord B", "LandlordB");
+        roles.put("LandLord C", "LandLordC");
+        
         roles.put("Stack's Restaurant Waiter Normal", "StackWaiterNormal");
         roles.put("Stack's Restaurant Waiter Shared", "StackWaiterShared");
         roles.put("Stack's Restaurant Cook", "StackCook");
@@ -226,6 +228,10 @@ public class SimCityGui {
 		occupationComboBox.addItem("Bank 2 Teller");
 		occupationComboBox.addItem("Market 1 Seller");
 		occupationComboBox.addItem("Market 2 Seller");
+		
+        occupationComboBox.addItem("Landlord A");
+        occupationComboBox.addItem("Landlord B");
+        occupationComboBox.addItem("LandLord C");
 		
 		//Sheh
 		occupationComboBox.addItem("Sheh's Restaurant Waiter Normal");
@@ -356,11 +362,11 @@ public class SimCityGui {
 		housingComboBox.addItem("House4");
 		housingComboBox.addItem("House5");
 		housingComboBox.addItem("House6");
-		*/
 		
 		housingComboBox.addItem("LandLordA");
 		housingComboBox.addItem("LandLordB");
 		housingComboBox.addItem("LandLordC");
+		*/
 		
 		housingComboBox.addItem("ApartmentA01");
 		housingComboBox.addItem("ApartmentA02");
@@ -421,9 +427,18 @@ public class SimCityGui {
                     transportationComboBox.getSelectedItem() != "None" &&
                     housingComboBox.getSelectedItem() != "None") {
 					
-					//CREATE CONDITION WHERE IFF HOUSING COMBO BOX IS LANDLORD THEN JOB IS LAND LORD AND VICE VERSA
-					if(housingComboBox.getSelectedItem().toString().toLowerCase().contains("landlord")) {
+					//CREATE CONDITION WHERE IFF OCCUPATION COMBO BOX IS LANDLORD THEN HOUSING IS LAND LORD
+					if(occupationComboBox.getSelectedItem().toString().toLowerCase().contains("landlord")) {
+
+						System.out.println("STUBSIMCITYGUI LINE427: " + housingComboBox.getSelectedItem().toString());
 						String apartmentLetter = ApartmentHelper.sharedInstance().getApartmentLetter(housingComboBox.getSelectedItem().toString());
+						System.out.println(apartmentLetter);
+						
+						Role role = new Role();
+						for(Role r : roles) {
+							if(role.toString() == housingComboBox.getSelectedItem().toString()) {
+							
+							}
 						
 						PersonAgent person = new PersonAgent(roles.get("home.LandLord" + apartmentLetter),
                                 nameTextField.getText(),
@@ -432,9 +447,13 @@ public class SimCityGui {
                                 (String)housingComboBox.getSelectedItem(),
                                 (String)transportationComboBox.getSelectedItem());
 						
+						System.out.println("STUB simcitygui LN438");
+						
 						housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
-					}
+						}
+					} 
 					else {
+						System.out.println("STUBSIMCITYGUI LINE427: " + housingComboBox.getSelectedItem().toString());
 						PersonAgent person = new PersonAgent(roles.get(occupationComboBox.getSelectedItem()),
                                 nameTextField.getText(),
                                 aggressivenessSlider.getValue(),

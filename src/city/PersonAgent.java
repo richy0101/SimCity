@@ -224,7 +224,7 @@ public class PersonAgent extends Agent implements Person {
 			String vehicleStatus) {
 		this.name = name;
 		//Set Up Work.
-		//TODO do we need this if statement?
+		//TODO do we need this if statement? SERIOUSLY THOUGH, DO WE? -RYAN
 		if (job.contains("employ")) {
 			print("I am unemployed!");
 			this.unemployed = true;
