@@ -145,6 +145,15 @@ public class PersonAgent extends Agent implements Person {
 		personGui = new PersonGui(this);
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
+			if(homeName.toLowerCase().contains("apartmenta")){
+				homeName = "ApartmentA";
+			}
+			else if(homeName.toLowerCase().contains("apartmentb")) {
+				homeName = "ApartmentB";
+			}
+			else if(homeName.toLowerCase().contains("apartmentc")) {
+				homeName = "ApartmentC";
+			}
 			if (b.getName() == homeName) {
 				//print("Adding GUI");
 				b.addGui(personGui);
@@ -606,6 +615,15 @@ public class PersonAgent extends Agent implements Person {
 		else if(homeName.toLowerCase().contains("apartmentc")) {
 			homeName = "ApartmentC";
 		}
+		if(homeName.toLowerCase().contains("apartmenta")) {
+			currentLocation = "ApartmentA";
+		}
+		else if(homeName.toLowerCase().contains("apartmentb")) {
+			currentLocation = "ApartmentB";
+		}
+		else if(homeName.toLowerCase().contains("apartmentc")) {
+			currentLocation = "ApartmentC";
+		}
 		
 		Role t = new TransportationRole(homeName, currentLocation);
 		t.setPerson(this);
@@ -647,6 +665,13 @@ public class PersonAgent extends Agent implements Person {
 		//Decide Which restaurant to go to
 		Restaurant r = Directory.sharedInstance().getRestaurants().get(1);
 		//End of Decide block
+		if(currentLocation.toLowerCase().contains("apartmenta"))
+			currentLocation = "ApartmentA";
+		if(currentLocation.toLowerCase().contains("apartmentb"))
+			currentLocation = "ApartmentB";
+		if(currentLocation.toLowerCase().contains("apartmentc"))
+			currentLocation = "ApartmentC";
+		
 		if(currentLocation == homeName) {
 			personGui.DoLeaveHouse();
 			actionComplete.acquireUninterruptibly();
@@ -701,6 +726,14 @@ public class PersonAgent extends Agent implements Person {
 		print("Action goWork. Going to work.");
 		hasWorked = true;
 		setPersonState(PersonState.OutToWork);
+		
+		if(currentLocation.toLowerCase().contains("apartmenta"))
+			currentLocation = "ApartmentA";
+		if(currentLocation.toLowerCase().contains("apartmentb"))
+			currentLocation = "ApartmentB";
+		if(currentLocation.toLowerCase().contains("apartmentc"))
+			currentLocation = "ApartmentC";
+		
 		if(currentLocation == homeName) {
 			personGui.DoLeaveHouse();
 			actionComplete.acquireUninterruptibly();
@@ -736,6 +769,13 @@ public class PersonAgent extends Agent implements Person {
 			print("Action goMarket - State set to OutToMarket");
 			setPersonState(PersonState.OutToMarket);
 			
+			if(currentLocation.toLowerCase().contains("apartmenta"))
+				currentLocation = "ApartmentA";
+			if(currentLocation.toLowerCase().contains("apartmentb"))
+				currentLocation = "ApartmentB";
+			if(currentLocation.toLowerCase().contains("apartmentc"))
+				currentLocation = "ApartmentC";
+			
 			if(currentLocation == homeName) {
 				personGui.DoLeaveHouse();
 				actionComplete.acquireUninterruptibly();
@@ -753,6 +793,13 @@ public class PersonAgent extends Agent implements Person {
 	}
 	/** Non Norm Actions **/
 	private void goRob() {
+		if(currentLocation.toLowerCase().contains("apartmenta"))
+			currentLocation = "ApartmentA";
+		if(currentLocation.toLowerCase().contains("apartmentb"))
+			currentLocation = "ApartmentB";
+		if(currentLocation.toLowerCase().contains("apartmentc"))
+			currentLocation = "ApartmentC";
+		
 		if(currentLocation == homeName) {
 			personGui.DoLeaveHouse();
 			actionComplete.acquireUninterruptibly();
@@ -779,6 +826,14 @@ public class PersonAgent extends Agent implements Person {
 		else {
 			deposit = 0.0;
 		}
+		
+		if(currentLocation.toLowerCase().contains("apartmenta"))
+			currentLocation = "ApartmentA";
+		if(currentLocation.toLowerCase().contains("apartmentb"))
+			currentLocation = "ApartmentB";
+		if(currentLocation.toLowerCase().contains("apartmentc"))
+			currentLocation = "ApartmentC";
+		
 		if(currentLocation == homeName) {
 			personGui.DoLeaveHouse();
 			actionComplete.acquireUninterruptibly();
@@ -798,6 +853,13 @@ public class PersonAgent extends Agent implements Person {
 		setPersonState(PersonState.OutToBank);
 	}
 	private void goLoan() {
+		if(currentLocation.toLowerCase().contains("apartmenta"))
+			currentLocation = "ApartmentA";
+		if(currentLocation.toLowerCase().contains("apartmentb"))
+			currentLocation = "ApartmentB";
+		if(currentLocation.toLowerCase().contains("apartmentc"))
+			currentLocation = "ApartmentC";
+		
 		if(currentLocation == homeName) {
 			personGui.DoLeaveHouse();
 			actionComplete.acquireUninterruptibly();
@@ -819,6 +881,13 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	private void goWithdraw() {
+		if(currentLocation.toLowerCase().contains("apartmenta"))
+			currentLocation = "ApartmentA";
+		if(currentLocation.toLowerCase().contains("apartmentb"))
+			currentLocation = "ApartmentB";
+		if(currentLocation.toLowerCase().contains("apartmentc"))
+			currentLocation = "ApartmentC";
+		
 		if(currentLocation == homeName) {
 			personGui.DoLeaveHouse();
 			actionComplete.acquireUninterruptibly();
