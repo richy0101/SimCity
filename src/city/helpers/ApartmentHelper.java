@@ -20,13 +20,13 @@ public class ApartmentHelper {
 	public String getApartmentLetter(String location) {
 		String letter = null;
 		
-		if(location.toLowerCase().contains("A")) {
+		if(location.toLowerCase().contains("a")) {
 			letter = "a";
 		}
-		if(location.toLowerCase().contains("B")) {
+		if(location.toLowerCase().contains("b")) {
 			letter = "b";
 		}
-		if(location.toLowerCase().contains("C")) {
+		if(location.toLowerCase().contains("c")) {
 			letter = "c";
 		}
 		
