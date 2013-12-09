@@ -8,6 +8,7 @@ import javax.swing.*;
 import city.BusAgent;
 import city.PersonAgent;
 import city.gui.BusGui;
+import city.helpers.ApartmentHelper;
 import city.helpers.Clock;
 import city.helpers.Directory;
 import city.helpers.XMLReader;
@@ -420,28 +421,20 @@ public class SimCityGui {
                     transportationComboBox.getSelectedItem() != "None" &&
                     housingComboBox.getSelectedItem() != "None") {
 					
-					/*
 					//CREATE CONDITION WHERE IFF HOUSING COMBO BOX IS LANDLORD THEN JOB IS LAND LORD AND VICE VERSA
 					if(housingComboBox.getSelectedItem().toString().toLowerCase().contains("landlord")) {
-						String string = housingComboBox.getSelectedItem().toString();
-						String [] parts = string.split("LandLord");
-						String part2 = parts[1];
+						String apartmentLetter = ApartmentHelper.sharedInstance().getApartmentLetter(housingComboBox.getSelectedItem());
 						
-						System.out.println(housingComboBox.getSelectedItem().toString());
-						System.out.println(part2);
-						
-						
-						PersonAgent person = new PersonAgent(roles.get("home.LandLord" + part2),
+						PersonAgent person = new PersonAgent(roles.get("home.LandLord" + apartmentLetter),
                                 nameTextField.getText(),
                                 aggressivenessSlider.getValue(),
                                 (double)initialFundsSlider.getValue(),
                                 (String)housingComboBox.getSelectedItem(),
                                 (String)transportationComboBox.getSelectedItem());
+						
+						housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
 					}
 					else {
-					*/
-					//housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
-					
 						PersonAgent person = new PersonAgent(roles.get(occupationComboBox.getSelectedItem()),
                                 nameTextField.getText(),
                                 aggressivenessSlider.getValue(),
@@ -451,7 +444,7 @@ public class SimCityGui {
 						
 						
 						housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
-					//}
+					}
 						
 				}
 			}
