@@ -31,6 +31,10 @@ public class TenantList {
 	 		this.moneyOwed = money;
 	 	}
 	 	
+	 	public String getState(){
+	 		return state.toString();
+	 	}
+	 	
 	 	public void setPayState(PayState state){
 	 		this.state = state;
 	 	}
