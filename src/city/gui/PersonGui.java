@@ -80,6 +80,8 @@ public class PersonGui implements Gui {
 			yTable = 61 + yMult;
 			xDoor = 72 + xMult;
 			yDoor = 22 + yMult;
+			xPos = xBed;
+			yPos = yBed;
 			xDestination = xBed;
 			yDestination = yBed;
 			

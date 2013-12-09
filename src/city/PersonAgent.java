@@ -308,10 +308,18 @@ public class PersonAgent extends Agent implements Person {
 		hasWorked = false;
 		Directory.sharedInstance().addPerson(this);
 		personGui = new PersonGui(this);
-		
 		homeName = housingStatus;
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
+			/*
+			if(homeName.toLowerCase().contains("apartmenta"))
+				homeName = "ApartmentA";
+			if(homeName.toLowerCase().contains("apartmentb"))
+				homeName = "ApartmentB";
+			if(homeName.toLowerCase().contains("apartmentc"))
+				homeName = "ApartmentC";
+				*/	
+			
 			if (b.getName() == homeName) {
 				b.addGui(personGui);
 			}
@@ -415,6 +423,14 @@ public class PersonAgent extends Agent implements Person {
 	public void msgTransportFinished(String location) {
 		roles.pop();
 		currentLocation = location;
+		/*
+		if(currentLocation.toLowerCase().contains("apartmenta"))
+			currentLocation = "ApartmentA";
+		if(currentLocation.toLowerCase().contains("apartmentb"))
+			currentLocation = "ApartmentB";
+		if(currentLocation.toLowerCase().contains("apartmentc"))
+			currentLocation = "ApartmentC";
+		*/
 		if (currentLocation == homeName) {
 			setPersonState(PersonState.EnterHome);
 			print("msgTransportFinished received - Popping transport role, updating current location to: " + currentLocation + ". At Home.");
@@ -443,6 +459,13 @@ public class PersonAgent extends Agent implements Person {
 	 * Scheduler.  Determine what action is called for, and do it. -------------------------------------------------------
 	 */
 	public boolean pickAndExecuteAnAction() {
+		if(currentLocation.toLowerCase().contains("apartmenta"))
+			currentLocation = "ApartmentA";
+		if(currentLocation.toLowerCase().contains("apartmentb"))
+			currentLocation = "ApartmentB";
+		if(currentLocation.toLowerCase().contains("apartmentc"))
+			currentLocation = "ApartmentC";
+		
 		if (getPersonState() == PersonState.DoneWorking) {
 			leaveWork();
 			return true;
@@ -528,6 +551,13 @@ public class PersonAgent extends Agent implements Person {
 	 * 
 	 */
 	private boolean evaluateStatus() {
+		if(currentLocation.toLowerCase().contains("apartmenta"))
+			currentLocation = "ApartmentA";
+		if(currentLocation.toLowerCase().contains("apartmentb"))
+			currentLocation = "ApartmentB";
+		if(currentLocation.toLowerCase().contains("apartmentc"))
+			currentLocation = "ApartmentC";
+		
 		//print("In Eval: Current Location = " + currentLocation + ".");
 		if (getPersonState().toString().contains("ing") || getPersonState().toString().contains("OutTo") || getPersonState().toString().contains("NeedsTo")){
 			return false;
