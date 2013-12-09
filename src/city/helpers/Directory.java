@@ -107,7 +107,7 @@ public class Directory {
 		
 	}
 //RESTAURANT Instantiations
-	private Restaurant stackRestaurant = new StackRestaurant("HuangRestaurant"); //restaurant 1
+	private Restaurant stackRestaurant = new StackRestaurant("StackRestaurant"); //restaurant 1
 	Coordinate stackRestaurantLocation = new Coordinate(105,275);
 	
 	private Restaurant huangRestaurant = new HuangRestaurant("HuangRestaurant"); //restaurant 2
@@ -218,8 +218,8 @@ public class Directory {
 	public Map <String, Agent> agents =  new HashMap<String, Agent>();{
 		agents.put(stackRestaurant.getName() + "Host", (Agent) stackRestaurant.getHost());
 		agents.put(stackRestaurant.getName() + "Cashier", (Agent) stackRestaurant.getCashier());
-		agents.put(huangRestaurant.getName() + "Host", (Agent) stackRestaurant.getHost());
-		agents.put(huangRestaurant.getName() + "Cashier", (Agent) stackRestaurant.getCashier());
+		agents.put(huangRestaurant.getName() + "Host", (Agent) huangRestaurant.getHost());
+		agents.put(huangRestaurant.getName() + "Cashier", (Agent) huangRestaurant.getCashier());
 		agents.put( bank.getName(),(Agent) bank.getManager());
 		agents.put( bank2.getName(),(Agent) bank2.getManager());
 	}

@@ -80,7 +80,9 @@ public class HuangCustomerRole extends Role implements Customer {
 	public void setHost(HuangHostAgent host) {
 		this.host = host;
 	}
-	
+	public void setCashier(HuangCashierAgent ca) {
+		this.ca = ca;
+	}
 	public void setWaiter(HuangWaiterRole w){
 		this.myWaiter = w;
 	}

@@ -26,7 +26,10 @@ public class RoleFactory {
 	}
 	public Role createRole(String role, PersonAgent p) {
 		System.out.println(role);
-		if(role.equals("HuangRestaurant")) {
+		if(role.equals("StackRestaurant")) {
+			newRole = new StackCustomerRole("StackRestaurant");
+		}
+		else if(role.equals("HuangRestaurant")) {
 			newRole = new HuangCustomerRole("HuangRestaurant");
 		}
 		else if(role.equals("Market1") || role.equals("Market2")) {
