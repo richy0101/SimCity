@@ -63,48 +63,48 @@ public class Directory {
 		roleDirectory.put("home.LandlordRoleC", "ApartmentC");
 		
 		//Restaurant Roles Stack
-//		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "StackRestaurant");
-//		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "StackRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "StackRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackWaiterSharedRole", "StackRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackWaiterNormalRole", "StackRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "StackRestaurant");
+//		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");
+//		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackWaiterSharedRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackWaiterNormalRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "HuangRestaurant");
 		
 		/*
 		//Restaurant Roles Tan
-		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "StackRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "StackRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "StackRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "StackRestaurant");	
+		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "HuangRestaurant");	
 		
 		//Restaurant Roles Sheh
-		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "StackRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "StackRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "StackRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "StackRestaurant");	
+		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "HuangRestaurant");	
 		
 		//Restaurant Roles Nakamura
-		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "StackRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "StackRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "StackRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "StackRestaurant");	
+		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "HuangRestaurant");	
 		
 		//Restaurant Roles Huang
-		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "StackRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "StackRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "StackRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "StackRestaurant");	
+		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "HuangRestaurant");	
 		
 		//Restaurant Roles Phillips
-		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "StackRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "StackRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "StackRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "StackRestaurant");	
+		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "HuangRestaurant");	
 		*/
 		
 	}
 //RESTAURANT Instantiations
-	private Restaurant stackRestaurant = new StackRestaurant("StackRestaurant"); //restaurant 1
+	private Restaurant stackRestaurant = new StackRestaurant("HuangRestaurant"); //restaurant 1
 	Coordinate stackRestaurantLocation = new Coordinate(105,275);
 	
 	/*
