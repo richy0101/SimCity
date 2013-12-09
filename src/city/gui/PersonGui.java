@@ -39,11 +39,11 @@ public class PersonGui implements Gui {
 		String address = agent.getAddress();
 		
 		apartmentLetter = ApartmentHelper.sharedInstance().getApartmentLetter(address);
-		xMult = ApartmentHelper.sharedInstance().getXMultiplier(address);
-		yMult = ApartmentHelper.sharedInstance().getYMultiplier(address);
+		xMult = ApartmentHelper.sharedInstance().getXMultiplier(address) * 245;
+		yMult = ApartmentHelper.sharedInstance().getYMultiplier(address) * 103;
 		
 		//HOME
-		//if(address.toLowerCase().contains("house")) {
+		if(address.toLowerCase().contains("house")) {
 			xBed = 5;
 			yBed = 135;
 			xKitchen = 695;
@@ -58,29 +58,70 @@ public class PersonGui implements Gui {
 			yPos = yBed;
 			xDestination = xBed;
 			yDestination = yBed;
-		//}
-		//APARTMENT
-		/*
-		else if(location.toLowerCase().contains("apartment")) {
-			String [] parts = location.split("Apartment");
-			String part2 = parts[1];
 			
-			System.out.println(housingComboBox.getSelectedItem().toString());
-			System.out.println(part2);
-			
+			try {
+	        	personLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
+	        	personRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));
+	        	personUp = ImageIO.read(getClass().getResource("GUIPersonUp.png"));
+	        	personDown = ImageIO.read(getClass().getResource("GUIPersonDown.png"));
+	        }
+	        catch(IOException e) {
+	        	System.out.println("Error w/ Person assets");
+	        }
 		}
-		*/
-		try {
-        	personLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
-        	personRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));
-        	personUp = ImageIO.read(getClass().getResource("GUIPersonUp.png"));
-        	personDown = ImageIO.read(getClass().getResource("GUIPersonDown.png"));
-        }
-        catch(IOException e) {
-        	System.out.println("Error w/ Person assets");
-        }
+		//APARTMENT
+		else if(address.toLowerCase().contains("apartment")) {		
+			xBed = 219 + xMult;
+			yBed = 35 + yMult;
+			xKitchen = 14 + xMult;
+			yKitchen = 25 + yMult;
+			xTable = 23 + xMult;
+			yTable = 74 + yMult;
+			xDoor = 87 + xMult;
+			yDoor = 26 + yMult;
+			xPos = xBed;
+			yPos = yBed;
+			xDestination = xBed;
+			yDestination = yBed;
+			
+			try {
+	        	personLeft = ImageIO.read(getClass().getResource("GUICITYPersonLeft.png"));
+	        	personRight = ImageIO.read(getClass().getResource("GUICITYPersonRight.png"));
+	        	personDown = ImageIO.read(getClass().getResource("GUICITYPersonDown.png"));
+	        	personUp = ImageIO.read(getClass().getResource("GUICITYPersonUp.png"));
+	        }
+	        catch(IOException e) {
+	        	System.out.println("Error w/ Person assets");
+	        }
+		}
+		else if(address.toLowerCase().contains("landlord")) {
+			xBed = 632;
+			yBed = 314;
+			xKitchen = 817;
+			yKitchen = 208;
+			xTable = 808;
+			yTable = 252;;
+			xDoor = 729;
+			yDoor = 199;
+			xPos = xBed;
+			yPos = yBed;
+			xDestination = xBed;
+			yDestination = yBed;
+			
+			try {
+	        	personLeft = ImageIO.read(getClass().getResource("GUICITYPersonLeft.png"));
+	        	personRight = ImageIO.read(getClass().getResource("GUICITYPersonRight.png"));
+	        	personDown = ImageIO.read(getClass().getResource("GUICITYPersonDown.png"));
+	        	personUp = ImageIO.read(getClass().getResource("GUICITYPersonUp.png"));
+	        }
+	        catch(IOException e) {
+	        	System.out.println("Error w/ Person assets");
+	        }
+		}
+
 		this.agent = agent;
 	}
+
 	
 	@Override
 	public void updatePosition() {

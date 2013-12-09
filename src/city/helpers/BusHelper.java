@@ -59,13 +59,16 @@ public class BusHelper {
 		busStopEvaluator.put("House5", busStop2Location);
 		busStopEvaluator.put("House6", busStop2Location);
 		
-		busStopEvaluator.put("Apartment1", busStop1Location);
-		busStopEvaluator.put("Apartment2", busStop2Location);
+		busStopEvaluator.put("ApartmentA", busStop1Location);
+		busStopEvaluator.put("ApartmentB", busStop3Location);
+		busStopEvaluator.put("ApartmentC", busStop2Location);
 		
 		busStopEvaluator.put("Market1", busStop3Location);
 		busStopEvaluator.put("Market2", busStop2Location);
 		
 		busStopEvaluator.put("StackRestaurant", busStop1Location);
+		busStopEvaluator.put("ShehRestaurant", busStop2Location);
+		busStopEvaluator.put("HuangRestaurant", busStop4Location);
 	}
 	public Map<String, Integer> busStopToInt = new HashMap<String, Integer>(); {
 		busStopToInt.put("Bank", 4);
@@ -74,16 +77,22 @@ public class BusHelper {
 		busStopToInt.put("House2", 4);
 		busStopToInt.put("House3", 3);
 		busStopToInt.put("House4", 3);
-		busStopToInt.put("House5", 2);
+		busStopToInt.put("House5", 2);;
 		busStopToInt.put("House6", 2);
 		
-		busStopToInt.put("Apartment1", 1);
-		busStopToInt.put("Apartment2", 2);
+		busStopToInt.put("ApartmentA", 1);
+		busStopToInt.put("ApartmentB", 3);
+		busStopToInt.put("ApartmentC", 2);
 		
 		busStopToInt.put("Market1", 3);
 		busStopToInt.put("Market2", 2);
 		
 		busStopToInt.put("StackRestaurant", 1);
+
+		busStopToInt.put("HuangRestaurant", 4);
+
+		busStopToInt.put("ShehRestaurant", 2);
+
 		
 	}
 		

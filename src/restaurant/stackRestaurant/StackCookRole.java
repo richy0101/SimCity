@@ -1,22 +1,30 @@
 package restaurant.stackRestaurant;
 
-import agent.Role;
 import gui.Building;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import market.interfaces.Market;
-import city.helpers.Directory;
+
+import restaurant.CookRole;
+import restaurant.stackRestaurant.gui.CookGui;
+import restaurant.Restaurant;
+import restaurant.FoodInformation;
 import restaurant.stackRestaurant.helpers.Menu;
 import restaurant.stackRestaurant.interfaces.Cashier;
 import restaurant.stackRestaurant.interfaces.Cook;
 import restaurant.stackRestaurant.interfaces.Host;
 import restaurant.stackRestaurant.interfaces.Waiter;
-import restaurant.stackRestaurant.StackWaiterRole.AgentState;
-import restaurant.stackRestaurant.gui.CookGui;
+import city.helpers.Directory;
 
-public class StackCookRole extends Role implements Cook {
+public class StackCookRole extends CookRole implements Cook {
 	
 	private List<MyOrder> orders = Collections.synchronizedList(new ArrayList<MyOrder>());
 	private Map<String, Food> foods = Collections.synchronizedMap(new HashMap<String, Food>());
@@ -27,6 +35,7 @@ public class StackCookRole extends Role implements Cook {
 	Host host;
 	Market market1;
 	Cashier cashier;
+	Restaurant restaurant = Directory.sharedInstance().getRestaurants().get(0);
 	
 	private Semaphore doneAnimation = new Semaphore(0,true);
 	private enum AgentState 
@@ -46,10 +55,22 @@ public class StackCookRole extends Role implements Cook {
 	
 	public StackCookRole(String location) {
 		super();
-		foods.put("Steak", new Food(100));
-		foods.put("Chicken", new Food(140));
-		foods.put("Salad", new Food(70));
-		foods.put("Pizza", new Food(120));
+		FoodInformation steak = new FoodInformation(6000, 100);
+		foods.put("Steak", new Food(steak));
+		restaurant.getFoodInventory().put("Steak", steak);
+		
+		FoodInformation chicken = new FoodInformation(4000, 100);
+		foods.put("Chicken", new Food(chicken));
+		restaurant.getFoodInventory().put("Chicken", chicken);
+		
+		FoodInformation salad = new FoodInformation(7000, 100);
+		foods.put("Salad", new Food(salad));
+		restaurant.getFoodInventory().put("Salad", salad);
+		
+		FoodInformation pizza = new FoodInformation(12000, 100);
+		foods.put("Pizza", new Food(pizza));
+		restaurant.getFoodInventory().put("Pizza", pizza);
+		
 		cookGui = new CookGui(this);
 		state = AgentState.Arrived;
 		
@@ -145,8 +166,8 @@ public class StackCookRole extends Role implements Cook {
 	}
 	
 	private void cookIt(final MyOrder order) {
-		int cookingTime = foods.get(order.choice).cookingTime;
-		int inventory = foods.get(order.choice).inventory;
+		int cookingTime = foods.get(order.choice).information.getCookTime();
+		int inventory = foods.get(order.choice).information.getQuantity();
 		if(inventory == 0) {
 			Menu.sharedInstance().setInventoryStock(order.choice, false);
 			order.waiter.msgFoodEmpty(order.choice, order.table, order.seat);
@@ -155,7 +176,8 @@ public class StackCookRole extends Role implements Cook {
 			return;
 		}
 		else {
-			foods.get(order.choice).inventory--;
+			int quantity = restaurant.getFoodInventory().get(order.choice).getQuantity();
+			restaurant.getFoodInventory().get(order.choice).setQuantity(quantity--);;
 		}
 		cookGui.DoGoToFridge();
 		try {
@@ -277,7 +299,8 @@ public class StackCookRole extends Role implements Cook {
 	}
 	
 	public void msgMarketDeliveringOrder(int inventory, String choice) {
-		foods.get(choice).inventory = inventory;
+		foods.get(choice).information.setQuantity(inventory);
+		restaurant.msgChangeFoodInventory(choice, inventory);
 		foods.get(choice).state = FoodState.Stocked;
 		Menu.sharedInstance().setInventoryStock(choice, true);
 		print("Food " + choice + " arrived");
@@ -329,12 +352,11 @@ public class StackCookRole extends Role implements Cook {
 		OrderState state;
 	}
 	
-	private class Food {
-		public Food(int cookingTime) {
-			this.cookingTime = cookingTime;
+	public class Food {
+		FoodInformation information;
+		public Food(FoodInformation information) {
+			this.information = information;
 		}
-		int cookingTime;
-		int inventory = 1000;
 		FoodState state;
 	}
 	

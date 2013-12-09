@@ -48,8 +48,8 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     //creating animation
     
     //number of grids in X and in Y
-    static int gridX= 10; // 42 checking if works faster with less grids
-    static int gridY= 10; // 21 to accommodate all pixels in blocks of 20
+    static int gridX= 42; // 42 checking if works faster with less grids
+    static int gridY= 21; // 21 to accommodate all pixels in blocks of 20
      
     
     Semaphore[][] grid = new Semaphore[gridX+1][gridY+1]; 
@@ -68,36 +68,29 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     		System.out.println("making row 0 and col 0 unavailable");
     		for(int i=0; i<gridY+1; i++){
     			grid[0][0+i].acquire();
-    			System.out.println("hihi");
     		}
     		for(int i=1; i<gridX+1; i++){ //because 0th one is already taken
-    			System.out.println("hoho");
     			grid[0+i][0].acquire();	
     		}
     		
     		System.out.println("making first 4 rows (top buildings) unavailable");
     		for(int i=1;i<gridX+1; i++){
-    			System.out.println("1");
     			grid[0+i][1].acquire();
-    			System.out.println("2");
     			grid[0+i][2].acquire();
-    			System.out.println("3");
     			grid[0+i][3].acquire();
-    			System.out.println("4");
     			grid[0+i][4].acquire();
-    			System.out.println("5");
 
     		}
     		
     		//x=5, y=18 grids
-    		/*
+    		
     		System.out.println("making first 5x18 grids unavailable for left buildings");
     		for(int i=1; i<=5; i++){ //first 5 columns
     			for(int j=5; j<= 18; j++){ //start from 5 bc first top 4 rows were already acquired
     				grid[i][j].acquire();
     			}
     		}
-    		*/
+  		
     	}
     	catch(Exception e){
     		System.out.println("Caught unexpected exception during grid setup: "+ e);
@@ -175,17 +168,17 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     	
     //APARTMENT
     	
-    	Building apartment1 = new Building(162,136,113, 166);
-    	apartment1.setName("Apartment1");
-    	buildings.add(apartment1);
+    	Building apartmentA = new Building(162,136,113, 166);
+    	apartmentA.setName("ApartmentA");
+    	buildings.add(apartmentA);
     	
-    	Building apartment2 = new Building(570, 0, 145, 84);
-    	apartment2.setName("Apartment2");
-    	buildings.add(apartment2);
+    	Building apartmentB = new Building(570, 0, 145, 84);
+    	apartmentB.setName("ApartmentB");
+    	buildings.add(apartmentB);
     	
-    	Building apartment3 = new Building(729, 127,106, 150);
-    	apartment3.setName("Apartment3");
-    	buildings.add(apartment3);
+    	Building apartmentC = new Building(729, 127,106, 150);
+    	apartmentC.setName("ApartmentC");
+    	buildings.add(apartmentC);
     	
     	
     //BANKS 
@@ -238,7 +231,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
         }
         
 //        if(Clock.sharedInstance().isDay()) 
-       	g2.drawImage(cityImage, 0, 0, null);
+        	g2.drawImage(cityImage, 0, 0, null);
 //        else 
 //        	g2.drawImage(cityImageNight, 0, 0, null);
         
@@ -282,6 +275,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
 				Building b = buildings.get(i);
 				if(b.contains(e.getX(), e.getY())) {
 					b.displayBuilding();
+					city.setUniqueBuildingPanel(b.getName());
 				}
 			}
 		}

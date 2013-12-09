@@ -10,9 +10,9 @@ import city.interfaces.Person;
 
 public class TenantList {
 	
-	private List<Tenant> tenants1 = new ArrayList<Tenant>();
-	private List<Tenant> tenants2 = new ArrayList<Tenant>();
-	private List<Tenant> tenants3 = new ArrayList<Tenant>();
+	private List<Tenant> tenants1 = Collections.synchronizedList(new ArrayList<Tenant>());
+	private List<Tenant> tenants2 = Collections.synchronizedList(new ArrayList<Tenant>());
+	private List<Tenant> tenants3 = Collections.synchronizedList(new ArrayList<Tenant>());
     
     private static TenantList sharedInstance = null;
     
@@ -30,8 +30,18 @@ public class TenantList {
 	 	public void setMoneyOwed(double money){
 	 		this.moneyOwed = money;
 	 	}
+	 	public double getMoneyOwed(){
+	 		return moneyOwed;
+	 	}
+	 	public String getState(){
+	 		return state.toString();
+	 	}
 	 	
-	 	public void setPayState(PayState state){
+	 	public Person getPerson(){
+	 		return inhabitant;
+	 	}
+	 	
+	 	public void setState(PayState state){
 	 		this.state = state;
 	 	}
 	 	
