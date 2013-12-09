@@ -115,9 +115,9 @@ public class HuangHostAgent extends Agent {
 	private String name;
 	public HostGui hostGui = null;
 
-	public HuangHostAgent(String name) {
+	public HuangHostAgent(String name, HuangCashierAgent ca) {
 		super();
-		ca = new HuangCashierAgent("Cashier");
+		this.ca = ca;
 		this.name = name;
 		// make some tables
 		tables = new ArrayList<Table>(NTABLES);

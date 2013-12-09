@@ -19,8 +19,8 @@ public class HuangRestaurant extends Restaurant {
 	public HuangRestaurant(String name) {
 		super();
 		this.name = name;
-		host = new HuangHostAgent("Host");
 		cashier = new HuangCashierAgent("Money Machine 9001");
+		host = new HuangHostAgent("Host", cashier);
 		host.startThread();
 		cashier.startThread();	
 	}
