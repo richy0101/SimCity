@@ -10,9 +10,9 @@ import city.interfaces.Person;
 
 public class TenantList {
 	
-	private List<Tenant> tenants1 = new ArrayList<Tenant>();
-	private List<Tenant> tenants2 = new ArrayList<Tenant>();
-	private List<Tenant> tenants3 = new ArrayList<Tenant>();
+	private List<Tenant> tenants1 = Collections.synchronizedList(new ArrayList<Tenant>());
+	private List<Tenant> tenants2 = Collections.synchronizedList(new ArrayList<Tenant>());
+	private List<Tenant> tenants3 = Collections.synchronizedList(new ArrayList<Tenant>());
     
     private static TenantList sharedInstance = null;
     
