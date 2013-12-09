@@ -168,17 +168,17 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     	
     //APARTMENT
     	
-    	Building apartment1 = new Building(162,136,113, 166);
-    	apartment1.setName("Apartment1");
-    	buildings.add(apartment1);
+    	Building apartmentA = new Building(162,136,113, 166);
+    	apartmentA.setName("ApartmentA");
+    	buildings.add(apartmentA);
     	
-    	Building apartment2 = new Building(570, 0, 145, 84);
-    	apartment2.setName("Apartment2");
-    	buildings.add(apartment2);
+    	Building apartmentB = new Building(570, 0, 145, 84);
+    	apartmentB.setName("ApartmentB");
+    	buildings.add(apartmentB);
     	
-    	Building apartment3 = new Building(729, 127,106, 150);
-    	apartment3.setName("Apartment3");
-    	buildings.add(apartment3);
+    	Building apartmentC = new Building(729, 127,106, 150);
+    	apartmentC.setName("ApartmentC");
+    	buildings.add(apartmentC);
     	
     	
     //BANKS 
@@ -231,7 +231,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
         }
         
 //        if(Clock.sharedInstance().isDay()) 
-       	g2.drawImage(cityImage, 0, 0, null);
+        	g2.drawImage(cityImage, 0, 0, null);
 //        else 
 //        	g2.drawImage(cityImageNight, 0, 0, null);
         

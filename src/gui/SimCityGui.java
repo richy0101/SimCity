@@ -32,6 +32,7 @@ import javax.swing.event.ChangeEvent;
 
 import market.MarketCustomerRole;
 import market.MarketRole;
+import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
 import restaurant.shehRestaurant.gui.ShehRestaurantAnimationPanel;
 import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
 import restaurant.stackRestaurant.StackCookRole;
@@ -95,9 +96,13 @@ public class SimCityGui {
         roles.put("Stack's Restaurant Waiter Shared", "StackWaiterShared");
         roles.put("Stack's Restaurant Cook", "StackCook");
         
-        roles.put("Sheh Restaurant Waiter Normal", "ShehWaiterNormal");
+        roles.put("Sheh's Restaurant Waiter Normal", "ShehWaiterNormal");
         //roles.put("Sheh Restaurant Waiter Shared", "ShehWaiter");
-        roles.put("Sheh Restaurant Cook", "ShehCook");
+        roles.put("Sheh's Restaurant Cook", "ShehCook");
+        
+        roles.put("Huang's Restaurant Waiter Normal", "HuangWaiterNormal");
+        roles.put("Huang's Restaurant Waiter Shared", "HuangWaiterShared");
+        roles.put("Huang's Restaurant Cook", "HuangCook");
         
 		frame = new JFrame();
 		frame.setResizable(false);
@@ -145,6 +150,9 @@ public class SimCityGui {
 			}
 			else if(b.getName().toLowerCase().contains("tan")) {
 				b.setBuildingPanel(new TanRestaurantAnimationPanel(b, i, this));
+			}
+			else if(b.getName().toLowerCase().contains("huang")) {
+				b.setBuildingPanel(new HuangRestaurantAnimationPanel(b, i, this));
 			}
 			else {
 				b.setBuildingPanel(new GUIMarket( b, i, this ));
@@ -239,6 +247,11 @@ public class SimCityGui {
 		occupationComboBox.addItem("Stack's Restaurant Waiter Normal");
 		occupationComboBox.addItem("Stack's Restaurant Waiter Shared");
 		occupationComboBox.addItem("Stack's Restaurant Cook");
+		
+		//Huang
+		occupationComboBox.addItem("Huang's Restaurant Waiter Normal");
+		occupationComboBox.addItem("Huang's Restaurant Waiter Shared");
+		occupationComboBox.addItem("Huang's Restaurant Cook");
 		
 
         //		occupationComboBox.addItem("Philips's Restaurant Host");
@@ -346,13 +359,15 @@ public class SimCityGui {
 		sl_panel.putConstraint(SpringLayout.WEST, housingComboBox, 0, SpringLayout.WEST, nameTextField);
 		sl_panel.putConstraint(SpringLayout.EAST, housingComboBox, 0, SpringLayout.EAST, btnPopulateCity);
 		
+		/*
+		//houses not necessary
 		housingComboBox.addItem("House1");
 		housingComboBox.addItem("House2");
 		housingComboBox.addItem("House3");
 		housingComboBox.addItem("House4");
 		housingComboBox.addItem("House5");
 		housingComboBox.addItem("House6");
-		
+		*/
 		
 		housingComboBox.addItem("LandLordA");
 		housingComboBox.addItem("LandLordB");
@@ -437,14 +452,19 @@ public class SimCityGui {
 					}
 					else {
 					*/
-					housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
+					//housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
+					
 						PersonAgent person = new PersonAgent(roles.get(occupationComboBox.getSelectedItem()),
                                 nameTextField.getText(),
                                 aggressivenessSlider.getValue(),
                                 (double)initialFundsSlider.getValue(),
                                 (String)housingComboBox.getSelectedItem(),
                                 (String)transportationComboBox.getSelectedItem());
+						
+						
+						housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
 					//}
+						
 				}
 			}
 		});
@@ -593,40 +613,40 @@ public class SimCityGui {
 //		/**
 //		 * Start of Fresh SuperNorm = All agents wake up and do normal stuff.
 //		 */
-//		String a = "StackRestaurant";
+//		String a = "HuangRestaurant";
 //		String b = "House1";
 //		String name = "Test Person 1";
 //		Role role;
 //		if(rand.nextInt()%2 == 0) {
-//			role = new StackWaiterSharedRole("StackRestaurant");
+//			role = new StackWaiterSharedRole("HuangRestaurant");
 //		}
 //		else {
-//			role = new StackWaiterNormalRole("StackRestaurant");
+//			role = new StackWaiterNormalRole("HuangRestaurant");
 //		}
 //		PersonAgent p = new PersonAgent(role, a , b, name);
 ////		p.msgWakeUp();
 //		role.setPerson(p);
 //		p.startThread();
 //	
-//		String a2 = "StackRestaurant";
+//		String a2 = "HuangRestaurant";
 //		String b2 = "House2";
 //		String name2 = "Test Person 2";
 //		Role role2;
 //		if(rand.nextInt()%2 == 0) {
-//			role2 = new StackWaiterSharedRole("StackRestaurant");
+//			role2 = new StackWaiterSharedRole("HuangRestaurant");
 //		}
 //		else {
-//			role2 = new StackWaiterNormalRole("StackRestaurant");
+//			role2 = new StackWaiterNormalRole("HuangRestaurant");
 //		}
 //		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
 //		role2.setPerson(p2);
 ////		p2.msgWakeUp();
 //		//p2.startThread();
 //
-//		String a3 = "StackRestaurant";
+//		String a3 = "HuangRestaurant";
 //		String b3 = "House3";
 //		String name3 = "Test Person 3";
-//		Role role3 = new StackCookRole("StackRestaurant");
+//		Role role3 = new StackCookRole("HuangRestaurant");
 //		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
 //		role3.setPerson(p3);
 ////		p3.msgWakeUp();

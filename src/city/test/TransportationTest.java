@@ -25,7 +25,7 @@ public class TransportationTest extends TestCase {
 		person = new MockPerson("Person");
 		person.transMethod = TransportationMethod.TakesTheBus;
 		
-		role = new TransportationRole("StackRestaurant", "House1"); //destination, startingLocation
+		role = new TransportationRole("HuangRestaurant", "House1"); //destination, startingLocation
 		role.setPerson(person);
 	}
 	

@@ -1,5 +1,7 @@
 package city.interfaces;
 
+import home.interfaces.Landlord;
+
 import java.util.Map;
 
 public interface Person{
@@ -18,4 +20,6 @@ public interface Person{
 
 	public void msgRoleFinished();
 	public void msgTransportFinished(String currentLocation);
+	public void msgPayRent(Landlord landlord, double moneyOwed);
+	public int getCurrentDay();
 }

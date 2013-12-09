@@ -40,7 +40,7 @@ public class PersonGui implements Gui {
 		
 		apartmentLetter = ApartmentHelper.sharedInstance().getApartmentLetter(address);
 		xMult = ApartmentHelper.sharedInstance().getXMultiplier(address) * 212;
-		yMult = ApartmentHelper.sharedInstance().getYMultiplier(address) * 88;
+		yMult = ApartmentHelper.sharedInstance().getYMultiplier(address) * 96;
 		
 		//HOME
 		if(address.toLowerCase().contains("house")) {
@@ -71,14 +71,17 @@ public class PersonGui implements Gui {
 		}
 		//APARTMENT
 		else if(address.toLowerCase().contains("apartment")) {
-			xBed = 184 * xMult;
-			yBed = 29 * yMult;
-			xKitchen = 9 * xMult;
-			yKitchen = 29 * yMult;
-			xTable = 17 * xMult;
-			yTable = 61 * yMult;
-			xDoor = 72 * xMult;
-			yDoor = 22 * yMult;
+			
+			xBed = 184 + xMult;
+			yBed = 29 + yMult;
+			xKitchen = 9 + xMult;
+			yKitchen = 29 + yMult;
+			xTable = 17 + xMult;
+			yTable = 61 + yMult;
+			xDoor = 72 + xMult;
+			yDoor = 22 + yMult;
+			xPos = xBed;
+			yPos = yBed;
 			xDestination = xBed;
 			yDestination = yBed;
 			
