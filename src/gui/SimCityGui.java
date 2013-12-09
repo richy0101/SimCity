@@ -435,7 +435,7 @@ public class SimCityGui {
 					
 					//CREATE CONDITION WHERE IFF HOUSING COMBO BOX IS LANDLORD THEN JOB IS LAND LORD AND VICE VERSA
 					if(housingComboBox.getSelectedItem().toString().toLowerCase().contains("landlord")) {
-						String apartmentLetter = ApartmentHelper.sharedInstance().getApartmentLetter(housingComboBox.getSelectedItem());
+						String apartmentLetter = ApartmentHelper.sharedInstance().getApartmentLetter(housingComboBox.getSelectedItem().toString());
 						
 						PersonAgent person = new PersonAgent(roles.get("home.LandLord" + apartmentLetter),
                                 nameTextField.getText(),

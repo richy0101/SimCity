@@ -1,6 +1,7 @@
 package city;
 
 import gui.Building;
+import home.HomePersonRole;
 import home.interfaces.Landlord;
 
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class PersonAgent extends Agent implements Person {
 		//Market Scenario Constants
 		NeedsToGoMarket, OutToMarket, EnterHome, OutToWork, Sleeping, DoneWorking, TryingToLeaveWork,
 		//Home Scenario Constants
-		AskedToPayRent, NeedsToPayRent, PaidRent
+		NeedsToCleanRoom, CleaningRoom, CleanedRoom, AskedToPayRent, NeedsToPayRent, PaidRent
 		};
 	HouseState houseState;
 	private PersonState personState;
@@ -479,9 +480,13 @@ public class PersonAgent extends Agent implements Person {
 			b = roles.peek().pickAndExecuteAnAction();
 			return b;
 		}
-		/** Paying Rent */
+		//Home Rules
 		if (getPersonState() == PersonState.NeedsToPayRent) {
 			goPayRent();
+			return true;
+		}
+		if (getPersonState() == PersonState.NeedsToCleanRoom) {
+			goCleanHouse();
 			return true;
 		}
 		/** Rules for Market and Bank visits. Should only happen if evaluate status is called. **/
@@ -568,6 +573,11 @@ public class PersonAgent extends Agent implements Person {
 		if (getPersonState().toString().contains("ing") || getPersonState().toString().contains("OutTo") || getPersonState().toString().contains("NeedsTo")){
 			return false;
 		}
+		else if (dirtynessLevel > 10) {
+			print("Eval says GO CLEAN");
+			setPersonState(PersonState.NeedsToCleanRoom);
+			return true;
+		}
 		else if (hasWorked == false && unemployed == false && !(workDetails.offDays.contains(currentDay))) {
 			print("Eval says go WORK");
 			setPersonState(PersonState.NeedsToWork);
@@ -636,9 +646,33 @@ public class PersonAgent extends Agent implements Person {
 			roles.clear();
 			roles.add(new HomePersonRole(landLord));
 			roles.add(new TransportationRole(homeName));
+		}	
+	}*/
+	
+	private void goCleanHouse() {
+		print("Action cleanHouse - State set to cleaning.");
+
+		if(currentLocation == homeName) { //check to see if apartment works?
+			roles.clear();
+			HomePersonRole homeRole = new HomePersonRole();
+			roles.add(homeRole);
+			homeRole.msgCleanHouse();
+			
 		}
 		
-	}*/
+		roles.clear();
+		Role custRole = factory.createRole(r.getName(), this);
+		roles.add(custRole);
+		custRole.msgGotHungry();
+		custRole.setHost(Directory.sharedInstance().getAgents().get(r.getName() + "Host"));
+		custRole.setCashier(Directory.sharedInstance().getAgents().get(r.getName() + "Cashier"));
+		Role t = new TransportationRole(r.getName(), currentLocation);
+		t.setPerson(this);
+		roles.add(t);
+		
+		setPersonState(PersonState.CleanedRoom);
+	}
+	
 	private void goHome() {
 		print("Action goHome - State set to InTransit. Adding new Transportation Role.");
 		setPersonState(PersonState.InTransit);
