@@ -21,4 +21,5 @@ public interface Person{
 	public void msgRoleFinished();
 	public void msgTransportFinished(String currentLocation);
 	public void msgPayRent(Landlord landlord, double moneyOwed);
+	public int getCurrentDay();
 }
