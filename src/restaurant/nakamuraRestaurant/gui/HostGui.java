@@ -6,11 +6,11 @@ import java.awt.*;
 import java.util.List;
 
 import restaurant.nakamuraRestaurant.NakamuraCustomerRole;
-import restaurant.nakamuraRestaurant.NakamuraHostRole;
+import restaurant.nakamuraRestaurant.NakamuraHostAgent;
 
 public class HostGui implements Gui {
 
-    private NakamuraHostRole role = null;
+    private NakamuraHostAgent role = null;
 
     private int xPos = 100, yPos = 50;//default host position
     private int xDestination = 100, yDestination = 50;//default start position
@@ -18,7 +18,7 @@ public class HostGui implements Gui {
     public static final int xTable = 200;
     public static final int yTable = 250;
 
-    public HostGui(NakamuraHostRole role) {
+    public HostGui(NakamuraHostAgent role) {
         this.role = role;
     }
 

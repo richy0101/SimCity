@@ -13,8 +13,8 @@ import city.PersonAgent;
 public class NakamuraRestaurant extends Restaurant {
 
 	private String name;
-	NakamuraHostRole host;
-	NakamuraCashierRole cashier;
+	NakamuraHostAgent host;
+	NakamuraCashierAgent cashier;
 	double till = 10000;
 	
 	
@@ -29,11 +29,11 @@ public class NakamuraRestaurant extends Restaurant {
 	}
 	
 	@Override
-	public NakamuraHostRole getHost() {
+	public NakamuraHostAgent getHost() {
 		return host;
 	}
 	
-	public NakamuraCashierRole getCashier() {
+	public NakamuraCashierAgent getCashier() {
 		return cashier;
 	}
 	

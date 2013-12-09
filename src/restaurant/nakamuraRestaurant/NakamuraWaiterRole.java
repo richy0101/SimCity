@@ -26,8 +26,8 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 
 	public WaiterGui waiterGui = null;
 	private NakamuraCookRole cook;
-	private NakamuraHostRole host;
-	private NakamuraCashierRole cashier;
+	private NakamuraHostAgent host;
+	private NakamuraCashierAgent cashier;
 	
 	public enum WorkState {working, tired, waitingforbreak, goingonbreak, onbreak, backtowork};
 	private WorkState status;
@@ -52,7 +52,7 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 		return MyCustomers;
 	}
 	
-	public void setHost(NakamuraHostRole h) {
+	public void setHost(NakamuraHostAgent h) {
 		host = h;
 	}
 	
@@ -60,7 +60,7 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 		cook = c;
 	}
 	
-	public void setCashier(NakamuraCashierRole c) {
+	public void setCashier(NakamuraCashierAgent c) {
 		cashier = c;
 	}
 

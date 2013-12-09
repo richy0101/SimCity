@@ -24,9 +24,9 @@ public class NakamuraCustomerRole extends Role implements Customer{
 	private Random generator = new Random();
 
 	// agent correspondents
-	private NakamuraHostRole host;
+	private NakamuraHostAgent host;
 	private NakamuraWaiterRole waiter;
-	private NakamuraCashierRole cashier;
+	private NakamuraCashierAgent cashier;
 	private Menu menu;
 	private Check check;
 	private String choice = null;
@@ -61,7 +61,7 @@ public class NakamuraCustomerRole extends Role implements Customer{
 	/**
 	 * hack to establish connection to Host agent.
 	 */
-	public void setHost(NakamuraHostRole host) {
+	public void setHost(NakamuraHostAgent host) {
 		this.host = host;
 	}
 	
@@ -69,7 +69,7 @@ public class NakamuraCustomerRole extends Role implements Customer{
 		this.waiter = waiter;
 	}
 	
-	public void setCashier(NakamuraCashierRole cashier) {
+	public void setCashier(NakamuraCashierAgent cashier) {
 		this.cashier = cashier;
 	}
 	

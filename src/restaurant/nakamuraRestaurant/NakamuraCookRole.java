@@ -20,7 +20,7 @@ public class NakamuraCookRole extends Role {
 	private Semaphore actionComplete = new Semaphore(0,true);
 
 	public enum orderState {pending, cooking, done};
-	private NakamuraCashierRole cashier;
+	private NakamuraCashierAgent cashier;
 	private String name;
 	Timer timer = new Timer();
 	boolean checkInventory;
@@ -56,7 +56,7 @@ public class NakamuraCookRole extends Role {
 		markets.add(m);
 	}
 	
-	public void setCashier(NakamuraCashierRole c) {
+	public void setCashier(NakamuraCashierAgent c) {
 		cashier = c;
 	}
 	

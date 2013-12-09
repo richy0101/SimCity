@@ -1,6 +1,6 @@
 package restaurant.nakamuraRestaurant.test;
 
-import restaurant.nakamuraRestaurant.NakamuraCashierRole;
+import restaurant.nakamuraRestaurant.NakamuraCashierAgent;
 import restaurant.nakamuraRestaurant.helpers.Check.state;
 import restaurant.nakamuraRestaurant.test.mock.MockCustomer;
 import restaurant.nakamuraRestaurant.test.mock.MockMarket;
@@ -18,7 +18,7 @@ import junit.framework.*;
 public class CashierTest extends TestCase
 {
 	//these are instantiated for each test separately via the setUp() method.
-	NakamuraCashierRole cashier;
+	NakamuraCashierAgent cashier;
 	MockWaiter waiter;
 	MockCustomer customer;
 	MockCustomer customer2;
@@ -32,7 +32,7 @@ public class CashierTest extends TestCase
 	 */
 	public void setUp() throws Exception{
 		super.setUp();		
-		cashier = new NakamuraCashierRole("cashier");		
+		cashier = new NakamuraCashierAgent("cashier");		
 		customer = new MockCustomer("mockcustomer");
 		customer2 = new MockCustomer("mockcustomer2");		
 		waiter = new MockWaiter("mockwaiter");

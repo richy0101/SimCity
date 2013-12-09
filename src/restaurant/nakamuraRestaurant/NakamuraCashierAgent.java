@@ -1,5 +1,6 @@
 package restaurant.nakamuraRestaurant;
 
+import agent.Agent;
 import agent.Role;
 import restaurant.nakamuraRestaurant.helpers.Check;
 import restaurant.nakamuraRestaurant.helpers.Check.state;
@@ -17,7 +18,7 @@ import java.util.concurrent.Semaphore;
 /**
  * Restaurant Cook Agent
  */
-public class NakamuraCashierRole extends Role implements Cashier{
+public class NakamuraCashierAgent extends Agent implements Cashier{
 	public List<Check> Checks
 	= Collections.synchronizedList(new ArrayList<Check>());
 	public List<MarketBill> Bills = Collections.synchronizedList(new ArrayList<MarketBill>());
@@ -31,7 +32,7 @@ public class NakamuraCashierRole extends Role implements Cashier{
 //	public HostGui hostGui = null;
 //  private List<WaiterAgent> waiters = new ArrayList<WaiterAgent>();
 
-	public NakamuraCashierRole(String name) {
+	public NakamuraCashierAgent(String name) {
 		super();
 
 		this.name = name;

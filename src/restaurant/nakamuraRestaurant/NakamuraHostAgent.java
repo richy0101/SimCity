@@ -1,5 +1,6 @@
 package restaurant.nakamuraRestaurant;
 
+import agent.Agent;
 import agent.Role;
 
 import java.util.*;
@@ -14,7 +15,7 @@ import restaurant.nakamuraRestaurant.gui.HostGui;
 //does all the rest. Rather than calling the other agent a waiter, we called him
 //the HostAgent. A Host is the manager of a restaurant who sees that all
 //is proceeded as he wishes.
-public class NakamuraHostRole extends Role {
+public class NakamuraHostAgent extends Agent {
 	static final int NTABLES = 4;//a global for the number of tables.
 	//Notice that we implement waitingCustomers using ArrayList, but type it
 	//with List semantics.
@@ -32,7 +33,7 @@ public class NakamuraHostRole extends Role {
 
 	public HostGui hostGui = null;
 
-	public NakamuraHostRole(String name) {
+	public NakamuraHostAgent(String name) {
 		super();
 
 		this.name = name;

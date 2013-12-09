@@ -54,7 +54,7 @@ public class MarketAgent extends Agent implements Market{
 
 	// Messages
 
-	public void msgNewOrder(NakamuraCookRole cook, NakamuraCashierRole cashier, List<String> choice, int amount) {
+	public void msgNewOrder(NakamuraCookRole cook, NakamuraCashierAgent cashier, List<String> choice, int amount) {
 		print("Received msgNewOrder");
 		Orders.add(new Order(cook, cashier, choice, amount));
 		stateChanged();
@@ -146,12 +146,12 @@ public class MarketAgent extends Agent implements Market{
 		state s;
 		List<String> choice;
 		NakamuraCookRole cook;
-		NakamuraCashierRole cashier;
+		NakamuraCashierAgent cashier;
 
 		List<String> cantFill = new ArrayList<String>();
 		List<String> filled = new ArrayList<String>();
 
-		Order(NakamuraCookRole cook, NakamuraCashierRole cashier, List<String> choice, int amt) {
+		Order(NakamuraCookRole cook, NakamuraCashierAgent cashier, List<String> choice, int amt) {
 			this.amount = amt;
 			this.choice = choice;
 			this.cook = cook;
