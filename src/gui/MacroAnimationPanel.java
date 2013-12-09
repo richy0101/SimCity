@@ -231,7 +231,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
         }
         
 //        if(Clock.sharedInstance().isDay()) 
-       	g2.drawImage(cityImage, 0, 0, null);
+        	g2.drawImage(cityImage, 0, 0, null);
 //        else 
 //        	g2.drawImage(cityImageNight, 0, 0, null);
         
