@@ -19,6 +19,7 @@ public class LandlordRole extends Role implements Landlord {
 	public enum PayState {NeedsToPay,WaitingForPayment,OwesMoney,PayLater,NothingOwed};
 	int apartmentNum;
 	String myLocation;
+	boolean timeToCollectRent = false;
 	
 	LandlordGui gui;
 	
@@ -37,19 +38,11 @@ public class LandlordRole extends Role implements Landlord {
 	}
 	
 	//Messages
-	public void msgTimeToCollectRent(){
-		for(int i=0;i<TenantList.sharedInstance().getTenants(apartmentNum).size();i++){
-			if(TenantList.sharedInstance().getTenant(i,apartmentNum).getState() == "NothingOwed"
-				|| TenantList.sharedInstance().getTenant(i,apartmentNum).getState() == "OwesMoney"){
-				TenantList.sharedInstance().getTenant(i,apartmentNum).setState(PayState.NeedsToPay);
-				TenantList.sharedInstance().getTenant(i,apartmentNum).setMoneyOwed(50);
-			}
-		}
-	}
 	public void msgHereIsRent(Person person, double money){
 		for(int i=0;i<TenantList.sharedInstance().getTenants(apartmentNum).size();i++){
 			if(TenantList.sharedInstance().getTenant(i,apartmentNum).getPerson() == person){
 				if(money == TenantList.sharedInstance().getTenant(i,apartmentNum).getMoneyOwed()){
+					print("Received msgHereIsRent and is paying $" + money);
 					getPersonAgent().setFunds(getPersonAgent().getFunds() + money);
 					TenantList.sharedInstance().getTenant(i,apartmentNum).setMoneyOwed(0);
 					TenantList.sharedInstance().getTenant(i,apartmentNum).setState(PayState.NothingOwed);
@@ -66,6 +59,12 @@ public class LandlordRole extends Role implements Landlord {
 	
 	//Scheduler
 	public boolean pickAndExecuteAnAction() {
+		if(getPersonAgent().getCurrentDay() == 7 && timeToCollectRent == false){
+			timeToCollectRent = true;
+		}
+		if(timeToCollectRent == true){
+			timeToCollectRent();
+		}
 		synchronized(TenantList.sharedInstance().getTenants(apartmentNum)){
 			for(int i=0;i<TenantList.sharedInstance().getTenants(apartmentNum).size();i++){
 				if(TenantList.sharedInstance().getTenant(i,apartmentNum).getState().equals("NeedsToPay")){
@@ -77,7 +76,19 @@ public class LandlordRole extends Role implements Landlord {
 		return false;
 	}
 	//Actions
+	public void timeToCollectRent(){
+		timeToCollectRent = false;
+		for(int i=0;i<TenantList.sharedInstance().getTenants(apartmentNum).size();i++){
+			print("Time to collect rent from my peasants");
+			if(TenantList.sharedInstance().getTenant(i,apartmentNum).getState() == "NothingOwed"
+				|| TenantList.sharedInstance().getTenant(i,apartmentNum).getState() == "OwesMoney"){
+				TenantList.sharedInstance().getTenant(i,apartmentNum).setState(PayState.NeedsToPay);
+				TenantList.sharedInstance().getTenant(i,apartmentNum).setMoneyOwed(50);
+			}
+		}
+	}
 	public void payRent(Tenant tenant){
+		print("Tenant paying rent $" + tenant.getMoneyOwed());
 		tenant.getPerson().msgPayRent(this,tenant.getMoneyOwed());
 		tenant.setState(PayState.WaitingForPayment);
 		stateChanged();

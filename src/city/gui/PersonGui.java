@@ -44,7 +44,6 @@ public class PersonGui implements Gui {
 		
 		//HOME
 		if(address.toLowerCase().contains("house")) {
-			System.out.println("HOUSEstub");
 			xBed = 5;
 			yBed = 135;
 			xKitchen = 695;
@@ -72,7 +71,6 @@ public class PersonGui implements Gui {
 		}
 		//APARTMENT
 		else if(address.toLowerCase().contains("apartment")) {
-			System.out.println("APARTMENTSTUB");
 			
 			xBed = 184 + xMult;
 			yBed = 29 + yMult;
