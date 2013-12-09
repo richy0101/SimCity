@@ -148,7 +148,7 @@ public class Directory {
 	private Home house6 = new Home("House6");
 	Coordinate house6Location = new Coordinate(290,272);	
 	
-		
+	
 //MARKETS
 	private Market market1 = new Market("Market1"); //priority market
 	Coordinate market1Location = new Coordinate(494,69);

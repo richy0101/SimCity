@@ -59,7 +59,8 @@ public class CarAgent extends Agent implements Vehicle {
 	 * Messages
 	 * @param myDestination
 	 */
-		public void msgTakeMeHere(String myDestination){ //receives msg from passenger
+		public void msgTakeMeHere(Transportation Passenger, String myDestination){ //receives msg from passenger
+			passenger= Passenger;
 			destination = myDestination;
 			print("Car Destination: " + myDestination + ".");
 			
@@ -98,6 +99,7 @@ public class CarAgent extends Agent implements Vehicle {
 		private void parkCar(){
 		//msg gives passenger the destination so its gui can reappear at an appropriate place
 			print("Car is parking.");
+			print("desti is"+ destination);
 			passenger.msgArrivedAtDestination(destination);
 			carGui.DoParkCar();
 			currentState = carState.Idle;
