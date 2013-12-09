@@ -37,7 +37,7 @@ public class HomePersonRole extends Role implements HomePerson {
 	//actions-----------------------------------------------------------------------------
 	private void PayRent() {
 		if(getPersonAgent().getFunds() >= debt) {
-			landlord.msgHereIsRent(this, debt);
+			//landlord.msgHereIsRent(this, debt);
 			getPersonAgent().setFunds(getPersonAgent().getFunds() - debt);
 		}
 		else 

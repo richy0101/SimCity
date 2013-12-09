@@ -1,6 +1,7 @@
 package city;
 
 import gui.Building;
+import home.interfaces.Landlord;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,6 +40,7 @@ public class PersonAgent extends Agent implements Person {
 	public boolean unemployed = false;
 	public boolean hasWorked;
 	boolean rentDue;
+	double moneyOwedToLandlord = 0;
 	public String name;
 	String homeName;
 	String currentLocation;
@@ -50,7 +52,9 @@ public class PersonAgent extends Agent implements Person {
 		//Bank Scenario Constants
 		OutToBank, WantsToWithdraw, WantsToGetLoan, WantsToDeposit, WantsToRob, 
 		//Market Scenario Constants
-		NeedsToGoMarket, OutToMarket, EnterHome, OutToWork, Sleeping, DoneWorking, TryingToLeaveWork
+		NeedsToGoMarket, OutToMarket, EnterHome, OutToWork, Sleeping, DoneWorking, TryingToLeaveWork,
+		//Home Scenario Constants
+		AskedToPayRent, NeedsToPayRent, PaidRent
 		};
 	HouseState houseState;
 	private PersonState personState;
@@ -62,6 +66,7 @@ public class PersonAgent extends Agent implements Person {
 	int currentHour;
 	int currentDay;
 	PersonGui personGui;
+	Landlord landlord = null;
 	Map<String, Integer> groceryList = new HashMap<String, Integer>();
 	Timer personTimer = new Timer();
 	
@@ -406,10 +411,14 @@ public class PersonAgent extends Agent implements Person {
 		currentLocation = homeName;
 		stateChanged();
 	}
-	public void msgPayRent() {
+	public void msgPayRent(Landlord landlord,double moneyOwed) {
 		print("msgPayrent received - setting rentDue to true.");
+		if(this.landlord != null){
+			this.landlord = landlord;
+		}
+		this.moneyOwedToLandlord += moneyOwed;
+		
 		rentDue = true;
-		stateChanged();
 	}
 	/**
 	 * Scheduler.  Determine what action is called for, and do it. -------------------------------------------------------
@@ -424,6 +433,11 @@ public class PersonAgent extends Agent implements Person {
 			boolean b = false;
 			b = roles.peek().pickAndExecuteAnAction();
 			return b;
+		}
+		/** Paying Rent */
+		if (getPersonState() == PersonState.NeedsToPayRent) {
+			goPayRent();
+			return true;
 		}
 		/** Rules for Market and Bank visits. Should only happen if evaluate status is called. **/
 		//Bank Rules
@@ -490,8 +504,6 @@ public class PersonAgent extends Agent implements Person {
 	}
 
 
-
-
 	/**
 	 * Actions --------------------------------------------------------------------------------------------------------
 	 * 
@@ -504,6 +516,11 @@ public class PersonAgent extends Agent implements Person {
 		else if (hasWorked == false && unemployed == false && !(workDetails.offDays.contains(currentDay))) {
 			print("Eval says go WORK");
 			setPersonState(PersonState.NeedsToWork);
+			return true;
+		}
+		else if(rentDue == true && currentLocation == homeName) {
+			print ("Eval says PAY RENT BECAUSE YOUR HOME");
+			setPersonState(PersonState.NeedsToPayRent);
 			return true;
 		}
 		else if (funds < 50.00 && aggressivenessLevel > 2) {
@@ -586,6 +603,24 @@ public class PersonAgent extends Agent implements Person {
 			}
 		},
 		inventory.get(desiredFood).preparationTime);//time for cooking
+	}
+	private void goPayRent(){
+		setPersonState(PersonState.PaidRent);
+		if(funds >= moneyOwedToLandlord ){
+			landlord.msgHereIsRent((Person) this, moneyOwedToLandlord);
+			funds -= moneyOwedToLandlord;
+			moneyOwedToLandlord = 0;
+			print("Action goPayRent = State set to PayingRent and new funds are $" + funds);
+			rentDue = false;
+		}
+		else{
+			landlord.msgHereIsRent(this, funds);
+			moneyOwedToLandlord -= funds;
+			funds = 0;
+			rentDue = false;
+			print("Action goPayRent = State set to PayingRent and still owes money to landlord");
+		}
+		stateChanged();
 	}
 	private void goRestaurant() {
 		print("Action goRestaurant - State set to OutToEat");

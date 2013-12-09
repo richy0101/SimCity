@@ -1,7 +1,9 @@
 package home.interfaces;
+import city.PersonAgent;
+import city.interfaces.Person;
 import home.*;
 
 public interface Landlord {
-	public abstract void msgNeedsToPayRent(HomePersonRole person, double moneyOwed);
-	public abstract void msgHereIsRent(HomePersonRole person, double money);
+	public abstract void msgTimeToCollectRent();
+	public abstract void msgHereIsRent(Person person, double money);
 }
