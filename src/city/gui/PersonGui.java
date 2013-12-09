@@ -42,10 +42,6 @@ public class PersonGui implements Gui {
 		xMult = ApartmentHelper.sharedInstance().getXMultiplier(address) * 212;
 		yMult = ApartmentHelper.sharedInstance().getYMultiplier(address) * 96;
 		
-		System.out.println(address);
-		System.out.println(xMult);
-		System.out.println(yMult);
-		
 		//HOME
 		if(address.toLowerCase().contains("house")) {
 			System.out.println("HOUSEstub");
