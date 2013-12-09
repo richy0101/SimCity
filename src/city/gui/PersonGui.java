@@ -39,11 +39,11 @@ public class PersonGui implements Gui {
 		String address = agent.getAddress();
 		
 		apartmentLetter = ApartmentHelper.sharedInstance().getApartmentLetter(address);
-		xMult = ApartmentHelper.sharedInstance().getXMultiplier(address);
-		yMult = ApartmentHelper.sharedInstance().getYMultiplier(address);
+		xMult = ApartmentHelper.sharedInstance().getXMultiplier(address) * 212;
+		yMult = ApartmentHelper.sharedInstance().getYMultiplier(address) * 88;
 		
 		//HOME
-		//if(address.toLowerCase().contains("house")) {
+		if(address.toLowerCase().contains("house")) {
 			xBed = 5;
 			yBed = 135;
 			xKitchen = 695;
@@ -58,27 +58,41 @@ public class PersonGui implements Gui {
 			yPos = yBed;
 			xDestination = xBed;
 			yDestination = yBed;
-		//}
-		//APARTMENT
-		/*
-		else if(location.toLowerCase().contains("apartment")) {
-			String [] parts = location.split("Apartment");
-			String part2 = parts[1];
 			
-			System.out.println(housingComboBox.getSelectedItem().toString());
-			System.out.println(part2);
-			
+			try {
+	        	personLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
+	        	personRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));
+	        	personUp = ImageIO.read(getClass().getResource("GUIPersonUp.png"));
+	        	personDown = ImageIO.read(getClass().getResource("GUIPersonDown.png"));
+	        }
+	        catch(IOException e) {
+	        	System.out.println("Error w/ Person assets");
+	        }
 		}
-		*/
-		try {
-        	personLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
-        	personRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));
-        	personUp = ImageIO.read(getClass().getResource("GUIPersonUp.png"));
-        	personDown = ImageIO.read(getClass().getResource("GUIPersonDown.png"));
-        }
-        catch(IOException e) {
-        	System.out.println("Error w/ Person assets");
-        }
+		//APARTMENT
+		else if(address.toLowerCase().contains("apartment")) {
+			xBed = 184 * xMult;
+			yBed = 29 * yMult;
+			xKitchen = 9 * xMult;
+			yKitchen = 29 * yMult;
+			xTable = 17 * xMult;
+			yTable = 61 * yMult;
+			xDoor = 72 * xMult;
+			yDoor = 22 * yMult;
+			xDestination = xBed;
+			yDestination = yBed;
+			
+			try {
+	        	personLeft = ImageIO.read(getClass().getResource("GUICITYPersonLeft.png"));
+	        	personRight = ImageIO.read(getClass().getResource("GUICITYPersonRight.png"));
+	        	personDown = ImageIO.read(getClass().getResource("GUICITYPersonDown.png"));
+	        	personUp = ImageIO.read(getClass().getResource("GUICITYPersonUp.png"));
+	        }
+	        catch(IOException e) {
+	        	System.out.println("Error w/ Person assets");
+	        }
+		}
+
 		this.agent = agent;
 	}
 	
