@@ -146,7 +146,6 @@ public class PersonAgent extends Agent implements Person {
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
 			if (b.getName() == homeName) {
-				print(homeName);
 				//print("Adding GUI");
 				b.addGui(personGui);
 			}
@@ -598,6 +597,16 @@ public class PersonAgent extends Agent implements Person {
 		print("Action goHome - State set to InTransit. Adding new Transportation Role.");
 		setPersonState(PersonState.InTransit);
 		roles.clear();
+		if(homeName.toLowerCase().contains("apartmenta")) {
+			homeName = "ApartmentA";
+		}
+		else if(homeName.toLowerCase().contains("apartmentb")) {
+			homeName = "ApartmentB";
+		}
+		else if(homeName.toLowerCase().contains("apartmentc")) {
+			homeName = "ApartmentC";
+		}
+		
 		Role t = new TransportationRole(homeName, currentLocation);
 		t.setPerson(this);
 		roles.add(t);
