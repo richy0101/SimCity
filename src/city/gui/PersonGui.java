@@ -48,6 +48,7 @@ public class PersonGui implements Gui {
 		
 		//HOME
 		if(address.toLowerCase().contains("house")) {
+			System.out.println("HOUSEstub");
 			xBed = 5;
 			yBed = 135;
 			xKitchen = 695;
@@ -74,19 +75,29 @@ public class PersonGui implements Gui {
 	        }
 		}
 		//APARTMENT
-		/*
 		else if(address.toLowerCase().contains("apartment")) {
-			xBed = 184 * xMult;
-			yBed = 29 * yMult;
-			xKitchen = 9 * xMult;
-			yKitchen = 29 * yMult;
-			xTable = 17 * xMult;
-			yTable = 61 * yMult;
-			xDoor = 72 * xMult;
-			yDoor = 22 * yMult;
+			System.out.println("APARTMENTSTUB");
+			xBed = 184 + xMult;
+			yBed = 29 + yMult;
+			xKitchen = 9 + xMult;
+			yKitchen = 29 + yMult;
+			xTable = 17 + xMult;
+			yTable = 61 + yMult;
+			xDoor = 72 + xMult;
+			yDoor = 22 + yMult;
 			xDestination = xBed;
 			yDestination = yBed;
 			
+			try {
+	        	personLeft = ImageIO.read(getClass().getResource("GUIPersonLeft.png"));
+	        	personRight = ImageIO.read(getClass().getResource("GUIPersonRight.png"));
+	        	personUp = ImageIO.read(getClass().getResource("GUIPersonUp.png"));
+	        	personDown = ImageIO.read(getClass().getResource("GUIPersonDown.png"));
+	        }
+	        catch(IOException e) {
+	        	System.out.println("Error w/ Person assets");
+	        }
+			/*
 			try {
 	        	personLeft = ImageIO.read(getClass().getResource("GUICITYPersonLeft.png"));
 	        	personRight = ImageIO.read(getClass().getResource("GUICITYPersonRight.png"));
@@ -96,8 +107,8 @@ public class PersonGui implements Gui {
 	        catch(IOException e) {
 	        	System.out.println("Error w/ Person assets");
 	        }
+	        */
 		}
-		*/
 
 		this.agent = agent;
 	}
