@@ -852,6 +852,9 @@ public class PersonAgent extends Agent implements Person {
 	public Map<String, Integer> getGroceriesList() {
 		return groceryList;
 	}
+	public int getCurrentDay(){
+		return currentDay;
+	}
 	public String getAddress() {
 		return homeName; 
 	}
