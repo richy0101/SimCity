@@ -1,5 +1,6 @@
 package restaurant.huangRestaurant.interfaces;
 
+import restaurant.CashierInterface;
 import agent.Role;
 
 
@@ -13,7 +14,7 @@ import agent.Role;
  * @author Alex Huang
  *
  */
-public interface Cashier {
+public interface Cashier extends CashierInterface {
 	public void msgHereIsCustomerDish(Waiter w, String type, int table, Customer c);
 	public void msgHereIsMoney(Customer c);
 	public void msgNotEnoughMoney(Customer c);

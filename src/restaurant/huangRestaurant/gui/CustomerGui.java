@@ -1,7 +1,6 @@
 package restaurant.huangRestaurant.gui;
 
 import restaurant.huangRestaurant.HuangCustomerRole;
-import restaurant.huangRestaurant.HuangWaiterRole;
 import gui.Gui;
 
 import java.awt.*;
@@ -26,12 +25,12 @@ public class CustomerGui implements Gui{
 	private static final int cashierX = 780; 
 	private static final int cashierY = 40;
 	private int xExit = 0, yExit = 450;//Exit
-	private enum Command {noCommand, GoToSeat, GoToPay, LeaveRestaurant};
+	private enum Command {noCommand, GoToSeat, GoToPay, LeaveRestaurant, GoToHost};
 	private Command command=Command.noCommand;
 	BufferedImage customerImage;
 
 	public CustomerGui(HuangCustomerRole c){ //HostAgent m) {
-		 this.agent = agent;
+		 this.agent = c;
 
 	        try {
 	        	customerImage = ImageIO.read(getClass().getResource("huangRestaurantCustomer.png"));
@@ -53,18 +52,23 @@ public class CustomerGui implements Gui{
 			yPos--;
 
 		if (xPos == xDestination && yPos == yDestination) {
-			if (command==Command.GoToSeat){
+			if (command == Command.GoToSeat){
 				agent.msgAnimationFinishedGoToSeat();
 			}
-			else if (command == command.GoToPay) {
+			else if (command == Command.GoToPay) {
 				agent.msgAnimationFinishedPay();
 			}
-			else if (command==Command.LeaveRestaurant) {
+			else if (command == Command.LeaveRestaurant) {
 				agent.msgAnimationFinishedLeaveRestaurant();
 				System.out.println("about to call gui.setCustomerEnabled(agent);");
 				isHungry = false;
 			}
-			command=Command.noCommand;
+			else if (command == Command.GoToHost) {
+				agent.msgAnimationAtHost();
+				System.out.println("about to call gui.setCustomerEnabled(agent);");
+				isHungry = false;
+			}
+			command = Command.noCommand;
 		}
 	}
 
@@ -77,7 +81,7 @@ public class CustomerGui implements Gui{
 	}
 	public void setHungry() {
 		isHungry = true;
-		agent.gotHungry();
+		agent.msgGotHungry();
 		setPresent(true);
 	}
 	public boolean isHungry() {
@@ -97,18 +101,18 @@ public class CustomerGui implements Gui{
 	public void DoGoToPay() {
 		xDestination = cashierX;
 		yDestination = cashierY;
-		command =command.GoToPay;
+		command = Command.GoToPay;
 	}
 
 	public void DoExitRestaurant() {
-		xDestination = -40;
-		yDestination = -40;
+		xDestination = xExit;
+		yDestination = yExit;
 		command = Command.LeaveRestaurant;
 	}
 
 	public void FullCaseExitRestaurant() {
-		xDestination = -41;
-		yDestination = -41;
+		xDestination = xExit;
+		yDestination = yExit;
 		command = Command.LeaveRestaurant;
 	}
 
@@ -129,6 +133,7 @@ public class CustomerGui implements Gui{
 		xDestination = xWait;
 	}
 	public void DoGoToHost() {
+		command = Command.GoToHost;
 		xDestination = hostX;
 		yDestination = hostY;
 	}

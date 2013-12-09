@@ -45,6 +45,7 @@ public class HuangCustomerRole extends Role implements Customer {
 	private Cashier ca;
 	
 	private Semaphore atCashier = new Semaphore(0, true);
+	private Semaphore atHost = new Semaphore(0,true);
 
 	//    private boolean isHungry = false; //hack for gui
 	public enum AgentState
@@ -160,6 +161,9 @@ public class HuangCustomerRole extends Role implements Customer {
 		event = AgentEvent.doneLeaving;
 		System.out.println(name + ": msgLeavingFinished received: Peace l8");
 		stateChanged();
+	}
+	public void msgAnimationAtHost() {
+		atHost.release();	
 	}
 
 	/**
@@ -317,6 +321,8 @@ public class HuangCustomerRole extends Role implements Customer {
 	}
 
 	private void goToRestaurant() {
+		customerGui.DoGoToHost();
+		atHost.acquireUninterruptibly();
 		name = getPersonAgent().getName();
 		Cash = getPersonAgent().getFunds();
 		host.msgIWantToEat(this);//send our instance, so he can respond to us
@@ -366,7 +372,9 @@ public class HuangCustomerRole extends Role implements Customer {
 	}
 	private void leaveTable() {
 		Do("Leaving.");
-		myWaiter.msgLeavingTable(this);
+		if (myWaiter!= null) {
+			myWaiter.msgLeavingTable(this);
+		}
 		customerGui.DoExitRestaurant();
 	}
 
@@ -406,5 +414,6 @@ public class HuangCustomerRole extends Role implements Customer {
 	public HuangWaiterRole getWaiter() {
 		return myWaiter;
 	}
+
 }
 

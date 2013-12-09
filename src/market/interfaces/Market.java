@@ -2,8 +2,8 @@ package market.interfaces;
 
 import java.util.Map;
 
-import restaurant.stackRestaurant.interfaces.Cashier;
-import restaurant.stackRestaurant.interfaces.Cook;
+import restaurant.CashierInterface;
+import restaurant.CookInterface;
 
 public interface Market {
 	public void msgGetGroceries(MarketCustomer customer, Map<String, Integer> groceryList);
@@ -12,7 +12,13 @@ public interface Market {
 	
 	public void msgCantAffordGroceries(MarketCustomer customer);
 	
-	public void msgOrderFood(Cook cook, Cashier cashier, String choice);
+	public void msgOrderFood(CookInterface cook, CashierInterface cashier, String choice, int amount);
+
+	public void msgOrderFood(CookInterface cook, CashierInterface cashier, String choice);
 	
-	public void msgPayForOrder(Cashier cashier, double funds);
+	public void msgPayForOrder(CashierInterface cashier, double funds);
+	
+	public void msgCannotPay(CashierInterface cashier, double funds);
+
+	public void msgCancelOrder(CookInterface cook);
 }

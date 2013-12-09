@@ -39,12 +39,11 @@ public class PersonGui implements Gui {
 		String address = agent.getAddress();
 		
 		apartmentLetter = ApartmentHelper.sharedInstance().getApartmentLetter(address);
-		xMult = ApartmentHelper.sharedInstance().getXMultiplier(address) * 212;
-		yMult = ApartmentHelper.sharedInstance().getYMultiplier(address) * 96;
+		xMult = ApartmentHelper.sharedInstance().getXMultiplier(address) * 245;
+		yMult = ApartmentHelper.sharedInstance().getYMultiplier(address) * 103;
 		
 		//HOME
 		if(address.toLowerCase().contains("house")) {
-			System.out.println("HOUSEstub");
 			xBed = 5;
 			yBed = 135;
 			xKitchen = 695;
@@ -71,17 +70,41 @@ public class PersonGui implements Gui {
 	        }
 		}
 		//APARTMENT
-		else if(address.toLowerCase().contains("apartment")) {
-			System.out.println("APARTMENTSTUB");
+		else if(address.toLowerCase().contains("apartment")) {		
+			xBed = 219 + xMult;
+			yBed = 35 + yMult;
+			xKitchen = 14 + xMult;
+			yKitchen = 25 + yMult;
+			xTable = 23 + xMult;
+			yTable = 74 + yMult;
+			xDoor = 87 + xMult;
+			yDoor = 26 + yMult;
+			xPos = xBed;
+			yPos = yBed;
+			xDestination = xBed;
+			yDestination = yBed;
 			
-			xBed = 184 + xMult;
-			yBed = 29 + yMult;
-			xKitchen = 9 + xMult;
-			yKitchen = 29 + yMult;
-			xTable = 17 + xMult;
-			yTable = 61 + yMult;
-			xDoor = 72 + xMult;
-			yDoor = 22 + yMult;
+			try {
+	        	personLeft = ImageIO.read(getClass().getResource("GUICITYPersonLeft.png"));
+	        	personRight = ImageIO.read(getClass().getResource("GUICITYPersonRight.png"));
+	        	personDown = ImageIO.read(getClass().getResource("GUICITYPersonDown.png"));
+	        	personUp = ImageIO.read(getClass().getResource("GUICITYPersonUp.png"));
+	        }
+	        catch(IOException e) {
+	        	System.out.println("Error w/ Person assets");
+	        }
+		}
+		else if(address.toLowerCase().contains("landlord")) {
+			xBed = 632;
+			yBed = 314;
+			xKitchen = 817;
+			yKitchen = 208;
+			xTable = 808;
+			yTable = 252;;
+			xDoor = 729;
+			yDoor = 199;
+			xPos = xBed;
+			yPos = yBed;
 			xDestination = xBed;
 			yDestination = yBed;
 			
@@ -98,6 +121,7 @@ public class PersonGui implements Gui {
 
 		this.agent = agent;
 	}
+
 	
 	@Override
 	public void updatePosition() {

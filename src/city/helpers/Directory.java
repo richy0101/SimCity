@@ -73,10 +73,10 @@ public class Directory {
 		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "StackRestaurant");
 		
 		//Restaurant Roles Huang
-		roleDirectory.put("restaurant.stackRestaurant.HuangWaiterSharedRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.HuangHostRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.HuangWaiterNormalRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.HuangCookRole", "HuangRestaurant");	
+		roleDirectory.put("restaurant.huangRestaurant.HuangWaiterSharedRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.huangRestaurant.HuangHostRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.huangRestaurant.HuangWaiterNormalRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.huangRestaurant.HuangCookRole", "HuangRestaurant");	
 		/*
 		//Restaurant Roles Tan
 		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");
@@ -148,7 +148,7 @@ public class Directory {
 	private Home house6 = new Home("House6");
 	Coordinate house6Location = new Coordinate(290,272);	
 	
-		
+	
 //MARKETS
 	private Market market1 = new Market("Market1"); //priority market
 	Coordinate market1Location = new Coordinate(494,69);

@@ -298,7 +298,10 @@ public class HuangHostAgent extends Agent {
 						return true;
 					}
 				}
-				tellCustomerClosed(hc.c);
+				else {
+					tellCustomerClosed(hc.c);
+					return true;
+				}
 			}
 		}
 
@@ -311,6 +314,13 @@ public class HuangHostAgent extends Agent {
 	// Actions
 	private void tellCustomerClosed(HuangCustomerRole c) {
 		c.msgGetOut();
+		for(HungryCustomer hc : hungryCustomers) {
+			if(hc.c.equals(c)) {
+				hungryCustomers.remove(hc);
+				break;
+			}
+		}
+		customers.remove(c);
 	}
 
 	private void tellWaitersCookHere(HuangCookRole c) {

@@ -3,6 +3,7 @@ package city.helpers;
 import city.PersonAgent;
 
 public class ApartmentHelper {
+	
 	public static ApartmentHelper sharedInstance;
 	PersonAgent agent;
 	

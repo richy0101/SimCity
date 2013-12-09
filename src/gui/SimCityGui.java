@@ -1,7 +1,5 @@
 package gui;
 
-import home.LandlordRole;
-
 import java.awt.CardLayout;
 import java.awt.EventQueue;
 
@@ -9,16 +7,13 @@ import javax.swing.*;
 
 import city.BusAgent;
 import city.PersonAgent;
-import city.TransportationRole;
 import city.gui.BusGui;
+import city.helpers.ApartmentHelper;
 import city.helpers.Clock;
 import city.helpers.Directory;
 import city.helpers.XMLReader;
 import agent.Role;
-import bank.BankCustomerRole;
-import bank.BankManagerAgent;
 import bank.BankTellerRole;
-import bank.gui.*;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -30,15 +25,13 @@ import java.util.Random;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
-import market.MarketCustomerRole;
 import market.MarketRole;
+import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
 import restaurant.shehRestaurant.gui.ShehRestaurantAnimationPanel;
 import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
 import restaurant.stackRestaurant.StackCookRole;
-import restaurant.stackRestaurant.StackHostAgent;
 import restaurant.stackRestaurant.StackWaiterNormalRole;
-import restaurant.stackRestaurant.StackWaiterRole;
 import restaurant.stackRestaurant.StackWaiterSharedRole;
 import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 
@@ -56,6 +49,8 @@ public class SimCityGui {
 	BusAgent bus2;
 	BusGui busGui;
 	BusGui busGui2;
+	private JPanel panel;
+	private JTabbedPane tabbedPane;
 	
 	/**
 	 * Launch the application.
@@ -78,50 +73,15 @@ public class SimCityGui {
 	 */
 	public SimCityGui() {
 		initialize();
+		populateCards();
 		Directory.sharedInstance().setCityGui(this);
 		runSuperNorm();
 	}
     
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() { //BUTTONS
-		 
-		roles.put("None", "Unemployed");
-		roles.put("Bank Teller", "BankTeller");
-		roles.put("Bank 2 Teller", "BankTeller2");
-        roles.put("Market 1 Seller", "Market1");
-        roles.put("Market 2 Seller", "Market2");
-        roles.put("Stack's Restaurant Waiter Normal", "StackWaiterNormal");
-        roles.put("Stack's Restaurant Waiter Shared", "StackWaiterShared");
-        roles.put("Stack's Restaurant Cook", "StackCook");
-        
-        roles.put("Sheh Restaurant Waiter Normal", "ShehWaiterNormal");
-        //roles.put("Sheh Restaurant Waiter Shared", "ShehWaiter");
-        roles.put("Sheh Restaurant Cook", "ShehCook");
-        
-		frame = new JFrame();
-		frame.setResizable(false);
-		frame.setBounds(0, 0, 1133, 855);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		macroAnimationPanel = new MacroAnimationPanel(this);
-		macroAnimationPanel.setBounds(5, 5, 827, 406);
-		frame.getContentPane().add(macroAnimationPanel);
-		
-		//MicroAnimationPanel microAnimationPanel = new MicroAnimationPanel();
-		buildingPanels = new JPanel();
-		cardLayout = new CardLayout();
-        //		microAnimationPanel.setLayout(cardLayout);
-		buildingPanels.setLayout(cardLayout);
-		
-		
-		//TAKES SQUARES FROM MACRO AND TURNS INTO PANELS IN MICRO
+	private void populateCards() {
 		ArrayList<Building> buildings = macroAnimationPanel.getBuildings();
 		for ( int i=0; i<buildings.size(); i++ ) {
 			Building b = buildings.get(i);
-			BuildingPanel ma = null;
-			
 			
 			if(b.getName().toLowerCase().contains("house")) {
 				b.setBuildingPanel(new GUIHome( b, i, this ));
@@ -159,6 +119,53 @@ public class SimCityGui {
 		buildingPanels.setBounds(5, 425, 827, 406);
 		frame.getContentPane().add(buildingPanels);
 		
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() { //BUTTONS
+		roles.put("None", "Unemployed");
+		roles.put("Bank Teller", "BankTeller");
+		roles.put("Bank 2 Teller", "BankTeller2");
+        roles.put("Market 1 Seller", "Market1");
+        roles.put("Market 2 Seller", "Market2");
+        
+        roles.put("Landlord A", "LandlordA");
+        roles.put("Landlord B", "LandlordB");
+        roles.put("LandLord C", "LandLordC");
+        
+        roles.put("Stack's Restaurant Waiter Normal", "StackWaiterNormal");
+        roles.put("Stack's Restaurant Waiter Shared", "StackWaiterShared");
+        roles.put("Stack's Restaurant Cook", "StackCook");
+        
+        roles.put("Sheh's Restaurant Waiter Normal", "ShehWaiterNormal");
+        //roles.put("Sheh Restaurant Waiter Shared", "ShehWaiter");
+        roles.put("Sheh's Restaurant Cook", "ShehCook");
+        
+        roles.put("Huang's Restaurant Waiter Normal", "HuangWaiterNormal");
+        roles.put("Huang's Restaurant Waiter Shared", "HuangWaiterShared");
+        roles.put("Huang's Restaurant Cook", "HuangCook");
+        
+		frame = new JFrame();
+		frame.setResizable(false);
+		frame.setBounds(0, 0, 1133, 855);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		macroAnimationPanel = new MacroAnimationPanel(this);
+		macroAnimationPanel.setBounds(5, 5, 827, 406);
+		frame.getContentPane().add(macroAnimationPanel);
+		
+		//MicroAnimationPanel microAnimationPanel = new MicroAnimationPanel();
+		buildingPanels = new JPanel();
+		cardLayout = new CardLayout();
+        //		microAnimationPanel.setLayout(cardLayout);
+		buildingPanels.setLayout(cardLayout);
+		
+		
+		//TAKES SQUARES FROM MACRO AND TURNS INTO PANELS IN MICRO
+		
+		
 		SpringLayout springLayout = new SpringLayout();
 		springLayout.putConstraint(SpringLayout.NORTH, macroAnimationPanel, 10, SpringLayout.NORTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, macroAnimationPanel, 10, SpringLayout.WEST, frame.getContentPane());
@@ -169,7 +176,7 @@ public class SimCityGui {
 		springLayout.putConstraint(SpringLayout.SOUTH, buildingPanels, -10, SpringLayout.SOUTH, frame.getContentPane());
 		frame.getContentPane().setLayout(springLayout);
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		springLayout.putConstraint(SpringLayout.EAST, macroAnimationPanel, -6, SpringLayout.WEST, tabbedPane);
 		springLayout.putConstraint(SpringLayout.NORTH, tabbedPane, 10, SpringLayout.NORTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, tabbedPane, 843, SpringLayout.WEST, frame.getContentPane());
@@ -177,22 +184,10 @@ public class SimCityGui {
 		springLayout.putConstraint(SpringLayout.EAST, tabbedPane, -10, SpringLayout.EAST, frame.getContentPane());
 		frame.getContentPane().add(tabbedPane);
 		
-		JPanel panel = new JPanel();
+		panel = new JPanel();
 		tabbedPane.addTab("Create Person", null, panel, null);
 		SpringLayout sl_panel = new SpringLayout();
 		panel.setLayout(sl_panel);
-		
-		JPanel panel_1 = new JPanel();
-		tabbedPane.addTab("Current Building", null, panel_1, null);
-		SpringLayout sl_panel_1 = new SpringLayout();
-		panel_1.setLayout(sl_panel_1);
-		
-		JPanel panel_2 = new JPanel();
-		sl_panel_1.putConstraint(SpringLayout.NORTH, panel_2, 0, SpringLayout.NORTH, panel_1);
-		sl_panel_1.putConstraint(SpringLayout.WEST, panel_2, 0, SpringLayout.WEST, panel_1);
-		sl_panel_1.putConstraint(SpringLayout.SOUTH, panel_2, 689, SpringLayout.NORTH, panel_1);
-		sl_panel_1.putConstraint(SpringLayout.EAST, panel_2, 259, SpringLayout.WEST, panel_1);
-		panel_1.add(panel_2);
 		
 		final JButton btnPopulateCity = new JButton("Populate City");
 		btnPopulateCity.addActionListener(new ActionListener() {
@@ -234,6 +229,10 @@ public class SimCityGui {
 		occupationComboBox.addItem("Market 1 Seller");
 		occupationComboBox.addItem("Market 2 Seller");
 		
+        occupationComboBox.addItem("Landlord A");
+        occupationComboBox.addItem("Landlord B");
+        occupationComboBox.addItem("LandLord C");
+		
 		//Sheh
 		occupationComboBox.addItem("Sheh's Restaurant Waiter Normal");
 		occupationComboBox.addItem("Sheh's Restaurant Waiter Shared");
@@ -243,6 +242,11 @@ public class SimCityGui {
 		occupationComboBox.addItem("Stack's Restaurant Waiter Normal");
 		occupationComboBox.addItem("Stack's Restaurant Waiter Shared");
 		occupationComboBox.addItem("Stack's Restaurant Cook");
+		
+		//Huang
+		occupationComboBox.addItem("Huang's Restaurant Waiter Normal");
+		occupationComboBox.addItem("Huang's Restaurant Waiter Shared");
+		occupationComboBox.addItem("Huang's Restaurant Cook");
 		
 
         //		occupationComboBox.addItem("Philips's Restaurant Host");
@@ -350,6 +354,8 @@ public class SimCityGui {
 		sl_panel.putConstraint(SpringLayout.WEST, housingComboBox, 0, SpringLayout.WEST, nameTextField);
 		sl_panel.putConstraint(SpringLayout.EAST, housingComboBox, 0, SpringLayout.EAST, btnPopulateCity);
 		
+		/*
+		//houses not necessary
 		housingComboBox.addItem("House1");
 		housingComboBox.addItem("House2");
 		housingComboBox.addItem("House3");
@@ -357,10 +363,10 @@ public class SimCityGui {
 		housingComboBox.addItem("House5");
 		housingComboBox.addItem("House6");
 		
-		
 		housingComboBox.addItem("LandLordA");
 		housingComboBox.addItem("LandLordB");
 		housingComboBox.addItem("LandLordC");
+		*/
 		
 		housingComboBox.addItem("ApartmentA01");
 		housingComboBox.addItem("ApartmentA02");
@@ -421,28 +427,33 @@ public class SimCityGui {
                     transportationComboBox.getSelectedItem() != "None" &&
                     housingComboBox.getSelectedItem() != "None") {
 					
-					/*
-					//CREATE CONDITION WHERE IFF HOUSING COMBO BOX IS LANDLORD THEN JOB IS LAND LORD AND VICE VERSA
-					if(housingComboBox.getSelectedItem().toString().toLowerCase().contains("landlord")) {
-						String string = housingComboBox.getSelectedItem().toString();
-						String [] parts = string.split("LandLord");
-						String part2 = parts[1];
+					//CREATE CONDITION WHERE IFF OCCUPATION COMBO BOX IS LANDLORD THEN HOUSING IS LAND LORD
+					if(occupationComboBox.getSelectedItem().toString().toLowerCase().contains("landlord")) {
+
+						System.out.println("STUBSIMCITYGUI LINE427: " + housingComboBox.getSelectedItem().toString());
+						String apartmentLetter = ApartmentHelper.sharedInstance().getApartmentLetter(housingComboBox.getSelectedItem().toString());
+						System.out.println(apartmentLetter);
 						
-						System.out.println(housingComboBox.getSelectedItem().toString());
-						System.out.println(part2);
+						Role role = new Role();
+						for(Role r : roles) {
+							if(role.toString() == housingComboBox.getSelectedItem().toString()) {
+							
+							}
 						
-						
-						PersonAgent person = new PersonAgent(roles.get("home.LandLord" + part2),
+						PersonAgent person = new PersonAgent(roles.get("home.LandLord" + apartmentLetter),
                                 nameTextField.getText(),
                                 aggressivenessSlider.getValue(),
                                 (double)initialFundsSlider.getValue(),
                                 (String)housingComboBox.getSelectedItem(),
                                 (String)transportationComboBox.getSelectedItem());
-					}
+						
+						System.out.println("STUB simcitygui LN438");
+						
+						housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
+						}
+					} 
 					else {
-					*/
-					//housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
-					
+						System.out.println("STUBSIMCITYGUI LINE427: " + housingComboBox.getSelectedItem().toString());
 						PersonAgent person = new PersonAgent(roles.get(occupationComboBox.getSelectedItem()),
                                 nameTextField.getText(),
                                 aggressivenessSlider.getValue(),
@@ -453,7 +464,7 @@ public class SimCityGui {
 						
 						
 						housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
-					//}
+					}
 						
 				}
 			}
@@ -514,38 +525,38 @@ public class SimCityGui {
 		}
 		
 	
-		String a = "HuangRestaurant";
+		String a = "StackRestaurant";
 		String b = "House1";
 		String name = "Test Person 1";
 		Role role;
 		if(rand.nextInt()%2 == 0) {
-			role = new StackWaiterSharedRole("HuangRestaurant");
+			role = new StackWaiterSharedRole("StackRestaurant");
 		}
 		else {
-			role = new StackWaiterNormalRole("HuangRestaurant");
+			role = new StackWaiterNormalRole("StackRestaurant");
 		}
 		PersonAgent p = new PersonAgent(role, a , b, name);
 		role.setPerson(p);
 		//p.msgWakeUp();
 	
-		String a2 = "HuangRestaurant";
+		String a2 = "StackRestaurant";
 		String b2 = "House2";
 		String name2 = "Test Person 2";
 		Role role2;
 		if(rand.nextInt()%2 == 0) {
-			role2 = new StackWaiterSharedRole("HuangRestaurant");
+			role2 = new StackWaiterSharedRole("StackRestaurant");
 		}
 		else {
-			role2 = new StackWaiterNormalRole("HuangRestaurant");
+			role2 = new StackWaiterNormalRole("StackRestaurant");
 		}
 		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
 		role2.setPerson(p2);
 		//p2.msgGoWork();
 
-		String a3 = "HuangRestaurant";
+		String a3 = "StackRestaurant";
 		String b3 = "House3";
 		String name3 = "Test Person 3";
-		Role role3 = new StackCookRole("HuangRestaurant");
+		Role role3 = new StackCookRole("StackRestaurant");
 		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
 		role3.setPerson(p3);
 		//p3.msgGoWork();
@@ -704,12 +715,21 @@ public class SimCityGui {
 	public MacroAnimationPanel getMacroAnimationPanel() {
 		return macroAnimationPanel;
 	}
-    //	public void displayMicroAnimationPanel(MicroAnimationPanel microAnimationPanel) {
-    //			System.out.println("Accessing " + microAnimationPanel.getName() + " for MicroAnimationPanel.");
-    //			cardLayout.show(buildingPanels, microAnimationPanel.getName());
-    //	}
 	
 	public BusAgent getBus() {
 		return bus;
+	}
+
+	public void setUniqueBuildingPanel(String name) {
+		for(Restaurant restaurant : Directory.sharedInstance().getRestaurants()) {
+			if(restaurant.getName().contains(name)) {
+				if(tabbedPane.getTabCount() == 2) {
+					tabbedPane.remove(1);
+				}
+				CurrentBuildingPanel restPanel = new CurrentBuildingPanel(restaurant);
+				tabbedPane.addTab("Current Building", restPanel);
+			}
+		}
+		
 	}
 }
