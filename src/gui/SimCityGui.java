@@ -564,12 +564,12 @@ public class SimCityGui {
 		String a4 = "Bank";
 		String b4 = "House4";
 		String name4 = "Test Person 4";
-		Role role4 = new BankTellerRole("Bank2");
+		Role role4 = new BankTellerRole("Bank1");
 		PersonAgent p4 = new PersonAgent(role4, a4 , b4, name4);
 		role4.setPerson(p4);
 		//p4.msgGoWork();
 		
-		String a5 = "Bank";
+		String a5 = "Bank2";
 		String b5 = "House5";
 		String name5 = "BankLoanPerson5";
 		Role role5 = new BankTellerRole("Bank2");
