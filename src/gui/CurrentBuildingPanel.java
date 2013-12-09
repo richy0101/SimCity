@@ -45,12 +45,15 @@ public class CurrentBuildingPanel extends JPanel {
 		SpringLayout springLayout = new SpringLayout();
 		setLayout(springLayout);
 		
-		JButton btnCloseBuilding = new JButton("Close Building");
+		final JButton btnCloseBuilding = new JButton("Close Building");
 		springLayout.putConstraint(SpringLayout.WEST, btnCloseBuilding, 10, SpringLayout.WEST, this);
 		btnCloseBuilding.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(restaurant != null) {
-					restaurant.msgChangeOpen();
+				if(restaurant != null && btnCloseBuilding.getText().contains("Close")) {
+					restaurant.msgSetClosed();
+				}
+				else if(restaurant != null) {
+					restaurant.msgSetOpen();
 				}
 			}
 		});
