@@ -2,6 +2,7 @@ package restaurant.huangRestaurant.gui;
 
 import restaurant.huangRestaurant.HuangCustomerRole;
 import restaurant.huangRestaurant.HuangWaiterRole;
+import gui.Gui;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

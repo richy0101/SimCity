@@ -3,6 +3,7 @@ package restaurant.huangRestaurant.gui;
 
 import restaurant.huangRestaurant.HuangCustomerRole;
 import restaurant.huangRestaurant.HuangHostAgent;
+import gui.Gui;
 
 import java.awt.*;
 

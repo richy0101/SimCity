@@ -84,6 +84,7 @@ public class BusHelper {
 		busStopToInt.put("Market2", 2);
 		
 		busStopToInt.put("StackRestaurant", 1);
+		busStopToInt.put("HuangRestaurant", 4);
 		
 	}
 		

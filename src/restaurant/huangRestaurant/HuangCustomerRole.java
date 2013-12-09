@@ -69,10 +69,10 @@ public class HuangCustomerRole extends Role implements Customer {
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
 			if (b.getName() == myLocation) {
-				b.addGui((Gui) customerGui);
+				b.addGui(customerGui);
 			}
 		}
-		Cash = getPersonAgent().getFunds();
+		gotHungry();
 	}
 	/**
 	 * hack to establish connection to Host agent.
@@ -93,9 +93,7 @@ public class HuangCustomerRole extends Role implements Customer {
 	// Messages
 
 	public void gotHungry() {//from animation
-		print("I'm hungry");
 		event = AgentEvent.gotHungry;
-		stateChanged();
 	}
 	public void msgRestaurantFull() {
 		System.out.println(name + ": msgRestaurantFull recieved: deciding whether to stay or not.");
@@ -319,7 +317,8 @@ public class HuangCustomerRole extends Role implements Customer {
 	}
 
 	private void goToRestaurant() {
-		Do("Going to restaurant");
+		name = getPersonAgent().getName();
+		Cash = getPersonAgent().getFunds();
 		host.msgIWantToEat(this);//send our instance, so he can respond to us
 	}
 
