@@ -451,6 +451,7 @@ public class SimCityGui {
                                 (String)transportationComboBox.getSelectedItem());
 						
 						
+						
 						housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
 					//}
 						

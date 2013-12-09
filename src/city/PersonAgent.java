@@ -1,6 +1,7 @@
 package city;
 
 import gui.Building;
+import home.helpers.TenantList;
 import home.interfaces.Landlord;
 
 import java.util.ArrayList;
@@ -246,12 +247,21 @@ public class PersonAgent extends Agent implements Person {
 		for(Building b : buildings) {
 			if(homeName.toLowerCase().contains("apartmenta")){
 				homeName = "ApartmentA";
+				if(!(job.contains("lord"))){
+					TenantList.sharedInstance().addTenant(this,1);
+				}
 			}
 			else if(homeName.toLowerCase().contains("apartmentb")) {
 				homeName = "ApartmentB";
+				if(!(job.contains("lord"))){
+					TenantList.sharedInstance().addTenant(this,2);
+				}
 			}
 			else if(homeName.toLowerCase().contains("apartmentc")) {
 				homeName = "ApartmentC";
+				if(!(job.contains("lord"))){
+					TenantList.sharedInstance().addTenant(this,3);
+				}
 			}
 			
 			if (b.getName().equals(homeName)) {
