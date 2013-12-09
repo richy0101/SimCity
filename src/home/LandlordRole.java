@@ -83,9 +83,9 @@ public class LandlordRole extends Role implements Landlord {
 	
 	//Scheduler
 	public boolean pickAndExecuteAnAction() {
-		synchronized(this.tenants){
-			for(int i=0;i<tenants.size();i++){
-				if(tenants.get(i).state == PayState.NeedsToPay){
+		synchronized(TenantList.sharedInstance().getTenants(apartmentNum)){
+			for(int i=0;i<TenantList.sharedInstance().getTenants(apartmentNum).size();i++){
+				if(TenantList.sharedInstance().getTenant(i,apartmentNum).getState().equals("NeedsToPay")){
 					payRent(tenants.get(i));
 					return true;
 				}
