@@ -1,22 +1,27 @@
 package restaurant.stackRestaurant;
 
-import agent.Role;
 import gui.Building;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import market.interfaces.Market;
-import city.helpers.Directory;
+import restaurant.CookRole;
+import restaurant.stackRestaurant.gui.CookGui;
 import restaurant.stackRestaurant.helpers.Menu;
 import restaurant.stackRestaurant.interfaces.Cashier;
 import restaurant.stackRestaurant.interfaces.Cook;
 import restaurant.stackRestaurant.interfaces.Host;
 import restaurant.stackRestaurant.interfaces.Waiter;
-import restaurant.stackRestaurant.StackWaiterRole.AgentState;
-import restaurant.stackRestaurant.gui.CookGui;
+import city.helpers.Directory;
 
-public class StackCookRole extends Role implements Cook {
+public class StackCookRole extends CookRole implements Cook {
 	
 	private List<MyOrder> orders = Collections.synchronizedList(new ArrayList<MyOrder>());
 	private Map<String, Food> foods = Collections.synchronizedMap(new HashMap<String, Food>());

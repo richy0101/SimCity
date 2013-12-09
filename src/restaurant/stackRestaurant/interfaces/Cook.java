@@ -1,9 +1,10 @@
 package restaurant.stackRestaurant.interfaces;
 
 import market.interfaces.*;
+import restaurant.CookInterface;
 
 
-public interface Cook {
+public interface Cook extends CookInterface{
 	
 	public void msgCookOrder(Waiter waiter, String choice, int table, int seat);
 	

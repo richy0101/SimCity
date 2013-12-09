@@ -1,20 +1,21 @@
 package restaurant.huangRestaurant;
 
-
-import agent.Role;
 import gui.Building;
 import gui.Gui;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Stack;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-
-
-
-import city.helpers.Directory;
-import restaurant.huangRestaurant.HuangWaiterRole.WaiterState;
+import market.interfaces.Market;
+import restaurant.CookRole;
 import restaurant.huangRestaurant.gui.CookGui;
-import restaurant.huangRestaurant.gui.WaiterGui;
+import restaurant.huangRestaurant.interfaces.Cashier;
+import city.helpers.Directory;
 
 
 
@@ -26,9 +27,10 @@ import restaurant.huangRestaurant.gui.WaiterGui;
 //does all the rest. Rather than calling the other agent a waiter, we called him
 //the HostAgent. A Host is the manager of a restaurant who sees that all
 //is proceeded as he wishes.
-public class HuangCookRole extends Role {
+public class HuangCookRole extends CookRole {
 	private Semaphore actionComplete = new Semaphore(0, true);
 	public HuangHostAgent host;
+	public Cashier cashier;
 	public CookGui gui;
 	private enum OrderState {Pending, Cooking, Done, Plated, out};
 	private class Order {
@@ -82,11 +84,11 @@ public class HuangCookRole extends Role {
 	}
 	private List<Food> inventory = Collections.synchronizedList(new ArrayList<Food>());
 	
-	private enum MarketReqState {notSent,pending, canBeFulfilled, canBeHalfAssed, cannotBeFulfilled, Requested, Received}
+	private enum MarketReqState {notSent,pending, canBeFulfilled, cannotBeFulfilled, Received}
 	private class MarketRequest {
 		private MarketReqState state;
 		String request;
-		public MarketAgent m;
+		public Market m;
 		public int requirement;
 		
 		public MarketRequest(String request, int requestStock) {
@@ -94,7 +96,7 @@ public class HuangCookRole extends Role {
 			this.requirement = requestStock;
 			this.state = MarketReqState.notSent;
 		}
-		public void setMarket(MarketAgent m) {
+		public void setMarket(Market m) {
 			this.m = m;
 		}
 	}
@@ -103,14 +105,14 @@ public class HuangCookRole extends Role {
 	private enum MarketState {inStock, outOfStock, delivering, delivered, accept, reject, uncalled};
 	private class MyMarket {
 		private int number;
-		private MarketAgent m;
+		private Market m;
 		private MarketState state;
 		private boolean Chicken;
 		private boolean Steak;
 		private boolean Pizza;
 		private boolean Salad;
 		private Stack<String> rejected = new Stack<String>();
-		public MyMarket(MarketAgent m, int i) {
+		public MyMarket(Market m, int i) {
 			this.number = i;
 			this.m = m;
 			this.Chicken = true;
@@ -122,7 +124,6 @@ public class HuangCookRole extends Role {
 	}
 	private List<MyMarket> markets = Collections.synchronizedList(new ArrayList<MyMarket>());
 	private static final int requestStock = 5;
-	private static final int totalMarkets = 3;
 	private static final int threshold = 2;
 	
 	private Semaphore processingMarketResponse = new Semaphore(1, true);
@@ -157,33 +158,9 @@ public class HuangCookRole extends Role {
 		initialFood = new Food ("Pizza");
 		inventory.add(initialFood);
 		//Set up markets
-		MarketAgent market;
 		MyMarket mm;
-		for(int i = 0; i < totalMarkets; i++ ) {
-			market = new MarketAgent(this, String.valueOf(i));
-			mm = new MyMarket(market, i);
-			markets.add(mm);
-		}
-	}
-	public HuangCookRole(String name, HuangHostAgent host) {
-		this.host = host;
-		this.name = name;
-		this.state = CookState.Arrived;
-		//Set up inventory
-		Food initialFood = new Food("Chicken");
-		inventory.add(initialFood);
-		initialFood = new Food ("Steak");
-		inventory.add(initialFood);
-		initialFood = new Food ("Salad");
-		inventory.add(initialFood);
-		initialFood = new Food ("Pizza");
-		inventory.add(initialFood);
-		//Set up markets
-		MarketAgent market;
-		MyMarket mm;
-		for(int i = 0; i < totalMarkets; i++ ) {
-			market = new MarketAgent(this, String.valueOf(i));
-			mm = new MyMarket(market, i);
+		for(int i = 0; i < Directory.sharedInstance().getMarkets().size(); i++) {
+			mm = new MyMarket(Directory.sharedInstance().getMarkets().get(i).getWorker(), i);
 			markets.add(mm);
 		}
 	}
@@ -196,7 +173,7 @@ public class HuangCookRole extends Role {
 	public void msgActionComplete() {
 		actionComplete.release();
 	}
-	public void msgHereIsDelivery(String type, int resupply) {
+	public void msgMarketDeliveringOrder(int resupply, String type) {
 		System.out.println(name + ": msgHereIsDelivery received: Cook: Kitchen inventory replenished!");
 		for (Food i : inventory) {
 			if (i.type.equals(type)) {
@@ -220,17 +197,11 @@ public class HuangCookRole extends Role {
 		}
 		stateChanged();
 	}
-	public void msgRequestGood(String request, MarketAgent m) {
+	public void msgCanFillOrder(Market m, String request) {
 		processingMarketResponse.acquireUninterruptibly();
 		for (MarketRequest mr: marketRequests) {
 			if(mr.request.equals(request)) {
-				if(!mr.state.equals(MarketReqState.canBeFulfilled) && !mr.state.equals(MarketReqState.Requested)) {
-					System.out.println(name + ": msgRequestGood received: Cook: Market has good stock.");
-					mr.setMarket(m);
-					mr.state = MarketReqState.canBeFulfilled;
-					break;
-				}
-				else if (mr.state.equals(MarketReqState.canBeFulfilled)){
+				if (mr.state.equals(MarketReqState.canBeFulfilled)){
 					for (MyMarket mm: markets) {
 						if (mm.m.equals(m)) {
 							mm.state = MarketState.reject;
@@ -240,12 +211,19 @@ public class HuangCookRole extends Role {
 					}
 					break;
 				}
+				
+				else {
+					System.out.println(name + ": msgRequestGood received: Cook: Market has good stock.");
+					mr.setMarket(m);
+					mr.state = MarketReqState.canBeFulfilled;
+					break;
+				}
 			}
 		}
 		processingMarketResponse.release();
 		stateChanged();
 	}
-	public void msgRequestBad(String request, MarketAgent m) {
+	public void msgInventoryOut(Market m, String request) {
 		System.out.println(name + ": msgRequestBad received: Cook: Market is out of that food");
 		if(request == "Chicken") {
 			synchronized(markets) {
@@ -296,46 +274,7 @@ public class HuangCookRole extends Role {
 		}
 		stateChanged();
 	}
-	public void msgRequestHalf(String request, MarketAgent m, int stock) {
-		processingMarketResponse.acquireUninterruptibly();
-		for (MarketRequest mr: marketRequests) {
-			if(mr.request.equals(request)) {
-				if(!mr.state.equals(MarketReqState.canBeFulfilled) && !mr.state.equals(MarketReqState.canBeHalfAssed) && !mr.state.equals(MarketReqState.Requested)) {
-					System.out.println(name + ": msgRequestHalf received: Cook: Market can somewhat fulfill my order.");
-					mr.setMarket(m);
-					mr.state = MarketReqState.canBeHalfAssed;
-					break;
-				}
-				else if (mr.state.equals(MarketReqState.canBeHalfAssed) || mr.state.equals(MarketReqState.canBeFulfilled) || mr.state.equals(MarketReqState.Requested)){
-					for (MyMarket mm: markets) {
-						if (mm.m.equals(m)) {
-							mm.state = MarketState.reject;
-							mm.rejected.add(request);
-							break;
-						}
-					}
-					break;
-				}
-			}
-		}
-		processingMarketResponse.release();
-		stateChanged();
-		/*
-		System.out.println(name + ": msgRequestHalf received: Cook: Cannot fully fulfill my order");
-		synchronized(marketRequests) {
-			for (MarketRequest mr: marketRequests) {
-				if(mr.request.equals(request)) {
-					if(!mr.state.equals("canBeFulfilled")) {
-						mr.setMarket(m);
-						mr.state = MarketReqState.canBeHalfAssed;
-						mr.requirement -= stock;
-						break;
-					}
-				}
-			}
-		}
-		stateChanged();*/
-	}
+
 	public void msgHereIsPayCheck(double payCheck) {
 		state = CookState.ReceivedPay;
 		getPersonAgent().setFunds(getPersonAgent().getFunds() + payCheck);
@@ -423,24 +362,6 @@ public class HuangCookRole extends Role {
 		}
 		synchronized(marketRequests) {
 			for (MarketRequest mr: marketRequests) {
-				if (mr.state.equals(MarketReqState.canBeFulfilled)) {
-					mr.state = MarketReqState.Requested;
-					askForDelivery(mr);
-					return true;
-				}
-			}
-		}
-		synchronized(marketRequests) {
-			for (MarketRequest mr: marketRequests) {
-				if (mr.state.equals(MarketReqState.canBeHalfAssed)) {
-					askForDelivery(mr);
-					mr.state = MarketReqState.Requested;
-					return true;
-				}
-			}
-		}
-		synchronized(marketRequests) {
-			for (MarketRequest mr: marketRequests) {
 				if (mr.state.equals(MarketReqState.cannotBeFulfilled)) {
 					/** Perhaps tell host that this item is now off the menu? */
 					marketRequests.remove(mr);
@@ -509,11 +430,8 @@ public class HuangCookRole extends Role {
 	}
 	private void tellMarketCancelOrder(MyMarket mm) {
 		if(!mm.rejected.isEmpty()) {
-					mm.m.msgCancelOrder(mm.rejected.pop());
+					mm.m.msgCancelOrder(this);
 		}
-	}
-	private void askForDelivery(MarketRequest mr) {
-		mr.m.msgPlsDeliverRequest(mr.request);	
 	}
 	private void callForRestock(String foodType, int requirement) {
 		/*int reportedStock = 0;
@@ -526,26 +444,27 @@ public class HuangCookRole extends Role {
 		for (MyMarket m: markets) {
 			if(foodType == "Chicken") {
 				if (m.Chicken == true) {
-					m.m.msgWhatIsYourStockState(foodType, requirement);
+					m.m.msgOrderFood(this, cashier, foodType, requirement);
 				}
 			}
 			else if(foodType == "Steak") {
 				if (m.Steak == true) {
-					m.m.msgWhatIsYourStockState(foodType, requirement);
+					m.m.msgOrderFood(this, cashier, foodType, requirement);
 				}
 			}
 			else if(foodType == "Salad") {
 				if (m.Salad == true) {
-					m.m.msgWhatIsYourStockState(foodType, requirement);
+					m.m.msgOrderFood(this, cashier, foodType, requirement);
 				}
 			}
 			else if(foodType == "Pizza") {
 				if (m.Pizza == true) {
-					m.m.msgWhatIsYourStockState(foodType, requirement);
+					m.m.msgOrderFood(this, cashier, foodType, requirement);
 				}
 			}
 		}
 	}
+	
 	private void checkInventory() {
 		boolean exists = false;
 		synchronized(inventory) {
@@ -643,39 +562,9 @@ public class HuangCookRole extends Role {
 	public void setGui(CookGui gui) {
 		this.gui = gui;
 	}
-	public void emptyRandomMarket() {
-		Random rng = new Random();
-		int r = rng.nextInt();
-		if(r % 3 == 0) {
-			synchronized(markets) {
-				for (MyMarket mm: markets) {
-					if (mm.number == 0) {
-						mm.m.emptyMarket();
-						break;
-					}
-				}
-			}
-		}
-		else if(r % 3 == 1) {
-			synchronized(markets) {
-				for (MyMarket mm: markets) {
-					if (mm.number == 1) {
-						mm.m.emptyMarket();
-						break;
-					}
-				}
-			}
-		}
-		else {
-			synchronized(markets) {
-				for (MyMarket mm: markets) {
-					if (mm.number == 2) {
-						mm.m.emptyMarket();
-						break;
-					}
-				}	
-			}
-		}
+	
+	public void setCashier(HuangCashierAgent cashier) {
+		this.cashier = cashier;
 	}
 }
 

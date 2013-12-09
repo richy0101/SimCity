@@ -2,8 +2,6 @@ package market;
 
 import gui.Building;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,24 +12,20 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-import javax.imageio.ImageIO;
-
-import restaurant.stackRestaurant.helpers.Check;
-import restaurant.stackRestaurant.interfaces.Cashier;
-import restaurant.stackRestaurant.interfaces.Cook;
-import city.PersonAgent;
-import city.helpers.Directory;
-import agent.Role;
-import market.test.mock.EventLog;
-import market.test.mock.LoggedEvent;
 import market.gui.MarketGui;
 import market.interfaces.Market;
 import market.interfaces.MarketCustomer;
+import market.test.mock.EventLog;
+import market.test.mock.LoggedEvent;
+import restaurant.CashierInterface;
+import restaurant.CookInterface;
+import agent.Role;
+import city.helpers.Directory;
 
 public class MarketRole extends Role implements Market {
 
 	//data--------------------------------------------------------------------------------
-	public enum orderState {Ordered, CantFill, Filled, Billed, ReadyToDeliver, Paid, CantPay};
+	public enum orderState {Ordered, CantFill, Filled, Billed, ReadyToDeliver, Paid, CantPay, Cancelled};
 	
 	List<Order> MyOrders;
 	List<RestaurantOrder> MyRestaurantOrders;
@@ -49,14 +43,14 @@ public class MarketRole extends Role implements Market {
 	public EventLog log;
 	
 	public class RestaurantOrder {
-		Cook cook;
-		Cashier cashier;
+		CookInterface cook;
+		CashierInterface cashier;
 		String choice;
 		int amount;
 		double price;
 		orderState state;
 		
-		RestaurantOrder(Cook cook, Cashier cashier, String choice, int amount) {
+		RestaurantOrder(CookInterface cook, CashierInterface cashier, String choice, int amount) {
 			this.cook = cook;
 			this.cashier = cashier;
 			this.choice = choice;
@@ -68,7 +62,7 @@ public class MarketRole extends Role implements Market {
 			return state;
 		}
 
-		public Cook getCook() {
+		public CookInterface getCook() {
 			return cook;
 		}
 
@@ -236,7 +230,15 @@ public class MarketRole extends Role implements Market {
 	}
 	
 	//Restaurant messages-------------------------------------------------------------
-	public void msgOrderFood(Cook cook, Cashier cashier, String choice) {
+	public void msgOrderFood(CookInterface cook, CashierInterface cashier, String choice, int amount) {
+		MyRestaurantOrders.add(new RestaurantOrder(cook, cashier, choice, amount));
+		
+		log.add(new LoggedEvent("Received msgOrderFood from Cook. Choice = " + choice));
+		stateChanged();
+	}
+	
+		/*No amount given*/
+	public void msgOrderFood(CookInterface cook, CashierInterface cashier, String choice) {
 		MyRestaurantOrders.add(new RestaurantOrder(cook, cashier, choice, 5));
 		
 		log.add(new LoggedEvent("Received msgOrderFood from Cook. Choice = " + choice));
@@ -250,17 +252,44 @@ public class MarketRole extends Role implements Market {
 		stateChanged();
 	}
 	
-	public void msgPayForOrder(Cashier cashier, double funds) {
+	public void msgPayForOrder(CashierInterface cashier, double funds) {
 		this.funds += funds;
-		for(RestaurantOrder o : MyRestaurantOrders) {
-			if(o.cashier == cashier)
-				o.state = orderState.Paid;
+		
+		synchronized(MyRestaurantOrders) {
+			for(RestaurantOrder o : MyRestaurantOrders) {
+				if(o.cashier == cashier)
+					o.state = orderState.Paid;
+			}
 		}
 		
 		log.add(new LoggedEvent("Receieved msgPayFor Order from Cashier. Amount = $" + funds));
 		stateChanged();
 	}
 	
+	public void msgCannotPay(CashierInterface cashier, double funds) {
+		
+		synchronized(MyRestaurantOrders) {
+			for(RestaurantOrder o : MyRestaurantOrders) {
+				if(o.cashier == cashier)
+					o.state = orderState.CantPay;
+			}
+		}
+		
+		log.add(new LoggedEvent("Receieved msgPayFor Order from Cashier. Amount = $" + funds));
+		stateChanged();		
+	}
+	
+	//Huang Restaurant messages----------------------------------------------------------
+	public void msgCancelOrder(CookInterface cook) {
+		synchronized(MyRestaurantOrders) {
+			for (RestaurantOrder o : MyRestaurantOrders) {
+				if(o.cook == cook) {
+					o.state = orderState.Cancelled;
+				}
+			}
+		}
+		stateChanged();
+	}	
 
 	//Person/GUI messages-------------------------------------------------------------
 	public void msgJobDone() {
@@ -304,7 +333,7 @@ public class MarketRole extends Role implements Market {
 			}
 			
 			for(RestaurantOrder o : MyRestaurantOrders) {
-				if(o.state == orderState.Paid) {
+				if(o.state == orderState.Paid || o.state == orderState.Cancelled) {
 					MyRestaurantOrders.remove(o);
 					
 					log.add(new LoggedEvent("Removing RestaurantOrder."));
@@ -422,6 +451,7 @@ public class MarketRole extends Role implements Market {
 	private void FillRestaurantOrder(final RestaurantOrder o) {
 		if(inventory.get(o.choice).getSupply() >= o.amount) {
 			o.state = orderState.Filled;
+			o.cook.msgCanFillOrder(this, o.choice);
 			log.add(new LoggedEvent("Filling Restaurant Order."));
 			timer.schedule(new TimerTask() {
 				public void run() {
@@ -444,13 +474,9 @@ public class MarketRole extends Role implements Market {
 		
 
 		o.cook.msgMarketDeliveringOrder(inventory.get(o.choice).getSupply(), o.choice);
-		o.cashier.msgGiveBill(new Check(o.price, o.choice), getMe());
+		o.cashier.msgGiveBill(new MarketCheck(o.price, o.choice, this));
 		
 		log.add(new LoggedEvent("Delivered order."));
-	}
-	
-	private MarketRole getMe() {
-		return this;
 	}
 	
 	//PersonAgent actions----------------------------------------------------------------

@@ -1,21 +1,23 @@
 package restaurant.huangRestaurant;
 
-import agent.Agent;
-import agent.Role;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-import java.util.*;
-
+import market.MarketCheck;
+import market.interfaces.Market;
+import restaurant.CashierAgent;
 import restaurant.huangRestaurant.interfaces.Cashier;
 import restaurant.huangRestaurant.interfaces.Customer;
-import restaurant.huangRestaurant.interfaces.Market;
 import restaurant.huangRestaurant.interfaces.Waiter;
+import agent.Role;
 
 
 /**
  * Restaurant Cashier Agent. Creates checks.
  */
 
-public class HuangCashierAgent extends Agent implements Cashier {
+public class HuangCashierAgent extends CashierAgent implements Cashier {
 	public enum OrderState {checkReady, withWaiter, Unpaid, Paid, cannotPay, waitingForWaiter, asked};
 	public class Order {
 		private Waiter w;
@@ -48,14 +50,14 @@ public class HuangCashierAgent extends Agent implements Cashier {
 
 	}
 	public List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
-	public enum BillState { unpaid, paid, tabbed};
+	public enum BillState {unpaid, paid, tabbed};
 	public class MarketBill {
 		public BillState state;
-		public FoodBill b;
+		public MarketCheck c;
 		public Market m;
-		MarketBill(FoodBill b, Market m) {
-			this.m = m;
-			this.b = b;
+		MarketBill(MarketCheck c) {
+			this.m = c.getMarket();
+			this.c = c;
 			state = BillState.unpaid;
 		}
 	}
@@ -106,9 +108,9 @@ public class HuangCashierAgent extends Agent implements Cashier {
 	}
 
 	// Messages
-	public void msgHereIsFoodDeliveryBill(FoodBill b, Market m) {
+	public void msgGiveBill(MarketCheck c) {
 		System.out.println(name + ": msgHereIsFoodDeliveryBill received: Creating new bill to pay.");
-		MarketBill mb = new MarketBill(b, m);
+		MarketBill mb = new MarketBill(c);
 		bills.add(mb);
 		System.out.println("state: " + mb.state);
 		stateChanged();
@@ -220,14 +222,14 @@ public class HuangCashierAgent extends Agent implements Cashier {
 	}
 	private void payBill(MarketBill mb) {
 		System.out.println("Paying Bill.");
-		if(wallet - mb.b.price >=0) {
+		if(wallet - mb.c.getCost() >=0) {
 			mb.state = BillState.paid;
-			wallet -= mb.b.price;
-			mb.m.msgHereIsPayment(mb.b);
+			wallet -= mb.c.getCost();
+			mb.m.msgPayForOrder(this, mb.c.getCost());
 		}
 		else {
 			mb.state = BillState.tabbed;
-			mb.m.msgCannotPay(mb.b);
+			mb.m.msgCannotPay(this, mb.c.getCost());
 		}
 	}
 	private void kickFreeLoader(FreeLoader fl) {

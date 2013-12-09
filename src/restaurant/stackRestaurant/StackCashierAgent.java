@@ -2,14 +2,16 @@ package restaurant.stackRestaurant;
 
 import agent.Agent;
 import agent.Role;
+import restaurant.CashierAgent;
 import restaurant.stackRestaurant.helpers.Check;
 import restaurant.stackRestaurant.helpers.Menu;
 import restaurant.stackRestaurant.interfaces.*;
+import market.MarketCheck;
 import market.interfaces.*;
 
 import java.util.*;
 
-public class StackCashierAgent extends Agent implements Cashier {
+public class StackCashierAgent extends CashierAgent implements Cashier {
 	
 	private List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	private List<MyCheck> checks = Collections.synchronizedList(new ArrayList<MyCheck>());
@@ -37,7 +39,6 @@ public class StackCashierAgent extends Agent implements Cashier {
 	public List<MyCheck> getChecks() {
 		return checks;
 	}
-	
 	
 	@Override
 	public boolean pickAndExecuteAnAction() {
@@ -154,9 +155,9 @@ public class StackCashierAgent extends Agent implements Cashier {
 		stateChanged();
 	}
 	
-	public void msgGiveBill(Check check, Market market) {
+	public void msgGiveBill(MarketCheck check) {
 		print("Please pay this bill");
-		checks.add(new MyCheck(market, check, CheckState.NeedPaying));
+		checks.add(new MyCheck(check.getMarket(), new Check(check.getCost(), check.getChoice()), CheckState.NeedPaying));
 		stateChanged();
 	}
 	
