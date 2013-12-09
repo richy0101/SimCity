@@ -435,6 +435,7 @@ public class SimCityGui {
 						System.out.println(apartmentLetter);
 						
 						Role role = new Role();
+						//TODO you have to go through an entry set
 						for(Role r : roles) {
 							if(role.toString() == housingComboBox.getSelectedItem().toString()) {
 							
