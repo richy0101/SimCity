@@ -30,12 +30,18 @@ public class TenantList {
 	 	public void setMoneyOwed(double money){
 	 		this.moneyOwed = money;
 	 	}
-	 	
+	 	public double getMoneyOwed(){
+	 		return moneyOwed;
+	 	}
 	 	public String getState(){
 	 		return state.toString();
 	 	}
 	 	
-	 	public void setPayState(PayState state){
+	 	public Person getPerson(){
+	 		return inhabitant;
+	 	}
+	 	
+	 	public void setState(PayState state){
 	 		this.state = state;
 	 	}
 	 	
