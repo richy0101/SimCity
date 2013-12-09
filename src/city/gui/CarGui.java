@@ -36,6 +36,27 @@ public class CarGui implements Gui {
 	
 	private CarAgent agent = null;
 	
+	public CarGui(CarAgent agent, String currentLocation) {
+        this.agent = agent;
+        isPresent = true;
+        System.out.println("currentloc is "+ currentLocation);
+        System.out.println("corresponding xCoord is "+ Directory.sharedInstance().locationDirectory.get(currentLocation).xCoordinate);
+        System.out.println("corresponding yCoord is "+ Directory.sharedInstance().locationDirectory.get(currentLocation).yCoordinate);
+        xPos = 135;//Directory.sharedInstance().locationDirectory.get(currentLocation).xCoordinate;
+		yPos = 200;//Directory.sharedInstance().locationDirectory.get(currentLocation).yCoordinate;
+
+        //check the x/y coord on the grid to know which side it's on and outputs appropriate car image.
+        try {
+        	carLeftImage = ImageIO.read(getClass().getResource("carLeft.png"));
+        	carRightImage = ImageIO.read(getClass().getResource("carRight.png"));
+        	carUpImage = ImageIO.read(getClass().getResource("carUp.png"));
+        	carDownImage = ImageIO.read(getClass().getResource("carDown.png"));
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ carGui");
+        }
+    }
+	
 	/**
 	 * Received Messages/Actions
 	 */
@@ -73,21 +94,6 @@ public class CarGui implements Gui {
 		return Directory.sharedInstance().locationDirectory.get(Destination).yCoordinate;
 	}
 	
-	public CarGui(CarAgent agent, String currentLocation) {
-        this.agent = agent;
-        
-        //check the x/y coord on the grid to know which side it's on and outputs appropriate car image.
-        try {
-        	carLeftImage = ImageIO.read(getClass().getResource("carLeft.png"));
-        	carRightImage = ImageIO.read(getClass().getResource("carRight.png"));
-        	carUpImage = ImageIO.read(getClass().getResource("carUp.png"));
-        	carDownImage = ImageIO.read(getClass().getResource("carDown.png"));
-        }
-        catch(IOException e) {
-        	System.out.println("Error w/ carGui");
-        }
-    }
-	
 	
 	@Override
 	public void updatePosition() {		
@@ -118,6 +124,12 @@ public class CarGui implements Gui {
 	@Override
 	public void draw(Graphics2D g) { //need to account for x and y position
 		//clockwise
+		if(isPresent){
+		
+		if (xPos>0){
+			g.drawImage(carUpImage, xPos, yPos, null);
+		}
+			
 		if (yPos==TopRow)
 			g.drawImage(carRightImage, xPos, yPos, null);
 		else if (xPos==RightCol)
@@ -127,6 +139,7 @@ public class CarGui implements Gui {
 		else if (xPos==LeftCol)
 			g.drawImage(carUpImage, xPos, yPos, null);
 
+		}
 	}
 
 	public void setPresentFalse() {

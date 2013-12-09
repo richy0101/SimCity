@@ -30,7 +30,7 @@ public class CarAgent extends Agent implements Vehicle {
 	private String currentLocation;
 	private Semaphore driving = new Semaphore(0,true);
 	
-	CarAgent() {
+	CarAgent(String currentLocation) {
 		carGui= new CarGui(this, currentLocation);
 	}
 		

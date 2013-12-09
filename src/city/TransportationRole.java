@@ -172,15 +172,12 @@ public class TransportationRole extends Role implements Transportation  {
 			
 			
 			//set car agent
-			car = new CarAgent();
+			car = new CarAgent(startingLocation);
 			car.startThread();
 			//set destination
 			car.msgTakeMeHere(destination);
 			//create car gui
-			System.out.println("before carGui creation");
-			carGui = new CarGui(car, currentLocation);
-			System.out.println("setting gui");
-
+			carGui = new CarGui(car, startingLocation);
 			car.setGui(carGui);
 			Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(carGui);
 			//setState(TransportationState.InTransit); //SET STATE
