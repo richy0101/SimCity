@@ -1,7 +1,5 @@
 package gui;
 
-import home.LandlordRole;
-
 import java.awt.CardLayout;
 import java.awt.EventQueue;
 
@@ -9,17 +7,13 @@ import javax.swing.*;
 
 import city.BusAgent;
 import city.PersonAgent;
-import city.TransportationRole;
 import city.gui.BusGui;
 import city.helpers.ApartmentHelper;
 import city.helpers.Clock;
 import city.helpers.Directory;
 import city.helpers.XMLReader;
 import agent.Role;
-import bank.BankCustomerRole;
-import bank.BankManagerAgent;
 import bank.BankTellerRole;
-import bank.gui.*;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -31,15 +25,13 @@ import java.util.Random;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
-import market.MarketCustomerRole;
 import market.MarketRole;
+import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
 import restaurant.shehRestaurant.gui.ShehRestaurantAnimationPanel;
 import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
 import restaurant.stackRestaurant.StackCookRole;
-import restaurant.stackRestaurant.StackHostAgent;
 import restaurant.stackRestaurant.StackWaiterNormalRole;
-import restaurant.stackRestaurant.StackWaiterRole;
 import restaurant.stackRestaurant.StackWaiterSharedRole;
 import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 
@@ -57,6 +49,8 @@ public class SimCityGui {
 	BusAgent bus2;
 	BusGui busGui;
 	BusGui busGui2;
+	private JPanel panel;
+	private JTabbedPane tabbedPane;
 	
 	/**
 	 * Launch the application.
@@ -79,54 +73,15 @@ public class SimCityGui {
 	 */
 	public SimCityGui() {
 		initialize();
+		populateCards();
 		Directory.sharedInstance().setCityGui(this);
 		runSuperNorm();
 	}
     
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() { //BUTTONS
-		 
-		roles.put("None", "Unemployed");
-		roles.put("Bank Teller", "BankTeller");
-		roles.put("Bank 2 Teller", "BankTeller2");
-        roles.put("Market 1 Seller", "Market1");
-        roles.put("Market 2 Seller", "Market2");
-        roles.put("Stack's Restaurant Waiter Normal", "StackWaiterNormal");
-        roles.put("Stack's Restaurant Waiter Shared", "StackWaiterShared");
-        roles.put("Stack's Restaurant Cook", "StackCook");
-        
-        roles.put("Sheh's Restaurant Waiter Normal", "ShehWaiterNormal");
-        //roles.put("Sheh Restaurant Waiter Shared", "ShehWaiter");
-        roles.put("Sheh's Restaurant Cook", "ShehCook");
-        
-        roles.put("Huang's Restaurant Waiter Normal", "HuangWaiterNormal");
-        roles.put("Huang's Restaurant Waiter Shared", "HuangWaiterShared");
-        roles.put("Huang's Restaurant Cook", "HuangCook");
-        
-		frame = new JFrame();
-		frame.setResizable(false);
-		frame.setBounds(0, 0, 1133, 855);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		macroAnimationPanel = new MacroAnimationPanel(this);
-		macroAnimationPanel.setBounds(5, 5, 827, 406);
-		frame.getContentPane().add(macroAnimationPanel);
-		
-		//MicroAnimationPanel microAnimationPanel = new MicroAnimationPanel();
-		buildingPanels = new JPanel();
-		cardLayout = new CardLayout();
-        //		microAnimationPanel.setLayout(cardLayout);
-		buildingPanels.setLayout(cardLayout);
-		
-		
-		//TAKES SQUARES FROM MACRO AND TURNS INTO PANELS IN MICRO
+	private void populateCards() {
 		ArrayList<Building> buildings = macroAnimationPanel.getBuildings();
 		for ( int i=0; i<buildings.size(); i++ ) {
 			Building b = buildings.get(i);
-			BuildingPanel ma = null;
-			
 			
 			if(b.getName().toLowerCase().contains("house")) {
 				b.setBuildingPanel(new GUIHome( b, i, this ));
@@ -164,6 +119,51 @@ public class SimCityGui {
 		buildingPanels.setBounds(5, 425, 827, 406);
 		frame.getContentPane().add(buildingPanels);
 		
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() { //BUTTONS
+		
+		
+		 
+		roles.put("None", "Unemployed");
+		roles.put("Bank Teller", "BankTeller");
+		roles.put("Bank 2 Teller", "BankTeller2");
+        roles.put("Market 1 Seller", "Market1");
+        roles.put("Market 2 Seller", "Market2");
+        roles.put("Stack's Restaurant Waiter Normal", "StackWaiterNormal");
+        roles.put("Stack's Restaurant Waiter Shared", "StackWaiterShared");
+        roles.put("Stack's Restaurant Cook", "StackCook");
+        
+        roles.put("Sheh's Restaurant Waiter Normal", "ShehWaiterNormal");
+        //roles.put("Sheh Restaurant Waiter Shared", "ShehWaiter");
+        roles.put("Sheh's Restaurant Cook", "ShehCook");
+        
+        roles.put("Huang's Restaurant Waiter Normal", "HuangWaiterNormal");
+        roles.put("Huang's Restaurant Waiter Shared", "HuangWaiterShared");
+        roles.put("Huang's Restaurant Cook", "HuangCook");
+        
+		frame = new JFrame();
+		frame.setResizable(false);
+		frame.setBounds(0, 0, 1133, 855);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		macroAnimationPanel = new MacroAnimationPanel(this);
+		macroAnimationPanel.setBounds(5, 5, 827, 406);
+		frame.getContentPane().add(macroAnimationPanel);
+		
+		//MicroAnimationPanel microAnimationPanel = new MicroAnimationPanel();
+		buildingPanels = new JPanel();
+		cardLayout = new CardLayout();
+        //		microAnimationPanel.setLayout(cardLayout);
+		buildingPanels.setLayout(cardLayout);
+		
+		
+		//TAKES SQUARES FROM MACRO AND TURNS INTO PANELS IN MICRO
+		
+		
 		SpringLayout springLayout = new SpringLayout();
 		springLayout.putConstraint(SpringLayout.NORTH, macroAnimationPanel, 10, SpringLayout.NORTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, macroAnimationPanel, 10, SpringLayout.WEST, frame.getContentPane());
@@ -174,7 +174,7 @@ public class SimCityGui {
 		springLayout.putConstraint(SpringLayout.SOUTH, buildingPanels, -10, SpringLayout.SOUTH, frame.getContentPane());
 		frame.getContentPane().setLayout(springLayout);
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		springLayout.putConstraint(SpringLayout.EAST, macroAnimationPanel, -6, SpringLayout.WEST, tabbedPane);
 		springLayout.putConstraint(SpringLayout.NORTH, tabbedPane, 10, SpringLayout.NORTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, tabbedPane, 843, SpringLayout.WEST, frame.getContentPane());
@@ -182,22 +182,10 @@ public class SimCityGui {
 		springLayout.putConstraint(SpringLayout.EAST, tabbedPane, -10, SpringLayout.EAST, frame.getContentPane());
 		frame.getContentPane().add(tabbedPane);
 		
-		JPanel panel = new JPanel();
+		panel = new JPanel();
 		tabbedPane.addTab("Create Person", null, panel, null);
 		SpringLayout sl_panel = new SpringLayout();
 		panel.setLayout(sl_panel);
-		
-		JPanel panel_1 = new JPanel();
-		tabbedPane.addTab("Current Building", null, panel_1, null);
-		SpringLayout sl_panel_1 = new SpringLayout();
-		panel_1.setLayout(sl_panel_1);
-		
-		JPanel panel_2 = new JPanel();
-		sl_panel_1.putConstraint(SpringLayout.NORTH, panel_2, 0, SpringLayout.NORTH, panel_1);
-		sl_panel_1.putConstraint(SpringLayout.WEST, panel_2, 0, SpringLayout.WEST, panel_1);
-		sl_panel_1.putConstraint(SpringLayout.SOUTH, panel_2, 689, SpringLayout.NORTH, panel_1);
-		sl_panel_1.putConstraint(SpringLayout.EAST, panel_2, 259, SpringLayout.WEST, panel_1);
-		panel_1.add(panel_2);
 		
 		final JButton btnPopulateCity = new JButton("Populate City");
 		btnPopulateCity.addActionListener(new ActionListener() {
@@ -707,12 +695,21 @@ public class SimCityGui {
 	public MacroAnimationPanel getMacroAnimationPanel() {
 		return macroAnimationPanel;
 	}
-    //	public void displayMicroAnimationPanel(MicroAnimationPanel microAnimationPanel) {
-    //			System.out.println("Accessing " + microAnimationPanel.getName() + " for MicroAnimationPanel.");
-    //			cardLayout.show(buildingPanels, microAnimationPanel.getName());
-    //	}
 	
 	public BusAgent getBus() {
 		return bus;
+	}
+
+	public void setUniqueBuildingPanel(String name) {
+		for(Restaurant restaurant : Directory.sharedInstance().getRestaurants()) {
+			if(restaurant.getName().contains(name)) {
+				if(tabbedPane.getTabCount() == 2) {
+					tabbedPane.remove(1);
+				}
+				CurrentBuildingPanel restPanel = new CurrentBuildingPanel(restaurant);
+				tabbedPane.addTab("Current Building", restPanel);
+			}
+		}
+		
 	}
 }
