@@ -9,7 +9,7 @@ import restaurant.stackRestaurant.ProducerConsumerMonitor;
 public class Restaurant {
 	
 	private boolean isOpen = true;
-	private Map<String, FoodData> foodInventory = Collections.synchronizedMap(new HashMap<String, FoodData>());
+	private Map<String, FoodInformation> foodInventory = Collections.synchronizedMap(new HashMap<String, FoodInformation>());
 
 	private ProducerConsumerMonitor monitor;
 	public Restaurant() {
@@ -36,20 +36,16 @@ public class Restaurant {
 		foodInventory.get(type).setQuantity(quantity);
 	}
 	
-	public void msgChangeOpen() {
-
+	public void msgSetOpen() {
+		isOpen = true;
 	}
 	
-	public Map<String, FoodData> getFoodInventory() {
+	public void msgSetClosed() {
+		isOpen = false;
+	}
+	
+	public Map<String, FoodInformation> getFoodInventory() {
 		return foodInventory;
-	}
-	
-	private class FoodData {
-		int quantity;
-		
-		public void setQuantity(int quantity) {
-			this.quantity = quantity;
-		}
 	}
 
 }
