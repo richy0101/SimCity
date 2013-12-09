@@ -399,6 +399,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	public void msgRoleFinished() {
 		RoleInterface r = roles.pop();
+		setPersonState(PersonState.Idle);
 		print("msgRoleFinished received - Popping current Role: " + r.toString() + ".");
 		stateChanged();
 	}
