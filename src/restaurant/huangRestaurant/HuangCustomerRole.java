@@ -72,7 +72,6 @@ public class HuangCustomerRole extends Role implements Customer {
 				b.addGui(customerGui);
 			}
 		}
-		gotHungry();
 	}
 	/**
 	 * hack to establish connection to Host agent.
@@ -92,8 +91,9 @@ public class HuangCustomerRole extends Role implements Customer {
 	}
 	// Messages
 
-	public void gotHungry() {//from animation
+	public void msgGotHungry() {//from animation
 		event = AgentEvent.gotHungry;
+		stateChanged();
 	}
 	public void msgRestaurantFull() {
 		System.out.println(name + ": msgRestaurantFull recieved: deciding whether to stay or not.");
