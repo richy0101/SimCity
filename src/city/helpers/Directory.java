@@ -17,6 +17,7 @@ import gui.SimCityGui;
 import home.Apartment;
 import home.Home;
 import restaurant.Restaurant;
+import restaurant.shehRestaurant.ShehRestaurant;
 import restaurant.stackRestaurant.*;
 import restaurant.tanRestaurant.TanRestaurant;
 
@@ -115,10 +116,10 @@ public class Directory {
 	
 	private Restaurant phillipsRestaurant = new PhillipsRestaurant("PhillipsRestaurant"); //restaurant 4
 	Coordinate phillipsRestaurantLocation = new Coordinate(768,346);
-	
+	*/
 	private Restaurant shehRestaurant = new ShehRestaurant("ShehRestaurant"); //restaurant 5
 	Coordinate shehRestaurantLocation = new Coordinate(621,331);
-	*/
+	
 	
 	private Restaurant tanRestaurant = new TanRestaurant("TanRestaurant"); //restaurant 6
 	Coordinate tanRestaurantLocation = new Coordinate(380,361);
@@ -198,8 +199,9 @@ public class Directory {
 		
 		//Restaurants
 		locationDirectory.put(stackRestaurant.getName(), stackRestaurantLocation);
-		/*
+		
 		locationDirectory.put(shehRestaurant.getName(), shehRestaurantLocation);
+		/*
 		locationDirectory.put(tanRestaurant.getName(), tanRestaurantLocation);
 		locationDirectory.put(phillipsRestaurant.getName(), phillipsRestaurantLocation);
 		locationDirectory.put(nakamuraRestaurant.getName(), nakamuraRestaurantLocation);

@@ -446,8 +446,10 @@ public class SimCityGui {
                                 (String)housingComboBox.getSelectedItem(),
                                 (String)transportationComboBox.getSelectedItem());
 						
-					//}
+						
 						housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
+					//}
+						
 				}
 			}
 		});
