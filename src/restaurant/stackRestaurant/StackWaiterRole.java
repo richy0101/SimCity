@@ -6,6 +6,7 @@ import gui.Building;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import restaurant.Restaurant;
 import restaurant.stackRestaurant.gui.WaiterGui;
 import restaurant.stackRestaurant.helpers.Check;
 import restaurant.stackRestaurant.interfaces.*;
@@ -25,6 +26,8 @@ public class StackWaiterRole extends Role implements Waiter {
 	protected enum AgentState
 	{Arrived, Working, WantToGoOnBreak, WaitingForNotice, GoingOnBreak, OnBreak, FinishingBreak, GettingPaycheck, Leaving, WaitingForPaycheck};
 	AgentState state = AgentState.Working;
+	private Restaurant restaurant;
+	private String stringState;
 	
 	protected enum CustomerState
 	{Waiting, Seated, ReadyToOrder, Ordering, Ordered, AtCook, FoodEmpty, FoodReady, WaitingForReadyFood, Eating, DoneEating, ReadyForCheck, WaitingForCheck, HasCheck, Paying, Gone};
@@ -45,7 +48,12 @@ public class StackWaiterRole extends Role implements Waiter {
 	}
 	
 	public String getName() {
-		return getPersonAgent().getName();
+		if(getPersonAgent() != null) {
+			return getPersonAgent().getName();
+		}
+		else {
+			return "";
+		}
 	}
 	
 	public void setCook(Cook cook) {
@@ -65,33 +73,39 @@ public class StackWaiterRole extends Role implements Waiter {
 	public boolean pickAndExecuteAnAction() {
 		try {
 			if(state == AgentState.Arrived) {
+				setStringState(state.toString());
 				tellHostAtWork();
 				return true;
 			}
 			if(state == AgentState.WantToGoOnBreak) {
+				setStringState(state.toString());
 				askHostToGoOnBreak();
 				return true;
 			}
 			for(MyCustomer customer : customers) {
 				if(customer.state == CustomerState.ReadyToOrder) {
+					setStringState(customer.state.toString());
 					takeOrderFromCustomer(customer);
 					return true;
 				}
 			}
 			for(MyCustomer customer : customers) {
 				if(customer.state == CustomerState.Ordered) {
+					setStringState(customer.state.toString());
 					takeOrderToCook(customer);
 					return true;
 				}
 			}
 			for(MyCustomer customer : customers) {
 				if(customer.state == CustomerState.FoodEmpty) {
+					setStringState(customer.state.toString());
 					tellCustomerToReorder(customer);
 					return true;
 				}
 			}
 			for(MyCustomer customer : customers) {
 				if(customer.state == CustomerState.FoodReady) {
+					setStringState(customer.state.toString());
 					goPickUpFood(customer);
 					takeFoodToTable(customer);
 					return true;
@@ -99,12 +113,14 @@ public class StackWaiterRole extends Role implements Waiter {
 			}	
 			for(MyCustomer customer : customers) {
 				if(customer.state == CustomerState.DoneEating) {
+					setStringState(customer.state.toString());
 					tellHostTableEmpty(customer);
 					return true;
 				}
 			}
 			for(MyCustomer customer : customers) {
 				if(customer.state == CustomerState.ReadyForCheck) {
+					setStringState(customer.state.toString());
 					cashier.msgComputeCheck(this, customer.customer, customer.choice);
 					customer.state = CustomerState.WaitingForCheck;
 					return true;
@@ -112,29 +128,35 @@ public class StackWaiterRole extends Role implements Waiter {
 			}
 			for(MyCustomer customer : customers) {
 				if(customer.state == CustomerState.HasCheck) {
+					setStringState(customer.state.toString());
 					giveCustomerCheck(customer);
 					return true;
 				}
 			}
 			for(MyCustomer customer : customers) {
 				if(customer.state == CustomerState.Waiting) {
+					setStringState(customer.state.toString());
 					seatCustomer(customer, customer.table, customer.seatNum);
 					return true;
 				}
 			}
 			if(state == AgentState.GettingPaycheck) {
+				setStringState(state.toString());
 				goGetPaycheck();
 				return true;
 			}
 			if(state == AgentState.Leaving) {
+				setStringState(state.toString());
 				leaveRestaurant();
 				return true;
 			}
 			if(state == AgentState.GoingOnBreak) {
+				setStringState(state.toString());
 				goOnBreak();
 				return true;
 			}
 			if(state == AgentState.FinishingBreak) {
+				setStringState(state.toString());
 				tellHostOffBreak();
 				return true;
 			}
@@ -537,5 +559,19 @@ public class StackWaiterRole extends Role implements Waiter {
 		String choice;
 		int seatNum;
 		CustomerState state;
+	}
+
+	@Override
+	public void setRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant;
+		
+	}
+	
+	public String getStringState() {
+		return stringState;
+	}
+	
+	public void setStringState(String stringState) {
+		this.stringState = stringState;
 	}
 }

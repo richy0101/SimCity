@@ -1,6 +1,7 @@
 package restaurant.stackRestaurant;
 
 import agent.Agent;
+import restaurant.Restaurant;
 import restaurant.stackRestaurant.gui.WaiterGui;
 import restaurant.stackRestaurant.helpers.TableList;
 import restaurant.stackRestaurant.interfaces.Cook;
@@ -29,6 +30,7 @@ public class StackHostAgent extends Agent implements Host {
 	//Later we will see how it is implemented
 	private boolean needToNotifyWaiters = false;
 	private boolean needToNotifyNewWaiter = false;
+	private Restaurant restaurant;
 	
 	public enum CustomerState 
 	{WaitingInRestaurant, NotifiedRestaurantFull, Eating, Done};
@@ -145,6 +147,7 @@ public class StackHostAgent extends Agent implements Host {
 	
 	public void msgAddWaiter(Waiter waiter) {
 		print("adding " +  waiter);
+		waiter.setRestaurant(restaurant);
 		waiters.add(new MyWaiter(waiter, WaiterState.Idle));
 		needToNotifyNewWaiter  = true;
 		stateChanged();
@@ -152,6 +155,7 @@ public class StackHostAgent extends Agent implements Host {
 	
 	public void msgAddCook(Cook cook) {
 		print("adding " +  cook);
+		cook.setRestaurant(restaurant);
 		this.cook = cook;
 		needToNotifyWaiters = true;
 		stateChanged();
@@ -212,7 +216,7 @@ public class StackHostAgent extends Agent implements Host {
 		}
 		synchronized(customers) {
 			for(MyCustomer customer : customers) {
-				if((cook == null || waiters.size() == 0) && customer.state != CustomerState.Done) {
+				if((cook == null || waiters.size() == 0 || !restaurant.isOpen()) && customer.state != CustomerState.Done) {
 					tellCustomerRestaurantClosed(customer);
 					return true;
 				}
@@ -335,6 +339,11 @@ public class StackHostAgent extends Agent implements Host {
 	
 	public Cook getCook() {
 		return cook;
+	}
+
+	public void setRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant;
+		
 	}
 }
 

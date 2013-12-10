@@ -1,8 +1,12 @@
 package restaurant;
 
+import gui.CurrentBuildingPanel;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.swing.JPanel;
 
 import restaurant.stackRestaurant.ProducerConsumerMonitor;
 
@@ -10,8 +14,21 @@ public class Restaurant {
 	
 	private boolean isOpen = true;
 	private Map<String, FoodInformation> foodInventory = Collections.synchronizedMap(new HashMap<String, FoodInformation>());
+	CurrentBuildingPanel restPanel;
+	
 
 	private ProducerConsumerMonitor monitor;
+	double till = 1000;
+	
+	public double getTill() {
+		return till;
+	}
+
+	public void setTill(double till) {
+		restPanel.msgChangeTillInformation(till);
+		this.till = till;
+	}
+
 	public Restaurant() {
 		monitor = new ProducerConsumerMonitor();
 	}
@@ -33,19 +50,47 @@ public class Restaurant {
 	}
 	
 	public void msgChangeFoodInventory(String type, int quantity) {
+		if(type.equals("Steak")) {
+			restPanel.msgChangeSteakInventory(quantity);
+		}
+		else if(type.equals("Chicken")) {
+			restPanel.msgChangeChickenInventory(quantity);
+		}
+		else if(type.equals("Salad")) {
+			restPanel.msgChangeSaladInventory(quantity);
+		}
+		else if(type.equals("Pizza")) {
+			restPanel.msgChangePizzaInventory(quantity);
+		}
 		foodInventory.get(type).setQuantity(quantity);
 	}
 	
 	public void msgSetOpen() {
-		isOpen = true;
+		setOpen(true);
 	}
 	
 	public void msgSetClosed() {
-		isOpen = false;
+		setOpen(false);
 	}
 	
 	public Map<String, FoodInformation> getFoodInventory() {
 		return foodInventory;
+	}
+
+	public JPanel getInfoPanel() {
+		return restPanel;
+	}
+
+	public boolean isOpen() {
+		return isOpen;
+	}
+
+	public void setOpen(boolean isOpen) {
+		this.isOpen = isOpen;
+	}
+
+	public void setInfoPanel(CurrentBuildingPanel restPanel) {
+		this.restPanel = restPanel;
 	}
 
 }

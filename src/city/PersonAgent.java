@@ -1,7 +1,7 @@
 package city;
 
 import gui.Building;
-import home.HomePersonRole;
+import home.helpers.TenantList;
 import home.interfaces.Landlord;
 
 import java.util.ArrayList;
@@ -228,11 +228,30 @@ public class PersonAgent extends Agent implements Person {
 		if (job.contains("employ")) {
 			print("I am unemployed!");
 			this.unemployed = true;
+			Role r = factory.createRole(job, this);
+			String jobLocation = Directory.sharedInstance().roleDirectory.get(r.getClass().getName());
+			workDetails = new WorkDetails(r, jobLocation);
+		}
+		else if (job.contains("lordA")){
+			Role r = factory.createRole(job, this);
+			workDetails = new WorkDetails(r, "ApartmentA");
+		}
+		else if (job.contains("lordB")){
+			Role r = factory.createRole(job, this);
+			workDetails = new WorkDetails(r, "ApartmentB");
+		}
+		else if (job.contains("lordC")){
+			Role r = factory.createRole(job, this);
+			workDetails = new WorkDetails(r, "ApartmentC");
 		}
 		else {
 			Role r = factory.createRole(job, this);
 			//print("Role created from front end: " + r.getClass().getName());
-			workDetails = new WorkDetails(r, Directory.sharedInstance().roleDirectory.get(r.getClass().getName()));
+			String jobLocation = Directory.sharedInstance().roleDirectory.get(r.getClass().getName());
+			if (job.contains("2")) {
+				jobLocation = jobLocation + "2";
+			}
+			workDetails = new WorkDetails(r, jobLocation);
 			//finish setting up Work
 		}
 		print("created someone");
@@ -250,22 +269,31 @@ public class PersonAgent extends Agent implements Person {
 		Directory.sharedInstance().addPerson(this);
 		homeName = housingStatus;
 		personGui = new PersonGui(this);
-		currentLocation = housingStatus;
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
-			if(homeName.toLowerCase().contains("apartmenta") || homeName.toLowerCase().contains("landlorda")) {
+			if(homeName.toLowerCase().contains("apartmenta")) {
 				homeName = "ApartmentA";
+				if(!(job.contains("lord"))){
+					TenantList.sharedInstance().addTenant(this,1);
+				}
 			}
-			else if(homeName.toLowerCase().contains("apartmentb") || homeName.toLowerCase().contains("landlordb")) {
+			else if(homeName.toLowerCase().contains("apartmentb")) {
 				homeName = "ApartmentB";
+				if(!(job.contains("lord"))){
+					TenantList.sharedInstance().addTenant(this,2);
+				}
 			}
-			else if(homeName.toLowerCase().contains("apartmentc") || homeName.toLowerCase().contains("landlordc")) {
+			else if(homeName.toLowerCase().contains("apartmentc")) {
 				homeName = "ApartmentC";
+				if(!(job.contains("lord"))){
+					TenantList.sharedInstance().addTenant(this,3);
+				}
 			}
 			
 			if (b.getName().equals(homeName)) {
 				b.addGui(personGui);
 			}
+			currentLocation = homeName;
 		}
 		//Set up inventory
 		Food initialFood = new Food("Chicken");
@@ -279,7 +307,6 @@ public class PersonAgent extends Agent implements Person {
 		startThread();
 		//print("I LIVE.");
 	}
-	
 	
 	public PersonAgent(Role job, 
 			String name, 
@@ -366,7 +393,8 @@ public class PersonAgent extends Agent implements Person {
 				stateChanged();
 			}
 		}
-		else if (getPersonState() == PersonState.Sleeping){
+		else if (getPersonState() == PersonState.Sleeping && hour > 10){
+			personState = PersonState.Idle;
 			stateChanged();
 		}
 	}
@@ -424,14 +452,6 @@ public class PersonAgent extends Agent implements Person {
 	public void msgTransportFinished(String location) {
 		roles.pop();
 		currentLocation = location;
-		/*
-		if(currentLocation.toLowerCase().contains("apartmenta"))
-			currentLocation = "ApartmentA";
-		if(currentLocation.toLowerCase().contains("apartmentb"))
-			currentLocation = "ApartmentB";
-		if(currentLocation.toLowerCase().contains("apartmentc"))
-			currentLocation = "ApartmentC";
-		*/
 		if (currentLocation == homeName) {
 			setPersonState(PersonState.EnterHome);
 			print("msgTransportFinished received - Popping transport role, updating current location to: " + currentLocation + ". At Home.");
@@ -460,15 +480,6 @@ public class PersonAgent extends Agent implements Person {
 	 * Scheduler.  Determine what action is called for, and do it. -------------------------------------------------------
 	 */
 	public boolean pickAndExecuteAnAction() {
-		if(currentLocation.toLowerCase().contains("apartmenta") || currentLocation.toLowerCase().contains("landlorda")) {
-			currentLocation = "ApartmentA";
-		}
-		else if(currentLocation.toLowerCase().contains("apartmentb") || currentLocation.toLowerCase().contains("landlordb")) {
-			currentLocation = "ApartmentB";
-		}
-		else if(currentLocation.toLowerCase().contains("apartmentc") || currentLocation.toLowerCase().contains("landlordc")) {
-			currentLocation = "ApartmentC";
-		}
 		
 		if (getPersonState() == PersonState.DoneWorking) {
 			leaveWork();
@@ -534,7 +545,6 @@ public class PersonAgent extends Agent implements Person {
 			return true;
 		}
 		if (getPersonState() == PersonState.WantFood) {
-			//print("STUB IN PERSONAGENT SCHEDULER: WANTFOOD");
 			decideFood();
 			return true;
 		}
@@ -546,10 +556,6 @@ public class PersonAgent extends Agent implements Person {
 			goWork();
 			return true;
 		}
-		/*if (rentDue == true) {
-			payRent();
-			return true;
-		}*/
 		return evaluateStatus();
 	}
 
@@ -558,34 +564,14 @@ public class PersonAgent extends Agent implements Person {
 	 * Actions --------------------------------------------------------------------------------------------------------
 	 * 
 	 */
-	private boolean evaluateStatus() {
-		if(currentLocation.toLowerCase().contains("apartmenta") || currentLocation.toLowerCase().contains("landlorda")) {
-			currentLocation = "ApartmentA";
-		}
-		else if(currentLocation.toLowerCase().contains("apartmentb") || currentLocation.toLowerCase().contains("landlordb")) {
-			currentLocation = "ApartmentB";
-		}
-		else if(currentLocation.toLowerCase().contains("apartmentc") || currentLocation.toLowerCase().contains("landlordc")) {
-			currentLocation = "ApartmentC";
-		}
-		
+	private boolean evaluateStatus() {		
 		//print("In Eval: Current Location = " + currentLocation + ".");
 		if (getPersonState().toString().contains("ing") || getPersonState().toString().contains("OutTo") || getPersonState().toString().contains("NeedsTo")){
 			return false;
 		}
-		else if (dirtynessLevel > 10) {
-			print("Eval says GO CLEAN");
-			setPersonState(PersonState.NeedsToCleanRoom);
-			return true;
-		}
 		else if (hasWorked == false && unemployed == false && !(workDetails.offDays.contains(currentDay))) {
 			print("Eval says go WORK");
 			setPersonState(PersonState.NeedsToWork);
-			return true;
-		}
-		else if(rentDue == true && currentLocation == homeName) {
-			print ("Eval says PAY RENT BECAUSE YOUR HOME");
-			setPersonState(PersonState.NeedsToPayRent);
 			return true;
 		}
 		else if (funds < 50.00 && aggressivenessLevel > 2) {
@@ -618,13 +604,23 @@ public class PersonAgent extends Agent implements Person {
 			setPersonState(PersonState.WantsToGoHome);
 			return true;
 		}
+		else if(rentDue == true) {
+			print ("Eval says PAY RENT BECAUSE YOUR HOME");
+			setPersonState(PersonState.NeedsToPayRent);
+			return true;
+		}
+		else if (dirtynessLevel > 10) {
+			print("Eval says GO CLEAN");
+			setPersonState(PersonState.NeedsToCleanRoom);
+			return true;
+		}
 		else if(getPersonState() == PersonState.Idle){
 			setPersonState(PersonState.Sleeping);
 			personGui.DoSleep();
 			return false;
 		}
 		else {
-			return true;
+			return false;
 		}
 	}
 	private void enterHome() {
@@ -636,66 +632,27 @@ public class PersonAgent extends Agent implements Person {
 		setPersonState(PersonState.TryingToLeaveWork);
 		roles.peek().msgJobDone();
 	}
-	/*private void payRent() {
-		roles.clear();
-		if (personPosition == personPosition.AtHome) {
-			roles.clear();
-			roles.add(new HomePersonRole(landLord));
-		}
-		else {
-			roles.clear();
-			roles.add(new HomePersonRole(landLord));
-			roles.add(new TransportationRole(homeName));
-		}	
-	}*/
 	
 	private void goCleanHouse() {
 		print("Action cleanHouse - State set to cleaning.");
 
-		if(currentLocation == homeName) { //check to see if apartment works?
-			roles.clear();
-			HomePersonRole homeRole = new HomePersonRole();
-			roles.add(homeRole);
-			homeRole.msgCleanHouse();
-			
-		}
-		
-		roles.clear();
-		Role custRole = factory.createRole(r.getName(), this);
-		roles.add(custRole);
-		custRole.msgGotHungry();
-		custRole.setHost(Directory.sharedInstance().getAgents().get(r.getName() + "Host"));
-		custRole.setCashier(Directory.sharedInstance().getAgents().get(r.getName() + "Cashier"));
-		Role t = new TransportationRole(r.getName(), currentLocation);
-		t.setPerson(this);
-		roles.add(t);
-		
-		setPersonState(PersonState.CleanedRoom);
+//		if(currentLocation == homeName) { //check to see if apartment works?
+//			roles.clear();
+//			HomePersonRole homeRole = new HomePersonRole();
+//			roles.add(homeRole);
+//			homeRole.msgCleanHouse();
+//			
+//		}
+		personGui.DoClean();
+		actionComplete.acquireUninterruptibly();
+		setPersonState(PersonState.Idle);
+		dirtynessLevel = 0;
 	}
 	
 	private void goHome() {
 		print("Action goHome - State set to InTransit. Adding new Transportation Role.");
 		setPersonState(PersonState.InTransit);
 		roles.clear();
-		if(homeName.toLowerCase().contains("apartmenta") || homeName.toLowerCase().contains("landlorda")) {
-			homeName = "ApartmentA";
-		}
-		else if(homeName.toLowerCase().contains("apartmentb") || homeName.toLowerCase().contains("landlordb")) {
-			homeName = "ApartmentB";
-		}
-		else if(homeName.toLowerCase().contains("apartmentc") || homeName.toLowerCase().contains("landlordc")) {
-			homeName = "ApartmentC";
-		}
-		if(currentLocation.toLowerCase().contains("apartmenta") || currentLocation.toLowerCase().contains("landlorda")) {
-			currentLocation = "ApartmentA";
-		}
-		else if(currentLocation.toLowerCase().contains("apartmentb") || currentLocation.toLowerCase().contains("landlordb")) {
-			currentLocation = "ApartmentB";
-		}
-		else if(currentLocation.toLowerCase().contains("apartmentc") || currentLocation.toLowerCase().contains("landlordc")) {
-			currentLocation = "ApartmentC";
-		}
-		
 		Role t = new TransportationRole(homeName, currentLocation);
 		t.setPerson(this);
 		roles.add(t);
@@ -734,18 +691,8 @@ public class PersonAgent extends Agent implements Person {
 		print("Action goRestaurant - State set to OutToEat");
 		setPersonState(PersonState.OutToEat);
 		//Decide Which restaurant to go to
-		Restaurant r = Directory.sharedInstance().getRestaurants().get(1);
+		Restaurant r = Directory.sharedInstance().getRestaurants().get(0);
 		//End of Decide block
-		if(currentLocation.toLowerCase().contains("apartmenta") || currentLocation.toLowerCase().contains("landlorda")) {
-			currentLocation = "ApartmentA";
-		}
-		else if(currentLocation.toLowerCase().contains("apartmentb") || currentLocation.toLowerCase().contains("landlordb")) {
-			currentLocation = "ApartmentB";
-		}
-		else if(currentLocation.toLowerCase().contains("apartmentc") || currentLocation.toLowerCase().contains("landlordc")) {
-			currentLocation = "ApartmentC";
-		}
-		
 		if(currentLocation == homeName) {
 			personGui.DoLeaveHouse();
 			actionComplete.acquireUninterruptibly();
@@ -800,17 +747,6 @@ public class PersonAgent extends Agent implements Person {
 		print("Action goWork. Going to work.");
 		hasWorked = true;
 		setPersonState(PersonState.OutToWork);
-		
-		if(currentLocation.toLowerCase().contains("apartmenta") || currentLocation.toLowerCase().contains("landlorda")) {
-			currentLocation = "ApartmentA";
-		}
-		else if(currentLocation.toLowerCase().contains("apartmentb") || currentLocation.toLowerCase().contains("landlordb")) {
-			currentLocation = "ApartmentB";
-		}
-		else if(currentLocation.toLowerCase().contains("apartmentc") || currentLocation.toLowerCase().contains("landlordc")) {
-			currentLocation = "ApartmentC";
-		}
-		
 		if(currentLocation == homeName) {
 			personGui.DoLeaveHouse();
 			actionComplete.acquireUninterruptibly();
@@ -844,18 +780,7 @@ public class PersonAgent extends Agent implements Person {
 		
 		if(m != null) {
 			print("Action goMarket - State set to OutToMarket");
-			setPersonState(PersonState.OutToMarket);
-			
-			if(currentLocation.toLowerCase().contains("apartmenta") || currentLocation.toLowerCase().contains("landlorda")) {
-				currentLocation = "ApartmentA";
-			}
-			else if(currentLocation.toLowerCase().contains("apartmentb") || currentLocation.toLowerCase().contains("landlordb")) {
-				currentLocation = "ApartmentB";
-			}
-			else if(currentLocation.toLowerCase().contains("apartmentc") || currentLocation.toLowerCase().contains("landlordc")) {
-				currentLocation = "ApartmentC";
-			}
-			
+			setPersonState(PersonState.OutToMarket);	
 			if(currentLocation == homeName) {
 				personGui.DoLeaveHouse();
 				actionComplete.acquireUninterruptibly();
@@ -863,7 +788,7 @@ public class PersonAgent extends Agent implements Person {
 			}
 			m = Directory.sharedInstance().getMarkets().get(0);
 			roles.clear();
-			Role marketCust = factory.createRole(m.getName(), this);
+			Role marketCust = factory.createRole(m.getName()+"Cust", this);
 			marketCust.setMarket(Directory.sharedInstance().marketDirectory.get(m.getName()).getWorker());
 			roles.add(marketCust);
 			Role t = new TransportationRole(m.getName(), currentLocation);
@@ -873,16 +798,6 @@ public class PersonAgent extends Agent implements Person {
 	}
 	/** Non Norm Actions **/
 	private void goRob() {
-		if(currentLocation.toLowerCase().contains("apartmenta") || currentLocation.toLowerCase().contains("landlorda")) {
-			currentLocation = "ApartmentA";
-		}
-		else if(currentLocation.toLowerCase().contains("apartmentb") || currentLocation.toLowerCase().contains("landlordb")) {
-			currentLocation = "ApartmentB";
-		}
-		else if(currentLocation.toLowerCase().contains("apartmentc") || currentLocation.toLowerCase().contains("landlordc")) {
-			currentLocation = "ApartmentC";
-		}
-		
 		if(currentLocation == homeName) {
 			personGui.DoLeaveHouse();
 			actionComplete.acquireUninterruptibly();
@@ -898,8 +813,6 @@ public class PersonAgent extends Agent implements Person {
 		roles.add(t);
 		print("Action goRob - State set to OutBank");
 		setPersonState(PersonState.OutToBank);
-		
-		
 	}
 	private void goDeposit() {
 		double deposit;
@@ -908,16 +821,6 @@ public class PersonAgent extends Agent implements Person {
 		}
 		else {
 			deposit = 0.0;
-		}
-		
-		if(currentLocation.toLowerCase().contains("apartmenta") || currentLocation.toLowerCase().contains("landlorda")) {
-			currentLocation = "ApartmentA";
-		}
-		else if(currentLocation.toLowerCase().contains("apartmentb") || currentLocation.toLowerCase().contains("landlordb")) {
-			currentLocation = "ApartmentB";
-		}
-		else if(currentLocation.toLowerCase().contains("apartmentc") || currentLocation.toLowerCase().contains("landlordc")) {
-			currentLocation = "ApartmentC";
 		}
 		
 		if(currentLocation == homeName) {
@@ -939,15 +842,6 @@ public class PersonAgent extends Agent implements Person {
 		setPersonState(PersonState.OutToBank);
 	}
 	private void goLoan() {
-		if(currentLocation.toLowerCase().contains("apartmenta") || currentLocation.toLowerCase().contains("landlorda")) {
-			currentLocation = "ApartmentA";
-		}
-		else if(currentLocation.toLowerCase().contains("apartmentb") || currentLocation.toLowerCase().contains("landlordb")) {
-			currentLocation = "ApartmentB";
-		}
-		else if(currentLocation.toLowerCase().contains("apartmentc") || currentLocation.toLowerCase().contains("landlordc")) {
-			currentLocation = "ApartmentC";
-		}
 		
 		if(currentLocation == homeName) {
 			personGui.DoLeaveHouse();
@@ -969,17 +863,7 @@ public class PersonAgent extends Agent implements Person {
 		
 	}
 	
-	private void goWithdraw() {
-		if(currentLocation.toLowerCase().contains("apartmenta") || currentLocation.toLowerCase().contains("landlorda")) {
-			currentLocation = "ApartmentA";
-		}
-		else if(currentLocation.toLowerCase().contains("apartmentb") || currentLocation.toLowerCase().contains("landlordb")) {
-			currentLocation = "ApartmentB";
-		}
-		else if(currentLocation.toLowerCase().contains("apartmentc") || currentLocation.toLowerCase().contains("landlordc")) {
-			currentLocation = "ApartmentC";
-		}
-		
+	private void goWithdraw() {	
 		if(currentLocation == homeName) {
 			personGui.DoLeaveHouse();
 			actionComplete.acquireUninterruptibly();
@@ -1048,5 +932,11 @@ public class PersonAgent extends Agent implements Person {
 	}
 	public String getAddress() {
 		return homeName; 
+	}
+	public String getCurrentLocation() {
+		return currentLocation;
+	}
+	public void addRole(Role t) {
+		roles.add(t);
 	}
 }

@@ -6,19 +6,17 @@ import java.util.List;
 import java.util.Map;
 
 import city.PersonAgent;
-import city.TransportationRole;
-import city.gui.BusStop;
-import city.gui.StreetCorner;
+import city.TrafficAgent;
 import market.Market;
 import agent.Agent;
 import bank.Bank;
-import gui.MacroAnimationPanel;
 import gui.SimCityGui;
 import home.Apartment;
 import home.Home;
 import restaurant.Restaurant;
 import restaurant.huangRestaurant.HuangRestaurant;
 import restaurant.nakamuraRestaurant.NakamuraRestaurant;
+import restaurant.phillipsRestaurant.PhillipsRestaurant;
 import restaurant.shehRestaurant.ShehRestaurant;
 import restaurant.stackRestaurant.*;
 import restaurant.tanRestaurant.TanRestaurant;
@@ -32,11 +30,14 @@ public class Directory {
 		restaurants.add(stackRestaurant);
 		restaurants.add(huangRestaurant);
 		restaurants.add(nakamuraRestaurant);
+		restaurants.add(shehRestaurant);
+		restaurants.add(phillipsRestaurant);
 		restaurants.add(tanRestaurant); //should be added last to be 5th on the list
 		banks.add(bank);
 		banks.add(bank2);
-		markets.add(market1);
+		markets.add(Market);
 		markets.add(market2);
+		//trafficLights.add(trafficLight);
 	}
 	
 	public static Directory sharedInstance() {
@@ -50,62 +51,50 @@ public class Directory {
 	public Map<String, String> roleDirectory = new HashMap<String, String>(); {
 		//Bank Roles
 		roleDirectory.put("bank.BankCustomerRole", "Bank");
-		roleDirectory.put("bank.BankManagerRole", "Bank");
 		roleDirectory.put("bank.BankTellerRole", "Bank");
 		
-		roleDirectory.put("bank.BankCustomerRole", "Bank2");
-		roleDirectory.put("bank.BankManagerRole", "Bank2");
-		roleDirectory.put("bank.BankTellerRole", "Bank2");
+//		roleDirectory.put("bank.BankCustomerRole2", "Bank2");
+//		roleDirectory.put("bank.BankManagerRole2", "Bank2");
+//		roleDirectory.put("bank.BankTellerRole2", "Bank2");
 		
 		//Market Roles
-		roleDirectory.put("market.MarketRole1" , "Market1");
+		roleDirectory.put("market.MarketRole" , "Market");
 		roleDirectory.put("market.MarketRole2", "Market2");
-		
-		//LandLord Roles
-		roleDirectory.put("home.LandlordRoleA", "ApartmentA");
-		roleDirectory.put("home.LandlordRoleB", "ApartmentB");
-		roleDirectory.put("home.LandlordRoleC", "ApartmentC");
 		
 		//Restaurant Roles Stack
 //		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");
 //		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "StackRestaurant");
 		roleDirectory.put("restaurant.stackRestaurant.StackWaiterSharedRole", "StackRestaurant");
 		roleDirectory.put("restaurant.stackRestaurant.StackWaiterNormalRole", "StackRestaurant");
 		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "StackRestaurant");
 		
 		//Restaurant Roles Huang
 		roleDirectory.put("restaurant.huangRestaurant.HuangWaiterSharedRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.huangRestaurant.HuangHostRole", "HuangRestaurant");
 		roleDirectory.put("restaurant.huangRestaurant.HuangWaiterNormalRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.huangRestaurant.HuangCookRole", "HuangRestaurant");	
+		roleDirectory.put("restaurant.huangRestaurant.HuangCookRole", "HuangRestaurant");
+		
+		//Restaurant Roles Sheh
+		roleDirectory.put("restaurant.shehRestaurant.ShehWaiterRole", "ShehRestaurant");
+		roleDirectory.put("restaurant.shehRestaurant.ShehCookRole", "ShehRestaurant");
 		/*
 		//Restaurant Roles Tan
 		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");
 		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "HuangRestaurant");
 		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "HuangRestaurant");
 		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "HuangRestaurant");	
-		
-		//Restaurant Roles Sheh
-		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "HuangRestaurant");	
 		*/
 		//Restaurant Roles Nakamura
-		roleDirectory.put("restaurant.nakamuraRestaurant.StackCashierRole", "NakamuraRestaurant");
-		roleDirectory.put("restaurant.nakamuraRestaurant.StackHostRole", "NakamuraRestaurant");
-		roleDirectory.put("restaurant.nakamuraRestaurant.StackWaiterRole", "NakamuraRestaurant");
-		roleDirectory.put("restaurant.nakamuraRestaurant.StackCookRole", "NakamuraRestaurant");	
+		roleDirectory.put("restaurant.nakamuraRestaurant.NakamuraCashierRole", "NakamuraRestaurant");
+		roleDirectory.put("restaurant.nakamuraRestaurant.NakamuraHostRole", "NakamuraRestaurant");
+		roleDirectory.put("restaurant.nakamuraRestaurant.NakamuraWaiterRole", "NakamuraRestaurant");
+		roleDirectory.put("restaurant.nakamuraRestaurant.NakamuraCookRole", "NakamuraRestaurant");	
 		
-
-		/*
 		//Restaurant Roles Phillips
-		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "HuangRestaurant");	
-		*/
+		//roleDirectory.put("restaurant.phillipsRestaurant.StackCashierRole", "HuangRestaurant");
+		//roleDirectory.put("restaurant.phillipsRestaurant.StackHostRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.phillipsRestaurant.PhillipsWaiterRole", "PhillipsRestaurant");
+		roleDirectory.put("restaurant.phillipsRestaurant.PhillipsCookRole", "PhillipsRestaurant");	
+		
 		
 	}
 //RESTAURANT Instantiations
@@ -117,14 +106,14 @@ public class Directory {
 		
 	private Restaurant nakamuraRestaurant = new NakamuraRestaurant("NakamuraRestaurant"); //restaurant 3
 	Coordinate nakamuraRestaurantLocation = new Coordinate(334,64);
-	/*
-	private Restaurant phillipsRestaurant = new PhillipsRestaurant("PhillipsRestaurant"); //restaurant 4
-	Coordinate phillipsRestaurantLocation = new Coordinate(768,346);
-	*/
+	
 	private Restaurant shehRestaurant = new ShehRestaurant("ShehRestaurant"); //restaurant 5
 	Coordinate shehRestaurantLocation = new Coordinate(621,331);
 	
+	private Restaurant phillipsRestaurant = new PhillipsRestaurant("PhillipsRestaurant"); //restaurant 4
+	Coordinate phillipsRestaurantLocation = new Coordinate(768,346);
 	
+
 	private Restaurant tanRestaurant = new TanRestaurant("TanRestaurant"); //restaurant 6
 	Coordinate tanRestaurantLocation = new Coordinate(380,361);
 	
@@ -150,14 +139,14 @@ public class Directory {
 	
 	
 //MARKETS
-	private Market market1 = new Market("Market1"); //priority market
-	Coordinate market1Location = new Coordinate(494,69);
+	private Market Market = new Market("Market"); //priority market
+	Coordinate MarketLocation = new Coordinate(494,69);
 	
 	private Market market2 = new Market("Market2"); //secondary market
 	Coordinate market2Location = new Coordinate(488,333);
 	
 	public Map<String, Market> marketDirectory = new HashMap<String, Market>(); {
-		marketDirectory.put("Market1", market1);
+		marketDirectory.put("Market", Market);
 		marketDirectory.put("Market2", market2);
 	}
 	
@@ -185,7 +174,7 @@ public class Directory {
 		locationDirectory.put(bank2.getName(), bankLocation2);
 		
 		//Markets
-		locationDirectory.put(market1.getName(), market1Location);
+		locationDirectory.put(Market.getName(), MarketLocation);
 		locationDirectory.put(market2.getName(), market2Location);
 		
 		//Apartments
@@ -207,22 +196,32 @@ public class Directory {
 		locationDirectory.put(shehRestaurant.getName(), shehRestaurantLocation);
 		
 		locationDirectory.put(huangRestaurant.getName(), huangRestaurantLocation);
-		/*
+		
 		locationDirectory.put(tanRestaurant.getName(), tanRestaurantLocation);
+		
 		locationDirectory.put(phillipsRestaurant.getName(), phillipsRestaurantLocation);
-		*/
 		
 		locationDirectory.put(nakamuraRestaurant.getName(), nakamuraRestaurantLocation);
 		
 	}
 	
+	//Instantiating Cashier/Host Agents into Restaurant
 	public Map <String, Agent> agents =  new HashMap<String, Agent>();{
 		agents.put(stackRestaurant.getName() + "Host", (Agent) stackRestaurant.getHost());
 		agents.put(stackRestaurant.getName() + "Cashier", (Agent) stackRestaurant.getCashier());
+		
 		agents.put(huangRestaurant.getName() + "Host", (Agent) huangRestaurant.getHost());
 		agents.put(huangRestaurant.getName() + "Cashier", (Agent) huangRestaurant.getCashier());
+		
 		agents.put(nakamuraRestaurant.getName() + "Host", (Agent) nakamuraRestaurant.getHost());
 		agents.put(nakamuraRestaurant.getName() + "Cashier", (Agent) nakamuraRestaurant.getCashier());
+		
+		agents.put(shehRestaurant.getName() + "Host", (Agent) shehRestaurant.getHost());
+		agents.put(shehRestaurant.getName() + "Cashier", (Agent) shehRestaurant.getCashier());
+		
+		agents.put(phillipsRestaurant.getName() + "Host", (Agent) phillipsRestaurant.getHost());
+		agents.put(phillipsRestaurant.getName() + "Cashier", (Agent) phillipsRestaurant.getCashier());
+		
 		agents.put( bank.getName(),(Agent) bank.getManager());
 		agents.put( bank2.getName(),(Agent) bank2.getManager());
 	}
@@ -230,6 +229,8 @@ public class Directory {
 	public static List<Bank> banks = new ArrayList<Bank>();
 	public static List<Market> markets = new ArrayList<Market>();
 	public static List<PersonAgent> people = new ArrayList<PersonAgent>();
+	
+	public static List<TrafficAgent> trafficLights = new ArrayList<TrafficAgent>();
 	
 	public Map<String, Agent> getAgents() {
 		return agents;

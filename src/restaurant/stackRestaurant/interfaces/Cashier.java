@@ -12,8 +12,6 @@ public interface Cashier extends CashierInterface{
 	
 	public abstract void msgPayCheck(Customer cust, Check check, double money);
 	
-	public abstract void msgGiveBill(MarketCheck check);
-	
 	public abstract void msgNeedPaycheck(Role role);
 
 }

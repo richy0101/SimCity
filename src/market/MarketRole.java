@@ -19,17 +19,20 @@ import market.test.mock.EventLog;
 import market.test.mock.LoggedEvent;
 import restaurant.CashierInterface;
 import restaurant.CookInterface;
+import restaurant.Restaurant;
 import agent.Role;
+import city.TransportationRole;
 import city.helpers.Directory;
 
 public class MarketRole extends Role implements Market {
 
 	//data--------------------------------------------------------------------------------
-	public enum orderState {Ordered, CantFill, Filled, Billed, ReadyToDeliver, Paid, CantPay, Cancelled};
+	public enum orderState {Ordered, CantFill, Filled, Billed, ReadyToDeliver, Paid, CantPay, Cancelled, InTransit};
 	
 	List<Order> MyOrders;
 	List<RestaurantOrder> MyRestaurantOrders;
 	boolean atWork;
+	boolean deliverOrders;
 	boolean jobDone;
 	Map<String, Food> inventory = new HashMap<String, Food>();
 	double funds;
@@ -318,7 +321,7 @@ public class MarketRole extends Role implements Market {
 	public void msgJobDone() {
 		print("Received msgJobDone");
 		jobDone = true;
-
+		deliverOrders = true;
 	    log.add(new LoggedEvent("Received msgJobDone from Person."));
 		stateChanged();
 	}
@@ -339,32 +342,6 @@ public class MarketRole extends Role implements Market {
 			LeaveJob();
 			return true;
 		}		
-		
-		synchronized(MyRestaurantOrders) {
-			for(RestaurantOrder o : MyRestaurantOrders) {
-				if(o.state == orderState.Ordered) {
-					FillRestaurantOrder(o);
-					return true;
-				}
-			}
-
-			for(RestaurantOrder o : MyRestaurantOrders) {
-				if(o.state == orderState.ReadyToDeliver) {
-					DeliverOrder(o);
-					return true;
-				}
-			}
-			
-			for(RestaurantOrder o : MyRestaurantOrders) {
-				if(o.state == orderState.Paid || o.state == orderState.Cancelled) {
-					MyRestaurantOrders.remove(o);
-					
-					log.add(new LoggedEvent("Removing RestaurantOrder."));
-					return true;
-				}
-			}
-		}
-		
 		synchronized(MyOrders) {
 			for(Order o : MyOrders) {
 				if(o.state == orderState.Ordered) {
@@ -407,7 +384,36 @@ public class MarketRole extends Role implements Market {
 				}
 			}
 		}
-		
+		if (deliverOrders == true) {
+			synchronized(MyRestaurantOrders) {
+				for(RestaurantOrder o : MyRestaurantOrders) {
+					if(o.state == orderState.Ordered) {
+						FillRestaurantOrder(o);
+						return true;
+					}
+				}
+				for(RestaurantOrder o : MyRestaurantOrders) {
+					if(o.state == orderState.Paid || o.state == orderState.Cancelled) {
+						MyRestaurantOrders.remove(o);
+						
+						log.add(new LoggedEvent("Removing RestaurantOrder."));
+						return true;
+					}
+				}
+				for(RestaurantOrder o : MyRestaurantOrders) {
+					if (o.state == orderState.InTransit) {
+						DeliverOrder(o);
+						return true;
+					}
+				}	
+				for(RestaurantOrder o : MyRestaurantOrders) {
+					if(o.state == orderState.ReadyToDeliver) {
+						DriveToOrder(o);
+						return true;
+					}
+				}
+			}
+		}
 		return false;
 	}
 	
@@ -471,8 +477,7 @@ public class MarketRole extends Role implements Market {
 	}
 
 	//Restaurant Order actions--------------------------------------------------------------
-	private void FillRestaurantOrder(final RestaurantOrder o) {
-		
+	private void FillRestaurantOrder(final RestaurantOrder o) {		
 		//If order is only one choice
 		if(o.choices.isEmpty()) {
 			if(inventory.get(o.choice).getSupply() >= o.amount) {
@@ -515,20 +520,35 @@ public class MarketRole extends Role implements Market {
 				MyRestaurantOrders.remove(o);
 			}
 			else {
-				timer.schedule(new TimerTask() {
+				timer.schedule(new TimerTask(){
 					public void run() {
 						msgDeliverOrder(o);
 					}
 				},
 				6000);				
 			}
-			
 		}
 	}
 	
+	private void DriveToOrder(RestaurantOrder o) {
+		o.state = orderState.InTransit;
+		inventory.get(o.choice).setSupply(inventory.get(o.choice).getSupply() - o.amount);
+		o.price = o.amount * inventory.get(o.choice).price;
+		
+		String orderLocation = null;
+		List<Restaurant> restaurants = Directory.sharedInstance().getRestaurants();
+		for (Restaurant r : restaurants) {
+			if (r.getCashier() == o.cashier) {
+				orderLocation = r.getName();
+				break;
+			}
+		}
+		Role t = new TransportationRole(orderLocation, getPersonAgent().getCurrentLocation());
+		getPersonAgent().addRole(t);
+	}
 	private void DeliverOrder(RestaurantOrder o) {
 		o.state = orderState.Billed;
-		
+	
 		//If order is only one choice
 		if(o.choices.isEmpty()) {
 			o.price = o.amount * inventory.get(o.choice).price;
@@ -543,12 +563,12 @@ public class MarketRole extends Role implements Market {
 			for(String choice : o.choices) {
 				o.price += o.amount * inventory.get(choice).price;
 			}
-
+	
 			o.cook.msgMarketDeliveringOrder(o.amount, o.choices);
 			o.cashier.msgGiveBill(new MarketCheck(o.price, o.choices, o.amount, this));
+			
+			log.add(new LoggedEvent("Delivered order."));
 		}
-		
-		log.add(new LoggedEvent("Delivered order."));
 	}
 	
 	//PersonAgent actions----------------------------------------------------------------

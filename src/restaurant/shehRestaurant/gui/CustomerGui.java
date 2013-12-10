@@ -29,25 +29,21 @@ public class CustomerGui implements Gui{
 	private int YTABLE2 = 274;
 	private int XTABLE3 = 513;
 	private int YTABLE3 = 279;
+	private int XWAITING = 747;
+	private int YWAITING = 119;
 	
 	private int XDOOR = 707;
-	private int YDOOR = 53;
+	private int YDOOR = 292;
 	
 	private enum Command {noCommand, GoToSeat, LeaveRestaurant};
 	private Command command=Command.noCommand;
 
-	//public static final int xTable = 200;
-	public int xTable;
-	public static final int yTable = 250;
-
 	public CustomerGui(ShehCustomerRole c){ //HostAgent m) {
 		agent = c;
-		xPos = -40;
-		yPos = -40;
-		xDestination = -40;
-		yDestination = -40;
-		
-		agentSize = 20;
+		xPos = XDOOR;
+		yPos = YDOOR;
+		xDestination = XDOOR;
+		yDestination = YDOOR;
 		
 		try {
         	customerImage = ImageIO.read(getClass().getResource("shehRestaurantCustomer.png"));
@@ -108,8 +104,8 @@ public class CustomerGui implements Gui{
 	}
 	
 	public void DoWaitInRestaurant(int queue) {
-		xDestination = 10 + (queue * 40);
-		yDestination = 10;
+		xDestination = 10;
+		yDestination = 10 - (queue * (agentSize * 2));
 		
 	}
 

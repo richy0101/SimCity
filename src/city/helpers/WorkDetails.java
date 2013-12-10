@@ -44,7 +44,7 @@ public class WorkDetails {
 			offDays.add(Constants.SUNDAY);
 			offDays.add(Constants.SATURDAY);
 		}
-		else if (location.equals("Market1")) {
+		else if (location.equals("Market")) {
 			this.workStartHour = 7;
 			this.workEndHour = 24;
 		}

@@ -5,17 +5,22 @@ import restaurant.shehRestaurant.gui.CustomerGui;
 import restaurant.shehRestaurant.helpers.Menu;
 //import restaurant.shehRestaurant.helpers.RestaurantGui;
 import agent.Agent;
+import agent.Role;
 import restaurant.shehRestaurant.helpers.Table;
 import restaurant.shehRestaurant.interfaces.Cashier;
 import restaurant.shehRestaurant.interfaces.Customer;
+import gui.Building;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import city.helpers.Directory;
 
 /**
  * Restaurant customer agent.
  */
-public class ShehCustomerRole extends Agent implements Customer {
+public class ShehCustomerRole extends Role implements Customer {
 	//MONEY~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	private double money = 50;
 	
@@ -54,9 +59,18 @@ public class ShehCustomerRole extends Agent implements Customer {
 	 * @param name name of the customer
 	 * @param gui  reference to the customer gui so the customer can send it messages
 	 */
-	public ShehCustomerRole(String name){
+	public ShehCustomerRole(String location){
 		super();
-		this.name = name;
+	
+		customerGui = new CustomerGui(this);
+		host = (ShehHostAgent) Directory.sharedInstance().getAgents().get("ShehHostAgent");
+		
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == location) {
+				b.addGui(customerGui);
+			}
+		}
 	}
 
 	/**

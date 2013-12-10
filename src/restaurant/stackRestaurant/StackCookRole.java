@@ -12,9 +12,9 @@ import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import market.interfaces.Market;
-
 import restaurant.CookRole;
 import restaurant.stackRestaurant.gui.CookGui;
+import restaurant.FoodInformation.FoodState;
 import restaurant.Restaurant;
 import restaurant.FoodInformation;
 import restaurant.stackRestaurant.helpers.Menu;
@@ -27,15 +27,15 @@ import city.helpers.Directory;
 public class StackCookRole extends CookRole implements Cook {
 	
 	private List<MyOrder> orders = Collections.synchronizedList(new ArrayList<MyOrder>());
-	private Map<String, Food> foods = Collections.synchronizedMap(new HashMap<String, Food>());
 	private List<MyMarket> markets = Collections.synchronizedList(new ArrayList<MyMarket>());
 	private CookGui cookGui;
-	String myLocation;
-	Timer timer = new Timer();
-	Host host;
-	Market market1;
-	Cashier cashier;
-	Restaurant restaurant = Directory.sharedInstance().getRestaurants().get(0);
+	private String myLocation;
+	private Timer timer = new Timer();
+	private Host host;
+	private Market market1;
+	private Cashier cashier;
+	private Restaurant restaurant = Directory.sharedInstance().getRestaurants().get(0);
+	private String stringState;
 	
 	private Semaphore doneAnimation = new Semaphore(0,true);
 	private enum AgentState 
@@ -49,34 +49,14 @@ public class StackCookRole extends CookRole implements Cook {
 	{Checked, NeedsChecking};
 	SharedOrderState sharedState = SharedOrderState.NeedsChecking;
 	
-	private enum FoodState
-	{Empty, Ordered, Stocked, PermanentlyEmpty};
-	
-	
 	public StackCookRole(String location) {
 		super();
-		FoodInformation steak = new FoodInformation(6000, 100);
-		foods.put("Steak", new Food(steak));
-		restaurant.getFoodInventory().put("Steak", steak);
-		
-		FoodInformation chicken = new FoodInformation(4000, 100);
-		foods.put("Chicken", new Food(chicken));
-		restaurant.getFoodInventory().put("Chicken", chicken);
-		
-		FoodInformation salad = new FoodInformation(7000, 100);
-		foods.put("Salad", new Food(salad));
-		restaurant.getFoodInventory().put("Salad", salad);
-		
-		FoodInformation pizza = new FoodInformation(12000, 100);
-		foods.put("Pizza", new Food(pizza));
-		restaurant.getFoodInventory().put("Pizza", pizza);
-		
 		cookGui = new CookGui(this);
 		state = AgentState.Arrived;
 		
 		host = (Host) Directory.sharedInstance().getAgents().get("StackRestaurantHost");
 		cashier = (Cashier) Directory.sharedInstance().getRestaurants().get(0).getCashier();
-		market1 = (Market) Directory.sharedInstance().marketDirectory.get("Market1").getWorker();
+		market1 = (Market) Directory.sharedInstance().marketDirectory.get("Market").getWorker();
 		markets.add(new MyMarket(market1));
 		
 		
@@ -90,7 +70,12 @@ public class StackCookRole extends CookRole implements Cook {
 	}
 	
 	public String getName() {
-		return getPersonAgent().getName();
+		if(getPersonAgent() != null) {
+			return getPersonAgent().getName();
+		}
+		else {
+			return "";
+		}
 	}
 	
 	public void setGui(CookGui g) {
@@ -103,21 +88,26 @@ public class StackCookRole extends CookRole implements Cook {
 	
 	@Override
 	public boolean pickAndExecuteAnAction() {
+		print(state.toString() + "-----------------------------");
 		if(state == AgentState.Arrived) {
+			setStringState(state.toString());
 			tellHostAtWork();
 			return true;
 		}
 		if(state == AgentState.GettingPaycheck) {
+			setStringState(state.toString());
 			goGetPaycheck();
 			return true;
 		}
 		if(state == AgentState.Leaving) {
+			setStringState(state.toString());
 			leaveRestaurant();
 			return true;
 		}
 		synchronized(orders) {
 			for(MyOrder order : orders) {
 				if(order.state == OrderState.Done) {
+					setStringState(order.state.toString());
 					print("plate it");
 					plateIt(order);
 					return true;
@@ -127,6 +117,7 @@ public class StackCookRole extends CookRole implements Cook {
 		synchronized(orders) {
 			for(MyOrder order : orders) {
 				if(order.state == OrderState.Pending) {
+					setStringState(order.state.toString());
 					print("cook it");
 					cookIt(order);
 					return true;
@@ -134,24 +125,28 @@ public class StackCookRole extends CookRole implements Cook {
 			}
 		}
 		
-		synchronized(foods) {
-			for(Map.Entry<String, Food> food : foods.entrySet()) {
+		synchronized(restaurant.getFoodInventory()) {
+			for(Map.Entry<String, FoodInformation> food : restaurant.getFoodInventory().entrySet()) {
 				if(food.getValue().state == FoodState.Empty) {
+					setStringState(food.getValue().state.toString());
 					orderIt(food.getKey());
 					return true;
 				}
 			}
 		}
 		if(sharedState == SharedOrderState.NeedsChecking) {
+			setStringState(sharedState.toString());
 			timer.schedule(new TimerTask() {
 				public void run() {
 					addSharedOrders();
+					setStringState(sharedState.toString());
 					sharedState = SharedOrderState.NeedsChecking;
 					stateChanged();
 				}
 			},
 			5000);
 			sharedState = SharedOrderState.Checked;
+			setStringState(sharedState.toString());
 			return true;
 		}
 		return false;
@@ -159,19 +154,22 @@ public class StackCookRole extends CookRole implements Cook {
 	
 	//actions
 	private void addSharedOrders() {
+		print("checking for order---------------");
 		Order order = Directory.sharedInstance().getRestaurants().get(0).getMonitor().remove();
 		if(order != null) {
 			orders.add(new MyOrder(order, OrderState.Pending));
 		}
+		doneAnimation.release();
 	}
 	
 	private void cookIt(final MyOrder order) {
-		int cookingTime = foods.get(order.choice).information.getCookTime();
-		int inventory = foods.get(order.choice).information.getQuantity();
+		print("cooking food----------------------------");
+		int cookingTime = restaurant.getFoodInventory().get(order.choice).getCookTime();
+		int inventory = restaurant.getFoodInventory().get(order.choice).getQuantity();
 		if(inventory == 0) {
 			Menu.sharedInstance().setInventoryStock(order.choice, false);
 			order.waiter.msgFoodEmpty(order.choice, order.table, order.seat);
-			foods.get(order.choice).state = FoodState.Empty;
+			restaurant.getFoodInventory().get(order.choice).state = FoodState.Empty;
 			order.state = OrderState.Notified;
 			return;
 		}
@@ -194,6 +192,7 @@ public class StackCookRole extends CookRole implements Cook {
 		timer.schedule(new TimerTask() {
 			Object cookie = 1;
 			public void run() {
+				print("about to finish cooking------------------------");
 				cookGui.DoGoToPlatingArea();
 				try {
 					doneAnimation.acquire();
@@ -211,22 +210,24 @@ public class StackCookRole extends CookRole implements Cook {
 	}
 	
 	private void plateIt(MyOrder order) {
+		print("plating food--------------------");
 		order.state = OrderState.Notified;
 		order.waiter.msgOrderDone(order.choice, order.table, order.seat);	
 	}
 	
 	private void orderIt(String choice) {
+		print("ordering food--------------------");
 		for(MyMarket market : markets) {
 			if(market.market != null) {
 				if(market.foodStock.get(choice)) {
 					print("finding food from market: " + market.market);
 					market.market.msgOrderFood(this, cashier, choice);
-					foods.get(choice).state = FoodState.Ordered;
+					restaurant.getFoodInventory().get(choice).state = FoodState.Ordered;
 					return;
 				}
 			}
 		}
-		foods.get(choice).state = FoodState.PermanentlyEmpty;
+		restaurant.getFoodInventory().get(choice).state = FoodState.PermanentlyEmpty;
 		
 	}
 	
@@ -288,7 +289,7 @@ public class StackCookRole extends CookRole implements Cook {
 	}
 	
 	public void msgInventoryOut(Market market, String choice) {
-		foods.get(choice).state = FoodState.Empty;
+		restaurant.getFoodInventory().get(choice).state = FoodState.Empty;
 		for(MyMarket mMarket : markets) {
 			if(market.equals(mMarket.market)) {
 				mMarket.foodStock.put(choice, false);
@@ -299,9 +300,9 @@ public class StackCookRole extends CookRole implements Cook {
 	}
 	
 	public void msgMarketDeliveringOrder(int inventory, String choice) {
-		foods.get(choice).information.setQuantity(inventory);
+		restaurant.getFoodInventory().get(choice).setQuantity(inventory);
 		restaurant.msgChangeFoodInventory(choice, inventory);
-		foods.get(choice).state = FoodState.Stocked;
+		restaurant.getFoodInventory().get(choice).state = FoodState.Stocked;
 		Menu.sharedInstance().setInventoryStock(choice, true);
 		print("Food " + choice + " arrived");
 	}
@@ -316,6 +317,7 @@ public class StackCookRole extends CookRole implements Cook {
 	}
 
 	public void msgAtPlating() {
+		print("at plating---------------------");
 		doneAnimation.release();
 	}
 	
@@ -352,13 +354,6 @@ public class StackCookRole extends CookRole implements Cook {
 		OrderState state;
 	}
 	
-	public class Food {
-		FoodInformation information;
-		public Food(FoodInformation information) {
-			this.information = information;
-		}
-		FoodState state;
-	}
 	
 	private class MyMarket {
 		public MyMarket(Market market) {
@@ -374,5 +369,18 @@ public class StackCookRole extends CookRole implements Cook {
 				put("Pizza", true);
 			}
 		};
+	}
+
+	public void setRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant;
+		
+	}
+	
+	public String getStringState() {
+		return stringState;
+	}
+	
+	public void setStringState(String stringState) {
+		this.stringState = stringState;
 	}
 }
