@@ -599,9 +599,9 @@ public class SimCityGui {
 		String name1 = "Test Person 2";
 		Role role1;
 		role1= new TanCookRole("TanRestaurant");
-		PersonAgent p1 = new PersonAgent(role, a1 , b1, name1);
+		PersonAgent p1 = new PersonAgent(role1, a1 , b1, name1);
 		p1.msgWakeUp();
-		role.setPerson(p);
+		role1.setPerson(p);
 		p1.startThread();
 	
 		String a2 = "TanRestaurant";

@@ -76,10 +76,8 @@ public class Directory {
 		roleDirectory.put("restaurant.shehRestaurant.ShehCookRole", "ShehRestaurant");
 		
 		//Restaurant Roles Tan
-		//roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");
-		//roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.TanWaiterRole", "TanRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.TanCookRole", "TanRestaurant");	
+		roleDirectory.put("restaurant.tanRestaurant.TanWaiterRole", "TanRestaurant");
+		roleDirectory.put("restaurant.tanRestaurant.TanCookRole", "TanRestaurant");	
 		
 		/*
 		//Restaurant Roles Nakamura

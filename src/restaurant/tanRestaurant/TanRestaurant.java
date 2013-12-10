@@ -25,6 +25,8 @@ public class TanRestaurant extends Restaurant {
 		this.name = name;
 		host = new TanHostAgent("Host");
 		cashier = new TanCashierAgent("Cashier");
+		cashier.setRestaurant(this);
+		host.setRestaurant(this);
 		host.startThread();
 		cashier.startThread();	
 	}

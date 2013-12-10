@@ -59,19 +59,19 @@ public class CarAgent extends Agent implements Vehicle {
 	*/	
 		protected boolean pickAndExecuteAnAction(){
 			if (currentState == carState.inTransit){
-				print("STUBPICKANDEXECUTEANACTION");
+				//print("STUBPICKANDEXECUTEANACTION");
 				goTo(destination);
 				return true;
 			}
 			
 			else if(currentState == carState.atIntersection1 || currentState == carState.atIntersection2){
-				print("stopping at intersection");
+				//print("stopping at intersection");
 				stopCar();
 				return true;
 			}
 		
 			else if(currentState == carState.givenGreen){
-				print("given green light");
+				//print("given green light");
 				keepDriving();
 				return true;
 			}
