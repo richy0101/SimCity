@@ -15,6 +15,7 @@ import city.gui.BusGui;
 import city.helpers.ApartmentHelper;
 import city.helpers.Clock;
 import city.helpers.Directory;
+import city.helpers.WalkLoopHelper;
 import city.helpers.XMLReader;
 import agent.Role;
 import bank.BankTellerRole;
@@ -164,6 +165,10 @@ public class SimCityGui {
         roles.put("Huang's Restaurant Waiter Shared", "HuangWaiterShared");
         roles.put("Huang's Restaurant Cook", "HuangCook");
         
+        roles.put("Tan's Restaurant Waiter Normal", "TanWaiterNormal");
+        roles.put("Tan's Restaurant Waiter Shared", "TanWaiterShared");
+        roles.put("Tan's Restaurant Cook", "TanCook");
+        
         roles.put("Richard's Restaurant Waiter Normal", "RichardWaiterNormal");
         //roles.put("Richards's Restaurant Waiter Shared", "RichardWaiterShared");
         roles.put("Richard's Restaurant Cook", "RichardCook");
@@ -274,11 +279,12 @@ public class SimCityGui {
         //		occupationComboBox.addItem("Philips's Restaurant Waiter");
         //		occupationComboBox.addItem("Philips's Restaurant Cook");
         //		occupationComboBox.addItem("Philips's Restaurant Cashier");
-        //
-        //		occupationComboBox.addItem("Tan's Restaurant Host");
-        //		occupationComboBox.addItem("Tan's Restaurant Waiter");
-        //		occupationComboBox.addItem("Tan's Restaurant Cook");
-        //		occupationComboBox.addItem("Tan's Restaurant Cashier");
+        
+		//Tan
+        occupationComboBox.addItem("Tan's Restaurant Host");
+        occupationComboBox.addItem("Tan's Restaurant Waiter");
+        occupationComboBox.addItem("Tan's Restaurant Cook");
+        occupationComboBox.addItem("Tan's Restaurant Cashier");
         //
         //		occupationComboBox.addItem("Huang's Restaurant Host");
         //		occupationComboBox.addItem("Huang's Restaurant Waiter");
@@ -540,7 +546,9 @@ public class SimCityGui {
 		if(Clock.sharedInstance().isDay()) {
 			
 		}
-
+		if(WalkLoopHelper.sharedInstance() == null) {
+			
+		}
 
 		PersonAgent person1 = new PersonAgent("HuangCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
 		PersonAgent person2 = new PersonAgent("HuangWaiterNormal", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");

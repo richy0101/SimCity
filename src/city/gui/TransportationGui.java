@@ -9,9 +9,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import city.PersonAgent;
+
 import city.TransportationRole;
-import city.gui.PersonGui.CurrentAction;
+
+import city.helpers.WalkLoopHelper;
 
 public class TransportationGui implements Gui {
 	private TransportationRole agent = null;
@@ -47,10 +48,10 @@ public class TransportationGui implements Gui {
 	int IRLeftLane= 435;
 	int IRRightLane= 674;
 	
-	int Cross1X = 390, Cross1Y = 83;
+	int Cross1X = 390, Cross1Y = 83; //390
 	int Cross2X = 390, Cross2Y = 127;
 	int Cross4X = 390, Cross4Y = 308;
-	int Cross3X = 435, Cross3Y = 127;
+	int Cross3X = 435, Cross3Y = 127; //435
 	int Cross5X = 435, Cross5Y = 308;
 	int Cross6X = 435, Cross6Y = 353;
 	public enum Loop {InnerRight, InnerLeft, Outer};
@@ -59,14 +60,40 @@ public class TransportationGui implements Gui {
 	public enum CurrentAction {Travelling, Idle, 
 		BreakOut, BreakIn, BreakOver, BreakInFromTop, BreakInFromBottom, BreakOutFromTop, BreakOutFromBottom
 		};
-	CurrentAction currentAction = CurrentAction.Idle;
-	public TransportationGui(TransportationRole agent, int startX, int startY, int destX, int destY) {
+	CurrentAction currentAction;
+	public TransportationGui(TransportationRole agent, String startLocation, String destinationLocation) {
 		this.agent = agent;
-		xPos = startX;
-		yPos = startY;
-		xDestination = destX;
-		yDestination = destY;
-		
+		xPos = WalkLoopHelper.sharedInstance.getCoordinateEvaluator().get(startLocation).xCoordinate;
+		yPos = WalkLoopHelper.sharedInstance.getCoordinateEvaluator().get(startLocation).yCoordinate;
+		xDestination = WalkLoopHelper.sharedInstance.getCoordinateEvaluator().get(destinationLocation).xCoordinate;
+		yDestination = WalkLoopHelper.sharedInstance.getCoordinateEvaluator().get(destinationLocation).yCoordinate;
+		/**
+		 * Set starting loop
+		 */
+		if(WalkLoopHelper.sharedInstance.getloopEvaluator().get(startLocation).contains("Right")) {
+			currentLoop = Loop.InnerRight;
+		}
+		else if(WalkLoopHelper.sharedInstance.getloopEvaluator().get(startLocation).contains("Left")) {
+			currentLoop = Loop.InnerLeft;
+		}
+		else if(WalkLoopHelper.sharedInstance.getloopEvaluator().get(startLocation).contains("Out")) {
+			currentLoop = Loop.Outer;
+		}
+		/**
+		 * Set destination loop
+		 */
+		if(WalkLoopHelper.sharedInstance.getloopEvaluator().get(destinationLocation).contains("Right")) {
+			destinationLoop = Loop.InnerRight;
+		}
+		else if(WalkLoopHelper.sharedInstance.getloopEvaluator().get(destinationLocation).contains("Left")) {
+			destinationLoop = Loop.InnerLeft;
+		}
+		else if(WalkLoopHelper.sharedInstance.getloopEvaluator().get(destinationLocation).contains("Out")) {
+			destinationLoop = Loop.Outer;
+		}
+		/**
+		 * Load assets
+		 */
 		try {
         	personLeft = ImageIO.read(getClass().getResource("GUICITYPersonLeft.png"));
         	personRight = ImageIO.read(getClass().getResource("GUICITYPersonRight.png"));
@@ -76,8 +103,7 @@ public class TransportationGui implements Gui {
         catch(IOException e) {
         	System.out.println("Error w/ Person assets");
         }
-		
-		currentAction = CurrentAction.Travelling;
+		evaluateNextMove();
 	}
 	
 	@Override
@@ -86,7 +112,21 @@ public class TransportationGui implements Gui {
 			if (xPos == xDestination && yPos == yDestination) {
 				agent.msgActionComplete();
 				currentAction = CurrentAction.Idle;
+				return;
 			}
+			/*
+			if(currentAction == CurrentAction.BreakOut){
+				System.out.println("WANT TO BREAK OUT");
+			}
+			
+			if(currentAction == CurrentAction.BreakOutFromTop){
+				System.out.println("WANT TO BREAK OUT FROM TOP");
+			}
+			
+			if(currentAction == CurrentAction.BreakOutFromBottom){
+				System.out.println("WANT TO BREAK OUT FROM BOTTOM");
+			}*/
+			
 			/**
 			 * Breaking Out Block
 			 */
@@ -94,7 +134,8 @@ public class TransportationGui implements Gui {
 				yPos--;
 				return;
 			}
-			else if(doneBreaking(Cross1X, Cross1Y)){
+			else if(currentAction == CurrentAction.BreakOutFromTop && doneBreaking(Cross1X, Cross1Y)){
+				//System.out.println("broken out");
 				currentLoop = Loop.Outer;
 				evaluateNextMove();
 				return;
@@ -103,7 +144,8 @@ public class TransportationGui implements Gui {
 				yPos++;
 				return;
 			}
-			else if(doneBreaking(Cross6X, Cross6Y)) {
+			else if(currentAction == CurrentAction.BreakOutFromBottom && doneBreaking(Cross6X, Cross6Y)) {
+				//System.out.println("broken out");
 				currentLoop = Loop.Outer;
 				evaluateNextMove();
 				return;
@@ -125,7 +167,8 @@ public class TransportationGui implements Gui {
 			if (currentAction == CurrentAction.BreakInFromTop && !doneBreaking(Cross2X, Cross2Y)) {
 				yPos++;
 			}
-			else if(doneBreaking(Cross2X, Cross2Y)) {
+			else if(currentAction == CurrentAction.BreakInFromTop && doneBreaking(Cross2X, Cross2Y)) {
+				//System.out.println("broken out");
 				currentLoop = Loop.InnerLeft;
 				evaluateNextMove();
 				return;
@@ -133,7 +176,8 @@ public class TransportationGui implements Gui {
 			if (currentAction == CurrentAction.BreakInFromBottom && !doneBreaking(Cross5X, Cross5Y)) {
 				yPos--;
 			}
-			else if(doneBreaking(Cross5X, Cross5Y)) {
+			else if(currentAction == CurrentAction.BreakInFromBottom && doneBreaking(Cross5X, Cross5Y)) {
+				//System.out.println("broken in to 5");
 				currentLoop = Loop.InnerRight;
 				evaluateNextMove();
 				return;
@@ -156,6 +200,7 @@ public class TransportationGui implements Gui {
 	}
 	private boolean doneBreaking(int x, int y) {
 		if (xPos == x && yPos == y) {
+			System.out.println("DONE BREAKING");
 			return true;
 		}
 		else {
@@ -166,72 +211,69 @@ public class TransportationGui implements Gui {
 		/**
 		 * Outer Loop Logic
 		 */
-		if ((xPos == outerLeftLane) && (yPos != outerBottomLane)) { //at left, coming down
-            yPos++;
+		if (currentLoop == Loop.Outer) {
+			if ((xPos == outerLeftLane) && (yPos != outerBottomLane)) { //at left, coming down
+	            yPos++;
+			}
+			else if ((yPos == outerBottomLane) && (xPos != outerRightLane)) { //at bottom, going right
+	            xPos++;
+			}
+	        else if ((xPos == outerRightLane) && (yPos != outerTopLane)) {//at right, going up
+	            yPos--;
+	        }
+	        else if ((yPos == outerTopLane) && (xPos != outerLeftLane)) {//at top, going left
+	            xPos--;
+	        }
 		}
-		else if ((yPos == outerBottomLane) && (xPos != outerRightLane)) { //at bottom, going right
-            xPos++;
-		}
-        else if ((xPos == outerRightLane) && (yPos != outerTopLane)) {//at right, going up
-            yPos--;
-        }
-        else if ((yPos == outerTopLane) && (xPos != outerLeftLane)) {//at top, going left
-            xPos--;
-        }
 		/**
 		 * Inner Loop Right Logic
 		 */
-		if ((xPos == IRLeftLane) && (yPos != IRBottomLane)) { //at left, coming down
-            yPos++;
+		else if (currentLoop == Loop.InnerRight) {
+			if ((xPos == IRLeftLane) && (yPos != IRBottomLane)) { //at left, coming down
+	            yPos++;
+			}
+			else if ((yPos == IRBottomLane) && (xPos != IRRightLane)) { //at bottom, going right
+	            xPos++;
+			}
+	        else if ((xPos == IRRightLane) && (yPos != IRTopLane)) {//at right, going up
+	            yPos--;
+	        }
+	        else if ((yPos == IRTopLane) && (xPos != IRLeftLane)) {//at top, going left
+	            xPos--;
+	        }
 		}
-		else if ((yPos == IRBottomLane) && (xPos != IRRightLane)) { //at bottom, going right
-            xPos++;
-		}
-        else if ((xPos == IRRightLane) && (yPos != IRTopLane)) {//at right, going up
-            yPos--;
-        }
-        else if ((yPos == IRTopLane) && (xPos != IRLeftLane)) {//at top, going left
-            xPos--;
-        }
 		/**
 		 * Inner Loop Left Logic
 		 */
-		if ((xPos == ILLeftLane) && (yPos != ILBottomLane)) { //at left, coming down
-            yPos++;
+		else if (currentLoop == Loop.InnerLeft) {
+			if ((xPos == ILLeftLane) && (yPos != ILBottomLane)) { //at left, coming down
+	            yPos++;
+			}
+			else if ((yPos == ILBottomLane) && (xPos != ILRightLane)) { //at bottom, going right
+	            xPos++;
+			}
+	        else if ((xPos == ILRightLane) && (yPos != ILTopLane)) {//at right, going up
+	            yPos--;
+	        }
+	        else if ((yPos == ILTopLane) && (xPos != ILLeftLane)) {//at top, going left
+	            xPos--;
+	        }
 		}
-		else if ((yPos == ILBottomLane) && (xPos != ILRightLane)) { //at bottom, going right
-            xPos++;
-		}
-        else if ((xPos == ILRightLane) && (yPos != ILTopLane)) {//at right, going up
-            yPos--;
-        }
-        else if ((yPos == ILTopLane) && (xPos != ILLeftLane)) {//at top, going left
-            xPos--;
-        }
 	}
 	private void evaluateNextMove() {
 		if(currentLoop == destinationLoop) {
-			return;
+			currentAction = CurrentAction.Travelling;
+			ContinueLooping();
 		}
-		else if (destinationLoop == Loop.InnerLeft) {
+		else if (destinationLoop == Loop.InnerLeft || destinationLoop == Loop.InnerRight) {
 			currentAction = CurrentAction.BreakIn;
 		}
-		else if (destinationLoop == Loop.InnerRight) {
-			currentAction = CurrentAction.BreakIn;
-		}
-		else if (destinationLoop == Loop.Outer && currentLoop == Loop.InnerLeft) {
-			currentAction = CurrentAction.BreakOut;
-		}
-		else if (destinationLoop == Loop.Outer && currentLoop == Loop.InnerRight) {
+		else if (destinationLoop == Loop.Outer) {
+			System.out.println("SETTING TO BREAKOUT");
 			currentAction = CurrentAction.BreakOut;
 		}
 	}
-	private void BreakOut() {
-		
-	}
-	private void BreakOver() {
-	
-	}
+
 	@Override
 	public void draw(Graphics2D g) {
 		//System.out.println("Updating Pos.");

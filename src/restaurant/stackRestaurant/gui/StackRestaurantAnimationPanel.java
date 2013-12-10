@@ -80,10 +80,12 @@ public class StackRestaurantAnimationPanel extends BuildingPanel implements Acti
     }
 	
 	public void updateGui() {
-        for(Gui gui : guis) {
-            if (gui.isPresent())
-                gui.updatePosition();
-        }
+		synchronized(guis) {
+			for(Gui gui : guis) {
+	            if (gui.isPresent())
+	                gui.updatePosition();
+	        }
+		}
 	}
 
     public void addGui(Gui gui) {
