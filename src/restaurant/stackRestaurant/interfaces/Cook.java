@@ -9,11 +9,11 @@ public interface Cook extends CookInterface{
 	
 	public void msgCookOrder(Waiter waiter, String choice, int table, int seat);
 	
-	public void msgInventoryOut(Market market, String choice);
+	public void msgInventoryOut(MarketWorker market, String choice);
 	
 	public void msgMarketDeliveringOrder(int inventory, String choice);
 	
-	public void msgAddMarket(Market market);
+	public void msgAddMarket(MarketWorker market);
 	
 	public void msgAtCooktop();
 

@@ -32,7 +32,7 @@ public class Directory {
 		restaurants.add(nakamuraRestaurant);
 		restaurants.add(shehRestaurant);
 		restaurants.add(phillipsRestaurant);
-		restaurants.add(tanRestaurant); //should be added last to be 5th on the list
+		restaurants.add(tanRestaurant);
 		banks.add(bank);
 		banks.add(bank2);
 		markets.add(Market);
@@ -53,17 +53,11 @@ public class Directory {
 		roleDirectory.put("bank.BankCustomerRole", "Bank");
 		roleDirectory.put("bank.BankTellerRole", "Bank");
 		
-//		roleDirectory.put("bank.BankCustomerRole2", "Bank2");
-//		roleDirectory.put("bank.BankManagerRole2", "Bank2");
-//		roleDirectory.put("bank.BankTellerRole2", "Bank2");
-		
 		//Market Roles
-		roleDirectory.put("market.MarketRole" , "Market");
-		roleDirectory.put("market.MarketRole2", "Market2");
+		roleDirectory.put("market.MarketWorkerRole" , "Market");
+		roleDirectory.put("market.MarketWorkerRole2", "Market2");
 		
 		//Restaurant Roles Stack
-//		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");
-//		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "HuangRestaurant");
 		roleDirectory.put("restaurant.stackRestaurant.StackWaiterSharedRole", "StackRestaurant");
 		roleDirectory.put("restaurant.stackRestaurant.StackWaiterNormalRole", "StackRestaurant");
 		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "StackRestaurant");
@@ -76,13 +70,13 @@ public class Directory {
 		//Restaurant Roles Sheh
 		roleDirectory.put("restaurant.shehRestaurant.ShehWaiterRole", "ShehRestaurant");
 		roleDirectory.put("restaurant.shehRestaurant.ShehCookRole", "ShehRestaurant");
-		/*
+		
 		//Restaurant Roles Tan
-		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "HuangRestaurant");	
-		*/
+		//roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");
+		//roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.TanWaiterRole", "TanRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.TanCookRole", "TanRestaurant");	
+		
 		//Restaurant Roles Nakamura
 //		roleDirectory.put("restaurant.nakamuraRestaurant.NakamuraCashierRole", "NakamuraRestaurant");
 //		roleDirectory.put("restaurant.nakamuraRestaurant.NakamuraHostRole", "NakamuraRestaurant");
@@ -222,6 +216,9 @@ public class Directory {
 		
 		agents.put(phillipsRestaurant.getName() + "Host", (Agent) phillipsRestaurant.getHost());
 		agents.put(phillipsRestaurant.getName() + "Cashier", (Agent) phillipsRestaurant.getCashier());
+		
+		agents.put(tanRestaurant.getName() + "Host", (Agent) tanRestaurant.getHost());
+		agents.put(tanRestaurant.getName() + "Cashier", (Agent) tanRestaurant.getCashier());
 		
 		agents.put( bank.getName(),(Agent) bank.getManager());
 		agents.put( bank2.getName(),(Agent) bank2.getManager());

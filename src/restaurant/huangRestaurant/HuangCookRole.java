@@ -11,7 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-import market.interfaces.Market;
+import market.interfaces.MarketWorker;
 import restaurant.CookRole;
 import restaurant.huangRestaurant.gui.CookGui;
 import restaurant.huangRestaurant.interfaces.Cashier;
@@ -88,7 +88,7 @@ public class HuangCookRole extends CookRole {
 	private class MarketRequest {
 		private MarketReqState state;
 		String request;
-		public Market m;
+		public MarketWorker m;
 		public int requirement;
 		
 		public MarketRequest(String request, int requestStock) {
@@ -96,7 +96,7 @@ public class HuangCookRole extends CookRole {
 			this.requirement = requestStock;
 			this.state = MarketReqState.notSent;
 		}
-		public void setMarket(Market m) {
+		public void setMarket(MarketWorker m) {
 			this.m = m;
 		}
 	}
@@ -105,14 +105,14 @@ public class HuangCookRole extends CookRole {
 	private enum MarketState {inStock, outOfStock, delivering, delivered, accept, reject, uncalled};
 	private class MyMarket {
 		private int number;
-		private Market m;
+		private MarketWorker m;
 		private MarketState state;
 		private boolean Chicken;
 		private boolean Steak;
 		private boolean Pizza;
 		private boolean Salad;
 		private Stack<String> rejected = new Stack<String>();
-		public MyMarket(Market m, int i) {
+		public MyMarket(MarketWorker m, int i) {
 			this.number = i;
 			this.m = m;
 			this.Chicken = true;
@@ -197,7 +197,7 @@ public class HuangCookRole extends CookRole {
 		}
 		stateChanged();
 	}
-	public void msgCanFillOrder(Market m, String request) {
+	public void msgCanFillOrder(MarketWorker m, String request) {
 		processingMarketResponse.acquireUninterruptibly();
 		for (MarketRequest mr: marketRequests) {
 			if(mr.request.equals(request)) {
@@ -223,7 +223,7 @@ public class HuangCookRole extends CookRole {
 		processingMarketResponse.release();
 		stateChanged();
 	}
-	public void msgInventoryOut(Market m, String request) {
+	public void msgInventoryOut(MarketWorker m, String request) {
 		System.out.println(name + ": msgRequestBad received: Cook: Market is out of that food");
 		if(request == "Chicken") {
 			synchronized(markets) {

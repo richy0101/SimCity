@@ -11,7 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-import market.interfaces.Market;
+import market.interfaces.MarketWorker;
 import restaurant.CookRole;
 import restaurant.stackRestaurant.gui.CookGui;
 import restaurant.FoodInformation.FoodState;
@@ -32,7 +32,7 @@ public class StackCookRole extends CookRole implements Cook {
 	private String myLocation;
 	private Timer timer = new Timer();
 	private Host host;
-	private Market market1;
+	private MarketWorker market1;
 	private Cashier cashier;
 	private Restaurant restaurant = Directory.sharedInstance().getRestaurants().get(0);
 	private String stringState;
@@ -56,7 +56,7 @@ public class StackCookRole extends CookRole implements Cook {
 		
 		host = (Host) Directory.sharedInstance().getAgents().get("StackRestaurantHost");
 		cashier = (Cashier) Directory.sharedInstance().getRestaurants().get(0).getCashier();
-		market1 = (Market) Directory.sharedInstance().marketDirectory.get("Market").getWorker();
+		market1 = (MarketWorker) Directory.sharedInstance().marketDirectory.get("Market").getWorker();
 		markets.add(new MyMarket(market1));
 		
 		
@@ -288,7 +288,7 @@ public class StackCookRole extends CookRole implements Cook {
 		stateChanged();
 	}
 	
-	public void msgInventoryOut(Market market, String choice) {
+	public void msgInventoryOut(MarketWorker market, String choice) {
 		restaurant.getFoodInventory().get(choice).state = FoodState.Empty;
 		for(MyMarket mMarket : markets) {
 			if(market.equals(mMarket.market)) {
@@ -307,7 +307,7 @@ public class StackCookRole extends CookRole implements Cook {
 		print("Food " + choice + " arrived");
 	}
 	
-	public void msgAddMarket(Market market) {
+	public void msgAddMarket(MarketWorker market) {
 		markets.add(new MyMarket(market));
 		stateChanged();
 	}
@@ -356,10 +356,10 @@ public class StackCookRole extends CookRole implements Cook {
 	
 	
 	private class MyMarket {
-		public MyMarket(Market market) {
+		public MyMarket(MarketWorker market) {
 			this.market = market;
 		}
-		Market market;
+		MarketWorker market;
 		@SuppressWarnings("serial")
 		Map<String, Boolean> foodStock = new HashMap<String, Boolean>() {
 			{

@@ -10,11 +10,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import market.MarketRole;
+import market.MarketWorkerRole;
 
 public class MarketGui implements Gui {
 
-	private MarketRole role = null;
+	private MarketWorkerRole role = null;
 	GUIMarket gui;
 	private String info;
 	
@@ -38,7 +38,7 @@ public class MarketGui implements Gui {
 	public static final int yShelf = 46;
 	
 	
-	public MarketGui(MarketRole mr) {
+	public MarketGui(MarketWorkerRole mr) {
 		role = mr;
 //		gui = m;
 		
