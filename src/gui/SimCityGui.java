@@ -28,6 +28,7 @@ import javax.swing.event.ChangeEvent;
 import market.MarketRole;
 import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
+import restaurant.shehRestaurant.ShehWaiterRole;
 import restaurant.shehRestaurant.gui.ShehRestaurantAnimationPanel;
 import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
 import restaurant.stackRestaurant.StackCookRole;
@@ -515,7 +516,7 @@ public class SimCityGui {
 			
 		}
 		
-	
+	/*
 		String a = "StackRestaurant";
 		String b = "House1";
 		String name = "Test Person 1";
@@ -543,6 +544,29 @@ public class SimCityGui {
 		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
 		role2.setPerson(p2);
 		//p2.msgGoWork();
+	*/
+		
+		//beasdfasfasBEGINNING OF TEST CODE
+		
+		String a = "ShehRestaurant";
+		String b = "House1";
+		String name = "Test Person 1";
+		Role role;
+		role = new ShehWaiterRole("ShehRestaurant");
+		
+		/*
+		if(rand.nextInt()%2 == 0) {
+			role = new ShehWaiterSharedRole("ShehRestaurant");
+		}
+		else {
+			role = new ShehWaiterNormalRole("ShehRestaurant");
+		}
+		*/
+		PersonAgent p = new PersonAgent(role, a , b, name);
+		role.setPerson(p);
+		//p.msgWakeUp();
+		
+		//ASDF;ALKFJADS;LKFJDSA;LKFJAD;LFJASF;JASFSA END OF TEST CODE
 
 		String a3 = "StackRestaurant";
 		String b3 = "House3";

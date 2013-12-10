@@ -7,9 +7,13 @@ import restaurant.shehRestaurant.gui.WaiterGui;
 import restaurant.shehRestaurant.helpers.Table;
 import restaurant.shehRestaurant.interfaces.Cashier;
 import restaurant.shehRestaurant.interfaces.Waiter;
+import gui.Building;
+import gui.Gui;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
+
+import city.helpers.Directory;
 
 /**
  * Restaurant Waiter Agent
@@ -18,19 +22,22 @@ public class ShehWaiterRole extends Role implements Waiter {
 	static final int NTABLES = 3;
 	public List<ShehCustomerRole> waitingCustomers = Collections.synchronizedList(new ArrayList<ShehCustomerRole>());
 	private List<myCustomer> customers = Collections.synchronizedList(new ArrayList<myCustomer>());
+	public ArrayList<Table> tables;
+	
 	private ShehCookRole cook;
 	private ShehHostAgent host;
 	private Cashier cashier;
-	public ArrayList<Table> tables;
+
 	private Boolean breakGranted = false;
 
 	private Menu menu;
-
+	private Bill bill;
+	
 	private String name;
 	private Semaphore atTable = new Semaphore(0,true);
 	private Semaphore atKiosk = new Semaphore(0,true);
 	private Semaphore atKitchen = new Semaphore(0,true);
-	private Bill bill;
+	
 	private int homePosition = 0;
 
 	public WaiterGui waiterGui = null;
@@ -53,6 +60,22 @@ public class ShehWaiterRole extends Role implements Waiter {
 	{WaitingInRestaurant, BeingSeated, Seated, ReadyToOrder, Ordering, ReOrdering, DoneOrdering, Waiting, ReceivingFood, Eating, AskingForBill, WaitingForBill, BeingBilled,
 		Paying, Gone};
 	
+	public ShehWaiterRole(String location) {
+		super();
+		
+		host = (ShehHostAgent) Directory.sharedInstance().getAgents().get("ShehRestaurantHost");
+		cashier = host.getCashier();
+		
+		waiterGui = new WaiterGui(this);
+		
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		
+		for(Building b : buildings) {
+			if (b.getName() == location) {
+				b.addGui(waiterGui);
+			}
+		}
+	}
 	
 	public ShehWaiterRole(String name, Cashier ca, ShehCookRole co, ShehHostAgent h) {
 		super();
