@@ -15,7 +15,7 @@ public interface Waiter {
 	public abstract void msgWaiterOutOfFood(String order,int tableNum);
 	public abstract void msgOrderReadyForPickup(String choice,int tablenum);
 	public abstract void msgWantToPay(Customer cust);
-	public abstract void msgPayFood(String name,double money);
+	public abstract void msgPayFood(int table,double money);
 	public abstract void msgLeavingTable(Customer cust);
 	
 	public abstract void msgAtHost();

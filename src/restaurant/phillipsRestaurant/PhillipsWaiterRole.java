@@ -156,10 +156,10 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 		}
 		stateChanged();
 	}
-	public void msgPayFood(String name,double money){
+	public void msgPayFood(int table,double money){
 		//print("waiter received msgPayFood");
 		for (MyCustomerW c1: customers){
-			if (c1.c.getCustomerName() == name){
+			if (c1.c.tableNum == table){
 				c1.moneyOwed = money;
 				c1.st = AgentState.GoingToPay;
 			}
@@ -383,7 +383,7 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 			e.printStackTrace();
 		}
 		cust.st = AgentState.WaitingForPayment;
-		cashier.msgHereIsCheck(cust.choice,cust.c.getCustomerName(),this);
+		cashier.msgHereIsCheck(cust.choice,cust.c.tableNum,this);
 		stateChanged();
 	}
 	private void customerReadyToPay(MyCustomerW cust){
