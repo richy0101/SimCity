@@ -240,7 +240,6 @@ public class NakamuraCookRole extends CookRole {
 	}
 
 	private void addSharedOrders() {
-		print("checking for order---------------");
 		Order order = restaurant.getMyMonitor().remove();
 		if(order != null) {
 			Orders.add(order);
