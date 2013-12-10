@@ -31,14 +31,14 @@ public class TransportationGui implements Gui {
 	
 	//outer loop
 	int outerTopLane= 83;
-	int outerBottomlane= 353;
+	int outerBottomLane= 353;
 	int outerLeftLane= 108;
 	int outerRightLane= 719;
 	
 	//inner left (IL) loop
 	int ILTopLane= 127;
 	int ILBottomLane= 308;
-	int ILLeftlane= 152;
+	int ILLeftLane= 152;
 	int ILRightLane= 390;
 	
 	//inner right (IR) loop
@@ -47,7 +47,14 @@ public class TransportationGui implements Gui {
 	int IRLeftLane= 435;
 	int IRRightLane= 674;
 	
-	public enum CurrentAction {Travelling, Idle};
+	int Cross1X = 390, Cross1Y = 83;
+	int Cross2X = 390, Cross2Y = 127;
+	int Cross4X = 390, Cross4Y = 308;
+	int Cross3X = 435, Cross3Y = 127;
+	int Cross5X = 435, Cross5Y = 308;
+	int Cross6X = 435, Cross6Y = 353;
+	public enum CurrentLoop {InnerRight, InnerLeft, Outer};
+	public enum CurrentAction {Travelling, Idle, BreakOut, BreakIn, BreakOver};
 	CurrentAction currentAction = CurrentAction.Idle;
 	public TransportationGui(TransportationRole agent, int startX, int startY, int destX, int destY) {
 		this.agent = agent;
@@ -71,25 +78,120 @@ public class TransportationGui implements Gui {
 	
 	@Override
 	public void updatePosition() {
-		//System.out.println("Updating Pos.");
-		if ((xPos < xDestination)){ //&& ((yPos<TopRow+20 && yPos>TopRow-20)||(yPos == BottomRow))) {
-			xPos+= 1;
+		if(currentAction == CurrentAction.BreakIn) {
+			/**
+			 * Outer Loop Logic
+			 */
+			if ((xPos == outerLeftLane) && (yPos != outerBottomLane)) { //at left, coming down
+	            yPos++;
+			}
+			else if ((yPos == outerBottomLane) && (xPos != outerRightLane)) { //at bottom, going right
+	            xPos++;
+			}
+	        else if ((xPos == outerRightLane) && (yPos != outerTopLane)) {//at right, going up
+	            yPos--;
+	        }
+	        else if ((yPos == outerTopLane) && (xPos != outerLeftLane)) {//at top, going left
+	            xPos--;
+	        }
+			/**
+			 * Inner Loop Right Logic
+			 */
+			if ((xPos == IRLeftLane) && (yPos != IRBottomLane)) { //at left, coming down
+	            yPos++;
+			}
+			else if ((yPos == IRBottomLane) && (xPos != IRRightLane)) { //at bottom, going right
+	            xPos++;
+			}
+	        else if ((xPos == IRRightLane) && (yPos != IRTopLane)) {//at right, going up
+	            yPos--;
+	        }
+	        else if ((yPos == IRTopLane) && (xPos != IRLeftLane)) {//at top, going left
+	            xPos--;
+	        }
+			/**
+			 * Inner Loop Left Logic
+			 */
+			if ((xPos == ILLeftLane) && (yPos != ILBottomLane)) { //at left, coming down
+	            yPos++;
+			}
+			else if ((yPos == ILBottomLane) && (xPos != ILRightLane)) { //at bottom, going right
+	            xPos++;
+			}
+	        else if ((xPos == ILRightLane) && (yPos != ILTopLane)) {//at right, going up
+	            yPos--;
+	        }
+	        else if ((yPos == ILTopLane) && (xPos != ILLeftLane)) {//at top, going left
+	            xPos--;
+	        }
 		}
-		else if (xPos > xDestination) {
-			xPos-= 1;
+		else {
+			/**
+			 * Outer Loop Logic
+			 */
+			if ((xPos == outerLeftLane) && (yPos != outerBottomLane)) { //at left, coming down
+	            yPos++;
+			}
+			else if ((yPos == outerBottomLane) && (xPos != outerRightLane)) { //at bottom, going right
+	            xPos++;
+			}
+	        else if ((xPos == outerRightLane) && (yPos != outerTopLane)) {//at right, going up
+	            yPos--;
+	        }
+	        else if ((yPos == outerTopLane) && (xPos != outerLeftLane)) {//at top, going left
+	            xPos--;
+	        }
+			/**
+			 * Inner Loop Right Logic
+			 */
+			if ((xPos == IRLeftLane) && (yPos != IRBottomLane)) { //at left, coming down
+	            yPos++;
+			}
+			else if ((yPos == IRBottomLane) && (xPos != IRRightLane)) { //at bottom, going right
+	            xPos++;
+			}
+	        else if ((xPos == IRRightLane) && (yPos != IRTopLane)) {//at right, going up
+	            yPos--;
+	        }
+	        else if ((yPos == IRTopLane) && (xPos != IRLeftLane)) {//at top, going left
+	            xPos--;
+	        }
+			/**
+			 * Inner Loop Left Logic
+			 */
+			if ((xPos == ILLeftLane) && (yPos != ILBottomLane)) { //at left, coming down
+	            yPos++;
+			}
+			else if ((yPos == ILBottomLane) && (xPos != ILRightLane)) { //at bottom, going right
+	            xPos++;
+			}
+	        else if ((xPos == ILRightLane) && (yPos != ILTopLane)) {//at right, going up
+	            yPos--;
+	        }
+	        else if ((yPos == ILTopLane) && (xPos != ILLeftLane)) {//at top, going left
+	            xPos--;
+	        }
 		}
 		
-		if (yPos < yDestination) {
-			yPos+= 1;
-		}
-		else if (yPos > yDestination) {
-			yPos-= 1;
-		}
-		
-		if(yPos == yDestination && xPos == xDestination && currentAction == CurrentAction.Travelling) {
-			agent.msgActionComplete();
-			currentAction = CurrentAction.Idle;
-		}
+//		//System.out.println("Updating Pos.");
+//		if ((xPos < xDestination)){ //&& ((yPos<TopRow+20 && yPos>TopRow-20)||(yPos == BottomRow))) {
+//			xPos+= 1;
+//		}
+//		else if (xPos > xDestination) {
+//			xPos-= 1;
+//		}
+//		
+//		if (yPos < yDestination) {
+//			yPos+= 1;
+//		}
+//		else if (yPos > yDestination) {
+//			yPos-= 1;
+//		}
+//		
+//		if(yPos == yDestination && xPos == xDestination && currentAction == CurrentAction.Travelling) {
+//			agent.msgActionComplete();
+//			currentAction = CurrentAction.Idle;
+//		}
 	}
 
 	@Override
