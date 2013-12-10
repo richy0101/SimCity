@@ -26,15 +26,13 @@ import java.util.Random;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
-import market.MarketRole;
 import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
+import restaurant.shehRestaurant.ShehCookRole;
+import restaurant.shehRestaurant.ShehCustomerRole;
 import restaurant.shehRestaurant.ShehWaiterRole;
 import restaurant.shehRestaurant.gui.ShehRestaurantAnimationPanel;
 import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
-import restaurant.stackRestaurant.StackCookRole;
-import restaurant.stackRestaurant.StackWaiterNormalRole;
-import restaurant.stackRestaurant.StackWaiterSharedRole;
 import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 
 public class SimCityGui {
@@ -144,8 +142,8 @@ public class SimCityGui {
         roles.put("Stack's Restaurant Waiter Shared", "StackWaiterShared");
         roles.put("Stack's Restaurant Cook", "StackCook");
         
-        roles.put("Sheh's Restaurant Waiter Normal", "ShehWaiterNormal");
-        //roles.put("Sheh Restaurant Waiter Shared", "ShehWaiter");
+        roles.put("Sheh's Restaurant Waiter Normal", "ShehWaiter");
+        roles.put("Sheh's Restaurant Waiter Shared", "ShehWaiterShared");
         roles.put("Sheh's Restaurant Cook", "ShehCook");
         
         roles.put("Huang's Restaurant Waiter Normal", "HuangWaiterNormal");
@@ -500,6 +498,11 @@ public class SimCityGui {
 		
 		panel.add(speedSlider);
 		
+		Restaurant restaurant = Directory.sharedInstance().getRestaurants().get(0);
+		CurrentBuildingPanel restPanel = new CurrentBuildingPanel(restaurant);
+		restaurant.setInfoPanel(restPanel);
+		tabbedPane.addTab("Current Building", restPanel);
+		
 		
 	}
 	
@@ -519,11 +522,10 @@ public class SimCityGui {
 		if(Clock.sharedInstance().isDay()) {
 			
 		}
-		
-		
 
-		PersonAgent person1 = new PersonAgent("StackCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
-		PersonAgent person2 = new PersonAgent("StackWaiterNormal", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
+
+		PersonAgent person1 = new PersonAgent("HuangCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
+		PersonAgent person2 = new PersonAgent("HuangWaiterNormal", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
 		PersonAgent person3 = new PersonAgent("StackWaiterShared", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
 		PersonAgent person4 = new PersonAgent("BankTeller", "Test Person 4", 3, 1000.00, "House4", "TakesTheBus");
 		PersonAgent person5 = new PersonAgent("BankTeller", "Test Person 5", 3, 1000.00, "House5", "TakesTheBus");
@@ -550,7 +552,6 @@ public class SimCityGui {
 		trafficLight1.startThread();
 		trafficLight2 = new TrafficAgent();
 		trafficLight2.startThread();
-		
 		
 		/**
 		 End of Hard Code SuperNorm
@@ -679,6 +680,7 @@ public class SimCityGui {
 					tabbedPane.remove(1);
 				}
 				CurrentBuildingPanel restPanel = new CurrentBuildingPanel(restaurant);
+				restaurant.setInfoPanel(restPanel);
 				tabbedPane.addTab("Current Building", restPanel);
 			}
 		}

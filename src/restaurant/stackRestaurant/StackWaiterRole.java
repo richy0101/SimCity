@@ -6,6 +6,7 @@ import gui.Building;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import restaurant.Restaurant;
 import restaurant.stackRestaurant.gui.WaiterGui;
 import restaurant.stackRestaurant.helpers.Check;
 import restaurant.stackRestaurant.interfaces.*;
@@ -25,6 +26,7 @@ public class StackWaiterRole extends Role implements Waiter {
 	protected enum AgentState
 	{Arrived, Working, WantToGoOnBreak, WaitingForNotice, GoingOnBreak, OnBreak, FinishingBreak, GettingPaycheck, Leaving, WaitingForPaycheck};
 	AgentState state = AgentState.Working;
+	private Restaurant restaurant;
 	
 	protected enum CustomerState
 	{Waiting, Seated, ReadyToOrder, Ordering, Ordered, AtCook, FoodEmpty, FoodReady, WaitingForReadyFood, Eating, DoneEating, ReadyForCheck, WaitingForCheck, HasCheck, Paying, Gone};
@@ -537,5 +539,11 @@ public class StackWaiterRole extends Role implements Waiter {
 		String choice;
 		int seatNum;
 		CustomerState state;
+	}
+
+	@Override
+	public void setRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant;
+		
 	}
 }

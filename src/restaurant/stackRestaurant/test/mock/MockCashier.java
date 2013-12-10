@@ -5,6 +5,7 @@ import restaurant.stackRestaurant.helpers.Check;
 import restaurant.stackRestaurant.interfaces.Cashier;
 import restaurant.stackRestaurant.interfaces.Customer;
 import restaurant.stackRestaurant.interfaces.Waiter;
+import market.MarketCheck;
 import market.interfaces.Market;
 
 public class MockCashier extends Mock implements Cashier {
@@ -29,6 +30,12 @@ public class MockCashier extends Mock implements Cashier {
 
 	@Override
 	public void msgNeedPaycheck(Role role) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgGiveBill(MarketCheck marketcheck) {
 		// TODO Auto-generated method stub
 		
 	}

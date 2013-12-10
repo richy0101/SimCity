@@ -3,11 +3,15 @@ package restaurant.shehRestaurant.gui;
 import restaurant.shehRestaurant.ShehCustomerRole;
 import restaurant.shehRestaurant.ShehWaiterRole; 
 import restaurant.shehRestaurant.helpers.Table;
-
+import restaurant.shehRestaurant.interfaces.Waiter;
 import gui.Gui;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 public class WaiterGui implements Gui {
 
@@ -17,19 +21,43 @@ public class WaiterGui implements Gui {
     private int xDestination = -20, yDestination = -20;//default start position
     private int agentSize = 20; //default agent size
     
-    private final int KIOSK = 30;
-    private final int CHEFSKITCHEN = 400; 
-    private final int CHEFSPLATING = 200;
-    private final int CHEFSCOOKING = 100;
+    private final int XREGISTER = 642;
+    private final int YREGISTER = 180;
+    private final int XPLATING = 249;
+    private final int YPLATING = 176;
+    private final int XDOOR = 704;
+    private final int YDOOR = 62;
+    private final int XIDLE = 317;
+    private final int YIDLE = 150;
+    private final int XTABLE1 = 432;
+    private final int YTABLE1 = 130;
+    private final int XTABLE2 = 339;
+    private final int YTABLE2 = 284;
+    private final int XTABLE3 = 520;
+    private final int YTABLE3 = 275;
+    
+    BufferedImage waiterImage;
      
-    public int xTable, homePosition;
-    public static final int yTable = 250; 
+    public int homePosition;
     public ArrayList<Table> table; //Declaration of Table
     private Boolean wantsBreak = false;
 
     public WaiterGui(ShehWaiterRole agent) {
         this.agent = agent;
         table = agent.getTables();
+        
+        try {
+        	waiterImage = ImageIO.read(getClass().getResource("shehRestaurantWaiter.png"));
+        	/*
+        	chickenImage = ImageIO.read(getClass().getResource("chicken.png"));
+            pizzaImage = ImageIO.read(getClass().getResource("pizza.png"));
+            saladImage = ImageIO.read(getClass().getResource("salad.png"));
+            steakImage = ImageIO.read(getClass().getResource("steak.png"));
+       		*/
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ Background");
+        }
         
         //IMAGE STUFF
     }
@@ -46,25 +74,32 @@ public class WaiterGui implements Gui {
             yPos--;
 
         if (xPos == xDestination && yPos == yDestination
-        		& (xDestination == xTable + agentSize) & (yDestination == yTable - agentSize)) { 
+        		& (xDestination == XTABLE1 + agentSize) & (yDestination == YTABLE1 - agentSize)) { 
+           agent.msgAtTable();
+        }
+        if (xPos == xDestination && yPos == yDestination
+        		& (xDestination == XTABLE2 + agentSize) & (yDestination == YTABLE2 - agentSize)) { 
+           agent.msgAtTable();
+        }
+        if (xPos == xDestination && yPos == yDestination
+        		& (xDestination == XTABLE3 + agentSize) & (yDestination == YTABLE3 - agentSize)) { 
            agent.msgAtTable();
         }
         
-        if(xPos == KIOSK){
-        	if(yPos == KIOSK) {
+        if(xPos == XREGISTER){
+        	if(yPos == YREGISTER) {
         		agent.msgAtKiosk();
         	}
         }
-        if(xPos == CHEFSKITCHEN){
-        	if(yPos == CHEFSPLATING) {
+        if(xPos == XPLATING){
+        	if(yPos == YPLATING) {
         		agent.msgAtKitchen();
         	}
         }
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.BLUE);
-        g.fillRect(xPos, yPos, agentSize, agentSize);
+		g.drawImage(waiterImage, xPos, yPos, null);
     }
     
     public void label(Graphics g, String label, int xLoc, int yLoc) {
@@ -79,37 +114,37 @@ public class WaiterGui implements Gui {
 
     public void DoBringToTable(ShehCustomerRole customer, Table table) { //SEATING AT TABLE
     		if(table.getTableNumber() == 1){
-    			xTable = 100;
+    			xDestination = XTABLE1 + agentSize;
+    			yDestination = YTABLE1 - agentSize;
     		}
     		if(table.getTableNumber() == 2){
-    			xTable = 200;
+    			xDestination = XTABLE2 + agentSize;
+    			yDestination = YTABLE2 - agentSize;
     		}
     		if(table.getTableNumber() == 3){
-    			xTable = 300;
+    			xDestination = XTABLE3 + agentSize;
+    			yDestination = YTABLE3 - agentSize;
     		}
-    		
-    		xDestination = xTable + agentSize;
-    		yDestination = yTable - agentSize;
     }
     
     public void GoToTable(Table table) { //SEATING AT TABLE
 		if(table.getTableNumber() == 1){
-			xTable = 100;
+			xDestination = XTABLE1 + agentSize;
+			yDestination = YTABLE1 - agentSize;
 		}
 		if(table.getTableNumber() == 2){
-			xTable = 200;
+			xDestination = XTABLE2 + agentSize;
+			yDestination = YTABLE2 - agentSize;
 		}
 		if(table.getTableNumber() == 3){
-			xTable = 300;
+			xDestination = XTABLE3 + agentSize;
+			yDestination = YTABLE3 - agentSize;
 		}
-		
-		xDestination = xTable + agentSize;
-		yDestination = yTable - agentSize;
     }
     
     public void DoGoToKitchen() {
-    	xDestination = CHEFSKITCHEN;
-    	yDestination = CHEFSPLATING;
+    	xDestination = XPLATING;
+    	yDestination = YPLATING;
     }
     
     public void DeliverFoodToTable(Table table, String order) {
@@ -117,35 +152,32 @@ public class WaiterGui implements Gui {
     	//g2.setColor(Color.BLACK);
     	
 		if(table.getTableNumber() == 1){
-			xTable = 100;
-			//g2.drawString(order, xTable, yTable);
+			xDestination = XTABLE1 + agentSize;
+			yDestination = YTABLE1 - agentSize;
 		}
 		if(table.getTableNumber() == 2){
-			xTable = 200;
-			//g2.drawString(order, xTable, yTable);
+			xDestination = XTABLE2 + agentSize;
+			yDestination = YTABLE2 - agentSize;
 		}
 		if(table.getTableNumber() == 3){
-			xTable = 300;
-			//g2.drawString(order, xTable, yTable);
+			xDestination = XTABLE3 + agentSize;
+			yDestination = YTABLE3 - agentSize;
 		}
-		
-		xDestination = xTable + agentSize;
-		yDestination = yTable - agentSize;
     }
     
     public void DoGoToKiosk() {
-        xDestination = KIOSK;
-        yDestination = KIOSK;
+        xDestination = XREGISTER;
+        yDestination = YREGISTER;
     }
     
     public void DoGoOnBreak() {
-    	xDestination = 450;
-    	yDestination = 0;
+    	xDestination = XDOOR;
+    	yDestination = YDOOR;
     }
     
     public void DoStandby(int num) {
-    	xDestination = 410 - (homePosition * 40);
-    	yDestination = 20;
+    	xDestination = XIDLE - (homePosition * 40);
+    	yDestination = YIDLE;
     }
     
     public void setHome(int num) {

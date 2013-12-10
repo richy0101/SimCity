@@ -58,7 +58,7 @@ public class WaiterGui implements Gui {
 	BufferedImage waiterImage;
 
     public WaiterGui(HuangWaiterRole huangWaiterRole) {
-		this.agent = agent;
+		this.agent = huangWaiterRole;
         try {
         	waiterImage = ImageIO.read(getClass().getResource("huangRestaurantWaiter.png"));
         }

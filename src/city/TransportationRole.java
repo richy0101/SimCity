@@ -151,7 +151,7 @@ public class TransportationRole extends Role implements Transportation  {
 		if (getPersonAgent().getTransportationMethod().contains("Bus")) {
 			startStopX = BusHelper.sharedInstance().busStopEvaluator.get(getStartingLocation()).xCoordinate;
 			startStopY = BusHelper.sharedInstance().busStopEvaluator.get(getStartingLocation()).yCoordinate;
-			System.out.println("This is the destination that is breaking: " + destination);
+			//System.out.println("This is the destination that is breaking: " + destination);
 			endStopX = BusHelper.sharedInstance().busStopEvaluator.get(destination).xCoordinate;
 			endStopY = BusHelper.sharedInstance().busStopEvaluator.get(destination).yCoordinate;
 			finalStopNumber = BusHelper.sharedInstance().busStopToInt.get(destination);
