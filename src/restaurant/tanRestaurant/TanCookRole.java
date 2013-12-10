@@ -3,7 +3,11 @@ package restaurant.tanRestaurant;
 import agent.Agent;
 import agent.Role;
 import city.helpers.Directory;
-
+import restaurant.shehRestaurant.ShehHostAgent;
+//import restaurant.stackRestaurant.StackCookRole.AgentState;
+//import restaurant.stackRestaurant.StackCookRole.MyMarket;
+import restaurant.stackRestaurant.interfaces.Cashier;
+import restaurant.stackRestaurant.interfaces.Host;
 import restaurant.tanRestaurant.TanCookRole.MyOrder;
 import restaurant.tanRestaurant.TanCookRole.SharedOrderState;
 import restaurant.tanRestaurant.TanCookRole.MyMarket.shipmentState;
@@ -16,6 +20,7 @@ import restaurant.tanRestaurant.TanWaiterRole.MyCustomer.state;
 import restaurant.tanRestaurant.gui.HostGui;
 import restaurant.tanRestaurant.gui.CookGui;
 import restaurant.tanRestaurant.test.mock.EventLog;
+import gui.Building;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
@@ -60,7 +65,43 @@ public class TanCookRole extends Role {
 	SharedOrderState sharedState = SharedOrderState.NeedsChecking;
 	
 	
+	/*
+	public TanCookRole(String location) {
+		super();
+		cookGui = new CookGui(this);
+		//state = AgentState.Arrived;
+		
+		host = (Host) Directory.sharedInstance().getAgents().get("TanRestaurantHost");
+		cashier = (Cashier) Directory.sharedInstance().getRestaurants().get(0).getCashier();
+		market1 = (Market) Directory.sharedInstance().marketDirectory.get("Market").getWorker();
+		markets.add(new MyMarket(market1));
+		
+		
+		myLocation = location;
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == myLocation) {
+				b.addGui(cookGui);
+			}
+		}
+	}*/
 
+	public TanCookRole(String location) {
+		super();
+		TanHostAgent host = (TanHostAgent) Directory.sharedInstance().getAgents().get("TanRestaurantHost");
+
+		cookGui = new CookGui(this);
+		
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		
+		for(Building b : buildings) {
+			if (b.getName() == location) {
+				b.addGui(cookGui);
+			}
+		}
+	}
+	
+	/*
 	public TanCookRole(String name) {
 		super();
 
@@ -75,7 +116,7 @@ public class TanCookRole extends Role {
 		amtSteak= 15;
 		amtSalad= 15;
 		amtPizza= 15;
-	}
+	}*/
 
 	public static class MyMarket{
 		MyMarket(Market m){

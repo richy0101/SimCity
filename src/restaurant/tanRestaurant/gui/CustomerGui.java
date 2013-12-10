@@ -39,8 +39,8 @@ public class CustomerGui implements Gui{
 
 	public CustomerGui(TanCustomerRole c){//, RestaurantGui gui){ //HostAgent m) {
 		agent = c;
-		xPos = -20;
-		yPos = -20;
+		xPos = 280;
+		yPos = 410;
 		xDestination = -40;
 		yDestination = -40;
 		//maitreD = m;
@@ -108,7 +108,8 @@ public class CustomerGui implements Gui{
 	}
 
 	public void draw(Graphics2D g) {
-		g.setColor(Color.GREEN);
+		g.drawImage(customerImage, xPos, yPos, null);
+		/*g.setColor(Color.GREEN);
 		
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setColor(Color.BLACK);
@@ -139,7 +140,7 @@ public class CustomerGui implements Gui{
 			g2.drawString(">:) ", xPos, yPos-2);
 		}
 		g.drawImage(customerImage, xPos, yPos, null);
-		//g.fillRect(xPos, yPos, 20, 20);
+		//g.fillRect(xPos, yPos, 20, 20);*/
 	}
 
 	public boolean isPresent() {

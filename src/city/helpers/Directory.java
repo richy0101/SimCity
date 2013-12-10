@@ -30,7 +30,7 @@ public class Directory {
 		restaurants.add(huangRestaurant);
 		restaurants.add(shehRestaurant);
 		restaurants.add(phillipsRestaurant);
-		restaurants.add(tanRestaurant); //should be added last to be 5th on the list
+		restaurants.add(tanRestaurant);
 		banks.add(bank);
 		banks.add(bank2);
 		markets.add(Market);
@@ -74,13 +74,14 @@ public class Directory {
 		//Restaurant Roles Sheh
 		roleDirectory.put("restaurant.shehRestaurant.ShehWaiterRole", "ShehRestaurant");
 		roleDirectory.put("restaurant.shehRestaurant.ShehCookRole", "ShehRestaurant");
-		/*
-		//Restaurant Roles Tan
-		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "HuangRestaurant");	
 		
+		//Restaurant Roles Tan
+		//roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");
+		//roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "HuangRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.TanWaiterRole", "TanRestaurant");
+		roleDirectory.put("restaurant.stackRestaurant.TanCookRole", "TanRestaurant");	
+		
+		/*
 		//Restaurant Roles Nakamura
 		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");
 		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "HuangRestaurant");
@@ -199,6 +200,7 @@ public class Directory {
 		locationDirectory.put(huangRestaurant.getName(), huangRestaurantLocation);
 		
 		locationDirectory.put(tanRestaurant.getName(), tanRestaurantLocation);
+		
 		locationDirectory.put(phillipsRestaurant.getName(), phillipsRestaurantLocation);
 		/*locationDirectory.put(nakamuraRestaurant.getName(), nakamuraRestaurantLocation);
 		*/
@@ -218,6 +220,9 @@ public class Directory {
 		
 		agents.put(phillipsRestaurant.getName() + "Host", (Agent) phillipsRestaurant.getHost());
 		agents.put(phillipsRestaurant.getName() + "Cashier", (Agent) phillipsRestaurant.getCashier());
+		
+		agents.put(tanRestaurant.getName() + "Host", (Agent) tanRestaurant.getHost());
+		agents.put(tanRestaurant.getName() + "Cashier", (Agent) tanRestaurant.getCashier());
 		
 		agents.put( bank.getName(),(Agent) bank.getManager());
 		agents.put( bank2.getName(),(Agent) bank2.getManager());
