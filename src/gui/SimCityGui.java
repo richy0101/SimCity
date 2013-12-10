@@ -810,8 +810,6 @@ public class SimCityGui {
 	}
 	
 	public void displayBuildingPanel( BuildingPanel buildingPanel ) { //How is this tied in with the Micro Panel?
-		//System.out.println("abc");
-		System.out.println("Accessing " + buildingPanel.getName() + " for MicroAnimation Panel." );
 		cardLayout.show( buildingPanels, buildingPanel.getName());
 	}
 	public MacroAnimationPanel getMacroAnimationPanel() {
