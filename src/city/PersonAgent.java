@@ -776,12 +776,12 @@ public class PersonAgent extends Agent implements Person {
 			cook = false;
 		}
 		//if Stay at home and eat. Alters Cook true or false
-		if (cook == true) {
+//		if (cook == true) {
 			setPersonState(PersonState.CookHome);
-		}
-		else {
-			setPersonState(PersonState.GoOutEat);
-		}
+//		}
+//		else {
+//			setPersonState(PersonState.GoOutEat);
+//		}
 	}
 	private void eatFood() {
 		print("Action eatFood - State set to Eating at home.");

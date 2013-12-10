@@ -8,12 +8,10 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import city.helpers.Directory;
-import restaurant.nakamuraRestaurant.NakamuraCookRole.cookState;
 import restaurant.nakamuraRestaurant.gui.WaiterGui;
 import restaurant.nakamuraRestaurant.helpers.Check;
 import restaurant.nakamuraRestaurant.helpers.Menu;
 import restaurant.nakamuraRestaurant.interfaces.Waiter;
-import restaurant.stackRestaurant.StackWaiterRole.AgentState;
 import agent.Role;
 
 /**
@@ -43,9 +41,10 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 
 		this.status = WorkState.arrived;
 		this.myLocation = location;
+		waiterGui = new WaiterGui(this, 150, 50);
 
-		host = Directory.sharedInstance().getAgents().get("NakamuraRestaurantHost");
-		cashier = Directory.sharedInstance().getAgents().get("NakamuraRestaurantCashier");
+		host = (NakamuraHostAgent) Directory.sharedInstance().getAgents().get("NakamuraRestaurantHost");
+		cashier = (NakamuraCashierAgent) Directory.sharedInstance().getAgents().get("NakamuraRestaurantCashier");
 
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
@@ -230,6 +229,7 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 			else if(status == WorkState.backtowork) {
 				ReturnToWork();
 			}
+			
 			for(Cust cust: MyCustomers) {
 				if(cust.s == state.gettingcust) {
 					return false;

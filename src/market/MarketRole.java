@@ -19,7 +19,6 @@ import market.test.mock.EventLog;
 import market.test.mock.LoggedEvent;
 import restaurant.CashierInterface;
 import restaurant.CookInterface;
-import restaurant.nakamuraRestaurant.MarketAgent.state;
 import agent.Role;
 import city.helpers.Directory;
 

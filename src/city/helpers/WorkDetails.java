@@ -26,6 +26,12 @@ public class WorkDetails {
 			offDays.add(Constants.SUNDAY);
 			offDays.add(Constants.SATURDAY);
 		}
+		else if (location.contains("Nakamura")) {
+			this.workStartHour = 8;
+			this.workEndHour = 20;
+			offDays.add(Constants.SUNDAY);
+			offDays.add(Constants.SATURDAY);
+		}
 		else if (location.contains("Sheh")) {
 			this.workStartHour = 9;
 			this.workEndHour = 21;

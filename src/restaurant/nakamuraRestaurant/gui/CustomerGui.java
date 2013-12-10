@@ -15,7 +15,6 @@ public class CustomerGui implements Gui{
 	private boolean isHungry = false;
 
 	//private HostAgent host;
-	RestaurantGui gui;
 
 	private int xPos, yPos;
 	private int xDestination, yDestination;
@@ -31,7 +30,7 @@ public class CustomerGui implements Gui{
 	public int xTable = 100;
 	public int yTable = 75;
 
-	public CustomerGui(NakamuraCustomerRole c, RestaurantGui gui){ //HostAgent m) {
+	public CustomerGui(NakamuraCustomerRole c){ //HostAgent m) {
 		role = c;
 		xPos = -40;
 		yPos = -40;
@@ -41,7 +40,6 @@ public class CustomerGui implements Gui{
         foodIcon.put("Chicken", "CH");
         foodIcon.put("Pizza", "PZ");
         foodIcon.put("Salad", "SA");
-		this.gui = gui;
 	}
 
 	public void updatePosition() {
@@ -74,9 +72,7 @@ public class CustomerGui implements Gui{
 			}
 			else if (command==Command.LeaveRestaurant) {
 				role.msgAnimationFinishedLeaveRestaurant();
-				System.out.println("about to call gui.setCustomerEnabled(agent);");
 				isHungry = false;
-				gui.setCustomerEnabled(role);
 				command = Command.noCommand;
 			}
 		}

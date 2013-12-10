@@ -1,11 +1,11 @@
 package restaurant.nakamuraRestaurant;
 
-import restaurant.gui.RestaurantGui;
 import restaurant.nakamuraRestaurant.gui.CustomerGui;
 import restaurant.nakamuraRestaurant.helpers.Check;
 import restaurant.nakamuraRestaurant.helpers.Menu;
 import restaurant.nakamuraRestaurant.interfaces.Customer;
 import agent.Role;
+import gui.Building;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +13,14 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import city.helpers.Directory;
+
 /**
  * Restaurant customer agent.
  */
 public class NakamuraCustomerRole extends Role implements Customer{
 	private String name;
+	private String myLocation;
 	private int hungerLevel = 5;        // determines length of meal
 	Timer timer = new Timer();
 	private CustomerGui customerGui;
@@ -30,7 +33,6 @@ public class NakamuraCustomerRole extends Role implements Customer{
 	private Menu menu;
 	private Check check;
 	private String choice = null;
-	private int cash;
 	private List<String> cantOrder = new ArrayList<String>();
 
 	//    private boolean isHungry = false; //hack for gui
@@ -39,7 +41,7 @@ public class NakamuraCustomerRole extends Role implements Customer{
 	private AgentState state = AgentState.DoingNothing;//The start state
 
 	public enum AgentEvent 
-	{none, gotHungry, inside, inWaitingArea, noSeat, meetWaiter, followWaiter, seated, ordered, reorder, gotFood, doneEating, gotCheck, donePaying, doneLeaving};
+	{none, gotHungry, inside, inWaitingArea, noSeat, meetWaiter, followWaiter, seated, ordered, reorder, gotFood, doneEating, gotCheck, donePaying, doneLeaving, closed};
 	AgentEvent event = AgentEvent.none;
 
 	/**
@@ -48,29 +50,27 @@ public class NakamuraCustomerRole extends Role implements Customer{
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public NakamuraCustomerRole(String name){
+	public NakamuraCustomerRole(String location){
 		super();
-		this.name = name;
-		if(this.name.equals("Broke"))
-			cash = 0;
-		else
-			cash =  generator.nextInt(20) + 5;
-		print("New Customer. Cash: $" + cash + ".00");
-	}
+		
+		customerGui = new CustomerGui(this);
 
-	/**
-	 * hack to establish connection to Host agent.
-	 */
-	public void setHost(NakamuraHostAgent host) {
-		this.host = host;
+		host = (NakamuraHostAgent) Directory.sharedInstance().getAgents().get("NakamuraRestaurantHost");
+		cashier = (NakamuraCashierAgent) Directory.sharedInstance().getAgents().get("NakamuraRestaurantCashier");
+
+		myLocation = location;
+		menu = new Menu();
+		
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == myLocation) {
+				b.addGui(customerGui);
+			}
+		}
 	}
 	
 	public void setWaiter(NakamuraWaiterRole waiter) {
 		this.waiter = waiter;
-	}
-	
-	public void setCashier(NakamuraCashierAgent cashier) {
-		this.cashier = cashier;
 	}
 	
 	public void setMenu(Menu m) {
@@ -80,8 +80,8 @@ public class NakamuraCustomerRole extends Role implements Customer{
 	public String getCustomerName() {
 		return name;
 	}
+	
 	// Messages
-
 	public void gotHungry() {//from animation
 		print("I'm hungry");
 		event = AgentEvent.gotHungry;
@@ -91,6 +91,12 @@ public class NakamuraCustomerRole extends Role implements Customer{
 	public void msgRestaurantFull() {
 		print("Received msgRestaurantFull");
 		event = AgentEvent.noSeat;
+		stateChanged();
+	}
+	
+	public void msgRestaurantClosed() {
+		print("Received msgRestaurantClosed");
+		event = AgentEvent.closed;
 		stateChanged();
 	}
 
@@ -199,6 +205,12 @@ public class NakamuraCustomerRole extends Role implements Customer{
 			}
 			return true;
 		}
+		if (state == AgentState.WaitingInRestaurant && event == AgentEvent.closed){
+			state = AgentState.Leaving;
+			print("Leaving");
+			leaveRestaurant();
+			return true;
+		}
 		if (state == AgentState.BeingSeated && event == AgentEvent.followWaiter){
 			state = AgentState.Sitting;
 			GoToSeat();
@@ -286,7 +298,7 @@ public class NakamuraCustomerRole extends Role implements Customer{
 		5000);
 		do{
 			c = menu.choices.get(generator.nextInt(4));
-			if(menu.prices.get(c) > cash && !name.equals("Broke") && !cantOrder.contains(c)) {
+			if(menu.prices.get(c) > getPersonAgent().getFunds() && !name.equals("Broke") && !cantOrder.contains(c)) {
 				print("Can't afford " + c);
 				cantOrder.add(c);
 			}
@@ -349,7 +361,7 @@ public class NakamuraCustomerRole extends Role implements Customer{
 		}
 		else {
 			cashier.msgPayment(this, check, menu.prices.get(choice));
-			cash -= menu.prices.get(choice);
+			getPersonAgent().setFunds(getPersonAgent().getFunds() - menu.prices.get(choice));
 		}
 	}
 
@@ -363,6 +375,7 @@ public class NakamuraCustomerRole extends Role implements Customer{
 		print("Leaving");
 		host.msgLeaving(this);
 		customerGui.DoExitRestaurant();
+		getPersonAgent().msgRoleFinished();
 	}
 
 	// Accessors, etc.

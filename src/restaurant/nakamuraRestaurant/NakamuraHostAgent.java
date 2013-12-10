@@ -37,6 +37,8 @@ public class NakamuraHostAgent extends Agent {
 		for (int ix = 1; ix <= NTABLES; ix++) {
 			tables.add(new Table(ix));//how you add to a collections
 		}
+		
+		hostGui = new HostGui(this);
 	}
 
 	public String getMaitreDName() {

@@ -26,6 +26,8 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
 import market.MarketRole;
+import restaurant.nakamuraRestaurant.NakamuraCookRole;
+import restaurant.nakamuraRestaurant.NakamuraWaiterRole;
 import restaurant.nakamuraRestaurant.gui.NakamuraRestaurantAnimationPanel;
 import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
@@ -151,6 +153,10 @@ public class SimCityGui {
         roles.put("Huang's Restaurant Waiter Shared", "HuangWaiterShared");
         roles.put("Huang's Restaurant Cook", "HuangCook");
         
+        roles.put("Nakamura's Restaurant Waiter Normal", "NakamuraWaiterNormal");
+        roles.put("Nakamura's Restaurant Waiter Shared", "NakamuraWaiterShared");
+        roles.put("Nakamura's Restaurant Cook", "NakamuraCook");
+        
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setBounds(0, 0, 1133, 855);
@@ -267,11 +273,11 @@ public class SimCityGui {
         //		occupationComboBox.addItem("Huang's Restaurant Waiter");
         //		occupationComboBox.addItem("Huang's Restaurant Cook");
         //		occupationComboBox.addItem("Huang's Restaurant Cashier");
-        //
-        //		occupationComboBox.addItem("Nakamura's Restaurant Host");
-        //		occupationComboBox.addItem("Nakamura's Restaurant Waiter");
-        //		occupationComboBox.addItem("Nakamura's Restaurant Cook");
-        //		occupationComboBox.addItem("Nakamura's Restaurant Cashier");
+        //Nakamura
+        occupationComboBox.addItem("Nakamura's Restaurant Host");
+        occupationComboBox.addItem("Nakamura's Restaurant Waiter");
+        occupationComboBox.addItem("Nakamura's Restaurant Cook");
+        occupationComboBox.addItem("Nakamura's Restaurant Cashier");
 		
 		panel.add(occupationComboBox);
 		
@@ -528,38 +534,28 @@ public class SimCityGui {
 		}
 		
 	
-		String a = "StackRestaurant";
+		String a = "NakamuraRestaurant";
 		String b = "House1";
 		String name = "Test Person 1";
 		Role role;
-		if(rand.nextInt()%2 == 0) {
-			role = new StackWaiterSharedRole("StackRestaurant");
-		}
-		else {
-			role = new StackWaiterNormalRole("StackRestaurant");
-		}
+		role = new NakamuraWaiterRole("NakamuraRestaurant");
 		PersonAgent p = new PersonAgent(role, a , b, name);
 		role.setPerson(p);
 		//p.msgWakeUp();
 	
-		String a2 = "StackRestaurant";
+		String a2 = "NakamuraRestaurant";
 		String b2 = "House2";
 		String name2 = "Test Person 2";
 		Role role2;
-		if(rand.nextInt()%2 == 0) {
-			role2 = new StackWaiterSharedRole("StackRestaurant");
-		}
-		else {
-			role2 = new StackWaiterNormalRole("StackRestaurant");
-		}
+		role2 = new NakamuraWaiterRole("NakamuraRestaurant");
 		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
 		role2.setPerson(p2);
 		//p2.msgGoWork();
 
-		String a3 = "StackRestaurant";
+		String a3 = "NakamuraRestaurant";
 		String b3 = "House3";
 		String name3 = "Test Person 3";
-		Role role3 = new StackCookRole("StackRestaurant");
+		Role role3 = new NakamuraCookRole("NakamuraRestaurant");
 		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
 		role3.setPerson(p3);
 		//p3.msgGoWork();

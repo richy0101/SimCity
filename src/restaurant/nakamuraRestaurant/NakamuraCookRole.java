@@ -49,15 +49,16 @@ public class NakamuraCookRole extends CookRole {
 			food.put("Salad", new Food("Salad", 5000, 5));
 			food.put("Pizza", new Food("Pizza", 15000, 5));
 		}
-		
-		host = Directory.sharedInstance().getAgents().get("NakamuraRestaurantHost");
-		cashier = Directory.sharedInstance().getAgents().get("NakamuraRestaurantCashier");
-		
+
+		host = (NakamuraHostAgent) Directory.sharedInstance().getAgents().get("NakamuraRestaurantHost");
+		cashier = (NakamuraCashierAgent) Directory.sharedInstance().getAgents().get("NakamuraRestaurantCashier");
+
 		for(int i = 0; i < Directory.sharedInstance().getMarkets().size(); i++) {
 			markets.add(Directory.sharedInstance().getMarkets().get(i).getWorker());
 		}		
 		
 		state = cookState.Arrived;
+		cookGui = new CookGui(this);
 		
 		myLocation = location;
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();

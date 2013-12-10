@@ -6,10 +6,11 @@ import city.UnemployedRole;
 import market.MarketCustomerRole;
 import agent.Role;
 import bank.BankTellerRole;
+import restaurant.nakamuraRestaurant.NakamuraCookRole;
+import restaurant.nakamuraRestaurant.NakamuraCustomerRole;
+import restaurant.nakamuraRestaurant.NakamuraWaiterRole;
 import restaurant.shehRestaurant.ShehCookRole;
 import restaurant.stackRestaurant.*;
-
-
 import restaurant.huangRestaurant.HuangCookRole;
 import restaurant.huangRestaurant.HuangCustomerRole;
 import restaurant.huangRestaurant.HuangWaiterNormalRole;
@@ -31,6 +32,9 @@ public class RoleFactory {
 		}
 		else if(role.equals("HuangRestaurant")) {
 			newRole = new HuangCustomerRole("HuangRestaurant");
+		}
+		else if(role.equals("NakamuraRestaurant")) {
+			newRole = new NakamuraCustomerRole("NakamuraRestaurant");
 		}
 		else if(role.equals("Market1") || role.equals("Market2")) {
 			newRole = new MarketCustomerRole(p.getGroceriesList(), role);
@@ -83,18 +87,18 @@ public class RoleFactory {
 //			newRole = new TanCookRole("TanRestaurant");
 //			return newRole;
 //		}
-//		else if(role.equals("NakamuraWaiterNormal")) {
-//			newRole = new NakamuraWaiterNormalRole("NakamuraRestaurant");
-//			return newRole;
-//		}
-//		else if (role.equals("NakamurakWaiterShared")) {
-//			newRole = new NakamuraWaiterSharedRole("NakamuraRestaurant");
-//			return newRole;
-//		}
-//		else if (role.equals("NakamuraCook")) {
-//			newRole = new NakamuraCookRole("NakamuraRestaurant");
-//			return newRole;
-//		}
+		else if(role.equals("NakamuraWaiterNormal")) {
+			newRole = new NakamuraWaiterRole("NakamuraRestaurant");
+			return newRole;
+		}
+		else if (role.equals("NakamurakWaiterShared")) {
+			newRole = new NakamuraWaiterRole("NakamuraRestaurant");
+			return newRole;
+		}
+		else if (role.equals("NakamuraCook")) {
+			newRole = new NakamuraCookRole("NakamuraRestaurant");
+			return newRole;
+		}
 //		else if(role.equals("PhillipsWaiterNormal")) {
 //			newRole = new PhillipsWaiterNormalRole("PhillipsRestaurant");
 //			return newRole;
