@@ -216,7 +216,7 @@ public class StackHostAgent extends Agent implements Host {
 		}
 		synchronized(customers) {
 			for(MyCustomer customer : customers) {
-				if((cook == null || waiters.size() == 0) && customer.state != CustomerState.Done) {
+				if((cook == null || waiters.size() == 0 || !restaurant.isOpen()) && customer.state != CustomerState.Done) {
 					tellCustomerRestaurantClosed(customer);
 					return true;
 				}
