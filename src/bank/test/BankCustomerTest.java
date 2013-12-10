@@ -445,5 +445,70 @@ public class BankCustomerTest extends TestCase {
 		
 		assertEquals("Customer's state should be Gone ",customer.getState(),"Gone");
 	}
+	//NON NORM ROB BANK
+	public void testEightBankInteraction(){
+		customer = new BankCustomerRole("Rob",0,1000.0,"Crook");
+		customer.manager = manager;
+		customer.setPerson(person);
+		//no account number needed for robber
+		assertTrue(customer.getPersonAgent().equals(person));
+		customer.getPersonAgent().setFunds(400.0);
+		
+		//precondition
+		assertEquals("Customer should have the manager from setUp()", customer.manager,manager);
+		assertEquals("Customer's state should be DoingNothing ",customer.getState(),"DoingNothing");
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's state should be waiting ",customer.getState(),"Waiting");
+		assertEquals("Customer's x gui position/destination should be at x manager",
+				customer.customerGui.getxDestination(),400);
+		assertEquals("Customer's y gui position/destination should be at y manager",
+				customer.customerGui.getyDestination(),68);
+		
+		
+		assertEquals("Customer's teller number to go to should be -1 (null)",customer.getTellerNumber(),-1);
+		customer.msgHowCanIHelpYou(teller, 4);
+		assertEquals("Customer's teller number to go to should be 4",customer.getTellerNumber(),4);
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's x gui position/destination should be x teller",
+				customer.customerGui.getxDestination(),customer.customerGui.getxTeller());
+		assertEquals("Customer's y gui position/destination should be y teller",
+				customer.customerGui.getyDestination(),customer.customerGui.getyTeller());
+		
+		customer.msgAtTeller();
+		
+		assertEquals("Customer's state should be BeingHelped ",customer.getState(),"BeingHelped");
+		assertEquals("Customer's task should be Rob ",customer.getTask(),"Rob");
+		
+		assertEquals("Customer's funds should be 400 before robbing the bank",
+				customer.getPersonAgent().getFunds(),400.0);
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's state should be WaitingForHelpResponse ",
+				customer.getState(),"WaitingForHelpResponse");
+		
+		customer.msgHereAreFunds(customer.getMoneyRequired());
+		
+		assertEquals("Customer's funds should be 1400 now because he stole 1000 from the bank",
+				customer.getPersonAgent().getFunds(),1400.0);
+		assertEquals("Customer's state should be Done ",customer.getState(),"Done");
+		
+		customer.pickAndExecuteAnAction();
+		
+		assertEquals("Customer's state should be InTransit ",customer.getState(),"InTransit");
+		assertEquals("Customer's x gui position/destination should be at x exit",
+				customer.customerGui.getxDestination(),customer.customerGui.getxExit());
+		assertEquals("Customer's y gui position/destination should be at y exit",
+				customer.customerGui.getyDestination(),customer.customerGui.getyExit());
+		
+		customer.msgAnimationFinishedLeavingBank();
+		
+		assertEquals("Customer's state should be Gone ",customer.getState(),"Gone");
+	}
+	
 	
 }
