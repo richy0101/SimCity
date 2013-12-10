@@ -16,13 +16,6 @@ public class CustomerGui implements Gui{
 	private Customer agent = null;
 	private boolean isPresent = false;
 	private boolean isHungry = false;
-<<<<<<< HEAD
-=======
-	
-
-	//private HostAgent host;
-	//RestaurantGui gui;
->>>>>>> bbc1af2959397031c0fcfc7222c75a296fc1d941
 
 	private int xPos, yPos;
 	private int xDestination, yDestination;
@@ -85,10 +78,6 @@ public class CustomerGui implements Gui{
         catch(IOException e) {
         	System.out.println("Error w/ Background");
         }  
-<<<<<<< HEAD
-=======
-		//this.gui = gui;
->>>>>>> bbc1af2959397031c0fcfc7222c75a296fc1d941
 	}
 
 	public void updatePosition() {
@@ -126,7 +115,7 @@ public class CustomerGui implements Gui{
 	}
 
 	public boolean isPresent() {
-		return isPresent;
+		return true;
 	}
 	
 	public void setHungry() {

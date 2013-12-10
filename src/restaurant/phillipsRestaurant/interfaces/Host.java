@@ -9,6 +9,8 @@ public interface Host {
 	void msgCanWaiterTakeBreak(Waiter waiter);
 
 	void msgAddWaiter(Waiter waiter);
+
+	void msgAddCook(Cook cook);
 	
 
 }

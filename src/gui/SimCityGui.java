@@ -34,6 +34,7 @@ import javax.swing.event.ChangeEvent;
 
 import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
+import restaurant.phillipsRestaurant.PhillipsWaiterRole;
 import restaurant.phillipsRestaurant.gui.PhillipsRestaurantAnimationPanel;
 import restaurant.shehRestaurant.ShehCookRole;
 import restaurant.shehRestaurant.ShehCustomerRole;
@@ -550,13 +551,23 @@ public class SimCityGui {
 			
 		}
 
-		PersonAgent person1 = new PersonAgent("HuangCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
-		PersonAgent person2 = new PersonAgent("HuangWaiterNormal", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
-		PersonAgent person3 = new PersonAgent("StackWaiterShared", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
+		//PersonAgent person1 = new PersonAgent("HuangCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
+		//PersonAgent person2 = new PersonAgent("HuangWaiterNormal", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
+		//PersonAgent person3 = new PersonAgent("StackWaiterShared", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
 		PersonAgent person4 = new PersonAgent("BankTeller", "Test Person 4", 3, 1000.00, "House4", "TakesTheBus");
 		PersonAgent person5 = new PersonAgent("BankTeller", "Test Person 5", 3, 1000.00, "House5", "TakesTheBus");
 		PersonAgent person6 = new PersonAgent("Market", "Test Person 6", 3, 1000.00, "House6", "TakesTheBus");
-		
+		//PersonAgent person7 = new PersonAgent("PhillipsCook", "Test Person 7", 3, 1000.00, "House1", "TakesTheBus");
+		//PersonAgent person8 = new PersonAgent("PhillipsWaiter", "Test Person 8", 3, 1000.00, "House2", "TakesTheBus");
+		PersonAgent person9 = new PersonAgent("Unemployed", "Test Person 9", 3, 0.00, "House3", "TakesTheBus");
+		String a = "PhillipsRestaurant";
+		String b = "House1";
+		String name = "Test Person 1";
+		Role role = new PhillipsWaiterRole("PhillipsRestaurant");
+		PersonAgent p = new PersonAgent(role, a , b, name);
+		//p.msgWakeUp();
+		role.setPerson(p);
+		p.startThread();
 		
 		bus = new BusAgent(1);
 		busGui = new BusGui(bus,1); //agent, starting StopNumber

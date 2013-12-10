@@ -2,6 +2,7 @@ package restaurant.phillipsRestaurant;
 
 import agent.Agent;
 import restaurant.phillipsRestaurant.*;
+import restaurant.phillipsRestaurant.interfaces.Cook;
 import restaurant.phillipsRestaurant.interfaces.Customer;
 import restaurant.phillipsRestaurant.interfaces.Host;
 import restaurant.phillipsRestaurant.interfaces.Waiter;
@@ -27,6 +28,7 @@ public class PhillipsHostAgent extends Agent implements Host {
 
 	private ArrayList<Waiter> waiters = new ArrayList<Waiter>();
 	private Waiter waiter = null;
+	private Cook cook = null;
 
 	public PhillipsHostAgent(String name) {
 		super();
@@ -71,6 +73,10 @@ public class PhillipsHostAgent extends Agent implements Host {
 		synchronized(this.waiters){
 			waiters.add(w);
 		}
+	}
+	
+	public void msgAddCook(Cook c){
+		cook = c;
 	}
 	
 	public void msgIWantFood(Customer cust) {

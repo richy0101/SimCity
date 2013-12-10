@@ -7,6 +7,8 @@ import market.MarketCustomerRole;
 import market.MarketRole;
 import agent.Role;
 import bank.BankTellerRole;
+import restaurant.phillipsRestaurant.PhillipsCookRole;
+import restaurant.phillipsRestaurant.PhillipsWaiterRole;
 import restaurant.shehRestaurant.ShehCookRole;
 import restaurant.stackRestaurant.*;
 import restaurant.huangRestaurant.HuangCookRole;
@@ -105,18 +107,18 @@ public class RoleFactory {
 //			newRole = new NakamuraCookRole("NakamuraRestaurant");
 //			return newRole;
 //		}
-//		else if(role.equals("PhillipsWaiterNormal")) {
-//			newRole = new PhillipsWaiterNormalRole("PhillipsRestaurant");
-//			return newRole;
-//		}
+		else if(role.equals("PhillipsWaiter")) {
+			newRole = new PhillipsWaiterRole("PhillipsRestaurant");
+			return newRole;
+		}
 //		else if (role.equals("PhillipsWaiterShared")) {
 //			newRole = new PhillipsWaiterSharedRole("PhillipsRestaurant");
 //			return newRole;
 //		}
-//		else if (role.equals("PhillipsCook")) {
-//			newRole = new PhillipsCookRole("PhillipsRestaurant");
-//			return newRole;
-//		}
+		else if (role.equals("PhillipsCook")) {
+			newRole = new PhillipsCookRole("PhillipsRestaurant");
+			return newRole;
+		}
 //		else if(role.equals("HuangWaiterNormal")) {
 //			newRole = new HuangWaiterNormalRole("HuangRestaurant");
 //			return newRole;
