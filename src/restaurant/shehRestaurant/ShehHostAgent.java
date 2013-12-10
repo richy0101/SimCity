@@ -18,11 +18,12 @@ import city.helpers.Directory;
 public class ShehHostAgent extends Agent {
 	static final int NTABLES = 3;
 	public List<ShehCustomerRole> waitingCustomers = Collections.synchronizedList(new ArrayList<ShehCustomerRole>());
-	public List<ShehWaiterRole> waiters;
-	private Cashier cashier;
+	public List<ShehWaiterRole> waiters = new ArrayList<ShehWaiterRole>();
+	//private Cashier cashier;
 	
 	public List<myWaiter> breakWaiters = Collections.synchronizedList(new ArrayList<myWaiter>());
 	private List<myCustomer> customers = Collections.synchronizedList(new ArrayList<myCustomer>());
+	private ShehCookRole cook;
 	
 	public ArrayList<Table> tables;
 
@@ -31,27 +32,21 @@ public class ShehHostAgent extends Agent {
 
 	public HostGui hostGui = null;
 	
+	Boolean cookPresent = false;
 	private int counter = 0;
 	private int availableTables = NTABLES;
 	private int numOfCustomers = 0, numOfWaiters = 0;
-
-	public ShehHostAgent(String location) {
-		super();
-		
-		cashier = (ShehCashierAgent) Directory.sharedInstance().getAgents().get("ShehRestaurantCashier");
-	}
 	
-	public ShehHostAgent(String name, Vector<ShehWaiterRole> w) {
-		super();
+	ShehRestaurant restaurant;
 
-		this.name = name;
-		waiters = w;
+	public ShehHostAgent() {
+		super();
 		
-		// make some tables
+		//cashier = (ShehCashierAgent) Directory.sharedInstance().getAgents().get("ShehRestaurantCashier");
 		tables = new ArrayList<Table>(NTABLES);
 		for (int ix = 1; ix <= NTABLES; ix++) {
 			tables.add(new Table(ix));
-		}
+		} 
 	}
 	
 	public class myCustomer {
@@ -80,19 +75,22 @@ public class ShehHostAgent extends Agent {
 	public enum WaiterState
 	{Waiting, WantBreak, OnBreak, Gone, Returned};
 
-	public String getMaitreDName() {
-		return name;
-	}
-
-	public String getName() {
-		return name;
-	}
-
 	public ArrayList<Table> getTables() {
 		return tables;
 	}
 	
 	// Messages
+	public void msgWaiterIsPresent(ShehWaiterRole waiter) {
+		print(waiter.getPersonAgent().getName() + " clocked in");
+		waiters.add(waiter);
+	}
+	
+	public void msgCookIsPresent(ShehCookRole cookRole) {
+		print(cookRole.getPersonAgent().getName() + " clocked in");
+		cook = cookRole;
+		cookPresent = true;
+	}
+	
 	public void msgIWantFood(ShehCustomerRole cust) {
 		waitingCustomers.add(cust);
 		stateChanged();
@@ -158,7 +156,7 @@ public class ShehHostAgent extends Agent {
 		}
 		*/
 		
-		if(waiters.size() > 0) { //if there are waiters and customers
+		if(waiters.size() > 0 && cookPresent == true) { //if there are waiters and customers
 			if(waitingCustomers.size() >= 1) {
 				organizeCustomers();
 				
@@ -217,8 +215,12 @@ public class ShehHostAgent extends Agent {
 	}
 	
 	private void organizeCustomers() { //alerts customer which location they should wai
+		print("We have waiters and I'm going to organize them.");
 		int queue = 0;
 		int num = 0;
+		for(ShehWaiterRole w : waiters) {
+			w.setCook(cook);
+		}
 		num = (waitingCustomers.size() + queue -1) % 10;
 		queue++;
 		waitingCustomers.get(waitingCustomers.size()-1).msgThisIsYourNumber(num); //causes indexing errors
@@ -280,12 +282,16 @@ public class ShehHostAgent extends Agent {
 	public void setGui(HostGui gui) {
 		hostGui = gui;
 	}
-
+	
 	public HostGui getGui() {
 		return hostGui;
 	}
 
-	public Cashier getCashier() {
-		return cashier;
+	public void setRestaurant(ShehRestaurant rest) {
+		this.restaurant = rest;	
+	}
+	
+	public ShehRestaurant getRestaurant() {
+		return restaurant;
 	}
 }

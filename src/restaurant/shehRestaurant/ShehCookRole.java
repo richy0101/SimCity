@@ -38,15 +38,19 @@ public class ShehCookRole extends CookRole implements Cook {
 	public ShehHostAgent host;
 	private Market market1, market2; 
 	private Cashier cashier;
+	
+	private enum AgentState 
+	{NeedsToWork, Arrived, Working, GettingPaycheck, Leaving, WaitingForPaycheck};
+	AgentState state = AgentState.NeedsToWork;
 
 	
 	//FOODDATA~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	
 	//CHANGE QUANTITY OF COOK AGENT
-	FoodData steak = new FoodData("Steak", 30, 5000, 1); //CHANGE THE THIRD PARAMETER (QUANTITY): FoodData(Price, CookTime, QUANTITY)
-	FoodData chicken = new FoodData("Chicken", 20, 5000, 1); 
-	FoodData pizza = new FoodData("Pizza", 25, 5000, 1);
-	FoodData salad = new FoodData("Salad", 20, 5000, 1);
+	FoodData steak = new FoodData("Steak", 30, 5000, 10); //CHANGE THE THIRD PARAMETER (QUANTITY): FoodData(Price, CookTime, QUANTITY)
+	FoodData chicken = new FoodData("Chicken", 20, 5000, 10); 
+	FoodData pizza = new FoodData("Pizza", 25, 5000, 10);
+	FoodData salad = new FoodData("Salad", 20, 5000, 10);
 
 	private Map<String, FoodData> restaurantInventory = new HashMap<String, FoodData>(); {
 		restaurantInventory.put("Steak", steak);
@@ -61,7 +65,9 @@ public class ShehCookRole extends CookRole implements Cook {
 	public ShehCookRole(String location) {
 		super();
 		host = (ShehHostAgent) Directory.sharedInstance().getAgents().get("ShehRestaurantHost");
-
+		cashier = (Cashier) Directory.sharedInstance().getRestaurants().get(2).getCashier();
+		//instantiate markets
+		
 		cookGui = new CookGui(this);
 		
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
@@ -71,6 +77,8 @@ public class ShehCookRole extends CookRole implements Cook {
 				b.addGui(cookGui);
 			}
 		}
+		
+		state = AgentState.Arrived;
 	}
 		
 		
@@ -127,6 +135,10 @@ public class ShehCookRole extends CookRole implements Cook {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
+		if(state == AgentState.Arrived) {
+			ClockInWithHost();
+		}
+		
 		for (Order o : orders) {
 			if (o.cs == OrderCookState.Pending) {
 				CookingOrder(o);
@@ -152,6 +164,12 @@ public class ShehCookRole extends CookRole implements Cook {
 	}
 
 	// Actions
+	private void ClockInWithHost() {
+		host.msgCookIsPresent(this); 
+		cookGui.DoStandby();
+		state = AgentState.Working;
+	}
+	
 	private void CookingOrder(final Order o)	{
 		if(restaurantInventory.get(o.o).quantity == 0) {
 			print("Out of this order");
@@ -215,10 +233,10 @@ public class ShehCookRole extends CookRole implements Cook {
 		if(restaurantInventory.get("Chicken").quantity <= 1) {
 			lowItems.add("Chicken");
 		}
-		if(restaurantInventory.get("Fish").quantity <= 1) {
+		if(restaurantInventory.get("Pizza").quantity <= 1) {
 			lowItems.add("Fish");
 		}
-		if(restaurantInventory.get("Vegetarian").quantity <= 1) {
+		if(restaurantInventory.get("Salad").quantity <= 1) {
 			lowItems.add("Vegetarian");
 		}
 
