@@ -34,6 +34,7 @@ import javax.swing.event.ChangeEvent;
 
 import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
+import restaurant.phillipsRestaurant.gui.PhillipsRestaurantAnimationPanel;
 import restaurant.shehRestaurant.ShehCookRole;
 import restaurant.shehRestaurant.ShehCustomerRole;
 import restaurant.shehRestaurant.ShehWaiterRole;
@@ -118,6 +119,9 @@ public class SimCityGui {
 			else if(b.getName().toLowerCase().contains("sheh")) {
 				b.setBuildingPanel(new ShehRestaurantAnimationPanel(b, i, this));
 			}
+			else if(b.getName().toLowerCase().contains("phillips")) {
+				b.setBuildingPanel(new PhillipsRestaurantAnimationPanel(b, i, this));
+			}
 			else if(b.getName().toLowerCase().contains("tan")) {
 				b.setBuildingPanel(new TanRestaurantAnimationPanel(b, i, this));
 			}
@@ -160,6 +164,14 @@ public class SimCityGui {
         roles.put("Huang's Restaurant Waiter Normal", "HuangWaiterNormal");
         roles.put("Huang's Restaurant Waiter Shared", "HuangWaiterShared");
         roles.put("Huang's Restaurant Cook", "HuangCook");
+        
+        roles.put("Tan's Restaurant Waiter Normal", "TanWaiterNormal");
+        roles.put("Tan's Restaurant Waiter Shared", "TanWaiterShared");
+        roles.put("Tan's Restaurant Cook", "TanCook");
+        
+        roles.put("Richard's Restaurant Waiter Normal", "RichardWaiterNormal");
+        //roles.put("Richards's Restaurant Waiter Shared", "RichardWaiterShared");
+        roles.put("Richard's Restaurant Cook", "RichardCook");
         
 		frame = new JFrame();
 		frame.setResizable(false);
@@ -267,11 +279,12 @@ public class SimCityGui {
         //		occupationComboBox.addItem("Philips's Restaurant Waiter");
         //		occupationComboBox.addItem("Philips's Restaurant Cook");
         //		occupationComboBox.addItem("Philips's Restaurant Cashier");
-        //
-        //		occupationComboBox.addItem("Tan's Restaurant Host");
-        //		occupationComboBox.addItem("Tan's Restaurant Waiter");
-        //		occupationComboBox.addItem("Tan's Restaurant Cook");
-        //		occupationComboBox.addItem("Tan's Restaurant Cashier");
+        
+		//Tan
+        occupationComboBox.addItem("Tan's Restaurant Host");
+        occupationComboBox.addItem("Tan's Restaurant Waiter");
+        occupationComboBox.addItem("Tan's Restaurant Cook");
+        occupationComboBox.addItem("Tan's Restaurant Cashier");
         //
         //		occupationComboBox.addItem("Huang's Restaurant Host");
         //		occupationComboBox.addItem("Huang's Restaurant Waiter");
