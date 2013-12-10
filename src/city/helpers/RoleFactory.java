@@ -12,6 +12,10 @@ import restaurant.nakamuraRestaurant.NakamuraCustomerRole;
 import restaurant.nakamuraRestaurant.NakamuraWaiterNormalRole;
 import restaurant.nakamuraRestaurant.NakamuraWaiterSharedRole;
 import restaurant.shehRestaurant.ShehCookRole;
+import restaurant.shehRestaurant.ShehCustomerRole;
+import restaurant.shehRestaurant.ShehWaiterNormalRole;
+import restaurant.shehRestaurant.ShehWaiterRole;
+import restaurant.shehRestaurant.ShehWaiterSharedRole;
 import restaurant.stackRestaurant.*;
 import restaurant.huangRestaurant.HuangCookRole;
 import restaurant.huangRestaurant.HuangCustomerRole;
@@ -38,8 +42,8 @@ public class RoleFactory {
 		else if(role.equals("NakamuraRestaurant")) {
 			newRole = new NakamuraCustomerRole("NakamuraRestaurant");
 		}
-		else if(role.equals("Market1") || role.equals("Market2")) {
-			newRole = new MarketCustomerRole(p.getGroceriesList(), role);
+		else if(role.equals("ShehRestaurant")) {
+			newRole = new ShehCustomerRole("ShehRestaurant");
 		}
 		else if(role.equals("MarketCust")) {
 			newRole = new MarketCustomerRole(p.getGroceriesList(), "Market");
@@ -81,18 +85,24 @@ public class RoleFactory {
 			newRole = new StackCookRole("StackRestaurant");
 			return newRole;
 		}
-//		else if(role.equals("ShehWaiterNormal")) {
-//			newRole = new ShehWaiterNormalRole("ShehRestaurant");
-//			return newRole;
-//		}
-//		else if (role.equals("ShehWaiterShared")) {
-//			newRole = new ShehWaiterSharedRole("ShehRestaurant");
-//			return newRole;
-//		}
-//		else if (role.equals("ShehCook")) {
-//			newRole = new ShehCookRole("ShehRestaurant");
-//			return newRole;
-//		}
+		else if(role.equals("ShehWaiter")) {
+			newRole = new ShehWaiterRole("ShehRestaurant");
+			return newRole;
+		}
+		/*
+		else if(role.equals("ShehWaiterNormal")) {
+			newRole = new ShehWaiterNormalRole("ShehRestaurant");
+			return newRole;
+		}
+		else if (role.equals("ShehWaiterShared")) {
+			newRole = new ShehWaiterSharedRole("ShehRestaurant");
+			return newRole;
+		}
+		*/
+		else if (role.equals("ShehCook")) {
+			newRole = new ShehCookRole("ShehRestaurant");
+			return newRole;
+		}
 //		else if(role.equals("TanWaiterNormal")) {
 //			newRole = new TanWaiterNormalRole("TanRestaurant");
 //			return newRole;
