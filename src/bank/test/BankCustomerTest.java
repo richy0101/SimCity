@@ -57,8 +57,8 @@ public class BankCustomerTest extends TestCase {
 		
 		
 		assertEquals("Customer's teller number to go to should be -1 (null)",customer.getTellerNumber(),-1);
-		customer.msgHowCanIHelpYou(teller, 1);
-		assertEquals("Customer's teller number to go to should be 1",customer.getTellerNumber(),1);
+		customer.msgHowCanIHelpYou(teller, 0);
+		assertEquals("Customer's teller number to go to should be 0",customer.getTellerNumber(),0);
 		
 		customer.pickAndExecuteAnAction();
 		
@@ -83,8 +83,13 @@ public class BankCustomerTest extends TestCase {
 				customer.getPersonAgent().getFunds(),100.0);
 		
 		customer.msgDepositSuccessful();
+		assertEquals("Customer's x gui position/destination should be at x teller 1",
+				customer.customerGui.getxDestination(),87);
+		assertEquals("Customer's y gui position/destination should be at y teller 1",
+				customer.customerGui.getyDestination(),51);
 		
-		assertEquals("Customer's state should be InTransit ",customer.getState(),"InTransit");
+		assertEquals("Customer's state should be Done ",customer.getState(),"Done");
+		customer.pickAndExecuteAnAction();
 		
 		customer.msgAnimationFinishedLeavingBank();
 		
@@ -154,7 +159,7 @@ public class BankCustomerTest extends TestCase {
 		
 		customer.msgDepositSuccessful();
 		
-		assertEquals("Customer's state should be InTransit ",customer.getState(),"InTransit");
+		assertEquals("Customer's state should be Done ",customer.getState(),"Done");
 		
 		customer.msgAnimationFinishedLeavingBank();
 		
@@ -216,7 +221,7 @@ public class BankCustomerTest extends TestCase {
 		
 		assertEquals("Customer's funds should be 500 now that hes withdrawn 100",
 				customer.getPersonAgent().getFunds(),500.0);
-		assertEquals("Customer's state should be InTransit ",customer.getState(),"InTransit");
+		assertEquals("Customer's state should be Done ",customer.getState(),"Done");
 		
 		customer.pickAndExecuteAnAction();
 		
@@ -290,7 +295,7 @@ public class BankCustomerTest extends TestCase {
 		
 		assertEquals("Customer's funds should be 500 now that hes withdrawn 100",
 				customer.getPersonAgent().getFunds(),500.0);
-		assertEquals("Customer's state should be InTransit ",customer.getState(),"InTransit");
+		assertEquals("Customer's state should be Done ",customer.getState(),"Done");
 		
 		customer.pickAndExecuteAnAction();
 		
@@ -355,7 +360,7 @@ public class BankCustomerTest extends TestCase {
 		
 		assertEquals("Customer's funds should be 1400 now that hes gotten a loan of $1000",
 				customer.getPersonAgent().getFunds(),1400.0);
-		assertEquals("Customer's state should be InTransit ",customer.getState(),"InTransit");
+		assertEquals("Customer's state should be InTransit ",customer.getState(),"Done");
 		
 		customer.pickAndExecuteAnAction();
 		

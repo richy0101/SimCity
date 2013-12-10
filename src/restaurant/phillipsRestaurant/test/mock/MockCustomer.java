@@ -77,4 +77,16 @@ public class MockCustomer extends Mock implements Customer {
 		
 	}
 
+	@Override
+	public void setWaiter(Waiter waiter) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setTableNum(int tableNumber) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
