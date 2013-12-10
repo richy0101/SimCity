@@ -229,6 +229,18 @@ public class PersonAgent extends Agent implements Person {
 			print("I am unemployed!");
 			this.unemployed = true;
 		}
+		else if (job.contains("lordA")){
+			Role r = factory.createRole(job, this);
+			workDetails = new WorkDetails(r, "ApartmentA");
+		}
+		else if (job.contains("lordB")){
+			Role r = factory.createRole(job, this);
+			workDetails = new WorkDetails(r, "ApartmentB");
+		}
+		else if (job.contains("lordC")){
+			Role r = factory.createRole(job, this);
+			workDetails = new WorkDetails(r, "ApartmentC");
+		}
 		else {
 			Role r = factory.createRole(job, this);
 			//print("Role created from front end: " + r.getClass().getName());
@@ -250,22 +262,21 @@ public class PersonAgent extends Agent implements Person {
 		Directory.sharedInstance().addPerson(this);
 		homeName = housingStatus;
 		personGui = new PersonGui(this);
-		currentLocation = housingStatus;
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
-			if(homeName.toLowerCase().contains("apartmenta") || homeName.toLowerCase().contains("landlorda")) {
+			if(homeName.toLowerCase().contains("apartmenta")) {
 				homeName = "ApartmentA";
 				if(!(job.contains("lord"))){
 					TenantList.sharedInstance().addTenant(this,1);
 				}
 			}
-			else if(homeName.toLowerCase().contains("apartmentb") || homeName.toLowerCase().contains("landlordb")) {
+			else if(homeName.toLowerCase().contains("apartmentb")) {
 				homeName = "ApartmentB";
 				if(!(job.contains("lord"))){
 					TenantList.sharedInstance().addTenant(this,2);
 				}
 			}
-			else if(homeName.toLowerCase().contains("apartmentc") || homeName.toLowerCase().contains("landlordc")) {
+			else if(homeName.toLowerCase().contains("apartmentc")) {
 				homeName = "ApartmentC";
 				if(!(job.contains("lord"))){
 					TenantList.sharedInstance().addTenant(this,3);
@@ -275,6 +286,7 @@ public class PersonAgent extends Agent implements Person {
 			if (b.getName().equals(homeName)) {
 				b.addGui(personGui);
 			}
+			currentLocation = homeName;
 		}
 		//Set up inventory
 		Food initialFood = new Food("Chicken");
