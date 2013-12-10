@@ -159,7 +159,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     	
     //MARKET
     	Building market1 = new Building(432, 8, 136, 82);
-    	market1.setName("Market1");
+    	market1.setName("Market");
     	buildings.add(market1);
     	
     	Building market2 = new Building(432, 333, 137, 81);

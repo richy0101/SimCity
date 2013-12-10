@@ -53,7 +53,7 @@
 		<job>BankTeller</job>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>1000</startingFunds>
-		<housingStatus>House6</housingStatus>
+		<housingStatus>ApartmentA01</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person> 
 	<Person>  
@@ -61,7 +61,7 @@
 		<job>Market</job>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>1000</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentA02</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person> 
 	<Person>  
@@ -69,7 +69,7 @@
 		<job>Market2</job>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>1000</startingFunds>
-		<housingStatus>House1</housingStatus>
+		<housingStatus>ApartmentA03</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person> 
 	<Person>  
@@ -78,7 +78,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House2</housingStatus>
+		<housingStatus>ApartmentA04</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person> 
 	<Person>  
@@ -87,7 +87,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>100</startingFunds>
-		<housingStatus>House3</housingStatus>
+		<housingStatus>ApartmentA05</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person> 
 	<Person>  
@@ -96,7 +96,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>500</startingFunds>
-		<housingStatus>House4</housingStatus>
+		<housingStatus>ApartmentA06</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person> 
 	<Person>  
@@ -105,7 +105,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentA07</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -114,7 +114,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentA08</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -123,7 +123,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentA09</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -132,7 +132,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentA10</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -141,7 +141,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentA11</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -150,7 +150,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentA12</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -159,7 +159,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentA13</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -168,7 +168,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentA14</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -177,7 +177,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentA15</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -186,7 +186,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentB01</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -195,7 +195,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentB02</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -204,7 +204,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentB03</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -213,7 +213,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentB04</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -222,7 +222,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentB05</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -231,7 +231,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentB06</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -240,7 +240,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentB07</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -249,7 +249,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentB08</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -258,7 +258,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentB09</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -267,7 +267,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentB10</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -276,7 +276,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentB11</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -285,7 +285,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentB12</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -294,7 +294,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentB13</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -303,7 +303,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentB14</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -312,7 +312,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentB15</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -321,7 +321,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentC01</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -330,7 +330,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentC02</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -339,7 +339,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentC03</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -348,7 +348,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentC04</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -357,7 +357,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentC05</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -366,7 +366,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentC06</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -375,7 +375,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentC07</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -384,7 +384,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentC08</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -393,7 +393,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentC09</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -402,7 +402,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentC10</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -411,7 +411,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentC11</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -420,7 +420,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentC12</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -429,7 +429,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentC13</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 	<Person>  
@@ -438,7 +438,7 @@
 		<job_location></job_location>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>200</startingFunds>
-		<housingStatus>House5</housingStatus>
+		<housingStatus>ApartmentC14</housingStatus>
 		<vehicleStatus>Takes The Bus</vehicleStatus>
 	</Person>
 </city> 

@@ -17,7 +17,6 @@ import city.PersonAgent;
 public class PersonGui implements Gui {
 	
 	private PersonAgent agent = null;
-	private String apartmentLetter = null;
 	private int xMult = 0;
 	private int yMult = 0;
 	
@@ -33,12 +32,10 @@ public class PersonGui implements Gui {
 	
 	boolean isPresent = true;
 	
-	public enum CurrentAction {Cooking, Eating, Transition, Idle, Deciding, Leaving, Sleeping};
+	public enum CurrentAction {Cooking, Eating, Transition, Idle, Deciding, Leaving, Sleeping, CleanRoom1, CleanRoom2, CleanRoom3, CleanRoom4};
 	CurrentAction currentAction = CurrentAction.Idle;
 	public PersonGui(PersonAgent agent) {
 		String address = agent.getAddress();
-		
-		apartmentLetter = ApartmentHelper.sharedInstance().getApartmentLetter(address);
 		xMult = ApartmentHelper.sharedInstance().getXMultiplier(address) * 245;
 		yMult = ApartmentHelper.sharedInstance().getYMultiplier(address) * 103;
 		
@@ -156,6 +153,23 @@ public class PersonGui implements Gui {
 			currentAction = CurrentAction.Transition;
 			agent.msgActionComplete();
 		}
+		/**
+		 * Cleaning Block
+		 */
+		if(xPos == xKitchen && yPos == yKitchen && currentAction == CurrentAction.CleanRoom1) {
+			currentAction = CurrentAction.CleanRoom2;
+			xDestination = xTable;
+			yDestination = yTable;
+		}
+		if(xPos == xTable && yPos == yTable && currentAction == CurrentAction.CleanRoom2) {
+			currentAction = CurrentAction.CleanRoom3;
+			xDestination = xBed;
+			yDestination = yBed;
+		}
+		if(xPos == xBed && yPos == yBed && currentAction == CurrentAction.CleanRoom3) {
+			currentAction = CurrentAction.Transition;
+			agent.msgActionComplete();
+		}
 //		if(xPos == xBed && yPos == yBed && currentAction == CurrentAction.Sleeping) {
 //			currentAction = CurrentAction.Transition;
 //			agent.msgActionComplete();
@@ -235,5 +249,11 @@ public class PersonGui implements Gui {
 		yPos = yDoor;
 		xDestination = xBed;
 		yDestination = yBed;
+	}
+
+	public void DoClean() {
+		currentAction = CurrentAction.CleanRoom1;
+		xDestination = xKitchen;
+		yDestination = yKitchen;
 	}
 }

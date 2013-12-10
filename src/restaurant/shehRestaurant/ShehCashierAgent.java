@@ -20,11 +20,13 @@ import java.util.*;
  */
 public class ShehCashierAgent extends Agent implements Cashier {
 	public List<myCustomer> myCustomers = Collections.synchronizedList(new ArrayList<myCustomer>());
-	Bill bill;
 	public List<Bill> bills = Collections.synchronizedList(new ArrayList<Bill>());
+	
 	Timer timer = new Timer();
 	Menu menu = new Menu();
 	Table table;
+	Bill bill;
+	
 	public EventLog log = new EventLog();
 
 	private double money = 0;

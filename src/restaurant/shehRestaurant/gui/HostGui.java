@@ -59,16 +59,6 @@ public class HostGui implements Gui {
     }
 
     public void DoBringToTable(ShehCustomerRole customer, Table table) { //SEATING AT TABLE
-    		if(table.getTableNumber() == 1){
-    			xTable = 200;
-    		}
-    		if(table.getTableNumber() == 2){
-    			xTable = 100;
-    		}
-    		if(table.getTableNumber() == 3){
-    			xTable = 300;
-    		}
-    		
     		xDestination = xTable + agentSize;
     		yDestination = yTable - agentSize;
     }

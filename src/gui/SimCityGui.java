@@ -29,6 +29,7 @@ import javax.swing.event.ChangeEvent;
 import market.MarketRole;
 import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
+import restaurant.shehRestaurant.ShehWaiterRole;
 import restaurant.shehRestaurant.gui.ShehRestaurantAnimationPanel;
 import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
 import restaurant.stackRestaurant.StackCookRole;
@@ -132,12 +133,12 @@ public class SimCityGui {
 		roles.put("None", "Unemployed");
 		roles.put("Bank Teller", "BankTeller");
 		roles.put("Bank 2 Teller", "BankTeller2");
-        roles.put("Market 1 Seller", "Market1");
+        roles.put("Market 1 Seller", "Market");
         roles.put("Market 2 Seller", "Market2");
         
         roles.put("Landlord A", "LandlordA");
         roles.put("Landlord B", "LandlordB");
-        roles.put("LandLord C", "LandLordC");
+        roles.put("Landlord C", "LandlordC");
         
         roles.put("Stack's Restaurant Waiter Normal", "StackWaiterNormal");
         roles.put("Stack's Restaurant Waiter Shared", "StackWaiterShared");
@@ -235,7 +236,7 @@ public class SimCityGui {
 		
         occupationComboBox.addItem("Landlord A");
         occupationComboBox.addItem("Landlord B");
-        occupationComboBox.addItem("LandLord C");
+        occupationComboBox.addItem("Landlord C");
 		
 		//Sheh
 		occupationComboBox.addItem("Sheh's Restaurant Waiter Normal");
@@ -386,7 +387,7 @@ public class SimCityGui {
 		housingComboBox.addItem("ApartmentA12");
 		housingComboBox.addItem("ApartmentA13");
 		housingComboBox.addItem("ApartmentA14");
-		housingComboBox.addItem("ApartmentA15");
+		//housingComboBox.addItem("ApartmentA15");
 		
 		housingComboBox.addItem("ApartmentB01");
 		housingComboBox.addItem("ApartmentB02");
@@ -402,7 +403,7 @@ public class SimCityGui {
 		housingComboBox.addItem("ApartmentB12");
 		housingComboBox.addItem("ApartmentB13");
 		housingComboBox.addItem("ApartmentB14");
-		housingComboBox.addItem("ApartmentB15");
+		//housingComboBox.addItem("ApartmentB15");
 		
 		housingComboBox.addItem("ApartmentC01");
 		housingComboBox.addItem("ApartmentC02");
@@ -418,7 +419,7 @@ public class SimCityGui {
 		housingComboBox.addItem("ApartmentC12");
 		housingComboBox.addItem("ApartmentC13");
 		housingComboBox.addItem("ApartmentC14");
-		housingComboBox.addItem("ApartmentC15");
+		//housingComboBox.addItem("ApartmentC15");
 		
 		panel.add(housingComboBox);
 		
@@ -431,48 +432,39 @@ public class SimCityGui {
                     transportationComboBox.getSelectedItem() != "None" &&
                     housingComboBox.getSelectedItem() != "None") {
 					
-					//CREATE CONDITION WHERE IFF OCCUPATION COMBO BOX IS LANDLORD THEN HOUSING IS LAND LORD
-					if(occupationComboBox.getSelectedItem().toString().toLowerCase().contains("landlord")) {
-
-						System.out.println("STUBSIMCITYGUI LINE427: " + housingComboBox.getSelectedItem().toString());
-						String apartmentLetter = ApartmentHelper.sharedInstance().getApartmentLetter(housingComboBox.getSelectedItem().toString());
-						System.out.println(apartmentLetter);
+						String role = roles.get(occupationComboBox.getSelectedItem());
+						String name = nameTextField.getText();
+						int aggressivenessLevel = aggressivenessSlider.getValue();
+						double initialFunds = (double) initialFundsSlider.getValue();
+						String housing = (String) housingComboBox.getSelectedItem();
+						String transportMethod = (String) transportationComboBox.getSelectedItem();
 						
-						Role role = new Role();
-						for(Role r : roles) {
-							if(role.toString() == housingComboBox.getSelectedItem().toString()) {
-							
+						//CREATE CONDITION WHERE IFF OCCUPATION COMBO BOX IS LANDLORD THEN HOUSING IS LAND LORD
+						if(role.contains("lord")) {
+							if (role.contains("lordA")) {
+								housing = "ApartmentA15";
 							}
-						
-						PersonAgent person = new PersonAgent(roles.get("home.LandLord" + apartmentLetter),
-                                nameTextField.getText(),
-                                aggressivenessSlider.getValue(),
-                                (double)initialFundsSlider.getValue(),
-                                (String)housingComboBox.getSelectedItem(),
-                                (String)transportationComboBox.getSelectedItem());
-						
-						System.out.println("STUB simcitygui LN438");
-						
-						housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
+							else if (role.contains("lordB")) {
+								housing = "ApartmentB15";
+							}
+							else if (role.contains("lordC")) {
+								housing = "ApartmentC15";
+							}
+							//TODO you have to go through an entry set
+							PersonAgent person = new PersonAgent(role, name, aggressivenessLevel, initialFunds, housing, transportMethod);
+							/**
+							 * Remove Landlord role from being made after one has been made.
+							 */
+							occupationComboBox.removeItemAt(occupationComboBox.getSelectedIndex());
 						}
-					} 
-					else {
-						System.out.println("STUBSIMCITYGUI LINE427: " + housingComboBox.getSelectedItem().toString());
-						PersonAgent person = new PersonAgent(roles.get(occupationComboBox.getSelectedItem()),
-                                nameTextField.getText(),
-                                aggressivenessSlider.getValue(),
-                                (double)initialFundsSlider.getValue(),
-                                (String)housingComboBox.getSelectedItem(),
-                                (String)transportationComboBox.getSelectedItem());
-						
-						
-						
-						housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
-					}
-						
+						else {
+							PersonAgent person = new PersonAgent(role, name, aggressivenessLevel, initialFunds, housing, transportMethod);	
+							housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
+						}
+					} 		
 				}
 			}
-		});
+		);
 		sl_panel.putConstraint(SpringLayout.NORTH, btnCreatePerson, 6, SpringLayout.SOUTH, aggressivenessSlider);
 		sl_panel.putConstraint(SpringLayout.WEST, btnCreatePerson, 0, SpringLayout.WEST, btnPopulateCity);
 		sl_panel.putConstraint(SpringLayout.EAST, btnCreatePerson, 0, SpringLayout.EAST, btnPopulateCity);
@@ -528,7 +520,7 @@ public class SimCityGui {
 			
 		}
 		
-	
+	/*
 		String a = "StackRestaurant";
 		String b = "House1";
 		String name = "Test Person 1";
@@ -556,6 +548,29 @@ public class SimCityGui {
 		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
 		role2.setPerson(p2);
 		//p2.msgGoWork();
+	*/
+		
+		//beasdfasfasBEGINNING OF TEST CODE
+		
+		String a = "ShehRestaurant";
+		String b = "House1";
+		String name = "Test Person 1";
+		Role role;
+		role = new ShehWaiterRole("ShehRestaurant");
+		
+		/*
+		if(rand.nextInt()%2 == 0) {
+			role = new ShehWaiterSharedRole("ShehRestaurant");
+		}
+		else {
+			role = new ShehWaiterNormalRole("ShehRestaurant");
+		}
+		*/
+		PersonAgent p = new PersonAgent(role, a , b, name);
+		role.setPerson(p);
+		//p.msgWakeUp();
+		
+		//ASDF;ALKFJADS;LKFJDSA;LKFJAD;LFJASF;JASFSA END OF TEST CODE
 
 		String a3 = "StackRestaurant";
 		String b3 = "House3";
@@ -568,12 +583,12 @@ public class SimCityGui {
 		String a4 = "Bank";
 		String b4 = "House4";
 		String name4 = "Test Person 4";
-		Role role4 = new BankTellerRole("Bank2");
+		Role role4 = new BankTellerRole("Bank1");
 		PersonAgent p4 = new PersonAgent(role4, a4 , b4, name4);
 		role4.setPerson(p4);
 		//p4.msgGoWork();
 		
-		String a5 = "Bank";
+		String a5 = "Bank2";
 		String b5 = "House5";
 		String name5 = "BankLoanPerson5";
 		Role role5 = new BankTellerRole("Bank2");
@@ -581,10 +596,10 @@ public class SimCityGui {
 		role5.setPerson(p5);
 		p5.msgTestWakeUp();
         
-		MarketRole role6 = new MarketRole("Market1");
-		Directory.sharedInstance().marketDirectory.get("Market1").setWorker(role6);
+		MarketRole role6 = new MarketRole("Market");
+		Directory.sharedInstance().marketDirectory.get("Market").setWorker(role6);
 		
-		String a6 = "Market1";
+		String a6 = "Market";
 		String b6 = "House1";
 		String name6 = "Test Person 6";
 		PersonAgent p6 = new PersonAgent(role6, a6 , b6, name6);
@@ -684,10 +699,10 @@ public class SimCityGui {
 ////		p5.msgWakeUp();
 //		//p5.startThread();
 //        
-//		MarketRole role6 = new MarketRole("Market1");
-//		Directory.sharedInstance().marketDirectory.get("Market1").setWorker(role6);
+//		MarketRole role6 = new MarketRole("Market");
+//		Directory.sharedInstance().marketDirectory.get("Market").setWorker(role6);
 //		
-//		String a6 = "Market1";
+//		String a6 = "Market";
 //		String b6 = "House6";
 //		String name6 = "Test Person 6";
 //		PersonAgent p6 = new PersonAgent(role6, a6 , b6, name6);

@@ -7,6 +7,5 @@ public class ShehWaiterNormalRole extends ShehWaiterRole {
 	public ShehWaiterNormalRole(String name, Cashier ca, ShehCookRole co,
 			ShehHostAgent h) {
 		super(name, ca, co, h);
-		// TODO Auto-generated constructor stub
 	}
 }

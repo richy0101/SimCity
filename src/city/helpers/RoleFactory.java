@@ -4,12 +4,11 @@ import home.LandlordRole;
 import city.PersonAgent;
 import city.UnemployedRole;
 import market.MarketCustomerRole;
+import market.MarketRole;
 import agent.Role;
 import bank.BankTellerRole;
 import restaurant.shehRestaurant.ShehCookRole;
 import restaurant.stackRestaurant.*;
-
-
 import restaurant.huangRestaurant.HuangCookRole;
 import restaurant.huangRestaurant.HuangCustomerRole;
 import restaurant.huangRestaurant.HuangWaiterNormalRole;
@@ -32,8 +31,17 @@ public class RoleFactory {
 		else if(role.equals("HuangRestaurant")) {
 			newRole = new HuangCustomerRole("HuangRestaurant");
 		}
-		else if(role.equals("Market1") || role.equals("Market2")) {
-			newRole = new MarketCustomerRole(p.getGroceriesList(), role);
+		else if(role.equals("MarketCust")) {
+			newRole = new MarketCustomerRole(p.getGroceriesList(), "Market");
+		}
+		else if(role.equals("Market2Cust")) {
+			newRole = new MarketCustomerRole(p.getGroceriesList(), "Market2");
+		}
+		else if(role.equals("Market")) {
+			newRole = new MarketRole("Market");
+		}
+		else if(role.equals("Market2")) {
+			newRole = new MarketRole("Market2");
 		}
 		else if(role.equals("HuangWaiterNormal")) {
 			newRole = new HuangWaiterNormalRole("HuangRestaurant");
@@ -132,15 +140,15 @@ public class RoleFactory {
 			return newRole;
 		}
 		else if (role.equals("LandlordA")) {
-			newRole = new LandlordRole("AppartmentA", 1);
+			newRole = new LandlordRole("ApartmentA", 1);
 			return newRole;
 		}
 		else if (role.equals("LandlordB")) {
-			newRole = new LandlordRole("AppartmentB", 2);
+			newRole = new LandlordRole("ApartmentB", 2);
 			return newRole;
 		}
 		else if (role.equals("LandlordC")) {
-			newRole = new LandlordRole("AppartmentC", 3);
+			newRole = new LandlordRole("ApartmentC", 3);
 			return newRole;
 		}
 		newRole.setPerson(p);

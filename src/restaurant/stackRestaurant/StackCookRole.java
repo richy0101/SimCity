@@ -76,7 +76,7 @@ public class StackCookRole extends CookRole implements Cook {
 		
 		host = (Host) Directory.sharedInstance().getAgents().get("StackRestaurantHost");
 		cashier = (Cashier) Directory.sharedInstance().getRestaurants().get(0).getCashier();
-		market1 = (Market) Directory.sharedInstance().marketDirectory.get("Market1").getWorker();
+		market1 = (Market) Directory.sharedInstance().marketDirectory.get("Market").getWorker();
 		markets.add(new MyMarket(market1));
 		
 		
@@ -234,6 +234,9 @@ public class StackCookRole extends CookRole implements Cook {
 		host.msgAddCook(this);
 		cookGui.DoGoHome();
 		state = AgentState.Working;
+		
+		//TEST REMOVE ME
+		orderIt("Steak");
 	}
 	
 	private void leaveRestaurant() {
