@@ -112,6 +112,7 @@ public class TransportationGui implements Gui {
 			if (xPos == xDestination && yPos == yDestination) {
 				agent.msgActionComplete();
 				currentAction = CurrentAction.Idle;
+				return;
 			}
 			/**
 			 * Breaking Out Block
@@ -192,48 +193,54 @@ public class TransportationGui implements Gui {
 		/**
 		 * Outer Loop Logic
 		 */
-		if ((xPos == outerLeftLane) && (yPos != outerBottomLane)) { //at left, coming down
-            yPos++;
+		if (currentLoop == Loop.Outer) {
+			if ((xPos == outerLeftLane) && (yPos != outerBottomLane)) { //at left, coming down
+	            yPos++;
+			}
+			else if ((yPos == outerBottomLane) && (xPos != outerRightLane)) { //at bottom, going right
+	            xPos++;
+			}
+	        else if ((xPos == outerRightLane) && (yPos != outerTopLane)) {//at right, going up
+	            yPos--;
+	        }
+	        else if ((yPos == outerTopLane) && (xPos != outerLeftLane)) {//at top, going left
+	            xPos--;
+	        }
 		}
-		else if ((yPos == outerBottomLane) && (xPos != outerRightLane)) { //at bottom, going right
-            xPos++;
-		}
-        else if ((xPos == outerRightLane) && (yPos != outerTopLane)) {//at right, going up
-            yPos--;
-        }
-        else if ((yPos == outerTopLane) && (xPos != outerLeftLane)) {//at top, going left
-            xPos--;
-        }
 		/**
 		 * Inner Loop Right Logic
 		 */
-		if ((xPos == IRLeftLane) && (yPos != IRBottomLane)) { //at left, coming down
-            yPos++;
+		else if (currentLoop == Loop.InnerRight) {
+			if ((xPos == IRLeftLane) && (yPos != IRBottomLane)) { //at left, coming down
+	            yPos++;
+			}
+			else if ((yPos == IRBottomLane) && (xPos != IRRightLane)) { //at bottom, going right
+	            xPos++;
+			}
+	        else if ((xPos == IRRightLane) && (yPos != IRTopLane)) {//at right, going up
+	            yPos--;
+	        }
+	        else if ((yPos == IRTopLane) && (xPos != IRLeftLane)) {//at top, going left
+	            xPos--;
+	        }
 		}
-		else if ((yPos == IRBottomLane) && (xPos != IRRightLane)) { //at bottom, going right
-            xPos++;
-		}
-        else if ((xPos == IRRightLane) && (yPos != IRTopLane)) {//at right, going up
-            yPos--;
-        }
-        else if ((yPos == IRTopLane) && (xPos != IRLeftLane)) {//at top, going left
-            xPos--;
-        }
 		/**
 		 * Inner Loop Left Logic
 		 */
-		if ((xPos == ILLeftLane) && (yPos != ILBottomLane)) { //at left, coming down
-            yPos++;
+		else if (currentLoop == Loop.InnerRight) {
+			if ((xPos == ILLeftLane) && (yPos != ILBottomLane)) { //at left, coming down
+	            yPos++;
+			}
+			else if ((yPos == ILBottomLane) && (xPos != ILRightLane)) { //at bottom, going right
+	            xPos++;
+			}
+	        else if ((xPos == ILRightLane) && (yPos != ILTopLane)) {//at right, going up
+	            yPos--;
+	        }
+	        else if ((yPos == ILTopLane) && (xPos != ILLeftLane)) {//at top, going left
+	            xPos--;
+	        }
 		}
-		else if ((yPos == ILBottomLane) && (xPos != ILRightLane)) { //at bottom, going right
-            xPos++;
-		}
-        else if ((xPos == ILRightLane) && (yPos != ILTopLane)) {//at right, going up
-            yPos--;
-        }
-        else if ((yPos == ILTopLane) && (xPos != ILLeftLane)) {//at top, going left
-            xPos--;
-        }
 	}
 	private void evaluateNextMove() {
 		if(currentLoop == destinationLoop) {
