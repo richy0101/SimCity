@@ -10,15 +10,22 @@ public class CookGui implements Gui {
 
     private NakamuraCookRole agent = null;
 
-    private int xPos = 575, yPos = 100;//default Cook position
-    private int xDestination = 575, yDestination = 100;//default start position
+    private static final int xStart = 575, yStart = -20;//default Cook position
     private ArrayList<String> Cooking = new ArrayList<String>();
     private ArrayList<String> Plating = new ArrayList<String>();
+    enum Command {noCommand, moving};
+    Command command;
 
+    public int xPos = xStart;
+    public int yPos = yStart;
+    public int xDestination = xStart;
+    public int yDestination = yStart;
     public static final int xCooking = 575;
     public static final int yCooking = 210;
     public static final int xPlating = 575;
     public static final int yPlating = 110;
+    public static final int xCashier = 500;
+    public static final int yCashier = 210;
 
     public CookGui(NakamuraCookRole cook) {
         this.agent = cook;
@@ -35,13 +42,11 @@ public class CookGui implements Gui {
         else if (yPos > yDestination)
             yPos--;
 
-//        if (xPos == xDestination && yPos == yDestination
-//        		& (xDestination > 0) & (yDestination > 0)) {
-//        }
-//        else if (xPos == -25 && yPos == -25 && xDestination == -25 && yDestination == -25){
-//        	xDestination = -20;
-//        	yDestination = -20;
-//        }
+        if (xPos == xDestination && yPos == yDestination
+        		&& command == Command.moving) {
+        	agent.msgActionComplete();
+        	command = Command.noCommand;
+        }
     }
 
     public void draw(Graphics2D g) {
@@ -65,13 +70,25 @@ public class CookGui implements Gui {
     public void DoGoToCooking() {
     	xDestination = xCooking;
     	yDestination = yCooking;
-    	agent.msgActionComplete();
+    	command = Command.moving;
     }
 
     public void DoGoToPlating() {
         xDestination = xPlating;
         yDestination = yPlating;
-        agent.msgActionComplete();
+        command = Command.moving;
+    }
+    
+    public void DoGoToCashier() {
+        xDestination = xCashier;
+        yDestination = yCashier;
+        command = Command.moving;    	
+    }
+    
+    public void DoLeaveRestaurant() {
+    	xDestination = xStart;
+    	yDestination = yStart;
+    	command = Command.moving;
     }
     
     public void AddCooking(String food) {

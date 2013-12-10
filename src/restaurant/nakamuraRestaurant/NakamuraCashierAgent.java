@@ -103,13 +103,13 @@ public class NakamuraCashierAgent extends CashierAgent implements Cashier{
 		stateChanged();
 	}
 	
-	public void msgBillIsCorrect(String choice, int amount) {
+	public void msgBillIsCorrect(List<String> choices, int amount) {
 		print("Received msgBillIsCorrect");
 		
 		synchronized(marketBills) {
 			for(MarketBill b : marketBills) {
 				if(b.state == billState.BeingVerified &&
-					b.getChoice() == choice &&
+					b.getChoices() == choices &&
 					b.getAmount() == amount) {
 					
 					b.state = billState.Verified;
@@ -213,7 +213,7 @@ public class NakamuraCashierAgent extends CashierAgent implements Cashier{
 	}
 	
 	private void VerifyMarketBill(MarketBill bill) {
-		cook.msgVerifyMarketBill(bill.getChoice(), bill.getAmount());
+		cook.msgVerifyMarketBill(bill.getChoices(), bill.getAmount());
 		bill.state = billState.BeingVerified;
 	}
 	
@@ -254,8 +254,8 @@ public class NakamuraCashierAgent extends CashierAgent implements Cashier{
 			return marketcheck.getMarket();
 		}
 		
-		public String getChoice() {
-			return marketcheck.getChoice();
+		public List<String> getChoices() {
+			return marketcheck.getChoices();
 		}
 		
 		public int getAmount() {
