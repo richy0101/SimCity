@@ -929,4 +929,10 @@ public class PersonAgent extends Agent implements Person {
 	public String getAddress() {
 		return homeName; 
 	}
+	public String getCurrentLocation() {
+		return currentLocation;
+	}
+	public void addRole(Role t) {
+		roles.add(t);
+	}
 }
