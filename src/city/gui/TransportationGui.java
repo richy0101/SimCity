@@ -134,7 +134,7 @@ public class TransportationGui implements Gui {
 				yPos--;
 				return;
 			}
-			else if(doneBreaking(Cross1X, Cross1Y)){
+			else if(currentAction == CurrentAction.BreakOutFromTop && doneBreaking(Cross1X, Cross1Y)){
 				//System.out.println("broken out");
 				currentLoop = Loop.Outer;
 				evaluateNextMove();
@@ -144,7 +144,7 @@ public class TransportationGui implements Gui {
 				yPos++;
 				return;
 			}
-			else if(doneBreaking(Cross6X, Cross6Y)) {
+			else if(currentAction == CurrentAction.BreakOutFromBottom && doneBreaking(Cross6X, Cross6Y)) {
 				//System.out.println("broken out");
 				currentLoop = Loop.Outer;
 				evaluateNextMove();
@@ -167,7 +167,7 @@ public class TransportationGui implements Gui {
 			if (currentAction == CurrentAction.BreakInFromTop && !doneBreaking(Cross2X, Cross2Y)) {
 				yPos++;
 			}
-			else if(doneBreaking(Cross2X, Cross2Y)) {
+			else if(currentAction == CurrentAction.BreakInFromTop && doneBreaking(Cross2X, Cross2Y)) {
 				//System.out.println("broken out");
 				currentLoop = Loop.InnerLeft;
 				evaluateNextMove();
@@ -176,7 +176,7 @@ public class TransportationGui implements Gui {
 			if (currentAction == CurrentAction.BreakInFromBottom && !doneBreaking(Cross5X, Cross5Y)) {
 				yPos--;
 			}
-			else if(doneBreaking(Cross5X, Cross5Y)) {
+			else if(currentAction == CurrentAction.BreakInFromBottom && doneBreaking(Cross5X, Cross5Y)) {
 				//System.out.println("broken in to 5");
 				currentLoop = Loop.InnerRight;
 				evaluateNextMove();
@@ -245,7 +245,7 @@ public class TransportationGui implements Gui {
 		/**
 		 * Inner Loop Left Logic
 		 */
-		else if (currentLoop == Loop.InnerRight) {
+		else if (currentLoop == Loop.InnerLeft) {
 			if ((xPos == ILLeftLane) && (yPos != ILBottomLane)) { //at left, coming down
 	            yPos++;
 			}
@@ -262,6 +262,7 @@ public class TransportationGui implements Gui {
 	}
 	private void evaluateNextMove() {
 		if(currentLoop == destinationLoop) {
+			currentAction = CurrentAction.Travelling;
 			ContinueLooping();
 		}
 		else if (destinationLoop == Loop.InnerLeft || destinationLoop == Loop.InnerRight) {

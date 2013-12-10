@@ -149,9 +149,11 @@ public class TransportationRole extends Role implements Transportation  {
 		setState(TransportationState.InTransit);
 
 		if (getPersonAgent().getTransportationMethod().contains("Bus")) {
-			
 			startStop = BusHelper.sharedInstance().busStopToString.get(currentLocation);
 			endStop = BusHelper.sharedInstance().busStopToString.get(destination);
+			
+			startStopNumber = BusHelper.sharedInstance().busStopToInt.get(currentLocation);
+			finalStopNumber = BusHelper.sharedInstance().busStopToInt.get(destination);
 			guiToStop = new TransportationGui(this, currentLocation, startStop);
 			print("Want " + startStop);
 			

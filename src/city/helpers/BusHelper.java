@@ -95,6 +95,31 @@ public class BusHelper {
 
 		
 	}
+	public Map<String, Integer> busStopToInt = new HashMap<String, Integer>(); {
+		busStopToInt.put("Bank", 4);
+		busStopToInt.put("Bank2", 3);
+		busStopToInt.put("House1", 1);
+		busStopToInt.put("House2", 4);
+		busStopToInt.put("House3", 3);
+		busStopToInt.put("House4", 3);
+		busStopToInt.put("House5", 2);
+		busStopToInt.put("House6", 2);
+		
+		busStopToInt.put("ApartmentA", 1);
+		busStopToInt.put("ApartmentB", 3);
+		busStopToInt.put("ApartmentC", 2);
+		
+		busStopToInt.put("Market", 3);
+		busStopToInt.put("Market2", 2);
+		
+		busStopToInt.put("StackRestaurant", 1);
+
+		busStopToInt.put("HuangRestaurant", 4);
+
+		busStopToInt.put("ShehRestaurant", 2);
+
+		
+	}
 		
 //STREETCORNERS
 	
