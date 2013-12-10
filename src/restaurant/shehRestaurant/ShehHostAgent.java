@@ -4,9 +4,12 @@ import agent.Agent;
 import agent.Role;
 import restaurant.shehRestaurant.gui.HostGui;
 import restaurant.shehRestaurant.helpers.Table;
+import restaurant.shehRestaurant.interfaces.Cashier;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
+
+import city.helpers.Directory;
 
 /**
  * Restaurant Host Agent
@@ -16,6 +19,7 @@ public class ShehHostAgent extends Agent {
 	static final int NTABLES = 3;
 	public List<ShehCustomerRole> waitingCustomers = Collections.synchronizedList(new ArrayList<ShehCustomerRole>());
 	public List<ShehWaiterRole> waiters;
+	private Cashier cashier;
 	
 	public List<myWaiter> breakWaiters = Collections.synchronizedList(new ArrayList<myWaiter>());
 	private List<myCustomer> customers = Collections.synchronizedList(new ArrayList<myCustomer>());
@@ -31,6 +35,12 @@ public class ShehHostAgent extends Agent {
 	private int availableTables = NTABLES;
 	private int numOfCustomers = 0, numOfWaiters = 0;
 
+	public ShehHostAgent(String location) {
+		super();
+		
+		cashier = (ShehCashierAgent) Directory.sharedInstance().getAgents().get("ShehRestaurantCashier");
+	}
+	
 	public ShehHostAgent(String name, Vector<ShehWaiterRole> w) {
 		super();
 
@@ -273,5 +283,9 @@ public class ShehHostAgent extends Agent {
 
 	public HostGui getGui() {
 		return hostGui;
+	}
+
+	public Cashier getCashier() {
+		return cashier;
 	}
 }
