@@ -1,6 +1,7 @@
 package restaurant.shehRestaurant;
 
 import agent.Agent;
+import restaurant.CashierAgent;
 import restaurant.shehRestaurant.helpers.Bill;
 import restaurant.shehRestaurant.helpers.Bill.PayCheckBillState;
 import restaurant.shehRestaurant.helpers.Menu;
@@ -17,7 +18,7 @@ import java.util.*;
 /**
  * Restaurant Cashier Agent
  */
-public class ShehCashierAgent extends Agent implements Cashier {
+public class ShehCashierAgent extends CashierAgent implements Cashier {
 	public List<myCustomer> myCustomers = Collections.synchronizedList(new ArrayList<myCustomer>());
 	public List<Bill> bills = Collections.synchronizedList(new ArrayList<Bill>());
 	

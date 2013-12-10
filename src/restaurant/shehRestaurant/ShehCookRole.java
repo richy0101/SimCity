@@ -13,13 +13,13 @@ import restaurant.shehRestaurant.helpers.Bill;
 import restaurant.shehRestaurant.helpers.Order.OrderMarketState;
 import restaurant.shehRestaurant.interfaces.Cashier;
 import restaurant.shehRestaurant.interfaces.Cook;
-import restaurant.shehRestaurant.interfaces.Market;
 import gui.Building;
 import gui.Gui;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import market.Market;
 import city.helpers.Directory;
 
 /**
@@ -65,11 +65,12 @@ public class ShehCookRole extends CookRole implements Cook {
 	public ShehCookRole(String location) {
 		super();
 		host = (ShehHostAgent) Directory.sharedInstance().getAgents().get("ShehRestaurantHost");
-		cashier = (Cashier) Directory.sharedInstance().getRestaurants().get(2).getCashier();
+		cashier = (Cashier) Directory.sharedInstance().getAgents().get("ShehRestaurantCashier");
 		//instantiate markets
 		
 		cookGui = new CookGui(this);
-		
+		market1 = Directory.sharedInstance().getMarkets().get(0);
+		market2 = Directory.sharedInstance().getMarkets().get(1);
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		
 		for(Building b : buildings) {
@@ -104,7 +105,7 @@ public class ShehCookRole extends CookRole implements Cook {
 		stateChanged();
 	}
 	
-	public void msgHereIsReplenishment(Order o, int quantity) {
+	public void msgMarketDeliveringOrder(Order o, int quantity) {
 		//update inventory
 		
 		for(int i = 0; i < o.list.size(); i++) {
@@ -115,9 +116,9 @@ public class ShehCookRole extends CookRole implements Cook {
 		print("Shipment from market received!");
 	}
 	
-	public void msgCannotFulfillOrder(String o) {
-		print("Need to order " + o + " from another market.");
-		orders.add(new Order(o, OrderCookState.Ordering));
+	public void msgInventoryOut(List<String> order) {
+		print("Need to order " + order + " from another market.");
+		orders.add(new Order(order, OrderCookState.Ordering));
 		stateChanged();
 	}
 	
@@ -225,7 +226,7 @@ public class ShehCookRole extends CookRole implements Cook {
 		print("Checking inventory.");
 		
 		//search inventory for low items
-		Vector<String> lowItems = new Vector<String>();
+		List<String> lowItems = new ArrayList<String>();
 		
 		if(restaurantInventory.get("Steak").quantity <= 1) {
 			lowItems.add("Steak");
@@ -244,7 +245,12 @@ public class ShehCookRole extends CookRole implements Cook {
 		//send order
 		if(lowItems.size() > 0) {
 			print("We have low inventory, must order from market.");
-			market1.msgOrderForReplenishment(lowItems, this, cashier);
+			if(market1.isOpen())
+				market1.getWorker().msgOrderFood(this, cashier, lowItems, 5);
+			else if(market2.isOpen())
+				market1.getWorker().msgOrderFood(this, cashier, lowItems, 5);
+			else
+				print("All markets closed.");
 		}
 		else
 			print("We have plenty of inventory.");
@@ -254,9 +260,12 @@ public class ShehCookRole extends CookRole implements Cook {
 	
 	private void ReOrder(Order o) {
 		print("Reordering from another market.");
-		Vector<String> neededItem = new Vector<String>();
+		List<String> neededItem = new ArrayList<String>();
 		neededItem.add(o.o);
-		market2.msgOrderForReplenishment(neededItem, this, cashier);
+		if(market2.isOpen())
+			market2.getWorker().msgOrderFood(this, cashier, neededItem, 5);
+		else
+			print("market2 closed");
 		o.cs = OrderCookState.Nothing;
 	}
 	
