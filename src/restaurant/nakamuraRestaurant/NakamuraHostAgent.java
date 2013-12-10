@@ -1,37 +1,32 @@
 package restaurant.nakamuraRestaurant;
 
-import agent.Agent;
-import agent.Role;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import restaurant.nakamuraRestaurant.gui.HostGui;
+import agent.Agent;
 
 /**
- * Restaurant Host Agent
+ * NakamuraRestaurant Host Agent
  */
-//We only have 2 types of agents in this prototype. A customer and an agent that
-//does all the rest. Rather than calling the other agent a waiter, we called him
-//the HostAgent. A Host is the manager of a restaurant who sees that all
-//is proceeded as he wishes.
 public class NakamuraHostAgent extends Agent {
-	static final int NTABLES = 4;//a global for the number of tables.
-	//Notice that we implement waitingCustomers using ArrayList, but type it
-	//with List semantics.
+	static final int NTABLES = 4;
 	public List<NakamuraCustomerRole> waitingCustomers
-	= Collections.synchronizedList(new ArrayList<NakamuraCustomerRole>());
+		= Collections.synchronizedList(new ArrayList<NakamuraCustomerRole>());
     private List<Waiters> waiters = Collections.synchronizedList(new ArrayList<Waiters>());
 	public Collection<Table> tables;
 	public enum TableState {empty, occupied, dirty};
-	public enum WaiterState {working, askedforbreak, onbreak};
+	public enum WaiterState {arrived, working, askedforbreak, onbreak};
 	private Semaphore actionComplete = new Semaphore(0,true);
-	//note that tables is typed with Collection semantics.
-	//Later we will see how it is implemented
 
 	private String name;
 
 	public HostGui hostGui = null;
+	public NakamuraCookRole cook = null;
+	boolean newCook = false;
 
 	public NakamuraHostAgent(String name) {
 		super();
@@ -52,11 +47,11 @@ public class NakamuraHostAgent extends Agent {
 		return name;
 	}
 
-	public List getWaitingCustomers() {
+	public List<NakamuraCustomerRole> getWaitingCustomers() {
 		return waitingCustomers;
 	}
 
-	public Collection getTables() {
+	public Collection<Table> getTables() {
 		return tables;
 	}
 	
@@ -69,18 +64,42 @@ public class NakamuraHostAgent extends Agent {
 		}
 		return true;
 	}
-	
-	public void addWaiter(NakamuraWaiterRole w) {
-		waiters.add(new Waiters(w));
-	}
 	// Messages
+	
+	public void msgNewWaiter(NakamuraWaiterRole waiter) {
+		waiters.add(new Waiters(waiter));
+		stateChanged();
+	}
+	
+	public void msgWaiterLeaving(NakamuraWaiterRole waiter) {
+		synchronized(waiters) {
+			for(Waiters w : waiters) {
+				if(w.waiter == waiter) {
+					waiters.remove(w);
+					break;
+				}
+			}
+		}
+		
+		stateChanged();
+	}
+	
+	public void msgNewCook(NakamuraCookRole c) {
+		this.cook = c;
+		newCook = true;
+		stateChanged();
+	}
+	
+	public void msgCookLeaving(NakamuraCookRole c) {
+		this.cook = null;
+		stateChanged();
+	}
 
 	public void msgIWantFood(NakamuraCustomerRole cust) {
 		print("Received msgIWantFood");
 		if(!tablesFull())
 			waitingCustomers.add(cust);
-		else
-			cust.msgRestaurantFull();
+		
 		stateChanged();
 	}
 	
@@ -139,6 +158,12 @@ public class NakamuraHostAgent extends Agent {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
+		
+		if(newCook) {
+			NotifyWaitersOfCook();
+			return true;
+		}
+		
 		synchronized(tables) {
 			for (Table table : tables) {
 				if (table.s == TableState.dirty) {
@@ -149,7 +174,13 @@ public class NakamuraHostAgent extends Agent {
 		}
 		
 		synchronized(waiters) {
-			for (Waiters w : waiters) {
+			for(Waiters w : waiters) {
+				if(w.state == WaiterState.arrived) {
+					PutWaiterToWork(w);
+				}
+			}
+			
+			for(Waiters w : waiters) {
 				if(w.state == WaiterState.askedforbreak) {
 					if(waiters.size() > 1) {	//Only 1 Waiter
 						for(Waiters wait : waiters) {
@@ -176,6 +207,16 @@ public class NakamuraHostAgent extends Agent {
             so that table is unoccupied and customer is waiting.
             If so seat him at the table.
 		 */
+		if(cook == null || waiters.isEmpty()) {
+			synchronized(waitingCustomers) {
+				for(NakamuraCustomerRole customer : waitingCustomers) {
+					customer.msgRestaurantClosed();
+				}
+				
+				waitingCustomers.clear();
+			}
+			return true;
+		}
 		
 		synchronized(tables) {
 			for (Table table : tables) {
@@ -190,17 +231,17 @@ public class NakamuraHostAgent extends Agent {
 			}
 		}
 		
-		if(!waitingCustomers.isEmpty())  {
-			hostGui.DoUpdateSeat(waitingCustomers);
-			try{
-				actionComplete.acquire();
-			} 
-			catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
-			return true;
-		}
+//		if(!waitingCustomers.isEmpty())  {
+//			hostGui.DoUpdateSeat(waitingCustomers);
+//			try{
+//				actionComplete.acquire();
+//			} 
+//			catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}			
+//			return true;
+//		}
 
 		return false;
 		//we have tried all our rules and found
@@ -214,7 +255,7 @@ public class NakamuraHostAgent extends Agent {
 		int least = 0;
 		synchronized(waiters) {
 			for(Waiters w: waiters){ //Find waiter with least customers
-				if(w.getCustomers() < waiters.get(least).getCustomers() && w.state != WaiterState.onbreak)
+				if(w.getCustomers() < waiters.get(least).getCustomers() && w.state == WaiterState.working)
 						least = waiters.indexOf(w);		
 			}
 		}
@@ -234,14 +275,20 @@ public class NakamuraHostAgent extends Agent {
 		}
 		table.setUnoccupied();	
 	}
-//	// The animation DoXYZ() routines
-//	private void DoSeatCustomer(CustomerAgent customer, Table table) {
-//		//Notice how we print "customer" directly. It's toString method will do it.
-//		//Same with "table"
-//		print("Seating " + customer + " at " + table);
-//		hostGui.DoBringToTable(customer, table.tableNumber); 
-//
-//	}
+	
+	private void PutWaiterToWork(Waiters w) {
+		w.waiter.msgSetCook(cook);
+		w.state = WaiterState.working;
+	}
+	
+	private void NotifyWaitersOfCook() {
+		synchronized(waiters) {
+			for(Waiters w : waiters) {
+				w.waiter.msgSetCook(cook);
+			}
+		}
+		newCook = false;
+	}
 
 	//utilities
 
@@ -300,7 +347,7 @@ public class NakamuraHostAgent extends Agent {
 
 		Waiters(NakamuraWaiterRole w) {
 			this.waiter = w;
-			this.state = WaiterState.working;
+			this.state = WaiterState.arrived;
 		}
 
 		void addCustomer() {
@@ -313,16 +360,6 @@ public class NakamuraHostAgent extends Agent {
 		
 		int getCustomers() {
 			return numCustomers;
-		}
-	}
-	
-	private class WaitingCustomer {
-		NakamuraCustomerRole c;
-		int seat;
-		
-		WaitingCustomer(NakamuraCustomerRole c, int seat) {
-			this.c = c;
-			this.seat = seat;
 		}
 	}
 }

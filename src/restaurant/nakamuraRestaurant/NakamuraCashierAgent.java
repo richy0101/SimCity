@@ -45,7 +45,7 @@ public class NakamuraCashierAgent extends CashierAgent implements Cashier{
 
 		this.name = name;
 		menu = new Menu();
-		cash = 50.00;
+		cash = 10000.00;
 		log = new EventLog();
 	}
 
