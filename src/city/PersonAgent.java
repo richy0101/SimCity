@@ -131,8 +131,8 @@ public class PersonAgent extends Agent implements Person {
 		rentDue = false;
 		hasWorked = false;
 		aggressivenessLevel = 1;
-		transMethod = TransportationMethod.TakesTheBus;
-		//transMethod = TransportationMethod.OwnsACar;
+		//transMethod = TransportationMethod.TakesTheBus;
+		transMethod = TransportationMethod.OwnsACar;
 		Directory.sharedInstance().addPerson(this);
 		//Set up inventory
 		Food initialFood = new Food("Chicken");

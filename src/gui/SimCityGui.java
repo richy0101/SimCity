@@ -7,6 +7,7 @@ import javax.swing.*;
 
 import city.BusAgent;
 import city.PersonAgent;
+import city.TrafficAgent;
 import city.gui.BusGui;
 import city.helpers.ApartmentHelper;
 import city.helpers.Clock;
@@ -49,6 +50,9 @@ public class SimCityGui {
 	BusAgent bus2;
 	BusGui busGui;
 	BusGui busGui2;
+	TrafficAgent trafficLight;
+	TrafficAgent trafficLight1;
+	TrafficAgent trafficLight2;
 	private JPanel panel;
 	private JTabbedPane tabbedPane;
 	
@@ -608,6 +612,15 @@ public class SimCityGui {
 		macroAnimationPanel.addGui(busGui2);
 		bus2.startThread();
 		
+		
+		trafficLight = new TrafficAgent();
+		trafficLight.startThread();
+		trafficLight1 = new TrafficAgent();
+		trafficLight1.startThread();
+		trafficLight2 = new TrafficAgent();
+		trafficLight2.startThread();
+		
+		
 		/**
 		 End of Hard Code SuperNorm
 		 */
@@ -718,6 +731,14 @@ public class SimCityGui {
 	
 	public BusAgent getBus() {
 		return bus;
+	}
+	
+	public TrafficAgent getTrafficLight1(){
+		return trafficLight1;
+	}
+	
+	public TrafficAgent getTrafficLight2(){
+		return trafficLight2;
 	}
 
 	public void setUniqueBuildingPanel(String name) {
