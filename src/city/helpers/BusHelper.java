@@ -51,7 +51,7 @@ public class BusHelper {
 	
 	public Map<String, Coordinate> busStopEvaluator = new HashMap<String, Coordinate>(); {
 		busStopEvaluator.put("Bank", busStop4Location);
-		
+		busStopEvaluator.put("Bank2", busStop3Location);
 		busStopEvaluator.put("House1", busStop1Location);
 		busStopEvaluator.put("House2", busStop4Location);
 		busStopEvaluator.put("House3", busStop3Location);
@@ -63,7 +63,7 @@ public class BusHelper {
 		busStopEvaluator.put("ApartmentB", busStop3Location);
 		busStopEvaluator.put("ApartmentC", busStop2Location);
 		
-		busStopEvaluator.put("Market1", busStop3Location);
+		busStopEvaluator.put("Market", busStop3Location);
 		busStopEvaluator.put("Market2", busStop2Location);
 		
 		busStopEvaluator.put("StackRestaurant", busStop1Location);
@@ -72,7 +72,7 @@ public class BusHelper {
 	}
 	public Map<String, Integer> busStopToInt = new HashMap<String, Integer>(); {
 		busStopToInt.put("Bank", 4);
-		
+		busStopToInt.put("Bank2", 3);
 		busStopToInt.put("House1", 1);
 		busStopToInt.put("House2", 4);
 		busStopToInt.put("House3", 3);
@@ -84,7 +84,7 @@ public class BusHelper {
 		busStopToInt.put("ApartmentB", 3);
 		busStopToInt.put("ApartmentC", 2);
 		
-		busStopToInt.put("Market1", 3);
+		busStopToInt.put("Market", 3);
 		busStopToInt.put("Market2", 2);
 		
 		busStopToInt.put("StackRestaurant", 1);

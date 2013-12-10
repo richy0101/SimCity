@@ -1,9 +1,11 @@
-package restaurant;
-import java.util.ArrayList;
-import restaurant.*;
-import restaurant.interfaces.*;
+package restaurant.phillipsRestaurant;
 
-import restaurant.CashierAgent.OrderState;
+import java.util.ArrayList;
+
+import restaurant.*;
+import restaurant.phillipsRestaurant.PhillipsCashierAgent.OrderState;
+import restaurant.phillipsRestaurant.interfaces.*;
+
 public class Check{
 	//Check for a customer
 	public String name;

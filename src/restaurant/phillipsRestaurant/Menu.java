@@ -1,4 +1,4 @@
-package restaurant;
+package restaurant.phillipsRestaurant;
 import java.util.ArrayList;
 public class Menu {
 

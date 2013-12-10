@@ -1,9 +1,8 @@
-package restaurant.test.mock;
+package restaurant.phillipsRestaurant.test.mock;
 
 
-import restaurant.Menu;
-import restaurant.WaiterAgent;
-import restaurant.interfaces.Customer;
+import restaurant.phillipsRestaurant.*;
+import restaurant.phillipsRestaurant.interfaces.*;
 
 /**
  * A sample MockCustomer built to unit test a CashierAgent.
@@ -25,7 +24,7 @@ public class MockCustomer extends Mock implements Customer {
 	}
 	
 	@Override
-	public void msgFollowMe(WaiterAgent w, int tNum, Menu menu) {
+	public void msgFollowMe(Waiter w, int tNum, Menu menu) {
 		log.add(new LoggedEvent("Customer following waiter to table " + tNum));
 		
 	}
@@ -63,6 +62,18 @@ public class MockCustomer extends Mock implements Customer {
 	@Override
 	public void msgAnimationFinishedLeaveRestaurant() {
 		log.add(new LoggedEvent("Customer has left restaurant"));
+		
+	}
+
+	@Override
+	public String getCustomerName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void msgAtCashier() {
+		// TODO Auto-generated method stub
 		
 	}
 

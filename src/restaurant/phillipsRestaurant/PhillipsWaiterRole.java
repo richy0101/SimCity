@@ -39,9 +39,9 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 	boolean onBreak = false;
 	private String name;
 	public enum AgentState {Break,WaitingAtRestaurant,WaitingToBeSeated,Seated,ReadyToOrder,Ordering,Ordered,WaitingForFoodToCook,WaitingForFoodToTable,Eating,NeedToPay,CheckingPayment,WaitingForPayment,GoingToPay,Paying,Paid,Leaving,Left};
-	private CookAgent cook;
-	private HostAgent host;
-	private CashierAgent cashier;
+	private Cook cook;
+	private Host host;
+	private Cashier cashier;
 	private Semaphore atTable = new Semaphore(0,true);
 	private Semaphore atCook = new Semaphore(0,true);
 	private Semaphore atHost = new Semaphore(0,true);
@@ -60,14 +60,14 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 		customers = Collections.synchronizedList(new ArrayList<MyCustomerW>());
 	}
 	
-	public void setCook(CookAgent c){
+	public void setCook(Cook c){
 		cook = c;
 	}
-	public void setHost(HostAgent h){
-		host = h;
+	public void setHost(Agent host){
+		this.host = (Host) host;
 	}
-	public void setCashier(CashierAgent c){
-		cashier = c;
+	public void setCashier(Agent cashier){
+		this.cashier = (Cashier) cashier;
 	}
 	public int getCustomers(){
 		return customers.size();
@@ -147,7 +147,7 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 		}
 		stateChanged();
 	}
-	public void msgWantToPay(CustomerAgent cust){
+	public void msgWantToPay(Customer cust){
 		//print("waiter received msgWantToPay");
 		for (MyCustomerW c1: customers){
 			if (c1.c == cust){
@@ -166,7 +166,7 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 		}
 		stateChanged();
 	}
-	public void msgLeavingTable(CustomerAgent cust){
+	public void msgLeavingTable(Customer cust){
 		//print("waiter received msgLeavingTable");
 		for (MyCustomerW c1: customers){
 			if (c1.c == cust){
@@ -428,7 +428,7 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 		waiterGui.DoGoToWaitingArea();
 	}
 	public void DoSeatCustomer(MyCustomerW mc){
-		waiterGui.DoBringToTable(mc.c);
+		waiterGui.DoBringToTable(mc.c,mc.table);
 	}
 	public void DoTakeOrder(MyCustomerW mc){
 		waiterGui.DoTakeCustomerOrder(mc.c);
@@ -437,7 +437,7 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 		waiterGui.DoGoToCook();
 	}
 	public void DeliverOrderToTable(MyCustomerW mc){
-		waiterGui.DoBringFoodToTable(mc.c,mc.choice);
+		waiterGui.DoBringFoodToTable(mc.c,mc.choice,mc.table);
 	}
 	public void DoGoToCashier(){
 		waiterGui.DoGoToCashier();

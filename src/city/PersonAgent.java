@@ -244,7 +244,11 @@ public class PersonAgent extends Agent implements Person {
 		else {
 			Role r = factory.createRole(job, this);
 			//print("Role created from front end: " + r.getClass().getName());
-			workDetails = new WorkDetails(r, Directory.sharedInstance().roleDirectory.get(r.getClass().getName()));
+			String jobLocation = Directory.sharedInstance().roleDirectory.get(r.getClass().getName());
+			if (job.contains("2")) {
+				jobLocation = jobLocation + "2";
+			}
+			workDetails = new WorkDetails(r, jobLocation);
 			//finish setting up Work
 		}
 		print("created someone");
@@ -780,7 +784,7 @@ public class PersonAgent extends Agent implements Person {
 			}
 			m = Directory.sharedInstance().getMarkets().get(0);
 			roles.clear();
-			Role marketCust = factory.createRole(m.getName(), this);
+			Role marketCust = factory.createRole(m.getName()+"Cust", this);
 			marketCust.setMarket(Directory.sharedInstance().marketDirectory.get(m.getName()).getWorker());
 			roles.add(marketCust);
 			Role t = new TransportationRole(m.getName(), currentLocation);
