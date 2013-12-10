@@ -56,8 +56,8 @@ public class Directory {
 //		roleDirectory.put("bank.BankTellerRole2", "Bank2");
 		
 		//Market Roles
-		roleDirectory.put("market.MarketRole" , "Market");
-//		roleDirectory.put("market.MarketRole2", "Market2");
+		roleDirectory.put("market.MarketRole" , "Market1");
+		roleDirectory.put("market.MarketRole2", "Market2");
 		
 		//Restaurant Roles Stack
 //		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");

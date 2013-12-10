@@ -4,12 +4,11 @@ import home.LandlordRole;
 import city.PersonAgent;
 import city.UnemployedRole;
 import market.MarketCustomerRole;
+import market.MarketRole;
 import agent.Role;
 import bank.BankTellerRole;
 import restaurant.shehRestaurant.ShehCookRole;
 import restaurant.stackRestaurant.*;
-
-
 import restaurant.huangRestaurant.HuangCookRole;
 import restaurant.huangRestaurant.HuangCustomerRole;
 import restaurant.huangRestaurant.HuangWaiterNormalRole;
@@ -32,8 +31,17 @@ public class RoleFactory {
 		else if(role.equals("HuangRestaurant")) {
 			newRole = new HuangCustomerRole("HuangRestaurant");
 		}
-		else if(role.equals("Market1") || role.equals("Market2")) {
-			newRole = new MarketCustomerRole(p.getGroceriesList(), role);
+		else if(role.equals("Market1Cust")) {
+			newRole = new MarketCustomerRole(p.getGroceriesList(), "Market1");
+		}
+		else if(role.equals("Market2Cust")) {
+			newRole = new MarketCustomerRole(p.getGroceriesList(), "Market2");
+		}
+		else if(role.equals("Market1")) {
+			newRole = new MarketRole("Market1");
+		}
+		else if(role.equals("Market2")) {
+			newRole = new MarketRole("Market2");
 		}
 		else if(role.equals("HuangWaiterNormal")) {
 			newRole = new HuangWaiterNormalRole("HuangRestaurant");

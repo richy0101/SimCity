@@ -784,7 +784,7 @@ public class PersonAgent extends Agent implements Person {
 			}
 			m = Directory.sharedInstance().getMarkets().get(0);
 			roles.clear();
-			Role marketCust = factory.createRole(m.getName(), this);
+			Role marketCust = factory.createRole(m.getName()+"Cust", this);
 			marketCust.setMarket(Directory.sharedInstance().marketDirectory.get(m.getName()).getWorker());
 			roles.add(marketCust);
 			Role t = new TransportationRole(m.getName(), currentLocation);
