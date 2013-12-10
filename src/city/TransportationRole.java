@@ -26,6 +26,7 @@ public class TransportationRole extends Role implements Transportation  {
 	BusAgent bus;
 	Boolean hasCar = false;
 	int startX, startY, startStopX, startStopY, endStopX, endStopY, startStopNumber, finalStopNumber;
+	String startStop, endStop;
 	
 	public enum BusStop
 		{stop1, stop2, stop3, stop4, none}
@@ -46,6 +47,7 @@ public class TransportationRole extends Role implements Transportation  {
 		setState(TransportationState.NeedsToTravel); // hack for normative;
 		this.destination = destination;
 		this.setStartingLocation(startingLocation);
+		this.currentLocation = startingLocation;
 	}
 	
 	/*
@@ -118,9 +120,7 @@ public class TransportationRole extends Role implements Transportation  {
 
 	private void WalkToFinalDestination() {
 		setState(TransportationState.Walking);
-		int finalDestinationX = Directory.sharedInstance.getDirectory().get(destination).xCoordinate;
-		int finalDestinationY = Directory.sharedInstance.getDirectory().get(destination).yCoordinate;
-		guiToDestination = new TransportationGui(this, endStopX, endStopY, finalDestinationX, finalDestinationY);
+		guiToDestination = new TransportationGui(this, endStop, destination);
 		Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToDestination);
 		//print("adding gotodestination to macro");
 		actionComplete.acquireUninterruptibly();
@@ -149,18 +149,11 @@ public class TransportationRole extends Role implements Transportation  {
 		setState(TransportationState.InTransit);
 
 		if (getPersonAgent().getTransportationMethod().contains("Bus")) {
-			startStopX = BusHelper.sharedInstance().busStopEvaluator.get(getStartingLocation()).xCoordinate;
-			startStopY = BusHelper.sharedInstance().busStopEvaluator.get(getStartingLocation()).yCoordinate;
-			//System.out.println("This is the destination that is breaking: " + destination);
-			endStopX = BusHelper.sharedInstance().busStopEvaluator.get(destination).xCoordinate;
-			endStopY = BusHelper.sharedInstance().busStopEvaluator.get(destination).yCoordinate;
-			finalStopNumber = BusHelper.sharedInstance().busStopToInt.get(destination);
-			startStopNumber = BusHelper.sharedInstance().busStopToInt.get(getStartingLocation());
-			print("Want bus stop " + startStopNumber);
 			
-			startX = Directory.sharedInstance.getDirectory().get(getStartingLocation()).xCoordinate;
-			startY = Directory.sharedInstance.getDirectory().get(getStartingLocation()).yCoordinate;
-			guiToStop = new TransportationGui(this, startX, startY, startStopX, startStopY);
+			startStop = BusHelper.sharedInstance().busStopToString.get(currentLocation);
+			endStop = BusHelper.sharedInstance().busStopToString.get(destination);
+			guiToStop = new TransportationGui(this, currentLocation, startStop);
+			print("Want " + startStop);
 			
 			Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToStop);
 			//print("adding transport gui to macro");

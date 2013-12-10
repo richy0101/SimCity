@@ -144,6 +144,11 @@ public class WalkLoopHelper {
 			
 			locationDirectory.put(tanRestaurant.getName(), tanRestaurantLocation);
 			
+			//BUs stops
+			locationDirectory.put(busStop1.getName(), busStop1Location);
+			locationDirectory.put(busStop2.getName(), busStop2Location);
+			locationDirectory.put(busStop3.getName(), busStop3Location);
+			locationDirectory.put(busStop4.getName(), busStop4Location);
 			/*
 			locationDirectory.put(phillipsRestaurant.getName(), phillipsRestaurantLocation);
 			locationDirectory.put(nakamuraRestaurant.getName(), nakamuraRestaurantLocation);

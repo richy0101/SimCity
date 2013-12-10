@@ -15,6 +15,7 @@ import city.gui.BusGui;
 import city.helpers.ApartmentHelper;
 import city.helpers.Clock;
 import city.helpers.Directory;
+import city.helpers.WalkLoopHelper;
 import city.helpers.XMLReader;
 import agent.Role;
 import bank.BankTellerRole;
@@ -532,7 +533,9 @@ public class SimCityGui {
 		if(Clock.sharedInstance().isDay()) {
 			
 		}
-
+		if(WalkLoopHelper.sharedInstance() == null) {
+			
+		}
 
 		PersonAgent person1 = new PersonAgent("HuangCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
 		PersonAgent person2 = new PersonAgent("HuangWaiterNormal", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");

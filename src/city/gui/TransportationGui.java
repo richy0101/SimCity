@@ -9,9 +9,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import city.PersonAgent;
+
 import city.TransportationRole;
-import city.gui.PersonGui.CurrentAction;
+
+import city.helpers.WalkLoopHelper;
 
 public class TransportationGui implements Gui {
 	private TransportationRole agent = null;
@@ -59,14 +60,40 @@ public class TransportationGui implements Gui {
 	public enum CurrentAction {Travelling, Idle, 
 		BreakOut, BreakIn, BreakOver, BreakInFromTop, BreakInFromBottom, BreakOutFromTop, BreakOutFromBottom
 		};
-	CurrentAction currentAction = CurrentAction.Idle;
-	public TransportationGui(TransportationRole agent, int startX, int startY, int destX, int destY) {
+	CurrentAction currentAction;
+	public TransportationGui(TransportationRole agent, String startLocation, String destinationLocation) {
 		this.agent = agent;
-		xPos = startX;
-		yPos = startY;
-		xDestination = destX;
-		yDestination = destY;
-		
+		xPos = WalkLoopHelper.sharedInstance.getCoordinateEvaluator().get(startLocation).xCoordinate;
+		yPos = WalkLoopHelper.sharedInstance.getCoordinateEvaluator().get(startLocation).yCoordinate;
+		xDestination = WalkLoopHelper.sharedInstance.getCoordinateEvaluator().get(destinationLocation).xCoordinate;
+		yDestination = WalkLoopHelper.sharedInstance.getCoordinateEvaluator().get(destinationLocation).yCoordinate;
+		/**
+		 * Set starting loop
+		 */
+		if(WalkLoopHelper.sharedInstance.getloopEvaluator().get(startLocation).contains("Right")) {
+			currentLoop = Loop.InnerRight;
+		}
+		else if(WalkLoopHelper.sharedInstance.getloopEvaluator().get(startLocation).contains("Left")) {
+			currentLoop = Loop.InnerLeft;
+		}
+		else if(WalkLoopHelper.sharedInstance.getloopEvaluator().get(startLocation).contains("Out")) {
+			currentLoop = Loop.Outer;
+		}
+		/**
+		 * Set destination loop
+		 */
+		if(WalkLoopHelper.sharedInstance.getloopEvaluator().get(destinationLocation).contains("Right")) {
+			destinationLoop = Loop.InnerRight;
+		}
+		else if(WalkLoopHelper.sharedInstance.getloopEvaluator().get(destinationLocation).contains("Left")) {
+			destinationLoop = Loop.InnerLeft;
+		}
+		else if(WalkLoopHelper.sharedInstance.getloopEvaluator().get(destinationLocation).contains("Out")) {
+			destinationLoop = Loop.Outer;
+		}
+		/**
+		 * Load assets
+		 */
 		try {
         	personLeft = ImageIO.read(getClass().getResource("GUICITYPersonLeft.png"));
         	personRight = ImageIO.read(getClass().getResource("GUICITYPersonRight.png"));
@@ -76,8 +103,7 @@ public class TransportationGui implements Gui {
         catch(IOException e) {
         	System.out.println("Error w/ Person assets");
         }
-		
-		currentAction = CurrentAction.Travelling;
+		evaluateNextMove();
 	}
 	
 	@Override
@@ -216,22 +242,11 @@ public class TransportationGui implements Gui {
 		else if (destinationLoop == Loop.InnerLeft) {
 			currentAction = CurrentAction.BreakIn;
 		}
-		else if (destinationLoop == Loop.InnerRight) {
-			currentAction = CurrentAction.BreakIn;
-		}
-		else if (destinationLoop == Loop.Outer && currentLoop == Loop.InnerLeft) {
-			currentAction = CurrentAction.BreakOut;
-		}
-		else if (destinationLoop == Loop.Outer && currentLoop == Loop.InnerRight) {
+		else if (destinationLoop == Loop.Outer) {
 			currentAction = CurrentAction.BreakOut;
 		}
 	}
-	private void BreakOut() {
-		
-	}
-	private void BreakOver() {
-	
-	}
+
 	@Override
 	public void draw(Graphics2D g) {
 		//System.out.println("Updating Pos.");
