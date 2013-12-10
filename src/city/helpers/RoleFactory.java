@@ -9,7 +9,8 @@ import agent.Role;
 import bank.BankTellerRole;
 import restaurant.nakamuraRestaurant.NakamuraCookRole;
 import restaurant.nakamuraRestaurant.NakamuraCustomerRole;
-import restaurant.nakamuraRestaurant.NakamuraWaiterRole;
+import restaurant.nakamuraRestaurant.NakamuraWaiterNormalRole;
+import restaurant.nakamuraRestaurant.NakamuraWaiterSharedRole;
 import restaurant.shehRestaurant.ShehCookRole;
 import restaurant.stackRestaurant.*;
 import restaurant.huangRestaurant.HuangCookRole;
@@ -103,11 +104,11 @@ public class RoleFactory {
 //			return newRole;
 //		}
 		else if(role.equals("NakamuraWaiterNormal")) {
-			newRole = new NakamuraWaiterRole("NakamuraRestaurant");
+			newRole = new NakamuraWaiterNormalRole("NakamuraRestaurant");
 			return newRole;
 		}
-		else if (role.equals("NakamurakWaiterShared")) {
-			newRole = new NakamuraWaiterRole("NakamuraRestaurant");
+		else if (role.equals("NakamuraWaiterShared")) {
+			newRole = new NakamuraWaiterSharedRole("NakamuraRestaurant");
 			return newRole;
 		}
 		else if (role.equals("NakamuraCook")) {

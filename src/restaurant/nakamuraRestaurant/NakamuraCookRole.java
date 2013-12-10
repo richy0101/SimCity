@@ -14,6 +14,7 @@ import restaurant.CookRole;
 import restaurant.FoodInformation;
 import restaurant.FoodInformation.FoodState;
 import restaurant.Restaurant;
+import restaurant.nakamuraRestaurant.helpers.Order;
 import restaurant.nakamuraRestaurant.gui.CookGui;
 import city.helpers.Directory;
 
@@ -29,7 +30,11 @@ public class NakamuraCookRole extends CookRole {
 	private Semaphore actionComplete = new Semaphore(0,true);
 
 	public enum orderState {pending, cooking, done};
+	public enum SharedOrderState {NeedsChecking, Checked};
+	SharedOrderState sharedState = SharedOrderState.NeedsChecking;
+	
 	private enum marketOrderState {Ordered, Verifying, Done};
+	
 	private enum cookState {Arrived, Working, GettingPaycheck, Leaving, WaitingForPaycheck, DoneWorking, WaitingToLeave};
 	cookState state;
 	Timer timer = new Timer();
@@ -40,7 +45,7 @@ public class NakamuraCookRole extends CookRole {
 	public CookGui cookGui;
 	NakamuraHostAgent host;
 	NakamuraCashierAgent cashier;
-	private Restaurant restaurant = Directory.sharedInstance().getRestaurants().get(2);
+	private NakamuraRestaurant restaurant = (NakamuraRestaurant) Directory.sharedInstance().getRestaurants().get(2);
 
 	public NakamuraCookRole(String location) {
 		super();
@@ -206,6 +211,19 @@ public class NakamuraCookRole extends CookRole {
 			}
 		}
 		
+		if(sharedState == SharedOrderState.NeedsChecking) {
+			timer.schedule(new TimerTask() {
+				public void run() {
+					addSharedOrders();
+					sharedState = SharedOrderState.NeedsChecking;
+					stateChanged();
+				}
+			},
+			5000);
+			sharedState = SharedOrderState.Checked;
+			return true;
+		}
+		
 
 		return false;
 		//we have tried all our rules and found
@@ -219,6 +237,14 @@ public class NakamuraCookRole extends CookRole {
 		host.msgNewCook(this);
 		cookGui.DoGoToCooking();
 		state = cookState.Working;
+	}
+
+	private void addSharedOrders() {
+		print("checking for order---------------");
+		Order order = restaurant.getMyMonitor().remove();
+		if(order != null) {
+			Orders.add(order);
+		}
 	}
 	
 	private void CookOrder(final Order o) {
@@ -360,24 +386,6 @@ public class NakamuraCookRole extends CookRole {
 	
 	public FoodInformation getFood(String choice) {
 		return restaurant.getFoodInventory().get(choice);
-	}
-
-	private class Order {
-		NakamuraWaiterRole w;
-		int tableNumber;
-		orderState s;
-		String choice;
-
-		Order(NakamuraWaiterRole w, String choice, int tableNumber) {
-			this.tableNumber = tableNumber;
-			this.w = w;
-			this.choice = choice;
-			s = orderState.pending;
-		}
-
-		orderState getState() {
-			return s;
-		}
 	}
 	
 	private class MarketOrder {

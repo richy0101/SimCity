@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import city.helpers.Directory;
+import restaurant.Restaurant;
 import restaurant.nakamuraRestaurant.gui.WaiterGui;
 import restaurant.nakamuraRestaurant.helpers.Check;
 import restaurant.nakamuraRestaurant.helpers.Menu;
@@ -26,15 +27,17 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 	public enum state {waiting, gettingcust, goingtoseat, seated, wanttoorder, tookorder, ordered, waitingforfood, reorder, foodready, eating, askedforcheck, waitingforcheck, gotcheck, paying, leaving, done};
 	private String myLocation;
 	
-	private Semaphore actionComplete = new Semaphore(0,true);
+	protected Semaphore actionComplete = new Semaphore(0,true);
 
 	public WaiterGui waiterGui = null;
-	private NakamuraCookRole cook;
-	private NakamuraHostAgent host;
+	protected NakamuraCookRole cook;
+	protected NakamuraHostAgent host;
 	private NakamuraCashierAgent cashier;
 	
 	public enum WorkState {arrived, working, tired, waitingforbreak, goingonbreak, onbreak, backtowork, leaving, gettingPaycheck, WaitingForPaycheck, doneWorking};
 	private WorkState status;
+	
+	protected NakamuraRestaurant restaurant = (NakamuraRestaurant) Directory.sharedInstance().getRestaurants().get(2);
 
 	public NakamuraWaiterRole(String location) {
 		super();
@@ -372,19 +375,9 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 		stateChanged();
 	}
 	
-	private void PlaceOrder(Cust customer) {
-		print("Placing order");
-		DoPlaceOrder(customer);
-		try {
-			actionComplete.acquire();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		cook.msgCookOrder(this, customer.choice, customer.tableNumber);
-		customer.s = state.waitingforfood;
-		stateChanged();
+	protected void PlaceOrder(Cust customer) {
 	}
+	
 	private void Reorder (Cust customer) {
 		print("Taking new order");
 		DoGetOrder(customer);
@@ -498,7 +491,7 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 		waiterGui.DoGoToTable(customer.tableNumber);
 	}
 	
-	private void DoPlaceOrder(Cust customer) {
+	protected void DoPlaceOrder(Cust customer) {
 		print("Taking " + customer.c + "'s order to cook");
 		waiterGui.DoGoToCook();
 	}
@@ -528,7 +521,7 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 		return waiterGui;
 	}
 
-	private class Cust {
+	class Cust {
 		NakamuraCustomerRole c;
 		int tableNumber;
 		String choice;

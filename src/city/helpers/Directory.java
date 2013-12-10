@@ -84,9 +84,10 @@ public class Directory {
 		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "HuangRestaurant");	
 		*/
 		//Restaurant Roles Nakamura
-		roleDirectory.put("restaurant.nakamuraRestaurant.NakamuraCashierRole", "NakamuraRestaurant");
-		roleDirectory.put("restaurant.nakamuraRestaurant.NakamuraHostRole", "NakamuraRestaurant");
-		roleDirectory.put("restaurant.nakamuraRestaurant.NakamuraWaiterRole", "NakamuraRestaurant");
+//		roleDirectory.put("restaurant.nakamuraRestaurant.NakamuraCashierRole", "NakamuraRestaurant");
+//		roleDirectory.put("restaurant.nakamuraRestaurant.NakamuraHostRole", "NakamuraRestaurant");
+		roleDirectory.put("restaurant.nakamuraRestaurant.NakamuraWaiterNormalRole", "NakamuraRestaurant");
+		roleDirectory.put("restaurant.nakamuraRestaurant.NakamuraWaiterSharedRole", "NakamuraRestaurant");
 		roleDirectory.put("restaurant.nakamuraRestaurant.NakamuraCookRole", "NakamuraRestaurant");	
 		
 		//Restaurant Roles Phillips

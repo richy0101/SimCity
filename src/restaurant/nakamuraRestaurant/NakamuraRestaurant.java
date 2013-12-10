@@ -9,6 +9,7 @@ public class NakamuraRestaurant extends Restaurant {
 	private String name;
 	NakamuraHostAgent host;
 	NakamuraCashierAgent cashier;
+	ProducerConsumerMonitor myMonitor;
 	double till = 10000;	
 
 	public NakamuraRestaurant(String name) {
@@ -31,6 +32,7 @@ public class NakamuraRestaurant extends Restaurant {
 		cashier.startThread();
 		host = new NakamuraHostAgent("NakamuraRestaurant Host");
 		host.startThread();
+		myMonitor = new ProducerConsumerMonitor();
 	}
 	
 	public String getName() {
@@ -52,6 +54,10 @@ public class NakamuraRestaurant extends Restaurant {
 
 	public void setTill(double till) {
 		this.till = till;
+	}
+	
+	public ProducerConsumerMonitor getMyMonitor() {
+		return myMonitor;
 	}
 
 }
