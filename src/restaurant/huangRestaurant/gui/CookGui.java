@@ -2,11 +2,11 @@ package restaurant.huangRestaurant.gui;
 
 import gui.Gui;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -21,7 +21,7 @@ public class CookGui implements Gui {
 	private String currentDish;
     private int xPos = 35, yPos = 450;//default cook position
     private int xDestination = 35, yDestination = 450;//default start position
-    private int xHome = 630, yHome = 360;//Cook Home positions
+    private int xHome = 630, yHome = 320;//Cook Home positions
     private int xCookArea = xHome + 70, yCookArea = yHome;//Customer Waiting area.
     private int xPlateArea = xHome + 120, yPlateArea = yHome -80;
     private int xCashier = 780, yCashier = 40;
@@ -53,8 +53,8 @@ public class CookGui implements Gui {
     		this.table = table;
     	}
     }
-    private List<PlatedFood> pFood = new ArrayList<PlatedFood>();
-    private List<CookingFood> cFood = new ArrayList<CookingFood>();
+    private List<PlatedFood> pFood = Collections.synchronizedList(new ArrayList<PlatedFood>());
+    private List<CookingFood> cFood = Collections.synchronizedList(new ArrayList<CookingFood>());
 	private static final int dishOffSetX = 20;
 	BufferedImage cookImage;
 
@@ -104,35 +104,43 @@ public class CookGui implements Gui {
     	g.drawImage(cookImage, xPos, yPos, null);
 	    
 	    if(!cFood.isEmpty()) {
-	    	for(CookingFood cf : cFood) {
-    			g.drawString(cf.food, cf.xPos, cf.yPos);
-    		}
+	    	synchronized(cFood) {
+		    	for(CookingFood cf : cFood) {
+	    			g.drawString(cf.food, cf.xPos, cf.yPos);
+	    		}
+	    	}
     	}
 	    if(!pFood.isEmpty()) {
-	    	for(PlatedFood pf : pFood) {
-    			g.drawString(pf.food, pf.xPos, pf.yPos);
-    		}
+	    	synchronized(pFood) {
+		    	for(PlatedFood pf : pFood) {
+	    			g.drawString(pf.food, pf.xPos, pf.yPos);
+	    		}
+	    	}
     	}
     }
     public boolean isPresent() {
         return true;
     }
     public void DoRemovePlatedDish(int table) {
-    	for(PlatedFood pf: pFood) {
-    		if (pf.table == table) {
-    			pFood.remove(pf);
-    			break;
-    		}
+    	synchronized(pFood) {
+	    	for(PlatedFood pf: pFood) {
+	    		if (pf.table == table) {
+	    			pFood.remove(pf);
+	    			break;
+	    		}
+	    	}
     	}
     }
     public void DoPlateDish(int table) {
-    	for(CookingFood cf: cFood) {
-    		if (cf.table == table) {
-    			PlatedFood pf = new PlatedFood(cf.food, cf.table);
-    			pFood.add(pf);
-    			cFood.remove(cf);
-    			break;
-    		}
+    	synchronized(cFood) {
+	    	for(CookingFood cf: cFood) {
+	    		if (cf.table == table) {
+	    			PlatedFood pf = new PlatedFood(cf.food, cf.table);
+	    			pFood.add(pf);
+	    			cFood.remove(cf);
+	    			break;
+	    		}
+	    	}
     	}
     }
     public void DoCookDish(String choice, int table) {

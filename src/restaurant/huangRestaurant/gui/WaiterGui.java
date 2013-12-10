@@ -98,7 +98,7 @@ public class WaiterGui implements Gui {
         if (xPos == hostX && yPos == hostY) {
         	agent.msgAtHost();
         }
-    	if (xPos == 40 && yPos == 20 && seatingNew == true) {
+    	if (xPos == xCWaitArea && yPos == yCWaitArea && seatingNew == true) {
     		agent.msgCanSeatNew();
     		seatingNew = false;
     	}
@@ -176,10 +176,10 @@ public class WaiterGui implements Gui {
     }
     public void setHome(int iterate) {
     	xHome = xHome + 30 * iterate;
-    	xPos = xHome;
-    	xDestination = xPos;
-    	yPos = yHome;
-    	yDestination = yPos;
+//    	xPos = xHome;
+//    	xDestination = xPos;
+//    	yPos = yHome;
+//    	yDestination = yPos;
     }
     public void DoLeaveCustomer() {
         xDestination = xHome;
@@ -221,6 +221,11 @@ public class WaiterGui implements Gui {
 	public void DoLeaveRestaurant() {
     	xDestination = xExit;
     	yDestination = yExit;
+		
+	}
+	public void DoGoHome() {
+		xDestination = xHome;
+		yDestination = yHome;
 		
 	}
 }

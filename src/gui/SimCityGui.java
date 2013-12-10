@@ -584,35 +584,35 @@ public class SimCityGui {
 		trafficLight2 = new TrafficAgent();
 		trafficLight2.startThread();
 		
-		String a = "TanRestaurant";
-		String b = "House1";
-		String name = "Test Person 1";
-		Role role;
-		role= new TanWaiterNormalRole("TanRestaurant");
-		PersonAgent p = new PersonAgent(role, a , b, name);
-		p.msgWakeUp();
-		role.setPerson(p);
-		p.startThread();
-		
-		String a1 = "TanRestaurant";
-		String b1 = "House2";
-		String name1 = "Test Person 2";
-		Role role1;
-		role1= new TanCookRole("TanRestaurant");
-		PersonAgent p1 = new PersonAgent(role, a1 , b1, name1);
-		p1.msgWakeUp();
-		role.setPerson(p);
-		p1.startThread();
-	
-		String a2 = "TanRestaurant";
-		String b2 = "House3";
-		String name2 = "Test Person 3";
-		Role role2;
-		role2 = new TanCustomerRole("TanRestaurant");
-		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
-		role2.setPerson(p2);
-		p2.msgWakeUp();
-		p2.startThread();
+//		String a = "TanRestaurant";
+//		String b = "House1";
+//		String name = "Test Person 1";
+//		Role role;
+//		role= new TanWaiterNormalRole("TanRestaurant");
+//		PersonAgent p = new PersonAgent(role, a , b, name);
+//		p.msgWakeUp();
+//		role.setPerson(p);
+//		p.startThread();
+//		
+//		String a1 = "HuangRestaurant";
+//		String b1 = "House2";
+//		String name1 = "Test Person 2";
+//		Role role1;
+//		role1= new TanCookRole("TanRestaurant");
+//		PersonAgent p1 = new PersonAgent(role, a1 , b1, name1);
+//		p1.msgWakeUp();
+//		role.setPerson(p);
+//		p1.startThread();
+//	
+//		String a2 = "TanRestaurant";
+//		String b2 = "House3";
+//		String name2 = "Test Person 3";
+//		Role role2;
+//		role2 = new TanCustomerRole("TanRestaurant");
+//		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
+//		role2.setPerson(p2);
+//		p2.msgWakeUp();
+//		p2.startThread();
 		
 		/**
 		 End of Hard Code SuperNorm
