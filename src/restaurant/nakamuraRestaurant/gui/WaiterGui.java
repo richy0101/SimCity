@@ -19,16 +19,20 @@ public class WaiterGui implements Gui {
 
     private static final int xTable = 200; //Location of Table 1
     private static final int yTable = 100;
-    private int xStart;
-    private int yStart;
+    private static final int xStart = 0;
+    private static final int yStart = 0;
+    private int xHome;
+    private int yHome;
     private static final int xCooking = 525;
     private static final int yCooking = 200;
     private static final int xPlating = 525;
     private static final int yPlating = 100;
+    private static final int xCashier = 525;
+    private static final int yCashier = 200;
     private String choice;
     private boolean isTired = false;
     
-    private enum Command {noCommand, getCustomer, seatCustomer, takeOrder, placeOrder, pickupFood, deliverFood, goHome};
+    private enum Command {noCommand, getCustomer, seatCustomer, takeOrder, placeOrder, pickupFood, deliverFood, goHome, goCashier, leaving};
     private Command command = Command.noCommand;
     
     private Map<Integer, Integer> tableX = new HashMap<Integer, Integer>();
@@ -51,12 +55,12 @@ public class WaiterGui implements Gui {
         foodIcon.put("Pizza", "PZ");
         foodIcon.put("Salad", "SA");
         
-        xStart = x;
-        yStart = y;
-        xPos = x;
-        yPos = y;
-        xDestination = x;
-        yDestination = y;
+        xHome = x;
+        yHome = y;
+        xPos = xStart;
+        yPos = yStart;
+        xDestination = xStart;
+        yDestination = yStart;
     }
 
     public void updatePosition() {
@@ -111,8 +115,8 @@ public class WaiterGui implements Gui {
 	}
 
 	public void DoGoToHome() {
-		xDestination = xStart;
-		yDestination = yStart;
+		xDestination = xHome;
+		yDestination = yHome;
 		command = Command.goHome;
 	}
     public void DoGoToHost() {
@@ -154,6 +158,19 @@ public class WaiterGui implements Gui {
     	command = Command.placeOrder;
     }
 
+	public void DoGoToCashier() {
+    	xDestination = xCashier;
+    	yDestination = yCashier;
+    	command = Command.goCashier;				
+	}
+	
+	public void DoLeaveRestaurant() {
+		xDestination = xStart;
+		yDestination = yStart;
+		command = Command.leaving;
+	}
+
+	
     public int getXPos() {
         return xPos;
     }
@@ -161,4 +178,5 @@ public class WaiterGui implements Gui {
     public int getYPos() {
         return yPos;
     }
+
 }

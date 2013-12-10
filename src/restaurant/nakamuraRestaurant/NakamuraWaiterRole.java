@@ -35,7 +35,7 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 	private NakamuraHostAgent host;
 	private NakamuraCashierAgent cashier;
 	
-	public enum WorkState {arrived, working, tired, waitingforbreak, goingonbreak, onbreak, backtowork, leaving, gettingPaycheck};
+	public enum WorkState {arrived, working, tired, waitingforbreak, goingonbreak, onbreak, backtowork, leaving, gettingPaycheck, WaitingForPaycheck};
 	private WorkState status;
 
 	public NakamuraWaiterRole(String location) {
@@ -443,6 +443,27 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 		status = WorkState.working;
 		host.msgBackToWork(this);
 	}
+	
+	private void CollectPaycheck() {
+		waiterGui.DoGoToCashier();
+		try {
+			actionComplete.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		cashier.msgNeedPay(this);
+		status = WorkState.WaitingForPaycheck;
+	}
+	
+	private void LeaveRestaurant() {
+		DoLeaveRestaurant();
+		try {
+			actionComplete.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		getPersonAgent().msgRoleFinished();
+	}
 
 	// The animation DoXYZ() routines
 	private void DoGetCustomer(Cust customer) {
@@ -473,6 +494,11 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 	private void DoDeliverFood(Cust customer) {
 		print("Delivering " + customer.c + "'s food");
 		waiterGui.DoDeliverFood(customer.tableNumber, customer.choice, cook);
+	}
+	
+	private void DoLeaveRestaurant() {
+		host.msgWaiterLeaving(this);
+		waiterGui.DoLeaveRestaurant();
 	}
 
 	//utilities

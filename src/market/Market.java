@@ -8,6 +8,7 @@ public class Market {
 	private String name;
 	private MarketRole worker;
 	private boolean open;
+	double till;
 
 	
 	public Market() {
@@ -17,10 +18,18 @@ public class Market {
 	public Market(String buildingName) {
 		name = buildingName;
 		open = false;
-
+		till = 1000;
 		
 //
 //		System.out.println("market");
+	}
+	
+	public double getTill() {
+		return till;
+	}
+
+	public void setTill(double till) {
+		this.till = till;
 	}
 	
 	public MarketRole getWorker() {
