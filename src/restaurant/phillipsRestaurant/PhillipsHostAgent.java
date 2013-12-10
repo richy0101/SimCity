@@ -50,10 +50,6 @@ public class PhillipsHostAgent extends Agent implements Host {
 	public List getWaitingCustomers() {
 		return waitingCustomers;
 	}
-	
-	public void addWaiter(Waiter w){
-		waiters.add(w);
-	}
 
 	public Collection getTables() {
 		return tables;
@@ -71,7 +67,12 @@ public class PhillipsHostAgent extends Agent implements Host {
 	}
 	
 	// Messages
-
+	public void msgAddWaiter(Waiter w){
+		synchronized(this.waiters){
+			waiters.add(w);
+		}
+	}
+	
 	public void msgIWantFood(Customer cust) {
 		state = HostState.sitCustomer;
 		synchronized (waitingCustomers) {

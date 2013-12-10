@@ -7,17 +7,21 @@ import agent.Role;
 import restaurant.CashierAgent;
 import restaurant.phillipsRestaurant.Menu;
 import agent.Agent;
+import gui.Building;
 
+import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import city.helpers.Directory;
+
 /**
  * Restaurant customer agent.
  */
 public class PhillipsCustomerRole extends Role implements Customer {
-	private String name;
+	private String name, location;
 	private int hungerLevel = 6;        // determines length of meal
 	Timer timer = new Timer();
 	Timer timer2 = new Timer();
@@ -50,11 +54,20 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public PhillipsCustomerRole(String name){
+	public PhillipsCustomerRole(String location){
 		super();
-		this.name = name;
+		
+		this.location = location;
+		customerGui = new CustomerGui(this,1);
 		double rand = (double) Math.random()*30+30;
 		cashOnHand = rand;
+		
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == location) {
+				b.addGui(customerGui);
+			}
+		}
 		
 	}
 
@@ -268,7 +281,7 @@ public class PhillipsCustomerRole extends Role implements Customer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		cashier.msgPayBill(this.name,moneyOwed);
+		cashier.msgPayBill(tableNum,moneyOwed);
 		cashOnHand -= moneyOwed;
 		state = AgentState.ReadyToLeave;
 		event = AgentEvent.paid;

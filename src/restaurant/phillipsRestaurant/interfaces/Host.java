@@ -7,6 +7,8 @@ public interface Host {
 	void msgLeavingTable(Customer c);
 
 	void msgCanWaiterTakeBreak(Waiter waiter);
+
+	void msgAddWaiter(Waiter waiter);
 	
 
 }

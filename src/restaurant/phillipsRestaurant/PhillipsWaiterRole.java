@@ -5,6 +5,7 @@ import restaurant.phillipsRestaurant.interfaces.*;
 import restaurant.phillipsRestaurant.gui.*;
 import agent.Agent;
 import agent.Role;
+import gui.Building;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,6 +13,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
+
+import city.helpers.Directory;
 
 /**
  * Restaurant waiter agent.
@@ -38,7 +41,7 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 	Timer timer = new Timer();
 	boolean onBreak = false;
 	private String name;
-	public enum AgentState {Break,WaitingAtRestaurant,WaitingToBeSeated,Seated,ReadyToOrder,Ordering,Ordered,WaitingForFoodToCook,WaitingForFoodToTable,Eating,NeedToPay,CheckingPayment,WaitingForPayment,GoingToPay,Paying,Paid,Leaving,Left};
+	public enum AgentState {Break,Arrived,WaitingAtRestaurant,WaitingToBeSeated,Seated,ReadyToOrder,Ordering,Ordered,WaitingForFoodToCook,WaitingForFoodToTable,Eating,NeedToPay,CheckingPayment,WaitingForPayment,GoingToPay,Paying,Paid,Leaving,Left};
 	private Cook cook;
 	private Host host;
 	private Cashier cashier;
@@ -47,17 +50,29 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 	private Semaphore atHost = new Semaphore(0,true);
 	private Semaphore atCashier = new Semaphore(0,true);
 	private Semaphore atWaitingArea = new Semaphore(0,true);
-	AgentState state = AgentState.WaitingAtRestaurant;
+	AgentState state;
 	public WaiterGui waiterGui = null;
+	private String location;
 	
 	/**
 	 * Constructor for WaiterAgent class
 	 *
 	 * @param name name of the waiter
 	 */
-	public PhillipsWaiterRole(String n){
-		name = n;	
+	public PhillipsWaiterRole(String location){
+		super();
 		customers = Collections.synchronizedList(new ArrayList<MyCustomerW>());
+		host = (Host) Directory.sharedInstance().getAgents().get("PhillipsRestaurantHost");
+		cashier = (Cashier) Directory.sharedInstance().getAgents().get("PhillipsRestaurantCashier");
+		waiterGui = new WaiterGui(this,1);
+		this.location = location;
+		state = AgentState.Arrived;
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == location) {
+				b.addGui(waiterGui);
+			}
+		}
 	}
 	
 	public void setCook(Cook c){
@@ -156,10 +171,10 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 		}
 		stateChanged();
 	}
-	public void msgPayFood(String name,double money){
+	public void msgPayFood(int table,double money){
 		//print("waiter received msgPayFood");
 		for (MyCustomerW c1: customers){
-			if (c1.c.getCustomerName() == name){
+			if (c1.c.tableNum == table){
 				c1.moneyOwed = money;
 				c1.st = AgentState.GoingToPay;
 			}
@@ -192,6 +207,9 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 		//if(customers.size()==0){
 		//	takeBreak();
 		//}
+		if(state == AgentState.Arrived){
+			tellHostAtWork();
+		}
 		synchronized(this.customers){
 			for (int i=0; i< customers.size();i++){
 				if(customers.get(i).st == AgentState.WaitingAtRestaurant){
@@ -272,6 +290,12 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 	}
 
 	// Actions
+	private void tellHostAtWork() {
+		host.msgAddWaiter(this);
+		state = AgentState.WaitingAtRestaurant;
+		stateChanged();
+	}
+	
 	private void takeBreak(){
 		onBreak = true;
 		timer.schedule(new TimerTask() {
@@ -383,7 +407,7 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 			e.printStackTrace();
 		}
 		cust.st = AgentState.WaitingForPayment;
-		cashier.msgHereIsCheck(cust.choice,cust.c.getCustomerName(),this);
+		cashier.msgHereIsCheck(cust.choice,cust.c.tableNum,this);
 		stateChanged();
 	}
 	private void customerReadyToPay(MyCustomerW cust){
