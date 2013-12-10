@@ -5,7 +5,7 @@ import java.util.Map;
 import restaurant.CashierInterface;
 import restaurant.CookInterface;
 
-public interface Market {
+public interface MarketWorker {
 	public void msgGetGroceries(MarketCustomer customer, Map<String, Integer> groceryList);
 	
 	public void msgHereIsMoney(MarketCustomer customer, double money);

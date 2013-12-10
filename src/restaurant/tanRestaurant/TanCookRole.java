@@ -9,7 +9,7 @@ import restaurant.tanRestaurant.TanCookRole.SharedOrderState;
 import restaurant.tanRestaurant.TanCookRole.MyMarket.shipmentState;
 //import restaurant.tanRestaurant.TanCustomerRole.Order;
 import restaurant.tanRestaurant.TanCookRole.MyOrder.orderState;
-import market.interfaces.Market;
+import market.interfaces.MarketWorker;
 import restaurant.tanRestaurant.TanCustomerRole.AgentEvent;
 import restaurant.tanRestaurant.TanWaiterRole.MyCustomer;
 import restaurant.tanRestaurant.TanWaiterRole.MyCustomer.state;
@@ -78,7 +78,7 @@ public class TanCookRole extends Role {
 	}
 
 	public static class MyMarket{
-		MyMarket(Market m){
+		MyMarket(MarketWorker m){
 			ma= m;
 			//order= o;
 			s=shipmentState.orderedShipment;
@@ -86,7 +86,7 @@ public class TanCookRole extends Role {
 			
 		}
 		
-		Market ma; //to be implemented later with multiple waiters
+		MarketWorker ma; //to be implemented later with multiple waiters
 		//Order order;
 		shipmentState s;
 		enum shipmentState{orderedShipment, outOfSteak, outOfChicken, outOfSalad, outOfPizza};
@@ -140,7 +140,7 @@ public class TanCookRole extends Role {
 	}
 	// Messages
 	
-	public void msgAddMarket(Market m){
+	public void msgAddMarket(MarketWorker m){
 		Markets.add(new MyMarket(m));
 	}
 	
@@ -186,7 +186,7 @@ public class TanCookRole extends Role {
 	}
 	
 	
-	public void msgFailedOrder(Market ma, Order o, int amt){
+	public void msgFailedOrder(MarketWorker ma, Order o, int amt){
 		//print(ma.getName()+" has insufficient "+ o.choice);
 		if (o.choice.equals("Steak")){
 			amtSteak += amt;

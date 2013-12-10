@@ -1,33 +1,40 @@
 package market;
 
-import city.PersonAgent;
-import market.MarketRole;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.JPanel;
+
+
+import gui.CurrentBuildingPanel;
+import market.MarketWorkerRole;
 
 public class Market {
 
 	private String name;
-	private MarketRole worker;
+	private MarketWorkerRole worker;
 	private boolean open;
-
+	CurrentBuildingPanel restPanel;
+	private Map<String, MarketItemInformation> marketInventory = Collections.synchronizedMap(new HashMap<String, MarketItemInformation>());
 	
 	public Market() {
-		
+		marketInventory.put("Chicken", new MarketItemInformation("Chicken", 10, 1.00));
+		marketInventory.put("Steak", new MarketItemInformation("Steak", 10, 2.00));
+		marketInventory.put("Pizza", new MarketItemInformation("Pizza", 10, 3.00));
+		marketInventory.put("Salad", new MarketItemInformation("Salad", 10, 4.00));
 	}
 	
 	public Market(String buildingName) {
 		name = buildingName;
 		open = false;
-
-		
-//
-//		System.out.println("market");
 	}
 	
-	public MarketRole getWorker() {
+	public MarketWorkerRole getWorker() {
 		return worker;
 	}
 	
-	public void setWorker(MarketRole m) {
+	public void setWorker(MarketWorkerRole m) {
 		worker = m;
 	}
 	
@@ -45,6 +52,38 @@ public class Market {
 	
 	public boolean isOpen() {
 		return open;
+	}
+
+	public void msgChangeFoodInventory(String type, int quantity) {
+		if(type.equals("Steak")) {
+			restPanel.msgChangeSteakInventory(quantity);
+		}
+		else if(type.equals("Chicken")) {
+			restPanel.msgChangeChickenInventory(quantity);
+		}
+		else if(type.equals("Salad")) {
+			restPanel.msgChangeSaladInventory(quantity);
+		}
+		else if(type.equals("Pizza")) {
+			restPanel.msgChangePizzaInventory(quantity);
+		}
+		else if(type.equals("Car")) {
+			restPanel.msgChangeCarInventory(quantity);
+		}
+		System.out.println(getFoodInventory().get(type) + "------------------------------");
+		getFoodInventory().get(type).setSupply(quantity);
+	}
+	
+	public Map<String, MarketItemInformation> getFoodInventory() {
+		return marketInventory;
+	}
+
+	public JPanel getInfoPanel() {
+		return restPanel;
+	}
+
+	public void setInfoPanel(CurrentBuildingPanel restPanel) {
+		this.restPanel = restPanel;
 	}
 
 }

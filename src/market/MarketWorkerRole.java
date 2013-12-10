@@ -13,7 +13,7 @@ import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import market.gui.MarketGui;
-import market.interfaces.Market;
+import market.interfaces.MarketWorker;
 import market.interfaces.MarketCustomer;
 import market.test.mock.EventLog;
 import market.test.mock.LoggedEvent;
@@ -24,7 +24,7 @@ import agent.Role;
 import city.TransportationRole;
 import city.helpers.Directory;
 
-public class MarketRole extends Role implements Market {
+public class MarketWorkerRole extends Role implements MarketWorker {
 
 	//data--------------------------------------------------------------------------------
 	public enum orderState {Ordered, CantFill, Filled, Billed, ReadyToDeliver, Paid, CantPay, Cancelled, InTransit};
@@ -34,10 +34,11 @@ public class MarketRole extends Role implements Market {
 	boolean atWork;
 	boolean deliverOrders;
 	boolean jobDone;
-	Map<String, Food> inventory = new HashMap<String, Food>();
+	Map<String, MarketItemInformation> inventory;
+//	Map<String, Food> inventory = new HashMap<String, Food>();
 	double funds;
 	Timer timer = new Timer();
-
+	Market market;
 
 	private Semaphore actionComplete = new Semaphore(0,true);
 	private MarketGui gui;
@@ -112,31 +113,31 @@ public class MarketRole extends Role implements Market {
 		}
 	}
 
-	public class Food {
-	    String name;
-	    private int supply;
-	    double price;
-	    
-	    Food(String n, int s, double p) {
-	    	name = n;
-	    	setSupply(s);
-	    	price = p;
-	    }
-
-		public int getSupply() {
-			return supply;
-		}
-
-		public void setSupply(int supply) {
-			this.supply = supply;
-		}
-	}
+//	public class Food {
+//	    String name;
+//	    private int supply;
+//	    double price;
+//	    
+//	    Food(String n, int s, double p) {
+//	    	name = n;
+//	    	setSupply(s);
+//	    	price = p;
+//	    }
+//
+//		public int getSupply() {
+//			return supply;
+//		}
+//
+//		public void setSupply(int supply) {
+//			this.supply = supply;
+//		}
+//	}
 	
-	public MarketRole(String location) {
-		inventory.put("Chicken", new Food("Chicken", 10, 1.00));
-		inventory.put("Steak", new Food("Steak", 10, 2.00));
-		inventory.put("Pizza", new Food("Pizza", 10, 3.00));
-		inventory.put("Salad", new Food("Salad", 10, 4.00));
+	public MarketWorkerRole(String location) {
+//		inventory.put("Chicken", new Food("Chicken", 10, 1.00));
+//		inventory.put("Steak", new Food("Steak", 10, 2.00));
+//		inventory.put("Pizza", new Food("Pizza", 10, 3.00));
+//		inventory.put("Salad", new Food("Salad", 10, 4.00));
 		
 		MyOrders = Collections.synchronizedList(new ArrayList<Order>());
 		MyRestaurantOrders = Collections.synchronizedList(new ArrayList<RestaurantOrder>());
@@ -158,11 +159,12 @@ public class MarketRole extends Role implements Market {
 		}
 	}
 	
-	public MarketRole() {
-		inventory.put("Chicken", new Food("Chicken", 10, 1.00));
-		inventory.put("Steak", new Food("Steak", 10, 2.00));
-		inventory.put("Pizza", new Food("Pizza", 10, 3.00));
-		inventory.put("Salad", new Food("Salad", 10, 4.00));
+	//for unit testing
+	public MarketWorkerRole() {
+//		inventory.put("Chicken", new Food("Chicken", 10, 1.00));
+//		inventory.put("Steak", new Food("Steak", 10, 2.00));
+//		inventory.put("Pizza", new Food("Pizza", 10, 3.00));
+//		inventory.put("Salad", new Food("Salad", 10, 4.00));
 		
 		MyOrders = Collections.synchronizedList(new ArrayList<Order>());
 		MyRestaurantOrders = Collections.synchronizedList(new ArrayList<RestaurantOrder>());
@@ -180,9 +182,6 @@ public class MarketRole extends Role implements Market {
 	}
 	public List<RestaurantOrder> getMyRestaurantOrders() {
 		return MyRestaurantOrders;
-	}
-	public Map<String, Food> getInventory() {
-		return inventory;
 	}
 	public boolean getJobDone() {
 		return jobDone;
@@ -532,7 +531,21 @@ public class MarketRole extends Role implements Market {
 	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		if(getPersonAgent() != null) {
+			return getPersonAgent().getName();
+		}
+		else {
+			return "";
+		}
 	}
+	
+	public Market getMarket() {
+		return market;
+	}
+
+	public void setMarket(Market market) {
+		this.market = market;
+		inventory = getMarket().getFoodInventory();
+	}
+	
 }

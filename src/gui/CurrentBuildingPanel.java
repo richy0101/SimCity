@@ -12,8 +12,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
+import market.Market;
 import bank.Bank;
-import market.interfaces.Market;
 import restaurant.Restaurant;
 
 @SuppressWarnings("serial")
@@ -31,14 +31,155 @@ public class CurrentBuildingPanel extends JPanel {
 	private JSlider chickenSlider;
 	private JSlider steakSlider;
 	private JLabel lblRegister;
+	private JLabel lblCar;
+	private JLabel carNumber;
+	private JSlider carSlider;
 	
 	public CurrentBuildingPanel(Object building) {
 		super();
 		if(building instanceof Restaurant) {
 			restaurant = (Restaurant) building;
+			initializeRestaurant();
+		}
+		else if(building instanceof Market) {
+			market = (Market) building;
+			initializeMarket();
 		}
 		
-		initializeRestaurant();
+	}
+
+	private void initializeMarket() {
+		SpringLayout springLayout = new SpringLayout();
+		setLayout(springLayout);
+		
+		JLabel lblName_1 = new JLabel("Name: ");
+		springLayout.putConstraint(SpringLayout.NORTH, lblName_1, 10, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.WEST, lblName_1, 10, SpringLayout.WEST, this);
+		add(lblName_1);
+		
+		JLabel lblInventory_1 = new JLabel("Inventory:");
+		springLayout.putConstraint(SpringLayout.NORTH, lblInventory_1, 6, SpringLayout.SOUTH, lblName_1);
+		springLayout.putConstraint(SpringLayout.WEST, lblInventory_1, 10, SpringLayout.WEST, this);
+		add(lblInventory_1);
+		
+		JLabel lblSteak_1 = new JLabel("Steak:");
+		springLayout.putConstraint(SpringLayout.NORTH, lblSteak_1, 6, SpringLayout.SOUTH, lblInventory_1);
+		springLayout.putConstraint(SpringLayout.WEST, lblSteak_1, 0, SpringLayout.WEST, lblName_1);
+		add(lblSteak_1);
+		
+		steakNumber = new JLabel("50");
+		springLayout.putConstraint(SpringLayout.NORTH, steakNumber, 0, SpringLayout.NORTH, lblSteak_1);
+		springLayout.putConstraint(SpringLayout.EAST, steakNumber, -10, SpringLayout.EAST, this);
+		add(steakNumber);
+		
+		steakSlider = new JSlider();
+		steakSlider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				if(market != null) {
+					market.msgChangeFoodInventory("Steak", steakSlider.getValue());
+					steakNumber.setText(String.valueOf(steakSlider.getValue()));
+				}
+			}
+		});
+		springLayout.putConstraint(SpringLayout.NORTH, steakSlider, 6, SpringLayout.SOUTH, lblSteak_1);
+		springLayout.putConstraint(SpringLayout.WEST, steakSlider, 0, SpringLayout.WEST, lblName_1);
+		springLayout.putConstraint(SpringLayout.EAST, steakSlider, 0, SpringLayout.EAST, steakNumber);
+		add(steakSlider);
+		
+		JLabel lblChicken_1 = new JLabel("Chicken:");
+		springLayout.putConstraint(SpringLayout.NORTH, lblChicken_1, 6, SpringLayout.SOUTH, steakSlider);
+		springLayout.putConstraint(SpringLayout.WEST, lblChicken_1, 0, SpringLayout.WEST, lblName_1);
+		add(lblChicken_1);
+		
+		chickenNumber = new JLabel("50");
+		springLayout.putConstraint(SpringLayout.NORTH, chickenNumber, 6, SpringLayout.SOUTH, steakSlider);
+		springLayout.putConstraint(SpringLayout.EAST, chickenNumber, 0, SpringLayout.EAST, steakNumber);
+		add(chickenNumber);
+		
+		chickenSlider = new JSlider();
+		chickenSlider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				if(market != null) {
+					market.msgChangeFoodInventory("Chicken", chickenSlider.getValue());
+					chickenNumber.setText(String.valueOf(chickenSlider.getValue()));
+				}
+			}
+		});
+		springLayout.putConstraint(SpringLayout.NORTH, chickenSlider, 6, SpringLayout.SOUTH, lblChicken_1);
+		springLayout.putConstraint(SpringLayout.WEST, chickenSlider, 10, SpringLayout.WEST, this);
+		springLayout.putConstraint(SpringLayout.EAST, chickenSlider, 249, SpringLayout.WEST, this);
+		add(chickenSlider);
+		
+		JLabel lblPizza_1 = new JLabel("Pizza:");
+		springLayout.putConstraint(SpringLayout.NORTH, lblPizza_1, 6, SpringLayout.SOUTH, chickenSlider);
+		springLayout.putConstraint(SpringLayout.WEST, lblPizza_1, 0, SpringLayout.WEST, lblName_1);
+		add(lblPizza_1);
+		
+		pizzaSlider = new JSlider();
+		pizzaSlider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				if(market != null) {
+					market.msgChangeFoodInventory("Pizza", pizzaSlider.getValue());
+					pizzaNumber.setText(String.valueOf(pizzaSlider.getValue()));
+				}
+			}
+		});
+		springLayout.putConstraint(SpringLayout.NORTH, pizzaSlider, 6, SpringLayout.SOUTH, lblPizza_1);
+		springLayout.putConstraint(SpringLayout.WEST, pizzaSlider, 0, SpringLayout.WEST, lblName_1);
+		springLayout.putConstraint(SpringLayout.EAST, pizzaSlider, 0, SpringLayout.EAST, steakNumber);
+		add(pizzaSlider);
+		
+		pizzaNumber = new JLabel("50");
+		springLayout.putConstraint(SpringLayout.SOUTH, pizzaNumber, 0, SpringLayout.SOUTH, lblPizza_1);
+		springLayout.putConstraint(SpringLayout.EAST, pizzaNumber, 0, SpringLayout.EAST, steakNumber);
+		add(pizzaNumber);
+		
+		JLabel lblSalad_1 = new JLabel("Salad:");
+		springLayout.putConstraint(SpringLayout.NORTH, lblSalad_1, 6, SpringLayout.SOUTH, pizzaSlider);
+		springLayout.putConstraint(SpringLayout.WEST, lblSalad_1, 0, SpringLayout.WEST, lblName_1);
+		add(lblSalad_1);
+		
+		saladNumber = new JLabel("50");
+		springLayout.putConstraint(SpringLayout.NORTH, saladNumber, 6, SpringLayout.SOUTH, pizzaSlider);
+		springLayout.putConstraint(SpringLayout.EAST, saladNumber, 0, SpringLayout.EAST, steakNumber);
+		add(saladNumber);
+		
+		saladSlider = new JSlider();
+		saladSlider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				if(market != null) {
+					market.msgChangeFoodInventory("Salad", saladSlider.getValue());
+					saladNumber.setText(String.valueOf(saladSlider.getValue()));
+				}
+			}
+		});
+		springLayout.putConstraint(SpringLayout.NORTH, saladSlider, 6, SpringLayout.SOUTH, lblSalad_1);
+		springLayout.putConstraint(SpringLayout.WEST, saladSlider, 0, SpringLayout.WEST, lblName_1);
+		springLayout.putConstraint(SpringLayout.EAST, saladSlider, 0, SpringLayout.EAST, steakNumber);
+		add(saladSlider);
+		
+		lblCar = new JLabel("Car:");
+		springLayout.putConstraint(SpringLayout.NORTH, lblCar, 6, SpringLayout.SOUTH, saladSlider);
+		springLayout.putConstraint(SpringLayout.WEST, lblCar, 0, SpringLayout.WEST, lblName_1);
+		add(lblCar);
+		
+		carNumber = new JLabel("50");
+		springLayout.putConstraint(SpringLayout.SOUTH, carNumber, 0, SpringLayout.SOUTH, lblCar);
+		springLayout.putConstraint(SpringLayout.EAST, carNumber, 0, SpringLayout.EAST, steakNumber);
+		add(carNumber);
+		
+		carSlider = new JSlider();
+		carSlider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				market.msgChangeFoodInventory("Car", carSlider.getValue());
+				carNumber.setText(String.valueOf(carSlider.getValue()));
+			}
+		});
+		springLayout.putConstraint(SpringLayout.NORTH, carSlider, 6, SpringLayout.SOUTH, lblCar);
+		springLayout.putConstraint(SpringLayout.WEST, carSlider, 0, SpringLayout.WEST, lblName_1);
+		springLayout.putConstraint(SpringLayout.EAST, carSlider, 0, SpringLayout.EAST, steakNumber);
+		add(carSlider);
+		
 	}
 
 	private void initializeRestaurant() {
@@ -226,6 +367,11 @@ public class CurrentBuildingPanel extends JPanel {
 	public void msgChangeSaladInventory(int saladInventory) {
 		saladSlider.setValue(saladInventory);
 		saladNumber.setText(String.valueOf(saladInventory));
+	}
+	
+	public void msgChangeCarInventory(int quantity) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	public void msgChangeTillInformation(double till) {
