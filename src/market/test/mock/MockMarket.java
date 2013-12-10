@@ -2,6 +2,8 @@ package market.test.mock;
 
 import java.util.Map;
 
+import restaurant.CashierInterface;
+import restaurant.CookInterface;
 import restaurant.stackRestaurant.interfaces.Cashier;
 import restaurant.stackRestaurant.interfaces.Cook;
 import market.interfaces.Market;
@@ -10,8 +12,8 @@ import market.interfaces.MarketCustomer;
 public class MockMarket extends Mock implements Market {
 
 	public MarketCustomer customer;
-	public Cook cook;
-	public Cashier cashier;
+	public CookInterface cook;
+	public CashierInterface cashier;
 	public EventLog log;
 	public Map<String, Integer> groceries;
 	public double money;
@@ -39,15 +41,34 @@ public class MockMarket extends Mock implements Market {
 	}
 
 	@Override
-	public void msgOrderFood(Cook cook, Cashier cashier, String choice) {
+	public void msgOrderFood(CookInterface cook, CashierInterface cashier, String choice) {
 		log.add(new LoggedEvent("Received msgOrderFood from cook. Ordered: " + choice));
 		this.cook = cook;
 		this.cashier = cashier;
 	}
 
 	@Override
-	public void msgPayForOrder(Cashier cashier, double funds) {
+	public void msgPayForOrder(CashierInterface cashier, double funds) {
 		log.add(new LoggedEvent("Received msgPayForOrder from cook. Money = $" + funds));
 		this.money = funds;		
+	}
+
+	@Override
+	public void msgOrderFood(CookInterface cook, CashierInterface cashier,
+			String choice, int amount) {
+		log.add(new LoggedEvent("Received msgOrderFood"));
+		
+	}
+
+	@Override
+	public void msgCannotPay(CashierInterface cashier, double funds) {
+		log.add(new LoggedEvent("Received msgCannotPay"));
+		
+	}
+
+	@Override
+	public void msgCancelOrder(CookInterface cook) {
+		log.add(new LoggedEvent("Received msgCancelOrder"));
+		
 	}
 }
