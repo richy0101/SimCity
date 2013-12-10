@@ -45,7 +45,7 @@ public class CookGui implements Gui {
         	System.out.println("Error w/ Background");
         } 
         
-        //isPresent = true;
+        isPresent();
     }
 
 	public void updatePosition() {

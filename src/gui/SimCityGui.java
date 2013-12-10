@@ -622,7 +622,7 @@ public class SimCityGui {
 		trafficLight1.startThread();
 		trafficLight2 = new TrafficAgent();
 		trafficLight2.startThread();
-		
+		/*
 		String a = "TanRestaurant";
 		String b = "House1";
 		String name = "Test Person 1";
@@ -652,7 +652,7 @@ public class SimCityGui {
 		role2.setPerson(p2);
 		p2.msgWakeUp();
 		p2.startThread();
-		
+		*/
 		/**
 		 End of Hard Code SuperNorm
 		 */

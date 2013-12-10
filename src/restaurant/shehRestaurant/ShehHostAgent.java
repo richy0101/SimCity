@@ -211,7 +211,11 @@ public class ShehHostAgent extends Agent {
  
 	// Actions
 	private void noWaiters() {
-		print("We don't have any waiters.");
+		print("We are not open.");
+		for(ShehCustomerRole cust : waitingCustomers) {
+			cust.msgRestaurantIsClosed();
+			waitingCustomers.remove(cust);
+		}
 	}
 	
 	private void organizeCustomers() { //alerts customer which location they should wai

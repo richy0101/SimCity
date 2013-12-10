@@ -19,9 +19,6 @@ public class ShehRestaurant extends Restaurant {
 		host = new ShehHostAgent();
 		cashier = new ShehCashierAgent();
 		
-		System.out.println(host.toString() + "STUB SHEHRESTAURATNTLINE22");
-		System.out.println(cashier.toString());
-		
 		host.setRestaurant(this);
 		cashier.setRestaurant(this);
 		
