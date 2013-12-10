@@ -474,7 +474,7 @@ public class MarketRole extends Role implements Market {
 		
 
 		o.cook.msgMarketDeliveringOrder(inventory.get(o.choice).getSupply(), o.choice);
-		o.cashier.msgGiveBill(new MarketCheck(o.price, o.choice, this));
+		o.cashier.msgGiveBill(new MarketCheck(o.price, o.choice, o.amount, this));
 		
 		log.add(new LoggedEvent("Delivered order."));
 	}

@@ -1,33 +1,41 @@
 package restaurant.nakamuraRestaurant;
 
-import agent.Agent;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Timer;
+
 import agent.Role;
+import market.MarketCheck;
+import market.interfaces.Market;
+import restaurant.CashierAgent;
+import restaurant.nakamuraRestaurant.NakamuraCookRole;
 import restaurant.nakamuraRestaurant.helpers.Check;
 import restaurant.nakamuraRestaurant.helpers.Check.state;
 import restaurant.nakamuraRestaurant.helpers.Menu;
 import restaurant.nakamuraRestaurant.interfaces.Cashier;
 import restaurant.nakamuraRestaurant.interfaces.Customer;
-import restaurant.nakamuraRestaurant.interfaces.Market;
 import restaurant.nakamuraRestaurant.interfaces.Waiter;
 import restaurant.nakamuraRestaurant.test.mock.EventLog;
 import restaurant.nakamuraRestaurant.test.mock.LoggedEvent;
 
-import java.util.*;
-import java.util.concurrent.Semaphore;
-
 /**
- * Restaurant Cook Agent
+ * Restaurant Cashier Agent
  */
-public class NakamuraCashierAgent extends Agent implements Cashier{
+public class NakamuraCashierAgent extends CashierAgent implements Cashier{
 	public List<Check> Checks
 	= Collections.synchronizedList(new ArrayList<Check>());
-	public List<MarketBill> Bills = Collections.synchronizedList(new ArrayList<MarketBill>());
+	public List<MarketBill> marketBills = Collections.synchronizedList(new ArrayList<MarketBill>());
+	public List<Role> myEmployees = Collections.synchronizedList(new ArrayList<Role>());
 
 	private Menu menu;
 	private String name;
 	private double cash;
 	Timer timer = new Timer();
 	public EventLog log;
+	
+	NakamuraCookRole cook;
+	enum billState {Received, Verified, Paid, BeingVerified, cantPay};
 
 //	public HostGui hostGui = null;
 //  private List<WaiterAgent> waiters = new ArrayList<WaiterAgent>();
@@ -88,10 +96,33 @@ public class NakamuraCashierAgent extends Agent implements Cashier{
 		stateChanged();
 	}
 	
-	public void msgMarketBill(Market market, double marketpayment) {
+	public void msgGiveBill(MarketCheck check) {
 		print("Received msgMarketBill");
-		Bills.add(new MarketBill(market, marketpayment));
-		log.add(new LoggedEvent("Received msgMarketBill. Total = $" + marketpayment));
+		marketBills.add(new MarketBill(check));
+		log.add(new LoggedEvent("Received msgMarketBill. Total = $" + check.getCost()));
+		stateChanged();
+	}
+	
+	public void msgBillIsCorrect(String choice, int amount) {
+		print("Received msgBillIsCorrect");
+		
+		synchronized(marketBills) {
+			for(MarketBill b : marketBills) {
+				if(b.state == billState.BeingVerified &&
+					b.getChoice() == choice &&
+					b.getAmount() == amount) {
+					
+					b.state = billState.Verified;
+				}
+			}
+		}
+		
+		stateChanged();
+	}
+	
+	public void msgNeedPay(Role employee) {
+		print("Receied msgNeedPay from " + employee.getPersonAgent().getName());
+		myEmployees.add(employee);
 		stateChanged();
 	}
 
@@ -123,16 +154,32 @@ public class NakamuraCashierAgent extends Agent implements Cashier{
 			}
 		}
 		
-		synchronized(Bills) {
-			for(MarketBill m : Bills) {
-				if(cash >= m.payment) {
-					m.market.msgHeresPayment(m.payment);
-					cash -= m.payment;
-					log.add(new LoggedEvent("Paid Bill. Total = $" + m.getPayment()));
-					Bills.remove(m);					
+		synchronized(marketBills) {
+			for(MarketBill m : marketBills) {
+				if(m.state == billState.Received) {
+					VerifyMarketBill(m);
 					return true;
 				}
 			}
+			
+			for(MarketBill m : marketBills) {
+				if(m.state == billState.Verified) {
+					PayMarketBill(m);
+					return true;
+				}
+			}
+			
+			for(MarketBill m : marketBills) {
+				if(m.state == billState.Paid) {
+					marketBills.remove(m);
+					return true;
+				}
+			}
+		}
+		
+		if(!myEmployees.isEmpty()) {
+			PayEmployee(myEmployees.get(0));
+			return true;
 		}
 
 		return false;
@@ -164,20 +211,63 @@ public class NakamuraCashierAgent extends Agent implements Cashier{
 		check.setState(state.debt);
 		log.add(new LoggedEvent("Let customer pay later. Debt = $" + check.getTotal()));
 	}
+	
+	private void VerifyMarketBill(MarketBill bill) {
+		cook.msgVerifyMarketBill(bill.getChoice(), bill.getAmount());
+		bill.state = billState.BeingVerified;
+	}
+	
+	private void PayMarketBill(MarketBill bill) {
+		if(cash >= bill.getCost()) {
+			cash -= bill.getCost();
+			bill.getMarket().msgPayForOrder(this, bill.getCost());
+			
+			bill.state = billState.Paid;
+		}
+		else {
+			bill.getMarket().msgCannotPay(this, bill.getCost());
+			bill.state = billState.cantPay;
+		}
+	}
+	
+	private void PayEmployee(Role employee) {
+		if(cash >= 100) {
+			cash -= 100;
+			employee.msgHereIsPaycheck(100);
+		}
+		else
+			employee.msgHereIsPaycheck(0);
+		
+		myEmployees.remove(employee);
+	}
 
 	public class MarketBill {
-		Market market;
-		double payment;
+		MarketCheck marketcheck;
+		billState state;
 		
-		MarketBill (Market market, double p) {
-			this.market = market;
-			payment = p;
+		MarketBill (MarketCheck marketcheck) {
+			this.marketcheck = marketcheck;
+			this.state = billState.Received;
 		}
-		public double getPayment() {
-			return payment;
-		}
+		
 		public Market getMarket() {
-			return market;
+			return marketcheck.getMarket();
 		}
+		
+		public String getChoice() {
+			return marketcheck.getChoice();
+		}
+		
+		public int getAmount() {
+			return marketcheck.getAmount();
+		}
+		
+		public double getCost() {
+			return marketcheck.getCost();
+		}
+	}
+	
+	public void setCook(NakamuraCookRole cook) {
+		this.cook = cook;
 	}
 }

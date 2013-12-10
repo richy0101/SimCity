@@ -1,5 +1,6 @@
 package restaurant.nakamuraRestaurant.interfaces;
 
+import restaurant.CashierInterface;
 import restaurant.nakamuraRestaurant.helpers.Check;
 
 /**
@@ -8,11 +9,8 @@ import restaurant.nakamuraRestaurant.helpers.Check;
  * @author Monroe Ekilah
  *
  */
-public interface Cashier {
+public interface Cashier extends CashierInterface {
 	public abstract void msgComputeCheck(Waiter w, Customer c, String choice);
 
 	public abstract void msgPayment(Customer c, Check check, double payment);
-	
-	public abstract void msgMarketBill(Market m, double marketpayment);
-
 }
