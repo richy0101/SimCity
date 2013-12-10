@@ -33,6 +33,7 @@ import javax.swing.event.ChangeEvent;
 
 import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
+import restaurant.phillipsRestaurant.gui.PhillipsRestaurantAnimationPanel;
 import restaurant.shehRestaurant.ShehCookRole;
 import restaurant.shehRestaurant.ShehCustomerRole;
 import restaurant.shehRestaurant.ShehWaiterRole;
@@ -117,6 +118,9 @@ public class SimCityGui {
 			else if(b.getName().toLowerCase().contains("sheh")) {
 				b.setBuildingPanel(new ShehRestaurantAnimationPanel(b, i, this));
 			}
+			else if(b.getName().toLowerCase().contains("phillips")) {
+				b.setBuildingPanel(new PhillipsRestaurantAnimationPanel(b, i, this));
+			}
 			else if(b.getName().toLowerCase().contains("tan")) {
 				b.setBuildingPanel(new TanRestaurantAnimationPanel(b, i, this));
 			}
@@ -159,6 +163,10 @@ public class SimCityGui {
         roles.put("Huang's Restaurant Waiter Normal", "HuangWaiterNormal");
         roles.put("Huang's Restaurant Waiter Shared", "HuangWaiterShared");
         roles.put("Huang's Restaurant Cook", "HuangCook");
+        
+        roles.put("Richard's Restaurant Waiter Normal", "RichardWaiterNormal");
+        //roles.put("Richards's Restaurant Waiter Shared", "RichardWaiterShared");
+        roles.put("Richard's Restaurant Cook", "RichardCook");
         
 		frame = new JFrame();
 		frame.setResizable(false);

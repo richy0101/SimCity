@@ -47,7 +47,7 @@ public class WaiterListPanel extends JPanel implements ActionListener {
         pane.setViewportView(view);
         add(pane);
         
-        add(new AnimationPanel());
+        add(new PhillipsRestaurantAnimationPanel());
         
     }
 
