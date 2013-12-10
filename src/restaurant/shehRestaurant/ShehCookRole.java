@@ -1,25 +1,26 @@
 package restaurant.shehRestaurant;
 
-import agent.Agent;
-import agent.Role;
-import restaurant.CookRole;
-import restaurant.shehRestaurant.gui.CookGui;
-import restaurant.shehRestaurant.helpers.FoodData;
-import restaurant.shehRestaurant.helpers.Menu;
-import restaurant.shehRestaurant.helpers.Order;
-import restaurant.shehRestaurant.gui.WaiterGui;
-import restaurant.shehRestaurant.helpers.Order.OrderCookState;
-import restaurant.shehRestaurant.helpers.Bill;
-import restaurant.shehRestaurant.helpers.Order.OrderMarketState;
-import restaurant.shehRestaurant.interfaces.Cashier;
-import restaurant.shehRestaurant.interfaces.Cook;
 import gui.Building;
-import gui.Gui;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import market.Market;
+import restaurant.CookRole;
+import restaurant.shehRestaurant.gui.CookGui;
+import restaurant.shehRestaurant.helpers.Bill;
+import restaurant.shehRestaurant.helpers.FoodData;
+import restaurant.shehRestaurant.helpers.Menu;
+import restaurant.shehRestaurant.helpers.Order;
+import restaurant.shehRestaurant.helpers.Order.OrderCookState;
+import restaurant.shehRestaurant.interfaces.Cashier;
+import restaurant.shehRestaurant.interfaces.Cook;
 import city.helpers.Directory;
 
 /**
@@ -105,12 +106,12 @@ public class ShehCookRole extends CookRole implements Cook {
 		stateChanged();
 	}
 	
-	public void msgMarketDeliveringOrder(Order o, int quantity) {
+	public void msgMarketDeliveringOrder(int supply, List<String> choices) {
 		//update inventory
 		
-		for(int i = 0; i < o.list.size(); i++) {
-			restaurantInventory.get(o.list.get(i)).quantity = restaurantInventory.get(o.list.get(i).toString()).quantity + 4;
-			print("Item: " + restaurantInventory.get(o.list.get(i)).name + "| Quantity: " + restaurantInventory.get(o.list.get(i)).quantity);
+		for(int i = 0; i < choices.size(); i++) {
+			restaurantInventory.get(choices.get(i)).quantity = restaurantInventory.get(choices.get(i).toString()).quantity + supply;
+			print("Item: " + restaurantInventory.get(choices.get(i)).name + "| Quantity: " + restaurantInventory.get(choices.get(i)).quantity);
 		}
 		
 		print("Shipment from market received!");

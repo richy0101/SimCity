@@ -15,6 +15,9 @@ import restaurant.shehRestaurant.test.mock.EventLog;
 
 import java.util.*;
 
+import market.MarketCheck;
+import market.interfaces.MarketWorker;
+
 /**
  * Restaurant Cashier Agent
  */
@@ -33,7 +36,7 @@ public class ShehCashierAgent extends CashierAgent implements Cashier {
 
 	private double money = 0;
 	private String name;
-	private Market market;
+	private MarketWorker market;
 	private ShehWaiterRole waiter;
 	
 	private class myCustomer {
@@ -91,11 +94,11 @@ public class ShehCashierAgent extends CashierAgent implements Cashier {
 		stateChanged();
 	}
 	
-	public void msgHereIsMarketBill(Bill cost, Market supplier) {
-		print("Received bill from market of $" + cost.m + ".");
-		double price = cost.m;
+	public void msgGiveBill(MarketCheck marketcheck) {
+		print("Received bill from market of $" + marketcheck.getAmount() + ".");
+		double price = marketcheck.getAmount();
 		bills.add(new Bill(price, OrderBillState.PayingMarketOrder));
-		market = supplier;
+		market = marketcheck.getMarket();
 		
 		stateChanged(); 
 	}
@@ -234,7 +237,7 @@ public class ShehCashierAgent extends CashierAgent implements Cashier {
 	private void PayMarketOrder(Bill b) {
 		print("Paying market order now.");
 		
-		market.msgHereIsPayment(b);
+		market.msgPayForOrder(this, b.getBillMoney());
 		b.s = OrderBillState.Complete;
 		
 	}
