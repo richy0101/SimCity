@@ -232,7 +232,7 @@ public class CashierTest extends TestCase
 	public void testPayingMarketScenarioNonnorm() {
 		assertEquals("Till should have 1000. It is not.", cashier.getTill(), 1000.0);
 
-		MarketCheck check = new MarketCheck(20, "Steak", market);
+		MarketCheck check = new MarketCheck(200.0, "Steak", 20, market);
 		cashier.msgGiveBill(check);
 		assertEquals("Cashier should have 1 check to pay. It doesn't.", cashier.getChecks().size(), 1);
 		assertTrue("Cashier's check should have a state of NeedPaying. It doesn't.", cashier.getChecks().get(0).state == CheckState.NeedPaying);
@@ -240,8 +240,8 @@ public class CashierTest extends TestCase
 		assertFalse("Cashier's scheduler should have returned true (one action to do), but didn't.", cashier.pickAndExecuteAnAction());
 		assertTrue("Cashier's check should have a state of NeedPaying. It doesn't.", cashier.getChecks().get(0).state == CheckState.Paid);
 		assertTrue("Market should have logged \"Received msgPayForOrder from cook. Money = $20\" but didn't. His log reads instead: "
-				+ market.log.getLastLoggedEvent().toString(), market.log.containsString("Received msgPayForOrder from cook. Money = $20"));
-		assertTrue("Cashier till should be 980.0. Instead it's " + cashier.getTill(), 980.0 == cashier.getTill());
+				+ market.log.getLastLoggedEvent().toString(), market.log.containsString("Received msgPayForOrder from cook. Money = $200"));
+		assertTrue("Cashier till should be 980.0. Instead it's " + cashier.getTill(), 800.0 == cashier.getTill());
 	}
 	
 	public void testPayingMarketScenarioRegular() {
@@ -249,7 +249,7 @@ public class CashierTest extends TestCase
 		cashier.setTill(1020);
 		assertEquals("Till should be 1020. It is not.", cashier.getTill(), 1020.0);
 
-		MarketCheck check = new MarketCheck(20, "Steak", market);
+		MarketCheck check = new MarketCheck(200.0, "Steak", 20, market);
 		cashier.msgGiveBill(check);
 		assertEquals("Cashier should have 1 check to pay. It doesn't.", cashier.getChecks().size(), 1);
 		assertTrue("Cashier's check should have a state of NeedPaying. It doesn't.", cashier.getChecks().get(0).state == CheckState.NeedPaying);
@@ -257,7 +257,7 @@ public class CashierTest extends TestCase
 		assertFalse("Cashier's scheduler should have returned true (one action to do), but didn't.", cashier.pickAndExecuteAnAction());
 		assertTrue("Cashier's check should have a state of NeedPaying. It doesn't.", cashier.getChecks().get(0).state == CheckState.Paid);
 		assertTrue("Market should have logged \"Received msgPayForOrder from cook. Money = $20\" but didn't. His log reads instead: "
-				+ market.log.getLastLoggedEvent().toString(), market.log.containsString("Received msgPayForOrder from cook. Money = $20"));
-		assertTrue("Cashier till should be 1000.0. Instead it's " + cashier.getTill(), 1000.0 == cashier.getTill());
+				+ market.log.getLastLoggedEvent().toString(), market.log.containsString("Received msgPayForOrder from cook. Money = $200"));
+		assertTrue("Cashier till should be 820.0. Instead it's " + cashier.getTill(), 820.0 == cashier.getTill());
 	}
 }

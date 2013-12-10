@@ -43,7 +43,9 @@ public class CookGui implements Gui {
         }
         catch(IOException e) {
         	System.out.println("Error w/ Background");
-        }    
+        } 
+        
+        isPresent();
     }
 
 	public void updatePosition() {
@@ -91,6 +93,11 @@ public class CookGui implements Gui {
     	//xDestination = xDestination + (num * 10);
     	xDestination = XHOME;
     	yDestination = YHOME;
+    }
+    
+    public void DoLeave() {
+    	xDestination = XDOOR;
+    	yDestination = YDOOR;
     }
     
     public boolean isPresent() {

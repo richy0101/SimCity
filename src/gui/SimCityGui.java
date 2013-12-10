@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.sound.sampled.AudioInputStream;
@@ -32,6 +33,9 @@ import java.util.Random;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
+import restaurant.nakamuraRestaurant.NakamuraCookRole;
+import restaurant.nakamuraRestaurant.NakamuraWaiterRole;
+import restaurant.nakamuraRestaurant.gui.NakamuraRestaurantAnimationPanel;
 import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
 import restaurant.phillipsRestaurant.gui.PhillipsRestaurantAnimationPanel;
@@ -44,6 +48,10 @@ import restaurant.tanRestaurant.TanCustomerRole;
 import restaurant.tanRestaurant.TanWaiterNormalRole;
 import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
 import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
+
+import javax.swing.event.PopupMenuListener;
+import javax.swing.event.PopupMenuEvent;
+import java.awt.Font;
 
 public class SimCityGui {
     
@@ -64,6 +72,7 @@ public class SimCityGui {
 	TrafficAgent trafficLight2;
 	private JPanel panel;
 	private JTabbedPane tabbedPane;
+	private JLabel lblTime;
 	
 	/**
 	 * Launch the application.
@@ -95,6 +104,7 @@ public class SimCityGui {
 		initialize();
 		populateCards();
 		Directory.sharedInstance().setCityGui(this);
+		Clock.sharedInstance().setGui(this);
 		runSuperNorm();
 	}
     
@@ -123,6 +133,9 @@ public class SimCityGui {
             }
 			else if(b.getName().toLowerCase().contains("sheh")) {
 				b.setBuildingPanel(new ShehRestaurantAnimationPanel(b, i, this));
+			}
+			else if(b.getName().toLowerCase().contains("nakamura")) {
+				b.setBuildingPanel(new NakamuraRestaurantAnimationPanel(b, i, this));
 			}
 			else if(b.getName().toLowerCase().contains("phillips")) {
 				b.setBuildingPanel(new PhillipsRestaurantAnimationPanel(b, i, this));
@@ -162,13 +175,17 @@ public class SimCityGui {
         roles.put("Stack's Restaurant Waiter Shared", "StackWaiterShared");
         roles.put("Stack's Restaurant Cook", "StackCook");
         
-        roles.put("Sheh's Restaurant Waiter Normal", "ShehWaiter");
+        roles.put("Sheh's Restaurant Waiter Normal", "ShehWaiterNormal");
         roles.put("Sheh's Restaurant Waiter Shared", "ShehWaiterShared");
         roles.put("Sheh's Restaurant Cook", "ShehCook");
         
         roles.put("Huang's Restaurant Waiter Normal", "HuangWaiterNormal");
         roles.put("Huang's Restaurant Waiter Shared", "HuangWaiterShared");
         roles.put("Huang's Restaurant Cook", "HuangCook");
+        
+        roles.put("Nakamura's Restaurant Waiter Normal", "NakamuraWaiterNormal");
+        roles.put("Nakamura's Restaurant Waiter Shared", "NakamuraWaiterShared");
+        roles.put("Nakamura's Restaurant Cook", "NakamuraCook");
         
         roles.put("Tan's Restaurant Waiter Normal", "TanWaiterNormal");
         roles.put("Tan's Restaurant Waiter Shared", "TanWaiterShared");
@@ -223,7 +240,7 @@ public class SimCityGui {
 		final JButton btnPopulateCity = new JButton("Populate City");
 		btnPopulateCity.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				populateCity("src/city/helpers/tanrestauranttest.xml");	//
+				populateCity("src/city/helpers/normative.xml");	//
 				btnPopulateCity.setEnabled(false);
 				
 			}
@@ -295,11 +312,11 @@ public class SimCityGui {
         //		occupationComboBox.addItem("Huang's Restaurant Waiter");
         //		occupationComboBox.addItem("Huang's Restaurant Cook");
         //		occupationComboBox.addItem("Huang's Restaurant Cashier");
-        //
-        //		occupationComboBox.addItem("Nakamura's Restaurant Host");
-        //		occupationComboBox.addItem("Nakamura's Restaurant Waiter");
-        //		occupationComboBox.addItem("Nakamura's Restaurant Cook");
-        //		occupationComboBox.addItem("Nakamura's Restaurant Cashier");
+        //Nakamura
+        occupationComboBox.addItem("Nakamura's Restaurant Host");
+        occupationComboBox.addItem("Nakamura's Restaurant Waiter");
+        occupationComboBox.addItem("Nakamura's Restaurant Cook");
+        occupationComboBox.addItem("Nakamura's Restaurant Cashier");
 		
 		panel.add(occupationComboBox);
 		
@@ -527,6 +544,40 @@ public class SimCityGui {
 		
 		panel.add(speedSlider);
 		
+		JLabel lblDhh = new JLabel("D:HH");
+		sl_panel.putConstraint(SpringLayout.NORTH, lblDhh, 6, SpringLayout.SOUTH, speedSlider);
+		sl_panel.putConstraint(SpringLayout.WEST, lblDhh, 0, SpringLayout.WEST, btnPopulateCity);
+		panel.add(lblDhh);
+		
+		lblTime = new JLabel(Clock.sharedInstance().getDay() + ":" + Clock.sharedInstance.getHour());
+		sl_panel.putConstraint(SpringLayout.NORTH, lblTime, 6, SpringLayout.SOUTH, speedSlider);
+		sl_panel.putConstraint(SpringLayout.EAST, lblTime, 0, SpringLayout.EAST, btnPopulateCity);
+		panel.add(lblTime);
+		
+		JButton btnIncrementHour = new JButton("Increment Hour");
+		sl_panel.putConstraint(SpringLayout.EAST, btnIncrementHour, 121, SpringLayout.WEST, panel);
+		btnIncrementHour.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		btnIncrementHour.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Clock.sharedInstance().incrementHour();
+			}
+		});
+		sl_panel.putConstraint(SpringLayout.NORTH, btnIncrementHour, 6, SpringLayout.SOUTH, lblDhh);
+		sl_panel.putConstraint(SpringLayout.WEST, btnIncrementHour, 10, SpringLayout.WEST, panel);
+		panel.add(btnIncrementHour);
+		
+		JButton btnIncrementDay = new JButton("Increment Day");
+		btnIncrementDay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Clock.sharedInstance().incrementDay();
+			}
+		});
+		sl_panel.putConstraint(SpringLayout.NORTH, btnIncrementDay, 6, SpringLayout.SOUTH, lblTime);
+		sl_panel.putConstraint(SpringLayout.WEST, btnIncrementDay, 128, SpringLayout.WEST, btnPopulateCity);
+		sl_panel.putConstraint(SpringLayout.EAST, btnIncrementDay, 0, SpringLayout.EAST, btnPopulateCity);
+		btnIncrementDay.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		panel.add(btnIncrementDay);
+		
 		Restaurant restaurant = Directory.sharedInstance().getRestaurants().get(0);
 		CurrentBuildingPanel restPanel = new CurrentBuildingPanel(restaurant);
 		restaurant.setInfoPanel(restPanel);
@@ -550,17 +601,90 @@ public class SimCityGui {
 		 */
 		if(Clock.sharedInstance().isDay()) {
 			
-		}
+		}		
+	
 		if(WalkLoopHelper.sharedInstance() == null) {
 			
 		}
 
-		PersonAgent person1 = new PersonAgent("HuangCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
-		PersonAgent person2 = new PersonAgent("HuangWaiterNormal", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
-		PersonAgent person3 = new PersonAgent("StackWaiterShared", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
+		PersonAgent person1 = new PersonAgent("NakamuraCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
+		PersonAgent person2 = new PersonAgent("NakamuraWaiterShared", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
+		PersonAgent person3 = new PersonAgent("Unemployed", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
 		PersonAgent person4 = new PersonAgent("BankTeller", "Test Person 4", 3, 1000.00, "House4", "TakesTheBus");
 		PersonAgent person5 = new PersonAgent("BankTeller", "Test Person 5", 3, 1000.00, "House5", "TakesTheBus");
 		PersonAgent person6 = new PersonAgent("Market", "Test Person 6", 3, 1000.00, "House6", "TakesTheBus");
+		
+		/*
+		String a = "TanRestaurant";
+		String b = "House1";
+		String name = "Test Person 1 Ben";
+		Role role;
+		role= new TanWaiterNormalRole("TanRestaurant");
+		PersonAgent p = new PersonAgent(role, a , b, name);
+		p.msgWakeUp();
+		role.setPerson(p);
+		p.startThread();
+		
+		String a1 = "TanRestaurant";
+		String b1 = "House2";
+		String name1 = "Test Person 2 Ben";
+		Role role1;
+		role1= new TanCookRole("TanRestaurant");
+		PersonAgent p1 = new PersonAgent(role1, a1 , b1, name1);
+		p1.msgWakeUp();
+		role1.setPerson(p);
+		p1.startThread();
+	
+		String a2 = "TanRestaurant";
+		String b2 = "House3";
+		String name2 = "Test Person 3 Ben";
+		Role role2;
+		role2 = new TanCustomerRole("TanRestaurant");
+		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
+		role2.setPerson(p2);
+		p2.msgWakeUp();
+		p2.startThread();
+		*/
+		
+		
+		//RYAN TEST CODE
+		String a = "ShehRestaurant";
+		String b = "House1";
+		String name = "WAITER";
+		Role role;
+		role = new ShehWaiterRole("ShehRestaurant");
+
+		PersonAgent p = new PersonAgent(role, a , b, name);
+		role.setPerson(p);
+		
+		String a1 = "ShehRestaurant";
+		String b1 = "House2";
+		String name1 = "WAITER2";
+		Role role1;
+		role1 = new ShehWaiterRole("ShehRestaurant");
+
+		PersonAgent p1 = new PersonAgent(role1, a1 , b1, name1);
+		role1.setPerson(p1);
+		
+		String a2 = "ShehRestaurant";
+		String b2 = "House2";
+		String name2 = "COOK";
+		Role role2;
+		role2 = new ShehCookRole("ShehRestaurant");
+
+		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
+		role2.setPerson(p2);
+		
+		String a3 = "ShehRestaurant";
+		String b3 = "House2";
+		String name3 = "COOK2";
+		Role role3;
+		role3 = new ShehCookRole("ShehRestaurant");
+
+		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
+		role3.setPerson(p3);
+		
+		//END OF TEST CODE
 		
 		
 		bus = new BusAgent(1);
@@ -583,6 +707,7 @@ public class SimCityGui {
 		trafficLight1.startThread();
 		trafficLight2 = new TrafficAgent();
 		trafficLight2.startThread();
+
 		
 //		String a = "TanRestaurant";
 //		String b = "House1";
@@ -614,6 +739,39 @@ public class SimCityGui {
 //		p2.msgWakeUp();
 //		p2.startThread();
 		
+
+		/*
+		String a = "TanRestaurant";
+		String b = "House1";
+		String name = "Test Person 1";
+		Role role;
+		role= new TanWaiterNormalRole("TanRestaurant");
+		PersonAgent p = new PersonAgent(role, a , b, name);
+		p.msgWakeUp();
+		role.setPerson(p);
+		p.startThread();
+		
+		String a1 = "TanRestaurant";
+		String b1 = "House2";
+		String name1 = "Test Person 2";
+		Role role1;
+		role1= new TanCookRole("TanRestaurant");
+		PersonAgent p1 = new PersonAgent(role, a1 , b1, name1);
+		p1.msgWakeUp();
+		role.setPerson(p);
+		p1.startThread();
+	
+		String a2 = "TanRestaurant";
+		String b2 = "House3";
+		String name2 = "Test Person 3";
+		Role role2;
+		role2 = new TanCustomerRole("TanRestaurant");
+		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
+		role2.setPerson(p2);
+		p2.msgWakeUp();
+		p2.startThread();
+		*/
+
 		/**
 		 End of Hard Code SuperNorm
 		 */
@@ -714,8 +872,6 @@ public class SimCityGui {
 	}
 	
 	public void displayBuildingPanel( BuildingPanel buildingPanel ) { //How is this tied in with the Micro Panel?
-		//System.out.println("abc");
-		System.out.println("Accessing " + buildingPanel.getName() + " for MicroAnimation Panel." );
 		cardLayout.show( buildingPanels, buildingPanel.getName());
 	}
 	public MacroAnimationPanel getMacroAnimationPanel() {
@@ -761,6 +917,26 @@ public class SimCityGui {
 			Directory.sharedInstance().getMarkets().get(1).setInfoPanel(restPanel);
 			tabbedPane.addTab("Current Building", restPanel);
 		}
+		else if(name.equals("Bank")) {
+			if(tabbedPane.getTabCount() == 2) {
+				tabbedPane.remove(1);
+			}
+			CurrentBuildingPanel restPanel = new CurrentBuildingPanel(Directory.sharedInstance().getBanks().get(0));
+			Directory.sharedInstance().getBanks().get(0).setInfoPanel(restPanel);
+			tabbedPane.addTab("Current Building", restPanel);
+		}
+		else if(name.equals("Bank2")) {
+			if(tabbedPane.getTabCount() == 2) {
+				tabbedPane.remove(1);
+			}
+			CurrentBuildingPanel restPanel = new CurrentBuildingPanel(Directory.sharedInstance().getBanks().get(1));
+			Directory.sharedInstance().getBanks().get(1).setInfoPanel(restPanel);
+			tabbedPane.addTab("Current Building", restPanel);
+		}
+	}
+
+	public void setTime(int day, int hour) {
+		lblTime.setText(String.valueOf(day) + ":" + String.valueOf(hour));
 		
 	}
 }

@@ -12,5 +12,4 @@ public interface Cashier {
 	void msgHereToPay(Customer customer, double total);
 
 	void msgHereIsMarketBill(Bill bill, Market marketAgent);
-
 }

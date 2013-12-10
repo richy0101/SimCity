@@ -1,6 +1,7 @@
 package restaurant.shehRestaurant;
 
 import agent.Role;
+import restaurant.CashierAgent;
 import restaurant.shehRestaurant.helpers.Bill;
 import restaurant.shehRestaurant.helpers.Menu;
 import restaurant.shehRestaurant.gui.WaiterGui;
@@ -26,7 +27,7 @@ public class ShehWaiterRole extends Role implements Waiter {
 	
 	private ShehCookRole cook;
 	private ShehHostAgent host;
-	private Cashier cashier;
+	private ShehCashierAgent cashier;
 
 	private Boolean breakGranted = false;
 
@@ -37,6 +38,8 @@ public class ShehWaiterRole extends Role implements Waiter {
 	private Semaphore atTable = new Semaphore(0,true);
 	private Semaphore atKiosk = new Semaphore(0,true);
 	private Semaphore atKitchen = new Semaphore(0,true);
+	
+	private double moneyEarned = 0;
 	
 	private int homePosition = 0;
 
@@ -56,15 +59,20 @@ public class ShehWaiterRole extends Role implements Waiter {
 		}
 	}
 
+	public enum AgentState 
+		{NotArrived, JustArrived, Working, GettingPayCheck, ReceivingPayCheck, LeavingWork};
+		
+		AgentState state = AgentState.NotArrived;
+	
 	public enum CustomerState
-	{WaitingInRestaurant, BeingSeated, Seated, ReadyToOrder, Ordering, ReOrdering, DoneOrdering, Waiting, ReceivingFood, Eating, AskingForBill, WaitingForBill, BeingBilled,
+		{WaitingInRestaurant, BeingSeated, Seated, ReadyToOrder, Ordering, ReOrdering, DoneOrdering, Waiting, ReceivingFood, Eating, AskingForBill, WaitingForBill, BeingBilled,
 		Paying, Gone};
 	
 	public ShehWaiterRole(String location) {
 		super();
 		
 		host = (ShehHostAgent) Directory.sharedInstance().getAgents().get("ShehRestaurantHost");
-		cashier = host.getCashier();
+		cashier = (ShehCashierAgent) Directory.sharedInstance().getAgents().get("ShehRestaurantCashier");
 		
 		waiterGui = new WaiterGui(this);
 		
@@ -75,9 +83,11 @@ public class ShehWaiterRole extends Role implements Waiter {
 				b.addGui(waiterGui);
 			}
 		}
+		
+		state = AgentState.JustArrived;
 	}
 	
-	public ShehWaiterRole(String name, Cashier ca, ShehCookRole co, ShehHostAgent h) {
+	public ShehWaiterRole(String name, ShehCashierAgent ca, ShehCookRole co, ShehHostAgent h) {
 		super();
 
 		this.name = name;
@@ -227,10 +237,28 @@ public class ShehWaiterRole extends Role implements Waiter {
 		breakGranted = false;
 	}
 	
+	public void msgJobDone() {
+		print("I'm done with work.");
+		state = AgentState.GettingPayCheck;
+		stateChanged();
+	}
+	
+	public void msgHereIsPayCheck(Bill b) {
+		print("Received my paycheck, received: $ " + b.m);
+		
+		moneyEarned = b.m;
+		state = AgentState.LeavingWork;
+	}
+	
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
+		if(state == AgentState.JustArrived) {
+			checkInWithHost();
+			return true;
+		}
+		
 		synchronized(customers) {
 			for (myCustomer c : customers) {
 				if (c.s == CustomerState.WaitingInRestaurant) {
@@ -310,11 +338,22 @@ public class ShehWaiterRole extends Role implements Waiter {
 			}
 		}
 		
+		if(state == AgentState.GettingPayCheck) {
+			collectPayCheck();
+			return true;
+		}
+		
 		waiterGui.DoStandby(homePosition);
 		return false;
 	}
 
 	// Actions
+	
+	private void checkInWithHost() {
+		host.msgWaiterIsPresent(this);
+		waiterGui.DoStandby(homePosition);
+		state = AgentState.Working;
+	}
 
 	private void seatCustomer(myCustomer c) {
 		waiterGui.DoGoToKiosk();
@@ -441,6 +480,12 @@ public class ShehWaiterRole extends Role implements Waiter {
 			
 		}
 		customers.remove(c);
+	}
+	
+	private void collectPayCheck() {
+		print("I need to collect my paycheck.");
+		cashier.msgCollectPayCheck(this);
+		state = AgentState.ReceivingPayCheck;
 	}
 
 	//Animation

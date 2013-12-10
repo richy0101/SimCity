@@ -63,7 +63,7 @@ public class ShehCustomerRole extends Role implements Customer {
 		super();
 	
 		customerGui = new CustomerGui(this);
-		host = (ShehHostAgent) Directory.sharedInstance().getAgents().get("ShehHostAgent");
+		host = (ShehHostAgent) Directory.sharedInstance().getAgents().get("ShehRestaurantHost");
 		
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
@@ -78,7 +78,7 @@ public class ShehCustomerRole extends Role implements Customer {
 	 */
 	// Messages
 
-	public void gotHungry() {//from animation
+	public void msgGotHungry() {//from animation
 		print("I'm hungry");
 		event = AgentEvent.gotHungry;
 		stateChanged();
@@ -136,18 +136,23 @@ public class ShehCustomerRole extends Role implements Customer {
 	
 	public void msgThisIsYourNumber(int num) {
 		customerGui.DoWaitInRestaurant(num);
-		
 	}
 	
 	public void msgAnimationFinishedLeaveRestaurant() {
 		event = AgentEvent.doneLeaving;
 		stateChanged();
 	}
+	
+	public void msgRestaurantIsClosed() {
+		print("Restaurant is closed, I'm leaving.");
+		customerGui.DoExitRestaurant();
+		this.getPersonAgent().msgRoleFinished();	
+	}
 
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		//	CustomerAgent is a finite state machine
 		if (state == AgentState.DoingNothing && event == AgentEvent.gotHungry ){
 			state = AgentState.WaitingInRestaurant;
@@ -354,8 +359,9 @@ public class ShehCustomerRole extends Role implements Customer {
 	
 	private void leaveTable() {
 		Do("Leaving w/ $" + money + " left in my wallet.");
-		host.msgLeavingTable(this);
+		//host.msgLeavingTable(this);
 		customerGui.DoExitRestaurant();
+		this.getPersonAgent().msgRoleFinished();
 	}
 
 	//Utilities
@@ -380,7 +386,6 @@ public class ShehCustomerRole extends Role implements Customer {
 	}
 
 	public CustomerGui getGui() {
-
 		return customerGui;
 	}
 	

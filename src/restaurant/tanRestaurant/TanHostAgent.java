@@ -49,9 +49,7 @@ public class TanHostAgent extends Agent {
 	public Collection<Table> tables;
 	public Collection<Seat> seats;
 	
-//	public WaiterAgent MyWaiter;
-	//note that tables is typed with Collection semantics.
-	//Later we will see how it is implemented
+	TanRestaurant restaurant;
 	
 	Timer timer = new Timer();
 	
@@ -91,6 +89,8 @@ public class TanHostAgent extends Agent {
 		super();
 		name= "Host Dmitri";
 		
+		System.out.println("Host Dmitri in da hauzzzzz "+ location);
+		
 		tables = new ArrayList<Table>(NTABLES);
 		for (int ix = 1; ix <= NTABLES; ix++) {
 			tables.add(new Table(ix));//how you add to a collections
@@ -99,6 +99,7 @@ public class TanHostAgent extends Agent {
 		for (int x = 1; x <= NSEATS; x++) {
 			seats.add(new Seat(x));//how you add to a collections
 		}
+		
 		//cashier = (TanCashierAgent) Directory.sharedInstance().getAgents().get("TanRestaurantCashier");
 	}
 	
@@ -515,6 +516,11 @@ public class TanHostAgent extends Agent {
 	public TanCashierAgent getCashier() {
 		// TODO Auto-generated method stub
 		return (TanCashierAgent) cashier;
+	}
+
+	public void setRestaurant(TanRestaurant tanRestaurant) {
+		restaurant= tanRestaurant;
+		
 	}
 }
 
