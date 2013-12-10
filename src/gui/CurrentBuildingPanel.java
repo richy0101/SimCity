@@ -53,6 +53,9 @@ public class CurrentBuildingPanel extends JPanel {
 		setLayout(springLayout);
 		
 		JLabel lblName_1 = new JLabel("Name: ");
+		if(market != null) {
+			lblName_1.setText("Name: " + market.getName());
+		}
 		springLayout.putConstraint(SpringLayout.NORTH, lblName_1, 10, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, lblName_1, 10, SpringLayout.WEST, this);
 		add(lblName_1);
@@ -72,7 +75,10 @@ public class CurrentBuildingPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.EAST, steakNumber, -10, SpringLayout.EAST, this);
 		add(steakNumber);
 		
-		steakSlider = new JSlider();
+		int beginningSteakMin = 0;
+		int beginningSteakMax = 100;
+		int beginningSteakStart = 50;
+		steakSlider = new JSlider(beginningSteakMin, beginningSteakMax, beginningSteakStart);
 		steakSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if(market != null) {
@@ -81,6 +87,9 @@ public class CurrentBuildingPanel extends JPanel {
 				}
 			}
 		});
+		steakSlider.setMajorTickSpacing(5);
+		steakSlider.setPaintTicks(true);
+		
 		springLayout.putConstraint(SpringLayout.NORTH, steakSlider, 6, SpringLayout.SOUTH, lblSteak_1);
 		springLayout.putConstraint(SpringLayout.WEST, steakSlider, 0, SpringLayout.WEST, lblName_1);
 		springLayout.putConstraint(SpringLayout.EAST, steakSlider, 0, SpringLayout.EAST, steakNumber);
@@ -96,7 +105,10 @@ public class CurrentBuildingPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.EAST, chickenNumber, 0, SpringLayout.EAST, steakNumber);
 		add(chickenNumber);
 		
-		chickenSlider = new JSlider();
+		int beginningChickenMin = 0;
+		int beginningChickenMax = 100;
+		int beginningChickenStart = 50;
+		chickenSlider = new JSlider(beginningChickenMin, beginningChickenMax, beginningChickenStart);
 		chickenSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if(market != null) {
@@ -110,12 +122,18 @@ public class CurrentBuildingPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.EAST, chickenSlider, 249, SpringLayout.WEST, this);
 		add(chickenSlider);
 		
+		chickenSlider.setMajorTickSpacing(5);
+		chickenSlider.setPaintTicks(true);
+		
 		JLabel lblPizza_1 = new JLabel("Pizza:");
 		springLayout.putConstraint(SpringLayout.NORTH, lblPizza_1, 6, SpringLayout.SOUTH, chickenSlider);
 		springLayout.putConstraint(SpringLayout.WEST, lblPizza_1, 0, SpringLayout.WEST, lblName_1);
 		add(lblPizza_1);
 		
-		pizzaSlider = new JSlider();
+		int beginningPizzaMin = 0;
+		int beginningPizzaMax = 100;
+		int beginningPizzaStart = 50;
+		pizzaSlider = new JSlider(beginningPizzaMin, beginningPizzaMax, beginningPizzaStart);
 		pizzaSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if(market != null) {
@@ -129,11 +147,14 @@ public class CurrentBuildingPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.EAST, pizzaSlider, 0, SpringLayout.EAST, steakNumber);
 		add(pizzaSlider);
 		
+		pizzaSlider.setMajorTickSpacing(5);
+		pizzaSlider.setPaintTicks(true);
+		
 		pizzaNumber = new JLabel("50");
 		springLayout.putConstraint(SpringLayout.SOUTH, pizzaNumber, 0, SpringLayout.SOUTH, lblPizza_1);
 		springLayout.putConstraint(SpringLayout.EAST, pizzaNumber, 0, SpringLayout.EAST, steakNumber);
 		add(pizzaNumber);
-		
+
 		JLabel lblSalad_1 = new JLabel("Salad:");
 		springLayout.putConstraint(SpringLayout.NORTH, lblSalad_1, 6, SpringLayout.SOUTH, pizzaSlider);
 		springLayout.putConstraint(SpringLayout.WEST, lblSalad_1, 0, SpringLayout.WEST, lblName_1);
@@ -144,7 +165,10 @@ public class CurrentBuildingPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.EAST, saladNumber, 0, SpringLayout.EAST, steakNumber);
 		add(saladNumber);
 		
-		saladSlider = new JSlider();
+		int beginningSaladMin = 0;
+		int beginningSaladMax = 100;
+		int beginningSaladStart = 50;
+		saladSlider = new JSlider(beginningSaladMin, beginningSaladMax, beginningSaladStart);
 		saladSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if(market != null) {
@@ -158,6 +182,9 @@ public class CurrentBuildingPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.EAST, saladSlider, 0, SpringLayout.EAST, steakNumber);
 		add(saladSlider);
 		
+		saladSlider.setMajorTickSpacing(5);
+		saladSlider.setPaintTicks(true);
+		
 		lblCar = new JLabel("Car:");
 		springLayout.putConstraint(SpringLayout.NORTH, lblCar, 6, SpringLayout.SOUTH, saladSlider);
 		springLayout.putConstraint(SpringLayout.WEST, lblCar, 0, SpringLayout.WEST, lblName_1);
@@ -168,7 +195,10 @@ public class CurrentBuildingPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.EAST, carNumber, 0, SpringLayout.EAST, steakNumber);
 		add(carNumber);
 		
-		carSlider = new JSlider();
+		int beginningCarMin = 0;
+		int beginningCarMax = 100;
+		int beginningCarStart = 50;
+		carSlider = new JSlider(beginningCarMin, beginningCarMax, beginningCarStart);
 		carSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				market.msgChangeFoodInventory("Car", carSlider.getValue());
@@ -179,6 +209,35 @@ public class CurrentBuildingPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.WEST, carSlider, 0, SpringLayout.WEST, lblName_1);
 		springLayout.putConstraint(SpringLayout.EAST, carSlider, 0, SpringLayout.EAST, steakNumber);
 		add(carSlider);
+		
+		carSlider.setMajorTickSpacing(5);
+		carSlider.setPaintTicks(true);
+		
+		final JButton btnCloseBuildingMarket = new JButton();
+		if(market != null) {
+			if(market.isOpen()) {
+				btnCloseBuildingMarket.setText("Close Building");
+			}
+			else {
+				btnCloseBuildingMarket.setText("Open Building");
+			}
+		}
+		btnCloseBuildingMarket.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(market != null && btnCloseBuildingMarket.getText().contains("Close")) {
+					market.setClosed();
+					btnCloseBuildingMarket.setText("Open Building");
+				}
+				else if(market != null) {
+					market.setOpen();
+					btnCloseBuildingMarket.setText("Close Building");
+				}
+			}
+		});
+		springLayout.putConstraint(SpringLayout.NORTH, btnCloseBuildingMarket, 6, SpringLayout.SOUTH, carSlider);
+		springLayout.putConstraint(SpringLayout.WEST, btnCloseBuildingMarket, 0, SpringLayout.WEST, lblName_1);
+		springLayout.putConstraint(SpringLayout.EAST, btnCloseBuildingMarket, 0, SpringLayout.EAST, steakNumber);
+		add(btnCloseBuildingMarket);
 		
 	}
 
