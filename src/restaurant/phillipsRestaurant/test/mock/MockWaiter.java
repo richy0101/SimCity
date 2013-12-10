@@ -1,11 +1,8 @@
-package restaurant.test.mock;
+package restaurant.phillipsRestaurant.test.mock;
 
 
-import restaurant.CustomerAgent;
-import restaurant.Menu;
-import restaurant.WaiterAgent;
-import restaurant.WaiterAgent.AgentState;
-import restaurant.interfaces.Waiter;
+import restaurant.phillipsRestaurant.*;
+import restaurant.phillipsRestaurant.interfaces.*;
 
 /**
  * A sample MockCustomer built to unit test a CashierAgent.
@@ -19,14 +16,14 @@ public class MockWaiter extends Mock implements Waiter {
         super(name);
 
 	}
-	public void msgSeatCustomerAtTable(CustomerAgent c, int table){
+	public void msgSeatCustomerAtTable(Customer c, int table){
 		log.add(new LoggedEvent("Waiter seating customer " + c.getCustomerName() + " at table " + table));	
 	}
 	
-	public void msgCustomerReadyToOrder(CustomerAgent c){
+	public void msgCustomerReadyToOrder(Customer c){
 		log.add(new LoggedEvent("Waiter going to customer " + c.getCustomerName() + " to get his order"));
 	}
-	public void msgHereIsMyChoice(CustomerAgent cust, String choice){
+	public void msgHereIsMyChoice(Customer cust, String choice){
 		log.add(new LoggedEvent("Waiter received customer " + cust.getCustomerName() + "'s choice, which is " + choice));
 	}
 	public void msgWaiterOutOfFood(String order,int tableNum){
@@ -36,14 +33,39 @@ public class MockWaiter extends Mock implements Waiter {
 	public void msgOrderReadyForPickup(String choice,int tablenum){
 		log.add(new LoggedEvent("Waiter is going to cook to pick up " + choice + " for table " + tablenum));
 	}
-	public void msgWantToPay(CustomerAgent cust){
+	public void msgWantToPay(Customer cust){
 		log.add(new LoggedEvent("Waiter is told customer " + cust.getCustomerName() + " wants to pay"));
 	}
 	public void msgPayFood(String name,double money){
 		log.add(new LoggedEvent("Waiter getting cashier to compute check for " + name));
 	}
-	public void msgLeavingTable(CustomerAgent cust){
+	public void msgLeavingTable(Customer cust){
 		log.add(new LoggedEvent("Customer " + cust + " leaving table"));
+	}
+	@Override
+	public void msgAtHost() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void msgAtCook() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void msgAtCashier() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void msgAtWaitingArea() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void msgAtTable() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

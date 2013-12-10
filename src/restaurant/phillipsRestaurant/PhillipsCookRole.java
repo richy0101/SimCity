@@ -26,7 +26,7 @@ import java.util.concurrent.Semaphore;
 /**
  * Restaurant cook agent.
  */
-public class PhillipsCookRole extends Role {
+public class PhillipsCookRole extends CookRole implements Cook {
 	
 	private class Food{ 
 		String choice; 
@@ -55,13 +55,13 @@ public class PhillipsCookRole extends Role {
 	}
 	
 	private class Order{
-		WaiterAgent waiter; 
+		Waiter waiter; 
 		String order; 
 		int tableNumber;
 		OrderState os;
 		OrderEvent oe;
 
-		Order(WaiterAgent w,String c,int t,OrderState st) {
+		Order(Waiter w,String c,int t,OrderState st) {
 			waiter = w;
 			order = c;
 			tableNumber = t;
@@ -113,15 +113,15 @@ public class PhillipsCookRole extends Role {
 	private Semaphore atPlatingArea = new Semaphore(0,true);
 	
 	public CookGui cookGui = null;
-	private WaiterAgent waiter=null;
-	private CashierAgent cashier=null;
+	private Waiter waiter=null;
+	private Cashier cashier=null;
 
 
 	/**
 	 * Constructor for CookAgent class
 	 *
 	 */
-	public CookAgent(){
+	public PhillipsCookRole(){
 		super();
 		orders = Collections.synchronizedList(new ArrayList<Order>());
 		markets = Collections.synchronizedList(new ArrayList<MyMarket>());
@@ -138,7 +138,7 @@ public class PhillipsCookRole extends Role {
 	public void setGui(CookGui gui) {
 		cookGui = gui;
 	}	
-	public void setCashier(CashierAgent c){
+	public void setCashier(Cashier c){
 		cashier = c;
 	}
 	
@@ -165,7 +165,7 @@ public class PhillipsCookRole extends Role {
 	}
 	
 	// Messages
-	public void msgHereIsOrder(WaiterAgent w,String choice,int table){
+	public void msgHereIsOrder(Waiter w,String choice,int table){
 		Do("Cook received order");
 		//waiter = w;
 		synchronized(this.orders){		
@@ -227,7 +227,7 @@ public class PhillipsCookRole extends Role {
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		if(state != OrderState.noFood){
 			
 			if(marketsOut == false){

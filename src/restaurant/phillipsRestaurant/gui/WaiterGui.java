@@ -1,9 +1,10 @@
-package restaurant.gui;
+package restaurant.phillipsRestaurant.gui;
 
 
-import restaurant.CustomerAgent;
-import restaurant.WaiterAgent;
-import restaurant.WaiterAgent.AgentState;
+import restaurant.phillipsRestaurant.*;
+import restaurant.phillipsRestaurant.interfaces.Customer;
+import restaurant.phillipsRestaurant.interfaces.Waiter;
+import gui.Gui;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -13,7 +14,7 @@ import javax.imageio.ImageIO;
 
 public class WaiterGui implements Gui {
 
-    private WaiterAgent agent = null;
+    private Waiter agent = null;
     
     boolean atDestination = false;
 
@@ -34,7 +35,7 @@ public class WaiterGui implements Gui {
 	
     BufferedImage waiterImage;
 
-    public WaiterGui(WaiterAgent agent, int waiterNum) {
+    public WaiterGui(Waiter agent, int waiterNum) {
         this.agent = agent;
         switch(waiterNum%4){
         case 0:
@@ -153,43 +154,43 @@ public class WaiterGui implements Gui {
     	xDestination = WAITINGX;
 		yDestination = WAITINGY;
     }
-    public void DoBringToTable(CustomerAgent customer) {
+    public void DoBringToTable(Customer customer,int tableNum) {
     	atDestination = false;
-    	if (customer.tableNum==1)
+    	if (tableNum==1)
     	{
     		xDestination = xTable + PERSONSIZEX;
             yDestination = yTable12 - PERSONSIZEY;
         }
-    	if (customer.tableNum==2)
+    	if (tableNum==2)
         {
     		xDestination = xTable2 + PERSONSIZEX;
             yDestination = yTable12 - PERSONSIZEY;
         }
-    	if (customer.tableNum==3)
+    	if (tableNum==3)
         {
     		xDestination = xTable3 + PERSONSIZEX;
             yDestination = yTable3 - PERSONSIZEY;
         }
     }
-    public void DoBringFoodToTable(CustomerAgent customer,String food){
+    public void DoBringFoodToTable(Customer customer,String food,int tableNum){
     	atDestination = false;
-    	if (customer.tableNum==1)
+    	if (tableNum==1)
     	{
     		xDestination = xTable + PERSONSIZEX;
             yDestination = yTable12 - PERSONSIZEY;
         }
-    	if (customer.tableNum==2)
+    	if (tableNum==2)
         {
     		xDestination = xTable2 + PERSONSIZEX;
             yDestination = yTable12 - PERSONSIZEY;
         }
-    	if (customer.tableNum==3)
+    	if (tableNum==3)
         {
     		xDestination = xTable3 + PERSONSIZEX;
             yDestination = yTable3 - PERSONSIZEY;
         }
     }
-    public void DoTakeCustomerOrder(CustomerAgent customer){
+    public void DoTakeCustomerOrder(Customer customer){
     	atDestination = false;
     	if (customer.tableNum==1)
     	{

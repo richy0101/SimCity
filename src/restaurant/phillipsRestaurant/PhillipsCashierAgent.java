@@ -1,12 +1,11 @@
-package restaurant;
+package restaurant.phillipsRestaurant;
 
-import restaurant.CustomerAgent.AgentEvent;
-import restaurant.test.mock.*;
-import restaurant.MarketAgent;
-import restaurant.WaiterAgent.AgentState;
-import restaurant.Check;
-import restaurant.gui.RestaurantGui;
-import restaurant.interfaces.Waiter;
+import restaurant.phillipsRestaurant.*;
+import restaurant.phillipsRestaurant.Check;
+import restaurant.phillipsRestaurant.test.*;
+import restaurant.phillipsRestaurant.test.mock.*;
+import restaurant.phillipsRestaurant.gui.*;
+import restaurant.phillipsRestaurant.interfaces.*;
 import agent.Agent;
 
 import java.util.Collections;
@@ -17,10 +16,12 @@ import java.util.Vector;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.ArrayList;
+
+import market.MarketCheck;
 /**
  * Restaurant cook agent.
  */
-public class CashierAgent extends Agent {
+public class PhillipsCashierAgent extends Agent implements Cashier{
 	
 	public EventLog log = new EventLog();
 	public enum OrderState {payMarket,payMarketLater,waitingPayment,computing,paid,done};
@@ -40,7 +41,7 @@ public class CashierAgent extends Agent {
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public CashierAgent(String name){
+	public PhillipsCashierAgent(String name){
 		super();
 		this.name = name;
 	}
@@ -180,6 +181,11 @@ public class CashierAgent extends Agent {
 	public void removeCheck(Check c){
 		System.out.println("Cashier received money from customer and throwing away check");
 		checks.remove(c);
+	}
+	@Override
+	public void msgGiveBill(MarketCheck marketcheck) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

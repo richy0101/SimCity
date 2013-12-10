@@ -22,7 +22,7 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	Timer timer = new Timer();
 	Timer timer2 = new Timer();
 	private CustomerGui customerGui;
-	public int tableNum,randChoice = (int) (Math.random()*4);
+	public int tableNum, randChoice = (int) (Math.random()*4);
 	public String order;
 	Menu menu = null;
 	private Semaphore atCashier = new Semaphore(0,true);
@@ -30,9 +30,9 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	boolean reOrder=false;
 	
 	// agent correspondents
-	private HostAgent host = null;
+	private Host host = null;
 	private Waiter waiter = null;
-	private CashierAgent cashier = null;
+	private Cashier cashier = null;
 
 	//    private boolean isHungry = false; //hack for gui
 	public enum AgentState
@@ -61,13 +61,13 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	/**
 	 * hack to establish connection to Host agent.
 	 */
-	public void setHost(HostAgent host) {
-		this.host = host;
+	public void setHost(Agent host) {
+		this.host = (Host) host;
 	}
 	public void setWaiter(Waiter waiter) {
 		this.waiter = waiter;
 	}
-	public void setCashier(CashierAgent cashier){
+	public void setCashier(Cashier cashier){
 		this.cashier = cashier;
 	}
 	
@@ -309,6 +309,13 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	public CustomerGui getGui() {
 		return customerGui;
 	}
+	
+	public int getTableNum(){
+		return tableNum;
+	}
 
+	public void setTableNum(int table){
+		this.tableNum = table;
+	}
 }
 

@@ -17,4 +17,11 @@ public interface Waiter {
 	public abstract void msgWantToPay(Customer cust);
 	public abstract void msgPayFood(String name,double money);
 	public abstract void msgLeavingTable(Customer cust);
+	
+	public abstract void msgAtHost();
+	public abstract void msgAtCook();
+	public abstract void msgAtCashier();
+	public abstract void msgAtWaitingArea();
+	public abstract void msgAtTable();
+	public abstract int getCustomers();
 }

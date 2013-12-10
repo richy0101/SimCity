@@ -1,9 +1,9 @@
-package restaurant.gui;
+package restaurant.phillipsRestaurant.gui;
 
 
-import restaurant.CustomerAgent;
-import restaurant.CookAgent;
-import restaurant.CookAgent.OrderState;
+import restaurant.phillipsRestaurant.*;
+import restaurant.phillipsRestaurant.interfaces.Cook;
+import gui.Gui;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -20,10 +20,10 @@ public class CookGui implements Gui {
     private static final int COOKINGX = 770, COOKINGY = 225;
     private static final int FRIDGEX = 750, FRIDGEY = 60;
     
-    CookAgent agent = null;
+    Cook agent = null;
     BufferedImage cookImage;
 
-    public CookGui(CookAgent agent) {
+    public CookGui(Cook agent) {
         this.agent = agent;
         
         try {
@@ -58,7 +58,7 @@ public class CookGui implements Gui {
         else if (atDestination == false && xPos == xDestination && yPos == yDestination
         		& (xDestination == PLATINGX) & (yDestination == PLATINGY)) {
             atDestination = true;
-            agent.msgAtPlatingArea();
+            agent.msgAtCookingArea();
          }
     }
 

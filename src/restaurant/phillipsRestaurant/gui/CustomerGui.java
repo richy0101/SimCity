@@ -1,7 +1,8 @@
-package restaurant.gui;
+package restaurant.phillipsRestaurant.gui;
 
-import restaurant.CustomerAgent;
-import restaurant.HostAgent;
+import restaurant.phillipsRestaurant.*;
+import restaurant.phillipsRestaurant.interfaces.Customer;
+import gui.Gui;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -12,7 +13,7 @@ import javax.imageio.ImageIO;
 
 public class CustomerGui implements Gui{
 
-	private CustomerAgent agent = null;
+	private Customer agent = null;
 	private boolean isPresent = false;
 	private boolean isHungry = false;
 	
@@ -34,7 +35,7 @@ public class CustomerGui implements Gui{
 	
 	//public ArrayList<Boolean> tableOccupied = new ArrayList<Boolean>();
 
-	public CustomerGui(CustomerAgent c, RestaurantGui gui, int customerNum){ //HostAgent m) {
+	public CustomerGui(Customer c, RestaurantGui gui, int customerNum){ //HostAgent m) {
 		agent = c;
 		switch(customerNum%6){
         case 0:
@@ -108,7 +109,7 @@ public class CustomerGui implements Gui{
 				agent.msgAnimationFinishedLeaveRestaurant();
 				//System.out.println("about to call gui.setCustomerEnabled(agent);");
 				isHungry = false;
-				gui.setCustomerEnabled(agent);
+				//gui.setCustomerEnabled(agent);
 			}
 			command=Command.noCommand;
 		}
