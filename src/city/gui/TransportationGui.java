@@ -29,6 +29,24 @@ public class TransportationGui implements Gui {
 	BufferedImage personDown;
 	private String info;
 	
+	//outer loop
+	int outerTopLane= 83;
+	int outerBottomlane= 353;
+	int outerLeftLane= 108;
+	int outerRightLane= 719;
+	
+	//inner left (IL) loop
+	int ILTopLane= 127;
+	int ILBottomLane= 308;
+	int ILLeftlane= 152;
+	int ILRightLane= 390;
+	
+	//inner right (IR) loop
+	int IRTopLane= 127;
+	int IRBottomLane= 308;
+	int IRLeftLane= 435;
+	int IRRightLane= 674;
+	
 	public enum CurrentAction {Travelling, Idle};
 	CurrentAction currentAction = CurrentAction.Idle;
 	public TransportationGui(TransportationRole agent, int startX, int startY, int destX, int destY) {

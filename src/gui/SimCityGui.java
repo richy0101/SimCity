@@ -197,7 +197,7 @@ public class SimCityGui {
 		final JButton btnPopulateCity = new JButton("Populate City");
 		btnPopulateCity.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				populateCity("src/city/helpers/supernormative.xml");	
+				populateCity("src/city/helpers/supernormative.xml");	//
 				btnPopulateCity.setEnabled(false);
 				
 			}
