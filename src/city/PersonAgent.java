@@ -798,6 +798,8 @@ public class PersonAgent extends Agent implements Person {
 			t.setPerson(this);
 			roles.add(t);
 		}
+		else
+			setPersonState(PersonState.WantsToGoHome);
 	}
 	/** Non Norm Actions **/
 	private void goRob() {

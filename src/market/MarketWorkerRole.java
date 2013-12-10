@@ -586,6 +586,7 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 		
 		jobDone = false;
 		atWork = false;
+		gui.setIsNotPresent();
 		
 		getPersonAgent().msgRoleFinished();
 	}
@@ -595,11 +596,11 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 		gui.setPresent();
 		gui.DoEnterMarket();
 	}
+	
 	private void DoLeaveMarket() {
-		gui.DoLeaveMarket();
-		gui.setIsNotPresent();
-		
+		gui.DoLeaveMarket();		
 	}
+	
 	private void DoGetItem(String s) {
 		gui.DoGetFood();		
 	}
