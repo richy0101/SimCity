@@ -86,7 +86,7 @@ public class DrivewayHelper {
 		
 	//MARKETS
 		private Driveway market1 = new Driveway("Market1"); //priority market
-		Coordinate market1Location = new Coordinate(494,93); //done changing
+		Coordinate market1Location = new Coordinate(494,110); //done changing
 		
 		private Driveway market2 = new Driveway("Market2"); //secondary market
 		Coordinate market2Location = new Coordinate(488,320);
@@ -113,6 +113,29 @@ public class DrivewayHelper {
 		
 		private Driveway bank2 = new Driveway("Bank2");
 		Coordinate bankLocation2 = new Coordinate(685,122);
+		
+		/*
+		public Map<String, String> busStopEvaluator = new HashMap<String, String>(); {
+			busStopEvaluator.put("Bank", busStop4Location);
+			
+			busStopEvaluator.put("House1", busStop1Location);
+			busStopEvaluator.put("House2", busStop4Location);
+			busStopEvaluator.put("House3", busStop3Location);
+			busStopEvaluator.put("House4", busStop3Location);
+			busStopEvaluator.put("House5", busStop2Location);
+			busStopEvaluator.put("House6", busStop2Location);
+			
+			busStopEvaluator.put("ApartmentA", busStop1Location);
+			busStopEvaluator.put("ApartmentB", busStop3Location);
+			busStopEvaluator.put("ApartmentC", busStop2Location);
+			
+			busStopEvaluator.put("Market1", busStop3Location);
+			busStopEvaluator.put("Market2", busStop2Location);
+			
+			busStopEvaluator.put("StackRestaurant", busStop1Location);
+			busStopEvaluator.put("ShehRestaurant", busStop2Location);
+			busStopEvaluator.put("HuangRestaurant", busStop4Location);
+		}*/
 		
 		public Map<String, Coordinate> locationDirectory = new HashMap<String, Coordinate>(); {
 			//Bank

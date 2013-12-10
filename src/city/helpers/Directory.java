@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import city.PersonAgent;
+import city.TrafficAgent;
 import city.TransportationRole;
 import city.gui.BusStop;
 import city.gui.StreetCorner;
@@ -36,6 +37,7 @@ public class Directory {
 		banks.add(bank2);
 		markets.add(Market);
 		markets.add(market2);
+		//trafficLights.add(trafficLight);
 	}
 	
 	public static Directory sharedInstance() {
@@ -228,6 +230,8 @@ public class Directory {
 	public static List<Bank> banks = new ArrayList<Bank>();
 	public static List<Market> markets = new ArrayList<Market>();
 	public static List<PersonAgent> people = new ArrayList<PersonAgent>();
+	
+	public static List<TrafficAgent> trafficLights = new ArrayList<TrafficAgent>();
 	
 	public Map<String, Agent> getAgents() {
 		return agents;

@@ -34,10 +34,11 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 
 	public EventLog log;
 	
-	public MarketCustomerRole(String location) {
+	public MarketCustomerRole(Map<String, Integer> groceries, String location) {
 		roleEvent = Event.WantsGroceries;
 		roleState = State.DoingNothing;
 		
+		myGroceryList = groceries;
 		gui = new MarketCustomerGui(this);
 		log = new EventLog();
 		
@@ -50,11 +51,13 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		}
 	}
 	
-	public MarketCustomerRole() {
+	public MarketCustomerRole(Map<String, Integer> groceries) {
 		roleEvent = Event.WantsGroceries;
 		roleState = State.DoingNothing;
 		
+		myGroceryList = groceries;
 		gui = new MarketCustomerGui(this);
+		
 		log = new EventLog();
 	}
 	
@@ -76,9 +79,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	public State getState() {
 		return roleState;
 	}
-	public void setGroceryList(Map<String, Integer> groceries) {
-		this.myGroceryList = groceries;
-	}
+	
 	//messages----------------------------------------------------------------------------
 	public void msgHereIsBill(double price) {
 		print("Received msgHereIsBill");
