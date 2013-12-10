@@ -88,7 +88,6 @@ public class StackCookRole extends CookRole implements Cook {
 	
 	@Override
 	public boolean pickAndExecuteAnAction() {
-		print(state.toString() + "-----------------------------");
 		if(state == AgentState.Arrived) {
 			setStringState(state.toString());
 			tellHostAtWork();
@@ -154,7 +153,6 @@ public class StackCookRole extends CookRole implements Cook {
 	
 	//actions
 	private void addSharedOrders() {
-		print("checking for order---------------");
 		Order order = Directory.sharedInstance().getRestaurants().get(0).getMonitor().remove();
 		if(order != null) {
 			orders.add(new MyOrder(order, OrderState.Pending));
@@ -163,7 +161,6 @@ public class StackCookRole extends CookRole implements Cook {
 	}
 	
 	private void cookIt(final MyOrder order) {
-		print("cooking food----------------------------");
 		int cookingTime = restaurant.getFoodInventory().get(order.choice).getCookTime();
 		int inventory = restaurant.getFoodInventory().get(order.choice).getQuantity();
 		if(inventory == 0) {
@@ -175,7 +172,8 @@ public class StackCookRole extends CookRole implements Cook {
 		}
 		else {
 			int quantity = restaurant.getFoodInventory().get(order.choice).getQuantity();
-			restaurant.getFoodInventory().get(order.choice).setQuantity(quantity--);;
+			restaurant.getFoodInventory().get(order.choice).setQuantity(quantity--);
+			restaurant.msgChangeFoodInventory(order.choice, quantity--);
 		}
 		cookGui.DoGoToFridge();
 		try {
@@ -192,7 +190,6 @@ public class StackCookRole extends CookRole implements Cook {
 		timer.schedule(new TimerTask() {
 			Object cookie = 1;
 			public void run() {
-				print("about to finish cooking------------------------");
 				cookGui.DoGoToPlatingArea();
 				try {
 					doneAnimation.acquire();
@@ -210,13 +207,11 @@ public class StackCookRole extends CookRole implements Cook {
 	}
 	
 	private void plateIt(MyOrder order) {
-		print("plating food--------------------");
 		order.state = OrderState.Notified;
 		order.waiter.msgOrderDone(order.choice, order.table, order.seat);	
 	}
 	
 	private void orderIt(String choice) {
-		print("ordering food--------------------");
 		for(MyMarket market : markets) {
 			if(market.market != null) {
 				if(market.foodStock.get(choice)) {
@@ -317,7 +312,6 @@ public class StackCookRole extends CookRole implements Cook {
 	}
 
 	public void msgAtPlating() {
-		print("at plating---------------------");
 		doneAnimation.release();
 	}
 	
