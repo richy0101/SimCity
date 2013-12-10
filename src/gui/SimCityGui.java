@@ -28,6 +28,8 @@ import javax.swing.event.ChangeEvent;
 import market.MarketRole;
 import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
+import restaurant.shehRestaurant.ShehCookRole;
+import restaurant.shehRestaurant.ShehCustomerRole;
 import restaurant.shehRestaurant.ShehWaiterRole;
 import restaurant.shehRestaurant.gui.ShehRestaurantAnimationPanel;
 import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
@@ -140,8 +142,8 @@ public class SimCityGui {
         roles.put("Stack's Restaurant Waiter Shared", "StackWaiterShared");
         roles.put("Stack's Restaurant Cook", "StackCook");
         
-        roles.put("Sheh's Restaurant Waiter Normal", "ShehWaiterNormal");
-        //roles.put("Sheh Restaurant Waiter Shared", "ShehWaiter");
+        roles.put("Sheh's Restaurant Waiter Normal", "ShehWaiter");
+        roles.put("Sheh's Restaurant Waiter Shared", "ShehWaiterShared");
         roles.put("Sheh's Restaurant Cook", "ShehCook");
         
         roles.put("Huang's Restaurant Waiter Normal", "HuangWaiterNormal");
@@ -546,28 +548,44 @@ public class SimCityGui {
 		//p2.msgGoWork();
 	*/
 		
-		//beasdfasfasBEGINNING OF TEST CODE
+		//RYAN TESTCODE BLOCK
 		
 		String a = "ShehRestaurant";
 		String b = "House1";
 		String name = "Test Person 1";
 		Role role;
-		role = new ShehWaiterRole("ShehRestaurant");
+		role = new ShehWaiterRole("Test Person 0");
 		
-		/*
-		if(rand.nextInt()%2 == 0) {
-			role = new ShehWaiterSharedRole("ShehRestaurant");
-		}
-		else {
-			role = new ShehWaiterNormalRole("ShehRestaurant");
-		}
-		*/
+		
 		PersonAgent p = new PersonAgent(role, a , b, name);
 		role.setPerson(p);
-		//p.msgWakeUp();
 		
-		//ASDF;ALKFJADS;LKFJDSA;LKFJAD;LFJASF;JASFSA END OF TEST CODE
+		
+		/*
+		String a1 = "ShehRestaurant";
+		String b1 = "House2";
+		String name1 = "Test Person 2";
+		Role role1;
+		role1 = new ShehCustomerRole("Test Person 1");
+		
+		PersonAgent p1 = new PersonAgent(role1, a1 , b1, name1);
+		role1.setPerson(p1);
+		
+	
+		String a2 = "ShehRestaurant";
+		String b2 = "House3";
+		String name2 = "Test Person 3";
+		Role role2;
+		role2 = new ShehWaiterRole("Test Person 2");
+		
+		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
+		role2.setPerson(p2);
+		*/
+		
+		
 
+		
+		//ENDTESTCODEBLOCK
 		String a3 = "StackRestaurant";
 		String b3 = "House3";
 		String name3 = "Test Person 3";
@@ -609,7 +627,7 @@ public class SimCityGui {
 		PersonAgent p7 = new PersonAgent(role7, a7 , b7, name7);
 		role7.setPerson(p7);
 		p7.msgTestWakeUp();
-		
+	
 		bus = new BusAgent(1);
 		busGui = new BusGui(bus,1); //agent, starting StopNumber
 		bus.setGui(busGui);
@@ -622,7 +640,7 @@ public class SimCityGui {
 		bus2.setGui(busGui2);
 		macroAnimationPanel.addGui(busGui2);
 		bus2.startThread();
-		
+	
 		/**
 		 End of Hard Code SuperNorm
 		 */
