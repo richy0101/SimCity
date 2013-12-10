@@ -63,7 +63,7 @@ public class BusHelper {
 		busStopEvaluator.put("ApartmentB", busStop3Location);
 		busStopEvaluator.put("ApartmentC", busStop2Location);
 		
-		busStopEvaluator.put("Market1", busStop3Location);
+		busStopEvaluator.put("Market", busStop3Location);
 		busStopEvaluator.put("Market2", busStop2Location);
 		
 		busStopEvaluator.put("StackRestaurant", busStop1Location);
@@ -84,7 +84,7 @@ public class BusHelper {
 		busStopToInt.put("ApartmentB", 3);
 		busStopToInt.put("ApartmentC", 2);
 		
-		busStopToInt.put("Market1", 3);
+		busStopToInt.put("Market", 3);
 		busStopToInt.put("Market2", 2);
 		
 		busStopToInt.put("StackRestaurant", 1);

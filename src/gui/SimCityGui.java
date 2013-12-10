@@ -128,7 +128,7 @@ public class SimCityGui {
 		roles.put("None", "Unemployed");
 		roles.put("Bank Teller", "BankTeller");
 		roles.put("Bank 2 Teller", "BankTeller2");
-        roles.put("Market 1 Seller", "Market1");
+        roles.put("Market 1 Seller", "Market");
         roles.put("Market 2 Seller", "Market2");
         
         roles.put("Landlord A", "LandlordA");
@@ -568,10 +568,10 @@ public class SimCityGui {
 		role5.setPerson(p5);
 		p5.msgTestWakeUp();
         
-		MarketRole role6 = new MarketRole("Market1");
-		Directory.sharedInstance().marketDirectory.get("Market1").setWorker(role6);
+		MarketRole role6 = new MarketRole("Market");
+		Directory.sharedInstance().marketDirectory.get("Market").setWorker(role6);
 		
-		String a6 = "Market1";
+		String a6 = "Market";
 		String b6 = "House1";
 		String name6 = "Test Person 6";
 		PersonAgent p6 = new PersonAgent(role6, a6 , b6, name6);
@@ -662,10 +662,10 @@ public class SimCityGui {
 ////		p5.msgWakeUp();
 //		//p5.startThread();
 //        
-//		MarketRole role6 = new MarketRole("Market1");
-//		Directory.sharedInstance().marketDirectory.get("Market1").setWorker(role6);
+//		MarketRole role6 = new MarketRole("Market");
+//		Directory.sharedInstance().marketDirectory.get("Market").setWorker(role6);
 //		
-//		String a6 = "Market1";
+//		String a6 = "Market";
 //		String b6 = "House6";
 //		String name6 = "Test Person 6";
 //		PersonAgent p6 = new PersonAgent(role6, a6 , b6, name6);

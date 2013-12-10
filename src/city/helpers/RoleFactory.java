@@ -31,14 +31,14 @@ public class RoleFactory {
 		else if(role.equals("HuangRestaurant")) {
 			newRole = new HuangCustomerRole("HuangRestaurant");
 		}
-		else if(role.equals("Market1Cust")) {
-			newRole = new MarketCustomerRole(p.getGroceriesList(), "Market1");
+		else if(role.equals("MarketCust")) {
+			newRole = new MarketCustomerRole(p.getGroceriesList(), "Market");
 		}
 		else if(role.equals("Market2Cust")) {
 			newRole = new MarketCustomerRole(p.getGroceriesList(), "Market2");
 		}
-		else if(role.equals("Market1")) {
-			newRole = new MarketRole("Market1");
+		else if(role.equals("Market")) {
+			newRole = new MarketRole("Market");
 		}
 		else if(role.equals("Market2")) {
 			newRole = new MarketRole("Market2");

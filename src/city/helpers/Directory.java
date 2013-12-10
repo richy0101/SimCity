@@ -33,7 +33,7 @@ public class Directory {
 		restaurants.add(tanRestaurant); //should be added last to be 5th on the list
 		banks.add(bank);
 		banks.add(bank2);
-		markets.add(market1);
+		markets.add(Market);
 		markets.add(market2);
 	}
 	
@@ -56,7 +56,7 @@ public class Directory {
 //		roleDirectory.put("bank.BankTellerRole2", "Bank2");
 		
 		//Market Roles
-		roleDirectory.put("market.MarketRole" , "Market1");
+		roleDirectory.put("market.MarketRole" , "Market");
 		roleDirectory.put("market.MarketRole2", "Market2");
 		
 		//Restaurant Roles Stack
@@ -145,14 +145,14 @@ public class Directory {
 	
 	
 //MARKETS
-	private Market market1 = new Market("Market1"); //priority market
-	Coordinate market1Location = new Coordinate(494,69);
+	private Market Market = new Market("Market"); //priority market
+	Coordinate MarketLocation = new Coordinate(494,69);
 	
 	private Market market2 = new Market("Market2"); //secondary market
 	Coordinate market2Location = new Coordinate(488,333);
 	
 	public Map<String, Market> marketDirectory = new HashMap<String, Market>(); {
-		marketDirectory.put("Market1", market1);
+		marketDirectory.put("Market", Market);
 		marketDirectory.put("Market2", market2);
 	}
 	
@@ -180,7 +180,7 @@ public class Directory {
 		locationDirectory.put(bank2.getName(), bankLocation2);
 		
 		//Markets
-		locationDirectory.put(market1.getName(), market1Location);
+		locationDirectory.put(Market.getName(), MarketLocation);
 		locationDirectory.put(market2.getName(), market2Location);
 		
 		//Apartments
