@@ -160,6 +160,10 @@ public class SimCityGui {
         roles.put("Huang's Restaurant Waiter Shared", "HuangWaiterShared");
         roles.put("Huang's Restaurant Cook", "HuangCook");
         
+        roles.put("Tan's Restaurant Waiter Normal", "TanWaiterNormal");
+        roles.put("Tan's Restaurant Waiter Shared", "TanWaiterShared");
+        roles.put("Tan's Restaurant Cook", "TanCook");
+        
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setBounds(0, 0, 1133, 855);
@@ -266,11 +270,12 @@ public class SimCityGui {
         //		occupationComboBox.addItem("Philips's Restaurant Waiter");
         //		occupationComboBox.addItem("Philips's Restaurant Cook");
         //		occupationComboBox.addItem("Philips's Restaurant Cashier");
-        //
-        //		occupationComboBox.addItem("Tan's Restaurant Host");
-        //		occupationComboBox.addItem("Tan's Restaurant Waiter");
-        //		occupationComboBox.addItem("Tan's Restaurant Cook");
-        //		occupationComboBox.addItem("Tan's Restaurant Cashier");
+        
+		//Tan
+        occupationComboBox.addItem("Tan's Restaurant Host");
+        occupationComboBox.addItem("Tan's Restaurant Waiter");
+        occupationComboBox.addItem("Tan's Restaurant Cook");
+        occupationComboBox.addItem("Tan's Restaurant Cashier");
         //
         //		occupationComboBox.addItem("Huang's Restaurant Host");
         //		occupationComboBox.addItem("Huang's Restaurant Waiter");
