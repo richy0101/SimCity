@@ -264,6 +264,7 @@ public class NakamuraCookRole extends CookRole {
 			o.s = orderState.cooking;
 			DoCookOrder(o);
 			getFood(o.choice).setQuantity(getFood(o.choice).getQuantity() - 1);
+			restaurant.msgChangeFoodInventory(o.choice, getFood(o.choice).getQuantity() - 1);
 			print(o.choice + " remaining: " + getFood(o.choice).getQuantity());
 			timer.schedule(new TimerTask() {
 				public void run() {

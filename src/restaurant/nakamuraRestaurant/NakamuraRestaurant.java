@@ -29,6 +29,7 @@ public class NakamuraRestaurant extends Restaurant {
 		
 		this.name = name;
 		cashier = new NakamuraCashierAgent("NakamuraRestaurant Cashier");
+		cashier.setRestaurant(this);
 		cashier.startThread();
 		host = new NakamuraHostAgent("NakamuraRestaurant Host");
 		host.startThread();

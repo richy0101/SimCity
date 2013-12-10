@@ -79,6 +79,10 @@ public class WaiterGui implements Gui {
             	role.msgActionComplete();
             	command = Command.noCommand;            		
         	}
+        	else if(command == Command.leaving) {
+            	role.msgActionComplete();
+            	command = Command.noCommand;            		
+        	}
         	else if(command != Command.noCommand) {
         		xDestination = xHome;
         		yDestination = yHome;

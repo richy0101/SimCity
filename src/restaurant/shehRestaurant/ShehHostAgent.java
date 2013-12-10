@@ -211,7 +211,7 @@ public class ShehHostAgent extends Agent {
  
 	// Actions
 	private void noWaiters() {
-		print("We don't have any waiters.");
+		//print("We don't have any waiters.");
 	}
 	
 	private void organizeCustomers() { //alerts customer which location they should wai
