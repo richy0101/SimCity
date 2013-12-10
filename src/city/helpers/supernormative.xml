@@ -58,7 +58,7 @@
 	</Person> 
 	<Person>  
 		<name>John</name>  
-		<job>Market1</job>
+		<job>Market</job>
 		<aggressiveness>1</aggressiveness>
 		<startingFunds>1000</startingFunds>
 		<housingStatus>House5</housingStatus>

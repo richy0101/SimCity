@@ -228,6 +228,9 @@ public class PersonAgent extends Agent implements Person {
 		if (job.contains("employ")) {
 			print("I am unemployed!");
 			this.unemployed = true;
+			Role r = factory.createRole(job, this);
+			String jobLocation = Directory.sharedInstance().roleDirectory.get(r.getClass().getName());
+			workDetails = new WorkDetails(r, jobLocation);
 		}
 		else if (job.contains("lordA")){
 			Role r = factory.createRole(job, this);
@@ -390,7 +393,8 @@ public class PersonAgent extends Agent implements Person {
 				stateChanged();
 			}
 		}
-		else if (getPersonState() == PersonState.Sleeping){
+		else if (getPersonState() == PersonState.Sleeping && hour > 10){
+			personState = PersonState.Idle;
 			stateChanged();
 		}
 	}
@@ -928,5 +932,11 @@ public class PersonAgent extends Agent implements Person {
 	}
 	public String getAddress() {
 		return homeName; 
+	}
+	public String getCurrentLocation() {
+		return currentLocation;
+	}
+	public void addRole(Role t) {
+		roles.add(t);
 	}
 }

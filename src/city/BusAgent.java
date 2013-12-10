@@ -317,4 +317,18 @@ public class BusAgent extends Agent implements Vehicle {
 		public void setGui(BusGui gui){
 			busGui = gui;
 		}
+
+
+		@Override
+		public void msgGreenLight() {
+			// TODO Auto-generated method stub
+			
+		}
+
+
+		@Override
+		public void msgGreenLight(TrafficAgent trafficAgent) {
+			// TODO Auto-generated method stub
+			
+		}
 }

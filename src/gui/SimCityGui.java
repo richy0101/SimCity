@@ -7,6 +7,7 @@ import javax.swing.*;
 
 import city.BusAgent;
 import city.PersonAgent;
+import city.TrafficAgent;
 import city.gui.BusGui;
 import city.helpers.ApartmentHelper;
 import city.helpers.Clock;
@@ -25,7 +26,6 @@ import java.util.Random;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
-import market.MarketRole;
 import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
 import restaurant.shehRestaurant.ShehCookRole;
@@ -33,9 +33,6 @@ import restaurant.shehRestaurant.ShehCustomerRole;
 import restaurant.shehRestaurant.ShehWaiterRole;
 import restaurant.shehRestaurant.gui.ShehRestaurantAnimationPanel;
 import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
-import restaurant.stackRestaurant.StackCookRole;
-import restaurant.stackRestaurant.StackWaiterNormalRole;
-import restaurant.stackRestaurant.StackWaiterSharedRole;
 import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 
 public class SimCityGui {
@@ -52,6 +49,9 @@ public class SimCityGui {
 	BusAgent bus2;
 	BusGui busGui;
 	BusGui busGui2;
+	TrafficAgent trafficLight;
+	TrafficAgent trafficLight1;
+	TrafficAgent trafficLight2;
 	private JPanel panel;
 	private JTabbedPane tabbedPane;
 	
@@ -498,6 +498,11 @@ public class SimCityGui {
 		
 		panel.add(speedSlider);
 		
+		Restaurant restaurant = Directory.sharedInstance().getRestaurants().get(0);
+		CurrentBuildingPanel restPanel = new CurrentBuildingPanel(restaurant);
+		restaurant.setInfoPanel(restPanel);
+		tabbedPane.addTab("Current Building", restPanel);
+		
 		
 	}
 	
@@ -517,117 +522,16 @@ public class SimCityGui {
 		if(Clock.sharedInstance().isDay()) {
 			
 		}
-		
-	/*
-		String a = "StackRestaurant";
-		String b = "House1";
-		String name = "Test Person 1";
-		Role role;
-		if(rand.nextInt()%2 == 0) {
-			role = new StackWaiterSharedRole("StackRestaurant");
-		}
-		else {
-			role = new StackWaiterNormalRole("StackRestaurant");
-		}
-		PersonAgent p = new PersonAgent(role, a , b, name);
-		role.setPerson(p);
-		//p.msgWakeUp();
-	
-		String a2 = "StackRestaurant";
-		String b2 = "House2";
-		String name2 = "Test Person 2";
-		Role role2;
-		if(rand.nextInt()%2 == 0) {
-			role2 = new StackWaiterSharedRole("StackRestaurant");
-		}
-		else {
-			role2 = new StackWaiterNormalRole("StackRestaurant");
-		}
-		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
-		role2.setPerson(p2);
-		//p2.msgGoWork();
-	*/
-		
-		//RYAN TESTCODE BLOCK
-		
-		String a = "ShehRestaurant";
-		String b = "House1";
-		String name = "Test Person 1";
-		Role role;
-		role = new ShehWaiterRole("Test Person 0");
-		
-		
-		PersonAgent p = new PersonAgent(role, a , b, name);
-		role.setPerson(p);
-		
-		
-		/*
-		String a1 = "ShehRestaurant";
-		String b1 = "House2";
-		String name1 = "Test Person 2";
-		Role role1;
-		role1 = new ShehCustomerRole("Test Person 1");
-		
-		PersonAgent p1 = new PersonAgent(role1, a1 , b1, name1);
-		role1.setPerson(p1);
-		
-	
-		String a2 = "ShehRestaurant";
-		String b2 = "House3";
-		String name2 = "Test Person 3";
-		Role role2;
-		role2 = new ShehWaiterRole("Test Person 2");
-		
-		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
-		role2.setPerson(p2);
-		*/
-		
-		
 
-		
-		//ENDTESTCODEBLOCK
-		String a3 = "StackRestaurant";
-		String b3 = "House3";
-		String name3 = "Test Person 3";
-		Role role3 = new StackCookRole("StackRestaurant");
-		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
-		role3.setPerson(p3);
-		//p3.msgGoWork();
 
-		String a4 = "Bank";
-		String b4 = "House4";
-		String name4 = "Test Person 4";
-		Role role4 = new BankTellerRole("Bank1");
-		PersonAgent p4 = new PersonAgent(role4, a4 , b4, name4);
-		role4.setPerson(p4);
-		//p4.msgGoWork();
+		PersonAgent person1 = new PersonAgent("HuangCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
+		PersonAgent person2 = new PersonAgent("HuangWaiterNormal", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
+		PersonAgent person3 = new PersonAgent("StackWaiterShared", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
+		PersonAgent person4 = new PersonAgent("BankTeller", "Test Person 4", 3, 1000.00, "House4", "TakesTheBus");
+		PersonAgent person5 = new PersonAgent("BankTeller", "Test Person 5", 3, 1000.00, "House5", "TakesTheBus");
+		PersonAgent person6 = new PersonAgent("Market", "Test Person 6", 3, 1000.00, "House6", "TakesTheBus");
 		
-		String a5 = "Bank2";
-		String b5 = "House5";
-		String name5 = "BankLoanPerson5";
-		Role role5 = new BankTellerRole("Bank2");
-		PersonAgent p5 = new PersonAgent(role5, a5 , b5, name5);
-		role5.setPerson(p5);
-		p5.msgTestWakeUp();
-        
-		MarketRole role6 = new MarketRole("Market");
-		Directory.sharedInstance().marketDirectory.get("Market").setWorker(role6);
 		
-		String a6 = "Market";
-		String b6 = "House1";
-		String name6 = "Test Person 6";
-		PersonAgent p6 = new PersonAgent(role6, a6 , b6, name6);
-		role6.setPerson(p6);
-		//p6.msgGoWork();
-		
-		String a7 = "Bank";
-		String b7 = "House2";
-		String name7 = "MarketGoerPerson";
-		Role role7 = new BankTellerRole("Bank2");
-		PersonAgent p7 = new PersonAgent(role7, a7 , b7, name7);
-		role7.setPerson(p7);
-		p7.msgTestWakeUp();
-	
 		bus = new BusAgent(1);
 		busGui = new BusGui(bus,1); //agent, starting StopNumber
 		bus.setGui(busGui);
@@ -640,7 +544,15 @@ public class SimCityGui {
 		bus2.setGui(busGui2);
 		macroAnimationPanel.addGui(busGui2);
 		bus2.startThread();
-	
+		
+		
+		trafficLight = new TrafficAgent();
+		trafficLight.startThread();
+		trafficLight1 = new TrafficAgent();
+		trafficLight1.startThread();
+		trafficLight2 = new TrafficAgent();
+		trafficLight2.startThread();
+		
 		/**
 		 End of Hard Code SuperNorm
 		 */
@@ -752,6 +664,14 @@ public class SimCityGui {
 	public BusAgent getBus() {
 		return bus;
 	}
+	
+	public TrafficAgent getTrafficLight1(){
+		return trafficLight1;
+	}
+	
+	public TrafficAgent getTrafficLight2(){
+		return trafficLight2;
+	}
 
 	public void setUniqueBuildingPanel(String name) {
 		for(Restaurant restaurant : Directory.sharedInstance().getRestaurants()) {
@@ -760,6 +680,7 @@ public class SimCityGui {
 					tabbedPane.remove(1);
 				}
 				CurrentBuildingPanel restPanel = new CurrentBuildingPanel(restaurant);
+				restaurant.setInfoPanel(restPanel);
 				tabbedPane.addTab("Current Building", restPanel);
 			}
 		}

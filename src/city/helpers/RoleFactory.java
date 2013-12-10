@@ -39,9 +39,11 @@ public class RoleFactory {
 		}
 		else if(role.equals("Market")) {
 			newRole = new MarketRole("Market");
+			Directory.sharedInstance().marketDirectory.get("Market").setWorker((MarketRole)newRole);
 		}
 		else if(role.equals("Market2")) {
 			newRole = new MarketRole("Market2");
+			Directory.sharedInstance().marketDirectory.get("Market2").setWorker((MarketRole)newRole);
 		}
 		else if(role.equals("HuangWaiterNormal")) {
 			newRole = new HuangWaiterNormalRole("HuangRestaurant");

@@ -6,6 +6,7 @@ import restaurant.stackRestaurant.StackCashierAgent.CustomerState;
 import restaurant.stackRestaurant.helpers.Check;
 import restaurant.stackRestaurant.test.mock.MockCustomer;
 import restaurant.stackRestaurant.test.mock.MockWaiter;
+import market.MarketCheck;
 import market.test.mock.MockMarket;
 import junit.framework.*;
 
@@ -222,9 +223,8 @@ public class CashierTest extends TestCase
 	public void testPayingMarketScenarioNonnorm() {
 		assertEquals("Till should be empty. It is not.", cashier.getTill(), 0.0);
 
-		
-		Check check = new Check(20.0, "Steak");
-		cashier.msgGiveBill(check, market);
+		MarketCheck check = new MarketCheck(20, "Steak", market);
+		cashier.msgGiveBill(check);
 		assertEquals("Cashier should have 1 check to pay. It doesn't.", cashier.getChecks().size(), 1);
 		assertTrue("Cashier's check should have a state of NeedPaying. It doesn't.", cashier.getChecks().get(0).state == CheckState.NeedPaying);
 		cashier.pickAndExecuteAnAction();
@@ -241,8 +241,8 @@ public class CashierTest extends TestCase
 		assertEquals("Till should be 20. It is not.", cashier.getTill(), 20.0);
 
 		
-		Check check = new Check(20.0, "Steak");
-		cashier.msgGiveBill(check, market);
+		MarketCheck check = new MarketCheck(20, "Steak", market);
+		cashier.msgGiveBill(check);
 		assertEquals("Cashier should have 1 check to pay. It doesn't.", cashier.getChecks().size(), 1);
 		assertTrue("Cashier's check should have a state of NeedPaying. It doesn't.", cashier.getChecks().get(0).state == CheckState.NeedPaying);
 		cashier.pickAndExecuteAnAction();

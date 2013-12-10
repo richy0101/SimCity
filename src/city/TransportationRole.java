@@ -76,7 +76,7 @@ public class TransportationRole extends Role implements Transportation  {
 		}
 		stateChanged();
 	}
-	
+		
 	/*
 	 * Scheduler
 	 * @see agent.Agent#pickAndExecuteAnAction()
