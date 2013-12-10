@@ -234,6 +234,9 @@ public class StackCookRole extends CookRole implements Cook {
 		host.msgAddCook(this);
 		cookGui.DoGoHome();
 		state = AgentState.Working;
+		
+		//TEST REMOVE ME
+		orderIt("Steak");
 	}
 	
 	private void leaveRestaurant() {
