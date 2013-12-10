@@ -54,8 +54,9 @@ public class TransportationGui implements Gui {
 	int Cross3X = 435, Cross3Y = 127; //435
 	int Cross5X = 435, Cross5Y = 308;
 	int Cross6X = 435, Cross6Y = 353;
-	public enum Direction {ToTheLeft, ToTheRight};
-	Direction direction;
+	public enum Direction {ToTheLeft, ToTheRight, ToTheTop, ToTheBottom, EqualLeft, EqualRight, ItsNotAboutTheMoney, EqualBottom, EqualTop};
+	Direction directionX;
+	Direction directionY;
 	public enum Loop {InnerRight, InnerLeft, Outer};
 	Loop currentLoop;
 	Loop destinationLoop;
@@ -70,12 +71,6 @@ public class TransportationGui implements Gui {
 		xDestination = WalkLoopHelper.sharedInstance.getCoordinateEvaluator().get(destinationLocation).xCoordinate;
 		yDestination = WalkLoopHelper.sharedInstance.getCoordinateEvaluator().get(destinationLocation).yCoordinate;
 		
-		if (xPos < xDestination) {
-			direction = Direction.ToTheRight;
-		}
-		else if (xPos > xDestination) {
-			direction = Direction.ToTheLeft;
-		}
 		/**
 		 * Set starting loop
 		 */
@@ -202,7 +197,6 @@ public class TransportationGui implements Gui {
 			/**
 			 * End of Breaking In block
 			 */
-			
 			ContinueLooping();
 		}
 			
@@ -217,114 +211,199 @@ public class TransportationGui implements Gui {
 		}
 	}
 	private void ContinueLooping() {
-		if (direction == Direction.ToTheLeft) {
-			/**
-			 * Outer Loop Logic
-			 */
-			if (currentLoop == Loop.Outer) {
-				if ((xPos == outerLeftLane) && (yPos != outerBottomLane)) { //at left, coming down
-		            yPos++;
-				}
-				else if ((yPos == outerBottomLane) && (xPos != outerRightLane)) { //at bottom, going right
-		            xPos++;
-				}
-		        else if ((xPos == outerRightLane) && (yPos != outerTopLane)) {//at right, going up
-		            yPos--;
-		        }
-		        else if ((yPos == outerTopLane) && (xPos != outerLeftLane)) {//at top, going left
-		            xPos--;
-		        }
-			}
-			/**
-			 * Inner Loop Right Logic
-			 */
-			else if (currentLoop == Loop.InnerRight) {
-				if ((xPos == IRLeftLane) && (yPos != IRBottomLane)) { //at left, coming down
-		            yPos++;
-				}
-				else if ((yPos == IRBottomLane) && (xPos != IRRightLane)) { //at bottom, going right
-		            xPos++;
-				}
-		        else if ((xPos == IRRightLane) && (yPos != IRTopLane)) {//at right, going up
-		            yPos--;
-		        }
-		        else if ((yPos == IRTopLane) && (xPos != IRLeftLane)) {//at top, going left
-		            xPos--;
-		        }
-			}
-			/**
-			 * Inner Loop Left Logic
-			 */
-			else if (currentLoop == Loop.InnerLeft) {
-				if ((xPos == ILLeftLane) && (yPos != ILBottomLane)) { //at left, coming down
-		            yPos++;
-				}
-				else if ((yPos == ILBottomLane) && (xPos != ILRightLane)) { //at bottom, going right
-		            xPos++;
-				}
-		        else if ((xPos == ILRightLane) && (yPos != ILTopLane)) {//at right, going up
-		            yPos--;
-		        }
-		        else if ((yPos == ILTopLane) && (xPos != ILLeftLane)) {//at top, going left
-		            xPos--;
-		        }
-			}
+		/**
+		 * General Logic
+		 */
+		if (directionX == Direction.ToTheLeft && directionY == Direction.ToTheBottom && xPos <= 420) {
+			loopCounterClockwise();
 		}
-		else if (direction == Direction.ToTheRight) {
-			/**
-			 * Outer Loop Logic
-			 */
-			if (currentLoop == Loop.Outer) {
-				if ((xPos == outerLeftLane) && (yPos != outerTopLane)) { //at left, coming down
-		            yPos--;
-				}
-				else if ((yPos == outerBottomLane) && (xPos != outerLeftLane)) { //at bottom, going right
-		            xPos--;
-				}
-		        else if ((xPos == outerRightLane) && (yPos != outerBottomLane)) {//at right, going up
-		            yPos++;
-		        }
-		        else if ((yPos == outerTopLane) && (xPos != outerRightLane)) {//at top, going left
-		            xPos++;
-		        }
+		else if (directionX == Direction.ToTheLeft && directionY == Direction.ToTheBottom && xPos >= 420) {
+			loopClockwise();
+		}
+		else if (directionX == Direction.ToTheLeft && directionY == Direction.ToTheTop && xPos <= 420) {
+			loopClockwise();
+		}
+		else if (directionX == Direction.ToTheLeft && directionY == Direction.ToTheTop && xPos >= 420) {
+			loopCounterClockwise();
+		}
+		else if (directionX == Direction.ToTheRight && directionY == Direction.ToTheBottom && xPos <= 420) {
+			loopCounterClockwise();
+		}
+		else if (directionX == Direction.ToTheRight && directionY == Direction.ToTheBottom && xPos >= 420) {
+			loopClockwise();
+		}
+		else if (directionX == Direction.ToTheRight && directionY == Direction.ToTheTop && xPos <= 420) {
+			loopClockwise();
+		}
+		else if (directionX == Direction.ToTheRight && directionY == Direction.ToTheTop && xPos >= 420) {
+			loopCounterClockwise();
+		}
+		/**
+		 * Top to Down cases from Left and right lanes , xPos = xDestination
+		 */
+		else if (directionX == Direction.EqualRight && directionY == Direction.ToTheBottom) { //From right side to bottom
+			loopClockwise();
+		}
+		else if (directionX == Direction.EqualLeft && directionY == Direction.ToTheBottom) { //From Left side To bottom
+			loopCounterClockwise();
+		}
+		else if (directionX == Direction.EqualRight && directionY == Direction.ToTheTop) { //From right side to Top
+			loopCounterClockwise();
+		}
+		else if (directionX == Direction.EqualLeft && directionY == Direction.ToTheTop) { //From Left side To Top
+			loopClockwise();
+		}
+		/**
+		 * yPos = yDestination
+		 */
+		else if (directionY == Direction.EqualTop && directionX == Direction.ToTheLeft) { //From Top to Left 
+			loopCounterClockwise();
+		}
+		else if (directionY == Direction.EqualTop && directionX == Direction.ToTheRight) { //From Top to Right
+			loopClockwise();
+		}
+		else if (directionY == Direction.EqualBottom && directionX == Direction.ToTheLeft) { //From bottom to left
+			loopClockwise();
+		}
+		else if (directionY == Direction.EqualBottom && directionX == Direction.ToTheRight) { //From bottom to right
+			loopCounterClockwise();
+		}
+	}
+	private void loopClockwise() {
+		/**
+		 * Outer Loop Logic
+		 */
+		if (currentLoop == Loop.Outer) {
+			if ((xPos == outerLeftLane) && (yPos != outerTopLane)) { //at left, going up
+	            yPos--;
 			}
-			/**
-			 * Inner Loop Right Logic
-			 */
-			else if (currentLoop == Loop.InnerRight) {
-				if ((xPos == IRLeftLane) && (yPos != IRTopLane)) { //at left, coming down
-		            yPos--;
-				}
-				else if ((yPos == IRBottomLane) && (xPos != IRLeftLane)) { //at bottom, going right
-		            xPos--;
-				}
-		        else if ((xPos == IRRightLane) && (yPos != IRBottomLane)) {//at right, going up
-		            yPos++;
-		        }
-		        else if ((yPos == IRTopLane) && (xPos != IRRightLane)) {//at top, going left
-		            xPos++;
-		        }
+			else if ((yPos == outerBottomLane) && (xPos != outerLeftLane)) { //at bottom, going left
+	            xPos--;
 			}
-			/**
-			 * Inner Loop Left Logic
-			 */
-			else if (currentLoop == Loop.InnerLeft) {
-				if ((xPos == ILLeftLane) && (yPos != ILTopLane)) { //at left, coming down
-		            yPos--;
-				}
-				else if ((yPos == ILBottomLane) && (xPos != ILLeftLane)) { //at bottom, going right
-		            xPos--;
-				}
-		        else if ((xPos == ILRightLane) && (yPos != ILBottomLane)) {//at right, going up
-		            yPos++;
-		        }
-		        else if ((yPos == ILTopLane) && (xPos != ILRightLane)) {//at top, going left
-		            xPos++;
-		        }
+	        else if ((xPos == outerRightLane) && (yPos != outerBottomLane)) {//at right, going down
+	            yPos++;
+	        }
+	        else if ((yPos == outerTopLane) && (xPos != outerRightLane)) {//at top, going right
+	            xPos++;
+	        }
+		}
+		/**
+		 * Inner Loop Right Logic
+		 */
+		else if (currentLoop == Loop.InnerRight) {
+			if ((xPos == IRLeftLane) && (yPos != IRTopLane)) { //at left, going up
+	            yPos--;
 			}
+			else if ((yPos == IRBottomLane) && (xPos != IRLeftLane)) { //at bottom, going left
+	            xPos--;
+			}
+	        else if ((xPos == IRRightLane) && (yPos != IRBottomLane)) {//at right, going down
+	            yPos++;
+	        }
+	        else if ((yPos == IRTopLane) && (xPos != IRRightLane)) {//at top, going right
+	            xPos++;
+	        }
+		}
+		/**
+		 * Inner Loop Left Logic
+		 */
+		else if (currentLoop == Loop.InnerLeft) {
+			if ((xPos == ILLeftLane) && (yPos != ILTopLane)) { //at left, going up
+	            yPos--;
+			}
+			else if ((yPos == ILBottomLane) && (xPos != ILLeftLane)) { //at bottom, going left
+	            xPos--;
+			}
+	        else if ((xPos == ILRightLane) && (yPos != ILBottomLane)) {//at right, going down
+	            yPos++;
+	        }
+	        else if ((yPos == ILTopLane) && (xPos != ILRightLane)) {//at top, going right
+	            xPos++;
+	        }
+		}
+	}
+	
+	private void loopCounterClockwise() {
+		/**
+		 * Outer Loop Logic
+		 */
+		if (currentLoop == Loop.Outer) {
+			if ((xPos == outerLeftLane) && (yPos != outerBottomLane)) { //at left, coming down
+	            yPos++;
+			}
+			else if ((yPos == outerBottomLane) && (xPos != outerRightLane)) { //at bottom, going right
+	            xPos++;
+			}
+	        else if ((xPos == outerRightLane) && (yPos != outerTopLane)) {//at right, going up
+	            yPos--;
+	        }
+	        else if ((yPos == outerTopLane) && (xPos != outerLeftLane)) {//at top, going left
+	            xPos--;
+	        }
+		}
+		/**
+		 * Inner Loop Right Logic
+		 */
+		else if (currentLoop == Loop.InnerRight) {
+			if ((xPos == IRLeftLane) && (yPos != IRBottomLane)) { //at left, coming down
+	            yPos++;
+			}
+			else if ((yPos == IRBottomLane) && (xPos != IRRightLane)) { //at bottom, going right
+	            xPos++;
+			}
+	        else if ((xPos == IRRightLane) && (yPos != IRTopLane)) {//at right, going up
+	            yPos--;
+	        }
+	        else if ((yPos == IRTopLane) && (xPos != IRLeftLane)) {//at top, going left
+	            xPos--;
+	        }
+		}
+		/**
+		 * Inner Loop Left Logic
+		 */
+		else if (currentLoop == Loop.InnerLeft) {
+			if ((xPos == ILLeftLane) && (yPos != ILBottomLane)) { //at left, coming down
+	            yPos++;
+			}
+			else if ((yPos == ILBottomLane) && (xPos != ILRightLane)) { //at bottom, going right
+	            xPos++;
+			}
+	        else if ((xPos == ILRightLane) && (yPos != ILTopLane)) {//at right, going up
+	            yPos--;
+	        }
+	        else if ((yPos == ILTopLane) && (xPos != ILLeftLane)) {//at top, going left
+	            xPos--;
+	        }
 		}
 	}
 	private void evaluateNextMove() {
+		/**
+		 * Update Directions block
+		 */
+		if (xPos < xDestination) {
+			directionX = Direction.ToTheRight;
+		}
+		else if (xPos > xDestination) {
+			directionX = Direction.ToTheLeft;
+		}
+		else if (xPos == xDestination && xPos >= 420) {
+			directionX = Direction.EqualRight;
+		}
+		else if (xPos == xDestination && xPos < 420) {
+			directionX = Direction.EqualLeft;
+		}
+		if (yPos < yDestination) {
+			directionY = Direction.ToTheBottom;
+		}
+		else if (yPos > yDestination) {
+			directionY = Direction.ToTheTop;
+		}
+		else if (yPos == yDestination && yPos >= 203) {
+			directionY = Direction.EqualBottom;
+		}
+		else if (yPos == yDestination && yPos < 203) {
+			directionY = Direction.EqualTop;
+		}
 		if(currentLoop == destinationLoop) {
 			currentAction = CurrentAction.Travelling;
 			ContinueLooping();
@@ -333,7 +412,6 @@ public class TransportationGui implements Gui {
 			currentAction = CurrentAction.BreakIn;
 		}
 		else if (destinationLoop == Loop.Outer) {
-			System.out.println("SETTING TO BREAKOUT");
 			currentAction = CurrentAction.BreakOut;
 		}
 	}
