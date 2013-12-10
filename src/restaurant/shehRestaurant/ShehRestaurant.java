@@ -18,7 +18,6 @@ public class ShehRestaurant extends Restaurant {
 		
 		host = new ShehHostAgent();
 		cashier = new ShehCashierAgent();
-		
 		host.setRestaurant(this);
 		cashier.setRestaurant(this);
 		

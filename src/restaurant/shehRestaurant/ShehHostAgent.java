@@ -216,6 +216,7 @@ public class ShehHostAgent extends Agent {
 			cust.msgRestaurantIsClosed();
 			waitingCustomers.remove(cust);
 		}
+
 	}
 	
 	private void organizeCustomers() { //alerts customer which location they should wai

@@ -1,5 +1,10 @@
 package restaurant;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import market.interfaces.MarketWorker;
+
 public class FoodInformation {
 	protected int quantity;
 	protected String name;
@@ -9,12 +14,15 @@ public class FoodInformation {
 	{Empty, Ordered, Stocked, PermanentlyEmpty};
 	public FoodState state;
 	
+	protected List<MarketWorker> markets;
+	
 	public FoodInformation() {
 	}
 	
 	public FoodInformation(int cookingTime, int inventory) {
 		quantity = inventory;
 		cookTime = cookingTime;
+		markets = new ArrayList<MarketWorker>();
 	}
 	
 	public void setQuantity(int quantity) {
@@ -31,5 +39,9 @@ public class FoodInformation {
 	
 	public int getCookTime() {
 		return cookTime;
+	}
+	
+	public List<MarketWorker> getMarkets() {
+		return markets;
 	}
 }

@@ -15,6 +15,8 @@ public class Market {
 	private String name;
 	private MarketWorkerRole worker;
 	private boolean open;
+	double till;
+
 	CurrentBuildingPanel restPanel;
 	private Map<String, MarketItemInformation> marketInventory = Collections.synchronizedMap(new HashMap<String, MarketItemInformation>());
 	

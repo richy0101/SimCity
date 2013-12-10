@@ -35,10 +35,10 @@ public class WalkLoopHelper {
 		private Walkway huangRestaurant = new Walkway("HuangRestaurant"); //restaurant 2
 		Coordinate huangRestaurantLocation = new Coordinate(230,83);
 		
-		/*
 		private Walkway nakamuraRestaurant = new Walkway("NakamuraRestaurant"); //restaurant 3
 		Coordinate nakamuraRestaurantLocation = new Coordinate(348,83);
-		
+
+		/*
 		private Walkway phillipsRestaurant = new Walkway("PhillipsRestaurant"); //restaurant 4
 		Coordinate phillipsRestaurantLocation = new Coordinate(719,323);
 		*/
@@ -144,6 +144,8 @@ public class WalkLoopHelper {
 			
 			locationDirectory.put(tanRestaurant.getName(), tanRestaurantLocation);
 			
+			locationDirectory.put(nakamuraRestaurant.getName(), nakamuraRestaurantLocation);
+			
 			//BUs stops
 			locationDirectory.put(busStop1.getName(), busStop1Location);
 			locationDirectory.put(busStop2.getName(), busStop2Location);
@@ -151,7 +153,6 @@ public class WalkLoopHelper {
 			locationDirectory.put(busStop4.getName(), busStop4Location);
 			/*
 			locationDirectory.put(phillipsRestaurant.getName(), phillipsRestaurantLocation);
-			locationDirectory.put(nakamuraRestaurant.getName(), nakamuraRestaurantLocation);
 			*/
 			
 			
@@ -178,6 +179,7 @@ public class WalkLoopHelper {
 			loopEvaluator.put("ShehRestaurant", "OuterLoop");
 			loopEvaluator.put("HuangRestaurant", "OuterLoop");
 			loopEvaluator.put("TanRestaurant","OuterLoop");
+			loopEvaluator.put("NakamuraRestaurant","OuterLoop");
 			
 			loopEvaluator.put("BusStop1", "OuterLoop");
 			loopEvaluator.put("BusStop2", "OuterLoop");
@@ -206,6 +208,7 @@ public class WalkLoopHelper {
 			coordinateEvaluator.put("ShehRestaurant", shehRestaurantLocation);
 			coordinateEvaluator.put("HuangRestaurant", huangRestaurantLocation);
 			coordinateEvaluator.put("TanRestaurant", tanRestaurantLocation);
+			coordinateEvaluator.put("NakamuraRestaurant", nakamuraRestaurantLocation);
 			
 			coordinateEvaluator.put("BusStop1", busStop1Location);
 			coordinateEvaluator.put("BusStop2", busStop2Location);

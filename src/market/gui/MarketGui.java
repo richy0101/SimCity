@@ -22,7 +22,7 @@ public class MarketGui implements Gui {
 	private int xPos, yPos;
 	private int xDestination, yDestination;
 	
-	private enum state {NoCommand, GettingItem, GoingToCounter};
+	private enum state {NoCommand, GettingItem, GoingToCounter, Leaving};
 	private state command = state.NoCommand;
 	
 	BufferedImage marketRoleLeft;
@@ -74,7 +74,7 @@ public class MarketGui implements Gui {
 			yPos--;
 		
 		if(xPos == xDestination && yPos == yDestination) {
-			if(command == state.GettingItem || command == state.GoingToCounter) {
+			if(command != state.NoCommand) {
 				role.msgActionComplete();
 				command = state.NoCommand;
 			}
@@ -110,6 +110,9 @@ public class MarketGui implements Gui {
 	public void setPresent() {
 		isPresent = true;
 	}
+	public void setIsNotPresent() {
+		isPresent = false;
+	}
 	
 	public void DoEnterMarket() {
 		xDestination = xCounter;
@@ -127,6 +130,12 @@ public class MarketGui implements Gui {
 		xDestination = xCounter;
 		yDestination = yCounter;
 		command = state.GoingToCounter;
+	}
+
+	public void DoLeaveMarket() {
+		xDestination = xStart;
+		yDestination = yStart;
+		command = state.Leaving;		
 	}
 	
 }
