@@ -10,4 +10,6 @@ public interface BankCustomer {
 	public void msgHereIsYourAccount(int accountNumber);
 	
 	public void msgDepositSuccessful();
+
+	public void msgBankIsClosed();
 }

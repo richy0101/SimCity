@@ -1,7 +1,7 @@
 package market.test.mock;
 
 import restaurant.stackRestaurant.interfaces.Cook;
-import market.interfaces.Market;
+import market.interfaces.MarketWorker;
 import restaurant.stackRestaurant.interfaces.Waiter;
 
 public class MockCook extends Mock implements Cook {
@@ -19,7 +19,7 @@ public class MockCook extends Mock implements Cook {
 		
 	}
 	
-	public void msgInventoryOut(Market market, String choice) {
+	public void msgInventoryOut(MarketWorker market, String choice) {
 		log.add(new LoggedEvent("Recieved msgInventoryOut from Market"));
 	}
 	
@@ -29,7 +29,7 @@ public class MockCook extends Mock implements Cook {
 		this.inventory = inventory;
 	}
 	
-	public void msgAddMarket(Market market) {
+	public void msgAddMarket(MarketWorker market) {
 		
 	}
 	

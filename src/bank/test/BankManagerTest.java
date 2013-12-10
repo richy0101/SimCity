@@ -10,8 +10,8 @@ import bank.interfaces.BankTeller;
 import bank.test.mock.MockBankCustomer;
 import bank.test.mock.MockBankManager;
 import bank.test.mock.MockBankTeller;
-import market.MarketRole;
-import market.MarketRole.orderState;
+import market.MarketWorkerRole;
+import market.MarketWorkerRole.orderState;
 import market.test.mock.*;
 import junit.framework.*;
 

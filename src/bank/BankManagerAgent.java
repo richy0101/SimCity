@@ -12,6 +12,7 @@ public class BankManagerAgent extends Agent implements BankManager {
     //data--------------------------------------------------------------------------------
 	private List<BankCustomer> customers = Collections.synchronizedList(new ArrayList<BankCustomer>());
 	private List<MyBankTeller> tellers = Collections.synchronizedList(new ArrayList<MyBankTeller>());
+	Bank bank;
 	public class MyBankTeller {
 
 		BankTeller teller;
@@ -104,27 +105,36 @@ public class BankManagerAgent extends Agent implements BankManager {
     //scheduler---------------------------------------------------------------------------
 	@Override
 	public boolean pickAndExecuteAnAction() {
-		synchronized(this.tellers){
-			for(MyBankTeller tempTeller: tellers){
-				if(tempTeller.state == BankTellerState.GotToWork){
-					AssignTellerToRegister(tempTeller);
+		if(bank.isOpen) {
+			synchronized(this.tellers){
+				for(MyBankTeller tempTeller: tellers){
+					if(tempTeller.state == BankTellerState.GotToWork){
+						AssignTellerToRegister(tempTeller);
+					}
 				}
 			}
-		}
-		synchronized(this.tellers){
-			for(MyBankTeller tempTeller: tellers){
-				if(tempTeller.state == BankTellerState.Idle){
-					if(customers.size() != 0){
-						AssignCustomerToTeller(customers.get(0),tempTeller);
-						return true;
+			synchronized(this.tellers){
+				for(MyBankTeller tempTeller: tellers){
+					if(tempTeller.state == BankTellerState.Idle){
+						if(customers.size() != 0){
+							AssignCustomerToTeller(customers.get(0),tempTeller);
+							return true;
+						}
+					}
+				}
+			}
+			synchronized(this.tellers){
+				for(MyBankTeller tempTeller: tellers){
+					if(tempTeller.state == BankTellerState.GettingPay){
+						GiveTellerPay(tempTeller);
 					}
 				}
 			}
 		}
-		synchronized(this.tellers){
-			for(MyBankTeller tempTeller: tellers){
-				if(tempTeller.state == BankTellerState.GettingPay){
-					GiveTellerPay(tempTeller);
+		else {
+			synchronized(customers) {
+				for(BankCustomer customer : customers) {
+					customer.msgBankIsClosed();
 				}
 			}
 		}
@@ -181,6 +191,14 @@ public class BankManagerAgent extends Agent implements BankManager {
 	 */
 	public List<MyBankTeller> getTellers() {
 		return tellers;
+	}
+
+	public Bank getBank() {
+		return bank;
+	}
+
+	public void setBank(Bank bank) {
+		this.bank = bank;
 	}
 	
 }

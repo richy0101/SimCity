@@ -129,6 +129,11 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		stateChanged();
 	}
 	
+	public void msgBankIsClosed() {
+		state = CustomerState.Done;
+		stateChanged();
+	}
+	
 	
     //scheduler---------------------------------------------------------------------------
 	
@@ -313,5 +318,4 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	public String getTask() {
 		return task;
 	}
-
 }

@@ -6,7 +6,7 @@ import restaurant.stackRestaurant.interfaces.Cashier;
 import restaurant.stackRestaurant.interfaces.Customer;
 import restaurant.stackRestaurant.interfaces.Waiter;
 import market.MarketCheck;
-import market.interfaces.Market;
+import market.interfaces.MarketWorker;
 
 public class MockCashier extends Mock implements Cashier {
 	
@@ -23,7 +23,7 @@ public class MockCashier extends Mock implements Cashier {
 		
 	}
 
-	public void msgGiveBill(Check check, Market market) {
+	public void msgGiveBill(Check check, MarketWorker market) {
 		// TODO Auto-generated method stub
 		
 	}

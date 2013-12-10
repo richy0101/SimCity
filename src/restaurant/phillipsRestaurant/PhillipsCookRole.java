@@ -11,7 +11,7 @@ import restaurant.phillipsRestaurant.interfaces.*;
 import restaurant.phillipsRestaurant.interfaces.Waiter;
 import city.helpers.Directory;
 
-import market.interfaces.Market;
+import market.interfaces.MarketWorker;
 
 import java.util.ArrayList;
 import java.util.Collections;

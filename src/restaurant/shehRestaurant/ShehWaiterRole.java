@@ -56,15 +56,20 @@ public class ShehWaiterRole extends Role implements Waiter {
 		}
 	}
 
+	public enum AgentState 
+		{NotArrived, JustArrived, Working };
+		
+		AgentState state = AgentState.NotArrived;
+	
 	public enum CustomerState
-	{WaitingInRestaurant, BeingSeated, Seated, ReadyToOrder, Ordering, ReOrdering, DoneOrdering, Waiting, ReceivingFood, Eating, AskingForBill, WaitingForBill, BeingBilled,
+		{WaitingInRestaurant, BeingSeated, Seated, ReadyToOrder, Ordering, ReOrdering, DoneOrdering, Waiting, ReceivingFood, Eating, AskingForBill, WaitingForBill, BeingBilled,
 		Paying, Gone};
 	
 	public ShehWaiterRole(String location) {
 		super();
 		
 		host = (ShehHostAgent) Directory.sharedInstance().getAgents().get("ShehRestaurantHost");
-		cashier = host.getCashier();
+		cashier = (ShehCashierAgent) Directory.sharedInstance().getAgents().get("ShehRestaurantCashier");
 		
 		waiterGui = new WaiterGui(this);
 		
@@ -75,6 +80,8 @@ public class ShehWaiterRole extends Role implements Waiter {
 				b.addGui(waiterGui);
 			}
 		}
+		
+		state = AgentState.JustArrived;
 	}
 	
 	public ShehWaiterRole(String name, Cashier ca, ShehCookRole co, ShehHostAgent h) {
@@ -231,6 +238,11 @@ public class ShehWaiterRole extends Role implements Waiter {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
+		if(state == AgentState.JustArrived) {
+			checkInWithHost();
+			return true;
+		}
+		
 		synchronized(customers) {
 			for (myCustomer c : customers) {
 				if (c.s == CustomerState.WaitingInRestaurant) {
@@ -315,6 +327,12 @@ public class ShehWaiterRole extends Role implements Waiter {
 	}
 
 	// Actions
+	
+	private void checkInWithHost() {
+		host.msgWaiterIsPresent(this);
+		waiterGui.DoStandby(homePosition);
+		state = AgentState.Working;
+	}
 
 	private void seatCustomer(myCustomer c) {
 		waiterGui.DoGoToKiosk();
