@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.sound.sampled.AudioInputStream;
@@ -48,6 +49,10 @@ import restaurant.tanRestaurant.TanWaiterNormalRole;
 import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
 import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 
+import javax.swing.event.PopupMenuListener;
+import javax.swing.event.PopupMenuEvent;
+import java.awt.Font;
+
 public class SimCityGui {
     
 	//NEW STUFF
@@ -67,6 +72,7 @@ public class SimCityGui {
 	TrafficAgent trafficLight2;
 	private JPanel panel;
 	private JTabbedPane tabbedPane;
+	private JLabel lblTime;
 	
 	/**
 	 * Launch the application.
@@ -98,6 +104,7 @@ public class SimCityGui {
 		initialize();
 		populateCards();
 		Directory.sharedInstance().setCityGui(this);
+		Clock.sharedInstance().setGui(this);
 		runSuperNorm();
 	}
     
@@ -233,7 +240,7 @@ public class SimCityGui {
 		final JButton btnPopulateCity = new JButton("Populate City");
 		btnPopulateCity.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				populateCity("src/city/helpers/tanrestauranttest.xml");	//
+				populateCity("src/city/helpers/normative.xml");	//
 				btnPopulateCity.setEnabled(false);
 				
 			}
@@ -537,6 +544,40 @@ public class SimCityGui {
 		
 		panel.add(speedSlider);
 		
+		JLabel lblDhh = new JLabel("D:HH");
+		sl_panel.putConstraint(SpringLayout.NORTH, lblDhh, 6, SpringLayout.SOUTH, speedSlider);
+		sl_panel.putConstraint(SpringLayout.WEST, lblDhh, 0, SpringLayout.WEST, btnPopulateCity);
+		panel.add(lblDhh);
+		
+		lblTime = new JLabel(Clock.sharedInstance().getDay() + ":" + Clock.sharedInstance.getHour());
+		sl_panel.putConstraint(SpringLayout.NORTH, lblTime, 6, SpringLayout.SOUTH, speedSlider);
+		sl_panel.putConstraint(SpringLayout.EAST, lblTime, 0, SpringLayout.EAST, btnPopulateCity);
+		panel.add(lblTime);
+		
+		JButton btnIncrementHour = new JButton("Increment Hour");
+		sl_panel.putConstraint(SpringLayout.EAST, btnIncrementHour, 121, SpringLayout.WEST, panel);
+		btnIncrementHour.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		btnIncrementHour.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Clock.sharedInstance().incrementHour();
+			}
+		});
+		sl_panel.putConstraint(SpringLayout.NORTH, btnIncrementHour, 6, SpringLayout.SOUTH, lblDhh);
+		sl_panel.putConstraint(SpringLayout.WEST, btnIncrementHour, 10, SpringLayout.WEST, panel);
+		panel.add(btnIncrementHour);
+		
+		JButton btnIncrementDay = new JButton("Increment Day");
+		btnIncrementDay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Clock.sharedInstance().incrementDay();
+			}
+		});
+		sl_panel.putConstraint(SpringLayout.NORTH, btnIncrementDay, 6, SpringLayout.SOUTH, lblTime);
+		sl_panel.putConstraint(SpringLayout.WEST, btnIncrementDay, 128, SpringLayout.WEST, btnPopulateCity);
+		sl_panel.putConstraint(SpringLayout.EAST, btnIncrementDay, 0, SpringLayout.EAST, btnPopulateCity);
+		btnIncrementDay.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		panel.add(btnIncrementDay);
+		
 		Restaurant restaurant = Directory.sharedInstance().getRestaurants().get(0);
 		CurrentBuildingPanel restPanel = new CurrentBuildingPanel(restaurant);
 		restaurant.setInfoPanel(restPanel);
@@ -573,7 +614,7 @@ public class SimCityGui {
 		PersonAgent person5 = new PersonAgent("BankTeller", "Test Person 5", 3, 1000.00, "House5", "TakesTheBus");
 		PersonAgent person6 = new PersonAgent("Market", "Test Person 6", 3, 1000.00, "House6", "TakesTheBus");
 		
-		
+		/*
 		String a = "TanRestaurant";
 		String b = "House1";
 		String name = "Test Person 1 Ben";
@@ -603,10 +644,10 @@ public class SimCityGui {
 		role2.setPerson(p2);
 		p2.msgWakeUp();
 		p2.startThread();
+		*/
 		
 		
 		//RYAN TEST CODE
-		/*
 		String a = "ShehRestaurant";
 		String b = "House1";
 		String name = "WAITER";
@@ -642,7 +683,6 @@ public class SimCityGui {
 
 		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
 		role3.setPerson(p3);
-		*/
 		
 		//END OF TEST CODE
 		
@@ -667,8 +707,38 @@ public class SimCityGui {
 		trafficLight1.startThread();
 		trafficLight2 = new TrafficAgent();
 		trafficLight2.startThread();
+		/*
+		String a = "TanRestaurant";
+		String b = "House1";
+		String name = "Test Person 1";
+		Role role;
+		role= new TanWaiterNormalRole("TanRestaurant");
+		PersonAgent p = new PersonAgent(role, a , b, name);
+		p.msgWakeUp();
+		role.setPerson(p);
+		p.startThread();
 		
-		
+		String a1 = "TanRestaurant";
+		String b1 = "House2";
+		String name1 = "Test Person 2";
+		Role role1;
+		role1= new TanCookRole("TanRestaurant");
+		PersonAgent p1 = new PersonAgent(role, a1 , b1, name1);
+		p1.msgWakeUp();
+		role.setPerson(p);
+		p1.startThread();
+	
+		String a2 = "TanRestaurant";
+		String b2 = "House3";
+		String name2 = "Test Person 3";
+		Role role2;
+		role2 = new TanCustomerRole("TanRestaurant");
+		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
+		role2.setPerson(p2);
+		p2.msgWakeUp();
+		p2.startThread();
+		*/
+
 		/**
 		 End of Hard Code SuperNorm
 		 */
@@ -769,8 +839,6 @@ public class SimCityGui {
 	}
 	
 	public void displayBuildingPanel( BuildingPanel buildingPanel ) { //How is this tied in with the Micro Panel?
-		//System.out.println("abc");
-		System.out.println("Accessing " + buildingPanel.getName() + " for MicroAnimation Panel." );
 		cardLayout.show( buildingPanels, buildingPanel.getName());
 	}
 	public MacroAnimationPanel getMacroAnimationPanel() {
@@ -832,5 +900,10 @@ public class SimCityGui {
 			Directory.sharedInstance().getBanks().get(1).setInfoPanel(restPanel);
 			tabbedPane.addTab("Current Building", restPanel);
 		}
+	}
+
+	public void setTime(int day, int hour) {
+		lblTime.setText(String.valueOf(day) + ":" + String.valueOf(hour));
+		
 	}
 }

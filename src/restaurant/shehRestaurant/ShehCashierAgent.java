@@ -1,8 +1,8 @@
 package restaurant.shehRestaurant;
 
 import agent.Agent;
-
 import restaurant.shehRestaurant.helpers.Bill;
+import restaurant.shehRestaurant.helpers.Bill.PayCheckBillState;
 import restaurant.shehRestaurant.helpers.Menu;
 import restaurant.shehRestaurant.helpers.Table;
 import restaurant.shehRestaurant.interfaces.Cashier;
@@ -10,7 +10,6 @@ import restaurant.shehRestaurant.interfaces.Customer;
 import restaurant.shehRestaurant.interfaces.Market;
 import restaurant.shehRestaurant.interfaces.Waiter;
 import restaurant.shehRestaurant.helpers.Bill.OrderBillState;
-
 import restaurant.shehRestaurant.test.mock.EventLog;
 
 import java.util.*;
@@ -34,6 +33,7 @@ public class ShehCashierAgent extends Agent implements Cashier {
 	private double money = 0;
 	private String name;
 	private Market market;
+	private ShehWaiterRole waiter;
 	
 	private class myCustomer {
 		Customer c;
@@ -63,14 +63,14 @@ public class ShehCashierAgent extends Agent implements Cashier {
 	
 	FoodData steak = new FoodData(20, 5000, 1);
 	FoodData chicken = new FoodData(15, 5000, 1);
-	FoodData fish = new FoodData(20, 5000, 1);
-	FoodData vegetarian = new FoodData(20, 5000, 1);
+	FoodData pizza = new FoodData(20, 5000, 1);
+	FoodData salad = new FoodData(20, 5000, 1);
 	
 	private Map<String, FoodData> inventory = new HashMap<String, FoodData>(); {
 		inventory.put("Steak", steak);
 		inventory.put("Chicken", chicken);
-		inventory.put("Fish", fish);
-		inventory.put("Vegetarian", vegetarian);
+		inventory.put("Pizza", pizza);
+		inventory.put("Salad", salad);
 	}
 	/*
 	public ShehCashierAgent(String n) {
@@ -107,6 +107,12 @@ public class ShehCashierAgent extends Agent implements Cashier {
 				stateChanged();
 			}
 		}
+	}
+	
+	public void msgCollectPayCheck(ShehWaiterRole waiterRole) {
+		print("Printing paycheck to waiter.");
+		Bill bill = new Bill(waiterRole, 100, Bill.PayCheckBillState.CalculatingPayCheck);
+		stateChanged();
 	}
 	
 	/**
@@ -160,6 +166,15 @@ public class ShehCashierAgent extends Agent implements Cashier {
 		synchronized(bills) {
 			for (Bill b : bills) {
 				if(b.s == OrderBillState.Complete) {
+					return true;
+				}
+			}
+		}
+		
+		synchronized(bills) {
+			for (Bill b : bills) {
+				if(b.ps == PayCheckBillState.CalculatingPayCheck) {
+					PrintPayCheck(b);
 					return true;
 				}
 			}
@@ -221,6 +236,13 @@ public class ShehCashierAgent extends Agent implements Cashier {
 		market.msgHereIsPayment(b);
 		b.s = OrderBillState.Complete;
 		
+	}
+	
+	private void PrintPayCheck(Bill b) {
+		print("Printing: Paycheck");
+		
+		waiter.msgHereIsPayCheck(b);
+		b.ps = PayCheckBillState.SentPayCheck;
 	}
 
 	public void setRestaurant(ShehRestaurant rest) {

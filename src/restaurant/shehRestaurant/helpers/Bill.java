@@ -1,5 +1,6 @@
 package restaurant.shehRestaurant.helpers;
 
+import restaurant.shehRestaurant.ShehWaiterRole;
 import restaurant.shehRestaurant.interfaces.Customer;
 import restaurant.shehRestaurant.interfaces.Waiter;
 
@@ -9,6 +10,8 @@ public class Bill {
 		public Customer c;
 		public Waiter w;
 		public OrderBillState s;
+		public PayCheckBillState ps;
+		public ShehWaiterRole r;
 		
 		public Bill(double money, String order, Customer customer, Waiter waiter, OrderBillState state) {
 			m = money;
@@ -21,6 +24,12 @@ public class Bill {
 		public Bill(double money, OrderBillState state) {
 			m = money;
 			s = state;
+		}
+		
+		public Bill(ShehWaiterRole waiterRole, double money, PayCheckBillState state) {
+			r = waiterRole;
+			m = money;
+			ps = state;
 		}
 		
 	public double getBillMoney() { //change this to BillTotal
@@ -46,4 +55,8 @@ public class Bill {
 	public enum OrderBillState {
 		Pending, Calculating, BillSent, Paying, Complete, PayingMarketOrder
 	}	
+	
+	public enum PayCheckBillState {
+		CalculatingPayCheck, SentPayCheck
+	}
 }

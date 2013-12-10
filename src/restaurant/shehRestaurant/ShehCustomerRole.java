@@ -136,12 +136,17 @@ public class ShehCustomerRole extends Role implements Customer {
 	
 	public void msgThisIsYourNumber(int num) {
 		customerGui.DoWaitInRestaurant(num);
-		
 	}
 	
 	public void msgAnimationFinishedLeaveRestaurant() {
 		event = AgentEvent.doneLeaving;
 		stateChanged();
+	}
+	
+	public void msgRestaurantIsClosed() {
+		print("Restaurant is closed, I'm leaving.");
+		customerGui.DoExitRestaurant();
+		this.getPersonAgent().msgRoleFinished();	
 	}
 
 	/**
@@ -354,8 +359,9 @@ public class ShehCustomerRole extends Role implements Customer {
 	
 	private void leaveTable() {
 		Do("Leaving w/ $" + money + " left in my wallet.");
-		host.msgLeavingTable(this);
+		//host.msgLeavingTable(this);
 		customerGui.DoExitRestaurant();
+		this.getPersonAgent().msgRoleFinished();
 	}
 
 	//Utilities
@@ -380,7 +386,6 @@ public class ShehCustomerRole extends Role implements Customer {
 	}
 
 	public CustomerGui getGui() {
-
 		return customerGui;
 	}
 	
