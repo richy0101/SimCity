@@ -1,14 +1,20 @@
 package restaurant.nakamuraRestaurant;
 
-import agent.Agent;
-import agent.Role;
+import gui.Building;
+
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.List;
+import java.util.concurrent.Semaphore;
+
+import city.helpers.Directory;
+import restaurant.nakamuraRestaurant.NakamuraCookRole.cookState;
 import restaurant.nakamuraRestaurant.gui.WaiterGui;
 import restaurant.nakamuraRestaurant.helpers.Check;
 import restaurant.nakamuraRestaurant.helpers.Menu;
 import restaurant.nakamuraRestaurant.interfaces.Waiter;
-
-import java.util.*;
-import java.util.concurrent.Semaphore;
+import restaurant.stackRestaurant.StackWaiterRole.AgentState;
+import agent.Role;
 
 /**
  * Restaurant Waiter Agent
@@ -20,7 +26,7 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 	public List<Check> Checks = new ArrayList<Check>();
 
 	public enum state {waiting, gettingcust, goingtoseat, seated, wanttoorder, tookorder, ordered, waitingforfood, reorder, foodready, eating, askedforcheck, waitingforcheck, gotcheck, paying, leaving, done};
-	private String name;
+	private String myLocation;
 	
 	private Semaphore actionComplete = new Semaphore(0,true);
 
@@ -29,26 +35,27 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 	private NakamuraHostAgent host;
 	private NakamuraCashierAgent cashier;
 	
-	public enum WorkState {working, tired, waitingforbreak, goingonbreak, onbreak, backtowork};
+	public enum WorkState {arrived, working, tired, waitingforbreak, goingonbreak, onbreak, backtowork, leaving, gettingPaycheck};
 	private WorkState status;
 
-	public NakamuraWaiterRole(String name) {
+	public NakamuraWaiterRole(String location) {
 		super();
 
-		this.name = name;
-		this.status = WorkState.working;
-		print("New Waiter");
+		this.status = WorkState.arrived;
+		this.myLocation = location;
+
+		host = Directory.sharedInstance().getAgents().get("NakamuraRestaurantHost");
+		cashier = Directory.sharedInstance().getAgents().get("NakamuraRestaurantCashier");
+
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == myLocation) {
+				b.addGui(waiterGui);
+			}
+		}
 	}
 
-	public String getWaiterName() {
-		return name;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public List getMyCustomers() {
+	public List<Cust> getMyCustomers() {
 		return MyCustomers;
 	}
 	
@@ -65,6 +72,10 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 	}
 
 	// Messages
+	public void msgSetCook(NakamuraCookRole cook) {
+		this.cook = cook;
+	}
+	
 	public void msgWantToGoOnBreak() {
 		print("Received msgWantToGoOnBreak");
 		status = WorkState.tired;
@@ -175,6 +186,13 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 		stateChanged();
 	}
 
+	public void msgHereIsPaycheck(double pay){
+		print("Received msgHereIsPaycheck");
+		getPersonAgent().setFunds(getPersonAgent().getFunds() + pay);
+		status = WorkState.leaving;
+		stateChanged();
+	}
+
 	public void msgActionComplete() {//from animation
 		print("msgActionComplete() called");
 		actionComplete.release();// = true;
@@ -185,12 +203,21 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
-		/* Think of this next rule as:
-            Does there exist a table and customer,
-            so that table is unoccupied and customer is waiting.
-            If so seat him at the table.
-		 */
 		try {
+			if(status == WorkState.arrived) {
+				ArriveAtWork();
+			}
+			
+			if(status == WorkState.gettingPaycheck) {
+				CollectPaycheck();
+				return true;
+			}
+			
+			if(status == WorkState.leaving) {
+				LeaveRestaurant();
+				return true;
+			}
+			
 			if(status == WorkState.tired) {
 				status = WorkState.waitingforbreak;
 				AskToBreak();
@@ -283,6 +310,12 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 	}
 
 	// Actions
+	private void ArriveAtWork() {
+		host.msgNewWaiter(this);
+		waiterGui.DoGoToHome();
+		status = WorkState.working;
+	}
+	
 	private void AskToBreak() {
 		host.msgGoingOnBreak(this);
 		stateChanged();

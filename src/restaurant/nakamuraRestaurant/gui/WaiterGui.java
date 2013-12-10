@@ -28,7 +28,7 @@ public class WaiterGui implements Gui {
     private String choice;
     private boolean isTired = false;
     
-    private enum Command {noCommand, getCustomer, seatCustomer, takeOrder, placeOrder, pickupFood, deliverFood};
+    private enum Command {noCommand, getCustomer, seatCustomer, takeOrder, placeOrder, pickupFood, deliverFood, goHome};
     private Command command = Command.noCommand;
     
     private Map<Integer, Integer> tableX = new HashMap<Integer, Integer>();
@@ -110,6 +110,11 @@ public class WaiterGui implements Gui {
 		return isTired;
 	}
 
+	public void DoGoToHome() {
+		xDestination = xStart;
+		yDestination = yStart;
+		command = Command.goHome;
+	}
     public void DoGoToHost() {
     	xDestination = 100;
     	yDestination = 75;

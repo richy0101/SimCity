@@ -184,7 +184,7 @@ public class NakamuraHostAgent extends Agent {
 				if(w.state == WaiterState.askedforbreak) {
 					if(waiters.size() > 1) {	//Only 1 Waiter
 						for(Waiters wait : waiters) {
-							if(wait.state != WaiterState.onbreak && wait.waiter.getName() != w.waiter.getName()) { //Another Waiter not on break
+							if(wait.state != WaiterState.onbreak && !wait.waiter.equals(w.waiter)) { //Another Waiter not on break
 								w.waiter.msgGoOnBreak();
 								w.state = WaiterState.onbreak;
 								return true;

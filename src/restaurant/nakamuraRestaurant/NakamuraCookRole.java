@@ -122,11 +122,18 @@ public class NakamuraCookRole extends CookRole {
 				}
 			}
 		}
+		stateChanged();
 	}
 	
 	public void msgActionComplete() {
 		print("msgActionComplete called");
 		actionComplete.release();
+		stateChanged();
+	}
+	
+	public void msgJobDone() {
+		print("Received msgJobDone");
+		state = cookState.GettingPaycheck;
 		stateChanged();
 	}
 	
