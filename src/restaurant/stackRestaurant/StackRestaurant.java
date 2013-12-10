@@ -9,8 +9,6 @@ public class StackRestaurant extends Restaurant {
 	private StackHostAgent host;
 	private StackCashierAgent cashier;
 	
-	
-
 	public StackRestaurant(String name) {
 		super();
 		FoodInformation steak = new FoodInformation(6000, 100);

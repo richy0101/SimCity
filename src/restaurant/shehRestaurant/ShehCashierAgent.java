@@ -27,6 +27,8 @@ public class ShehCashierAgent extends Agent implements Cashier {
 	Table table;
 	Bill bill;
 	
+	ShehRestaurant restaurant;
+	
 	public EventLog log = new EventLog();
 
 	private double money = 0;
@@ -70,11 +72,16 @@ public class ShehCashierAgent extends Agent implements Cashier {
 		inventory.put("Fish", fish);
 		inventory.put("Vegetarian", vegetarian);
 	}
-	
+	/*
 	public ShehCashierAgent(String n) {
 		super();
 		this.name = "Cashier";
 		name = n;
+	}
+	*/
+
+	public ShehCashierAgent() {
+		super();
 	}
 
 	// Messages
@@ -214,6 +221,14 @@ public class ShehCashierAgent extends Agent implements Cashier {
 		market.msgHereIsPayment(b);
 		b.s = OrderBillState.Complete;
 		
+	}
+
+	public void setRestaurant(ShehRestaurant rest) {
+		restaurant = rest;
+	}
+	
+	public ShehRestaurant getRestaurant() {
+		return restaurant;
 	}
 
 }
