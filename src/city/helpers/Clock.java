@@ -1,5 +1,7 @@
 package city.helpers;
 
+import gui.SimCityGui;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,6 +16,7 @@ public class Clock implements ActionListener{
 	int hour;
 	int day;
 	Timer timer;
+	SimCityGui gui;
 	
 	private Clock() {
 		hour = 5;
@@ -56,5 +59,33 @@ public class Clock implements ActionListener{
 		for(PersonAgent person : Directory.sharedInstance().getPeople()) {
 			person.msgCheckTime(hour, day);
 		}
+		gui.setTime(day, hour);
 	}
+
+	public void incrementHour() {
+		updateTime();
+	}
+	public void incrementDay() {
+		if(day == 7)
+			day = 1;
+		else
+			day++;
+		for(PersonAgent person : Directory.sharedInstance().getPeople()) {
+			person.msgCheckTime(hour, day);
+		}
+		gui.setTime(day, hour);
+	}
+	
+	public void setGui(SimCityGui gui) {
+		this.gui = gui;
+	}
+
+	public int getHour() {
+		return hour;
+	}
+	public int getDay() {
+		return day;
+	}
+
+	
 }
