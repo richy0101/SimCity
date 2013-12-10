@@ -3,15 +3,15 @@ package market.test;
 import java.util.HashMap;
 import java.util.Map;
 
-import market.MarketRole;
-import market.MarketRole.orderState;
+import market.MarketWorkerRole;
+import market.MarketWorkerRole.orderState;
 import market.test.mock.*;
 import junit.framework.*;
 
 public class MarketTest extends TestCase {
 
 	//these are instantiated for each test separately via the setUp() method.
-	MarketRole market;
+	MarketWorkerRole market;
 	MockMarketCustomer customer1;
 	MockMarketCustomer customer2;
 	MockPerson person;
@@ -27,7 +27,7 @@ public class MarketTest extends TestCase {
 	 */
 	public void setUp() throws Exception{
 		super.setUp();		
-		market = new MarketRole();
+		market = new MarketWorkerRole();
 		person = new MockPerson("person");
 		market.setPerson(person);
 		customer1 = new MockMarketCustomer("mockcustomer1");

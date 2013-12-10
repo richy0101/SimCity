@@ -194,12 +194,12 @@ public class StackCashierAgent extends CashierAgent implements Cashier {
 	}
 	
 	public class MyCheck {
-		MyCheck(Market market, Check check, CheckState state) {
+		MyCheck(MarketWorker market, Check check, CheckState state) {
 			this.market = market;
 			this.check = check;
 			this.state = state;
 		}
-		Market market;
+		MarketWorker market;
 		public Check check;
 		public CheckState state;
 	}

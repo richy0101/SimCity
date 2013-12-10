@@ -3,11 +3,11 @@ package market.test.mock;
 import java.util.Map;
 
 import city.interfaces.Person;
-import market.interfaces.Market;
+import market.interfaces.MarketWorker;
 
 public class MockPerson extends Mock implements Person {
 
-	public Market market;
+	public MarketWorker market;
 	public EventLog log;
 	public Map<String, Integer> groceryList;
 	public double funds;

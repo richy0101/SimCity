@@ -67,5 +67,10 @@ public class MockWaiter extends Mock implements Waiter {
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public int getCustomers() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 }

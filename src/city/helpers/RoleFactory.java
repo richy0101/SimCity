@@ -4,7 +4,7 @@ import home.LandlordRole;
 import city.PersonAgent;
 import city.UnemployedRole;
 import market.MarketCustomerRole;
-import market.MarketRole;
+import market.MarketWorkerRole;
 import agent.Role;
 import bank.BankTellerRole;
 import restaurant.shehRestaurant.ShehCookRole;
@@ -50,12 +50,14 @@ public class RoleFactory {
 			newRole = new MarketCustomerRole(p.getGroceriesList(), "Market2");
 		}
 		else if(role.equals("Market")) {
-			newRole = new MarketRole("Market");
-			Directory.sharedInstance().marketDirectory.get("Market").setWorker((MarketRole)newRole);
+			newRole = new MarketWorkerRole("Market");
+			Directory.sharedInstance().marketDirectory.get("Market").setWorker((MarketWorkerRole)newRole);
+			((MarketWorkerRole) newRole).setMarket(Directory.sharedInstance().marketDirectory.get("Market"));
 		}
 		else if(role.equals("Market2")) {
-			newRole = new MarketRole("Market2");
-			Directory.sharedInstance().marketDirectory.get("Market2").setWorker((MarketRole)newRole);
+			newRole = new MarketWorkerRole("Market2");
+			Directory.sharedInstance().marketDirectory.get("Market2").setWorker((MarketWorkerRole)newRole);
+			((MarketWorkerRole) newRole).setMarket(Directory.sharedInstance().marketDirectory.get("Market2"));
 		}
 		else if(role.equals("HuangWaiterNormal")) {
 			newRole = new HuangWaiterNormalRole("HuangRestaurant");

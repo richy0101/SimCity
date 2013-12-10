@@ -1,8 +1,10 @@
 package restaurant.stackRestaurant.test;
 
+import gui.CurrentBuildingPanel;
 import restaurant.stackRestaurant.StackCashierAgent;
 import restaurant.stackRestaurant.StackCashierAgent.CheckState;
 import restaurant.stackRestaurant.StackCashierAgent.CustomerState;
+import restaurant.stackRestaurant.StackRestaurant;
 import restaurant.stackRestaurant.helpers.Check;
 import restaurant.stackRestaurant.test.mock.MockCustomer;
 import restaurant.stackRestaurant.test.mock.MockWaiter;
@@ -27,6 +29,8 @@ public class CashierTest extends TestCase
 	MockCustomer customer2;
 	MockCustomer customer3;
 	MockMarket market;
+	StackRestaurant stackRestaurant;
+	CurrentBuildingPanel panel;
 	
 	
 	/**
@@ -41,6 +45,11 @@ public class CashierTest extends TestCase
 		customer3 = new MockCustomer("mockcustomer3");
 		waiter = new MockWaiter("mockwaiter");
 		market = new MockMarket("mockmarket");
+		stackRestaurant = new StackRestaurant("StackRestaurant");
+		cashier.setRestaurant(stackRestaurant);
+		waiter.setRestaurant(stackRestaurant);
+		panel = new CurrentBuildingPanel(stackRestaurant);
+		stackRestaurant.setInfoPanel(panel);
 	}	
 	/**
 	 * This tests the cashier under very simple terms: one customer is ready to pay the exact bill.
@@ -48,12 +57,12 @@ public class CashierTest extends TestCase
 	public void testOneNormalCustomerScenario()
 	{
 		//check preconditions
-		assertEquals("Till should be empty. It is not.", cashier.getTill(), 0.0);
+		assertEquals("Till should have 1000. It is not.", cashier.getTill(), 1000.0);
 		
 //		//step 1 of the test
 		cashier.msgComputeCheck(waiter, customer, "Pizza");
-		assertEquals("MockWaiter should have an empty event log before the Cashier's scheduler is called. Instead, the MockWaiter's event log reads: "
-						+ waiter.log.toString(), 0, waiter.log.size());
+		assertEquals("MockWaiter should have one event log before the Cashier's scheduler is called. Instead, the MockWaiter's event log reads: "
+						+ waiter.log.toString(), 1, waiter.log.size());
 		assertEquals("Cashier should have 1 customer with a check. It doesn't.", cashier.getCustomers().size(), 1);
 		assertTrue("Cashier's customer should have a state of NeedComputing. It doesn't.", cashier.getCustomers().get(0).state == CustomerState.NeedComputing);
 		cashier.pickAndExecuteAnAction();
@@ -72,17 +81,17 @@ public class CashierTest extends TestCase
 		assertTrue("Customer should have logged \"Received 1.0099999999999998 in change\" but didn't. His log reads instead: "
 				+ customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Received 1.0099999999999998 in change"));
 		assertTrue("Customer should have 0 in debt. Instead he has " + cashier.getCustomers().get(0).debt, 0 == cashier.getCustomers().get(0).debt);
-		assertTrue("Till should now have 8.99 in it. Instead it has: " + cashier.getTill(), 8.99 == cashier.getTill());
+		assertTrue("Till should now have 1008.99 in it. Instead it has: " + cashier.getTill(), 1008.99 == cashier.getTill());
 		assertFalse("Cashier's scheduler should have returned true (one action to do), but didn't.", cashier.pickAndExecuteAnAction());
 	}
 	
 	public void testCheapCustomerScenario() {
 		//check preconditions
-		assertEquals("Till should be empty. It is not.", cashier.getTill(), 0.0);
+		assertEquals("Till should be full. It is not.", cashier.getTill(), 1000.0);
 		//step 1 of the test
 		cashier.msgComputeCheck(waiter, customer, "Pizza");
-		assertEquals("MockWaiter should have an empty event log before the Cashier's scheduler is called. Instead, the MockWaiter's event log reads: "
-						+ waiter.log.toString(), 0, waiter.log.size());
+		assertEquals("MockWaiter should have one event log before the Cashier's scheduler is called. Instead, the MockWaiter's event log reads: "
+						+ waiter.log.toString(), 1, waiter.log.size());
 		assertEquals("Cashier should have 1 customer with a check. It doesn't.", cashier.getCustomers().size(), 1);
 		assertTrue("Cashier's customer should have a state of NeedComputing. It doesn't.", cashier.getCustomers().get(0).state == CustomerState.NeedComputing);
 		cashier.pickAndExecuteAnAction();
@@ -101,7 +110,7 @@ public class CashierTest extends TestCase
 		assertTrue("Customer should have logged \"Received 0.0 in change\" but didn't. His log reads instead: "
 				+ customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Received 0.0 in change"));
 		assertTrue("Customer should have 3.99 in debt. Instead he has " + cashier.getCustomers().get(0).debt, 3.99 == cashier.getCustomers().get(0).debt);
-		assertTrue("Till should now have 5.0 in it. Instead it has: " + cashier.getTill(), 5.0 == cashier.getTill());
+		assertTrue("Till should now have 1005.0 in it. Instead it has: " + cashier.getTill(), 1005.0 == cashier.getTill());
 		assertFalse("Cashier's scheduler should have returned true (one action to do), but didn't.", cashier.pickAndExecuteAnAction());		
 	}
 	
@@ -110,7 +119,7 @@ public class CashierTest extends TestCase
 		Check check2 = new Check(8.99, customer, "Pizza");
 		Check check3 = new Check(5.99, customer, "Salad");
 		
-		assertEquals("Till should be empty. It is not.", cashier.getTill(), 0.0);
+		assertEquals("Till should be full. It is not.", cashier.getTill(), 1000.0);
 		
 		cashier.msgComputeCheck(waiter, customer, "Steak");
 		assertEquals("Cashier should have 1 customer with a check. It doesn't.", cashier.getCustomers().size(), 1);
@@ -152,7 +161,7 @@ public class CashierTest extends TestCase
 		assertTrue("Cashier's customer should have a state of Paid. It doesn't.", cashier.getCustomers().get(0).state == CustomerState.Paid);
 		assertTrue("Customer should have logged \"Received 4.01 in change\" but didn't. His log reads instead: "
 				+ customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Received 4.01 in change"));
-		assertTrue("Till should now have 15.99 in it. Instead it has: " + cashier.getTill(), 15.99 == cashier.getTill());
+		assertTrue("Till should now have 1015.99 in it. Instead it has: " + cashier.getTill(), 1015.99 == cashier.getTill());
 		assertFalse("Cashier's scheduler should have returned true (one action to do), but didn't.", cashier.pickAndExecuteAnAction());
 		
 		cashier.msgPayCheck(customer2, check2, 20.00);
@@ -162,7 +171,7 @@ public class CashierTest extends TestCase
 		assertTrue("Cashier's customer should have a state of Paid. It doesn't.", cashier.getCustomers().get(1).state == CustomerState.Paid);
 		assertTrue("Customer should have logged \"Received 11.01 in change\" but didn't. His log reads instead: "
 				+ customer2.log.getLastLoggedEvent().toString(), customer2.log.containsString("Received 11.01 in change"));
-		assertTrue("Till should now have 24.98 in it. Instead it has: " + cashier.getTill(), 24.98 == cashier.getTill());
+		assertTrue("Till should now have 1024.98 in it. Instead it has: " + cashier.getTill(), 1024.98 == cashier.getTill());
 		assertFalse("Cashier's scheduler should have returned true (one action to do), but didn't.", cashier.pickAndExecuteAnAction());
 		
 		cashier.msgPayCheck(customer3, check3, 3.00);
@@ -173,17 +182,17 @@ public class CashierTest extends TestCase
 		assertTrue("Customer should have logged \"Received 0.0 in change\" but didn't. His log reads instead: "
 				+ customer3.log.getLastLoggedEvent().toString(), customer3.log.containsString("Received 0.0 in change"));
 		assertTrue("Customer should have 2.99 in debt. Instead he has " + cashier.getCustomers().get(0).debt, 2.99 == cashier.getCustomers().get(2).debt);
-		assertTrue("Till should now have 27.98 in it. Instead it has: " + cashier.getTill(), 27.98 == cashier.getTill());
+		assertTrue("Till should now have 1027.98 in it. Instead it has: " + cashier.getTill(), 1027.98 == cashier.getTill());
 		assertFalse("Cashier's scheduler should have returned true (one action to do), but didn't.", cashier.pickAndExecuteAnAction());
 	}
 	
 	public void testRepeatCheap() {
-		assertEquals("Till should be empty. It is not.", cashier.getTill(), 0.0);
+		assertEquals("Till should have 1000. It is not.", cashier.getTill(), 1000.0);
 		
 		//step 1 of the test
 		cashier.msgComputeCheck(waiter, customer, "Pizza");
-		assertEquals("MockWaiter should have an empty event log before the Cashier's scheduler is called. Instead, the MockWaiter's event log reads: "
-						+ waiter.log.toString(), 0, waiter.log.size());
+		assertEquals("MockWaiter should have one event log before the Cashier's scheduler is called. Instead, the MockWaiter's event log reads: "
+						+ waiter.log.toString(), 1, waiter.log.size());
 		assertEquals("Cashier should have 1 customer with a check. It doesn't.", cashier.getCustomers().size(), 1);
 		assertTrue("Cashier's customer should have a state of NeedComputing. It doesn't.", cashier.getCustomers().get(0).state == CustomerState.NeedComputing);
 		cashier.pickAndExecuteAnAction();
@@ -203,7 +212,7 @@ public class CashierTest extends TestCase
 		assertTrue("Customer should have logged \"Received 1.0099999999999998 in change\" but didn't. His log reads instead: "
 				+ customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Received 1.0099999999999998 in change"));
 		assertTrue("Customer should have 0.0 in debt. Instead he has " + cashier.getCustomers().get(0).debt, 0.0 == cashier.getCustomers().get(0).debt);
-		assertTrue("Till should now have 8.99 in it. Instead it has: " + cashier.getTill(), 8.99 == cashier.getTill());
+		assertTrue("Till should now have 1008.99 in it. Instead it has: " + cashier.getTill(), 1008.99 == cashier.getTill());
 		assertFalse("Cashier's scheduler should have returned true (one action to do), but didn't.", cashier.pickAndExecuteAnAction());
 		
 		cashier.msgPayCheck(customer, check, 1.01);
@@ -213,7 +222,7 @@ public class CashierTest extends TestCase
 		assertTrue("Customer should have logged \"Received 0.0 in change\" but didn't. His log reads instead: "
 				+ customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Received 0.0 in change"));
 		assertTrue("Customer should have 7.98 in debt. Instead he has " + cashier.getCustomers().get(0).debt, 7.98 == cashier.getCustomers().get(0).debt);
-		assertTrue("Till should now have 10.0 in it. Instead it has: " + cashier.getTill(), 10.0 == cashier.getTill());
+		assertTrue("Till should now have 1010.0 in it. Instead it has: " + cashier.getTill(), 1010.0 == cashier.getTill());
 		assertFalse("Cashier's scheduler should have returned true (one action to do), but didn't.", cashier.pickAndExecuteAnAction());
 	}
 	
@@ -221,7 +230,7 @@ public class CashierTest extends TestCase
 //	in the scenario that the restaurant doesn't have enough money, 
 //	it goes into debt and will soon make the money back from selling food
 	public void testPayingMarketScenarioNonnorm() {
-		assertEquals("Till should be empty. It is not.", cashier.getTill(), 0.0);
+		assertEquals("Till should have 1000. It is not.", cashier.getTill(), 1000.0);
 
 		MarketCheck check = new MarketCheck(20, "Steak", market);
 		cashier.msgGiveBill(check);
@@ -230,17 +239,16 @@ public class CashierTest extends TestCase
 		cashier.pickAndExecuteAnAction();
 		assertFalse("Cashier's scheduler should have returned true (one action to do), but didn't.", cashier.pickAndExecuteAnAction());
 		assertTrue("Cashier's check should have a state of NeedPaying. It doesn't.", cashier.getChecks().get(0).state == CheckState.Paid);
-		assertTrue("Market should have logged \"Received payment for order for 20.0\" but didn't. His log reads instead: "
-				+ market.log.getLastLoggedEvent().toString(), market.log.containsString("Received payment for order for 20.0"));
-		assertTrue("Cashier till should be -20.0. Instead it's " + cashier.getTill(), -20.0 == cashier.getTill());
+		assertTrue("Market should have logged \"Received msgPayForOrder from cook. Money = $20\" but didn't. His log reads instead: "
+				+ market.log.getLastLoggedEvent().toString(), market.log.containsString("Received msgPayForOrder from cook. Money = $20"));
+		assertTrue("Cashier till should be 980.0. Instead it's " + cashier.getTill(), 980.0 == cashier.getTill());
 	}
 	
 	public void testPayingMarketScenarioRegular() {
-		assertEquals("Till should be empty. It is not.", cashier.getTill(), 0.0);
-		cashier.setTill(20);
-		assertEquals("Till should be 20. It is not.", cashier.getTill(), 20.0);
+		assertEquals("Till should be at 1000. It is not.", cashier.getTill(), 1000.0);
+		cashier.setTill(1020);
+		assertEquals("Till should be 1020. It is not.", cashier.getTill(), 1020.0);
 
-		
 		MarketCheck check = new MarketCheck(20, "Steak", market);
 		cashier.msgGiveBill(check);
 		assertEquals("Cashier should have 1 check to pay. It doesn't.", cashier.getChecks().size(), 1);
@@ -248,8 +256,8 @@ public class CashierTest extends TestCase
 		cashier.pickAndExecuteAnAction();
 		assertFalse("Cashier's scheduler should have returned true (one action to do), but didn't.", cashier.pickAndExecuteAnAction());
 		assertTrue("Cashier's check should have a state of NeedPaying. It doesn't.", cashier.getChecks().get(0).state == CheckState.Paid);
-		assertTrue("Market should have logged \"Received payment for order for 20.0\" but didn't. His log reads instead: "
-				+ market.log.getLastLoggedEvent().toString(), market.log.containsString("Received payment for order for 20.0"));
-		assertTrue("Cashier till should be -0.0. Instead it's " + cashier.getTill(), 0.0 == cashier.getTill());
+		assertTrue("Market should have logged \"Received msgPayForOrder from cook. Money = $20\" but didn't. His log reads instead: "
+				+ market.log.getLastLoggedEvent().toString(), market.log.containsString("Received msgPayForOrder from cook. Money = $20"));
+		assertTrue("Cashier till should be 1000.0. Instead it's " + cashier.getTill(), 1000.0 == cashier.getTill());
 	}
 }

@@ -9,9 +9,9 @@ import market.interfaces.*;
 
 public interface Cashier extends CashierInterface{
 
-	void msgPayBill(String name, double moneyOwed);
+	void msgPayBill(int table, double moneyOwed);
 
-	void msgHereIsCheck(String choice, String customerName,
+	void msgHereIsCheck(String choice, int table,
 			Waiter waiter);
 
 	void msgPayMarket(MarketAgent market, String food, int amount);

@@ -7,6 +7,7 @@ public class TanWaiterNormalRole extends TanWaiterRole{
 
 		public TanWaiterNormalRole(String location) {
 			super(location);
+			
 		}
 
 		/*

@@ -17,6 +17,7 @@ import java.util.concurrent.Semaphore;
 
 import restaurant.Restaurant;
 import market.Market;
+import market.MarketCustomerRole;
 import bank.Bank;
 import bank.BankCustomerRole;
 import city.gui.PersonGui;
@@ -130,8 +131,8 @@ public class PersonAgent extends Agent implements Person {
 		rentDue = false;
 		hasWorked = false;
 		aggressivenessLevel = 1;
-		transMethod = TransportationMethod.TakesTheBus;
-		//transMethod = TransportationMethod.OwnsACar;
+		//transMethod = TransportationMethod.TakesTheBus;
+		transMethod = TransportationMethod.OwnsACar;
 		Directory.sharedInstance().addPerson(this);
 		//Set up inventory
 		Food initialFood = new Food("Chicken");
@@ -691,7 +692,9 @@ public class PersonAgent extends Agent implements Person {
 		print("Action goRestaurant - State set to OutToEat");
 		setPersonState(PersonState.OutToEat);
 		//Decide Which restaurant to go to
+
 		Restaurant r = Directory.sharedInstance().getRestaurants().get(2);
+		//Restaurant r = Directory.sharedInstance().getRestaurants().get(0);
 		//End of Decide block
 		if(currentLocation == homeName) {
 			personGui.DoLeaveHouse();
@@ -789,7 +792,7 @@ public class PersonAgent extends Agent implements Person {
 			m = Directory.sharedInstance().getMarkets().get(0);
 			roles.clear();
 			Role marketCust = factory.createRole(m.getName()+"Cust", this);
-			marketCust.setMarket(Directory.sharedInstance().marketDirectory.get(m.getName()).getWorker());
+			((MarketCustomerRole) marketCust).setMarketWorker(Directory.sharedInstance().marketDirectory.get(m.getName()).getWorker());
 			roles.add(marketCust);
 			Role t = new TransportationRole(m.getName(), currentLocation);
 			t.setPerson(this);

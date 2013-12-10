@@ -29,7 +29,6 @@ public class CustomerGui implements Gui{
 	private Command command=Command.noCommand;
 
 	
-	private static final int PERSONSIZEX = 32, PERSONSIZEY = 40;
 	private static final int CASHIERX = 460, CASHIERY = 34;
 	private static final int xExit = 850, yExit = 450;
 	private int WAITINGX = 725, WAITINGY = 333;
@@ -108,6 +107,9 @@ public class CustomerGui implements Gui{
 		else {
 			g.drawImage(customerImage, xPos, yPos, null);
 		}
+		String info = agent.getName() + "(" + agent.getStringState() + ")";
+    	g.setColor(Color.white);
+		g.drawString(info, xPos - 40, yPos - 5);
 	}
 
 	public void setHungry() {

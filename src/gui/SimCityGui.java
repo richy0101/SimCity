@@ -3,6 +3,9 @@ package gui;
 import java.awt.CardLayout;
 import java.awt.EventQueue;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 import city.BusAgent;
@@ -12,12 +15,15 @@ import city.gui.BusGui;
 import city.helpers.ApartmentHelper;
 import city.helpers.Clock;
 import city.helpers.Directory;
+import city.helpers.WalkLoopHelper;
 import city.helpers.XMLReader;
 import agent.Role;
 import bank.BankTellerRole;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,10 +34,14 @@ import javax.swing.event.ChangeEvent;
 
 import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
+import restaurant.phillipsRestaurant.gui.PhillipsRestaurantAnimationPanel;
 import restaurant.shehRestaurant.ShehCookRole;
 import restaurant.shehRestaurant.ShehCustomerRole;
 import restaurant.shehRestaurant.ShehWaiterRole;
 import restaurant.shehRestaurant.gui.ShehRestaurantAnimationPanel;
+import restaurant.tanRestaurant.TanCookRole;
+import restaurant.tanRestaurant.TanCustomerRole;
+import restaurant.tanRestaurant.TanWaiterNormalRole;
 import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
 import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 
@@ -64,6 +74,13 @@ public class SimCityGui {
 				try {
 					SimCityGui window = new SimCityGui();
 					window.frame.setVisible(true);
+					/*
+					URL url = new File("src/gui/12-new-bark-town.wav").toURI().toURL();
+					Clip audioClip = AudioSystem.getClip();
+					AudioInputStream ais = AudioSystem.getAudioInputStream(url);
+					audioClip.open(ais);
+					audioClip.loop(Clip.LOOP_CONTINUOUSLY);
+					*/
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -107,6 +124,9 @@ public class SimCityGui {
 			else if(b.getName().toLowerCase().contains("sheh")) {
 				b.setBuildingPanel(new ShehRestaurantAnimationPanel(b, i, this));
 			}
+			else if(b.getName().toLowerCase().contains("phillips")) {
+				b.setBuildingPanel(new PhillipsRestaurantAnimationPanel(b, i, this));
+			}
 			else if(b.getName().toLowerCase().contains("tan")) {
 				b.setBuildingPanel(new TanRestaurantAnimationPanel(b, i, this));
 			}
@@ -149,6 +169,14 @@ public class SimCityGui {
         roles.put("Huang's Restaurant Waiter Normal", "HuangWaiterNormal");
         roles.put("Huang's Restaurant Waiter Shared", "HuangWaiterShared");
         roles.put("Huang's Restaurant Cook", "HuangCook");
+        
+        roles.put("Tan's Restaurant Waiter Normal", "TanWaiterNormal");
+        roles.put("Tan's Restaurant Waiter Shared", "TanWaiterShared");
+        roles.put("Tan's Restaurant Cook", "TanCook");
+        
+        roles.put("Richard's Restaurant Waiter Normal", "RichardWaiterNormal");
+        //roles.put("Richards's Restaurant Waiter Shared", "RichardWaiterShared");
+        roles.put("Richard's Restaurant Cook", "RichardCook");
         
 		frame = new JFrame();
 		frame.setResizable(false);
@@ -195,7 +223,7 @@ public class SimCityGui {
 		final JButton btnPopulateCity = new JButton("Populate City");
 		btnPopulateCity.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				populateCity("src/city/helpers/supernormative.xml");	
+				populateCity("src/city/helpers/tanrestauranttest.xml");	//
 				btnPopulateCity.setEnabled(false);
 				
 			}
@@ -256,11 +284,12 @@ public class SimCityGui {
         //		occupationComboBox.addItem("Philips's Restaurant Waiter");
         //		occupationComboBox.addItem("Philips's Restaurant Cook");
         //		occupationComboBox.addItem("Philips's Restaurant Cashier");
-        //
-        //		occupationComboBox.addItem("Tan's Restaurant Host");
-        //		occupationComboBox.addItem("Tan's Restaurant Waiter");
-        //		occupationComboBox.addItem("Tan's Restaurant Cook");
-        //		occupationComboBox.addItem("Tan's Restaurant Cashier");
+        
+		//Tan
+        occupationComboBox.addItem("Tan's Restaurant Host");
+        occupationComboBox.addItem("Tan's Restaurant Waiter");
+        occupationComboBox.addItem("Tan's Restaurant Cook");
+        occupationComboBox.addItem("Tan's Restaurant Cashier");
         //
         //		occupationComboBox.addItem("Huang's Restaurant Host");
         //		occupationComboBox.addItem("Huang's Restaurant Waiter");
@@ -522,7 +551,9 @@ public class SimCityGui {
 		if(Clock.sharedInstance().isDay()) {
 			
 		}
-
+		if(WalkLoopHelper.sharedInstance() == null) {
+			
+		}
 
 		PersonAgent person1 = new PersonAgent("HuangCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
 		PersonAgent person2 = new PersonAgent("HuangWaiterNormal", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
@@ -591,6 +622,36 @@ public class SimCityGui {
 		trafficLight1.startThread();
 		trafficLight2 = new TrafficAgent();
 		trafficLight2.startThread();
+		
+		String a = "TanRestaurant";
+		String b = "House1";
+		String name = "Test Person 1";
+		Role role;
+		role= new TanWaiterNormalRole("TanRestaurant");
+		PersonAgent p = new PersonAgent(role, a , b, name);
+		p.msgWakeUp();
+		role.setPerson(p);
+		p.startThread();
+		
+		String a1 = "TanRestaurant";
+		String b1 = "House2";
+		String name1 = "Test Person 2";
+		Role role1;
+		role1= new TanCookRole("TanRestaurant");
+		PersonAgent p1 = new PersonAgent(role, a1 , b1, name1);
+		p1.msgWakeUp();
+		role.setPerson(p);
+		p1.startThread();
+	
+		String a2 = "TanRestaurant";
+		String b2 = "House3";
+		String name2 = "Test Person 3";
+		Role role2;
+		role2 = new TanCustomerRole("TanRestaurant");
+		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
+		role2.setPerson(p2);
+		p2.msgWakeUp();
+		p2.startThread();
 		
 		/**
 		 End of Hard Code SuperNorm
@@ -722,6 +783,22 @@ public class SimCityGui {
 				restaurant.setInfoPanel(restPanel);
 				tabbedPane.addTab("Current Building", restPanel);
 			}
+		}
+		if(name.equals("Market")) {
+			if(tabbedPane.getTabCount() == 2) {
+				tabbedPane.remove(1);
+			}
+			CurrentBuildingPanel restPanel = new CurrentBuildingPanel(Directory.sharedInstance().getMarkets().get(0));
+			Directory.sharedInstance().getMarkets().get(0).setInfoPanel(restPanel);
+			tabbedPane.addTab("Current Building", restPanel);
+		}
+		else if(name.equals("Market2")) {
+			if(tabbedPane.getTabCount() == 2) {
+				tabbedPane.remove(1);
+			}
+			CurrentBuildingPanel restPanel = new CurrentBuildingPanel(Directory.sharedInstance().getMarkets().get(1));
+			Directory.sharedInstance().getMarkets().get(1).setInfoPanel(restPanel);
+			tabbedPane.addTab("Current Building", restPanel);
 		}
 		
 	}

@@ -50,16 +50,16 @@ public class Restaurant {
 	}
 	
 	public void msgChangeFoodInventory(String type, int quantity) {
-		if(type.contains("Steak")) {
+		if(type.equals("Steak")) {
 			restPanel.msgChangeSteakInventory(quantity);
 		}
-		else if(type.contains("Chicken")) {
+		else if(type.equals("Chicken")) {
 			restPanel.msgChangeChickenInventory(quantity);
 		}
-		else if(type.contains("Salad")) {
+		else if(type.equals("Salad")) {
 			restPanel.msgChangeSaladInventory(quantity);
 		}
-		else if(type.contains("Pizza")) {
+		else if(type.equals("Pizza")) {
 			restPanel.msgChangePizzaInventory(quantity);
 		}
 		foodInventory.get(type).setQuantity(quantity);

@@ -9,7 +9,7 @@ import city.PersonAgent;
 import city.helpers.Directory;
 import agent.Role;
 import market.gui.MarketCustomerGui;
-import market.interfaces.Market;
+import market.interfaces.MarketWorker;
 import market.interfaces.MarketCustomer;
 import market.test.mock.EventLog;
 import market.test.mock.LoggedEvent;
@@ -25,7 +25,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	Event roleEvent;
 	//BufferedImage customerImage;
 	
-	Market market;
+	MarketWorker worker;
 	String myLocation;
 	double orderCost = 0;
 	
@@ -61,14 +61,14 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		log = new EventLog();
 	}
 	
-	public void setMarket(MarketRole m) {
-		market = m;
+	public void setMarket(MarketWorkerRole m) {
+		worker = m;
 	}
-	public void setMarket(Market m) {
-		market = m;
+	public void setMarket(MarketWorker m) {
+		worker = m;
 	}
-	public Market getMarket() {
-		return market;
+	public MarketWorker getMarket() {
+		return worker;
 	}
 	public double getOrderCost() {
 		return orderCost;
@@ -158,24 +158,24 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		if(market == null) {
+		if(worker == null) {
 			print("market null");
 		}
 		else if(myGroceryList == null)
 			print("grocerylist null");
-	    market.msgGetGroceries(this, myGroceryList);
+	    worker.msgGetGroceries(this, myGroceryList);
 	    log.add(new LoggedEvent("Ordered groceries."));
 	}
 	
 	public void Pay() {
 		if(getPersonAgent().getFunds() >= orderCost) {
-			market.msgHereIsMoney(this, orderCost);
+			worker.msgHereIsMoney(this, orderCost);
 			getPersonAgent().setFunds(getPersonAgent().getFunds() - orderCost);
 
 		    log.add(new LoggedEvent("Paid."));
 		}
 		else {
-			market.msgCantAffordGroceries(this);
+			worker.msgCantAffordGroceries(this);
 			roleState = State.CantPay;
 			
 		    log.add(new LoggedEvent("Couldn't pay."));
@@ -203,5 +203,9 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 	private void DoLeaveMarket() {
 		gui.DoLeaveMarket();
+	}
+	
+	public void setMarketWorker(MarketWorker worker) {
+		this.worker = worker;
 	}
 }

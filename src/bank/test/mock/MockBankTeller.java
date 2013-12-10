@@ -4,7 +4,7 @@ import java.util.Map;
 
 import bank.interfaces.BankCustomer;
 import bank.interfaces.BankTeller;
-import market.interfaces.Market;
+import market.interfaces.MarketWorker;
 import market.interfaces.MarketCustomer;
 import bank.test.mock.LoggedEvent;
 

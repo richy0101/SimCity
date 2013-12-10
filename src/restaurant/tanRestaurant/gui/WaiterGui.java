@@ -8,22 +8,31 @@ import gui.Gui;
 //import restaurant.gui.CustomerGui.Command;
 
 
+
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class WaiterGui implements Gui {
 
     private TanWaiterRole agent = null;
     private boolean requestedBreak= false;
 
-    private int xPos = -20, yPos = -20;//default waiter position
-    private int xDestination = -20, yDestination = -20;//default start position
+    private int xPos = 50, yPos = 50;//default waiter position
+    private int xDestination = 292, yDestination = 410;//default start position
 
     public static final int xTable = 200;
     public static final int yTable = 250;
     
 	public static final int xSeat = 70;
 	public static final int ySeat = 80;
+	
+	public enum locationState
+	{Away, Entered};
+	private locationState locState = locationState.Away;
 	
 	BufferedImage waiterImage;
     BufferedImage chickenImage;
@@ -35,6 +44,17 @@ public class WaiterGui implements Gui {
 
     public WaiterGui(TanWaiterRole agent) {
         this.agent = agent;
+        
+        try {
+        	waiterImage = ImageIO.read(getClass().getResource("stackRestaurantWaiter.png"));
+        	chickenImage = ImageIO.read(getClass().getResource("chicken.png"));
+            pizzaImage = ImageIO.read(getClass().getResource("pizza.png"));
+            saladImage = ImageIO.read(getClass().getResource("salad.png"));
+            steakImage = ImageIO.read(getClass().getResource("steak.png"));
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ Background");
+        }   
     }
 
 	public WaiterGui(TanWaiterRole w, int n){//RestaurantGui gui, int n){ //HostAgent m) {
@@ -62,6 +82,17 @@ public class WaiterGui implements Gui {
 			xDestination = 20;
 			yDestination = 20;
 		}
+		
+        try {
+        	waiterImage = ImageIO.read(getClass().getResource("stackRestaurantWaiter.png"));
+        	chickenImage = ImageIO.read(getClass().getResource("chicken.png"));
+            pizzaImage = ImageIO.read(getClass().getResource("pizza.png"));
+            saladImage = ImageIO.read(getClass().getResource("salad.png"));
+            steakImage = ImageIO.read(getClass().getResource("steak.png"));
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ Background");
+        }   
 		//maitreD = m;
 		//this.gui = gui;
 	}
@@ -116,12 +147,13 @@ public class WaiterGui implements Gui {
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.BLUE);
+    	g.drawImage(waiterImage, xPos, yPos, null);
+        /*g.setColor(Color.BLUE);
         g.fillRect(xPos, yPos, 20, 20);
         
         Graphics2D g2 = (Graphics2D)g;
 		g2.setColor(Color.BLACK);
-		g2.drawString(agent.getName(), xPos, yPos-2);
+		g2.drawString(agent.getName(), xPos, yPos-2);*/
     }
 
     public boolean isPresent() {
