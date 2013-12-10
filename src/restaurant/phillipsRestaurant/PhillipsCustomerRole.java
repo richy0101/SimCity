@@ -21,7 +21,11 @@ import city.helpers.Directory;
  * Restaurant customer agent.
  */
 public class PhillipsCustomerRole extends Role implements Customer {
+<<<<<<< HEAD
 	private String name, location;
+=======
+	private String location;
+>>>>>>> bbc1af2959397031c0fcfc7222c75a296fc1d941
 	private int hungerLevel = 6;        // determines length of meal
 	Timer timer = new Timer();
 	Timer timer2 = new Timer();
@@ -56,9 +60,13 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	 */
 	public PhillipsCustomerRole(String location){
 		super();
+<<<<<<< HEAD
 		
 		this.location = location;
 		customerGui = new CustomerGui(this,1);
+=======
+		this.location = location;
+>>>>>>> bbc1af2959397031c0fcfc7222c75a296fc1d941
 		double rand = (double) Math.random()*30+30;
 		cashOnHand = rand;
 		
@@ -84,9 +92,6 @@ public class PhillipsCustomerRole extends Role implements Customer {
 		this.cashier = cashier;
 	}
 	
-	public String getCustomerName() {
-		return name;
-	}
 	public void msgAtCashier() {//from animation
 		timer.schedule(new TimerTask() {
 			public void run() {
@@ -281,7 +286,11 @@ public class PhillipsCustomerRole extends Role implements Customer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+<<<<<<< HEAD
 		cashier.msgPayBill(tableNum,moneyOwed);
+=======
+		cashier.msgPayBill(this.tableNum,moneyOwed);
+>>>>>>> bbc1af2959397031c0fcfc7222c75a296fc1d941
 		cashOnHand -= moneyOwed;
 		state = AgentState.ReadyToLeave;
 		event = AgentEvent.paid;
@@ -294,11 +303,6 @@ public class PhillipsCustomerRole extends Role implements Customer {
 		customerGui.DoExitRestaurant();
 	}
 
-	// Accessors, etc.
-
-	public String getName() {
-		return name;
-	}
 	
 	//random food choice
 	public int getHungerLevel() {
@@ -311,9 +315,9 @@ public class PhillipsCustomerRole extends Role implements Customer {
 		//need to eat until hunger lever is > 5?
 	}
 
-	public String toString() {
-		return "customer " + getName();
-	}
+	//public String toString() {
+	//	return "customer " + getName();
+	//}
 
 	public void setGui(CustomerGui g) {
 		customerGui = g;
