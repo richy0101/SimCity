@@ -51,13 +51,13 @@ public class Directory {
 		roleDirectory.put("bank.BankManagerRole", "Bank");
 		roleDirectory.put("bank.BankTellerRole", "Bank");
 		
-		roleDirectory.put("bank.BankCustomerRole", "Bank2");
-		roleDirectory.put("bank.BankManagerRole", "Bank2");
-		roleDirectory.put("bank.BankTellerRole", "Bank2");
+//		roleDirectory.put("bank.BankCustomerRole2", "Bank2");
+//		roleDirectory.put("bank.BankManagerRole2", "Bank2");
+//		roleDirectory.put("bank.BankTellerRole2", "Bank2");
 		
 		//Market Roles
-		roleDirectory.put("market.MarketRole1" , "Market1");
-		roleDirectory.put("market.MarketRole2", "Market2");
+		roleDirectory.put("market.MarketRole" , "Market");
+//		roleDirectory.put("market.MarketRole2", "Market2");
 		
 		//Restaurant Roles Stack
 //		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");
