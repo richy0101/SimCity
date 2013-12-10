@@ -10,7 +10,6 @@ public class NakamuraRestaurant extends Restaurant {
 	NakamuraHostAgent host;
 	NakamuraCashierAgent cashier;
 	ProducerConsumerMonitor myMonitor;
-	double till = 10000;	
 
 	public NakamuraRestaurant(String name) {
 		super();
@@ -47,14 +46,6 @@ public class NakamuraRestaurant extends Restaurant {
 	
 	public NakamuraCashierAgent getCashier() {
 		return cashier;
-	}
-	
-	public double getTill() {
-		return till;
-	}
-
-	public void setTill(double till) {
-		this.till = till;
 	}
 	
 	public ProducerConsumerMonitor getMyMonitor() {

@@ -102,6 +102,7 @@ public class NakamuraCookRole extends CookRole {
 		for(String c : choices) {
 			int quantity = getFood(c).getQuantity();
 			getFood(c).setQuantity(quantity + amount);
+			restaurant.msgChangeFoodInventory(c, amount);
 			getFood(c).state = FoodState.Stocked;
 		}
 		stateChanged();
