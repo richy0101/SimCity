@@ -5,10 +5,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 
+import city.helpers.Directory;
 import agent.Role;
 import market.MarketCheck;
 import market.interfaces.MarketWorker;
 import restaurant.CashierAgent;
+import restaurant.Restaurant;
 import restaurant.nakamuraRestaurant.NakamuraCookRole;
 import restaurant.nakamuraRestaurant.helpers.Check;
 import restaurant.nakamuraRestaurant.helpers.Check.state;
@@ -30,11 +32,11 @@ public class NakamuraCashierAgent extends CashierAgent implements Cashier{
 
 	private Menu menu;
 	private String name;
-	private double cash;
 	Timer timer = new Timer();
 	public EventLog log;
 	
 	NakamuraCookRole cook;
+	Restaurant restaurant;
 	enum billState {Received, Verified, Paid, BeingVerified, cantPay};
 
 //	public HostGui hostGui = null;
@@ -45,7 +47,6 @@ public class NakamuraCashierAgent extends CashierAgent implements Cashier{
 
 		this.name = name;
 		menu = new Menu();
-		cash = 10000.00;
 		log = new EventLog();
 	}
 
@@ -57,14 +58,14 @@ public class NakamuraCashierAgent extends CashierAgent implements Cashier{
 		return name;
 	}
 	
-	public double getCash() {
-		return cash;
-	}
-	
 	public void setMenu(Menu m) {
 		this.menu = m;
 	}
 
+	public void setRestaurant(Restaurant rest){
+		this.restaurant = rest;
+	}
+	
 	public void msgComputeCheck(Waiter w, Customer c, String choice) {
 		print("Received msgComputeCheck");
 		Double total = 0.0;
@@ -92,7 +93,7 @@ public class NakamuraCashierAgent extends CashierAgent implements Cashier{
 			check.setState(state.shortChange);
 			log.add(new LoggedEvent("No payment from customer"));
 		}
-		cash += payment;
+		setTill(getTill() + payment);
 		stateChanged();
 	}
 	
@@ -218,8 +219,8 @@ public class NakamuraCashierAgent extends CashierAgent implements Cashier{
 	}
 	
 	private void PayMarketBill(MarketBill bill) {
-		if(cash >= bill.getCost()) {
-			cash -= bill.getCost();
+		if(getTill() >= bill.getCost()) {
+			setTill(getTill() - bill.getCost());
 			bill.getMarket().msgPayForOrder(this, bill.getCost());
 			
 			bill.state = billState.Paid;
@@ -231,8 +232,8 @@ public class NakamuraCashierAgent extends CashierAgent implements Cashier{
 	}
 	
 	private void PayEmployee(Role employee) {
-		if(cash >= 100) {
-			cash -= 100;
+		if(getTill() >= 100) {
+			setTill(getTill() - 100);
 			employee.msgHereIsPaycheck(100);
 		}
 		else
@@ -269,5 +270,13 @@ public class NakamuraCashierAgent extends CashierAgent implements Cashier{
 	
 	public void setCook(NakamuraCookRole cook) {
 		this.cook = cook;
+	}
+	
+	public double getTill() {
+		return restaurant.getTill();
+	}
+	
+	public void setTill(double amount) {
+		restaurant.setTill(amount);
 	}
 }
