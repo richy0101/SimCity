@@ -714,7 +714,6 @@ public class SimCityGui {
 			if(tabbedPane.getTabCount() == 2) {
 				tabbedPane.remove(1);
 			}
-			System.out.println("---------------------------" + Directory.sharedInstance().getMarkets().get(0).toString());
 			CurrentBuildingPanel restPanel = new CurrentBuildingPanel(Directory.sharedInstance().getMarkets().get(0));
 			Directory.sharedInstance().getMarkets().get(0).setInfoPanel(restPanel);
 			tabbedPane.addTab("Current Building", restPanel);
@@ -723,7 +722,6 @@ public class SimCityGui {
 			if(tabbedPane.getTabCount() == 2) {
 				tabbedPane.remove(1);
 			}
-			System.out.println("---------------------------" + Directory.sharedInstance().getMarkets().get(1).toString());
 			CurrentBuildingPanel restPanel = new CurrentBuildingPanel(Directory.sharedInstance().getMarkets().get(1));
 			Directory.sharedInstance().getMarkets().get(1).setInfoPanel(restPanel);
 			tabbedPane.addTab("Current Building", restPanel);

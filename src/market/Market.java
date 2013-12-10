@@ -18,16 +18,14 @@ public class Market {
 	CurrentBuildingPanel restPanel;
 	private Map<String, MarketItemInformation> marketInventory = Collections.synchronizedMap(new HashMap<String, MarketItemInformation>());
 	
-	public Market() {
+	public Market(String buildingName) {
+		name = buildingName;
+		open = false;
+		
 		marketInventory.put("Chicken", new MarketItemInformation("Chicken", 10, 1.00));
 		marketInventory.put("Steak", new MarketItemInformation("Steak", 10, 2.00));
 		marketInventory.put("Pizza", new MarketItemInformation("Pizza", 10, 3.00));
 		marketInventory.put("Salad", new MarketItemInformation("Salad", 10, 4.00));
-	}
-	
-	public Market(String buildingName) {
-		name = buildingName;
-		open = false;
 	}
 	
 	public MarketWorkerRole getWorker() {
@@ -70,7 +68,6 @@ public class Market {
 		else if(type.equals("Car")) {
 			restPanel.msgChangeCarInventory(quantity);
 		}
-		System.out.println(getFoodInventory().get(type) + "------------------------------");
 		getFoodInventory().get(type).setSupply(quantity);
 	}
 	
