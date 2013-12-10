@@ -75,6 +75,9 @@ public class CookGui implements Gui {
     
     public void draw(Graphics2D g) {
     	g.drawImage(cookImage, xPos, yPos, null);
+    	String info = agent.getName() + "(" + agent.getStringState() + ")";
+    	g.setColor(Color.white);
+		g.drawString(info, xPos - 40, yPos - 5);
     }
     
     public void DoGoToFridge() {

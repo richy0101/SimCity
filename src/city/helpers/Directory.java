@@ -49,7 +49,6 @@ public class Directory {
 	public Map<String, String> roleDirectory = new HashMap<String, String>(); {
 		//Bank Roles
 		roleDirectory.put("bank.BankCustomerRole", "Bank");
-		roleDirectory.put("bank.BankManagerRole", "Bank");
 		roleDirectory.put("bank.BankTellerRole", "Bank");
 		
 //		roleDirectory.put("bank.BankCustomerRole2", "Bank2");
@@ -63,14 +62,12 @@ public class Directory {
 		//Restaurant Roles Stack
 //		roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");
 //		roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.StackWaiterRole", "StackRestaurant");
 		roleDirectory.put("restaurant.stackRestaurant.StackWaiterSharedRole", "StackRestaurant");
 		roleDirectory.put("restaurant.stackRestaurant.StackWaiterNormalRole", "StackRestaurant");
 		roleDirectory.put("restaurant.stackRestaurant.StackCookRole", "StackRestaurant");
 		
 		//Restaurant Roles Huang
 		roleDirectory.put("restaurant.huangRestaurant.HuangWaiterSharedRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.huangRestaurant.HuangHostRole", "HuangRestaurant");
 		roleDirectory.put("restaurant.huangRestaurant.HuangWaiterNormalRole", "HuangRestaurant");
 		roleDirectory.put("restaurant.huangRestaurant.HuangCookRole", "HuangRestaurant");
 		

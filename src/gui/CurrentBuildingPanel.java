@@ -229,6 +229,6 @@ public class CurrentBuildingPanel extends JPanel {
 	}
 	
 	public void msgChangeTillInformation(double till) {
-		lblRegister.setText(String.valueOf(till));
+		lblRegister.setText("Register: " + String.valueOf(till));
 	}
 }
