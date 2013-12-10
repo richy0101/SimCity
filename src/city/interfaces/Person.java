@@ -4,6 +4,8 @@ import home.interfaces.Landlord;
 
 import java.util.Map;
 
+import agent.Role;
+
 public interface Person{
 
 	public void clearGroceries(Map<String, Integer> groceries);
@@ -22,4 +24,6 @@ public interface Person{
 	public void msgTransportFinished(String currentLocation);
 	public void msgPayRent(Landlord landlord, double moneyOwed);
 	public int getCurrentDay();
+	public String getCurrentLocation();
+	public void addRole(Role t);
 }
