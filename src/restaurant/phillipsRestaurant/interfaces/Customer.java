@@ -19,7 +19,6 @@ public interface Customer {
 	public abstract void msgAnimationFinishedGoToSeat();
 	public abstract void msgAnimationFinishedLeaveRestaurant();
 	
-	public abstract String getCustomerName();
 	public abstract void msgAtCashier();
 	public abstract void setWaiter(Waiter waiter);
 	public abstract void setTableNum(int tableNumber);

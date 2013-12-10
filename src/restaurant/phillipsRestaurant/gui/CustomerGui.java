@@ -19,7 +19,7 @@ public class CustomerGui implements Gui{
 	
 
 	//private HostAgent host;
-	RestaurantGui gui;
+	//RestaurantGui gui;
 
 	private int xPos, yPos;
 	private int xDestination, yDestination;
@@ -35,7 +35,7 @@ public class CustomerGui implements Gui{
 	
 	//public ArrayList<Boolean> tableOccupied = new ArrayList<Boolean>();
 
-	public CustomerGui(Customer c, RestaurantGui gui, int customerNum){ //HostAgent m) {
+	public CustomerGui(Customer c, int customerNum){ //HostAgent m) {
 		agent = c;
 		switch(customerNum%6){
         case 0:
@@ -82,7 +82,7 @@ public class CustomerGui implements Gui{
         catch(IOException e) {
         	System.out.println("Error w/ Background");
         }  
-		this.gui = gui;
+		//this.gui = gui;
 	}
 
 	public void updatePosition() {

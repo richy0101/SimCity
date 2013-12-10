@@ -17,7 +17,7 @@ import java.util.concurrent.Semaphore;
  * Restaurant customer agent.
  */
 public class PhillipsCustomerRole extends Role implements Customer {
-	private String name;
+	private String location;
 	private int hungerLevel = 6;        // determines length of meal
 	Timer timer = new Timer();
 	Timer timer2 = new Timer();
@@ -50,9 +50,9 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public PhillipsCustomerRole(String name){
+	public PhillipsCustomerRole(String location){
 		super();
-		this.name = name;
+		this.location = location;
 		double rand = (double) Math.random()*30+30;
 		cashOnHand = rand;
 		
@@ -71,9 +71,6 @@ public class PhillipsCustomerRole extends Role implements Customer {
 		this.cashier = cashier;
 	}
 	
-	public String getCustomerName() {
-		return name;
-	}
 	public void msgAtCashier() {//from animation
 		timer.schedule(new TimerTask() {
 			public void run() {
@@ -268,7 +265,7 @@ public class PhillipsCustomerRole extends Role implements Customer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		cashier.msgPayBill(this.name,moneyOwed);
+		cashier.msgPayBill(this.tableNum,moneyOwed);
 		cashOnHand -= moneyOwed;
 		state = AgentState.ReadyToLeave;
 		event = AgentEvent.paid;
@@ -281,11 +278,6 @@ public class PhillipsCustomerRole extends Role implements Customer {
 		customerGui.DoExitRestaurant();
 	}
 
-	// Accessors, etc.
-
-	public String getName() {
-		return name;
-	}
 	
 	//random food choice
 	public int getHungerLevel() {
@@ -298,9 +290,9 @@ public class PhillipsCustomerRole extends Role implements Customer {
 		//need to eat until hunger lever is > 5?
 	}
 
-	public String toString() {
-		return "customer " + getName();
-	}
+	//public String toString() {
+	//	return "customer " + getName();
+	//}
 
 	public void setGui(CustomerGui g) {
 		customerGui = g;

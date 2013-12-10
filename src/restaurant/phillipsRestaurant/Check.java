@@ -8,7 +8,7 @@ import restaurant.phillipsRestaurant.interfaces.*;
 
 public class Check{
 	//Check for a customer
-	public String name;
+	public int tableNum;
 	public double moneyOwed;
 	public OrderState state;
 	public Waiter waiter;
@@ -21,8 +21,8 @@ public class Check{
 		moneyOwed = money;
 		state = s;
 	}
-	public Check(String n, double mon, OrderState s,Waiter w){
-		name = n;
+	public Check(int table, double mon, OrderState s,Waiter w){
+		tableNum = table;
 		moneyOwed = mon;
 		state = s;
 		waiter = w;

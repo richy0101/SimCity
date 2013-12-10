@@ -59,31 +59,31 @@ public class PhillipsCashierAgent extends Agent implements Cashier{
 	}
 	
 	// Messages
-	public void msgHereIsCheck(String choice, String name, Waiter w){
+	public void msgHereIsCheck(String choice, int table, Waiter w){
 		Do("Received check from waiter");
 		setWaiter(w);
 		synchronized(this.checks){
 			switch(choice){
 				case "steak":
-					checks.add(new Check(name, menu.costs.get(0),OrderState.computing,w));
+					checks.add(new Check(table, menu.costs.get(0),OrderState.computing,w));
 					break;
 				case "chicken":
-					checks.add(new Check(name, menu.costs.get(1),OrderState.computing,w));
+					checks.add(new Check(table, menu.costs.get(1),OrderState.computing,w));
 					break;
 				case "salad":
-					checks.add(new Check(name, menu.costs.get(2),OrderState.computing,w));
+					checks.add(new Check(table, menu.costs.get(2),OrderState.computing,w));
 					break;
 				case "pizza":
-					checks.add(new Check(name, menu.costs.get(3),OrderState.computing,w));
+					checks.add(new Check(table, menu.costs.get(3),OrderState.computing,w));
 					break;
 				}
 		}
 		stateChanged();
 	}
 
-	public void msgPayBill(String name, double money){
+	public void msgPayBill(int table, double money){
 		for(int i=0;i<checks.size();i++){
-			if(checks.get(i).name == name){
+			if(checks.get(i).tableNum == table){
 				cashInRestaurant += money;
 				checks.get(i).state = OrderState.paid;
 			}
@@ -166,15 +166,15 @@ public class PhillipsCashierAgent extends Agent implements Cashier{
 	public void tellWaiterCheckNeedsPayment(Check c){
 		Do("Telling waiter to give check to Customer");
 		if(waiter1 == c.waiter){
-			waiter1.msgPayFood(c.name,c.moneyOwed);
+			waiter1.msgPayFood(c.tableNum,c.moneyOwed);
 			waiter1 = null;
 		}
 		else if(waiter2 == c.waiter){
-			waiter2.msgPayFood(c.name,c.moneyOwed);
+			waiter2.msgPayFood(c.tableNum,c.moneyOwed);
 			waiter2 = null;
 		}
 		else if(waiter3 == c.waiter){
-			waiter3.msgPayFood(c.name,c.moneyOwed);
+			waiter3.msgPayFood(c.tableNum,c.moneyOwed);
 			waiter3 = null;
 		}
 	}
