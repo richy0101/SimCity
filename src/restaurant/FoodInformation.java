@@ -5,6 +5,10 @@ public class FoodInformation {
 	protected String name;
 	protected int cookTime;
 	
+	public enum FoodState
+	{Empty, Ordered, Stocked, PermanentlyEmpty};
+	public FoodState state;
+	
 	public FoodInformation() {
 	}
 	

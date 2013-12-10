@@ -1,5 +1,6 @@
 package restaurant.stackRestaurant.test.mock;
 
+import restaurant.Restaurant;
 import restaurant.stackRestaurant.helpers.Check;
 import restaurant.stackRestaurant.interfaces.Cook;
 import restaurant.stackRestaurant.interfaces.Customer;
@@ -58,9 +59,13 @@ public class MockWaiter extends Mock implements Waiter {
 		log.add(new LoggedEvent("The waiter gui is coming off break"));
 	}
 
-	@Override
 	public void msgCookHere(Cook cook) {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("The cook has arrive. Rejoice"));
+		
+	}
+
+	public void setRestaurant(Restaurant restaurant) {
+		log.add(new LoggedEvent("Added restaurant"));
 		
 	}
 

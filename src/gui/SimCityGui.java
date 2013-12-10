@@ -3,6 +3,9 @@ package gui;
 import java.awt.CardLayout;
 import java.awt.EventQueue;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 import city.BusAgent;
@@ -18,6 +21,8 @@ import bank.BankTellerRole;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,15 +31,13 @@ import java.util.Random;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
-import market.MarketRole;
 import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
+import restaurant.shehRestaurant.ShehCookRole;
+import restaurant.shehRestaurant.ShehCustomerRole;
 import restaurant.shehRestaurant.ShehWaiterRole;
 import restaurant.shehRestaurant.gui.ShehRestaurantAnimationPanel;
 import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
-import restaurant.stackRestaurant.StackCookRole;
-import restaurant.stackRestaurant.StackWaiterNormalRole;
-import restaurant.stackRestaurant.StackWaiterSharedRole;
 import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 
 public class SimCityGui {
@@ -66,6 +69,11 @@ public class SimCityGui {
 				try {
 					SimCityGui window = new SimCityGui();
 					window.frame.setVisible(true);
+					URL url = new File("src/gui/12-new-bark-town.wav").toURI().toURL();
+					Clip audioClip = AudioSystem.getClip();
+					AudioInputStream ais = AudioSystem.getAudioInputStream(url);
+					audioClip.open(ais);
+					audioClip.loop(Clip.LOOP_CONTINUOUSLY);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -144,8 +152,8 @@ public class SimCityGui {
         roles.put("Stack's Restaurant Waiter Shared", "StackWaiterShared");
         roles.put("Stack's Restaurant Cook", "StackCook");
         
-        roles.put("Sheh's Restaurant Waiter Normal", "ShehWaiterNormal");
-        //roles.put("Sheh Restaurant Waiter Shared", "ShehWaiter");
+        roles.put("Sheh's Restaurant Waiter Normal", "ShehWaiter");
+        roles.put("Sheh's Restaurant Waiter Shared", "ShehWaiterShared");
         roles.put("Sheh's Restaurant Cook", "ShehCook");
         
         roles.put("Huang's Restaurant Waiter Normal", "HuangWaiterNormal");
@@ -197,7 +205,7 @@ public class SimCityGui {
 		final JButton btnPopulateCity = new JButton("Populate City");
 		btnPopulateCity.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				populateCity("src/city/helpers/supernormative.xml");	
+				populateCity("src/city/helpers/supernormative.xml");	//
 				btnPopulateCity.setEnabled(false);
 				
 			}
@@ -500,6 +508,11 @@ public class SimCityGui {
 		
 		panel.add(speedSlider);
 		
+		Restaurant restaurant = Directory.sharedInstance().getRestaurants().get(0);
+		CurrentBuildingPanel restPanel = new CurrentBuildingPanel(restaurant);
+		restaurant.setInfoPanel(restPanel);
+		tabbedPane.addTab("Current Building", restPanel);
+		
 		
 	}
 	
@@ -519,8 +532,7 @@ public class SimCityGui {
 		if(Clock.sharedInstance().isDay()) {
 			
 		}
-		
-		
+
 
 		PersonAgent person1 = new PersonAgent("HuangCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
 		PersonAgent person2 = new PersonAgent("HuangWaiterNormal", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
@@ -550,7 +562,6 @@ public class SimCityGui {
 		trafficLight1.startThread();
 		trafficLight2 = new TrafficAgent();
 		trafficLight2.startThread();
-		
 		
 		/**
 		 End of Hard Code SuperNorm
@@ -679,6 +690,7 @@ public class SimCityGui {
 					tabbedPane.remove(1);
 				}
 				CurrentBuildingPanel restPanel = new CurrentBuildingPanel(restaurant);
+				restaurant.setInfoPanel(restPanel);
 				tabbedPane.addTab("Current Building", restPanel);
 			}
 		}
