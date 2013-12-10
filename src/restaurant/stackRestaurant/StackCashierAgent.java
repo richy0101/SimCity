@@ -1,8 +1,8 @@
 package restaurant.stackRestaurant;
 
-import agent.Agent;
 import agent.Role;
 import restaurant.CashierAgent;
+import restaurant.Restaurant;
 import restaurant.stackRestaurant.helpers.Check;
 import restaurant.stackRestaurant.helpers.Menu;
 import restaurant.stackRestaurant.interfaces.*;
@@ -10,6 +10,7 @@ import market.MarketCheck;
 import market.interfaces.*;
 
 import java.util.*;
+
 
 public class StackCashierAgent extends CashierAgent implements Cashier {
 	
@@ -26,7 +27,7 @@ public class StackCashierAgent extends CashierAgent implements Cashier {
 	public enum EmployeeState
 	{NeedPaying, Paid};
 	
-	private double till;
+	Restaurant restaurant;
 	
 	public String getName() {
 		return "Money Machine 5000";
@@ -80,7 +81,7 @@ public class StackCashierAgent extends CashierAgent implements Cashier {
 		print("Paying " + check.market + " " + check.check.cost());
 		check.market.msgPayForOrder(this, check.check.cost());
 		setTill(getTill() - check.check.cost());
-		print("The till now has: " + till);
+		print("The till now has: " + getTill());
 		check.state = CheckState.Paid;
 	}
 	
@@ -96,7 +97,7 @@ public class StackCashierAgent extends CashierAgent implements Cashier {
 			if(customer.availableMoney >=0) {
 				customer.debt += (customer.check.cost() - customer.availableMoney);
 				setTill(getTill() + customer.availableMoney);
-				print("Till now has: " + till);
+				print("Till now has: " + getTill());
 			}
 			else {
 				customer.debt += (customer.check.cost());
@@ -107,7 +108,7 @@ public class StackCashierAgent extends CashierAgent implements Cashier {
 		else if (customer.availableMoney > customer.check.cost()) {
 			customer.availableMoney -= customer.check.cost();
 			setTill(getTill() + customer.check.cost());
-			print("Till now has: " + till);
+			print("Till now has: " + getTill());
 		}
 		
 		customer.customer.msgHereIsChange(customer.availableMoney);
@@ -162,11 +163,11 @@ public class StackCashierAgent extends CashierAgent implements Cashier {
 	}
 	
 	public double getTill() {
-		return till;
+		return restaurant.getTill();
 	}
 
 	public void setTill(double till) {
-		this.till = till;
+		restaurant.setTill(till);
 	}
 
 	public class MyCustomer {
@@ -201,5 +202,13 @@ public class StackCashierAgent extends CashierAgent implements Cashier {
 		Market market;
 		public Check check;
 		public CheckState state;
+	}
+	
+	public void setRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant;
+	}
+	
+	public Restaurant getRestaurant() {
+		return restaurant;
 	}
 }

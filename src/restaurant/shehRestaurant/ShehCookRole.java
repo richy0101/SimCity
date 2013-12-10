@@ -2,6 +2,7 @@ package restaurant.shehRestaurant;
 
 import agent.Agent;
 import agent.Role;
+import restaurant.CookRole;
 import restaurant.shehRestaurant.gui.CookGui;
 import restaurant.shehRestaurant.helpers.FoodData;
 import restaurant.shehRestaurant.helpers.Menu;
@@ -13,14 +14,18 @@ import restaurant.shehRestaurant.helpers.Order.OrderMarketState;
 import restaurant.shehRestaurant.interfaces.Cashier;
 import restaurant.shehRestaurant.interfaces.Cook;
 import restaurant.shehRestaurant.interfaces.Market;
+import gui.Building;
+import gui.Gui;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import city.helpers.Directory;
+
 /**
  * Restaurant Cook Agent
  */
-public class ShehCookRole extends Role implements Cook {
+public class ShehCookRole extends CookRole implements Cook {
 	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
 	Timer timer = new Timer();
 	Menu menu = new Menu();
@@ -30,6 +35,9 @@ public class ShehCookRole extends Role implements Cook {
 	private Semaphore atCooking = new Semaphore(0, true);
 	
 	public CookGui cookGui = null;
+	public ShehHostAgent host;
+	private Market market1, market2; 
+	private Cashier cashier;
 
 	
 	//FOODDATA~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -37,19 +45,35 @@ public class ShehCookRole extends Role implements Cook {
 	//CHANGE QUANTITY OF COOK AGENT
 	FoodData steak = new FoodData("Steak", 30, 5000, 1); //CHANGE THE THIRD PARAMETER (QUANTITY): FoodData(Price, CookTime, QUANTITY)
 	FoodData chicken = new FoodData("Chicken", 20, 5000, 1); 
-	FoodData fish = new FoodData("Fish", 25, 5000, 1);
-	FoodData vegetarian = new FoodData("Vegetarian", 20, 5000, 1);
+	FoodData pizza = new FoodData("Pizza", 25, 5000, 1);
+	FoodData salad = new FoodData("Salad", 20, 5000, 1);
 
 	private Map<String, FoodData> restaurantInventory = new HashMap<String, FoodData>(); {
 		restaurantInventory.put("Steak", steak);
 		restaurantInventory.put("Chicken", chicken);
-		restaurantInventory.put("Fish", fish);
-		restaurantInventory.put("Vegetarian", vegetarian);
-	}
-	
-	private Market market1, market2; 
-	private Cashier cashier;
+		restaurantInventory.put("Pizza", pizza);
+		restaurantInventory.put("Salad", salad);
+		
 
+	}
+
+
+	public ShehCookRole(String location) {
+		super();
+		host = (ShehHostAgent) Directory.sharedInstance().getAgents().get("ShehRestaurantHost");
+
+		cookGui = new CookGui(this);
+		
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		
+		for(Building b : buildings) {
+			if (b.getName() == location) {
+				b.addGui(cookGui);
+			}
+		}
+	}
+		
+		
 	public ShehCookRole(String n, Market m1, Market m2) {
 		super();
 

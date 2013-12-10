@@ -15,7 +15,8 @@ public class CookGui implements Gui {
 
     private ShehCookRole agent = null;
 
-    private int xPos = 705, yPos = 63;//default waiter position
+    private int xPos = 705;
+    private int yPos = 63;//default waiter position
     private int XHOME = 72, YHOME = 157;
     private int xDestination = XHOME;
     private int yDestination = YHOME;//default start position
@@ -24,6 +25,8 @@ public class CookGui implements Gui {
     private final int YPLATING = 262;
     private final int XCOOKING = 164;
     private final int YCOOKING = 8;
+    private final int XDOOR = 705;
+    private final int YDOOR = 63;
     
     public int xTable;
     public static final int yTable = 250; 
@@ -40,8 +43,7 @@ public class CookGui implements Gui {
         }
         catch(IOException e) {
         	System.out.println("Error w/ Background");
-        }
-        
+        }    
     }
 
 	public void updatePosition() {

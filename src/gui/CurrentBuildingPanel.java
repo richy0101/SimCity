@@ -45,15 +45,25 @@ public class CurrentBuildingPanel extends JPanel {
 		SpringLayout springLayout = new SpringLayout();
 		setLayout(springLayout);
 		
-		final JButton btnCloseBuilding = new JButton("Close Building");
+		final JButton btnCloseBuilding = new JButton();
+		if(restaurant != null) {
+			if(restaurant.isOpen()) {
+				btnCloseBuilding.setText("Close Building");
+			}
+			else {
+				btnCloseBuilding.setText("Open Building");
+			}
+		}
 		springLayout.putConstraint(SpringLayout.WEST, btnCloseBuilding, 10, SpringLayout.WEST, this);
 		btnCloseBuilding.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(restaurant != null && btnCloseBuilding.getText().contains("Close")) {
 					restaurant.msgSetClosed();
+					btnCloseBuilding.setText("Open Building");
 				}
 				else if(restaurant != null) {
 					restaurant.msgSetOpen();
+					btnCloseBuilding.setText("Close Building");
 				}
 			}
 		});
@@ -190,7 +200,7 @@ public class CurrentBuildingPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.WEST, lblName, 10, SpringLayout.WEST, this);
 		add(lblName);
 		
-		lblRegister = new JLabel("Register:");
+		lblRegister = new JLabel("Register: " + restaurant.getTill());
 		springLayout.putConstraint(SpringLayout.WEST, lblRegister, 10, SpringLayout.WEST, this);
 		springLayout.putConstraint(SpringLayout.NORTH, lblInventory, 6, SpringLayout.SOUTH, lblRegister);
 		springLayout.putConstraint(SpringLayout.NORTH, lblRegister, 6, SpringLayout.SOUTH, lblName);
@@ -218,7 +228,7 @@ public class CurrentBuildingPanel extends JPanel {
 		saladNumber.setText(String.valueOf(saladInventory));
 	}
 	
-	public void msgChangeTillInformation(int register) {
-		lblRegister.setText(String.valueOf(register));
+	public void msgChangeTillInformation(double till) {
+		lblRegister.setText(String.valueOf(till));
 	}
 }
