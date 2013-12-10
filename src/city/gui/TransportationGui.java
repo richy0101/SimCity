@@ -244,9 +244,9 @@ public class TransportationGui implements Gui {
 	}
 	private void evaluateNextMove() {
 		if(currentLoop == destinationLoop) {
-			return;
+			ContinueLooping();
 		}
-		else if (destinationLoop == Loop.InnerLeft) {
+		else if (destinationLoop == Loop.InnerLeft || destinationLoop == Loop.InnerRight) {
 			currentAction = CurrentAction.BreakIn;
 		}
 		else if (destinationLoop == Loop.Outer) {
