@@ -1,5 +1,6 @@
 package restaurant.tanRestaurant;
 
+import restaurant.shehRestaurant.ShehHostAgent;
 import restaurant.tanRestaurant.gui.CustomerGui;
 //import restaurant.tanRestaurant.gui.RestaurantGui;
 import agent.Role;
@@ -9,12 +10,16 @@ import restaurant.tanRestaurant.TanHostAgent.Seat;
 import restaurant.tanRestaurant.interfaces.Customer;
 import restaurant.tanRestaurant.test.mock.EventLog;
 import agent.Agent;
+import gui.Building;
 
+import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 import java.awt.event.*;
+
+import city.helpers.Directory;
 
 /**
  * Restaurant customer agent.
@@ -91,6 +96,21 @@ public class TanCustomerRole extends Role implements Customer{
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
+	
+	public TanCustomerRole(String location){
+		super();
+	
+		customerGui = new CustomerGui(this);
+		host = (TanHostAgent) Directory.sharedInstance().getAgents().get("TanHostAgent");
+		
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == location) {
+				b.addGui(customerGui);
+			}
+		}
+	}
+	/*
 	public TanCustomerRole(String name){
 		super();
 		this.name = name;
@@ -109,7 +129,7 @@ public class TanCustomerRole extends Role implements Customer{
 		else
 			this.name=name;
 		print("I have $"+cash+ " and owe $"+debt);
-	}
+	}*/
 
 	/**
 	 * hack to establish connection to Host agent.

@@ -1,11 +1,5 @@
 package restaurant.shehRestaurant.helpers;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
-import restaurant.shehRestaurant.ShehWaiterRole;
-
 public class FoodData {
 	public String name;
 	public int price;

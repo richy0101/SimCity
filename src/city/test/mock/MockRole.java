@@ -1,6 +1,6 @@
 package city.test.mock;
 
-import market.MarketRole;
+import market.MarketWorkerRole;
 import agent.Agent;
 import city.PersonAgent;
 import city.interfaces.*;

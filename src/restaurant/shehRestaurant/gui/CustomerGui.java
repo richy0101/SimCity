@@ -42,8 +42,9 @@ public class CustomerGui implements Gui{
 		agent = c;
 		xPos = XDOOR;
 		yPos = YDOOR;
-		xDestination = XDOOR;
-		yDestination = YDOOR;
+		xDestination = XWAITING;
+		yDestination = YWAITING;
+		isPresent = true;
 		
 		try {
         	customerImage = ImageIO.read(getClass().getResource("shehRestaurantCustomer.png"));
@@ -92,8 +93,8 @@ public class CustomerGui implements Gui{
 	}
 	public void setHungry() {
 		isHungry = true;
-		agent.gotHungry();
-		setPresent(true);;
+		agent.msgGotHungry();
+		setPresent(true);
 	}
 	public boolean isHungry() {
 		return isHungry;
@@ -104,8 +105,8 @@ public class CustomerGui implements Gui{
 	}
 	
 	public void DoWaitInRestaurant(int queue) {
-		xDestination = 10;
-		yDestination = 10 - (queue * (agentSize * 2));
+		xDestination = XWAITING;
+		yDestination = YWAITING - (queue * (agentSize * 2));
 		
 	}
 
@@ -130,5 +131,6 @@ public class CustomerGui implements Gui{
 		xDestination = XDOOR;
 		yDestination = YDOOR;
 		command = Command.LeaveRestaurant;
+		isPresent = false;
 	}
 }

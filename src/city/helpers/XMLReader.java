@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;  
 import javax.xml.parsers.DocumentBuilderFactory;  
 
-import market.MarketRole;
+import market.MarketWorkerRole;
 
 import org.w3c.dom.Document;  
 import org.w3c.dom.Element;  

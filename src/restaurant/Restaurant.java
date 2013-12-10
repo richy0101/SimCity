@@ -17,7 +17,7 @@ public class Restaurant {
 	CurrentBuildingPanel restPanel;
 	
 
-	private ProducerConsumerMonitor monitor;
+	protected ProducerConsumerMonitor monitor;
 	double till = 1000;
 	
 	public double getTill() {

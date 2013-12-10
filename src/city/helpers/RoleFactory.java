@@ -4,12 +4,23 @@ import home.LandlordRole;
 import city.PersonAgent;
 import city.UnemployedRole;
 import market.MarketCustomerRole;
-import market.MarketRole;
+import market.MarketWorkerRole;
 import agent.Role;
 import bank.BankTellerRole;
+<<<<<<< HEAD
 import restaurant.phillipsRestaurant.PhillipsCookRole;
 import restaurant.phillipsRestaurant.PhillipsWaiterRole;
+=======
+import restaurant.nakamuraRestaurant.NakamuraCookRole;
+import restaurant.nakamuraRestaurant.NakamuraCustomerRole;
+import restaurant.nakamuraRestaurant.NakamuraWaiterNormalRole;
+import restaurant.nakamuraRestaurant.NakamuraWaiterSharedRole;
+>>>>>>> 8ee6806c6fc3c3b25f2dbe9daaa2f4cc63857f39
 import restaurant.shehRestaurant.ShehCookRole;
+import restaurant.shehRestaurant.ShehCustomerRole;
+import restaurant.shehRestaurant.ShehWaiterNormalRole;
+import restaurant.shehRestaurant.ShehWaiterRole;
+import restaurant.shehRestaurant.ShehWaiterSharedRole;
 import restaurant.stackRestaurant.*;
 import restaurant.huangRestaurant.HuangCookRole;
 import restaurant.huangRestaurant.HuangCustomerRole;
@@ -33,6 +44,12 @@ public class RoleFactory {
 		else if(role.equals("HuangRestaurant")) {
 			newRole = new HuangCustomerRole("HuangRestaurant");
 		}
+		else if(role.equals("NakamuraRestaurant")) {
+			newRole = new NakamuraCustomerRole("NakamuraRestaurant");
+		}
+		else if(role.equals("ShehRestaurant")) {
+			newRole = new ShehCustomerRole("ShehRestaurant");
+		}
 		else if(role.equals("MarketCust")) {
 			newRole = new MarketCustomerRole(p.getGroceriesList(), "Market");
 		}
@@ -40,12 +57,14 @@ public class RoleFactory {
 			newRole = new MarketCustomerRole(p.getGroceriesList(), "Market2");
 		}
 		else if(role.equals("Market")) {
-			newRole = new MarketRole("Market");
-			Directory.sharedInstance().marketDirectory.get("Market").setWorker((MarketRole)newRole);
+			newRole = new MarketWorkerRole("Market");
+			Directory.sharedInstance().marketDirectory.get("Market").setWorker((MarketWorkerRole)newRole);
+			((MarketWorkerRole) newRole).setMarket(Directory.sharedInstance().marketDirectory.get("Market"));
 		}
 		else if(role.equals("Market2")) {
-			newRole = new MarketRole("Market2");
-			Directory.sharedInstance().marketDirectory.get("Market2").setWorker((MarketRole)newRole);
+			newRole = new MarketWorkerRole("Market2");
+			Directory.sharedInstance().marketDirectory.get("Market2").setWorker((MarketWorkerRole)newRole);
+			((MarketWorkerRole) newRole).setMarket(Directory.sharedInstance().marketDirectory.get("Market2"));
 		}
 		else if(role.equals("HuangWaiterNormal")) {
 			newRole = new HuangWaiterNormalRole("HuangRestaurant");
@@ -71,18 +90,24 @@ public class RoleFactory {
 			newRole = new StackCookRole("StackRestaurant");
 			return newRole;
 		}
-//		else if(role.equals("ShehWaiterNormal")) {
-//			newRole = new ShehWaiterNormalRole("ShehRestaurant");
-//			return newRole;
-//		}
-//		else if (role.equals("ShehWaiterShared")) {
-//			newRole = new ShehWaiterSharedRole("ShehRestaurant");
-//			return newRole;
-//		}
-//		else if (role.equals("ShehCook")) {
-//			newRole = new ShehCookRole("ShehRestaurant");
-//			return newRole;
-//		}
+		else if(role.equals("ShehWaiter")) {
+			newRole = new ShehWaiterRole("ShehRestaurant");
+			return newRole;
+		}
+		/*
+		else if(role.equals("ShehWaiterNormal")) {
+			newRole = new ShehWaiterNormalRole("ShehRestaurant");
+			return newRole;
+		}
+		else if (role.equals("ShehWaiterShared")) {
+			newRole = new ShehWaiterSharedRole("ShehRestaurant");
+			return newRole;
+		}
+		*/
+		else if (role.equals("ShehCook")) {
+			newRole = new ShehCookRole("ShehRestaurant");
+			return newRole;
+		}
 //		else if(role.equals("TanWaiterNormal")) {
 //			newRole = new TanWaiterNormalRole("TanRestaurant");
 //			return newRole;
@@ -95,6 +120,7 @@ public class RoleFactory {
 //			newRole = new TanCookRole("TanRestaurant");
 //			return newRole;
 //		}
+<<<<<<< HEAD
 //		else if(role.equals("NakamuraWaiterNormal")) {
 //			newRole = new NakamuraWaiterNormalRole("NakamuraRestaurant");
 //			return newRole;
@@ -111,6 +137,24 @@ public class RoleFactory {
 			newRole = new PhillipsWaiterRole("PhillipsRestaurant");
 			return newRole;
 		}
+=======
+		else if(role.equals("NakamuraWaiterNormal")) {
+			newRole = new NakamuraWaiterNormalRole("NakamuraRestaurant");
+			return newRole;
+		}
+		else if (role.equals("NakamuraWaiterShared")) {
+			newRole = new NakamuraWaiterSharedRole("NakamuraRestaurant");
+			return newRole;
+		}
+		else if (role.equals("NakamuraCook")) {
+			newRole = new NakamuraCookRole("NakamuraRestaurant");
+			return newRole;
+		}
+//		else if(role.equals("PhillipsWaiterNormal")) {
+//			newRole = new PhillipsWaiterNormalRole("PhillipsRestaurant");
+//			return newRole;
+//		}
+>>>>>>> 8ee6806c6fc3c3b25f2dbe9daaa2f4cc63857f39
 //		else if (role.equals("PhillipsWaiterShared")) {
 //			newRole = new PhillipsWaiterSharedRole("PhillipsRestaurant");
 //			return newRole;

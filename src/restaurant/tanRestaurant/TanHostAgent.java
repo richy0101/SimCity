@@ -2,12 +2,14 @@ package restaurant.tanRestaurant;
 
 import agent.Agent;
 import agent.Role;
+import restaurant.shehRestaurant.ShehCashierAgent;
 import restaurant.tanRestaurant.TanHostAgent.MyCust.WaitingStatus;
 //import restaurant.HostAgent.MyWaiter.WorkingStatus;
 import restaurant.tanRestaurant.TanWaiterRole.MyCustomer;
 //import restaurant.WaiterAgent.WorkingStatus;
 import restaurant.tanRestaurant.TanWaiterRole.MyCustomer.state;
 import restaurant.tanRestaurant.gui.HostGui;
+import restaurant.tanRestaurant.interfaces.Cashier;
 import restaurant.tanRestaurant.test.mock.EventLog;
 
 import java.util.*;
@@ -15,6 +17,8 @@ import java.util.concurrent.Semaphore;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import city.helpers.Directory;
 
 /**
  * Restaurant Host Agent
@@ -40,14 +44,12 @@ public class TanHostAgent extends Agent {
 	= new ArrayList<WaiterAgent>();*/
 	public List<MyWaiter> Waiters
 	= Collections.synchronizedList(new ArrayList<MyWaiter>());
-	
+	Cashier cashier;
 	
 	public Collection<Table> tables;
 	public Collection<Seat> seats;
 	
-//	public WaiterAgent MyWaiter;
-	//note that tables is typed with Collection semantics.
-	//Later we will see how it is implemented
+	TanRestaurant restaurant;
 	
 	Timer timer = new Timer();
 	
@@ -83,6 +85,24 @@ public class TanHostAgent extends Agent {
 
 	public HostGui hostGui = null;
 	
+	public TanHostAgent(String location) {
+		super();
+		name= "Host Dmitri";
+		
+		System.out.println("Host Dmitri in da hauzzzzz "+ location);
+		
+		tables = new ArrayList<Table>(NTABLES);
+		for (int ix = 1; ix <= NTABLES; ix++) {
+			tables.add(new Table(ix));//how you add to a collections
+		}
+		seats= new ArrayList<Seat>(NSEATS);
+		for (int x = 1; x <= NSEATS; x++) {
+			seats.add(new Seat(x));//how you add to a collections
+		}
+		
+		//cashier = (TanCashierAgent) Directory.sharedInstance().getAgents().get("TanRestaurantCashier");
+	}
+	
 	public TanHostAgent() {
 		super();
 
@@ -95,7 +115,7 @@ public class TanHostAgent extends Agent {
 			seats.add(new Seat(x));//how you add to a collections
 		}
 	}
-
+/*
 	public TanHostAgent(String name) {
 		super();
 
@@ -112,7 +132,7 @@ public class TanHostAgent extends Agent {
 			seats.add(new Seat(x));//how you add to a collections
 		}
 	}
-
+*/
 	public String getMaitreDName() {
 		return name;
 	}
@@ -491,6 +511,16 @@ public class TanHostAgent extends Agent {
 		public String toString() {
 			return "table " + tableNumber;
 		}
+	}
+
+	public TanCashierAgent getCashier() {
+		// TODO Auto-generated method stub
+		return (TanCashierAgent) cashier;
+	}
+
+	public void setRestaurant(TanRestaurant tanRestaurant) {
+		restaurant= tanRestaurant;
+		
 	}
 }
 

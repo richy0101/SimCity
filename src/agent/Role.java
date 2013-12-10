@@ -1,5 +1,6 @@
 package agent;
-import market.MarketRole;
+import market.Market;
+import market.MarketWorkerRole;
 import city.PersonAgent;
 import city.interfaces.Person;
 import city.interfaces.RoleInterface;
@@ -49,10 +50,6 @@ public class Role implements RoleInterface {
 		
 	}
 
-	public void setMarket(MarketRole marketRole) {
-		// TODO Auto-generated method stub
-		
-	}
 	public void msgJobDone() {
 		
 	}

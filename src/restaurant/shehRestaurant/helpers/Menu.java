@@ -2,9 +2,6 @@ package restaurant.shehRestaurant.helpers;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-
-import restaurant.shehRestaurant.ShehWaiterRole;
 
 public class Menu {
 	
@@ -14,14 +11,14 @@ public class Menu {
 	public Menu() {
 		FoodData steak = new FoodData("Steak", 20, 2000, 1);
 		FoodData chicken = new FoodData("Chicken", 15, 2000, 1);
-		FoodData fish = new FoodData("Fish", 20, 2000, 1);
-		FoodData vegetarian = new FoodData("Vegetarian", 20, 2000, 1);
+		FoodData pizza = new FoodData("Pizza", 20, 2000, 1);
+		FoodData salad = new FoodData("Salad", 20, 2000, 1);
 		
 		Map<String, FoodData> inventory = new HashMap<String, FoodData>(); {
 			inventory.put("Steak", steak);
 			inventory.put("Chicken", chicken);
-			inventory.put("Fish", fish);
-			inventory.put("Vegetarian", vegetarian);
+			inventory.put("Pizza", pizza);
+			inventory.put("Salad", salad);
 			
 		this.choices = inventory.keySet().toArray();
 		this.size = inventory.size();

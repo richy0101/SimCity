@@ -1,7 +1,5 @@
 package restaurant.shehRestaurant;
 
-import java.util.Vector;
-
 import restaurant.Restaurant;
 
 
@@ -10,14 +8,25 @@ public class ShehRestaurant extends Restaurant {
 	private String name;
 	ShehHostAgent host;
 	ShehCashierAgent cashier;
-	double till = 10000;
-	Vector<ShehWaiterRole> waiters = new Vector<ShehWaiterRole>();
+
 	
 	public ShehRestaurant(String name) {
 		super();
 		this.name = name;
-		host = new ShehHostAgent("Host", waiters);
-		cashier = new ShehCashierAgent("Cashier");
+		
+		//FOODDATA
+		
+		host = new ShehHostAgent();
+		cashier = new ShehCashierAgent();
+		
+		/*
+		System.out.println(host.toString() + "STUB SHEHRESTAURATNTLINE22");
+		System.out.println(cashier.toString());
+		*/
+		
+		host.setRestaurant(this);
+		cashier.setRestaurant(this);
+		
 		host.startThread();
 		cashier.startThread();	
 	}
@@ -34,13 +43,4 @@ public class ShehRestaurant extends Restaurant {
 	public ShehCashierAgent getCashier() {
 		return cashier;
 	}
-	//till?
-	public double getTill() {
-		return till;
-	}
-
-	public void setTill(double till) {
-		this.till = till;
-	}
-
 }

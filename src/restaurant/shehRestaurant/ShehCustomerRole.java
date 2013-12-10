@@ -63,7 +63,7 @@ public class ShehCustomerRole extends Role implements Customer {
 		super();
 	
 		customerGui = new CustomerGui(this);
-		host = (ShehHostAgent) Directory.sharedInstance().getAgents().get("ShehHostAgent");
+		host = (ShehHostAgent) Directory.sharedInstance().getAgents().get("ShehRestaurantHost");
 		
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
@@ -78,7 +78,7 @@ public class ShehCustomerRole extends Role implements Customer {
 	 */
 	// Messages
 
-	public void gotHungry() {//from animation
+	public void msgGotHungry() {//from animation
 		print("I'm hungry");
 		event = AgentEvent.gotHungry;
 		stateChanged();
@@ -147,7 +147,7 @@ public class ShehCustomerRole extends Role implements Customer {
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		//	CustomerAgent is a finite state machine
 		if (state == AgentState.DoingNothing && event == AgentEvent.gotHungry ){
 			state = AgentState.WaitingInRestaurant;

@@ -2,6 +2,7 @@ package restaurant.tanRestaurant;
 
 import agent.Agent;
 import agent.Role;
+import restaurant.shehRestaurant.ShehHostAgent;
 import restaurant.tanRestaurant.TanCustomerRole.Order;
 import restaurant.tanRestaurant.TanCustomerRole.AgentEvent;
 import restaurant.tanRestaurant.TanCustomerRole.AgentState;
@@ -17,9 +18,12 @@ import restaurant.tanRestaurant.interfaces.Cashier;
 import restaurant.tanRestaurant.interfaces.Customer;
 import restaurant.tanRestaurant.interfaces.Waiter;
 import restaurant.tanRestaurant.test.mock.EventLog;
+import gui.Building;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
+
+import city.helpers.Directory;
 
 /**
  * Restaurant Waiter Agent
@@ -117,7 +121,24 @@ public class TanWaiterRole extends Role implements Waiter{
 		enum state{waitingToBeSeated, Seated, readyToOrder, approachedByWaiter, doneOrdering, askedOrder, placedOrder, waitingForFood, Salivating, Served, whereIsMyFood, givenBill, payingBill, leaving, left};
 	}
 
-
+	public TanWaiterRole(String location) {
+		super();
+		
+		host = (TanHostAgent) Directory.sharedInstance().getAgents().get("TanRestaurantHost");
+		//cashier = host.getCashier();
+		name= "Cashier 1";
+		
+		waiterGui = new WaiterGui(this);
+		
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		
+		for(Building b : buildings) {
+			if (b.getName() == location) {
+				b.addGui(waiterGui);
+			}
+		}
+	}
+	/*
 	public TanWaiterRole(String name) {
 		super();
 
@@ -132,7 +153,7 @@ public class TanWaiterRole extends Role implements Waiter{
 		}
 
 	}
-
+*/
 	public String getWaiterName() {
 		return name;
 	}

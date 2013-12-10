@@ -8,78 +8,43 @@ import restaurant.tanRestaurant.TanCustomerRole.OrderStatus;
 import gui.Gui;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class CookGui implements Gui {
 
     private TanCookRole agent = null;
 
-    private int xPos = 350, yPos = 20;//default waiter position
-    private int xDestination = -20, yDestination = -20;//default start position
-
-    public static final int xTable = 200;
-    public static final int yTable = 250;
+    private int xPos=291, yPos=-40;//xPos = 291, yPos = 53;//default waiter position
+    private int xDestination = 291, yDestination = 53;//default start position
+    BufferedImage cookImage;
 
     public CookGui(TanCookRole agent) {
         this.agent = agent;
+        try {
+        	cookImage = ImageIO.read(getClass().getResource("stackRestaurantCook.png"));
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ Background");
+        }
     }
 
     
     public void updatePosition() {
-    	/*
-        if(xPos==-20 && yPos==-20){
-        	agent.msgAtStart();
-        }
-    	if (xPos < xDestination)
-            xPos++;
-        else if (xPos > xDestination)
-            xPos--;
 
-        if (yPos < yDestination)
-            yPos++;
-        else if (yPos > yDestination)
-            yPos--;
-
-        if (xPos == xDestination && yPos == yDestination
-        		& (xDestination == xTable + 20) & (yDestination == yTable - 20)) {
-           agent.msgAtTable();
-        }
-        else if(xPos == xDestination && yPos == yDestination
-        		& (xDestination == xTable + 150 + 20) & (yDestination == yTable - 20)) {
-            agent.msgAtTable();
-         }
-        else if(xPos == xDestination && yPos == yDestination
-        		& (xDestination == xTable + 150 + 20) & (yDestination == yTable - 20-150)) {
-            agent.msgAtTable();
-         }*/
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.WHITE);
-        g.fillRect(xPos, yPos, 20, 20);
-        /*Graphics2D g2 = (Graphics2D)g;
-		g2.setColor(Color.WHITE);
-        g2.fillRect(xPos, yPos, 20, 20);*/
+    	Graphics2D g2 = (Graphics2D)g;
 
-		//g2.drawString("Cashier",xPos-12, yPos+45);
+        //Clear the screen by painting a rectangle the size of the frame
+        g2.drawImage(cookImage, xPos, yPos, null);
     }
 
     public boolean isPresent() {
         return true;
-    }
-
-    public void DoBringToTable(TanCustomerRole customer, int seatnumber) {
-        if (seatnumber==1){
-        	xDestination = xTable + 20;
-            yDestination = yTable - 20;
-        }
-        else if(seatnumber==2){
-        	xDestination = xTable + 150 + 20;
-            yDestination = yTable - 20;
-        }
-        else if(seatnumber==3){
-        	xDestination = xTable + 150 + 20;
-            yDestination = yTable - 20 - 150;
-        }
     }
 
     public void DoLeaveCustomer() {
