@@ -8,7 +8,7 @@ import gui.CurrentBuildingPanel;
 public class Bank {
 	String name = "Bank";
 	BankManagerAgent manager;
-	boolean isOpen;
+	boolean isOpen = true;
 	CurrentBuildingPanel restPanel;
 
 	public Bank() {
