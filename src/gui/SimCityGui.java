@@ -133,7 +133,7 @@ public class SimCityGui {
         
         roles.put("Landlord A", "LandlordA");
         roles.put("Landlord B", "LandlordB");
-        roles.put("LandLord C", "LandLordC");
+        roles.put("Landlord C", "LandlordC");
         
         roles.put("Stack's Restaurant Waiter Normal", "StackWaiterNormal");
         roles.put("Stack's Restaurant Waiter Shared", "StackWaiterShared");
@@ -231,7 +231,7 @@ public class SimCityGui {
 		
         occupationComboBox.addItem("Landlord A");
         occupationComboBox.addItem("Landlord B");
-        occupationComboBox.addItem("LandLord C");
+        occupationComboBox.addItem("Landlord C");
 		
 		//Sheh
 		occupationComboBox.addItem("Sheh's Restaurant Waiter Normal");
@@ -382,7 +382,7 @@ public class SimCityGui {
 		housingComboBox.addItem("ApartmentA12");
 		housingComboBox.addItem("ApartmentA13");
 		housingComboBox.addItem("ApartmentA14");
-		housingComboBox.addItem("ApartmentA15");
+		//housingComboBox.addItem("ApartmentA15");
 		
 		housingComboBox.addItem("ApartmentB01");
 		housingComboBox.addItem("ApartmentB02");
@@ -398,7 +398,7 @@ public class SimCityGui {
 		housingComboBox.addItem("ApartmentB12");
 		housingComboBox.addItem("ApartmentB13");
 		housingComboBox.addItem("ApartmentB14");
-		housingComboBox.addItem("ApartmentB15");
+		//housingComboBox.addItem("ApartmentB15");
 		
 		housingComboBox.addItem("ApartmentC01");
 		housingComboBox.addItem("ApartmentC02");
@@ -414,7 +414,7 @@ public class SimCityGui {
 		housingComboBox.addItem("ApartmentC12");
 		housingComboBox.addItem("ApartmentC13");
 		housingComboBox.addItem("ApartmentC14");
-		housingComboBox.addItem("ApartmentC15");
+		//housingComboBox.addItem("ApartmentC15");
 		
 		panel.add(housingComboBox);
 		
@@ -427,49 +427,39 @@ public class SimCityGui {
                     transportationComboBox.getSelectedItem() != "None" &&
                     housingComboBox.getSelectedItem() != "None") {
 					
-					//CREATE CONDITION WHERE IFF OCCUPATION COMBO BOX IS LANDLORD THEN HOUSING IS LAND LORD
-					if(occupationComboBox.getSelectedItem().toString().toLowerCase().contains("landlord")) {
-
-						System.out.println("STUBSIMCITYGUI LINE427: " + housingComboBox.getSelectedItem().toString());
-						String apartmentLetter = ApartmentHelper.sharedInstance().getApartmentLetter(housingComboBox.getSelectedItem().toString());
-						System.out.println(apartmentLetter);
+						String role = roles.get(occupationComboBox.getSelectedItem());
+						String name = nameTextField.getText();
+						int aggressivenessLevel = aggressivenessSlider.getValue();
+						double initialFunds = (double) initialFundsSlider.getValue();
+						String housing = (String) housingComboBox.getSelectedItem();
+						String transportMethod = (String) transportationComboBox.getSelectedItem();
 						
-						Role role = new Role();
-						//TODO you have to go through an entry set
-						for(Role r : roles) {
-							if(role.toString() == housingComboBox.getSelectedItem().toString()) {
-							
+						//CREATE CONDITION WHERE IFF OCCUPATION COMBO BOX IS LANDLORD THEN HOUSING IS LAND LORD
+						if(role.contains("lord")) {
+							if (role.contains("lordA")) {
+								housing = "ApartmentA15";
 							}
-						
-						PersonAgent person = new PersonAgent(roles.get("home.LandLord" + apartmentLetter),
-                                nameTextField.getText(),
-                                aggressivenessSlider.getValue(),
-                                (double)initialFundsSlider.getValue(),
-                                (String)housingComboBox.getSelectedItem(),
-                                (String)transportationComboBox.getSelectedItem());
-						
-						System.out.println("STUB simcitygui LN438");
-						
-						housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
+							else if (role.contains("lordB")) {
+								housing = "ApartmentB15";
+							}
+							else if (role.contains("lordC")) {
+								housing = "ApartmentC15";
+							}
+							//TODO you have to go through an entry set
+							PersonAgent person = new PersonAgent(role, name, aggressivenessLevel, initialFunds, housing, transportMethod);
+							/**
+							 * Remove Landlord role from being made after one has been made.
+							 */
+							occupationComboBox.removeItemAt(occupationComboBox.getSelectedIndex());
 						}
-					} 
-					else {
-						System.out.println("STUBSIMCITYGUI LINE427: " + housingComboBox.getSelectedItem().toString());
-						PersonAgent person = new PersonAgent(roles.get(occupationComboBox.getSelectedItem()),
-                                nameTextField.getText(),
-                                aggressivenessSlider.getValue(),
-                                (double)initialFundsSlider.getValue(),
-                                (String)housingComboBox.getSelectedItem(),
-                                (String)transportationComboBox.getSelectedItem());
-						
-						
-						
-						housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
-					}
-						
+						else {
+							PersonAgent person = new PersonAgent(role, name, aggressivenessLevel, initialFunds, housing, transportMethod);	
+							housingComboBox.removeItemAt(housingComboBox.getSelectedIndex());
+						}
+					} 		
 				}
 			}
-		});
+		);
 		sl_panel.putConstraint(SpringLayout.NORTH, btnCreatePerson, 6, SpringLayout.SOUTH, aggressivenessSlider);
 		sl_panel.putConstraint(SpringLayout.WEST, btnCreatePerson, 0, SpringLayout.WEST, btnPopulateCity);
 		sl_panel.putConstraint(SpringLayout.EAST, btnCreatePerson, 0, SpringLayout.EAST, btnPopulateCity);

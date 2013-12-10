@@ -132,15 +132,15 @@ public class RoleFactory {
 			return newRole;
 		}
 		else if (role.equals("LandlordA")) {
-			newRole = new LandlordRole("AppartmentA", 1);
+			newRole = new LandlordRole("ApartmentA", 1);
 			return newRole;
 		}
 		else if (role.equals("LandlordB")) {
-			newRole = new LandlordRole("AppartmentB", 2);
+			newRole = new LandlordRole("ApartmentB", 2);
 			return newRole;
 		}
 		else if (role.equals("LandlordC")) {
-			newRole = new LandlordRole("AppartmentC", 3);
+			newRole = new LandlordRole("ApartmentC", 3);
 			return newRole;
 		}
 		newRole.setPerson(p);
