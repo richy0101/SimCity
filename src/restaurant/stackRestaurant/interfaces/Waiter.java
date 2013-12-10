@@ -1,5 +1,6 @@
 package restaurant.stackRestaurant.interfaces;
 
+import restaurant.Restaurant;
 import restaurant.stackRestaurant.helpers.Check;
 
 
@@ -28,4 +29,6 @@ public interface Waiter {
 	public abstract void msgImComingOffBreak();
 
 	public abstract void msgCookHere(Cook cook);
+
+	public abstract void setRestaurant(Restaurant restaurant);
 }

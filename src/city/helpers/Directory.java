@@ -7,13 +7,9 @@ import java.util.Map;
 
 import city.PersonAgent;
 import city.TrafficAgent;
-import city.TransportationRole;
-import city.gui.BusStop;
-import city.gui.StreetCorner;
 import market.Market;
 import agent.Agent;
 import bank.Bank;
-import gui.MacroAnimationPanel;
 import gui.SimCityGui;
 import home.Apartment;
 import home.Home;

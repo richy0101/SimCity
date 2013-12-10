@@ -2,6 +2,7 @@ package restaurant.stackRestaurant.interfaces;
 
 import market.interfaces.*;
 import restaurant.CookInterface;
+import restaurant.Restaurant;
 
 
 public interface Cook extends CookInterface{
@@ -19,5 +20,7 @@ public interface Cook extends CookInterface{
 	public void msgAtPlating();
 	
 	public void msgAtFridge();
+
+	public void setRestaurant(Restaurant restaurant);
 
 }

@@ -26,15 +26,10 @@ import java.util.Random;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
-import market.MarketRole;
 import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
-import restaurant.shehRestaurant.ShehWaiterRole;
 import restaurant.shehRestaurant.gui.ShehRestaurantAnimationPanel;
 import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
-import restaurant.stackRestaurant.StackCookRole;
-import restaurant.stackRestaurant.StackWaiterNormalRole;
-import restaurant.stackRestaurant.StackWaiterSharedRole;
 import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 
 public class SimCityGui {
@@ -500,6 +495,11 @@ public class SimCityGui {
 		
 		panel.add(speedSlider);
 		
+		Restaurant restaurant = Directory.sharedInstance().getRestaurants().get(0);
+		CurrentBuildingPanel restPanel = new CurrentBuildingPanel(restaurant);
+		restaurant.setInfoPanel(restPanel);
+		tabbedPane.addTab("Current Building", restPanel);
+		
 		
 	}
 	
@@ -679,6 +679,7 @@ public class SimCityGui {
 					tabbedPane.remove(1);
 				}
 				CurrentBuildingPanel restPanel = new CurrentBuildingPanel(restaurant);
+				restaurant.setInfoPanel(restPanel);
 				tabbedPane.addTab("Current Building", restPanel);
 			}
 		}
