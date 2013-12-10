@@ -364,6 +364,12 @@ public class MarketRole extends Role implements Market {
 		if (deliverOrders == true) {
 			synchronized(MyRestaurantOrders) {
 				for(RestaurantOrder o : MyRestaurantOrders) {
+					if(o.state == orderState.Ordered) {
+						FillRestaurantOrder(o);
+						return true;
+					}
+				}
+				for(RestaurantOrder o : MyRestaurantOrders) {
 					if(o.state == orderState.Paid || o.state == orderState.Cancelled) {
 						MyRestaurantOrders.remove(o);
 						
@@ -380,12 +386,6 @@ public class MarketRole extends Role implements Market {
 				for(RestaurantOrder o : MyRestaurantOrders) {
 					if(o.state == orderState.ReadyToDeliver) {
 						DriveToOrder(o);
-						return true;
-					}
-				}
-				for(RestaurantOrder o : MyRestaurantOrders) {
-					if(o.state == orderState.Ordered) {
-						FillRestaurantOrder(o);
 						return true;
 					}
 				}
