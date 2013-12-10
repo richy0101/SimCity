@@ -745,6 +745,22 @@ public class SimCityGui {
 				tabbedPane.addTab("Current Building", restPanel);
 			}
 		}
+		if(name.equals("Market")) {
+			if(tabbedPane.getTabCount() == 2) {
+				tabbedPane.remove(1);
+			}
+			CurrentBuildingPanel restPanel = new CurrentBuildingPanel(Directory.sharedInstance().getMarkets().get(0));
+			Directory.sharedInstance().getMarkets().get(0).setInfoPanel(restPanel);
+			tabbedPane.addTab("Current Building", restPanel);
+		}
+		else if(name.equals("Market2")) {
+			if(tabbedPane.getTabCount() == 2) {
+				tabbedPane.remove(1);
+			}
+			CurrentBuildingPanel restPanel = new CurrentBuildingPanel(Directory.sharedInstance().getMarkets().get(1));
+			Directory.sharedInstance().getMarkets().get(1).setInfoPanel(restPanel);
+			tabbedPane.addTab("Current Building", restPanel);
+		}
 		
 	}
 }

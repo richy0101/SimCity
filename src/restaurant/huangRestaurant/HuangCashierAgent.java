@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import market.MarketCheck;
-import market.interfaces.Market;
+import market.interfaces.MarketWorker;
 import restaurant.CashierAgent;
 import restaurant.huangRestaurant.interfaces.Cashier;
 import restaurant.huangRestaurant.interfaces.Customer;
@@ -54,7 +54,7 @@ public class HuangCashierAgent extends CashierAgent implements Cashier {
 	public class MarketBill {
 		public BillState state;
 		public MarketCheck c;
-		public Market m;
+		public MarketWorker m;
 		MarketBill(MarketCheck c) {
 			this.m = c.getMarket();
 			this.c = c;

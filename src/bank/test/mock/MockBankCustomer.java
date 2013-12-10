@@ -6,12 +6,12 @@ import bank.BankTellerRole;
 import bank.test.mock.LoggedEvent;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.BankTeller;
-import market.interfaces.Market;
+import market.interfaces.MarketWorker;
 import market.interfaces.MarketCustomer;
 
 public class MockBankCustomer extends Mock implements BankCustomer {
 
-	public Market market;
+	public MarketWorker market;
 	public EventLog log;
 	public double price;
 	public Map<String, Integer> groceries;

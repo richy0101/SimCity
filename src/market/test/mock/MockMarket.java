@@ -6,10 +6,10 @@ import restaurant.CashierInterface;
 import restaurant.CookInterface;
 import restaurant.stackRestaurant.interfaces.Cashier;
 import restaurant.stackRestaurant.interfaces.Cook;
-import market.interfaces.Market;
+import market.interfaces.MarketWorker;
 import market.interfaces.MarketCustomer;
 
-public class MockMarket extends Mock implements Market {
+public class MockMarket extends Mock implements MarketWorker {
 
 	public MarketCustomer customer;
 	public CookInterface cook;

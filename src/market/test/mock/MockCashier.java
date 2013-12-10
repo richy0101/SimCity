@@ -5,13 +5,13 @@ import restaurant.stackRestaurant.helpers.Check;
 import restaurant.stackRestaurant.interfaces.Cashier;
 import restaurant.stackRestaurant.interfaces.Customer;
 import restaurant.stackRestaurant.interfaces.Waiter;
-import market.interfaces.Market;
+import market.interfaces.MarketWorker;
 
 public class MockCashier extends Mock implements Cashier {
 
 	public EventLog log;
 	public Check check;
-	public Market market;
+	public MarketWorker market;
 
 	public MockCashier(String name) {
 		super(name);
@@ -29,7 +29,7 @@ public class MockCashier extends Mock implements Cashier {
 	}
 
 	@Override
-	public void msgGiveBill(Check check, Market market) {
+	public void msgGiveBill(Check check, MarketWorker market) {
 		log.add(new LoggedEvent("Received msgGiveBill from Market"));
 		
 		this.check = check;
