@@ -115,7 +115,6 @@ public class PersonAgent extends Agent implements Person {
 	public PersonAgent(RoleInterface job, String job_location, String home, String name) {
 		this.name = name;
 		if (job.getClass().getName().contains("employ")) {
-			print("I am unemployed!");
 			this.unemployed = true;
 		}
 		else {
@@ -157,11 +156,9 @@ public class PersonAgent extends Agent implements Person {
 				homeName = "ApartmentC";
 			}
 			if (b.getName() == homeName) {
-				//print("Adding GUI");
 				b.addGui(personGui);
 			}
 		}
-		//print("In hack for set task");
 		if (this.name.contains("BankD")) {
 			setPersonState(PersonState.WantsToDeposit);
 		}
@@ -186,7 +183,6 @@ public class PersonAgent extends Agent implements Person {
 		this.name = name;
 		//Set Up Work.
 		if (job.getClass().getName().contains("employ")) {
-			print("I am unemployed!");
 			this.unemployed = true;
 		}
 		else {
@@ -227,7 +223,6 @@ public class PersonAgent extends Agent implements Person {
 		//Set Up Work.
 		//TODO do we need this if statement? SERIOUSLY THOUGH, DO WE? -RYAN
 		if (job.contains("employ")) {
-			print("I am unemployed!");
 			this.unemployed = true;
 			Role r = factory.createRole(job, this);
 			String jobLocation = Directory.sharedInstance().roleDirectory.get(r.getClass().getName());
@@ -247,7 +242,6 @@ public class PersonAgent extends Agent implements Person {
 		}
 		else {
 			Role r = factory.createRole(job, this);
-			//print("Role created from front end: " + r.getClass().getName());
 			String jobLocation = Directory.sharedInstance().roleDirectory.get(r.getClass().getName());
 			if (job.contains("2")) {
 				jobLocation = jobLocation + "2";
@@ -255,7 +249,6 @@ public class PersonAgent extends Agent implements Person {
 			workDetails = new WorkDetails(r, jobLocation);
 			//finish setting up Work
 		}
-		print("created someone");
 		this.aggressivenessLevel = aggressivenessLevel;
 		this.funds = initialFunds;
 		String vehicleStatusNoSpace = vehicleStatus.replaceAll(" ", "");
@@ -306,7 +299,6 @@ public class PersonAgent extends Agent implements Person {
 		initialFood = new Food ("Pizza");
 		inventory.add(initialFood);
 		startThread();
-		//print("I LIVE.");
 	}
 	
 	public PersonAgent(Role job, 
@@ -318,7 +310,6 @@ public class PersonAgent extends Agent implements Person {
 		
 		this.name = name;
 		if (job.getClass().getName().contains("employ")) {
-			print("I am unemployed!");
 			this.unemployed = true;
 		}
 		else {
@@ -364,17 +355,8 @@ public class PersonAgent extends Agent implements Person {
 		inventory.add(initialFood);
 		
 		startThread();
-		//print("I LIVE.");
 	}
 	
-	//Hax for testing
-	public PersonAgent (Role hardCodeJob) {
-		name = "HardCoded " + hardCodeJob.toString();
-		print(name);
-		roles.add(hardCodeJob);
-		transMethod = TransportationMethod.TakesTheBus;
-		personGui = new PersonGui(this);
-	}
 	/**
 	 * Messages
 	 */
@@ -487,7 +469,6 @@ public class PersonAgent extends Agent implements Person {
 			return true;
 		}
 		if(!roles.isEmpty()) {
-			//print("STUB IN PERSONAGENT SCHEDULER: INROLESSTACK " + roles.peek().toString());
 			boolean b = false;
 			b = roles.peek().pickAndExecuteAnAction();
 			return b;
@@ -566,52 +547,42 @@ public class PersonAgent extends Agent implements Person {
 	 * 
 	 */
 	private boolean evaluateStatus() {		
-		//print("In Eval: Current Location = " + currentLocation + ".");
 		if (getPersonState().toString().contains("ing") || getPersonState().toString().contains("OutTo") || getPersonState().toString().contains("NeedsTo")){
 			return false;
 		}
 		else if (hasWorked == false && unemployed == false && !(workDetails.offDays.contains(currentDay))) {
-			print("Eval says go WORK");
 			setPersonState(PersonState.NeedsToWork);
 			return true;
 		}
 		else if (funds < 50.00 && aggressivenessLevel > 2) {
-			print("Eval says GO ROB BANK YOU CROOK");
 			setPersonState(PersonState.WantsToRob);
 			return true;
 		}
 		else if (funds > 1000.00) {
-			print("Eval says GO DEPOSIT YOU RICH MAN/WOMAN");
 			setPersonState(PersonState.WantsToDeposit);
 			return true;
 		}
 		else if(funds < 50.00 && accountNumber != 0) {
-			print("Eval says GO WITHDRAW");
 			setPersonState(PersonState.WantsToWithdraw);
 			return true;
 		}
 		else if (funds < 50.00) {
-			print("Eval says GO GET LOAN");
 			setPersonState(PersonState.WantsToGetLoan);
 			return true;
 		}
 		else if(checkInventory() == false) {
-			print("Just checked inventory, need to replenish!");
 			setPersonState(PersonState.NeedsToGoMarket);
 			return true;
 		}
 		else if(currentLocation != homeName) {
-			print ("Eval says GO HOME");
 			setPersonState(PersonState.WantsToGoHome);
 			return true;
 		}
 		else if(rentDue == true) {
-			print ("Eval says PAY RENT BECAUSE YOUR HOME");
 			setPersonState(PersonState.NeedsToPayRent);
 			return true;
 		}
 		else if (dirtynessLevel > 10) {
-			print("Eval says GO CLEAN");
 			setPersonState(PersonState.NeedsToCleanRoom);
 			return true;
 		}
@@ -636,14 +607,6 @@ public class PersonAgent extends Agent implements Person {
 	
 	private void goCleanHouse() {
 		print("Action cleanHouse - State set to cleaning.");
-
-//		if(currentLocation == homeName) { //check to see if apartment works?
-//			roles.clear();
-//			HomePersonRole homeRole = new HomePersonRole();
-//			roles.add(homeRole);
-//			homeRole.msgCleanHouse();
-//			
-//		}
 		personGui.DoClean();
 		actionComplete.acquireUninterruptibly();
 		setPersonState(PersonState.Idle);
@@ -893,7 +856,6 @@ public class PersonAgent extends Agent implements Person {
 	public void clearGroceries(Map<String, Integer> givenGroceries) {
 		for (Food f : inventory) {
 			f.stock += givenGroceries.get(f.type);
-			//print("Increasing inventory from groceries!");
 		}
 		groceryList.clear();
 	}
