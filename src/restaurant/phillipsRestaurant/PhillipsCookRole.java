@@ -8,12 +8,8 @@ import restaurant.FoodInformation;
 import restaurant.phillipsRestaurant.Menu;
 import restaurant.phillipsRestaurant.interfaces.*;
 import city.helpers.Directory;
-<<<<<<< HEAD
-import market.interfaces.Market;
-=======
-
+import market.interfaces.*;
 import market.interfaces.MarketWorker;
->>>>>>> 8ee6806c6fc3c3b25f2dbe9daaa2f4cc63857f39
 
 import java.util.ArrayList;
 import java.util.Collections;
