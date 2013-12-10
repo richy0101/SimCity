@@ -32,7 +32,6 @@ import java.util.Random;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
-import market.MarketRole;
 import restaurant.nakamuraRestaurant.NakamuraCookRole;
 import restaurant.nakamuraRestaurant.NakamuraWaiterRole;
 import restaurant.nakamuraRestaurant.gui.NakamuraRestaurantAnimationPanel;

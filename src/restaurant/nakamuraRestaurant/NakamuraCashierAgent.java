@@ -7,7 +7,7 @@ import java.util.Timer;
 
 import agent.Role;
 import market.MarketCheck;
-import market.interfaces.Market;
+import market.interfaces.MarketWorker;
 import restaurant.CashierAgent;
 import restaurant.nakamuraRestaurant.NakamuraCookRole;
 import restaurant.nakamuraRestaurant.helpers.Check;
@@ -250,7 +250,7 @@ public class NakamuraCashierAgent extends CashierAgent implements Cashier{
 			this.state = billState.Received;
 		}
 		
-		public Market getMarket() {
+		public MarketWorker getMarket() {
 			return marketcheck.getMarket();
 		}
 		

@@ -3,7 +3,7 @@ package restaurant;
 import java.util.ArrayList;
 import java.util.List;
 
-import market.interfaces.Market;
+import market.interfaces.MarketWorker;
 
 public class FoodInformation {
 	protected int quantity;
@@ -14,7 +14,7 @@ public class FoodInformation {
 	{Empty, Ordered, Stocked, PermanentlyEmpty};
 	public FoodState state;
 	
-	protected List<Market> markets;
+	protected List<MarketWorker> markets;
 	
 	public FoodInformation() {
 	}
@@ -22,7 +22,7 @@ public class FoodInformation {
 	public FoodInformation(int cookingTime, int inventory) {
 		quantity = inventory;
 		cookTime = cookingTime;
-		markets = new ArrayList<Market>();
+		markets = new ArrayList<MarketWorker>();
 	}
 	
 	public void setQuantity(int quantity) {
@@ -41,7 +41,7 @@ public class FoodInformation {
 		return cookTime;
 	}
 	
-	public List<Market> getMarkets() {
+	public List<MarketWorker> getMarkets() {
 		return markets;
 	}
 }
