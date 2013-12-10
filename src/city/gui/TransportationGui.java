@@ -53,8 +53,12 @@ public class TransportationGui implements Gui {
 	int Cross3X = 435, Cross3Y = 127;
 	int Cross5X = 435, Cross5Y = 308;
 	int Cross6X = 435, Cross6Y = 353;
-	public enum CurrentLoop {InnerRight, InnerLeft, Outer};
-	public enum CurrentAction {Travelling, Idle, BreakOut, BreakIn, BreakOver};
+	public enum Loop {InnerRight, InnerLeft, Outer};
+	Loop currentLoop;
+	Loop destinationLoop;
+	public enum CurrentAction {Travelling, Idle, 
+		BreakOut, BreakIn, BreakOver, BreakInFromTop, BreakInFromBottom, BreakOutFromTop, BreakOutFromBottom
+		};
 	CurrentAction currentAction = CurrentAction.Idle;
 	public TransportationGui(TransportationRole agent, int startX, int startY, int destX, int destY) {
 		this.agent = agent;
@@ -78,122 +82,156 @@ public class TransportationGui implements Gui {
 	
 	@Override
 	public void updatePosition() {
-		if(currentAction == CurrentAction.BreakIn) {
+		if (currentAction != CurrentAction.Idle) {
+			if (xPos == xDestination && yPos == yDestination) {
+				agent.msgActionComplete();
+				currentAction = CurrentAction.Idle;
+			}
 			/**
-			 * Outer Loop Logic
+			 * Breaking Out Block
 			 */
-			if ((xPos == outerLeftLane) && (yPos != outerBottomLane)) { //at left, coming down
-	            yPos++;
+			if (currentAction == CurrentAction.BreakOutFromTop && !doneBreaking(Cross1X, Cross1Y)) {
+				yPos--;
+				return;
 			}
-			else if ((yPos == outerBottomLane) && (xPos != outerRightLane)) { //at bottom, going right
-	            xPos++;
+			else if(doneBreaking(Cross1X, Cross1Y)){
+				currentLoop = Loop.Outer;
+				evaluateNextMove();
+				return;
 			}
-	        else if ((xPos == outerRightLane) && (yPos != outerTopLane)) {//at right, going up
-	            yPos--;
-	        }
-	        else if ((yPos == outerTopLane) && (xPos != outerLeftLane)) {//at top, going left
-	            xPos--;
-	        }
+			if (currentAction == CurrentAction.BreakOutFromBottom && !doneBreaking(Cross6X, Cross6Y)) {
+				yPos++;
+				return;
+			}
+			else if(doneBreaking(Cross6X, Cross6Y)) {
+				currentLoop = Loop.Outer;
+				evaluateNextMove();
+				return;
+			}
+			if(currentAction == CurrentAction.BreakOut && (xPos == Cross2X && yPos == Cross2Y)) {
+				currentAction = CurrentAction.BreakOutFromTop;
+				return;
+			}
+			else if (currentAction == CurrentAction.BreakOut && (xPos == Cross5X && yPos == Cross5Y)) {
+				currentAction = CurrentAction.BreakOutFromBottom;
+				return;
+			}
 			/**
-			 * Inner Loop Right Logic
+			 * End of Breaking Out Block
 			 */
-			if ((xPos == IRLeftLane) && (yPos != IRBottomLane)) { //at left, coming down
-	            yPos++;
-			}
-			else if ((yPos == IRBottomLane) && (xPos != IRRightLane)) { //at bottom, going right
-	            xPos++;
-			}
-	        else if ((xPos == IRRightLane) && (yPos != IRTopLane)) {//at right, going up
-	            yPos--;
-	        }
-	        else if ((yPos == IRTopLane) && (xPos != IRLeftLane)) {//at top, going left
-	            xPos--;
-	        }
 			/**
-			 * Inner Loop Left Logic
+			 * Breaking in Block
 			 */
-			if ((xPos == ILLeftLane) && (yPos != ILBottomLane)) { //at left, coming down
-	            yPos++;
+			if (currentAction == CurrentAction.BreakInFromTop && !doneBreaking(Cross2X, Cross2Y)) {
+				yPos++;
 			}
-			else if ((yPos == ILBottomLane) && (xPos != ILRightLane)) { //at bottom, going right
-	            xPos++;
+			else if(doneBreaking(Cross2X, Cross2Y)) {
+				currentLoop = Loop.InnerLeft;
+				evaluateNextMove();
+				return;
 			}
-	        else if ((xPos == ILRightLane) && (yPos != ILTopLane)) {//at right, going up
-	            yPos--;
-	        }
-	        else if ((yPos == ILTopLane) && (xPos != ILLeftLane)) {//at top, going left
-	            xPos--;
-	        }
+			if (currentAction == CurrentAction.BreakInFromBottom && !doneBreaking(Cross5X, Cross5Y)) {
+				yPos--;
+			}
+			else if(doneBreaking(Cross5X, Cross5Y)) {
+				currentLoop = Loop.InnerRight;
+				evaluateNextMove();
+				return;
+			}
+			if(currentAction == CurrentAction.BreakIn && (xPos == Cross1X && yPos == Cross1Y)) {
+				currentAction = CurrentAction.BreakInFromTop;
+				return;
+			}
+			else if (currentAction == CurrentAction.BreakIn && (xPos == Cross6X && yPos == Cross6Y)) {
+				currentAction = CurrentAction.BreakInFromBottom;
+				return;
+			}
+			/**
+			 * End of Breaking In block
+			 */
+			
+			ContinueLooping();
+		}
+			
+	}
+	private boolean doneBreaking(int x, int y) {
+		if (xPos == x && yPos == y) {
+			return true;
 		}
 		else {
-			/**
-			 * Outer Loop Logic
-			 */
-			if ((xPos == outerLeftLane) && (yPos != outerBottomLane)) { //at left, coming down
-	            yPos++;
-			}
-			else if ((yPos == outerBottomLane) && (xPos != outerRightLane)) { //at bottom, going right
-	            xPos++;
-			}
-	        else if ((xPos == outerRightLane) && (yPos != outerTopLane)) {//at right, going up
-	            yPos--;
-	        }
-	        else if ((yPos == outerTopLane) && (xPos != outerLeftLane)) {//at top, going left
-	            xPos--;
-	        }
-			/**
-			 * Inner Loop Right Logic
-			 */
-			if ((xPos == IRLeftLane) && (yPos != IRBottomLane)) { //at left, coming down
-	            yPos++;
-			}
-			else if ((yPos == IRBottomLane) && (xPos != IRRightLane)) { //at bottom, going right
-	            xPos++;
-			}
-	        else if ((xPos == IRRightLane) && (yPos != IRTopLane)) {//at right, going up
-	            yPos--;
-	        }
-	        else if ((yPos == IRTopLane) && (xPos != IRLeftLane)) {//at top, going left
-	            xPos--;
-	        }
-			/**
-			 * Inner Loop Left Logic
-			 */
-			if ((xPos == ILLeftLane) && (yPos != ILBottomLane)) { //at left, coming down
-	            yPos++;
-			}
-			else if ((yPos == ILBottomLane) && (xPos != ILRightLane)) { //at bottom, going right
-	            xPos++;
-			}
-	        else if ((xPos == ILRightLane) && (yPos != ILTopLane)) {//at right, going up
-	            yPos--;
-	        }
-	        else if ((yPos == ILTopLane) && (xPos != ILLeftLane)) {//at top, going left
-	            xPos--;
-	        }
+			return false;
 		}
-		
-//		//System.out.println("Updating Pos.");
-//		if ((xPos < xDestination)){ //&& ((yPos<TopRow+20 && yPos>TopRow-20)||(yPos == BottomRow))) {
-//			xPos+= 1;
-//		}
-//		else if (xPos > xDestination) {
-//			xPos-= 1;
-//		}
-//		
-//		if (yPos < yDestination) {
-//			yPos+= 1;
-//		}
-//		else if (yPos > yDestination) {
-//			yPos-= 1;
-//		}
-//		
-//		if(yPos == yDestination && xPos == xDestination && currentAction == CurrentAction.Travelling) {
-//			agent.msgActionComplete();
-//			currentAction = CurrentAction.Idle;
-//		}
 	}
-
+	private void ContinueLooping() {
+		/**
+		 * Outer Loop Logic
+		 */
+		if ((xPos == outerLeftLane) && (yPos != outerBottomLane)) { //at left, coming down
+            yPos++;
+		}
+		else if ((yPos == outerBottomLane) && (xPos != outerRightLane)) { //at bottom, going right
+            xPos++;
+		}
+        else if ((xPos == outerRightLane) && (yPos != outerTopLane)) {//at right, going up
+            yPos--;
+        }
+        else if ((yPos == outerTopLane) && (xPos != outerLeftLane)) {//at top, going left
+            xPos--;
+        }
+		/**
+		 * Inner Loop Right Logic
+		 */
+		if ((xPos == IRLeftLane) && (yPos != IRBottomLane)) { //at left, coming down
+            yPos++;
+		}
+		else if ((yPos == IRBottomLane) && (xPos != IRRightLane)) { //at bottom, going right
+            xPos++;
+		}
+        else if ((xPos == IRRightLane) && (yPos != IRTopLane)) {//at right, going up
+            yPos--;
+        }
+        else if ((yPos == IRTopLane) && (xPos != IRLeftLane)) {//at top, going left
+            xPos--;
+        }
+		/**
+		 * Inner Loop Left Logic
+		 */
+		if ((xPos == ILLeftLane) && (yPos != ILBottomLane)) { //at left, coming down
+            yPos++;
+		}
+		else if ((yPos == ILBottomLane) && (xPos != ILRightLane)) { //at bottom, going right
+            xPos++;
+		}
+        else if ((xPos == ILRightLane) && (yPos != ILTopLane)) {//at right, going up
+            yPos--;
+        }
+        else if ((yPos == ILTopLane) && (xPos != ILLeftLane)) {//at top, going left
+            xPos--;
+        }
+	}
+	private void evaluateNextMove() {
+		if(currentLoop == destinationLoop) {
+			return;
+		}
+		else if (destinationLoop == Loop.InnerLeft) {
+			currentAction = CurrentAction.BreakIn;
+		}
+		else if (destinationLoop == Loop.InnerRight) {
+			currentAction = CurrentAction.BreakIn;
+		}
+		else if (destinationLoop == Loop.Outer && currentLoop == Loop.InnerLeft) {
+			currentAction = CurrentAction.BreakOut;
+		}
+		else if (destinationLoop == Loop.Outer && currentLoop == Loop.InnerRight) {
+			currentAction = CurrentAction.BreakOut;
+		}
+	}
+	private void BreakOut() {
+		
+	}
+	private void BreakOver() {
+	
+	}
 	@Override
 	public void draw(Graphics2D g) {
 		//System.out.println("Updating Pos.");
