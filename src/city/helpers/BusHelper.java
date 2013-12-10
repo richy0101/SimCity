@@ -92,6 +92,8 @@ public class BusHelper {
 		busStopToString.put("HuangRestaurant", "BusStop4");
 
 		busStopToString.put("ShehRestaurant", "BusStop2");
+		
+		busStopToString.put("NakamuraRestaurant", "BusStop4");
 
 		
 	}
@@ -117,6 +119,8 @@ public class BusHelper {
 		busStopToInt.put("HuangRestaurant", 4);
 
 		busStopToInt.put("ShehRestaurant", 2);
+
+		busStopToInt.put("NakamuraRestaurant", 4);
 
 		
 	}

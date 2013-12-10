@@ -19,8 +19,8 @@ public class WaiterGui implements Gui {
 
     private static final int xTable = 200; //Location of Table 1
     private static final int yTable = 100;
-    private static final int xStart = 0;
-    private static final int yStart = 0;
+    private static final int xStart = -20;
+    private static final int yStart = -20;
     private int xHome;
     private int yHome;
     private static final int xCooking = 525;
@@ -80,8 +80,8 @@ public class WaiterGui implements Gui {
             	command = Command.noCommand;            		
         	}
         	else if(command != Command.noCommand) {
-        		xDestination = xStart;
-        		yDestination = yStart;
+        		xDestination = xHome;
+        		yDestination = yHome;
             	role.msgActionComplete();
             	command = Command.noCommand;
         	}

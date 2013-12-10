@@ -68,6 +68,8 @@ public class MarketRole extends Role implements Market {
 			this.cook = cook;
 			this.cashier = cashier;
 			this.choices = choices;
+			this.cantFill = new ArrayList<String>();
+			this.filled = new ArrayList<String>();
 			this.amount = amount;
 			state = orderState.Ordered;
 		}
@@ -249,6 +251,7 @@ public class MarketRole extends Role implements Market {
 	
 	//Restaurant messages-------------------------------------------------------------
 	public void msgOrderFood(CookInterface cook, CashierInterface cashier, String choice, int amount) {
+		print("Received msgOrderFood");
 		MyRestaurantOrders.add(new RestaurantOrder(cook, cashier, choice, amount));
 		
 		log.add(new LoggedEvent("Received msgOrderFood from Cook. Choice = " + choice));
@@ -257,6 +260,7 @@ public class MarketRole extends Role implements Market {
 	
 		/*No amount given*/
 	public void msgOrderFood(CookInterface cook, CashierInterface cashier, String choice) {
+		print("Received msgOrderFood");
 		MyRestaurantOrders.add(new RestaurantOrder(cook, cashier, choice, 5));
 		
 		log.add(new LoggedEvent("Received msgOrderFood from Cook. Choice = " + choice));
@@ -265,6 +269,7 @@ public class MarketRole extends Role implements Market {
 	
 		/*List of choices*/
 	public void msgOrderFood(CookInterface cook, CashierInterface cashier, List<String> choices, int amount) {
+		print("Received msgOrderFood");
 		MyRestaurantOrders.add(new RestaurantOrder(cook, cashier, choices, amount));
 		
 		log.add(new LoggedEvent("Received msgOrderFood from Cook. Choices = " + choices));
@@ -272,6 +277,7 @@ public class MarketRole extends Role implements Market {
 	}
 	
 	public void msgDeliverOrder(RestaurantOrder o) {
+		print("Received msgDeliverOrder");
 		o.state = orderState.ReadyToDeliver;
 		
 		log.add(new LoggedEvent("Received msgDeliverOrder from Timer."));
@@ -279,6 +285,7 @@ public class MarketRole extends Role implements Market {
 	}
 	
 	public void msgPayForOrder(CashierInterface cashier, double funds) {
+		print("Received msgPayForOrder");
 		this.funds += funds;
 		
 		synchronized(MyRestaurantOrders) {
@@ -293,7 +300,7 @@ public class MarketRole extends Role implements Market {
 	}
 	
 	public void msgCannotPay(CashierInterface cashier, double funds) {
-		
+		print("Received msgCannotPay");
 		synchronized(MyRestaurantOrders) {
 			for(RestaurantOrder o : MyRestaurantOrders) {
 				if(o.cashier == cashier)
@@ -307,6 +314,7 @@ public class MarketRole extends Role implements Market {
 	
 	//Huang Restaurant messages----------------------------------------------------------
 	public void msgCancelOrder(CookInterface cook) {
+		print("Received msgCancelOrder");
 		synchronized(MyRestaurantOrders) {
 			for (RestaurantOrder o : MyRestaurantOrders) {
 				if(o.cook == cook) {
@@ -486,12 +494,13 @@ public class MarketRole extends Role implements Market {
 				o.state = orderState.Filled;
 				o.cook.msgCanFillOrder(this, o.choice);
 				log.add(new LoggedEvent("Filling Restaurant Order."));
-				timer.schedule(new TimerTask() {
-					public void run() {
-						msgDeliverOrder(o);
-					}
-				},
-				6000);
+//				timer.schedule(new TimerTask() {
+//					public void run() {
+//						msgDeliverOrder(o);
+//					}
+//				},
+//				6000);
+				o.state = orderState.ReadyToDeliver;
 			}
 			else {
 				log.add(new LoggedEvent("Can't fill RestaurantOrder."));
@@ -505,7 +514,7 @@ public class MarketRole extends Role implements Market {
 			for(String choice : o.choices) {
 				if(inventory.get(choice).getSupply() >= o.amount) {
 					print(choice + " remaining: " + inventory.get(choice).getSupply());
-		    		inventory.get(o.choice).setSupply(inventory.get(o.choice).getSupply() - o.amount);
+		    		inventory.get(choice).setSupply(inventory.get(choice).getSupply() - o.amount);
 		    		
 					o.filled.add(choice);
 				}
@@ -520,20 +529,29 @@ public class MarketRole extends Role implements Market {
 				MyRestaurantOrders.remove(o);
 			}
 			else {
-				timer.schedule(new TimerTask(){
-					public void run() {
-						msgDeliverOrder(o);
-					}
-				},
-				6000);				
+//				timer.schedule(new TimerTask(){
+//					public void run() {
+//						msgDeliverOrder(o);
+//					}
+//				},
+//				6000);		
+				o.state = orderState.ReadyToDeliver;
 			}
 		}
 	}
 	
 	private void DriveToOrder(RestaurantOrder o) {
 		o.state = orderState.InTransit;
-		inventory.get(o.choice).setSupply(inventory.get(o.choice).getSupply() - o.amount);
-		o.price = o.amount * inventory.get(o.choice).price;
+		
+		//If order is only one choice
+		if(o.choices.isEmpty()) 
+			o.price = o.amount * inventory.get(o.choice).price;
+		//If order is a list of choices
+		else {
+			for(String s : o.choices) {
+				o.price += o.amount * inventory.get(s).price;
+			}
+		}
 		
 		String orderLocation = null;
 		List<Restaurant> restaurants = Directory.sharedInstance().getRestaurants();

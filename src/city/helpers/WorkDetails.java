@@ -17,7 +17,7 @@ public class WorkDetails {
 		this.workRole = job;
 		this.workLocation = location;
 		if (job.getClass().getName().contains("employ")) {
-			this.workStartHour = 10;
+			this.workStartHour = 17;
 			this.workEndHour = 10;
 		}
 		else if (location.contains("Stack")) {
@@ -28,7 +28,7 @@ public class WorkDetails {
 		}
 		else if (location.contains("Nakamura")) {
 			this.workStartHour = 8;
-			this.workEndHour = 20;
+			this.workEndHour = 24;
 			offDays.add(Constants.SUNDAY);
 			offDays.add(Constants.SATURDAY);
 		}

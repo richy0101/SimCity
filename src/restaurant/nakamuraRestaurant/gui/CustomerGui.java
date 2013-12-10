@@ -11,7 +11,7 @@ import restaurant.nakamuraRestaurant.NakamuraCustomerRole;
 public class CustomerGui implements Gui{
 
 	private NakamuraCustomerRole role = null;
-	private boolean isPresent = false;
+	private boolean isPresent = true;
 	private boolean isHungry = false;
 
 	//private HostAgent host;
@@ -93,7 +93,7 @@ public class CustomerGui implements Gui{
 	}
 	public void setHungry() {
 		isHungry = true;
-		role.gotHungry();
+		role.msgGotHungry();
 		setPresent(true);
 	}
 	public boolean isHungry() {

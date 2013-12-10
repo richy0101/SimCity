@@ -1,16 +1,21 @@
 package restaurant.nakamuraRestaurant;
 
-import agent.Role;
 import gui.Building;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-import market.interfaces.Market;
-import city.helpers.Directory;
+import market.Market;
 import restaurant.CookRole;
 import restaurant.FoodInformation;
+import restaurant.FoodInformation.FoodState;
+import restaurant.Restaurant;
 import restaurant.nakamuraRestaurant.gui.CookGui;
+import city.helpers.Directory;
 
 /**
  * Restaurant Cook Agent
@@ -18,8 +23,6 @@ import restaurant.nakamuraRestaurant.gui.CookGui;
 public class NakamuraCookRole extends CookRole {
 	public List<Order> Orders
 	= Collections.synchronizedList(new ArrayList<Order>());
-	
-	private Map<String, Food> food = Collections.synchronizedMap(new HashMap<String, Food>());
 
 	public List<MarketOrder> marketOrders = Collections.synchronizedList(new ArrayList<MarketOrder>());
 	public List<Market> markets = Collections.synchronizedList(new ArrayList<Market>());
@@ -27,7 +30,7 @@ public class NakamuraCookRole extends CookRole {
 
 	public enum orderState {pending, cooking, done};
 	private enum marketOrderState {Ordered, Verifying, Done};
-	private enum cookState {Arrived, Working, GettingPaycheck, Leaving, WaitingForPaycheck};
+	private enum cookState {Arrived, Working, GettingPaycheck, Leaving, WaitingForPaycheck, DoneWorking, WaitingToLeave};
 	cookState state;
 	Timer timer = new Timer();
 	boolean checkInventory;
@@ -37,24 +40,18 @@ public class NakamuraCookRole extends CookRole {
 	public CookGui cookGui;
 	NakamuraHostAgent host;
 	NakamuraCashierAgent cashier;
+	private Restaurant restaurant = Directory.sharedInstance().getRestaurants().get(2);
 
 	public NakamuraCookRole(String location) {
 		super();
 
 		this.myLocation = location;
-		
-		synchronized(food) {
-			food.put("Steak", new Food("Steak", 15000, 5));
-			food.put("Chicken", new Food("Chicken", 10000, 5));
-			food.put("Salad", new Food("Salad", 5000, 5));
-			food.put("Pizza", new Food("Pizza", 15000, 5));
-		}
 
 		host = (NakamuraHostAgent) Directory.sharedInstance().getAgents().get("NakamuraRestaurantHost");
 		cashier = (NakamuraCashierAgent) Directory.sharedInstance().getAgents().get("NakamuraRestaurantCashier");
 
 		for(int i = 0; i < Directory.sharedInstance().getMarkets().size(); i++) {
-			markets.add(Directory.sharedInstance().getMarkets().get(i).getWorker());
+			markets.add(Directory.sharedInstance().getMarkets().get(i));
 		}		
 		
 		state = cookState.Arrived;
@@ -89,21 +86,18 @@ public class NakamuraCookRole extends CookRole {
 	
 	public void msgInventoryOut(Market m, List<String> choices, int amount) {
 		print("Received msgCantFillOrder");
-		synchronized(food) {
-			for(String c : choices) {
-				food.get(c).markets.add(m);
-				food.get(c).ordered = false;
-			}
+		for(String c : choices) {
+			getFood(c).getMarkets().add(m.getWorker());
+			getFood(c).state = FoodState.Empty;
 		}
 		stateChanged();
 	}
 
 	public void msgMarketDeliveringOrder (int amount, List<String> choices) {
-		synchronized(food) {
-			for(String c: choices) {
-				food.get(c).increaseSupply(amount);
-				food.get(c).ordered = false;
-			}
+		for(String c : choices) {
+			int quantity = getFood(c).getQuantity();
+			getFood(c).setQuantity(quantity + amount);
+			getFood(c).state = FoodState.Stocked;
 		}
 		stateChanged();
 	}
@@ -118,7 +112,7 @@ public class NakamuraCookRole extends CookRole {
 		print("Received msgVerifyMarketBill");
 		synchronized(marketOrders) {
 			for(MarketOrder order : marketOrders) {
-				if(order.choices == choices && order.amount == amount) {
+				if(order.choices.contains(choices) && order.amount == amount) {
 					order.state = marketOrderState.Verifying;
 				}
 			}
@@ -134,6 +128,12 @@ public class NakamuraCookRole extends CookRole {
 	
 	public void msgJobDone() {
 		print("Received msgJobDone");
+		state = cookState.DoneWorking;
+		stateChanged();
+	}
+	
+	public void msgYouMayGo() {
+		print("Received msgYouMayGo");
 		state = cookState.GettingPaycheck;
 		stateChanged();
 	}
@@ -151,6 +151,11 @@ public class NakamuraCookRole extends CookRole {
 	public boolean pickAndExecuteAnAction() {
 		if(state == cookState.Arrived) {
 			ArriveAtWork();
+			return true;
+		}
+		
+		if(state == cookState.DoneWorking) {
+			NotifyHost();
 			return true;
 		}
 		
@@ -217,13 +222,13 @@ public class NakamuraCookRole extends CookRole {
 	}
 	
 	private void CookOrder(final Order o) {
-		if (food.get(o.choice).getSupply() <= 2 && food.get(o.choice).ordered == false) {
+		if (getFood(o.choice).getQuantity() <= 2 && getFood(o.choice).state != FoodState.Ordered) {
 			List<String> order = new ArrayList<String>();
 			order.add(o.choice);
 			OrderFood(order);
 		}
 		
-		if(food.get(o.choice).getSupply() == 0) {
+		if(getFood(o.choice).getQuantity() == 0) {
 			o.w.msgOutofFood(o.choice, o.tableNumber);
 			Orders.remove(o);
 		}
@@ -232,15 +237,15 @@ public class NakamuraCookRole extends CookRole {
 			
 			o.s = orderState.cooking;
 			DoCookOrder(o);
-			food.get(o.choice).decreaseSupply();
-			print(o.choice + " remaining: " + food.get(o.choice).getSupply());
+			getFood(o.choice).setQuantity(getFood(o.choice).getQuantity() - 1);
+			print(o.choice + " remaining: " + getFood(o.choice).getQuantity());
 			timer.schedule(new TimerTask() {
 				public void run() {
 					msgFoodDone(o);
 					stateChanged();
 				}
 			},
-			food.get(o.choice).getCookingTime());
+			getFood(o.choice).getCookTime());
 		}
 	}
 
@@ -256,16 +261,16 @@ public class NakamuraCookRole extends CookRole {
 			for(Market m : markets) {
 				List<String> orders = new ArrayList<String>();
 				for(String c : choices) {
-					if(!food.get(c).markets.contains(m)) {
+					if(!getFood(c).getMarkets().contains(m)) {
 						orders.add(c);
+						getFood(c).state = FoodState.Ordered;
 					}
 				}
 				
-				if(!orders.isEmpty()){
-					m.msgOrderFood(this, cashier, orders, 5);
+				if(!orders.isEmpty() && m.isOpen()){
+					m.getWorker().msgOrderFood(this, cashier, orders, 5);
 					marketOrders.add(new MarketOrder(orders, 5));
-					for(String o : orders)
-						choices.remove(o);
+					choices.remove(orders);
 				}
 			}
 		}
@@ -273,28 +278,26 @@ public class NakamuraCookRole extends CookRole {
 	
 	private void CheckInventory() {
 		List<String> order = new ArrayList<String>();
-		synchronized(food){
-			print(food.get("Steak").supply + " Steaks remaning");
-			if(food.get("Steak").supply <= 5) {
+			print(getFood("Steak").getQuantity() + " Steaks remaning");
+			if(getFood("Steak").getQuantity() <= 5) {
 				order.add("Steak");
-				food.get("Steak").ordered = true;
+				getFood("Steak").state = FoodState.Ordered;
 			}
-			print(food.get("Pizza").supply + " Pizzas remaning");
-			if(food.get("Pizza").supply <= 5) {
+			print(getFood("Pizza").getQuantity() + " Pizzas remaning");
+			if(getFood("Pizza").getQuantity() <= 5) {
 				order.add("Pizza");
-				food.get("Pizza").ordered = true;
+				getFood("Pizza").state = FoodState.Ordered;
 			}
-			print(food.get("Chicken").supply + " Chickens remaning");
-			if(food.get("Chicken").supply <= 5) { 
+			print(getFood("Chicken").getQuantity() + " Chickens remaning");
+			if(getFood("Chicken").getQuantity() <= 5) {
 				order.add("Chicken");
-				food.get("Chicken").ordered = true;
+				getFood("Chicken").state = FoodState.Ordered;
 			}
-			print(food.get("Salad").supply + " Salads remaning");
-			if(food.get("Salad").supply <= 5) {
+			print(getFood("Salad").getQuantity() + " Salads remaning");
+			if(getFood("Salad").getQuantity() <= 5) {
 				order.add("Salad");
-				food.get("Salad").ordered = true;
+				getFood("Salad").state = FoodState.Ordered;
 			}
-		}
 		
 		OrderFood(order);
 	}
@@ -302,6 +305,11 @@ public class NakamuraCookRole extends CookRole {
 	private void ConfirmOrder(MarketOrder o) {
 		cashier.msgBillIsCorrect(o.choices, o.amount);
 		o.state = marketOrderState.Done;
+	}
+	
+	private void NotifyHost() {
+		host.msgCookDone(this);
+		state = cookState.WaitingToLeave;
 	}
 	
 	private void CollectPaycheck() {
@@ -337,7 +345,6 @@ public class NakamuraCookRole extends CookRole {
 	}
 	
 	private void DoLeaveRestaurant() {
-		host.msgCookLeaving(this);
 		cookGui.DoLeaveRestaurant();		
 	}
 
@@ -349,6 +356,10 @@ public class NakamuraCookRole extends CookRole {
 
 	public CookGui getGui() {
 		return cookGui;
+	}
+	
+	public FoodInformation getFood(String choice) {
+		return restaurant.getFoodInventory().get(choice);
 	}
 
 	private class Order {
@@ -379,38 +390,6 @@ public class NakamuraCookRole extends CookRole {
 			this.choices = choices;
 			this.amount = amount;
 			this.state = marketOrderState.Ordered;
-		}
-	}
-	
-	private class Food{
-		String name;
-		int cookingTime;
-		int supply;
-		boolean ordered;
-		List<Market> markets;
-		
-		Food(String n, int c, int s) {
-			this.name = n;
-			this.cookingTime = c;
-			this.supply = s;
-			this.ordered = false;
-			markets = new ArrayList<Market>();
-		}
-		
-		int getSupply() {
-			return supply;
-		}
-		
-		int getCookingTime() {
-			return cookingTime;
-		}
-		
-		void decreaseSupply() {
-			supply--;
-		}
-		
-		void increaseSupply(int amount) {
-			supply +=amount;
 		}
 	}
 }

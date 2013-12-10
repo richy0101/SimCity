@@ -60,7 +60,6 @@ public class NakamuraCustomerRole extends Role implements Customer{
 
 		myLocation = location;
 		menu = new Menu();
-		
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
 			if (b.getName() == myLocation) {
@@ -82,7 +81,7 @@ public class NakamuraCustomerRole extends Role implements Customer{
 	}
 	
 	// Messages
-	public void gotHungry() {//from animation
+	public void msgGotHungry() {//from animation
 		print("I'm hungry");
 		event = AgentEvent.gotHungry;
 		stateChanged();
@@ -355,14 +354,14 @@ public class NakamuraCustomerRole extends Role implements Customer{
 	private void Pay() {
 		print("Paying");
 		print("Amount due: $" + check.getTotal() + ".00");
-		if(name.equals("Broke")) {
-			print("Not Enough Money");
-			cashier.msgPayment(this, check, 0);
-		}
-		else {
+//		if(name.equals("Broke")) {
+//			print("Not Enough Money");
+//			cashier.msgPayment(this, check, 0);
+//		}
+//		else {
 			cashier.msgPayment(this, check, menu.prices.get(choice));
 			getPersonAgent().setFunds(getPersonAgent().getFunds() - menu.prices.get(choice));
-		}
+//		}
 	}
 
 	private void leaveTable() {

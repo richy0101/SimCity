@@ -33,7 +33,7 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 	private NakamuraHostAgent host;
 	private NakamuraCashierAgent cashier;
 	
-	public enum WorkState {arrived, working, tired, waitingforbreak, goingonbreak, onbreak, backtowork, leaving, gettingPaycheck, WaitingForPaycheck};
+	public enum WorkState {arrived, working, tired, waitingforbreak, goingonbreak, onbreak, backtowork, leaving, gettingPaycheck, WaitingForPaycheck, doneWorking};
 	private WorkState status;
 
 	public NakamuraWaiterRole(String location) {
@@ -184,6 +184,12 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 		status = WorkState.working;
 		stateChanged();
 	}
+	
+	public void msgJobDone() {
+		print("Received msgJobDone");
+		status = WorkState.doneWorking;
+		stateChanged();
+	}
 
 	public void msgHereIsPaycheck(double pay){
 		print("Received msgHereIsPaycheck");
@@ -205,14 +211,20 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 		try {
 			if(status == WorkState.arrived) {
 				ArriveAtWork();
+				return true;
 			}
 			
-			if(status == WorkState.gettingPaycheck) {
+			if(status == WorkState.doneWorking) {
+				NotifyHost();
+				return true;
+			}
+			
+			if(status == WorkState.gettingPaycheck && MyCustomers.isEmpty()) {
 				CollectPaycheck();
 				return true;
 			}
 			
-			if(status == WorkState.leaving) {
+			if(status == WorkState.leaving && MyCustomers.isEmpty()) {
 				LeaveRestaurant();
 				return true;
 			}
@@ -442,6 +454,11 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 		print("Going back to work");
 		status = WorkState.working;
 		host.msgBackToWork(this);
+	}
+	
+	private void NotifyHost() {
+		host.msgNoNewCustomers(this);
+		status = WorkState.gettingPaycheck;
 	}
 	
 	private void CollectPaycheck() {
