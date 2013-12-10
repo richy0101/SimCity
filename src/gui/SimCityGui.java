@@ -3,6 +3,9 @@ package gui;
 import java.awt.CardLayout;
 import java.awt.EventQueue;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 import city.BusAgent;
@@ -18,6 +21,8 @@ import bank.BankTellerRole;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,6 +69,11 @@ public class SimCityGui {
 				try {
 					SimCityGui window = new SimCityGui();
 					window.frame.setVisible(true);
+					URL url = new File("src/gui/12-new-bark-town.wav").toURI().toURL();
+					Clip audioClip = AudioSystem.getClip();
+					AudioInputStream ais = AudioSystem.getAudioInputStream(url);
+					audioClip.open(ais);
+					audioClip.loop(Clip.LOOP_CONTINUOUSLY);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
