@@ -37,6 +37,7 @@ public class CurrentBuildingPanel extends JPanel {
 	
 	public CurrentBuildingPanel(Object building) {
 		super();
+		
 		if(building instanceof Restaurant) {
 			restaurant = (Restaurant) building;
 			initializeRestaurant();
@@ -45,7 +46,52 @@ public class CurrentBuildingPanel extends JPanel {
 			market = (Market) building;
 			initializeMarket();
 		}
+		else if(building instanceof Bank) {
+			bank = (Bank) building;
+			initializeBank();
+		}
 		
+	}
+
+	private void initializeBank() {
+		SpringLayout springLayout = new SpringLayout();
+		setLayout(springLayout);
+		
+		JLabel lblName_2 = new JLabel("Name:");
+		if(bank != null) {
+			lblName_2.setText("Name: " +  bank.getName());
+		}
+		springLayout.putConstraint(SpringLayout.NORTH, lblName_2, 10, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.WEST, lblName_2, 10, SpringLayout.WEST, this);
+		add(lblName_2);
+		
+		final JButton btnCloseBuildingBank = new JButton();
+		if(bank != null) {
+			if(bank.isOpen()) {
+				btnCloseBuildingBank.setText("Close Building");
+			}
+			else {
+				btnCloseBuildingBank.setText("Open Building");
+			}
+		}
+		btnCloseBuildingBank.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(bank != null) {
+					if(bank.isOpen()) {
+						bank.setOpen(false);
+						btnCloseBuildingBank.setText("Open Building");
+					}
+					else {
+						bank.setOpen(true);
+						btnCloseBuildingBank.setText("Close Building");
+					}
+				}
+			}
+		});
+		springLayout.putConstraint(SpringLayout.NORTH, btnCloseBuildingBank, 6, SpringLayout.SOUTH, lblName_2);
+		springLayout.putConstraint(SpringLayout.WEST, btnCloseBuildingBank, 10, SpringLayout.WEST, this);
+		springLayout.putConstraint(SpringLayout.EAST, btnCloseBuildingBank, 249, SpringLayout.WEST, this);
+		add(btnCloseBuildingBank);
 	}
 
 	private void initializeMarket() {

@@ -72,10 +72,8 @@ public class Directory {
 		roleDirectory.put("restaurant.shehRestaurant.ShehCookRole", "ShehRestaurant");
 		
 		//Restaurant Roles Tan
-		//roleDirectory.put("restaurant.stackRestaurant.StackCashierRole", "HuangRestaurant");
-		//roleDirectory.put("restaurant.stackRestaurant.StackHostRole", "HuangRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.TanWaiterRole", "TanRestaurant");
-		roleDirectory.put("restaurant.stackRestaurant.TanCookRole", "TanRestaurant");	
+		roleDirectory.put("restaurant.tanRestaurant.TanWaiterRole", "TanRestaurant");
+		roleDirectory.put("restaurant.tanRestaurant.TanCookRole", "TanRestaurant");	
 		
 		//Restaurant Roles Nakamura
 //		roleDirectory.put("restaurant.nakamuraRestaurant.NakamuraCashierRole", "NakamuraRestaurant");
@@ -107,7 +105,6 @@ public class Directory {
 	
 	private Restaurant phillipsRestaurant = new PhillipsRestaurant("PhillipsRestaurant"); //restaurant 4
 	Coordinate phillipsRestaurantLocation = new Coordinate(768,346);
-	
 
 	private Restaurant tanRestaurant = new TanRestaurant("TanRestaurant"); //restaurant 6
 	Coordinate tanRestaurantLocation = new Coordinate(380,361);

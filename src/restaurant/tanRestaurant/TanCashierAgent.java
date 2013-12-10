@@ -47,6 +47,7 @@ public class TanCashierAgent extends Agent implements Cashier{
 	String food;
 	int price;
 	private double restaurantCash= 500;
+	TanRestaurant restaurant;
 
 
 	public EventLog log = new EventLog();
@@ -377,6 +378,12 @@ public class TanCashierAgent extends Agent implements Cashier{
 		public String toString() {
 			return "table " + tableNumber;
 		}
+	}
+
+
+	public void setRestaurant(TanRestaurant tanRestaurant) {
+		TanRestaurant restaurant = tanRestaurant;
+		
 	}
 }
 

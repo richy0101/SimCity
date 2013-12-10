@@ -573,7 +573,40 @@ public class SimCityGui {
 		PersonAgent person5 = new PersonAgent("BankTeller", "Test Person 5", 3, 1000.00, "House5", "TakesTheBus");
 		PersonAgent person6 = new PersonAgent("Market", "Test Person 6", 3, 1000.00, "House6", "TakesTheBus");
 		
-		//RYAN TEST CODE	
+		
+		String a = "TanRestaurant";
+		String b = "House1";
+		String name = "Test Person 1 Ben";
+		Role role;
+		role= new TanWaiterNormalRole("TanRestaurant");
+		PersonAgent p = new PersonAgent(role, a , b, name);
+		p.msgWakeUp();
+		role.setPerson(p);
+		p.startThread();
+		
+		String a1 = "TanRestaurant";
+		String b1 = "House2";
+		String name1 = "Test Person 2 Ben";
+		Role role1;
+		role1= new TanCookRole("TanRestaurant");
+		PersonAgent p1 = new PersonAgent(role1, a1 , b1, name1);
+		p1.msgWakeUp();
+		role1.setPerson(p);
+		p1.startThread();
+	
+		String a2 = "TanRestaurant";
+		String b2 = "House3";
+		String name2 = "Test Person 3 Ben";
+		Role role2;
+		role2 = new TanCustomerRole("TanRestaurant");
+		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
+		role2.setPerson(p2);
+		p2.msgWakeUp();
+		p2.startThread();
+		
+		
+		//RYAN TEST CODE
+		/*
 		String a = "ShehRestaurant";
 		String b = "House1";
 		String name = "WAITER";
@@ -609,6 +642,7 @@ public class SimCityGui {
 
 		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
 		role3.setPerson(p3);
+		*/
 		
 		//END OF TEST CODE
 		
@@ -634,35 +668,6 @@ public class SimCityGui {
 		trafficLight2 = new TrafficAgent();
 		trafficLight2.startThread();
 		
-		String a = "TanRestaurant";
-		String b = "House1";
-		String name = "Test Person 1";
-		Role role;
-		role= new TanWaiterNormalRole("TanRestaurant");
-		PersonAgent p = new PersonAgent(role, a , b, name);
-		p.msgWakeUp();
-		role.setPerson(p);
-		p.startThread();
-		
-		String a1 = "TanRestaurant";
-		String b1 = "House2";
-		String name1 = "Test Person 2";
-		Role role1;
-		role1= new TanCookRole("TanRestaurant");
-		PersonAgent p1 = new PersonAgent(role, a1 , b1, name1);
-		p1.msgWakeUp();
-		role.setPerson(p);
-		p1.startThread();
-	
-		String a2 = "TanRestaurant";
-		String b2 = "House3";
-		String name2 = "Test Person 3";
-		Role role2;
-		role2 = new TanCustomerRole("TanRestaurant");
-		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
-		role2.setPerson(p2);
-		p2.msgWakeUp();
-		p2.startThread();
 		
 		/**
 		 End of Hard Code SuperNorm
@@ -811,6 +816,21 @@ public class SimCityGui {
 			Directory.sharedInstance().getMarkets().get(1).setInfoPanel(restPanel);
 			tabbedPane.addTab("Current Building", restPanel);
 		}
-		
+		else if(name.equals("Bank")) {
+			if(tabbedPane.getTabCount() == 2) {
+				tabbedPane.remove(1);
+			}
+			CurrentBuildingPanel restPanel = new CurrentBuildingPanel(Directory.sharedInstance().getBanks().get(0));
+			Directory.sharedInstance().getBanks().get(0).setInfoPanel(restPanel);
+			tabbedPane.addTab("Current Building", restPanel);
+		}
+		else if(name.equals("Bank2")) {
+			if(tabbedPane.getTabCount() == 2) {
+				tabbedPane.remove(1);
+			}
+			CurrentBuildingPanel restPanel = new CurrentBuildingPanel(Directory.sharedInstance().getBanks().get(1));
+			Directory.sharedInstance().getBanks().get(1).setInfoPanel(restPanel);
+			tabbedPane.addTab("Current Building", restPanel);
+		}
 	}
 }

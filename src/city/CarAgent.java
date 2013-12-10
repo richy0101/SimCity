@@ -59,19 +59,19 @@ public class CarAgent extends Agent implements Vehicle {
 	*/	
 		protected boolean pickAndExecuteAnAction(){
 			if (currentState == carState.inTransit){
-				print("STUBPICKANDEXECUTEANACTION");
+				//print("STUBPICKANDEXECUTEANACTION");
 				goTo(destination);
 				return true;
 			}
 			
 			else if(currentState == carState.atIntersection1 || currentState == carState.atIntersection2){
-				print("stopping at intersection");
+				//print("stopping at intersection");
 				stopCar();
 				return true;
 			}
 		
 			else if(currentState == carState.givenGreen){
-				print("given green light");
+				//print("given green light");
 				keepDriving();
 				return true;
 			}
@@ -110,7 +110,7 @@ public class CarAgent extends Agent implements Vehicle {
 
 		public void msgAtIntersection1() {
 			// TODO Auto-generated method stub
-			print("gui told me i'm at intersection 1. alerting traffic light");
+			//print("gui told me i'm at intersection 1. alerting traffic light");
 			trafficLight1.msgAtIntersection(this);
 			currentState = carState.atIntersection1;
 			driving.release();
@@ -119,7 +119,7 @@ public class CarAgent extends Agent implements Vehicle {
 		
 		public void msgAtIntersection2() {
 			// TODO Auto-generated method stub
-			print("gui told me i'm at intersection 2. alerting traffic light");
+			//print("gui told me i'm at intersection 2. alerting traffic light");
 			trafficLight2.msgAtIntersection(this);
 			currentState = carState.atIntersection2;
 			driving.release();
@@ -128,7 +128,7 @@ public class CarAgent extends Agent implements Vehicle {
 		
 		public void msgGreenLight(TrafficAgent ta){
 			currentLight= ta;
-			print("given green light");
+			//print("given green light");
 			currentState = carState.givenGreen;
 			//driving.acquire();
 			stateChanged();
@@ -146,7 +146,7 @@ public class CarAgent extends Agent implements Vehicle {
 
 		
 		private void goTo(String myDestination){
-			print("Starting car.");
+			print("Starting car to "+myDestination);
 			doGoTo(myDestination); //sets destination in carGui
 			try {
 				driving.acquire(); //to ensure that the gui is uninterrupted on the way
