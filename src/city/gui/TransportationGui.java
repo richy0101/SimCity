@@ -48,10 +48,10 @@ public class TransportationGui implements Gui {
 	int IRLeftLane= 435;
 	int IRRightLane= 674;
 	
-	int Cross1X = 390, Cross1Y = 83;
+	int Cross1X = 390, Cross1Y = 83; //390
 	int Cross2X = 390, Cross2Y = 127;
 	int Cross4X = 390, Cross4Y = 308;
-	int Cross3X = 435, Cross3Y = 127;
+	int Cross3X = 435, Cross3Y = 127; //435
 	int Cross5X = 435, Cross5Y = 308;
 	int Cross6X = 435, Cross6Y = 353;
 	public enum Loop {InnerRight, InnerLeft, Outer};
@@ -114,6 +114,19 @@ public class TransportationGui implements Gui {
 				currentAction = CurrentAction.Idle;
 				return;
 			}
+			/*
+			if(currentAction == CurrentAction.BreakOut){
+				System.out.println("WANT TO BREAK OUT");
+			}
+			
+			if(currentAction == CurrentAction.BreakOutFromTop){
+				System.out.println("WANT TO BREAK OUT FROM TOP");
+			}
+			
+			if(currentAction == CurrentAction.BreakOutFromBottom){
+				System.out.println("WANT TO BREAK OUT FROM BOTTOM");
+			}*/
+			
 			/**
 			 * Breaking Out Block
 			 */
@@ -122,6 +135,7 @@ public class TransportationGui implements Gui {
 				return;
 			}
 			else if(doneBreaking(Cross1X, Cross1Y)){
+				//System.out.println("broken out");
 				currentLoop = Loop.Outer;
 				evaluateNextMove();
 				return;
@@ -131,6 +145,7 @@ public class TransportationGui implements Gui {
 				return;
 			}
 			else if(doneBreaking(Cross6X, Cross6Y)) {
+				//System.out.println("broken out");
 				currentLoop = Loop.Outer;
 				evaluateNextMove();
 				return;
@@ -153,6 +168,7 @@ public class TransportationGui implements Gui {
 				yPos++;
 			}
 			else if(doneBreaking(Cross2X, Cross2Y)) {
+				//System.out.println("broken out");
 				currentLoop = Loop.InnerLeft;
 				evaluateNextMove();
 				return;
@@ -161,6 +177,7 @@ public class TransportationGui implements Gui {
 				yPos--;
 			}
 			else if(doneBreaking(Cross5X, Cross5Y)) {
+				//System.out.println("broken in to 5");
 				currentLoop = Loop.InnerRight;
 				evaluateNextMove();
 				return;
@@ -183,6 +200,7 @@ public class TransportationGui implements Gui {
 	}
 	private boolean doneBreaking(int x, int y) {
 		if (xPos == x && yPos == y) {
+			System.out.println("DONE BREAKING");
 			return true;
 		}
 		else {
@@ -250,6 +268,7 @@ public class TransportationGui implements Gui {
 			currentAction = CurrentAction.BreakIn;
 		}
 		else if (destinationLoop == Loop.Outer) {
+			System.out.println("SETTING TO BREAKOUT");
 			currentAction = CurrentAction.BreakOut;
 		}
 	}
