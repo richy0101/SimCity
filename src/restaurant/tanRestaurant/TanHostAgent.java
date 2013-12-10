@@ -89,6 +89,8 @@ public class TanHostAgent extends Agent {
 		super();
 		name= "Host Dmitri";
 		
+		System.out.println("Host Dmitri in da hauzzzzz "+ location);
+		
 		tables = new ArrayList<Table>(NTABLES);
 		for (int ix = 1; ix <= NTABLES; ix++) {
 			tables.add(new Table(ix));//how you add to a collections
@@ -98,7 +100,7 @@ public class TanHostAgent extends Agent {
 			seats.add(new Seat(x));//how you add to a collections
 		}
 		
-		cashier = (TanCashierAgent) Directory.sharedInstance().getAgents().get("TanRestaurantCashier");
+		//cashier = (TanCashierAgent) Directory.sharedInstance().getAgents().get("TanRestaurantCashier");
 	}
 	
 	public TanHostAgent() {

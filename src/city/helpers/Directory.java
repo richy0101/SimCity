@@ -105,7 +105,6 @@ public class Directory {
 	
 	private Restaurant phillipsRestaurant = new PhillipsRestaurant("PhillipsRestaurant"); //restaurant 4
 	Coordinate phillipsRestaurantLocation = new Coordinate(768,346);
-	
 
 	private Restaurant tanRestaurant = new TanRestaurant("TanRestaurant"); //restaurant 6
 	Coordinate tanRestaurantLocation = new Coordinate(380,361);
