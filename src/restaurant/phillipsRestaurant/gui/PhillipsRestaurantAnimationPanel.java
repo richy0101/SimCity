@@ -1,5 +1,9 @@
-package restaurant.gui;
+package restaurant.phillipsRestaurant.gui;
 
+
+import gui.BuildingPanel;
+import gui.Gui;
+import gui.SimCityGui;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -7,34 +11,31 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
-public class AnimationPanel extends JPanel implements ActionListener {
+public class PhillipsRestaurantAnimationPanel extends BuildingPanel implements ActionListener {
 
     private final int WINDOWX = 827;
     private final int WINDOWY = 406;
     BufferedImage restaurantImage;
-    private final int RECTXPOS = 200; 
-    private final int RECTYPOS = 250; 
-    private final int RECTX = 50; 
-    private final int RECTY = 50; 
-    private Image bufferImage;
-    private Dimension bufferSize;
-    public Timer timer = new Timer(20,this);
+    private final int DELAY = 10;
+    Timer timer;
+    
+    private List<Gui> guis = Collections.synchronizedList(new ArrayList<Gui>());
+  
 
-    private List<Gui> guis = new ArrayList<Gui>();
-
-    public AnimationPanel() {
+    public PhillipsRestaurantAnimationPanel(Rectangle2D r, int i, SimCityGui sc) {
+    	super(r, i, sc);
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
         setBackground(Color.lightGray);
         
-        bufferSize = this.getSize();
- 
-    	//Timer timer = new Timer(20, this );
+        timer = new Timer(DELAY, this );
     	timer.start();
     	
     	try {
@@ -81,6 +82,7 @@ public class AnimationPanel extends JPanel implements ActionListener {
         g2.setColor(Color.GRAY);
         g2.fillRect(0, 180, RECTX+20, RECTY+20);
         */
+        
         synchronized(this.guis){
 	        for(Gui gui : guis) {
 	            if (gui.isPresent()) {
@@ -104,26 +106,20 @@ public class AnimationPanel extends JPanel implements ActionListener {
         }
 	}
     
-    public void addGui(CustomerGui gui) {
-    	synchronized(this.guis){
-    		guis.add(gui);
-    	}
-    }
-
-    public void addGui(WaiterGui gui) {
-    	synchronized(this.guis){
-    		guis.add(gui);
-    	}
+    public void addGui(Gui gui) {
+       synchronized(this.guis){
+    	   guis.add(gui);
+       }
     }
     
-    public void addGui(CookGui gui) {
-    	synchronized(this.guis){
-    		guis.add(gui);
-    	}
-    }
     public void removeGui(Gui gui) {
-    	synchronized(this.guis){
-    		guis.remove(gui);
-    	}
+    	 synchronized(this.guis){
+      	   guis.remove(gui);
+         }
     }
+
+	public void displayBuildingPanel() {
+		myCity.displayBuildingPanel(this);	
+		
+	}
 }
