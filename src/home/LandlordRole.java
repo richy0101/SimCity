@@ -2,6 +2,8 @@ package home;
 
 import java.util.*;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import city.helpers.Directory;
 import city.interfaces.Person;
 import agent.Role;
@@ -42,7 +44,7 @@ public class LandlordRole extends Role implements Landlord {
 		for(int i=0;i<TenantList.sharedInstance().getTenants(apartmentNum).size();i++){
 			if(TenantList.sharedInstance().getTenant(i,apartmentNum).getPerson() == person){
 				if(money == TenantList.sharedInstance().getTenant(i,apartmentNum).getMoneyOwed()){
-					print("Received msgHereIsRent and is paying $" + money);
+					AlertLog.getInstance().logMessage(AlertTag.LANDLORD, getPersonAgent().getName(), "Got rent for $" + money);
 					getPersonAgent().setFunds(getPersonAgent().getFunds() + money);
 					TenantList.sharedInstance().getTenant(i,apartmentNum).setMoneyOwed(0);
 					TenantList.sharedInstance().getTenant(i,apartmentNum).setState(PayState.NothingOwed);
@@ -78,8 +80,8 @@ public class LandlordRole extends Role implements Landlord {
 	//Actions
 	public void timeToCollectRent(){
 		timeToCollectRent = false;
-		for(int i=0;i<TenantList.sharedInstance().getTenants(apartmentNum).size();i++){
-			print("Time to collect rent from my peasants");
+		for(int i=0;i<TenantList.sharedInstance().getTenants(apartmentNum).size();i++) {
+			AlertLog.getInstance().logMessage(AlertTag.LANDLORD, getPersonAgent().getName(), "Time to collect rent from my peasants");
 			if(TenantList.sharedInstance().getTenant(i,apartmentNum).getState() == "NothingOwed"
 				|| TenantList.sharedInstance().getTenant(i,apartmentNum).getState() == "OwesMoney"){
 				TenantList.sharedInstance().getTenant(i,apartmentNum).setState(PayState.NeedsToPay);
@@ -87,8 +89,8 @@ public class LandlordRole extends Role implements Landlord {
 			}
 		}
 	}
-	public void payRent(Tenant tenant){
-		print("Tenant paying rent $" + tenant.getMoneyOwed());
+	public void payRent(Tenant tenant) {
+		AlertLog.getInstance().logMessage(AlertTag.LANDLORD, getPersonAgent().getName(), "Peasant paid $" + tenant.getMoneyOwed());
 		tenant.getPerson().msgPayRent(this,tenant.getMoneyOwed());
 		tenant.setState(PayState.WaitingForPayment);
 		stateChanged();

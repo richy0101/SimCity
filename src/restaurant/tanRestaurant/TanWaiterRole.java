@@ -1,29 +1,27 @@
 package restaurant.tanRestaurant;
 
-import agent.Agent;
-import agent.Role;
-import restaurant.shehRestaurant.ShehHostAgent;
-import restaurant.tanRestaurant.TanCustomerRole.Order;
-import restaurant.tanRestaurant.TanCustomerRole.AgentEvent;
-import restaurant.tanRestaurant.TanCustomerRole.AgentState;
-import restaurant.tanRestaurant.TanWaiterRole.MyCustomer;
-import restaurant.tanRestaurant.TanWaiterRole.MyCustomer.state;
-import restaurant.tanRestaurant.TanCashierAgent.Bill;
-import restaurant.tanRestaurant.TanCashierAgent.Bill.billState;
-//import restaurant.gui.HostGui;
-import restaurant.tanRestaurant.gui.WaiterGui;
-//import restaurant.CustomerAgent;
-
-import restaurant.tanRestaurant.interfaces.Cashier;
-import restaurant.tanRestaurant.interfaces.Customer;
-import restaurant.tanRestaurant.interfaces.Waiter;
-import restaurant.tanRestaurant.test.mock.EventLog;
 import gui.Building;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Timer;
 import java.util.concurrent.Semaphore;
 
+import restaurant.tanRestaurant.TanCashierAgent.Bill;
+import restaurant.tanRestaurant.TanCustomerRole.CustOrder;
+import restaurant.tanRestaurant.TanWaiterRole.MyCustomer;
+import restaurant.tanRestaurant.TanWaiterRole.MyCustomer.state;
+//import restaurant.gui.HostGui;
+import restaurant.tanRestaurant.gui.WaiterGui;
+import restaurant.tanRestaurant.interfaces.Cook;
+//import restaurant.CustomerAgent;
+import restaurant.tanRestaurant.interfaces.Waiter;
+import restaurant.tanRestaurant.test.mock.EventLog;
+import agent.Role;
 import city.helpers.Directory;
+//import restaurant.tanRestaurant.TanCustomerRole.Order;
 
 /**
  * Restaurant Waiter Agent
@@ -49,6 +47,10 @@ public class TanWaiterRole extends Role implements Waiter{
 	public Semaphore atCook = new Semaphore(0,true);
 	private Semaphore atWaitingCustomer = new Semaphore(0,true);
 	public EventLog log = new EventLog();
+	
+	public enum roleState
+	{dead, alive, living};
+	roleState rstate = roleState.dead;
 
 	public WaiterGui waiterGui; //=null;
 
@@ -60,7 +62,7 @@ public class TanWaiterRole extends Role implements Waiter{
 
 	public boolean onBreak;
 	private TanHostAgent host;
-	private TanCookRole cook;
+	protected TanCookRole cook;
 	private TanCashierAgent cashier;
 	Timer timer = new Timer();
 
@@ -105,13 +107,15 @@ public class TanWaiterRole extends Role implements Waiter{
 
 	public static class MyCustomer{
 
-		MyCustomer(TanCustomerRole customer, int tab, int seat){
+		MyCustomer(TanCustomerRole customer, int tab, int seat, TanWaiterRole w){
 			c=customer;
 			table= tab;
 			mySeat= seat;
 			s=state.waitingToBeSeated;
+			waiter= w;
 		}
 
+		TanWaiterRole waiter;
 		TanCustomerRole c;
 		int table;
 		int mySeat;
@@ -125,10 +129,13 @@ public class TanWaiterRole extends Role implements Waiter{
 		super();
 		
 		host = (TanHostAgent) Directory.sharedInstance().getAgents().get("TanRestaurantHost");
+		cashier = (TanCashierAgent) Directory.sharedInstance().getAgents().get("TanRestaurantCashier");
+
 		//cashier = host.getCashier();
 		name= "Cashier 1";
 		
 		waiterGui = new WaiterGui(this);
+		rstate = roleState.alive;
 		
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		
@@ -173,8 +180,7 @@ public class TanWaiterRole extends Role implements Waiter{
 
 	public void msgSeatCustAtTable(TanCustomerRole cust, int tablenumber){
 		print("Received instruction. Seating customer "+ cust.getName());
-		Customers.add(new MyCustomer(cust, tablenumber, cust.mySeat));
-		cust.setWaiter(this);
+		Customers.add(new MyCustomer(cust, tablenumber, cust.mySeat, this));
 		stateChanged(); 
 	}
 
@@ -191,12 +197,12 @@ public class TanWaiterRole extends Role implements Waiter{
 		}
 	}
 
-	public void msgHereIsMyChoice(TanCustomerRole cust, Order o){ //implement choice later
+	public void msgHereIsMyChoice(TanCustomerRole cust, CustOrder co){ //implement choice later
 		synchronized(Customers){
 		for (MyCustomer myc:Customers ){
 			if (myc.c==cust){
-				print("o is "+o.getName());
-				myc.o= o;
+				print("co is "+co.getName());
+				myc.o= new Order(this,co.getName(),myc.table,0);
 				if(myc.o==null)
 					print("in msgHereismychoice, myc.o is not properly set");
 				myc.s=state.placedOrder;
@@ -268,7 +274,6 @@ public class TanWaiterRole extends Role implements Waiter{
 	public void msgAtTable() {//from animation
 		//print("msgAtTable() called");
 		atTable.release();// = true;
-		print("YOYOYOYOYOYOYO");
 		stateChanged();
 	}
 
@@ -284,8 +289,8 @@ public class TanWaiterRole extends Role implements Waiter{
 	public void msgHereIsBill(Bill b){
 		for(MyCustomer myc: Customers){
 			if(myc.c==b.customer){
+				print("got the right cust");
 				waiterGui.DoServeFood(myc.table);
-				myc.s=state.givenBill;
 				//waiterGui.DoLeaveCustomer();
 				try {
 				atTable.acquire();
@@ -294,6 +299,8 @@ public class TanWaiterRole extends Role implements Waiter{
 				e.printStackTrace();
 				}
 				myc.c.msgHereIsYourBill(b);
+				myc.s=state.givenBill;
+
 				waiterGui.DoLeaveCustomer();
 			}
 		}
@@ -312,24 +319,15 @@ public class TanWaiterRole extends Role implements Waiter{
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
-		/* Think of this next rule as:
-            Does there exist a table and customer,
-            so that table is unoccupied and customer is waiting.
-            If so seat him at the table.
-		 */
-
-		//if(!Customers.isEmpty()){
-		//}	
-		//try{
+		
+		if (rstate==roleState.alive){
+			GoToPost();
+		}
+		
+		//print("Now i'm in waiter's scheduler");
+		
 		if (!Customers.isEmpty()){	
 
-			/*
-			for(MyCustomer myc: Customers){
-				if(myc.s==state.askedOrder){
-					waiterGui.DoLeaveCustomer(); //hack because semaphores are hard
-					return true;
-				}
-			}*/
 			synchronized(Customers){
 			for(MyCustomer myc: Customers){
 				if(myc.s==state.Served){
@@ -457,6 +455,12 @@ public class TanWaiterRole extends Role implements Waiter{
 
 	// Actions
 	
+	private void GoToPost() {
+		rstate= roleState.living;
+		host.msgReportingForDuty(this);	
+		waiterGui.DoGoToPost();
+	}
+	
 	private void getBillFromCashier(MyCustomer myc){
 		waiterGui.GoToCashier();
 		try{
@@ -505,7 +509,7 @@ public class TanWaiterRole extends Role implements Waiter{
 		}
 		
 		print("after released from waiting");
-		customer.c.msgFollowMeToTable(table);//added tableNumber in message
+		customer.c.msgFollowMeToTable(table,this);//added tableNumber in message
 		DoSeatCustomer(customer.c, table); //animation
 		//customer.s=state.Seated;
 
@@ -560,7 +564,7 @@ public class TanWaiterRole extends Role implements Waiter{
 		stateChanged();
 	}
 
-	protected void PassOrderToCook(int tablenum, MyCustomer c, Order o){ //implement param order
+	//public void PassOrderToCook(int tablenum, MyCustomer c, Order o){ //implement param order
 		
 		/*waiterGui.DoGoToCook();
 		try {
@@ -575,7 +579,7 @@ public class TanWaiterRole extends Role implements Waiter{
 		waiterGui.DoLeaveCustomer();*/
 
 		//stateChanged(); //added
-	}
+	//}
 
 	private void serveCustomer(MyCustomer c, Order o){ //implement param order
 		//waiterGui.DoPickUpFood();
@@ -661,10 +665,27 @@ public class TanWaiterRole extends Role implements Waiter{
 
 
 	@Override
-	public void PassOrderToCook(int table, MyCustomer myc,
-			restaurant.tanRestaurant.Order o) {
+	public void PassOrderToCook(int table, MyCustomer myc, Order o) {
+		waiterGui.DoGoToCook();
+		try {
+			atCook.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		print("Cook, please cook "+ o.getName()+"table num is"+table);
+		cook.msgHereIsAnOrder(table, o, this);
+		myc.s=state.waitingForFood;
+		waiterGui.DoLeaveCustomer();
+
+		//stateChanged();
+	}
+	protected void PassOrderToCook(MyCustomer myc) {
 		// TODO Auto-generated method stub
 		
+	}
+	public void msgSetCook(TanCookRole tanCookRole) {
+		cook= tanCookRole;	
 	}
 
 

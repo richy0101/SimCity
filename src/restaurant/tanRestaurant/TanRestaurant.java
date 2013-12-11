@@ -25,8 +25,8 @@ public class TanRestaurant extends Restaurant {
 		this.name = name;
 		host = new TanHostAgent("Host");
 		cashier = new TanCashierAgent("Cashier");
-		System.out.println(host.toString() + "This Is Ben's Host!!");
-		System.out.println(cashier.toString() + "I obviously exist too.");
+		//System.out.println(host.toString() + "This Is Ben's Host!!");
+		//System.out.println(cashier.toString() + "I obviously exist too.");
 		cashier.setRestaurant(this);
 		host.setRestaurant(this);
 		host.startThread();

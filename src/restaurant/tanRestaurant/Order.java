@@ -17,5 +17,8 @@ public class Order {
 		String choice;
 		int table;
 		int seat;
+		public String getName() {
+			return choice;
+		}
 }
 

@@ -80,18 +80,24 @@ public class HuangRestaurantAnimationPanel extends BuildingPanel implements Acti
     }
 	
 	public void updateGui() {
-        for(Gui gui : guis) {
-            if (gui.isPresent())
-                gui.updatePosition();
-        }
+		synchronized(guis) {
+	        for(Gui gui : guis) {
+	            if (gui.isPresent())
+	                gui.updatePosition();
+	        }
+		}
 	}
 
     public void addGui(Gui gui) {
-        guis.add(gui);
+    	synchronized(guis) {
+    		guis.add(gui);
+    	}
     }
     
     public void removeGui(Gui gui) {
-    	guis.remove(gui);
+    	synchronized(guis) {
+    		guis.remove(gui);
+    	}
     }
 
 	public void displayBuildingPanel() {
