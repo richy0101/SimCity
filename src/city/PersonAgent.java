@@ -614,12 +614,17 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	private void goHome() {
-		print("Action goHome - State set to InTransit. Adding new Transportation Role.");
-		setPersonState(PersonState.InTransit);
-		roles.clear();
-		Role t = new TransportationRole(homeName, currentLocation);
-		t.setPerson(this);
-		roles.add(t);
+		if (currentLocation != homeName) {
+			print("Action goHome - State set to InTransit. Adding new Transportation Role.");
+			setPersonState(PersonState.InTransit);
+			roles.clear();
+			Role t = new TransportationRole(homeName, currentLocation);
+			t.setPerson(this);
+			roles.add(t);
+		}
+		else {
+			setPersonState(PersonState.EnterHome);
+		}
 	}	
 	private void cookHomeFood() {
 		print("Action cookHomeFood - State set to cooking " + inventory.get(desiredFood).type + ".");
@@ -765,8 +770,6 @@ public class PersonAgent extends Agent implements Person {
 			t.setPerson(this);
 			roles.add(t);
 		}
-		else
-			setPersonState(PersonState.WantsToGoHome);
 	}
 	/** Non Norm Actions **/
 	private void goRob() {
