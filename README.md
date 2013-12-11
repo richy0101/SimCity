@@ -62,6 +62,8 @@ Richard Phillip's Contribution:
  * Unit testing for bank roles for norm/some non-norm scenarios
  * Unit testing for bank GUI for norm/some non-norm scenarios
  * Missing functionality for V2: no robber interaction, no database (EC)
+ * Implemented Second Bank
+ * Implemented Bank Robbery
 
 Reid Nakamura's Contribution:
  * Implemented Market Roles
@@ -89,6 +91,7 @@ Ryan Sheh's Contribution
  * LandLord GUI
  * Updated Sim City MacroAnimation Panel to incorporate intersections/signs/nighttime.
  * Helped Nakamura's restaurant GUI
+ * Icon/Images have tracking information for references
  
  Ben Tan's Contribution
  * Design of Car Agent & interaction with Transportation Role
