@@ -28,6 +28,7 @@ public class TransportationGui implements Gui {
 	BufferedImage personRight;
 	BufferedImage personUp;
 	BufferedImage personDown;
+	BufferedImage tempDraw;
 	private String info;
 	
 	//outer loop
@@ -109,6 +110,7 @@ public class TransportationGui implements Gui {
         catch(IOException e) {
         	System.out.println("Error w/ Person assets");
         }
+		tempDraw = personDown;
 		evaluateNextMove();
 	}
 	
@@ -266,15 +268,19 @@ public class TransportationGui implements Gui {
 		if (currentLoop == Loop.Outer) {
 			if ((xPos == outerLeftLane) && (yPos != outerTopLane)) { //at left, going up
 	            yPos--;
+	            drawLogic(1);
 			}
 			else if ((yPos == outerBottomLane) && (xPos != outerLeftLane)) { //at bottom, going left
 	            xPos--;
+	            drawLogic(4);
 			}
 	        else if ((xPos == outerRightLane) && (yPos != outerBottomLane)) {//at right, going down
 	            yPos++;
+	            drawLogic(2);
 	        }
 	        else if ((yPos == outerTopLane) && (xPos != outerRightLane)) {//at top, going right
 	            xPos++;
+	            drawLogic(3);
 	        }
 		}
 		/**
@@ -283,15 +289,19 @@ public class TransportationGui implements Gui {
 		else if (currentLoop == Loop.InnerRight) {
 			if ((xPos == IRLeftLane) && (yPos != IRTopLane)) { //at left, going up
 	            yPos--;
+	            drawLogic(1);
 			}
 			else if ((yPos == IRBottomLane) && (xPos != IRLeftLane)) { //at bottom, going left
 	            xPos--;
+	            drawLogic(4);
 			}
 	        else if ((xPos == IRRightLane) && (yPos != IRBottomLane)) {//at right, going down
 	            yPos++;
+	            drawLogic(2);
 	        }
 	        else if ((yPos == IRTopLane) && (xPos != IRRightLane)) {//at top, going right
 	            xPos++;
+	            drawLogic(3);
 	        }
 		}
 		/**
@@ -300,15 +310,19 @@ public class TransportationGui implements Gui {
 		else if (currentLoop == Loop.InnerLeft) {
 			if ((xPos == ILLeftLane) && (yPos != ILTopLane)) { //at left, going up
 	            yPos--;
+	            drawLogic(1);
 			}
 			else if ((yPos == ILBottomLane) && (xPos != ILLeftLane)) { //at bottom, going left
 	            xPos--;
+	            drawLogic(4);
 			}
 	        else if ((xPos == ILRightLane) && (yPos != ILBottomLane)) {//at right, going down
 	            yPos++;
+	            drawLogic(2);
 	        }
 	        else if ((yPos == ILTopLane) && (xPos != ILRightLane)) {//at top, going right
 	            xPos++;
+	            drawLogic(3);
 	        }
 		}
 	}
@@ -320,15 +334,19 @@ public class TransportationGui implements Gui {
 		if (currentLoop == Loop.Outer) {
 			if ((xPos == outerLeftLane) && (yPos != outerBottomLane)) { //at left, coming down
 	            yPos++;
+	            drawLogic(2);
 			}
 			else if ((yPos == outerBottomLane) && (xPos != outerRightLane)) { //at bottom, going right
 	            xPos++;
+	            drawLogic(3);
 			}
 	        else if ((xPos == outerRightLane) && (yPos != outerTopLane)) {//at right, going up
 	            yPos--;
+	            drawLogic(1);
 	        }
 	        else if ((yPos == outerTopLane) && (xPos != outerLeftLane)) {//at top, going left
 	            xPos--;
+	            drawLogic(4);
 	        }
 		}
 		/**
@@ -337,15 +355,19 @@ public class TransportationGui implements Gui {
 		else if (currentLoop == Loop.InnerRight) {
 			if ((xPos == IRLeftLane) && (yPos != IRBottomLane)) { //at left, coming down
 	            yPos++;
+	            drawLogic(2);
 			}
 			else if ((yPos == IRBottomLane) && (xPos != IRRightLane)) { //at bottom, going right
 	            xPos++;
+	            drawLogic(3);
 			}
 	        else if ((xPos == IRRightLane) && (yPos != IRTopLane)) {//at right, going up
 	            yPos--;
+	            drawLogic(1);
 	        }
 	        else if ((yPos == IRTopLane) && (xPos != IRLeftLane)) {//at top, going left
 	            xPos--;
+	            drawLogic(4);
 	        }
 		}
 		/**
@@ -354,15 +376,19 @@ public class TransportationGui implements Gui {
 		else if (currentLoop == Loop.InnerLeft) {
 			if ((xPos == ILLeftLane) && (yPos != ILBottomLane)) { //at left, coming down
 	            yPos++;
+	            drawLogic(2);
 			}
 			else if ((yPos == ILBottomLane) && (xPos != ILRightLane)) { //at bottom, going right
 	            xPos++;
+	            drawLogic(3);
 			}
 	        else if ((xPos == ILRightLane) && (yPos != ILTopLane)) {//at right, going up
 	            yPos--;
+	            drawLogic(1);
 	        }
 	        else if ((yPos == ILTopLane) && (xPos != ILLeftLane)) {//at top, going left
 	            xPos--;
+	            drawLogic(4);
 	        }
 		}
 	}
@@ -418,27 +444,43 @@ public class TransportationGui implements Gui {
 	@Override
 	public void draw(Graphics2D g) {
 		//System.out.println("Updating Pos.");
-		if (xPos < xDestination) {
-			g.drawImage(personRight, xPos, yPos, null);
-		}
-		else if (xPos > xDestination) {
-			g.drawImage(personLeft,  xPos, yPos, null);
-		}
-		else if (yPos < yDestination) {
-			g.drawImage(personDown, xPos, yPos, null);
-		}
-		else if (yPos > yDestination) {
-			g.drawImage(personUp, xPos, yPos, null);
-		}
-		else {
-			g.drawImage(personDown, xPos, yPos, null);
-		}
+		
+		g.drawImage(tempDraw,xPos, yPos, null);
+		
+//		if (xPos < xDestination) {
+//			g.drawImage(personRight, xPos, yPos, null);
+//		}
+//		else if (xPos > xDestination) {
+//			g.drawImage(personLeft,  xPos, yPos, null);
+//		}
+//		else if (yPos < yDestination) {
+//			g.drawImage(personDown, xPos, yPos, null);
+//		}
+//		else if (yPos > yDestination) {
+//			g.drawImage(personUp, xPos, yPos, null);
+//		}
+//		else {
+//			g.drawImage(personDown, xPos, yPos, null);
+//		}
 		
 		info = agent.getPersonAgent().getName() + "(" + agent.getState() + ")";
 		g.setColor(Color.magenta);
 		g.drawString(info, xPos, yPos);
 	}
-
+	public void drawLogic(int direction) {
+		if (direction == 1) { //Up
+			tempDraw = personUp;
+		}
+		else if (direction == 2){ //Down
+			tempDraw = personDown;
+		}
+		else if (direction == 3){ //Right
+			tempDraw = personRight;
+		}
+		else if (direction == 4){ //Left
+			tempDraw = personLeft;
+		}
+	}
 	@Override
 	public boolean isPresent() {
 		// TODO Auto-generated method stub
