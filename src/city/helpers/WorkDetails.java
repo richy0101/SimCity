@@ -17,8 +17,8 @@ public class WorkDetails {
 		this.workRole = job;
 		this.workLocation = location;
 		if (job.getClass().getName().contains("employ")) {
-			this.workStartHour = 17;
-			this.workEndHour = 10;
+			this.workStartHour = 10;
+			this.workEndHour = 24;
 		}
 		else if (location.contains("Stack")) {
 			this.workStartHour = 8;
