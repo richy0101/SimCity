@@ -610,27 +610,25 @@ public class SimCityGui {
 			
 		}
 
-<<<<<<< HEAD
 		//PersonAgent person1 = new PersonAgent("HuangCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
 		//PersonAgent person2 = new PersonAgent("HuangWaiterNormal", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
 		//PersonAgent person3 = new PersonAgent("StackWaiterShared", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
-
+/*
 		PersonAgent person1 = new PersonAgent("NakamuraCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
 		PersonAgent person2 = new PersonAgent("NakamuraWaiterShared", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
 		PersonAgent person3 = new PersonAgent("Unemployed", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
-=======
+*/
 		PersonAgent person1 = new PersonAgent("HuangCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
 		PersonAgent person2 = new PersonAgent("HuangWaiterShared", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
 		PersonAgent person3 = new PersonAgent("HuangWaiterShared", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
->>>>>>> 91b05abd59e00b3bb5fb4593ca124fb37f2a1ee3
+
 		PersonAgent person4 = new PersonAgent("BankTeller", "Test Person 4", 3, 1000.00, "House4", "TakesTheBus");
 		PersonAgent person5 = new PersonAgent("BankTeller", "Test Person 5", 3, 1000.00, "House5", "TakesTheBus");
 		PersonAgent person6 = new PersonAgent("Market", "Test Person 6", 3, 1000.00, "House6", "TakesTheBus");
-		//PersonAgent person7 = new PersonAgent("PhillipsCook", "Test Person 7", 3, 1000.00, "House1", "TakesTheBus");
-		//PersonAgent person8 = new PersonAgent("PhillipsWaiter", "Test Person 8", 3, 1000.00, "House2", "TakesTheBus");
+		PersonAgent person7 = new PersonAgent("PhillipsCook", "Test Person 7", 3, 1000.00, "House1", "TakesTheBus");
+		PersonAgent person8 = new PersonAgent("PhillipsWaiter", "Test Person 8", 3, 1000.00, "House2", "TakesTheBus");
 		PersonAgent person9 = new PersonAgent("Unemployed", "Test Person 9", 3, 0.00, "House3", "TakesTheBus");
-		
-<<<<<<< HEAD
+		/*
 		String a = "PhillipsRestaurant";
 		String b = "House1";
 		String name = "JEEEZZUSSWAITER";
@@ -639,9 +637,7 @@ public class SimCityGui {
 		p.msgWakeUp();
 		role.setPerson(p);
 		p.startThread();
-=======
->>>>>>> 91b05abd59e00b3bb5fb4593ca124fb37f2a1ee3
-		/*
+		
 		String a = "TanRestaurant";
 		String b = "House1";
 		String name = "Test Person 1 Ben";
@@ -659,7 +655,7 @@ public class SimCityGui {
 		role1= new TanCookRole("TanRestaurant");
 		PersonAgent p1 = new PersonAgent(role1, a1 , b1, name1);
 		p1.msgWakeUp();
-		role1.setPerson(p);
+		role1.setPerson(p1);
 		p1.startThread();
 	
 		String a2 = "TanRestaurant";
@@ -671,8 +667,8 @@ public class SimCityGui {
 		role2.setPerson(p2);
 		p2.msgWakeUp();
 		p2.startThread();
-		*/
 		
+		/*
 		String a3 = "PhillipsRestaurant";
 		String b3 = "House4";
 		String name3 = "JEZZZZUSSSCOOK";
@@ -681,7 +677,7 @@ public class SimCityGui {
 		p.msgWakeUp();
 		role.setPerson(p);
 		p.startThread();
-		
+		*/
 //		//RYAN TEST CODE
 //		String a = "ShehRestaurant";
 //		String b = "House1";

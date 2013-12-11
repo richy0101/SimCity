@@ -655,20 +655,13 @@ public class PersonAgent extends Agent implements Person {
 		print("Action goRestaurant - State set to OutToEat");
 		setPersonState(PersonState.OutToEat);
 		//Decide Which restaurant to go to
-<<<<<<< HEAD
-		
 		Restaurant r = Directory.sharedInstance().getRestaurants().get(4);
 		//Restaurant r = Directory.sharedInstance().getRestaurants().get(2);
 		//Restaurant r = Directory.sharedInstance().getRestaurants().get(0);
-=======
-
-		Restaurant r = Directory.sharedInstance().getRestaurants().get(1);
 
 //		Restaurant r = Directory.sharedInstance().getRestaurants().get(2);
 		//Restaurant r = Directory.sharedInstance().getRestaurants().get(0);
 		
-
->>>>>>> 91b05abd59e00b3bb5fb4593ca124fb37f2a1ee3
 		//End of Decide block
 		if(currentLocation == homeName) {
 			personGui.DoLeaveHouse();
