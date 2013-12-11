@@ -35,7 +35,9 @@ import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
 import restaurant.phillipsRestaurant.gui.PhillipsRestaurantAnimationPanel;
 import restaurant.shehRestaurant.ShehCookRole;
+import restaurant.shehRestaurant.ShehWaiterNormalRole;
 import restaurant.shehRestaurant.ShehWaiterRole;
+import restaurant.shehRestaurant.ShehWaiterSharedRole;
 import restaurant.shehRestaurant.gui.ShehRestaurantAnimationPanel;
 import restaurant.tanRestaurant.TanCookRole;
 import restaurant.tanRestaurant.TanCustomerRole;
@@ -798,14 +800,78 @@ public class SimCityGui {
 			
 		}
 /*
+		//REID TEST CODE
 		PersonAgent person1 = new PersonAgent("NakamuraCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
 		PersonAgent person2 = new PersonAgent("NakamuraWaiterNormal", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
 		PersonAgent person3 = new PersonAgent("Unemployed", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
 		PersonAgent person4 = new PersonAgent("BankTeller", "Test Person 4", 3, 1000.00, "House4", "TakesTheBus");
 		PersonAgent person5 = new PersonAgent("BankTeller", "Test Person 5", 3, 1000.00, "House5", "TakesTheBus");
 		PersonAgent person6 = new PersonAgent("Market", "Test Person 6", 3, 1000.00, "House6", "TakesTheBus");
-
 */
+		
+/*
+		//RYAN TEST CODE
+		String a = "ShehRestaurant";
+		String b = "House1";
+		String name = "WAITER";
+		Role role;
+		role = new ShehWaiterNormalRole("ShehRestaurant");
+
+		PersonAgent p = new PersonAgent(role, a , b, name);
+		role.setPerson(p);
+		
+		String a1 = "ShehRestaurant";
+		String b1 = "House2";
+		String name1 = "WAITER2";
+		Role role1;
+		role1 = new ShehWaiterSharedRole("ShehRestaurant");
+
+		PersonAgent p1 = new PersonAgent(role1, a1 , b1, name1);
+		role1.setPerson(p1);
+		
+		String a2 = "ShehRestaurant";
+		String b2 = "House2";
+		String name2 = "COOK";
+		Role role2;
+		role2 = new ShehCookRole("ShehRestaurant");
+
+		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
+		role2.setPerson(p2);
+*/
+		
+/*
+ 		//TAN RESTAURANT CODE
+		String a = "TanRestaurant";
+		String b = "House1";
+		String name = "Test Person 1";
+		Role role;
+		role= new TanWaiterNormalRole("TanRestaurant");
+		PersonAgent p = new PersonAgent(role, a , b, name);
+		p.msgWakeUp();
+		role.setPerson(p);
+		p.startThread();
+		
+		String a1 = "TanRestaurant";
+		String b1 = "House2";
+		String name1 = "Test Person 2";
+		Role role1;
+		role1= new TanCookRole("TanRestaurant");
+		PersonAgent p1 = new PersonAgent(role, a1 , b1, name1);
+		p1.msgWakeUp();
+		role.setPerson(p);
+		p1.startThread();
+	
+		String a2 = "TanRestaurant";
+		String b2 = "House3";
+		String name2 = "Test Person 3";
+		Role role2;
+		role2 = new TanCustomerRole("TanRestaurant");
+		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
+		role2.setPerson(p2);
+		p2.msgWakeUp();
+		p2.startThread();
+*/		
+		
 		String a = "TanRestaurant";
 		String b = "House1";
 		String name = "Ben Test Waiter";
@@ -835,39 +901,6 @@ public class SimCityGui {
 		p2.msgWakeUp();
 		role2.setPerson(p2);
 		p2.startThread();
-		
-		
-		/*
-		//RYAN TEST CODE
-		String a = "ShehRestaurant";
-		String b = "House1";
-		String name = "WAITER";
-		Role role;
-		role = new ShehWaiterRole("ShehRestaurant");
-
-		PersonAgent p = new PersonAgent(role, a , b, name);
-		role.setPerson(p);
-		
-		String a1 = "ShehRestaurant";
-		String b1 = "House2";
-		String name1 = "WAITER2";
-		Role role1;
-		role1 = new ShehWaiterRole("ShehRestaurant");
-
-		PersonAgent p1 = new PersonAgent(role1, a1 , b1, name1);
-		role1.setPerson(p1);
-		
-		String a2 = "ShehRestaurant";
-		String b2 = "House2";
-		String name2 = "COOK";
-		Role role2;
-		role2 = new ShehCookRole("ShehRestaurant");
-
-		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
-		role2.setPerson(p2);
-		*/
-		
-		//END OF TEST CODE
 		
 		
 		bus = new BusAgent(1);
@@ -921,39 +954,6 @@ public class SimCityGui {
 //		role2.setPerson(p2);
 //		p2.msgWakeUp();
 //		p2.startThread();
-		
-
-		/*
-		String a = "TanRestaurant";
-		String b = "House1";
-		String name = "Test Person 1";
-		Role role;
-		role= new TanWaiterNormalRole("TanRestaurant");
-		PersonAgent p = new PersonAgent(role, a , b, name);
-		p.msgWakeUp();
-		role.setPerson(p);
-		p.startThread();
-		
-		String a1 = "TanRestaurant";
-		String b1 = "House2";
-		String name1 = "Test Person 2";
-		Role role1;
-		role1= new TanCookRole("TanRestaurant");
-		PersonAgent p1 = new PersonAgent(role, a1 , b1, name1);
-		p1.msgWakeUp();
-		role.setPerson(p);
-		p1.startThread();
-	
-		String a2 = "TanRestaurant";
-		String b2 = "House3";
-		String name2 = "Test Person 3";
-		Role role2;
-		role2 = new TanCustomerRole("TanRestaurant");
-		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
-		role2.setPerson(p2);
-		p2.msgWakeUp();
-		p2.startThread();
-		*/
 
 		/**
 		 End of Hard Code SuperNorm
