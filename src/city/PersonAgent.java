@@ -616,12 +616,17 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	private void goHome() {
-		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Going home");
-		setPersonState(PersonState.InTransit);
-		roles.clear();
-		Role t = new TransportationRole(homeName, currentLocation);
-		t.setPerson(this);
-		roles.add(t);
+		if (currentLocation != homeName) {
+			print("Action goHome - State set to InTransit. Adding new Transportation Role.");
+			setPersonState(PersonState.InTransit);
+			roles.clear();
+			Role t = new TransportationRole(homeName, currentLocation);
+			t.setPerson(this);
+			roles.add(t);
+		}
+		else {
+			setPersonState(PersonState.EnterHome);
+		}
 	}	
 	private void cookHomeFood() {
 		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Cooking " + inventory.get(desiredFood).type + " at home");
@@ -658,9 +663,9 @@ public class PersonAgent extends Agent implements Person {
 		setPersonState(PersonState.OutToEat);
 		//Decide Which restaurant to go to
 
-		Restaurant r = Directory.sharedInstance().getRestaurants().get(1);
-
-//		Restaurant r = Directory.sharedInstance().getRestaurants().get(2);
+		Restaurant r = Directory.sharedInstance().getRestaurants().get(3);
+		//Restaurant r = Directory.sharedInstance().getRestaurants().get(1);
+		//Restaurant r = Directory.sharedInstance().getRestaurants().get(2);
 		//Restaurant r = Directory.sharedInstance().getRestaurants().get(0);
 		
 
@@ -694,12 +699,12 @@ public class PersonAgent extends Agent implements Person {
 			cook = false;
 		}
 		//if Stay at home and eat. Alters Cook true or false
-//		if (cook == true) {
-//			setPersonState(PersonState.CookHome);
-//		}
-//		else {
+		if (cook == true) {
+			setPersonState(PersonState.CookHome);
+		}
+		else {
 			setPersonState(PersonState.GoOutEat);
-//		}
+		}
 	}
 	private void eatFood() {
 		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Eating at home");
@@ -766,8 +771,6 @@ public class PersonAgent extends Agent implements Person {
 			t.setPerson(this);
 			roles.add(t);
 		}
-		else
-			setPersonState(PersonState.WantsToGoHome);
 	}
 	/** Non Norm Actions **/
 	private void goRob() {

@@ -36,6 +36,13 @@ public class CookGui implements Gui {
 
     public CookGui(NakamuraCookRole cook) {
         this.agent = cook;
+
+        try {
+        	cookImage = ImageIO.read(getClass().getResource("nakamuraRestaurantCook.png"));
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ Background");
+        } 
     }
 
     public void updatePosition() {
@@ -54,16 +61,12 @@ public class CookGui implements Gui {
         	agent.msgActionComplete();
         	command = Command.noCommand;
         }
-        
-        try {
-        	cookImage = ImageIO.read(getClass().getResource("shehRestaurantCook.png"));
-        }
-        catch(IOException e) {
-        	System.out.println("Error w/ Background");
-        } 
+ 
     }
 
     public void draw(Graphics2D g) {
+    	g.drawImage(cookImage, xPos, yPos, null);
+    	
         for(int i = 0; i < Cooking.size(); i++)
         	g.drawString(Cooking.get(i), xCooking - 25, yCooking + i*10);
         for(int i = 0; i < Plating.size(); i++)

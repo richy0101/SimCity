@@ -145,17 +145,30 @@ public class TransportationRole extends Role implements Transportation  {
 		setState(TransportationState.InTransit);
 
 		if (getPersonAgent().getTransportationMethod().contains("Bus")) {
-			startStop = BusHelper.sharedInstance().busStopToString.get(currentLocation);
-			endStop = BusHelper.sharedInstance().busStopToString.get(destination);
-			
-			startStopNumber = BusHelper.sharedInstance().busStopToInt.get(currentLocation);
-			finalStopNumber = BusHelper.sharedInstance().busStopToInt.get(destination);
-			guiToStop = new TransportationGui(this, currentLocation, startStop);
-			
-			Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToStop);
-			actionComplete.acquireUninterruptibly();
-			BusHelper.sharedInstance().addWaitingPerson(this, startStopNumber);
-			setState(TransportationState.WaitingForBus);
+			if(needsBusChecker(startingLocation, destination)) {
+				startStop = BusHelper.sharedInstance().busStopToString.get(currentLocation);
+				endStop = BusHelper.sharedInstance().busStopToString.get(destination);
+				
+				startStopNumber = BusHelper.sharedInstance().busStopToInt.get(currentLocation);
+				finalStopNumber = BusHelper.sharedInstance().busStopToInt.get(destination);
+				guiToStop = new TransportationGui(this, currentLocation, startStop);
+				print("Want " + startStop);
+				
+				Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToStop);
+				//print("adding transport gui to macro");
+				actionComplete.acquireUninterruptibly();
+				BusHelper.sharedInstance().addWaitingPerson(this, startStopNumber);
+				setState(TransportationState.WaitingForBus);
+			}
+			else {
+				/**
+				 * Walk to destination after checking for buses
+				 */
+				guiToDestination = new TransportationGui(this, currentLocation, destination);
+				Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToDestination);
+				actionComplete.acquireUninterruptibly();
+				EnterBuilding();
+			}
 		}
 		if (getPersonAgent().getTransportationMethod().contains("Car")) {
 			//set car agent
@@ -168,20 +181,16 @@ public class TransportationRole extends Role implements Transportation  {
 			//car.setGui(carGui);
 			//.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(carGui);
 			//setState(TransportationState.InTransit); //SET STATE
-			
-			
 		}
-		if(getStartingLocation().equals("Home1")){
+		else {
+			/**
+			 * Walk to destination don't check buses
+			 */
+			guiToDestination = new TransportationGui(this, currentLocation, destination);
+			Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToDestination);
+			actionComplete.acquireUninterruptibly();
+			EnterBuilding();
 		}
-		/*
-		startX = Directory.sharedInstance.getDirectory().get(getStartingLocation()).xCoordinate;
-		startY = Directory.sharedInstance.getDirectory().get(getStartingLocation()).yCoordinate;
-		guiToStop = new TransportationGui(this, startX, startY, startStopX, startStopY);
-		Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToStop);
-		//print("adding transport gui to macro");
-		actionComplete.acquireUninterruptibly();
-		BusHelper.sharedInstance().addWaitingPerson(this, startStopNumber);
-		setState(TransportationState.WaitingForBus);*/
 		stateChanged();
 	}
 	private void GetOffBus() {
@@ -209,5 +218,15 @@ public class TransportationRole extends Role implements Transportation  {
 
 	public void setStartingLocation(String startingLocation) {
 		this.startingLocation = startingLocation;
+	}
+	public boolean needsBusChecker(String startingLocation, String destination) {
+		int startingStop = BusHelper.sharedInstance().busStopToInt.get(startingLocation);
+		int endStop = BusHelper.sharedInstance().busStopToInt.get(destination);
+		if (startingStop == endStop) {
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 }
