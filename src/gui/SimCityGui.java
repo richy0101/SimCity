@@ -48,9 +48,12 @@ import restaurant.tanRestaurant.TanCustomerRole;
 import restaurant.tanRestaurant.TanWaiterNormalRole;
 import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
 import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
+import trace.AlertTag;
+import trace.TracePanel;
 
 import javax.swing.event.PopupMenuListener;
 import javax.swing.event.PopupMenuEvent;
+
 import java.awt.Font;
 
 public class SimCityGui {
@@ -73,6 +76,8 @@ public class SimCityGui {
 	private JPanel panel;
 	private JTabbedPane tabbedPane;
 	private JLabel lblTime;
+	private JPanel logPanel;
+	private TracePanel tracePanel;
 	
 	/**
 	 * Launch the application.
@@ -215,16 +220,16 @@ public class SimCityGui {
 		
 		
 		SpringLayout springLayout = new SpringLayout();
+		springLayout.putConstraint(SpringLayout.WEST, buildingPanels, 10, SpringLayout.WEST, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.NORTH, macroAnimationPanel, 10, SpringLayout.NORTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, macroAnimationPanel, 10, SpringLayout.WEST, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.SOUTH, macroAnimationPanel, -6, SpringLayout.NORTH, buildingPanels);
-		springLayout.putConstraint(SpringLayout.EAST, buildingPanels, 0, SpringLayout.EAST, macroAnimationPanel);
 		springLayout.putConstraint(SpringLayout.NORTH, buildingPanels, 417, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, buildingPanels, 10, SpringLayout.WEST, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.SOUTH, buildingPanels, -10, SpringLayout.SOUTH, frame.getContentPane());
 		frame.getContentPane().setLayout(springLayout);
 		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		springLayout.putConstraint(SpringLayout.EAST, buildingPanels, -6, SpringLayout.WEST, tabbedPane);
 		springLayout.putConstraint(SpringLayout.EAST, macroAnimationPanel, -6, SpringLayout.WEST, tabbedPane);
 		springLayout.putConstraint(SpringLayout.NORTH, tabbedPane, 10, SpringLayout.NORTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, tabbedPane, 843, SpringLayout.WEST, frame.getContentPane());
@@ -583,6 +588,198 @@ public class SimCityGui {
 		restaurant.setInfoPanel(restPanel);
 		tabbedPane.addTab("Current Building", restPanel);
 		
+		logPanel = new JPanel();
+		tabbedPane.addTab("Alert Log", null, logPanel, null);
+		SpringLayout sl_logPanel = new SpringLayout();
+		logPanel.setLayout(sl_logPanel);
+		
+		tracePanel = new TracePanel();
+		sl_logPanel.putConstraint(SpringLayout.NORTH, tracePanel, 10, SpringLayout.NORTH, logPanel);
+		sl_logPanel.putConstraint(SpringLayout.WEST, tracePanel, 10, SpringLayout.WEST, logPanel);
+		sl_logPanel.putConstraint(SpringLayout.EAST, tracePanel, 249, SpringLayout.WEST, logPanel);
+		logPanel.add(tracePanel);
+		
+		final JToggleButton tglbtnBankCustomerMsg = new JToggleButton("Bank Customer");
+		tglbtnBankCustomerMsg.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(tglbtnBankCustomerMsg.isEnabled())
+					tracePanel.showAlertsWithTag(AlertTag.BANKCUSTOMER);
+				else
+					tracePanel.hideAlertsWithTag(AlertTag.BANKCUSTOMER);
+			}
+		});
+		sl_logPanel.putConstraint(SpringLayout.WEST, tglbtnBankCustomerMsg, 10, SpringLayout.WEST, logPanel);
+		tglbtnBankCustomerMsg.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		logPanel.add(tglbtnBankCustomerMsg);
+		
+		final JToggleButton tglbtnBankTellerMessages = new JToggleButton("Bank Teller");
+		tglbtnBankTellerMessages.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(tglbtnBankTellerMessages.isEnabled())
+					tracePanel.showAlertsWithTag(AlertTag.BANKTELLER);
+				else
+					tracePanel.hideAlertsWithTag(AlertTag.BANKTELLER);
+			}
+		});
+		sl_logPanel.putConstraint(SpringLayout.EAST, tglbtnBankTellerMessages, -10, SpringLayout.EAST, logPanel);
+		tglbtnBankTellerMessages.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		logPanel.add(tglbtnBankTellerMessages);
+		
+		final JToggleButton tglbtnBankManagerMessages = new JToggleButton("Bank Manager");
+		tglbtnBankManagerMessages.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(tglbtnBankManagerMessages.isEnabled())
+					tracePanel.showAlertsWithTag(AlertTag.BANKMANAGER);
+				else
+					tracePanel.hideAlertsWithTag(AlertTag.BANKMANAGER);
+			}
+		});
+		sl_logPanel.putConstraint(SpringLayout.WEST, tglbtnBankManagerMessages, 139, SpringLayout.WEST, logPanel);
+		sl_logPanel.putConstraint(SpringLayout.EAST, tglbtnBankManagerMessages, -10, SpringLayout.EAST, logPanel);
+		sl_logPanel.putConstraint(SpringLayout.EAST, tglbtnBankCustomerMsg, -19, SpringLayout.WEST, tglbtnBankManagerMessages);
+		sl_logPanel.putConstraint(SpringLayout.NORTH, tglbtnBankManagerMessages, 0, SpringLayout.NORTH, tglbtnBankCustomerMsg);
+		tglbtnBankManagerMessages.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		logPanel.add(tglbtnBankManagerMessages);
+		
+		final JToggleButton tglbtnCookMessages = new JToggleButton("Cook");
+		tglbtnCookMessages.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(tglbtnCookMessages.isEnabled())
+					tracePanel.showAlertsWithTag(AlertTag.COOK);
+				else
+					tracePanel.hideAlertsWithTag(AlertTag.COOK);
+			}
+		});
+		sl_logPanel.putConstraint(SpringLayout.WEST, tglbtnCookMessages, 10, SpringLayout.WEST, logPanel);
+		sl_logPanel.putConstraint(SpringLayout.EAST, tglbtnCookMessages, -139, SpringLayout.EAST, logPanel);
+		sl_logPanel.putConstraint(SpringLayout.WEST, tglbtnBankTellerMessages, 19, SpringLayout.EAST, tglbtnCookMessages);
+		sl_logPanel.putConstraint(SpringLayout.SOUTH, tglbtnBankCustomerMsg, -6, SpringLayout.NORTH, tglbtnCookMessages);
+		sl_logPanel.putConstraint(SpringLayout.NORTH, tglbtnBankTellerMessages, 0, SpringLayout.NORTH, tglbtnCookMessages);
+		tglbtnCookMessages.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		logPanel.add(tglbtnCookMessages);
+		
+		final JToggleButton tglbtnWaiterMessages = new JToggleButton("Waiter");
+		tglbtnWaiterMessages.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(tglbtnWaiterMessages.isEnabled())
+					tracePanel.showAlertsWithTag(AlertTag.WAITER);
+				else
+					tracePanel.hideAlertsWithTag(AlertTag.WAITER);
+			}
+		});
+		sl_logPanel.putConstraint(SpringLayout.EAST, tglbtnWaiterMessages, -10, SpringLayout.EAST, logPanel);
+		tglbtnWaiterMessages.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		logPanel.add(tglbtnWaiterMessages);
+		
+		final JToggleButton tglbtnHostMessages = new JToggleButton("Host");
+		tglbtnHostMessages.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(tglbtnHostMessages.isEnabled())
+					tracePanel.showAlertsWithTag(AlertTag.HOST);
+				else
+					tracePanel.hideAlertsWithTag(AlertTag.HOST);
+			}
+		});
+		sl_logPanel.putConstraint(SpringLayout.WEST, tglbtnHostMessages, 10, SpringLayout.WEST, logPanel);
+		sl_logPanel.putConstraint(SpringLayout.EAST, tglbtnHostMessages, -139, SpringLayout.EAST, logPanel);
+		sl_logPanel.putConstraint(SpringLayout.WEST, tglbtnWaiterMessages, 19, SpringLayout.EAST, tglbtnHostMessages);
+		sl_logPanel.putConstraint(SpringLayout.SOUTH, tglbtnCookMessages, -6, SpringLayout.NORTH, tglbtnHostMessages);
+		sl_logPanel.putConstraint(SpringLayout.NORTH, tglbtnWaiterMessages, 0, SpringLayout.NORTH, tglbtnHostMessages);
+		tglbtnHostMessages.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		logPanel.add(tglbtnHostMessages);
+		
+		final JToggleButton tglbtnRestaurantCustomerButton = new JToggleButton("Restaurant Customer");
+		tglbtnRestaurantCustomerButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(tglbtnRestaurantCustomerButton.isEnabled())
+					tracePanel.showAlertsWithTag(AlertTag.RESTAURANTCUSTOMER);
+				else
+					tracePanel.hideAlertsWithTag(AlertTag.RESTAURANTCUSTOMER);
+			}
+		});
+		sl_logPanel.putConstraint(SpringLayout.WEST, tglbtnRestaurantCustomerButton, 10, SpringLayout.WEST, logPanel);
+		sl_logPanel.putConstraint(SpringLayout.EAST, tglbtnRestaurantCustomerButton, 0, SpringLayout.EAST, logPanel);
+		sl_logPanel.putConstraint(SpringLayout.SOUTH, tglbtnHostMessages, -6, SpringLayout.NORTH, tglbtnRestaurantCustomerButton);
+		tglbtnRestaurantCustomerButton.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		logPanel.add(tglbtnRestaurantCustomerButton);
+		
+		final JToggleButton tglbtnMarketWorkerMessages = new JToggleButton("Market Worker");
+		tglbtnMarketWorkerMessages.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(tglbtnMarketWorkerMessages.isEnabled())
+					tracePanel.showAlertsWithTag(AlertTag.MARKETWORKER);
+				else
+					tracePanel.hideAlertsWithTag(AlertTag.MARKETWORKER);
+			}
+		});
+		sl_logPanel.putConstraint(SpringLayout.SOUTH, tglbtnRestaurantCustomerButton, -6, SpringLayout.NORTH, tglbtnMarketWorkerMessages);
+		sl_logPanel.putConstraint(SpringLayout.WEST, tglbtnMarketWorkerMessages, 10, SpringLayout.WEST, logPanel);
+		sl_logPanel.putConstraint(SpringLayout.EAST, tglbtnMarketWorkerMessages, 0, SpringLayout.EAST, tglbtnRestaurantCustomerButton);
+		tglbtnMarketWorkerMessages.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		logPanel.add(tglbtnMarketWorkerMessages);
+		
+		final JToggleButton tglbtnMarketCustomerMessages = new JToggleButton("Market Customer");
+		tglbtnMarketCustomerMessages.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(tglbtnMarketCustomerMessages.isEnabled())
+					tracePanel.showAlertsWithTag(AlertTag.MARKETCUSTOMER);
+				else
+					tracePanel.hideAlertsWithTag(AlertTag.MARKETCUSTOMER);
+			}
+		});
+		sl_logPanel.putConstraint(SpringLayout.WEST, tglbtnMarketCustomerMessages, 10, SpringLayout.WEST, logPanel);
+		sl_logPanel.putConstraint(SpringLayout.EAST, tglbtnMarketCustomerMessages, 0, SpringLayout.EAST, logPanel);
+		sl_logPanel.putConstraint(SpringLayout.SOUTH, tglbtnMarketWorkerMessages, -6, SpringLayout.NORTH, tglbtnMarketCustomerMessages);
+		sl_logPanel.putConstraint(SpringLayout.SOUTH, tglbtnMarketCustomerMessages, -10, SpringLayout.SOUTH, logPanel);
+		tglbtnMarketCustomerMessages.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		logPanel.add(tglbtnMarketCustomerMessages);
+		
+		final JToggleButton tglbtnLandlord = new JToggleButton("Landlord");
+		sl_logPanel.putConstraint(SpringLayout.SOUTH, tracePanel, -6, SpringLayout.NORTH, tglbtnLandlord);
+		sl_logPanel.putConstraint(SpringLayout.WEST, tglbtnLandlord, 10, SpringLayout.WEST, logPanel);
+		sl_logPanel.putConstraint(SpringLayout.EAST, tglbtnLandlord, -173, SpringLayout.EAST, logPanel);
+		tglbtnLandlord.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(tglbtnLandlord.isEnabled())
+					tracePanel.showAlertsWithTag(AlertTag.LANDLORD);
+				else
+					tracePanel.hideAlertsWithTag(AlertTag.LANDLORD);
+			}
+		});
+		sl_logPanel.putConstraint(SpringLayout.SOUTH, tglbtnLandlord, -6, SpringLayout.NORTH, tglbtnBankCustomerMsg);
+		tglbtnLandlord.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		logPanel.add(tglbtnLandlord);
+		
+		final JToggleButton tglbtnPerson = new JToggleButton("Person");
+		sl_logPanel.putConstraint(SpringLayout.NORTH, tglbtnPerson, 0, SpringLayout.NORTH, tglbtnLandlord);
+		sl_logPanel.putConstraint(SpringLayout.EAST, tglbtnPerson, -10, SpringLayout.EAST, logPanel);
+		tglbtnPerson.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(tglbtnPerson.isEnabled())
+					tracePanel.showAlertsWithTag(AlertTag.PERSON);
+				else
+					tracePanel.hideAlertsWithTag(AlertTag.PERSON);
+			}
+		});
+		tglbtnPerson.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		logPanel.add(tglbtnPerson);
+		
+		final JToggleButton tglbtnCashier = new JToggleButton("Cashier");
+		tglbtnCashier.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(tglbtnCashier.isEnabled())
+					tracePanel.showAlertsWithTag(AlertTag.CASHIER);
+				else
+					tracePanel.hideAlertsWithTag(AlertTag.CASHIER);
+			}
+		});
+		sl_logPanel.putConstraint(SpringLayout.EAST, tglbtnCashier, -92, SpringLayout.EAST, logPanel);
+		sl_logPanel.putConstraint(SpringLayout.WEST, tglbtnPerson, 6, SpringLayout.EAST, tglbtnCashier);
+		sl_logPanel.putConstraint(SpringLayout.WEST, tglbtnCashier, 91, SpringLayout.WEST, logPanel);
+		sl_logPanel.putConstraint(SpringLayout.SOUTH, tglbtnCashier, -6, SpringLayout.NORTH, tglbtnBankCustomerMsg);
+		tglbtnCashier.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		logPanel.add(tglbtnCashier);
+		
 		
 	}
 	
@@ -874,6 +1071,7 @@ public class SimCityGui {
 	public void displayBuildingPanel( BuildingPanel buildingPanel ) { //How is this tied in with the Micro Panel?
 		cardLayout.show( buildingPanels, buildingPanel.getName());
 	}
+	
 	public MacroAnimationPanel getMacroAnimationPanel() {
 		return macroAnimationPanel;
 	}

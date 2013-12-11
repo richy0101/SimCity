@@ -122,7 +122,6 @@ public class PersonGui implements Gui {
 	
 	@Override
 	public void updatePosition() {
-		//System.out.println("Updating Pos.");
 		if (xPos < xDestination) {
 			xPos+= 1;
 		}
@@ -178,7 +177,6 @@ public class PersonGui implements Gui {
 
 	@Override
 	public void draw(Graphics2D g) {
-		//System.out.println("Updating Pos.");
 		if (xPos < xDestination) {
 			g.drawImage(personRight, xPos, yPos, null);
 		}

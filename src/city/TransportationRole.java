@@ -59,14 +59,12 @@ public class TransportationRole extends Role implements Transportation  {
 	}
 	
 	public void msgGetOnBus(BusAgent b) {
-		print("Bus is here");
 		this.bus = b;
 		setState(TransportationState.GettingOnBus);
 		stateChanged();
 	}
 	
 	public void msgArrivedAtDestination(String destination) {
-		print("Car successfully took me to " + destination + ".");
 		currentLocation= destination;
 		setState(TransportationState.AtDestination);
 		stateChanged();
@@ -122,14 +120,12 @@ public class TransportationRole extends Role implements Transportation  {
 		setState(TransportationState.Walking);
 		guiToDestination = new TransportationGui(this, endStop, destination);
 		Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToDestination);
-		//print("adding gotodestination to macro");
 		actionComplete.acquireUninterruptibly();
 		setState(TransportationState.AtDestination);
 		stateChanged();
 	}
 
 	private void GetOnBus() {
-		print("Getting on bus");
 		Directory.sharedInstance().getCityGui().getMacroAnimationPanel().removeGui(guiToStop);
 		BusHelper.sharedInstance().removeWaitingPerson(this, startStopNumber);
 		bus.msgBoardingBus(this);
@@ -155,18 +151,13 @@ public class TransportationRole extends Role implements Transportation  {
 			startStopNumber = BusHelper.sharedInstance().busStopToInt.get(currentLocation);
 			finalStopNumber = BusHelper.sharedInstance().busStopToInt.get(destination);
 			guiToStop = new TransportationGui(this, currentLocation, startStop);
-			print("Want " + startStop);
 			
 			Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToStop);
-			//print("adding transport gui to macro");
 			actionComplete.acquireUninterruptibly();
 			BusHelper.sharedInstance().addWaitingPerson(this, startStopNumber);
 			setState(TransportationState.WaitingForBus);
 		}
 		if (getPersonAgent().getTransportationMethod().contains("Car")) {
-			print("Getting my car.");
-			
-			
 			//set car agent
 			car = new CarAgent(startingLocation);
 			car.startThread();
@@ -194,21 +185,11 @@ public class TransportationRole extends Role implements Transportation  {
 		stateChanged();
 	}
 	private void GetOffBus() {
-		print("Getting off bus");
 		bus.msgLeavingBus(this);
 		setState(TransportationState.JustGotOffBus);
 		stateChanged();
 	}
 	private void GetOffVehicle() {
-//		if(hasCar) {
-//			//remove car gui from main window
-//		}
-//		else if (!hasCar) {
-//			//create transportationrole gui at bus stop
-//			//have transportationrole gui walk to destination
-//			//remove transportationrole gui
-//		}
-		
 		setState(TransportationState.None);
 		getPersonAgent().msgTransportFinished(currentLocation); //haven't implemented updating the currentLoc for cars
 		//change roles

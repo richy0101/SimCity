@@ -7,6 +7,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import city.helpers.Directory;
 import city.interfaces.Person;
 import bank.gui.BankCustomerGui;
@@ -168,7 +170,6 @@ public class BankCustomerRole extends Role implements BankCustomer {
 				return true;
 			}
 			else {
-				print("What is task?");
 				return false;
 			}
 		}
@@ -191,11 +192,8 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		state = CustomerState.FinishedRole;
 	}
 	private void askForAssistance() {
-		//print("I need assistance");
+		AlertLog.getInstance().logMessage(AlertTag.BANKCUSTOMER, getPersonAgent().getName(), "I need assistance");
 		customerGui.DoGoToManager();
-		if (manager == null) {
-			print("Manager is Null.");
-		}
 		manager.msgINeedAssistance(this);
 		if(task.contains("Rob")){
 			customerGui.DoExplodeBank();
@@ -205,19 +203,19 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	private void openAccount() {
 		state = CustomerState.WaitingForHelpResponse;
-		print("I need my account opened");
+		AlertLog.getInstance().logMessage(AlertTag.BANKCUSTOMER, getPersonAgent().getName(), "I need an account opened");
 		teller.msgOpenAccount(this);
 	}
 	
 	private void takeOutLoan() {
 		state = CustomerState.WaitingForHelpResponse;
-		print("I need to take out a loan");
+		AlertLog.getInstance().logMessage(AlertTag.BANKCUSTOMER, getPersonAgent().getName(), "I need to take out a loan");
 		teller.msgIWantLoan(accountNumber, moneyRequired);
 	}
 	
 	private void depositMoney() {
 		state = CustomerState.WaitingForHelpResponse;
-		print("I need to deposit money");
+		AlertLog.getInstance().logMessage(AlertTag.BANKCUSTOMER, getPersonAgent().getName(), "I need to deposit money");
 		teller.msgDepositMoney(accountNumber, moneyToDeposit);
 		getPersonAgent().setFunds(getPersonAgent().getFunds() - moneyToDeposit);
 		moneyToDeposit = 0; 
@@ -225,19 +223,19 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	private void withdrawMoney() {
 		state = CustomerState.WaitingForHelpResponse;
-		print("I need to withdraw money");
+		AlertLog.getInstance().logMessage(AlertTag.BANKCUSTOMER, getPersonAgent().getName(), "I need to withdraw money");
 		teller.msgWithdrawMoney(accountNumber, moneyToWithdraw);
 	}
 	
 	private void robBank() {
 		state = CustomerState.WaitingForHelpResponse;
-		print("I'm robbing the bank");
+		AlertLog.getInstance().logMessage(AlertTag.BANKCUSTOMER, getPersonAgent().getName(), "I am robbing the bank");
 		teller.msgHoldUpBank(moneyRequired,this);
 	}
 	
 	private void leaveBank() {
 		state = CustomerState.InTransit;
-		print("Leaving bank");
+		AlertLog.getInstance().logMessage(AlertTag.BANKCUSTOMER, getPersonAgent().getName(), "Leaving bank");
 		if(task != "Rob"){
 			teller.msgThankYouForAssistance(this);
 		}
@@ -246,7 +244,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	private void goToTeller() {
 		state = CustomerState.InTransit;
-		print("Going to bank teller");
+		AlertLog.getInstance().logMessage(AlertTag.BANKCUSTOMER, getPersonAgent().getName(), "Going to bank teller");
 		customerGui.DoGoToTeller(tellerNumber);
 		/*try {
 			doneAnimation.acquire();

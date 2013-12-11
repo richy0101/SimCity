@@ -118,19 +118,6 @@ public class TransportationGui implements Gui {
 				currentAction = CurrentAction.Idle;
 				return;
 			}
-			/*
-			if(currentAction == CurrentAction.BreakOut){
-				System.out.println("WANT TO BREAK OUT");
-			}
-			
-			if(currentAction == CurrentAction.BreakOutFromTop){
-				System.out.println("WANT TO BREAK OUT FROM TOP");
-			}
-			
-			if(currentAction == CurrentAction.BreakOutFromBottom){
-				System.out.println("WANT TO BREAK OUT FROM BOTTOM");
-			}*/
-			
 			/**
 			 * Breaking Out Block
 			 */
@@ -139,7 +126,6 @@ public class TransportationGui implements Gui {
 				return;
 			}
 			else if(currentAction == CurrentAction.BreakOutFromTop && doneBreaking(Cross1X, Cross1Y)){
-				//System.out.println("broken out");
 				currentLoop = Loop.Outer;
 				evaluateNextMove();
 				return;
@@ -149,7 +135,6 @@ public class TransportationGui implements Gui {
 				return;
 			}
 			else if(currentAction == CurrentAction.BreakOutFromBottom && doneBreaking(Cross6X, Cross6Y)) {
-				//System.out.println("broken out");
 				currentLoop = Loop.Outer;
 				evaluateNextMove();
 				return;
@@ -172,7 +157,6 @@ public class TransportationGui implements Gui {
 				yPos++;
 			}
 			else if(currentAction == CurrentAction.BreakInFromTop && doneBreaking(Cross2X, Cross2Y)) {
-				//System.out.println("broken out");
 				currentLoop = Loop.InnerLeft;
 				evaluateNextMove();
 				return;
@@ -181,7 +165,6 @@ public class TransportationGui implements Gui {
 				yPos--;
 			}
 			else if(currentAction == CurrentAction.BreakInFromBottom && doneBreaking(Cross5X, Cross5Y)) {
-				//System.out.println("broken in to 5");
 				currentLoop = Loop.InnerRight;
 				evaluateNextMove();
 				return;
@@ -203,7 +186,6 @@ public class TransportationGui implements Gui {
 	}
 	private boolean doneBreaking(int x, int y) {
 		if (xPos == x && yPos == y) {
-			System.out.println("DONE BREAKING");
 			return true;
 		}
 		else {
@@ -418,7 +400,6 @@ public class TransportationGui implements Gui {
 
 	@Override
 	public void draw(Graphics2D g) {
-		//System.out.println("Updating Pos.");
 		if (xPos < xDestination) {
 			g.drawImage(personRight, xPos, yPos, null);
 		}

@@ -154,7 +154,6 @@ public class BusAgent extends Agent implements Vehicle {
 		}
 		
 		public void msgAtStopOne(){
-			//print("At Stop 1");
 			driving.release();
 			event= Event.reachedStop;
 			lastStation = Station.Stop1;
@@ -162,7 +161,6 @@ public class BusAgent extends Agent implements Vehicle {
 		}
 		
 		public void msgAtStopTwo(){
-			//print("At Stop 2");
 			driving.release();
 			event= Event.reachedStop;
 			lastStation = Station.Stop2;
@@ -170,7 +168,6 @@ public class BusAgent extends Agent implements Vehicle {
 		}
 
 		public void msgAtStopThree(){
-			//print("At Stop 3");
 			driving.release();
 			event= Event.reachedStop;
 			lastStation = Station.Stop3;
@@ -178,7 +175,6 @@ public class BusAgent extends Agent implements Vehicle {
 		}
 		
 		public void msgAtStopFour(){
-			//print("At Stop 4");
 			driving.release();
 			event= Event.reachedStop;
 			lastStation = Station.Stop4;
@@ -206,7 +202,6 @@ public class BusAgent extends Agent implements Vehicle {
 	 * @param myDestination
 	 */
 		private void stopBus(){
-			//print("Bus is stopping.");
 			busGui.DoStopDriving();
 			event = Event.stopped;
 		}
@@ -284,8 +279,7 @@ public class BusAgent extends Agent implements Vehicle {
 			event=Event.notifiedPassengersToBoardBus;
 		}
 		
-		private void waitForPassengersToBoard(){
-			//print("Loading passengers.");			
+		private void waitForPassengersToBoard(){		
 			timer.schedule(new TimerTask() {
 				public void run() {
 					msgChangeEventToPassengersBoarded();
