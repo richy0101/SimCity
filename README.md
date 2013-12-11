@@ -71,9 +71,9 @@ Reid Nakamura's Contribution:
  * Implement Market Role Unit Test
  * Helped to debug Transportation GUI
  * Resolved issue with Ryan Sheh to set up CardLayout of building animation panels
- * Implemented personal restaurant w/ normal/shared waiter/cook interactions
+ * Fully implemented personal restaurant w/ normal/shared waiter/cook interactions
  * Updated Market Role Agent to Handle Deliveries
- * Helped Ryan w/ Market/Restaurant interaction
+ * Worked with other team members to integrate market interactions into restaurant
  * Implemented time (days/hours/weekends)
 
 Ryan Sheh's Contribution
