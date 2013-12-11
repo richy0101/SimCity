@@ -93,4 +93,9 @@ public class Restaurant {
 		this.restPanel = restPanel;
 	}
 
+	public Object getMyMonitor() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

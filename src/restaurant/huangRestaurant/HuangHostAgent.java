@@ -40,7 +40,7 @@ public class HuangHostAgent extends Agent {
 	public List<MyCook> cooks = Collections.synchronizedList(new ArrayList<MyCook>());
 	public List<MyWaiter> waiters = Collections.synchronizedList(new ArrayList<MyWaiter>());
 	public Collection<Table> tables;
-	private Restaurant restaurant;
+	private HuangRestaurant restaurant;
 	private HuangCashierAgent ca;
 	
 	public enum WaiterState {Free, Busy, NeedsToKnowCook};
@@ -54,10 +54,11 @@ public class HuangHostAgent extends Agent {
 			this.w = w;
 			state = WaiterState.Free;
 			event = WaiterEvent.Working;
+			w.getGui().setHome(waiters.size());
 			w.setRestaurant(restaurant);
 		}
 	}
-	public enum CookState {JustArrived, OnShift, OffShift, DoneWorking};
+	public enum CookState {JustArrived, OnShift, OffShift, AllowedToLeave, AskedToLeave};
 	private class MyCook {
 		CookState state;
 		HuangCookRole c;
@@ -148,13 +149,17 @@ public class HuangHostAgent extends Agent {
 	}
 	// Messages
 	public void msgLeavingRest(HuangCustomerRole c) {
-		for(HungryCustomer hc : hungryCustomers) {
-			if(hc.c.equals(c)) {
-				hungryCustomers.remove(hc);
-				break;
+		synchronized(hungryCustomers) {
+			for(HungryCustomer hc : hungryCustomers) {
+				if(hc.c.equals(c)) {
+					hungryCustomers.remove(hc);
+					break;
+				}
 			}
 		}
-		customers.remove(c);
+		synchronized(customers) {
+			customers.remove(c);
+		}
 	}
 	public void msgIWantToEat(HuangCustomerRole c) {
 		customers.add(c);
@@ -248,7 +253,7 @@ public class HuangHostAgent extends Agent {
 			}
 		}
 		for (MyCook mc : cooks) {
-			if(mc.state == CookState.DoneWorking) {
+			if(mc.state == CookState.AllowedToLeave) {
 				cooks.remove(mc);
 				return true;
 			}
@@ -269,7 +274,6 @@ public class HuangHostAgent extends Agent {
 		for (MyWaiter w : waiters) {
 			if(w.event == WaiterEvent.JustArrived) {
 				w.event = WaiterEvent.Working;
-				w.w.getGui().setHome(waiters.size());
 				for (MyCook mc : cooks) {
 					if(mc.state == CookState.OnShift) {
 						tellWaitersCookHere(mc.c);
@@ -343,13 +347,25 @@ public class HuangHostAgent extends Agent {
 				}
 			}
 		}
+		for (MyCook mc : cooks) {
+			if (mc.state == CookState.AskedToLeave) {
+				if (waiters.isEmpty()) {
+					tellCookCanLeave(mc);
+				}
+			}
+		}
 		return false;
 		//we have tried all our rules and found
 		//nothing to do. So return false to main loop of abstract agent
 		//and wait.
 	}
 
+
 	// Actions
+	private void tellCookCanLeave(MyCook mc) {
+		mc.state = CookState.AllowedToLeave;
+		mc.c.msgYouCanLeave();
+	}
 	private void tellCustomerClosed(HuangCustomerRole c) {
 		c.msgGetOut();
 		synchronized(hungryCustomers) {
@@ -426,11 +442,15 @@ public class HuangHostAgent extends Agent {
 	}
 	public void msgArrivedToWork(Role r) {
 		if(r.getClass().toString().contains("Cook")) {
-			cooks.add(new MyCook((HuangCookRole) r));
+			synchronized(cooks) {
+				cooks.add(new MyCook((HuangCookRole) r));
+			}
 			stateChanged();
 		}
 		else if(r.getClass().toString().contains("Waiter")) {
-			waiters.add(new MyWaiter (this, (HuangWaiterRole) r));
+			synchronized(waiters) {
+				waiters.add(new MyWaiter (this, (HuangWaiterRole) r));
+			}
 			stateChanged();
 		}
 	}
@@ -439,7 +459,7 @@ public class HuangHostAgent extends Agent {
 			synchronized(cooks) {
 				for(MyCook mc : cooks) {
 					if (mc.c == r) {
-						mc.state = CookState.DoneWorking;
+						mc.state = CookState.AskedToLeave;
 					}
 				}
 			}
@@ -455,7 +475,7 @@ public class HuangHostAgent extends Agent {
 		}
 		stateChanged();
 	}
-	public void setRestaurant(Restaurant huang) {
+	public void setRestaurant(HuangRestaurant huang) {
 		this.restaurant = huang;
 	}
 

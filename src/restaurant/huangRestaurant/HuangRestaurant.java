@@ -5,6 +5,7 @@ package restaurant.huangRestaurant;
 
 import restaurant.FoodInformation;
 import restaurant.Restaurant;
+import restaurant.huangRestaurant.ProducerConsumerMonitor;
 
 
 
@@ -14,6 +15,7 @@ public class HuangRestaurant extends Restaurant {
 	HuangHostAgent host;
 	HuangCashierAgent cashier;
 	double till = 10000;
+	ProducerConsumerMonitor myMonitor;
 	
 	
 
@@ -26,7 +28,7 @@ public class HuangRestaurant extends Restaurant {
 		host.setRestaurant(this);
 		host.startThread();
 		cashier.startThread();	
-		
+		myMonitor = new ProducerConsumerMonitor();
 		FoodInformation steak = new FoodInformation(6000, 100);
 		getFoodInventory().put("Steak", steak);
 		
@@ -60,5 +62,7 @@ public class HuangRestaurant extends Restaurant {
 	public void setTill(double till) {
 		this.till = till;
 	}
-
+	public ProducerConsumerMonitor getMyMonitor() {
+		return myMonitor;
+	}
 }

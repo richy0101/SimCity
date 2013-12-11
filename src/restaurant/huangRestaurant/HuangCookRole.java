@@ -17,8 +17,10 @@ import restaurant.CookRole;
 import restaurant.FoodInformation;
 import restaurant.Restaurant;
 import restaurant.FoodInformation.FoodState;
+import restaurant.huangRestaurant.Order.OrderState;
 import restaurant.huangRestaurant.gui.CookGui;
 import restaurant.huangRestaurant.interfaces.Cashier;
+import restaurant.nakamuraRestaurant.NakamuraCookRole.SharedOrderState;
 import city.helpers.Directory;
 
 
@@ -36,22 +38,10 @@ public class HuangCookRole extends CookRole {
 	public HuangHostAgent host;
 	public Cashier cashier;
 	public CookGui gui;
-	private Restaurant restaurant;
-	private enum OrderState {Pending, Cooking, Done, Plated, out};
-	private class Order {
-		private HuangWaiterRole w;
-		public String choice;
-		public int table;
-		private OrderState state;
-		Order(HuangWaiterRole w, String choice, int table) {
-			this.w = w;
-			this.choice = choice;
-			this.table = table;
-			this.state = OrderState.Pending;
-		}
-	}
+	private HuangRestaurant restaurant;
 	public List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
-	
+	public enum SharedOrderState {NeedsChecking, Checked};
+	SharedOrderState sharedState = SharedOrderState.NeedsChecking;
 	Timer timer = new Timer();
 	private class CookTimerTask extends TimerTask {
 		Order o;
@@ -267,7 +257,7 @@ public class HuangCookRole extends CookRole {
 		stateChanged();
 	}
 
-	public void msgHereIsPayCheck(double payCheck) {
+	public void msgHereIsPaycheck(double payCheck) {
 		state = CookState.ReceivedPay;
 		getPersonAgent().setFunds(getPersonAgent().getFunds() + payCheck);
 		stateChanged();
@@ -288,7 +278,10 @@ public class HuangCookRole extends CookRole {
 		System.out.println(name + ": msgFoodDone received: This dish is done!");
 		stateChanged();
 	}
-
+	public void msgYouCanLeave() {
+		state = CookState.CollectPay;
+		stateChanged();
+	}
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
@@ -365,6 +358,19 @@ public class HuangCookRole extends CookRole {
 		}
 		if (state == CookState.DoneWorking) {
 			tellHostDoneWorking();
+			return true;
+		}
+		if(sharedState == SharedOrderState.NeedsChecking) {
+			timer.schedule(new TimerTask() {
+				public void run() {
+					addSharedOrders();
+					sharedState = SharedOrderState.NeedsChecking;
+					stateChanged();
+				}
+			},
+			5000);
+			sharedState = SharedOrderState.Checked;
+			return true;
 		}
 		//rule 2
 		checkInventory();
@@ -543,10 +549,16 @@ public class HuangCookRole extends CookRole {
 		DoPlate(o);
 	}
 	//utilities
+	private void addSharedOrders() {
+		Order order = restaurant.getMyMonitor().remove();
+		if(order != null) {
+			orders.add(order);
+		}
+	}
 	public void setGui(CookGui gui) {
 		this.gui = gui;
 	}
-	public void setRestaurant(Restaurant huang) {
+	public void setRestaurant(HuangRestaurant huang) {
 		this.restaurant = huang;
 	}
 	public void setCashier(HuangCashierAgent cashier) {
