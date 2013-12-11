@@ -102,7 +102,6 @@ public class HuangCashierAgent extends CashierAgent implements Cashier {
 	private Restaurant restaurant;
 	public HuangCashierAgent(String name) {
 		this.name = name;
-		this.startThread();
 	}
 
 	public String getName() {
@@ -153,6 +152,7 @@ public class HuangCashierAgent extends CashierAgent implements Cashier {
 		stateChanged();
 	}
 	public void msgAskForPayCheck(Role r) {
+		System.out.println("Adding new employee to pay");
 		employees.add(new MyEmployee(r));
 		stateChanged();
 	}
@@ -165,6 +165,7 @@ public class HuangCashierAgent extends CashierAgent implements Cashier {
 			for(MyEmployee me : employees) {
 				if (me.state == EmployeeState.AskedForPay) {
 					payEmployee(me);
+					System.out.println("Paid employee");
 					return true;
 				}
 			}

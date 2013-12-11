@@ -103,7 +103,8 @@ public class HuangWaiterRole extends Role implements Waiter {
 	}
 
 	// Messages
-	public void msgHereIsPayCheck(double payCheck) {
+	@Override
+	public void msgHereIsPaycheck(double payCheck) {
 		state = WaiterState.ReceivedPay;
 		System.out.println(getPersonAgent().getName() + " Got pay, leaving work.");
 		getPersonAgent().setFunds(getPersonAgent().getFunds() + payCheck);
@@ -379,12 +380,15 @@ public class HuangWaiterRole extends Role implements Waiter {
 				}
 			}
 		}	
-		if (state == WaiterState.ReceivedPay) {
-			leaveWork();
-		}
-		if (state == WaiterState.CollectPay) {
-			collectPay();
-			return true;
+		if (customers.isEmpty()) {
+			if (state == WaiterState.ReceivedPay) {
+				leaveWork();
+				return false;
+			}
+			if (state == WaiterState.CollectPay) {
+				collectPay();
+				return true;
+			}
 		}
 		if(state == WaiterState.DoneWorking) {
 			tellHostDoneWorking();
@@ -399,12 +403,6 @@ public class HuangWaiterRole extends Role implements Waiter {
 		//and wait.
 	}
 	
-
-
-
-
-
-
 
 	// Actions
 	private void goToWorkStation() {
@@ -543,7 +541,7 @@ public class HuangWaiterRole extends Role implements Waiter {
 	public WaiterGui getGui() {
 		return gui;
 	}
-	public void setRestaurant(Restaurant huang) {
+	public void setRestaurant(HuangRestaurant huang) {
 		this.restaurant = huang;
 	}
 
