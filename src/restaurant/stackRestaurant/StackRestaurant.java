@@ -1,29 +1,33 @@
 package restaurant.stackRestaurant;
 
-import java.util.Vector;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
+import restaurant.FoodInformation;
 import restaurant.Restaurant;
-import restaurant.stackRestaurant.*;
-import city.PersonAgent;
-
 
 public class StackRestaurant extends Restaurant {
 
 	private String name;
-	StackHostAgent host;
-	StackCashierAgent cashier;
-	double till = 10000;
+	private StackHostAgent host;
+	private StackCashierAgent cashier;
 	
-	
-
 	public StackRestaurant(String name) {
 		super();
+		FoodInformation steak = new FoodInformation(6000, 100);
+		getFoodInventory().put("Steak", steak);
+		
+		FoodInformation chicken = new FoodInformation(4000, 100);
+		getFoodInventory().put("Chicken", chicken);
+		
+		FoodInformation salad = new FoodInformation(7000, 100);
+		getFoodInventory().put("Salad", salad);
+		
+		FoodInformation pizza = new FoodInformation(12000, 100);
+		getFoodInventory().put("Pizza", pizza);
+		
 		this.name = name;
 		host = new StackHostAgent();
 		cashier = new StackCashierAgent();
+		cashier.setRestaurant(this);
+		host.setRestaurant(this);
 		host.startThread();
 		cashier.startThread();	
 	}
@@ -39,14 +43,6 @@ public class StackRestaurant extends Restaurant {
 	
 	public StackCashierAgent getCashier() {
 		return cashier;
-	}
-	
-	public double getTill() {
-		return till;
-	}
-
-	public void setTill(double till) {
-		this.till = till;
 	}
 
 }

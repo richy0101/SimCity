@@ -1,6 +1,7 @@
 package home;
 
 import agent.Role;
+import home.gui.HomePersonGui;
 import home.interfaces.*;
 
 public class HomePersonRole extends Role implements HomePerson {
@@ -8,6 +9,7 @@ public class HomePersonRole extends Role implements HomePerson {
 	//data--------------------------------------------------------------------------------
 	Landlord landlord;
 	boolean needToPayRent;
+	boolean cleanHouse = true;
 	double debt;
 	int dirtinessLevel;
 	
@@ -20,6 +22,10 @@ public class HomePersonRole extends Role implements HomePerson {
 	public void msgPayLater() {
 		
 	}
+	
+	public void msgCleanHouse() {
+		cleanHouse = false;
+	}
 		
 	//scheduler---------------------------------------------------------------------------
 	public boolean pickAndExecuteAnAction() {
@@ -27,7 +33,7 @@ public class HomePersonRole extends Role implements HomePerson {
 			PayRent();
 		}
 		
-		if(dirtinessLevel > 5) {
+		if(cleanHouse = false) {
 			Clean();
 		}
 		
@@ -37,7 +43,7 @@ public class HomePersonRole extends Role implements HomePerson {
 	//actions-----------------------------------------------------------------------------
 	private void PayRent() {
 		if(getPersonAgent().getFunds() >= debt) {
-			landlord.msgHereIsRent(this, debt);
+			//landlord.msgHereIsRent(this, debt);
 			getPersonAgent().setFunds(getPersonAgent().getFunds() - debt);
 		}
 		else 
@@ -49,11 +55,11 @@ public class HomePersonRole extends Role implements HomePerson {
 	
 	private void Clean() {
 		DoClean();
-		dirtinessLevel = 0;
+		cleanHouse = true;
 	}
 	
 	//GUI Actions-------------------------------------------------------------------------
 	private void DoClean() {
-		
+		//gui
 	}
 }

@@ -1,15 +1,20 @@
 package restaurant.stackRestaurant;
 
-import agent.Agent;
 import agent.Role;
+import restaurant.CashierAgent;
+import restaurant.Restaurant;
 import restaurant.stackRestaurant.helpers.Check;
 import restaurant.stackRestaurant.helpers.Menu;
 import restaurant.stackRestaurant.interfaces.*;
+import trace.AlertLog;
+import trace.AlertTag;
+import market.MarketCheck;
 import market.interfaces.*;
 
 import java.util.*;
 
-public class StackCashierAgent extends Agent implements Cashier {
+
+public class StackCashierAgent extends CashierAgent implements Cashier {
 	
 	private List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	private List<MyCheck> checks = Collections.synchronizedList(new ArrayList<MyCheck>());
@@ -24,7 +29,7 @@ public class StackCashierAgent extends Agent implements Cashier {
 	public enum EmployeeState
 	{NeedPaying, Paid};
 	
-	private double till;
+	Restaurant restaurant;
 	
 	public String getName() {
 		return "Money Machine 5000";
@@ -37,7 +42,6 @@ public class StackCashierAgent extends Agent implements Cashier {
 	public List<MyCheck> getChecks() {
 		return checks;
 	}
-	
 	
 	@Override
 	public boolean pickAndExecuteAnAction() {
@@ -76,16 +80,15 @@ public class StackCashierAgent extends Agent implements Cashier {
 	
 	//actions
 	private void payMarket(MyCheck check) {
-		print("Paying " + check.market + " " + check.check.cost());
+		AlertLog.getInstance().logMessage(AlertTag.CASHIER, getName(), "Paying " + check.market + " " + check.check.cost());
 		check.market.msgPayForOrder(this, check.check.cost());
 		setTill(getTill() - check.check.cost());
-		print("The till now has: " + till);
 		check.state = CheckState.Paid;
 	}
 	
 	private void computeCheck(MyCustomer customer) {
 		Check check = new Check(customer.debt + Menu.sharedInstance().getInventoryPrice(customer.choice), customer.customer, customer.choice);
-		print("computing check for waiter for " + customer.customer + "'s " + customer.choice + ", totaling to " + check.cost());
+		AlertLog.getInstance().logMessage(AlertTag.CASHIER, getName(), "computing check for waiter for " + customer.customer + "'s " + customer.choice + ", totaling to " + check.cost());
 		customer.waiter.msgHereIsCheck(check);
 		customer.state = CustomerState.Computed;
 	}
@@ -95,18 +98,16 @@ public class StackCashierAgent extends Agent implements Cashier {
 			if(customer.availableMoney >=0) {
 				customer.debt += (customer.check.cost() - customer.availableMoney);
 				setTill(getTill() + customer.availableMoney);
-				print("Till now has: " + till);
+				AlertLog.getInstance().logMessage(AlertTag.CASHIER, getName(), "Till now has: " + getTill());
 			}
 			else {
 				customer.debt += (customer.check.cost());
 			}
-			print(customer.customer + " does not have enough money, and now has a debt of " + customer.debt);
 			customer.availableMoney = 0;
 		}
 		else if (customer.availableMoney > customer.check.cost()) {
 			customer.availableMoney -= customer.check.cost();
 			setTill(getTill() + customer.check.cost());
-			print("Till now has: " + till);
 		}
 		
 		customer.customer.msgHereIsChange(customer.availableMoney);
@@ -123,7 +124,7 @@ public class StackCashierAgent extends Agent implements Cashier {
 	//messages
 	
 	public void msgComputeCheck(Waiter waiter, Customer cust, String choice) {
-		print("computing business");
+		AlertLog.getInstance().logMessage(AlertTag.CASHIER, getName(), "Computing Business");
 		for(MyCustomer customer : customers) {
 			if(cust.equals(customer.customer)) {
 				customer.choice = choice;
@@ -139,6 +140,8 @@ public class StackCashierAgent extends Agent implements Cashier {
 	}
 	
 	public void msgPayCheck(Customer cust, Check check, double money) {
+		AlertLog.getInstance().logMessage(AlertTag.CASHIER, getName(), "Customer wants to pay check");
+
 		for(MyCustomer customer : customers) {
 			if(cust.equals(customer.customer)) {
 				customer.state = CustomerState.NeedPaying;
@@ -150,22 +153,24 @@ public class StackCashierAgent extends Agent implements Cashier {
 	}
 	
 	public void msgNeedPaycheck(Role role) {
+		AlertLog.getInstance().logMessage(AlertTag.CASHIER, getName(), "Employee needs paycheck");
+
 		employees.add(new MyEmployee(role));
 		stateChanged();
 	}
 	
-	public void msgGiveBill(Check check, Market market) {
-		print("Please pay this bill");
-		checks.add(new MyCheck(market, check, CheckState.NeedPaying));
+	public void msgGiveBill(MarketCheck check) {
+		AlertLog.getInstance().logMessage(AlertTag.CASHIER, getName(), "Received bill to pay");
+		checks.add(new MyCheck(check.getMarket(), new Check(check.getCost(), check.getChoice()), CheckState.NeedPaying));
 		stateChanged();
 	}
 	
 	public double getTill() {
-		return till;
+		return restaurant.getTill();
 	}
 
 	public void setTill(double till) {
-		this.till = till;
+		restaurant.setTill(till);
 	}
 
 	public class MyCustomer {
@@ -192,13 +197,21 @@ public class StackCashierAgent extends Agent implements Cashier {
 	}
 	
 	public class MyCheck {
-		MyCheck(Market market, Check check, CheckState state) {
+		MyCheck(MarketWorker market, Check check, CheckState state) {
 			this.market = market;
 			this.check = check;
 			this.state = state;
 		}
-		Market market;
+		MarketWorker market;
 		public Check check;
 		public CheckState state;
+	}
+	
+	public void setRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant;
+	}
+	
+	public Restaurant getRestaurant() {
+		return restaurant;
 	}
 }

@@ -1,6 +1,10 @@
 package city.interfaces;
 
+import home.interfaces.Landlord;
+
 import java.util.Map;
+
+import agent.Role;
 
 public interface Person{
 
@@ -18,4 +22,8 @@ public interface Person{
 
 	public void msgRoleFinished();
 	public void msgTransportFinished(String currentLocation);
+	public void msgPayRent(Landlord landlord, double moneyOwed);
+	public int getCurrentDay();
+	public String getCurrentLocation();
+	public void addRole(Role t);
 }

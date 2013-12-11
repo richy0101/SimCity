@@ -1,5 +1,8 @@
 package restaurant.stackRestaurant;
 
+import trace.AlertLog;
+import trace.AlertTag;
+
 
 public class StackWaiterNormalRole extends StackWaiterRole {
 	
@@ -11,7 +14,7 @@ public class StackWaiterNormalRole extends StackWaiterRole {
 	protected void takeOrderToCook(MyCustomer customer) {
 		host.msgWaiterBusy(this);
 		DoGoToCook();
-		print("Taking " + customer.customer + "'s order to cook");
+		AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),"Taking " + customer.customer + "'s order to cook");
 		try {
 			doneAnimation.acquire();
 		} catch (InterruptedException e) {

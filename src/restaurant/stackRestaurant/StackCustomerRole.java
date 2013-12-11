@@ -15,6 +15,8 @@ import java.util.TimerTask;
 import city.PersonAgent;
 import city.helpers.Directory;
 import restaurant.stackRestaurant.interfaces.*;
+import trace.AlertLog;
+import trace.AlertTag;
 
 /**
  * Restaurant customer agent.
@@ -49,6 +51,7 @@ public class StackCustomerRole extends Role implements Customer {
 	public enum AgentEvent 
 	{none, gotHungry, doneEntering, waitingForSeating, followHost, seated, ordered, foodArrived, doneEating, waitingForCheck, gotCheck, gotToCashier, donePaying, doneLeaving, closed};
 	AgentEvent event = AgentEvent.none;
+	private String stringState;
 
 	/**
 	 * Constructor for CustomerAgent class
@@ -99,7 +102,7 @@ public class StackCustomerRole extends Role implements Customer {
 	}
 	
 	public void msgRestaurantFull() {
-		print("restaurant is full");
+		AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCUSTOMER, getName(), "Restaurant is full");
 		event = AgentEvent.waitingForSeating;
 		stateChanged();
 	}
@@ -124,7 +127,7 @@ public class StackCustomerRole extends Role implements Customer {
 	}
 	
 	public void msgReorder() {
-		print("I need to reorder");
+		AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCUSTOMER, getName(), "I need to reorder");
 		event = AgentEvent.ordered;
 		state = AgentState.Ordering;
 		stateChanged();
@@ -141,7 +144,7 @@ public class StackCustomerRole extends Role implements Customer {
 		stateChanged();
 	}
 	public void msgRestaurantClosed() {
-		print("restaurant is closed");
+		AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCUSTOMER, getName(), "Restaurant is closed");
 		event = AgentEvent.closed;
 		stateChanged();
 		
@@ -171,15 +174,18 @@ public class StackCustomerRole extends Role implements Customer {
 	 */
 	public boolean pickAndExecuteAnAction() {
 		if(event == AgentEvent.closed) {
+			setStringState(state.toString());
 			leaveClosedRestaurant();
 		}
 		if (state == AgentState.DoingNothing && event == AgentEvent.gotHungry ) {
 			state = AgentState.WaitingInRestaurant;
+			setStringState(state.toString());
 			goToRestaurant();
 			return true;
 		}
 		if (state == AgentState.WaitingInRestaurant && event == AgentEvent.doneEntering) {
 			state = AgentState.WaitingForWaiter;
+			setStringState(state.toString());
 			tellHostWaiting();
 			return true;
 		}
@@ -187,24 +193,29 @@ public class StackCustomerRole extends Role implements Customer {
 			if(!willingToWait) {
 				notWaitingAndLeaving();
 				state = AgentState.Leaving;
+				setStringState(state.toString());
 			}
 			else {
 				state = AgentState.WaitingForOpening;
+				setStringState(state.toString());
 			}
 			return true;
 		}
 		if (state == AgentState.WaitingForWaiter && event == AgentEvent.followHost ){
 			state = AgentState.BeingSeated;
+			setStringState(state.toString());
 			SitDown();
 			return true;
 		}
 		if (state == AgentState.BeingSeated && event == AgentEvent.seated) {
 			state = AgentState.Ordering;
+			setStringState(state.toString());
 			readyToOrder();
 			return true;
 		}
 		if (state == AgentState.Ordering && event == AgentEvent.ordered) {
 			state = AgentState.WaitingForFood;
+			setStringState(state.toString());
 			orderFood();
 			
 			return true;
@@ -212,29 +223,35 @@ public class StackCustomerRole extends Role implements Customer {
 		if (state == AgentState.WaitingForFood && event == AgentEvent.foodArrived){
 			state = AgentState.Eating;
 			updateGui(choice.substring(0, 2));
+			setStringState(state.toString());
 			EatFood();
 			return true;
 		}
 		if (state == AgentState.Eating && event == AgentEvent.doneEating){
 			state = AgentState.DoneEating;
 			event = AgentEvent.waitingForCheck;
+			setStringState(state.toString());
 			updateGui("");
 			waiter.msgCheckPlease(this);
 			return true;
 		}
 		if(state == AgentState.DoneEating && event == AgentEvent.gotCheck) {
 			state = AgentState.Paying;
+			setStringState(state.toString());
 			customerGui.DoGoToCashier();
 		}
 		if(state == AgentState.Paying && event == AgentEvent.gotToCashier) {
+			setStringState(state.toString());
 			payCheck();
 		}
 		if(state == AgentState.Paid && event == AgentEvent.donePaying) {
 			state = AgentState.Leaving;
+			setStringState(state.toString());
 			leaveRestaurant();
 		}
 		if (state == AgentState.Leaving && event == AgentEvent.doneLeaving){
 			state = AgentState.DoingNothing;
+			setStringState(state.toString());
 			doneRole();
 			return true;
 		}
@@ -265,7 +282,7 @@ public class StackCustomerRole extends Role implements Customer {
 			for(Menu.Food food : Menu.sharedInstance().getMenu()) {
 				if(getFunds() > food.getPrice() 
 						&& Menu.sharedInstance().getInventoryStock(food.getName())) {
-					print("Ordering food");
+					AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCUSTOMER, getName(), "Ordering food");
 					choice = food.getName();
 					waiter.msgGiveOrder(this, choice);
 					updateGui(choice.substring(0, 2) + "?");
@@ -274,13 +291,14 @@ public class StackCustomerRole extends Role implements Customer {
 			}
 			state = AgentState.Paid;
 			event = AgentEvent.donePaying;
-			print("Too expensive, going home");
+			AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCUSTOMER, getName(), "Too expensive and going home");
+
 		}
 		else {
 			for(int i = 0; i <=4; i++) {
 				choice = Menu.sharedInstance().getMenu().get(rand.nextInt(Menu.sharedInstance().getMenu().size())).getName();
 				if(Menu.sharedInstance().getInventoryStock(choice)) {
-					print("Ordering food");
+					AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCUSTOMER, getName(), "Ordering food");
 					waiter.msgGiveOrder(this, choice);
 					updateGui(choice.substring(0, 2) + "?");
 					return;
@@ -288,33 +306,33 @@ public class StackCustomerRole extends Role implements Customer {
 			}
 			state = AgentState.Paid;
 			event = AgentEvent.donePaying;
-			print("Going home");	
+			AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCUSTOMER, getName(), "Going home");
 		}
 	}
 	
 	private void readyToOrder() {
-		print("Telling waiter ready to order");
+		AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCUSTOMER, getName(), "Telling waiter ready to order");
 		waiter.msgReadyToOrder(this);
 	}
 
 	private void goToRestaurant() {
-		print("Going to restaurant");
+		AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCUSTOMER, getName(), "Going to restaurant");
 		customerGui.DoEnterRestaurant();
 		
 	}
 	
 	private void tellHostWaiting() {
-		print("waiting");
+		AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCUSTOMER, getName(), "waiting");
 		host.msgIWantFood(this);//send our instance, so he can respond to us
 	}
 
 	private void SitDown() {
-		print("Being seated. Going to table");
+		AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCUSTOMER, getName(), "Being seated. Going to table");
 		customerGui.DoGoToSeat(1, tableNumber);
 	}
 
 	private void EatFood() {
-		print("Eating Food");
+		AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCUSTOMER, getName(), "Eating Food");
 		//This next complicated line creates and starts a timer thread.
 		//We schedule a deadline of getHungerLevel()*1000 milliseconds.
 		//When that time elapses, it will call back to the run routine
@@ -326,7 +344,6 @@ public class StackCustomerRole extends Role implements Customer {
 		timer.schedule(new TimerTask() {
 			Object cookie = 1;
 			public void run() {
-				print("Done eating, cookie=" + cookie);
 				event = AgentEvent.doneEating;
 				//isHungry = false;
 				stateChanged();
@@ -338,21 +355,21 @@ public class StackCustomerRole extends Role implements Customer {
 	}
 
 	private void leaveRestaurant() {
-		print("Leaving.");
+		AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCUSTOMER, getName(), "Leaving.");
 		waiter.msgDoneEating(this);
 		customerGui.DoExitRestaurant();
 		getPersonAgent().msgRoleFinished();
 	}
 	
 	private void notWaitingAndLeaving() {
-		print("Leaving because it's too busy");
+		AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCUSTOMER, getName(), "Leaving because it's too busy");
 		host.msgNotWaiting(this);
 		customerGui.DoExitRestaurant();
 		getPersonAgent().msgRoleFinished();
 	}
 	
 	private void leaveClosedRestaurant() {
-		print("Leaving.");
+		AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCUSTOMER, getName(), "Leaving.");
 		customerGui.DoExitRestaurant();
 		getPersonAgent().msgRoleFinished();
 	}
@@ -381,6 +398,14 @@ public class StackCustomerRole extends Role implements Customer {
 
 	public CustomerGui getGui() {
 		return customerGui;
+	}
+	
+	public String getStringState() {
+		return stringState;
+	}
+	
+	public void setStringState(String stringState) {
+		this.stringState = stringState;
 	}
 }
 

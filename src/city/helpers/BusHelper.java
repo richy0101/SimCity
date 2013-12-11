@@ -35,6 +35,7 @@ public class BusHelper {
     	}
     	return sharedInstance;
 	}
+	
 //BUS STOPS
 	private BusStop busStop1 = new BusStop("BusStop1"); //bottom left
 	Coordinate busStop1Location = new Coordinate(171,361);
@@ -43,46 +44,86 @@ public class BusHelper {
 	Coordinate busStop2Location = new Coordinate(675,356);
 	
 	private BusStop busStop3 = new BusStop("BusStop3"); //top right
-	Coordinate busStop3Location = new Coordinate(610,73);
+	Coordinate busStop3Location = new Coordinate(729, 102);//370);
 	
 	private BusStop busStop4 = new BusStop("BusStop4"); //top left
-	Coordinate busStop4Location = new Coordinate(110,73);
+	Coordinate busStop4Location = new Coordinate(118,77);//(737,107);
 	
 	public Map<String, Coordinate> busStopEvaluator = new HashMap<String, Coordinate>(); {
 		busStopEvaluator.put("Bank", busStop4Location);
-		
-		busStopEvaluator.put("House1", busStop1Location);
+		busStopEvaluator.put("Bank2", busStop3Location);
+		busStopEvaluator.put("House1", busStop4Location);
 		busStopEvaluator.put("House2", busStop4Location);
-		busStopEvaluator.put("House3", busStop3Location);
-		busStopEvaluator.put("House4", busStop3Location);
+		busStopEvaluator.put("House3", busStop2Location);
+		busStopEvaluator.put("House4", busStop2Location);
 		busStopEvaluator.put("House5", busStop2Location);
 		busStopEvaluator.put("House6", busStop2Location);
 		
-		busStopEvaluator.put("Apartment1", busStop1Location);
-		busStopEvaluator.put("Apartment2", busStop2Location);
+		busStopEvaluator.put("ApartmentA", busStop4Location);
+		busStopEvaluator.put("ApartmentB", busStop3Location);
+		busStopEvaluator.put("ApartmentC", busStop2Location);
 		
-		busStopEvaluator.put("Market1", busStop3Location);
+		busStopEvaluator.put("Market", busStop3Location);
 		busStopEvaluator.put("Market2", busStop2Location);
 		
 		busStopEvaluator.put("StackRestaurant", busStop1Location);
+		busStopEvaluator.put("ShehRestaurant", busStop2Location);
+		busStopEvaluator.put("HuangRestaurant", busStop4Location);
+	}
+	public Map<String, String> busStopToString = new HashMap<String, String>(); {
+		busStopToString.put("Bank", "BusStop4");
+		busStopToString.put("Bank2", "BusStop3");
+		busStopToString.put("House1", "BusStop4");
+		busStopToString.put("House2", "BusStop4");
+		busStopToString.put("House3", "BusStop2");
+		busStopToString.put("House4", "BusStop2");
+		busStopToString.put("House5", "BusStop2");
+		busStopToString.put("House6", "BusStop2");
+		
+		busStopToString.put("ApartmentA", "BusStop4");
+		busStopToString.put("ApartmentB", "BusStop3");
+		busStopToString.put("ApartmentC", "BusStop2");
+		
+		busStopToString.put("Market", "BusStop3");
+		busStopToString.put("Market2", "BusStop2");
+		
+		busStopToString.put("StackRestaurant", "BusStop1");
+
+		busStopToString.put("HuangRestaurant", "BusStop4");
+
+		busStopToString.put("ShehRestaurant", "BusStop2");
+		
+		busStopToString.put("NakamuraRestaurant", "BusStop4");
+
+		
 	}
 	public Map<String, Integer> busStopToInt = new HashMap<String, Integer>(); {
 		busStopToInt.put("Bank", 4);
-		
-		busStopToInt.put("House1", 1);
+		busStopToInt.put("Bank2", 3);
+		busStopToInt.put("House1", 4);
 		busStopToInt.put("House2", 4);
-		busStopToInt.put("House3", 3);
-		busStopToInt.put("House4", 3);
+		busStopToInt.put("House3", 2);
+		busStopToInt.put("House4", 2);
 		busStopToInt.put("House5", 2);
 		busStopToInt.put("House6", 2);
 		
-		busStopToInt.put("Apartment1", 1);
-		busStopToInt.put("Apartment2", 2);
+		busStopToInt.put("ApartmentA", 4);
+		busStopToInt.put("ApartmentB", 3);
+		busStopToInt.put("ApartmentC", 2);
 		
-		busStopToInt.put("Market1", 3);
+		busStopToInt.put("Market", 3);
 		busStopToInt.put("Market2", 2);
 		
 		busStopToInt.put("StackRestaurant", 1);
+
+		busStopToInt.put("HuangRestaurant", 4);
+
+		busStopToInt.put("ShehRestaurant", 2);
+
+		busStopToInt.put("NakamuraRestaurant", 4);
+		
+		busStopToInt.put("TanRestaurant", 1);
+
 		
 	}
 		
@@ -122,7 +163,6 @@ public class BusHelper {
 		return locationDirectory;
 	}
 	public void addWaitingPerson(Transportation t, int stopNumber) {
-		//System.out.println("adding waiting person");
 		if (stopNumber == 1) {
 			waitingPassengersAtStop1.add(t);
 		}

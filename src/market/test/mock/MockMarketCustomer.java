@@ -2,13 +2,13 @@ package market.test.mock;
 
 import java.util.Map;
 
-import market.interfaces.Market;
+import market.interfaces.MarketWorker;
 import market.interfaces.MarketCustomer;
 
 
 public class MockMarketCustomer extends Mock implements MarketCustomer {
 
-	public Market market;
+	public MarketWorker market;
 	public EventLog log;
 	public double price;
 	public Map<String, Integer> groceries;

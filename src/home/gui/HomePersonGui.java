@@ -6,6 +6,10 @@ import java.awt.Graphics2D;
 
 public class HomePersonGui implements Gui {
 
+	public void DoClean() {
+		
+	}
+	
 	@Override
 	public void updatePosition() {
 		// TODO Auto-generated method stub

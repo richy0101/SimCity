@@ -1,5 +1,6 @@
 package agent;
-import market.MarketRole;
+import market.Market;
+import market.MarketWorkerRole;
 import city.PersonAgent;
 import city.interfaces.Person;
 import city.interfaces.RoleInterface;
@@ -8,7 +9,7 @@ public class Role implements RoleInterface {
 	Person myPerson;
 	public void setPerson(Person person) {
 		myPerson = person; 
-		//System.out.println(myPerson.getName() + "WOAH");
+		System.out.println(myPerson.getName() + "WOAH");
 	}
 	
 	public Person getPersonAgent() {
@@ -49,10 +50,6 @@ public class Role implements RoleInterface {
 		
 	}
 
-	public void setMarket(MarketRole marketRole) {
-		// TODO Auto-generated method stub
-		
-	}
 	public void msgJobDone() {
 		
 	}

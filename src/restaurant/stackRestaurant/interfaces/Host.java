@@ -20,4 +20,8 @@ public interface Host {
 
 	public void msgAddCook(Cook cook);
 
+	public void msgCookLeaving(Cook cook);
+
+	public void msgWaiterLeaving(Waiter waiter);
+
 }

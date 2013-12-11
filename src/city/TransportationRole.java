@@ -9,12 +9,11 @@ package city;
 import java.util.concurrent.Semaphore;
 
 import agent.Role;
-import city.PersonAgent.TransportationMethod;
+import city.gui.CarGui;
 import city.gui.TransportationGui;
 import city.helpers.BusHelper;
 import city.helpers.Directory;
 import city.interfaces.Transportation;
-import city.PersonAgent;
 
 public class TransportationRole extends Role implements Transportation  {
 
@@ -27,6 +26,7 @@ public class TransportationRole extends Role implements Transportation  {
 	BusAgent bus;
 	Boolean hasCar = false;
 	int startX, startY, startStopX, startStopY, endStopX, endStopY, startStopNumber, finalStopNumber;
+	String startStop, endStop;
 	
 	public enum BusStop
 		{stop1, stop2, stop3, stop4, none}
@@ -38,13 +38,16 @@ public class TransportationRole extends Role implements Transportation  {
 	
 	TransportationGui guiToStop;//use for bus stop
 	TransportationGui guiToDestination;
+	CarGui carGui;
 	
 	public TransportationRole(String destination, String startingLocation) {
 		super();
-		hasCar = false; //hack for normative
+		//hasCar = false; //hack for normative
+		hasCar = true; //testing for CarAgent
 		setState(TransportationState.NeedsToTravel); // hack for normative;
 		this.destination = destination;
 		this.setStartingLocation(startingLocation);
+		this.currentLocation = startingLocation;
 	}
 	
 	/*
@@ -56,14 +59,12 @@ public class TransportationRole extends Role implements Transportation  {
 	}
 	
 	public void msgGetOnBus(BusAgent b) {
-		print("Bus is here");
 		this.bus = b;
 		setState(TransportationState.GettingOnBus);
 		stateChanged();
 	}
 	
 	public void msgArrivedAtDestination(String destination) {
-		print("Car successfully took me to " + destination + ".");
 		currentLocation= destination;
 		setState(TransportationState.AtDestination);
 		stateChanged();
@@ -75,14 +76,14 @@ public class TransportationRole extends Role implements Transportation  {
 		}
 		stateChanged();
 	}
-	
+		
 	/*
 	 * Scheduler
 	 * @see agent.Agent#pickAndExecuteAnAction()
 	 */
 	public boolean pickAndExecuteAnAction() {
 		if (getState() == TransportationState.AtDestination) {
-			EnterBuilding();
+			EnterBuilding(); //should this be walk to destination too?
 			return true;
 		}
 		if	(getState() == TransportationState.JustGotOffBus) {
@@ -117,18 +118,14 @@ public class TransportationRole extends Role implements Transportation  {
 
 	private void WalkToFinalDestination() {
 		setState(TransportationState.Walking);
-		int finalDestinationX = Directory.sharedInstance.getDirectory().get(destination).xCoordinate;
-		int finalDestinationY = Directory.sharedInstance.getDirectory().get(destination).yCoordinate;
-		guiToDestination = new TransportationGui(this, endStopX, endStopY, finalDestinationX, finalDestinationY);
+		guiToDestination = new TransportationGui(this, endStop, destination);
 		Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToDestination);
-		//print("adding gotodestination to macro");
 		actionComplete.acquireUninterruptibly();
 		setState(TransportationState.AtDestination);
 		stateChanged();
 	}
 
 	private void GetOnBus() {
-		print("Getting on bus");
 		Directory.sharedInstance().getCityGui().getMacroAnimationPanel().removeGui(guiToStop);
 		BusHelper.sharedInstance().removeWaitingPerson(this, startStopNumber);
 		bus.msgBoardingBus(this);
@@ -145,55 +142,63 @@ public class TransportationRole extends Role implements Transportation  {
 	}
 	
 	private void GetAVehicle() {
-		/**if(hasCar) {
-			//create car gui in mainwindow gui just outside of source
-			car.msgTakeMeHere(destination);
-		}
-		else if (!hasCar) {
-			//create transportationrole gui in mainwindow
-			//have transportationrole gui walk to bus stop
-			
-			//bus.msgINeedARide(destination);
-		}**/
 		setState(TransportationState.InTransit);
 
 		if (getPersonAgent().getTransportationMethod().contains("Bus")) {
-			startStopX = BusHelper.sharedInstance().busStopEvaluator.get(getStartingLocation()).xCoordinate;
-			startStopY = BusHelper.sharedInstance().busStopEvaluator.get(getStartingLocation()).yCoordinate;
-			endStopX = BusHelper.sharedInstance().busStopEvaluator.get(destination).xCoordinate;
-			endStopY = BusHelper.sharedInstance().busStopEvaluator.get(destination).yCoordinate;
-			finalStopNumber = BusHelper.sharedInstance().busStopToInt.get(destination);
-			startStopNumber = BusHelper.sharedInstance().busStopToInt.get(getStartingLocation());
-			print("Want bus stop " + startStopNumber);
+			if(needsBusChecker(startingLocation, destination)) {
+				startStop = BusHelper.sharedInstance().busStopToString.get(currentLocation);
+				endStop = BusHelper.sharedInstance().busStopToString.get(destination);
+				
+				startStopNumber = BusHelper.sharedInstance().busStopToInt.get(currentLocation);
+				finalStopNumber = BusHelper.sharedInstance().busStopToInt.get(destination);
+				guiToStop = new TransportationGui(this, currentLocation, startStop);
+				print("Want " + startStop);
+				
+				Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToStop);
+				//print("adding transport gui to macro");
+				actionComplete.acquireUninterruptibly();
+				BusHelper.sharedInstance().addWaitingPerson(this, startStopNumber);
+				setState(TransportationState.WaitingForBus);
+			}
+			else {
+				/**
+				 * Walk to destination after checking for buses
+				 */
+				guiToDestination = new TransportationGui(this, currentLocation, destination);
+				Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToDestination);
+				actionComplete.acquireUninterruptibly();
+				EnterBuilding();
+			}
 		}
-		if(getStartingLocation().equals("Home1")){
+		else if (getPersonAgent().getTransportationMethod().contains("Car")) {
+			//set car agent
+			car = new CarAgent(startingLocation);
+			car.startThread();
+			//set destination
+			car.msgTakeMeHere(this, destination);
+			//create car gui
+			//carGui = new CarGui(car, startingLocation);
+			//car.setGui(carGui);
+			//.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(carGui);
+			//setState(TransportationState.InTransit); //SET STATE
 		}
-		startX = Directory.sharedInstance.getDirectory().get(getStartingLocation()).xCoordinate;
-		startY = Directory.sharedInstance.getDirectory().get(getStartingLocation()).yCoordinate;
-		guiToStop = new TransportationGui(this, startX, startY, startStopX, startStopY);
-		Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToStop);
-		//print("adding transport gui to macro");
-		actionComplete.acquireUninterruptibly();
-		BusHelper.sharedInstance().addWaitingPerson(this, startStopNumber);
-		setState(TransportationState.WaitingForBus);
+		else {
+			/**
+			 * Walk to destination don't check buses
+			 */
+			guiToDestination = new TransportationGui(this, currentLocation, destination);
+			Directory.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(guiToDestination);
+			actionComplete.acquireUninterruptibly();
+			EnterBuilding();
+		}
 		stateChanged();
 	}
 	private void GetOffBus() {
-		print("Getting off bus");
 		bus.msgLeavingBus(this);
 		setState(TransportationState.JustGotOffBus);
 		stateChanged();
 	}
 	private void GetOffVehicle() {
-//		if(hasCar) {
-//			//remove car gui from main window
-//		}
-//		else if (!hasCar) {
-//			//create transportationrole gui at bus stop
-//			//have transportationrole gui walk to destination
-//			//remove transportationrole gui
-//		}
-		
 		setState(TransportationState.None);
 		getPersonAgent().msgTransportFinished(currentLocation); //haven't implemented updating the currentLoc for cars
 		//change roles
@@ -213,5 +218,15 @@ public class TransportationRole extends Role implements Transportation  {
 
 	public void setStartingLocation(String startingLocation) {
 		this.startingLocation = startingLocation;
+	}
+	public boolean needsBusChecker(String startingLocation, String destination) {
+		int startingStop = BusHelper.sharedInstance().busStopToInt.get(startingLocation);
+		int endStop = BusHelper.sharedInstance().busStopToInt.get(destination);
+		if (startingStop == endStop) {
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 }

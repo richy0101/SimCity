@@ -128,6 +128,9 @@ public class WaiterGui implements Gui {
 		else {
 			g.drawImage(waiterImage, xPos, yPos, null);
 		}
+    	String info = agent.getName() + "(" + agent.getStringState() + ")";
+    	g.setColor(Color.white);
+		g.drawString(info, xPos - 40, yPos - 5);
     }
 
     public boolean isPresent() {

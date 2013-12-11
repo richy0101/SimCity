@@ -1,7 +1,8 @@
 package restaurant.stackRestaurant.test.mock;
 
+import restaurant.Restaurant;
 import restaurant.stackRestaurant.interfaces.Cook;
-import market.interfaces.Market;
+import market.interfaces.MarketWorker;
 import restaurant.stackRestaurant.interfaces.Waiter;
 
 public class MockCook extends Mock implements Cook {
@@ -15,7 +16,7 @@ public class MockCook extends Mock implements Cook {
 		
 	}
 	
-	public void msgInventoryOut(Market market, String choice) {
+	public void msgInventoryOut(MarketWorker market, String choice) {
 		
 	}
 	
@@ -23,7 +24,7 @@ public class MockCook extends Mock implements Cook {
 		
 	}
 	
-	public void msgAddMarket(Market market) {
+	public void msgAddMarket(MarketWorker market) {
 		
 	}
 	
@@ -36,6 +37,18 @@ public class MockCook extends Mock implements Cook {
 	}
 	
 	public void msgAtFridge() {
+		
+	}
+
+	@Override
+	public void msgCanFillOrder(MarketWorker market, String choice) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setRestaurant(Restaurant restaurant) {
+		// TODO Auto-generated method stub
 		
 	}
 

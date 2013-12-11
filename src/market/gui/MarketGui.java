@@ -10,18 +10,19 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import market.MarketRole;
+import market.MarketWorkerRole;
 
 public class MarketGui implements Gui {
 
-	private MarketRole role = null;
+	private MarketWorkerRole role = null;
 	GUIMarket gui;
+	private String info;
 	
 	private boolean isPresent = false;
 	private int xPos, yPos;
 	private int xDestination, yDestination;
 	
-	private enum state {NoCommand, GettingItem, GoingToCounter};
+	private enum state {NoCommand, GettingItem, GoingToCounter, Leaving};
 	private state command = state.NoCommand;
 	
 	BufferedImage marketRoleLeft;
@@ -37,7 +38,7 @@ public class MarketGui implements Gui {
 	public static final int yShelf = 46;
 	
 	
-	public MarketGui(MarketRole mr) {
+	public MarketGui(MarketWorkerRole mr) {
 		role = mr;
 //		gui = m;
 		
@@ -73,7 +74,7 @@ public class MarketGui implements Gui {
 			yPos--;
 		
 		if(xPos == xDestination && yPos == yDestination) {
-			if(command == state.GettingItem || command == state.GoingToCounter) {
+			if(command != state.NoCommand) {
 				role.msgActionComplete();
 				command = state.NoCommand;
 			}
@@ -82,21 +83,25 @@ public class MarketGui implements Gui {
 
 	@Override
 	public void draw(Graphics2D g) {
-		if (xPos < xDestination) {
+		if (xPos > xDestination) {
 			g.drawImage(marketRoleLeft, xPos, yPos, null);
 		}
-		else if (xPos > xDestination) {
+		else if (xPos < xDestination) {
 			g.drawImage(marketRoleRight,  xPos, yPos, null);
 		}
-		else if (yPos < yDestination) {
+		else if (yPos > yDestination) {
 			g.drawImage(marketRoleUp, xPos, yPos, null);
 		}
-		else if (yPos > yDestination) {
+		else if (yPos < yDestination) {
 			g.drawImage(marketRoleDown, xPos, yPos, null);
 		}
 		else {
 			g.drawImage(marketRoleDown, xPos, yPos, null);		
 		}
+		
+		info = role.getPersonAgent().getName();
+		g.setColor(Color.magenta);
+		g.drawString(info, xPos, yPos);
 	}
 
 	@Override
@@ -105,6 +110,15 @@ public class MarketGui implements Gui {
 	}
 	public void setPresent() {
 		isPresent = true;
+	}
+	public void setIsNotPresent() {
+		isPresent = false;
+	}
+	
+	public void DoEnterMarket() {
+		xDestination = xCounter;
+		yDestination = yCounter;
+		command = state.GoingToCounter;		
 	}
 
 	public void DoGetFood() {
@@ -117,6 +131,12 @@ public class MarketGui implements Gui {
 		xDestination = xCounter;
 		yDestination = yCounter;
 		command = state.GoingToCounter;
+	}
+
+	public void DoLeaveMarket() {
+		xDestination = xStart;
+		yDestination = yStart;
+		command = state.Leaving;		
 	}
 	
 }

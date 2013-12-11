@@ -4,7 +4,7 @@ import java.util.Map;
 
 import bank.interfaces.BankCustomer;
 import bank.interfaces.BankTeller;
-import market.interfaces.Market;
+import market.interfaces.MarketWorker;
 import market.interfaces.MarketCustomer;
 import bank.test.mock.LoggedEvent;
 
@@ -107,6 +107,12 @@ public class MockBankTeller extends Mock implements BankTeller {
 	@Override
 	public void msgHereIsPaycheck(double paycheck) {
 		log.add(new LoggedEvent("Teller is being paid for his work today"));
+		
+	}
+
+	@Override
+	public void msgHoldUpBank(double moneyRequired, BankCustomer person) {
+		log.add(new LoggedEvent("Bank is getting robbed"));
 		
 	}
 }

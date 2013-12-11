@@ -1,12 +1,15 @@
 package restaurant.stackRestaurant;
 
 import agent.Agent;
+import restaurant.Restaurant;
 import restaurant.stackRestaurant.gui.WaiterGui;
 import restaurant.stackRestaurant.helpers.TableList;
 import restaurant.stackRestaurant.interfaces.Cook;
 import restaurant.stackRestaurant.interfaces.Customer;
 import restaurant.stackRestaurant.interfaces.Host;
 import restaurant.stackRestaurant.interfaces.Waiter;
+import trace.AlertLog;
+import trace.AlertTag;
 
 import java.util.*;
 
@@ -29,6 +32,7 @@ public class StackHostAgent extends Agent implements Host {
 	//Later we will see how it is implemented
 	private boolean needToNotifyWaiters = false;
 	private boolean needToNotifyNewWaiter = false;
+	private Restaurant restaurant;
 	
 	public enum CustomerState 
 	{WaitingInRestaurant, NotifiedRestaurantFull, Eating, Done};
@@ -124,8 +128,8 @@ public class StackHostAgent extends Agent implements Host {
 	public void msgLeavingTable(Customer cust) {
 		synchronized(tables) {
 			for (Table table : tables) {
-				if (table.getOccupant() == cust) {
-					print(cust + " leaving " + table);
+				if (table.getOccupant() == cust) { 
+					AlertLog.getInstance().logMessage(AlertTag.HOST, getName(),cust + " leaving " + table);
 					table.setUnoccupied();
 					stateChanged();
 				}
@@ -144,16 +148,35 @@ public class StackHostAgent extends Agent implements Host {
 	}
 	
 	public void msgAddWaiter(Waiter waiter) {
-		print("adding " +  waiter);
+		AlertLog.getInstance().logMessage(AlertTag.HOST, getName(),"adding " +  waiter);
+		waiter.setRestaurant(restaurant);
 		waiters.add(new MyWaiter(waiter, WaiterState.Idle));
 		needToNotifyNewWaiter  = true;
 		stateChanged();
 	}
 	
 	public void msgAddCook(Cook cook) {
-		print("adding " +  cook);
+		AlertLog.getInstance().logMessage(AlertTag.HOST, getName(),"adding " +  cook);
+		cook.setRestaurant(restaurant);
 		this.cook = cook;
 		needToNotifyWaiters = true;
+		stateChanged();
+	}
+	
+	public void msgCookLeaving(Cook cook) {
+		AlertLog.getInstance().logMessage(AlertTag.HOST, getName(),"removing " + cook);
+		cook = null;
+		stateChanged();
+	}
+
+	public void msgWaiterLeaving(Waiter waiter) {
+		AlertLog.getInstance().logMessage(AlertTag.HOST, getName(),"removing " + waiter);
+		for(MyWaiter myWaiter : waiters) {
+			if(myWaiter.waiter.equals(waiter)) {
+				waiters.remove(myWaiter);
+				return;
+			}
+		}
 		stateChanged();
 	}
 	
@@ -194,7 +217,7 @@ public class StackHostAgent extends Agent implements Host {
 		}
 		synchronized(customers) {
 			for(MyCustomer customer : customers) {
-				if(cook == null && customer.state != CustomerState.Done) {
+				if((cook == null || waiters.size() == 0 || !restaurant.isOpen()) && customer.state != CustomerState.Done) {
 					tellCustomerRestaurantClosed(customer);
 					return true;
 				}
@@ -240,7 +263,7 @@ public class StackHostAgent extends Agent implements Host {
 		
 	}
 	private void notifyWaitersOfCook() {
-		print("we have a cook!");
+		AlertLog.getInstance().logMessage(AlertTag.HOST, getName(),"we have a cook!");
 		for(MyWaiter waiter : waiters) {
 			waiter.waiter.msgCookHere(cook);
 		}
@@ -248,7 +271,7 @@ public class StackHostAgent extends Agent implements Host {
 		needToNotifyNewWaiter = false;
 	}
 	private void assignCustomerToWaiter(MyCustomer customer, MyWaiter waiter, Table table) {
-		print("assigning customer to waiter: " + waiter.waiter);
+		AlertLog.getInstance().logMessage(AlertTag.HOST, getName(),"assigning customer to waiter: " + waiter.waiter);
 		waiter.waiter.msgSeatCustomer(customer.customer, table.tableNumber, 0);
 		waiter.state = WaiterState.Busy;
 		customer.state = CustomerState.Eating;
@@ -317,6 +340,11 @@ public class StackHostAgent extends Agent implements Host {
 	
 	public Cook getCook() {
 		return cook;
+	}
+
+	public void setRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant;
+		
 	}
 }
 

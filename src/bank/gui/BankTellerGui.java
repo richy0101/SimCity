@@ -19,6 +19,7 @@ public class BankTellerGui implements Gui {
     
 	private BankTellerRole agent = null;
 	int tellerNum;
+	String info;
     
     public int xPos = 0, yPos = 0;//default teller position
     public int xDestination = 0, yDestination = 0;//default start position
@@ -116,6 +117,10 @@ public class BankTellerGui implements Gui {
 		else {
 			g.drawImage(personDown, xPos, yPos, null);
 		}
+		
+		info = agent.getPersonAgent().getName() + "(" + agent.getState() + ")";
+		g.setColor(Color.magenta);
+		g.drawString(info, xPos, yPos);
 	}
     
 	@Override

@@ -23,14 +23,25 @@ public class BusGui implements Gui {
 	int xDestination = 20;
 	int yDestination = 20;
 	
-	int TopRow = 105-15;
-	int BottomRow = 325;
-	int LeftCol = 135-15-3;
-	int RightCol = 700-8;	
+	int topTopLane;
+	int topBottomLane;
+	int bottomTopLane;
+	int bottomBottomLane;
+	int midLeftLane;
+	int midRightLane;
+	int leftLeftLane;
+	int leftRightLane;
+	int rightLeftLane;
+	int rightRightLane;
+	
+	int TopRow = 105-12;
+	int BottomRow = 325+10;
+	int LeftCol = 135-15-1;
+	int RightCol = 700-8+10;	
 	
 	int Stop1xPos = 171;
 	int Stop2xPos = 675;
-	int Stop3xPos = 610;
+	int Stop3xPos = RightCol;//610;
 	int Stop4xPos = LeftCol;
 	
 	int xStart = LeftCol;
@@ -57,15 +68,12 @@ public class BusGui implements Gui {
 		if (destination.equals("StackRestaurant")){
 			//sets xDestination & yDestination
 			//need to figure out how to travel on road
-			System.out.println("carGui: in DoGoTo function, simulating car running.");
-			System.out.println("carGui: approaching destination.");
 			//agent.msgAtDestination(); //hack
 			
 		}
 	}
 	
 	public void DoParkBus(){
-		System.out.println("busGui: Parking bus.");
 		//may not be necessary for bus system
 		//send msg to animation panel to remove gui from the list
 	}

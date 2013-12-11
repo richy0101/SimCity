@@ -9,9 +9,12 @@ import city.interfaces.Person;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-import restaurant.stackRestaurant.interfaces.Host;
+import trace.AlertLog;
+import trace.AlertTag;
 import bank.gui.BankTellerGui;
 import bank.helpers.AccountSystem;
 import bank.interfaces.*;
@@ -30,6 +33,11 @@ public class BankTellerRole extends Role implements BankTeller {
 	    public MyCustomer(BankCustomer customer, CustomerState state){
 	    	this.customer = customer;
 	    	this.custState = state;
+	    }
+	    public MyCustomer(BankCustomer customer, CustomerState state, double moneyDemanded){
+	    	this.customer = customer;
+	    	this.custState = state;
+	    	this.moneyToWithdraw = moneyDemanded;
 	    }
 	    public String getState(){
 	    	return custState.toString();
@@ -51,6 +59,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	private static final int MAXLOAN = 1000;
 	private Semaphore doneAnimation = new Semaphore(0,true);
 	private int registerNumber = 0;
+	Timer timer = new Timer();
     public BankManager manager;
     public BankTellerGui tellerGui;
     public Person person;
@@ -60,7 +69,7 @@ public class BankTellerRole extends Role implements BankTeller {
     private enum CustomerState {NeedingAssistance, 
     	AskedAssistance, OpeningAccount, OpenedAccount, 
     	DepositingMoney, WithdrawingMoney, LoanAccepted, 
-    	LoanRejected, Leaving};
+    	LoanRejected, Robbing, Leaving};
     	
     private String myLocation;
     
@@ -68,9 +77,6 @@ public class BankTellerRole extends Role implements BankTeller {
     	state = TellerState.ArrivedAtWork;
     	myLocation = location;
     	manager = (BankManager) Directory.sharedInstance().getAgents().get(myLocation);
-    	if(manager == null) {
-    		System.out.println("Manager is null in TELLER");
-    	}
     	List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
     	tellerGui = new BankTellerGui(this);
 		for(Building b : buildings) {
@@ -98,7 +104,9 @@ public class BankTellerRole extends Role implements BankTeller {
 		
 	}
 	public void msgAssigningCustomer(BankCustomer customer) {
-		customers.add(new MyCustomer(customer, CustomerState.NeedingAssistance));
+		synchronized(this.customers){
+			customers.add(new MyCustomer(customer, CustomerState.NeedingAssistance));
+		}
 	    stateChanged();
 	}
 	
@@ -148,13 +156,23 @@ public class BankTellerRole extends Role implements BankTeller {
 		stateChanged();
 	}
 	
+	public void msgHoldUpBank(double moneyDemanded,BankCustomer person) {
+		for(MyCustomer tempCustomer : customers) {
+			if(tempCustomer.customer == person) {
+				tempCustomer.moneyToWithdraw = moneyDemanded;
+				tempCustomer.custState = CustomerState.Robbing;
+			}
+		}
+		stateChanged();
+		//person.getPersonAgent().setFunds(person.getPersonAgent().getFunds() + moneyDemanded);
+	}
+	
 	public void msgThankYouForAssistance(BankCustomer customer) {
 		for(MyCustomer tempCustomer : customers) {
 			if(tempCustomer.equals(customer)) {
 				tempCustomer.custState = CustomerState.Leaving;
 			}
-		}
-		
+		}	
 	}
 	
 	public void msgDoneWorking() {
@@ -171,9 +189,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	
     //scheduler---------------------------------------------------------------------------
 	public boolean pickAndExecuteAnAction(){
-		//System.out.println("In teller scheduler");
 		if(state == TellerState.ArrivedAtWork) {
-			//System.out.println("At Work as BankTeller");
 			DoGoCheckInWithManager();
 			return true;
 		}
@@ -186,6 +202,14 @@ public class BankTellerRole extends Role implements BankTeller {
 			return true;
 		}
 		if(state == TellerState.ReadyForCustomers) {
+			synchronized(customers){
+				for(MyCustomer tempCustomer: customers){
+					if(tempCustomer.custState == CustomerState.Robbing){
+						GiveUpMoney(tempCustomer);
+						return true;
+					}
+				}
+			}
 			synchronized(customers){
 				for(MyCustomer tempCustomer: customers){
 					if(tempCustomer.custState == CustomerState.NeedingAssistance){
@@ -259,18 +283,16 @@ public class BankTellerRole extends Role implements BankTeller {
 	//actions-----------------------------------------------------------------------------
 	private void DoGoCheckInWithManager() {
 		tellerGui.DoGoToManager();
-		//print("Before acquire in DoGoCheck.");
 		try {
 			doneAnimation.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		//print("After Acquire in Do GO Check.");
 		state = TellerState.AtManager;
 		stateChanged();
 	}
-	private void TellerAtWork(){
-		print("Telling manager I am at work.");
+	private void TellerAtWork() {
+		AlertLog.getInstance().logMessage(AlertTag.BANKTELLER, getPersonAgent().getName(), "Telling manager I am at work");
 		state = TellerState.ToldManager;
 		manager.msgHereForWork(this);
 	}
@@ -285,26 +307,38 @@ public class BankTellerRole extends Role implements BankTeller {
 		manager.msgTellerFree(this);
 	}
 	private void OfferAssistance(MyCustomer account) {
-		print("What do you need help with?");
+		AlertLog.getInstance().logMessage(AlertTag.BANKTELLER, getPersonAgent().getName(), "What do you need help with?");
 		account.customer.msgHowCanIHelpYou(this,registerNumber);
 		account.custState = CustomerState.AskedAssistance;
 	}
 	
 	private void OpenedAccount(MyCustomer myCustomer) {
-		print("Opening up your account");
+		AlertLog.getInstance().logMessage(AlertTag.BANKTELLER, getPersonAgent().getName(), "Opening up your account");
 		myCustomer.customer.msgHereIsYourAccount(myCustomer.accountNumber);
 		myCustomer.custState = CustomerState.OpenedAccount;
 	}
 	
 	private void DepositMoney(MyCustomer myCustomer) {
-		print("Depositing your money into your account");
+		AlertLog.getInstance().logMessage(AlertTag.BANKTELLER, getPersonAgent().getName(), "Depositing money into account");
+		timer.schedule(new TimerTask() {
+			public void run() {
+				//run timer for gui to stop
+			}
+		},
+		5000);
 		AccountSystem.sharedInstance().getAccounts().get(myCustomer.accountNumber).depositMoney(myCustomer.moneyToDeposit);
 		myCustomer.customer.msgDepositSuccessful();
 		myCustomer.custState = CustomerState.Leaving;
 	}
 	
 	private void WithdrawMoney(MyCustomer myCustomer) {
-		print("Withdrawing money from your account");	
+		AlertLog.getInstance().logMessage(AlertTag.BANKTELLER, getPersonAgent().getName(), "Withdrawing money from account");	
+		timer.schedule(new TimerTask() {
+			public void run() {
+				//run timer for gui to stop
+			}
+		},
+		5000);
 		AccountSystem.sharedInstance().getAccounts().get(myCustomer.accountNumber).withdrawMoney(myCustomer.moneyToWithdraw);
 		myCustomer.customer.msgHereAreFunds(myCustomer.moneyToWithdraw);
 		myCustomer.moneyToWithdraw = 0;
@@ -318,19 +352,37 @@ public class BankTellerRole extends Role implements BankTeller {
 	
 	private void GiveLoan(MyCustomer myCustomer) {
 		print("Giving loan");
+		timer.schedule(new TimerTask() {
+			public void run() {
+				//run timer for gui to stop
+			}
+		},
+		5000);
 		AccountSystem.sharedInstance().getAccounts().get(myCustomer.accountNumber).loanAccepted(MAXLOAN);
 		myCustomer.customer.msgHereAreFunds(MAXLOAN);
 		myCustomer.custState = CustomerState.Leaving;
 	}
 	
 	private void RejectLoan(MyCustomer myCustomer) {
-		print("Rejecting loan");
+		AlertLog.getInstance().logMessage(AlertTag.BANKTELLER, getPersonAgent().getName(), "Rejecting loan");
+		timer.schedule(new TimerTask() {
+			public void run() {
+				//run timer for gui to stop
+			}
+		},
+		5000);
 		myCustomer.customer.msgLoanDenied();
 		myCustomer.custState = CustomerState.Leaving;
 	}
 	
+	private void GiveUpMoney(MyCustomer myCustomer) {
+		AlertLog.getInstance().logMessage(AlertTag.BANKTELLER, getPersonAgent().getName(), "Giving robber money");
+		myCustomer.customer.msgHereAreFunds(myCustomer.moneyToWithdraw);
+		myCustomer.custState = CustomerState.Leaving;
+	}
+	
 	private void GetPayCheck(){
-		print("Receiving paycheck");
+		AlertLog.getInstance().logMessage(AlertTag.BANKTELLER, getPersonAgent().getName(), "Getting paycheck");
 		tellerGui.DoGoToManager();
 		manager.msgCollectPay(this);
 		/*	doneAnimation.acquire();
@@ -341,7 +393,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	
 	private void LeaveBank() {
-		print("Leaving Bank");
+		AlertLog.getInstance().logMessage(AlertTag.BANKTELLER, getPersonAgent().getName(), "Leaving bank");
 		tellerGui.DoLeaveBank();
 		manager.msgTellerLeavingWork(this);
 		/*try {

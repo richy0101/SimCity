@@ -1,5 +1,7 @@
 package gui;
 
+import home.Apartment;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -11,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.*;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -41,84 +44,146 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     protected SimCityGui city;
     protected Color background;
     protected Timer timer;
+    
+    //creating animation
+    
+    //number of grids in X and in Y
+    static int gridX= 42; // 42 checking if works faster with less grids
+    static int gridY= 21; // 21 to accommodate all pixels in blocks of 20
+     
+    
+    Semaphore[][] grid = new Semaphore[gridX+1][gridY+1]; 
 
-    public MacroAnimationPanel(SimCityGui city) {
+    public MacroAnimationPanel(SimCityGui city) { 
+    	
     	this.city = city;
     	
+    	//initializing semaphore grid
+    	for (int i= 0; i<gridX+1; i++){
+    		for (int j= 0; j<gridY+1; j++){
+    			grid[i][j]= new Semaphore(1,true);
+    		}
+    	}
+    	try{
+    		for(int i=0; i<gridY+1; i++){
+    			grid[0][0+i].acquire();
+    		}
+    		for(int i=1; i<gridX+1; i++){ //because 0th one is already taken
+    			grid[0+i][0].acquire();	
+    		}
+    		
+    		for(int i=1;i<gridX+1; i++){
+    			grid[0+i][1].acquire();
+    			grid[0+i][2].acquire();
+    			grid[0+i][3].acquire();
+    			grid[0+i][4].acquire();
+
+    		}
+    		
+    		//x=5, y=18 grids
+    		
+    		for(int i=1; i<=5; i++){ //first 5 columns
+    			for(int j=5; j<= 18; j++){ //start from 5 bc first top 4 rows were already acquired
+    				grid[i][j].acquire();
+    			}
+    		}
+  		
+    	}
+    	catch(Exception e){
+    		System.out.println("Caught unexpected exception during grid setup: "+ e);
+    	}
+    	    	
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
         setBackground(Color.LIGHT_GRAY);
         
-    	Timer timer = new Timer(DELAY, this);
+    	timer = new Timer(DELAY, this);
     	timer.start();
     	
     	//buildings = new ArrayList<Building>();
 
     //RESTAURANT
-    	Building stackRestaurant = new Building(0, 240, 105, 120);
+    	Building stackRestaurant = new Building(0, 222, 105, 150);
     	stackRestaurant.setName("StackRestaurant");
     	buildings.add(stackRestaurant);
     	
-    	Building huangRestaurant = new Building(183, 6, 134, 80);
+    	Building huangRestaurant = new Building(162, 8, 285, 92);
     	huangRestaurant.setName("HuangRestaurant");
     	buildings.add(huangRestaurant);
     	
-    	Building nakamuraRestaurant = new Building(321, 6, 138, 77);
+    	Building nakamuraRestaurant = new Building(287, 9, 127, 73);
     	nakamuraRestaurant.setName("NakamuraRestaurant");
     	buildings.add(nakamuraRestaurant);
     	
-    	Building phillipsRestaurant = new Building(729, 263, 107, 93);
+    	Building phillipsRestaurant = new Building(724, 276, 108, 96);
     	phillipsRestaurant.setName("PhillipsRestaurant");
     	buildings.add(phillipsRestaurant);
     	
-    	Building shehRestaurant = new Building(523, 326, 142, 74);
+    	Building shehRestaurant = new Building(572, 333, 123, 81);
     	shehRestaurant.setName("ShehRestaurant");
     	buildings.add(shehRestaurant);
     	
-    	Building tanRestaurant = new Building(185, 325, 158, 75);
+    	Building tanRestaurant = new Building(240, 332, 159, 83);
     	tanRestaurant.setName("TanRestaurant");
     	buildings.add(tanRestaurant);
     
     //HOUSES
-    	Building house1 = new Building(326, 196, 129, 99);
+    	Building house1 = new Building(275, 212, 105, 94);
     	house1.setName("House1");
     	buildings.add(house1);
     	
-    	Building house2 = new Building(330, 132, 145, 69);
+    	Building house2 = new Building(275, 133, 105, 83);
     	house2.setName("House2");
     	buildings.add(house2);
     	
-    	Building house3 = new Building(473, 133, 85, 73);
+    	Building house3 = new Building(448, 138, 98, 80);
     	house3.setName("House3");
     	buildings.add(house3);
     	
-    	Building house4 = new Building(564, 133, 104, 41);
+    	Building house4 = new Building(551, 137, 126, 55);
     	house4.setName("House4");
     	buildings.add(house4);
     	
-    	Building house5 = new Building(564, 178, 104, 117);
+    	Building house5 = new Building(570, 192, 105, 117);
     	house5.setName("House5");
     	buildings.add(house5);
 
-    	Building house6 = new Building(458, 210, 107, 86);
+    	Building house6 = new Building(449, 214, 120, 91);
     	house6.setName("House6");
     	buildings.add(house6);
     	
     //MARKET
-    	Building market1 = new Building(459, 8, 200, 70);
-    	market1.setName("Market1");
+    	Building market1 = new Building(432, 8, 136, 82);
+    	market1.setName("Market");
     	buildings.add(market1);
     	
-    	Building market2 = new Building(347, 329, 175, 71);
+    	Building market2 = new Building(432, 333, 137, 81);
     	market2.setName("Market2");
     	buildings.add(market2);
     	
     //APARTMENT
     	
-    //BANK 
+    	Building apartmentA = new Building(162,136,113, 166);
+    	apartmentA.setName("ApartmentA");
+    	buildings.add(apartmentA);
+    	
+    	Building apartmentB = new Building(570, 0, 145, 84);
+    	apartmentB.setName("ApartmentB");
+    	buildings.add(apartmentB);
+    	
+    	Building apartmentC = new Building(729, 127,106, 150);
+    	apartmentC.setName("ApartmentC");
+    	buildings.add(apartmentC);
+    	
+    	
+    //BANKS 
     	Building bank = new Building(0, 0, 104, 214);
     	bank.setName("Bank");
     	buildings.add(bank);
+    	
+    	Building bank2 = new Building(718, 0, 117, 101);
+    	bank2.setName("Bank2");
+    	buildings.add(bank2);
 
     	addMouseListener(this);
     	
@@ -152,7 +217,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
         g2.setColor(Color.black);
         
         //PLACED ONTOP FOR BUILDING REFERENCE PURPOSES
-        
+       
 	    synchronized(buildings) {
 	        for(int i = 0; i < buildings.size(); i++) {
 	        	Building b = buildings.get(i);
@@ -160,10 +225,10 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
 	        }
         }
         
-//        if(Clock.sharedInstance().getTime() < 10000) 
-       	g2.drawImage(cityImage, 0, 0, null);
-//        else 
-//        	g2.drawImage(cityImageNight, 0, 0, null);
+        if(Clock.sharedInstance().isDay()) 
+        	g2.drawImage(cityImage, 0, 0, null);
+        else 
+        	g2.drawImage(cityImageNight, 0, 0, null);
         
         synchronized(guis) {
 	        for(Gui gui : guis) {
@@ -184,11 +249,10 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
         //moveComponents();
         //drawComponents(g);
         
-        //if(Clock.sharedInstance().getTime() < 10000) 
+        if(Clock.sharedInstance().isDay()) 
         	g2.drawImage(cityImageTop, 0, 0, null);
-        //else 
-        	//g2.drawImage(cityImageNightTop, 0, 0, null);
-           
+        else 
+        	g2.drawImage(cityImageNightTop, 0, 0, null);
     }
     
     public ArrayList<Building> getBuildings() {
@@ -206,6 +270,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
 				Building b = buildings.get(i);
 				if(b.contains(e.getX(), e.getY())) {
 					b.displayBuilding();
+					city.setUniqueBuildingPanel(b.getName());
 				}
 			}
 		}
@@ -237,5 +302,9 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
 
 	public void removeGui(Gui gui) {
 		guis.remove(gui);
+	}
+	
+	public void setSpeed(int speed) {
+		timer.setDelay(speed);
 	}
 }
