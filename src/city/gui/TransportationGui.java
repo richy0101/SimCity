@@ -118,18 +118,7 @@ public class TransportationGui implements Gui {
 				currentAction = CurrentAction.Idle;
 				return;
 			}
-			/*
-			if(currentAction == CurrentAction.BreakOut){
-				System.out.println("WANT TO BREAK OUT");
-			}
-			
-			if(currentAction == CurrentAction.BreakOutFromTop){
-				System.out.println("WANT TO BREAK OUT FROM TOP");
-			}
-			
-			if(currentAction == CurrentAction.BreakOutFromBottom){
-				System.out.println("WANT TO BREAK OUT FROM BOTTOM");
-			}*/
+
 			
 			/**
 			 * Breaking Out Block
@@ -203,7 +192,6 @@ public class TransportationGui implements Gui {
 	}
 	private boolean doneBreaking(int x, int y) {
 		if (xPos == x && yPos == y) {
-			System.out.println("DONE BREAKING");
 			return true;
 		}
 		else {

@@ -121,6 +121,8 @@ public class BusHelper {
 		busStopToInt.put("ShehRestaurant", 2);
 
 		busStopToInt.put("NakamuraRestaurant", 4);
+		
+		busStopToInt.put("TanRestaurant", 1);
 
 		
 	}

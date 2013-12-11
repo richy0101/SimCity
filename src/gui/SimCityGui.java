@@ -565,18 +565,18 @@ public class SimCityGui {
 		if(WalkLoopHelper.sharedInstance() == null) {
 			
 		}
-
+/*
 		PersonAgent person1 = new PersonAgent("NakamuraCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
 		PersonAgent person2 = new PersonAgent("NakamuraWaiterShared", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
 		PersonAgent person3 = new PersonAgent("Unemployed", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
 		PersonAgent person4 = new PersonAgent("BankTeller", "Test Person 4", 3, 1000.00, "House4", "TakesTheBus");
 		PersonAgent person5 = new PersonAgent("BankTeller", "Test Person 5", 3, 1000.00, "House5", "TakesTheBus");
 		PersonAgent person6 = new PersonAgent("Market", "Test Person 6", 3, 1000.00, "House6", "TakesTheBus");
-		
+		*/
 		
 		String a = "TanRestaurant";
 		String b = "House1";
-		String name = "Test Person 1 Ben";
+		String name = "Ben Test Waiter";
 		Role role;
 		role= new TanWaiterNormalRole("TanRestaurant");
 		PersonAgent p = new PersonAgent(role, a , b, name);
@@ -586,12 +586,12 @@ public class SimCityGui {
 		
 		String a1 = "TanRestaurant";
 		String b1 = "House2";
-		String name1 = "Test Person 2 Ben";
+		String name1 = "Ben Test Cook";
 		Role role1;
 		role1= new TanCookRole("TanRestaurant");
 		PersonAgent p1 = new PersonAgent(role1, a1 , b1, name1);
 		p1.msgWakeUp();
-		role1.setPerson(p);
+		role1.setPerson(p1);
 		p1.startThread();
 	
 		String a2 = "TanRestaurant";
@@ -600,8 +600,8 @@ public class SimCityGui {
 		Role role2;
 		role2 = new TanCustomerRole("TanRestaurant");
 		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
-		role2.setPerson(p2);
 		p2.msgWakeUp();
+		role2.setPerson(p2);
 		p2.startThread();
 		
 		

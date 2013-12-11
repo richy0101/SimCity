@@ -17,8 +17,8 @@ public class CookGui implements Gui {
 
     private TanCookRole agent = null;
 
-    private int xPos=291, yPos=-40;//xPos = 291, yPos = 53;//default waiter position
-    private int xDestination = 291, yDestination = 53;//default start position
+    private int xPos=291, yPos=410;//xPos = 291, yPos = 53;//default cook position
+    private int xDestination = 291, yDestination = 410;//53;//default start position
     BufferedImage cookImage;
 
     public CookGui(TanCookRole agent) {
@@ -33,7 +33,14 @@ public class CookGui implements Gui {
 
     
     public void updatePosition() {
-
+    	if (xPos < xDestination)
+            xPos++;
+        else if (xPos > xDestination)
+            xPos--;
+        if (yPos < yDestination)
+            yPos++;
+        else if (yPos > yDestination)
+            yPos--;
     }
 
     public void draw(Graphics2D g) {
@@ -66,4 +73,11 @@ public class CookGui implements Gui {
     public int getYPos() {
         return yPos;
     }
+
+
+	public void DoGoToPost() {
+		xDestination= 291;
+		yDestination= 53;
+		
+	}
 }

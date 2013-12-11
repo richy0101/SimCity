@@ -10,10 +10,10 @@ public class TanWaiterNormalRole extends TanWaiterRole{
 			
 		}
 
-		/*
+		
 		@Override
 		
-		protected void PassOrderToCook(int table, MyCustomer myc, Order o){
+		protected void PassOrderToCook(MyCustomer myc){
 			waiterGui.DoGoToCook();
 			try {
 				atCook.acquire();
@@ -22,10 +22,10 @@ public class TanWaiterNormalRole extends TanWaiterRole{
 				e.printStackTrace();
 			}
 			//print("Cook, please cook "+ o.getName());
-			cook.msgHereIsAnOrder(table, o, this);
-			c.s=state.waitingForFood;
+			myc.waiter.cook.msgHereIsAnOrder(myc.table, myc.o, this);
+			myc.s=state.waitingForFood;
 			waiterGui.DoLeaveCustomer();
-		}*/
+		}
 		
 		/*
 		protected void takeOrderToCook(MyCustomer customer) {

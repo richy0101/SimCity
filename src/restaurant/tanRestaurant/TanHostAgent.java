@@ -3,6 +3,8 @@ package restaurant.tanRestaurant;
 import agent.Agent;
 import agent.Role;
 import restaurant.shehRestaurant.ShehCashierAgent;
+import restaurant.tanRestaurant.TanCashierAgent.Bill;
+import restaurant.tanRestaurant.TanCookRole.roleState;
 import restaurant.tanRestaurant.TanHostAgent.MyCust.WaitingStatus;
 //import restaurant.HostAgent.MyWaiter.WorkingStatus;
 import restaurant.tanRestaurant.TanWaiterRole.MyCustomer;
@@ -10,6 +12,7 @@ import restaurant.tanRestaurant.TanWaiterRole.MyCustomer;
 import restaurant.tanRestaurant.TanWaiterRole.MyCustomer.state;
 import restaurant.tanRestaurant.gui.HostGui;
 import restaurant.tanRestaurant.interfaces.Cashier;
+import restaurant.tanRestaurant.interfaces.Cook;
 import restaurant.tanRestaurant.test.mock.EventLog;
 
 import java.util.*;
@@ -27,7 +30,7 @@ import city.helpers.Directory;
 //does all the rest. Rather than calling the other agent a waiter, we called him
 //the HostAgent. A Host is the manager of a restaurant who sees that all
 //is proceeded as he wishes.
-public class TanHostAgent extends Agent {
+public class TanHostAgent extends Agent implements Cook{
 	static final int NTABLES = 3;//a global for the number of tables.
 	static final int NSEATS = 10;// waiting seats
 	//Notice that we implement waitingCustomers using ArrayList, but type it
@@ -44,10 +47,20 @@ public class TanHostAgent extends Agent {
 	= new ArrayList<WaiterAgent>();*/
 	public List<MyWaiter> Waiters
 	= Collections.synchronizedList(new ArrayList<MyWaiter>());
+	public List<TanCookRole> Cooks
+	= Collections.synchronizedList(new ArrayList<TanCookRole>());
 	Cashier cashier;
 	
 	public Collection<Table> tables;
 	public Collection<Seat> seats;
+	
+	public enum roleState
+	{dead, alive, living};
+	roleState state = roleState.dead;
+	
+	public enum CookStatus
+	{none, arrived, working};
+	CookStatus cookStatus = CookStatus.none;
 	
 	TanRestaurant restaurant;
 	
@@ -85,12 +98,10 @@ public class TanHostAgent extends Agent {
 
 	public HostGui hostGui = null;
 	
-	public TanHostAgent(String location) {
+	public TanHostAgent(String Location){//String location) {
 		super();
-		name= "Host Dmitri";
-		
-		System.out.println("Host Dmitri in da hauzzzzz "+ location);
-		
+		name= "Tan Host";
+				
 		tables = new ArrayList<Table>(NTABLES);
 		for (int ix = 1; ix <= NTABLES; ix++) {
 			tables.add(new Table(ix));//how you add to a collections
@@ -100,11 +111,13 @@ public class TanHostAgent extends Agent {
 			seats.add(new Seat(x));//how you add to a collections
 		}
 		
+		roleState state = roleState.alive;
 		//cashier = (TanCashierAgent) Directory.sharedInstance().getAgents().get("TanRestaurantCashier");
 	}
 	
 	public TanHostAgent() {
 		super();
+		name= "Tan Host";
 
 		tables = new ArrayList<Table>(NTABLES);
 		for (int ix = 1; ix <= NTABLES; ix++) {
@@ -239,6 +252,18 @@ public class TanHostAgent extends Agent {
 		}
 	}
 	
+	
+	public void msgLeavingRestaurant(TanCustomerRole tanCustomerRole) {
+		print("i'm gone!");
+		//waitingAreaCustomers.remove(tanCustomerRole);
+	}
+	
+	public void msgCookIsHere(TanCookRole tanCookRole){
+		print("cook is here");
+		Cooks.add(tanCookRole);
+		cookStatus= CookStatus.arrived;
+	}
+	
 	public void msgJoinQueue(TanCustomerRole c){
 		synchronized(waitingCustomers){
 		for(MyCust myc: waitingCustomers){
@@ -256,6 +281,11 @@ public class TanHostAgent extends Agent {
 		}
 	}
 
+	public void msgReportingForDuty(TanWaiterRole w){
+		print("WAITER REPORTING FOR DUTY");
+		Waiters.add(new MyWaiter(w));
+	}
+	
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
@@ -265,9 +295,27 @@ public class TanHostAgent extends Agent {
             so that table is unoccupied and customer is waiting.
             If so seat him at the table.
 		 */
+				
+		if(cookStatus== CookStatus.arrived){
+			synchronized(Waiters){
+				for(MyWaiter w: Waiters){
+					w.waiter.msgSetCook(Cooks.get(0));
+					}
+				cookStatus=CookStatus.working;
+			}
+		}
+		
 		if(!waitingAreaCustomers.isEmpty()){
+			if(Waiters.isEmpty() || Cooks.isEmpty()){
+				waitingAreaCustomers.get(0).cust.msgPleaseLeave();//msg leave bitches
+				waitingAreaCustomers.remove(0);
+			}
+			
+			else{
 			for(Seat seat:seats){ //not entering here
 				if(!seat.isOccupied()){
+					print("Seating Customer!");
+
 					seat.setOccupant(waitingAreaCustomers.get(0).cust);
 					waitingAreaCustomers.get(0).cust.msgPleaseTakeASeat(seat, seat.seatNumber);
 					waitingAreaCustomers.get(0).cust.mySeat=seat.seatNumber;
@@ -275,6 +323,7 @@ public class TanHostAgent extends Agent {
 					waitingAreaCustomers.remove(waitingAreaCustomers.get(0));
 					return true;
 				}
+			}
 			}
 		}
 		
@@ -385,26 +434,12 @@ public class TanHostAgent extends Agent {
 	// Actions
 
 	private void WaiterSeatCustomer(TanWaiterRole waiter, MyCust customer, Table table) {
-		//System.out.println("Instructing waiter to seat customer");
 		waiter.msgSeatCustAtTable(customer.cust, table.tableNumber);
-		//customer.msgSitAtTable(table.tableNumber);//added tableNumber in message
-		//DoSeatCustomer(customer, table);
+
 		table.setOccupant(customer.cust); //originally below try catch
 		
 		waitingCustomers.remove(customer); //orignally below try catch
-		/*try {
-			atTable.acquire();
-			
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-		}*/
-		//System.out.println("instructing action taking place");
-		//table.setOccupant(customer); //waiter assigns customer to table, waiter merely leads and serves
-		//waiter.msgSeatCustAtTable(customer, table.tableNumber);
-		//waitingCustomers.remove(customer); //customer is removed from list. returning custs not implemented yet
-		//hostGui.DoLeaveCustomer();
+
 	}
 
 
@@ -432,6 +467,7 @@ public class TanHostAgent extends Agent {
 	public HostGui getGui() {
 		return hostGui;
 	}
+	
 
 	public boolean restaurantIsFull(){
 		boolean isFull= true;
@@ -520,6 +556,18 @@ public class TanHostAgent extends Agent {
 
 	public void setRestaurant(TanRestaurant tanRestaurant) {
 		restaurant= tanRestaurant;
+		
+	}
+
+	@Override
+	public void msgHereIsBill(Bill b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void PassOrderToCook(int table, MyCustomer myc, Order o) {
+		// TODO Auto-generated method stub
 		
 	}
 }

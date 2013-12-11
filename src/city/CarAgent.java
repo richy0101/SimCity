@@ -94,7 +94,7 @@ public class CarAgent extends Agent implements Vehicle {
 		public void msgTakeMeHere(Transportation Passenger, String myDestination){ //receives msg from passenger
 			passenger= Passenger;
 			destination = myDestination;
-			print("Car Destination: " + myDestination + ".");
+			//print("Car Destination: " + myDestination + ".");
 			
 			currentState = carState.inTransit;
 			stateChanged();
@@ -146,7 +146,7 @@ public class CarAgent extends Agent implements Vehicle {
 
 		
 		private void goTo(String myDestination){
-			print("Starting car to "+myDestination);
+			print("Starting car"); // to "+myDestination);
 			doGoTo(myDestination); //sets destination in carGui
 			try {
 				driving.acquire(); //to ensure that the gui is uninterrupted on the way
