@@ -237,8 +237,15 @@ public class NakamuraCookRole extends CookRole {
 	private void ArriveAtWork() {
 		host.msgNewCook(this);
 		cashier.setCook(this);
+		
+		cookGui.setPresent();
 		cookGui.DoGoToCooking();
 		state = cookState.Working;
+		try {
+			actionComplete.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void addSharedOrders() {
@@ -264,6 +271,12 @@ public class NakamuraCookRole extends CookRole {
 			
 			o.s = orderState.cooking;
 			DoCookOrder(o);
+			try {
+				actionComplete.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
 			getFood(o.choice).setQuantity(getFood(o.choice).getQuantity() - 1);
 			restaurant.msgChangeFoodInventory(o.choice, getFood(o.choice).getQuantity() - 1);
 			print(o.choice + " remaining: " + getFood(o.choice).getQuantity());
@@ -279,6 +292,12 @@ public class NakamuraCookRole extends CookRole {
 
 	private void PlateOrder(Order o) {
 		DoPlateOrder(o); //animation
+		try {
+			actionComplete.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 		print("Plating food");
 		o.w.msgFoodReady(o.choice, o.tableNumber);
 		Orders.remove(o);

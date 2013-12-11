@@ -21,8 +21,14 @@ public class WaiterGui implements Gui {
     private int xPos, yPos;//default waiter position
     private int xDestination, yDestination;//default start position
 
-    private static final int xTable = 200; //Location of Table 1
-    private static final int yTable = 100;
+    private static final int xTable1 = 126;
+    private static final int yTable1 = 286;
+    private static final int xTable2 = 286;
+    private static final int yTable2 = 286;
+    private static final int xTable3 = 455;
+    private static final int yTable3 = 286;
+    private static final int xTable4 = 608;
+    private static final int yTable4 = 286;
     private static final int xStart = 737;
     private static final int yStart = 29;
     private int xHome;
@@ -35,12 +41,11 @@ public class WaiterGui implements Gui {
     private static final int yCashier = 100;
     private String choice;
     private boolean isTired = false;
+    private boolean isPresent;
     
     private enum Command {noCommand, getCustomer, seatCustomer, takeOrder, placeOrder, pickupFood, deliverFood, goHome, goCashier, leaving};
     private Command command = Command.noCommand;
     
-    private Map<Integer, Integer> tableX = new HashMap<Integer, Integer>();
-    private Map<Integer, Integer> tableY = new HashMap<Integer, Integer>();
     private Map<String, String> foodIcon = new HashMap<String, String>();
     
     BufferedImage waiterImage;
@@ -48,25 +53,14 @@ public class WaiterGui implements Gui {
     public WaiterGui(NakamuraWaiterRole role, int x, int y) {
         this.role = role;
         
-        tableX.put(1, xTable);	//Set coordinates for tables
-        tableX.put(2, xTable + 150);
-        tableX.put(3, xTable);
-        tableX.put(4, xTable + 150);
-        tableY.put(1, yTable);
-        tableY.put(2, yTable);
-        tableY.put(3, yTable + 100);
-        tableY.put(4, yTable + 100);
-        foodIcon.put("Steak", "ST");
-        foodIcon.put("Chicken", "CH");
-        foodIcon.put("Pizza", "PZ");
-        foodIcon.put("Salad", "SA");
-        
         xHome = x;
         yHome = y;
         xPos = xStart;
         yPos = yStart;
         xDestination = xStart;
         yDestination = yStart;
+        
+        isPresent = false;
         
         try {
         	waiterImage = ImageIO.read(getClass().getResource("nakamuraRestaurantWaiter.png"));
@@ -100,6 +94,7 @@ public class WaiterGui implements Gui {
         	}
         	else if(command == Command.leaving) {
             	role.msgActionComplete();
+            	isPresent = false;
             	command = Command.noCommand;            		
         	}
         	else if(command != Command.noCommand) {
@@ -115,12 +110,12 @@ public class WaiterGui implements Gui {
     	g.drawImage(waiterImage, xPos, yPos, null);
     	
         if(command == Command.deliverFood) {
-        	g.drawString(foodIcon.get(choice), xPos, yPos);
+        	g.drawString(choice, xPos, yPos);
         }
     }
 
     public boolean isPresent() {
-        return true;
+        return isPresent;
     }
     
 	public void setTired() {
@@ -147,17 +142,52 @@ public class WaiterGui implements Gui {
     	yDestination = 75;
     	command = Command.getCustomer;
     }
+    
     public void DoBringToTable(NakamuraCustomerRole customer, int tablenumber) {
     	CustomerGui cgui = customer.getGui();
-		xDestination = tableX.get(tablenumber) + 20;
-		yDestination = tableY.get(tablenumber) - 20;
-		cgui.DoGoToSeat(tableX.get(tablenumber), tableY.get(tablenumber));
+	    if(tablenumber == 1) {
+			xDestination = xTable1;
+			yDestination = yTable1; 
+		}
+	    else if(tablenumber == 2) {
+			xDestination = xTable2;
+			yDestination = yTable2; 
+		}
+	    else if(tablenumber == 3) {
+			xDestination = xTable3;
+			yDestination = yTable3; 
+		}
+	    else {
+			xDestination = xTable4;
+			yDestination = yTable4; 
+		}
+		cgui.DoGoToSeat(xDestination, yDestination);
+
+	    xDestination += 20;
+	    yDestination -= 20;
 		command = Command.seatCustomer;
     }
 
     public void DoGoToTable(int tablenumber) {
-		xDestination = tableX.get(tablenumber) + 20;
-		yDestination = tableY.get(tablenumber) - 20;
+	    if(tablenumber == 1) {
+			xDestination = xTable1;
+			yDestination = yTable1; 
+		}
+	    else if(tablenumber == 2) {
+			xDestination = xTable2;
+			yDestination = yTable2; 
+		}
+	    else if(tablenumber == 3) {
+			xDestination = xTable3;
+			yDestination = yTable3; 
+		}
+	    else {
+			xDestination = xTable4;
+			yDestination = yTable4; 
+		}
+	    xDestination += 20;
+	    yDestination -= 20;
+	    
 		command = Command.takeOrder;
     }
     
@@ -169,8 +199,23 @@ public class WaiterGui implements Gui {
     
     public void DoDeliverFood(int tablenumber, String c, NakamuraCookRole cook) {
     	choice = c;
-		xDestination = tableX.get(tablenumber) + 20;
-		yDestination = tableY.get(tablenumber) - 20;
+	    if(tablenumber == 1) {
+			xDestination = xTable1;
+			yDestination = yTable1; 
+		}
+	    else if(tablenumber == 2) {
+			xDestination = xTable2;
+			yDestination = yTable2; 
+		}
+	    else if(tablenumber == 3) {
+			xDestination = xTable3;
+			yDestination = yTable3; 
+		}
+	    else {
+			xDestination = xTable4;
+			yDestination = yTable4; 
+		}
+	    
 		cook.getGui().RemovePlating(c);
 		command = Command.deliverFood;
     }
@@ -200,6 +245,10 @@ public class WaiterGui implements Gui {
 
     public int getYPos() {
         return yPos;
+    }
+    
+    public void setPresent() {
+    	isPresent = true;
     }
 
 }

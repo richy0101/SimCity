@@ -5,7 +5,6 @@ SimCity201 Project Repository for CS 201 students
 
 How TO play/Grade(?):
  * Run Program
- * Observe hardcoded persons who have a preset beginning scenario
  * Use Create a Person to create people to interact with the city.
  * Read below for limitations and known bugs.
 
@@ -44,12 +43,18 @@ Missing functionality in V1
 Ryan Stack's Contribution:
  * Implemented restaurant with added shared data, market interactions, and payment from cashier
  * Implemented front-end GUI, created window and application, and actionListeners
- * Created graphics for city, restaurant, bank, and some agents (with help from Ryan Sheh)
+ * Created graphics for city, restaurant, bank, and some agents (with Ryan Sheh)
  * Helped implement bank, bankGUI, and roles for bank
- * Created an XML reader to read in scripts for creating scenarios and populating the city (with help from Alex Huang)
+ * Created an XML reader to read in scripts for creating scenarios and populating the city (with Alex Huang)
  * Created initial setup for project with interfaces and stubs from all designs
  * Created initial global clock and role class (iterations followed from other team members)
- * Missing functionality for V2: depositing excess money in bank
+ * Added animation speed changer to GUI
+ * Added clock display and clock changer to GUI
+ * Edited current buildings to take in opening and closing functionality
+ * Created custom building panels for every building to include changing inventory functionality and closing functionality
+ * Added log filter to clean up console and display proper log messages (2 clicks over from create person tab) 
+ * Implemented more script files to populate city with 50 people
+ 
 
 Richard Phillip's Contribution:
  * Implementation for bank roles

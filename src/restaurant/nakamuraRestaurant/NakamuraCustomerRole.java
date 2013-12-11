@@ -37,11 +37,11 @@ public class NakamuraCustomerRole extends Role implements Customer{
 
 	//    private boolean isHungry = false; //hack for gui
 	public enum AgentState
-	{DoingNothing, Entering, WaitingInRestaurant, BeingSeated, Sitting, Seated, Ordering, WaitingForFood, Eating, DoneEating, WaitingForCheck, Paying, Leaving};
+	{DoingNothing, Entering, WaitingInRestaurant, BeingSeated, Sitting, Seated, Ordering, WaitingForFood, Eating, DoneEating, WaitingForCheck, Paying, Leaving, GoingToPay};
 	private AgentState state = AgentState.DoingNothing;//The start state
 
 	public enum AgentEvent 
-	{none, gotHungry, inside, inWaitingArea, noSeat, meetWaiter, followWaiter, seated, ordered, reorder, gotFood, doneEating, gotCheck, donePaying, doneLeaving, closed};
+	{none, gotHungry, inside, inWaitingArea, noSeat, meetWaiter, followWaiter, seated, ordered, reorder, gotFood, doneEating, gotCheck, donePaying, doneLeaving, closed, finishedPaying, reachedCashier};
 	AgentEvent event = AgentEvent.none;
 
 	/**
@@ -165,6 +165,10 @@ public class NakamuraCustomerRole extends Role implements Customer{
 		event = AgentEvent.seated;
 		stateChanged();
 	}
+	public void msgAnimationFinishedGoingToCashier() {
+		event = AgentEvent.reachedCashier;
+		stateChanged();
+	}
 	public void msgAnimationFinishedLeaveRestaurant() {
 		//from animation
 		event = AgentEvent.doneLeaving;
@@ -245,10 +249,16 @@ public class NakamuraCustomerRole extends Role implements Customer{
 		}
 		
 		if (state == AgentState.WaitingForCheck && event == AgentEvent.gotCheck){
+			state = AgentState.GoingToPay;
+			GoToCashier();
+			return true;
+		}
+		
+		if (state == AgentState.GoingToPay && event == AgentEvent.reachedCashier){
 			state = AgentState.Paying;
 			Pay();
 			return true;
-		}		
+		}
 		
 		if (state == AgentState.Paying && event == AgentEvent.donePaying){
 			state = AgentState.Leaving;
@@ -259,7 +269,7 @@ public class NakamuraCustomerRole extends Role implements Customer{
 		if (state == AgentState.Leaving && event == AgentEvent.doneLeaving){
 			state = AgentState.DoingNothing;
 			print("Left");
-			//no action
+			getPersonAgent().msgRoleFinished();
 			return true;
 		}
 		return false;
@@ -269,6 +279,7 @@ public class NakamuraCustomerRole extends Role implements Customer{
 
 	private void goToRestaurant() {
 		Do("Going to restaurant");
+		customerGui.setPresent(true);
 		customerGui.DoEnterRestaurant();
 	}
 	
@@ -350,6 +361,10 @@ public class NakamuraCustomerRole extends Role implements Customer{
 		print("Getting Check");
 		waiter.msgCheckPlease(this);
 	}
+	private void GoToCashier() {
+		print("Going to cashier");
+		customerGui.DoGoToCashier();
+	}
 	
 	private void Pay() {
 		print("Paying");
@@ -359,6 +374,7 @@ public class NakamuraCustomerRole extends Role implements Customer{
 //			cashier.msgPayment(this, check, 0);
 //		}
 //		else {
+		
 			cashier.msgPayment(this, check, menu.prices.get(choice));
 			getPersonAgent().setFunds(getPersonAgent().getFunds() - menu.prices.get(choice));
 //		}
