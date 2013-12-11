@@ -25,7 +25,9 @@ public class Restaurant {
 	}
 
 	public void setTill(double till) {
-		restPanel.msgChangeTillInformation(till);
+		if(restPanel != null) {
+			restPanel.msgChangeTillInformation(till);
+		}
 		this.till = till;
 	}
 
@@ -50,17 +52,19 @@ public class Restaurant {
 	}
 	
 	public void msgChangeFoodInventory(String type, int quantity) {
-		if(type.equals("Steak")) {
-			restPanel.msgChangeSteakInventory(quantity);
-		}
-		else if(type.equals("Chicken")) {
-			restPanel.msgChangeChickenInventory(quantity);
-		}
-		else if(type.equals("Salad")) {
-			restPanel.msgChangeSaladInventory(quantity);
-		}
-		else if(type.equals("Pizza")) {
-			restPanel.msgChangePizzaInventory(quantity);
+		if(restPanel != null) {
+			if(type.equals("Steak")) {
+				restPanel.msgChangeSteakInventory(quantity);
+			}
+			else if(type.equals("Chicken")) {
+				restPanel.msgChangeChickenInventory(quantity);
+			}
+			else if(type.equals("Salad")) {
+				restPanel.msgChangeSaladInventory(quantity);
+			}
+			else if(type.equals("Pizza")) {
+				restPanel.msgChangePizzaInventory(quantity);
+			}
 		}
 		foodInventory.get(type).setQuantity(quantity);
 	}
