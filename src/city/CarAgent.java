@@ -137,6 +137,7 @@ public class CarAgent extends Agent implements Vehicle {
 
 		
 		private void goTo(String myDestination){
+
 			doGoTo(myDestination); //sets destination in carGui
 			try {
 				driving.acquire(); //to ensure that the gui is uninterrupted on the way

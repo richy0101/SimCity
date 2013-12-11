@@ -25,11 +25,16 @@ public class CustomerGui implements Gui{
 	private enum Command {noCommand, GoToWaitingSeat, GoToSeat, LeaveRestaurant, EscapeRestaurant};
 	private Command command=Command.noCommand;
 
-	public static final int xTable = 200;
-	public static final int yTable = 250;
-
-	public static final int xSeat = 50;
-	public static final int ySeat = 100;
+	private int xCashier=434, yCashier=73;
+	
+	//Tables
+	private int xTable1=38, xTable2=245, xTable3=452, xTable4=660;
+	private int yTable=165;
+	
+	//Waiting seats
+	private int xSeat1=31, xSeat2=95 ,xSeat3=129 ,xSeat4=158 ,xSeat5=199 ,xSeat6=381 ,xSeat7=420 ,
+			xSeat8=450 ,xSeat9=482 ,xSeat10=512; 
+	private int ySeat=320;
 	
 	BufferedImage customerImage;
 	BufferedImage chickenImage;
@@ -41,8 +46,8 @@ public class CustomerGui implements Gui{
 		agent = c;
 		xPos = 280;
 		yPos = 410;
-		xDestination = -40;
-		yDestination = -40;
+		xDestination = 287;
+		yDestination = 290;
 		//maitreD = m;
 		//this.gui = gui;
 		
@@ -56,6 +61,8 @@ public class CustomerGui implements Gui{
         catch(IOException e) {
         	System.out.println("Error w/ Background");
         }   
+		
+		//agent.gotHungry();
 	}
 
 	/*
@@ -78,7 +85,7 @@ public class CustomerGui implements Gui{
 		
 
 		if (xPos == xDestination && yPos == yDestination
-        		& (xDestination == 200) & (yDestination == 20)) {
+        		& (xDestination == xCashier) & (yDestination == yCashier)) {
         	//if (agent.ws == WaiterState.approachingTable)
         	agent.msgAtCashier();
         }
@@ -144,7 +151,6 @@ public class CustomerGui implements Gui{
 	}
 
 	public boolean isPresent() {
-		//return isPresent;
 		return true;
 	}
 	
@@ -163,91 +169,104 @@ public class CustomerGui implements Gui{
 	}
 
     public void GoToCashier(){
-    	xDestination= 200;
-    	yDestination= 20;
+    	xDestination= xCashier;
+    	yDestination= yCashier;
     }
 	
 	public void DoGoToSeat(int seatnumber) {
 		if(seatnumber==1){
-			xDestination = xTable;
+			xDestination = xTable1;
 			yDestination = yTable;
 			command = Command.GoToSeat;
 		}
 		else if(seatnumber==2){
-			xDestination= xTable+150;
+			xDestination= xTable2;
 			yDestination = yTable;
 			command = Command.GoToSeat;
 		}
 		else if(seatnumber==3){
-			xDestination= xTable+150;
-			yDestination = yTable-150;
+			xDestination= xTable3;
+			yDestination = yTable;
+			command = Command.GoToSeat;
+		}
+		else if(seatnumber==4){
+			xDestination= xTable4;
+			yDestination = yTable;
 			command = Command.GoToSeat;
 		}
 	}
 
 	public void DoGoToWaitingSeat(int sn){
 		if(sn==1){
-			xDestination = xSeat;
+			xDestination = xSeat1;
 			yDestination = ySeat;
 			command=Command.GoToWaitingSeat;
 		}
 		if(sn==2){
-			xDestination = xSeat-30;
+			xDestination = xSeat2;
 			yDestination = ySeat;
 			command=Command.GoToWaitingSeat;
 		}
 		if(sn==3){
-			xDestination = xSeat;
-			yDestination = ySeat+30;
+			xDestination = xSeat3;
+			yDestination = ySeat;
 			command=Command.GoToWaitingSeat;
 		}
 		if(sn==4){
-			xDestination = xSeat-30;
-			yDestination = ySeat+30;
+			xDestination = xSeat4;
+			yDestination = ySeat;
 			command=Command.GoToWaitingSeat;
 		}
 		if(sn==5){
-			xDestination = xSeat;
-			yDestination = ySeat+60;
+			xDestination = xSeat5;
+			yDestination = ySeat;
 			command=Command.GoToWaitingSeat;
 		}
 		if(sn==6){
-			xDestination = xSeat-30;
-			yDestination = ySeat+60;
+			xDestination = xSeat6;
+			yDestination = ySeat;
 			command=Command.GoToWaitingSeat;
 		}
 		if(sn==7){
-			xDestination = xSeat;
-			yDestination = ySeat+90;
+			xDestination = xSeat7;
+			yDestination = ySeat;
 			command=Command.GoToWaitingSeat;
 		}
 		if(sn==8){
-			xDestination = xSeat-30;
-			yDestination = ySeat+90;
+			xDestination = xSeat8;
+			yDestination = ySeat;
 			command=Command.GoToWaitingSeat;
 		}
 		if(sn==9){
-			xDestination = xSeat;
-			yDestination = ySeat+120;
+			xDestination = xSeat9;
+			yDestination = ySeat;
 			command=Command.GoToWaitingSeat;
 		}
 		if(sn==10){
-			xDestination = xSeat-30;
-			yDestination = ySeat+120;
+			xDestination = xSeat10;
+			yDestination = ySeat;
 			command=Command.GoToWaitingSeat;
 		}
 	}
 	
 	public void DoExitRestaurant() {
-		xDestination = -40;
-		yDestination = -40;
+		xDestination = 291;
+		yDestination = 410;
 		command = Command.LeaveRestaurant;
 	}
 	
 	public void DoEscapeRestaurant() {
 		System.out.println("CAN'T CATCH ME!");
-		xDestination = -40;
-		yDestination = -40;
+		xDestination = 291;
+		yDestination = 410;
 		command = Command.EscapeRestaurant;
+	}
+
+	public void DoLeave() {
+		xDestination = 291;
+		yDestination = 410;
+		command = Command.LeaveRestaurant;
+
+		
 	}
 }

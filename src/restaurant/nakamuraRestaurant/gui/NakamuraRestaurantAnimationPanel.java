@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -36,25 +37,19 @@ public class NakamuraRestaurantAnimationPanel extends BuildingPanel implements A
     
     private static final int xKitchen = 56;
     private static final int yKitchen = 57;
-    //private static final int xKitchenSize = 120;
-    //private static final int yKitchenSize = 200;
 
     private static final int xCooking = 55;
     private static final int yCooking = 55;
-    private static final int xCookingSize = 25;
-    private static final int yCookingSize = 50;
 
     private static final int xPlating = 86;
     private static final int yPlating = 137;
-    private static final int xPlatingSize = 25;
-    private static final int yPlatingSize = 50;
     
     private Image bufferImage;
     private Dimension bufferSize;
     
     BufferedImage restaurantImage;
 
-    private List<Gui> guis = new ArrayList<Gui>();
+    private List<Gui> guis = Collections.synchronizedList(new ArrayList<Gui>());
 
 	
     public NakamuraRestaurantAnimationPanel(Rectangle2D r, int i, SimCityGui sc) {
@@ -82,49 +77,31 @@ public class NakamuraRestaurantAnimationPanel extends BuildingPanel implements A
 
         //Clear the screen by painting a rectangle the size of the frame
         g2.drawImage(restaurantImage, 0, 0, null);
-
-        //Here are the tables
-        //g2.setColor(Color.ORANGE);
-        /*
-        g2.fillRect(xTable, yTable, TableSize, TableSize);
-        g2.fillRect(xTable + 150, yTable, TableSize, TableSize);
-        g2.fillRect(xTable, yTable + 100, TableSize, TableSize);
-        g2.fillRect(xTable + 150, yTable + 100, TableSize, TableSize);//200 and 250 need to be table params
-       
-        //Customer waiting area
-        g2.fillRect(xWaiting, yWaiting, WaitingSize, WaitingSize);
-        g2.fillRect(xWaiting, yWaiting + 35, WaitingSize, WaitingSize);
-        g2.fillRect(xWaiting, yWaiting + 70, WaitingSize, WaitingSize);
-        g2.fillRect(xWaiting, yWaiting + 105, WaitingSize, WaitingSize);
-        g2.fillRect(xWaiting, yWaiting + 140, WaitingSize, WaitingSize);
         
-        //Kitchen
-        g2.setColor(Color.GRAY);
-        g2.fillRect(xKitchen, yKitchen, xKitchenSize, yKitchenSize);
-        g2.setColor(Color.ORANGE);
-        g2.fillRect(xCooking, yCooking, xCookingSize, yCookingSize);
-        g2.fillRect(xPlating, yPlating, xPlatingSize, yPlatingSize);
-        
-        */
-        
-        for(Gui gui : guis) {
-            if (gui.isPresent()) {
-                gui.updatePosition();
-            }
+        synchronized(guis) {
+	        for(Gui gui : guis) {
+	            if (gui.isPresent()) {
+	                gui.updatePosition();
+	            }
+	        }
         }
-
-        for(Gui gui : guis) {
-            if (gui.isPresent()) {
-                gui.draw(g2);
-            }
+        
+        synchronized(guis) {
+	        for(Gui gui : guis) {
+	            if (gui.isPresent()) {
+	                gui.draw(g2);
+	            }
+	        }
         }
     }
 	
 	public void updateGui() {
-        for(Gui gui : guis) {
-            if (gui.isPresent())
-                gui.updatePosition();
-        }
+		synchronized(guis) {
+	        for(Gui gui : guis) {
+	            if (gui.isPresent())
+	                gui.updatePosition();
+	        }
+		}
 	}
 
     public void addGui(Gui gui) {

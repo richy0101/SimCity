@@ -30,7 +30,7 @@ public class TanCustomerRole extends Role implements Customer{
 	Timer timer = new Timer();
 	private CustomerGui customerGui;
 	public int mySeat=0;
-	public Order o;
+	public CustOrder o;
 	double cash= 20.00;
 	public double debt= 0.00;
 	
@@ -39,14 +39,14 @@ public class TanCustomerRole extends Role implements Customer{
 	private Semaphore atCashier = new Semaphore(0,true);
 	
 	// agent correspondents
-	private TanHostAgent host;
+	private TanHostAgent host = (TanHostAgent) Directory.sharedInstance().getAgents().get("TanRestaurantHost");
 	private TanWaiterRole waiter;
-	private TanCashierAgent cashier;
+	private TanCashierAgent cashier= (TanCashierAgent) Directory.sharedInstance().getAgents().get("TanRestaurantCashier");
 
 	//    private boolean isHungry = false; //hack for gui
 	
-	public static class Order{
-		Order(int num){
+	public static class CustOrder{
+		CustOrder(int num){
 			if (num==1) Choice= Choices.Steak;
 			else if (num==2) Choice= Choices.Chicken;
 			else if (num==3) Choice= Choices.Salad;
@@ -99,9 +99,10 @@ public class TanCustomerRole extends Role implements Customer{
 	
 	public TanCustomerRole(String location){
 		super();
-	
+		//print("i'm here right now");
 		customerGui = new CustomerGui(this);
-		host = (TanHostAgent) Directory.sharedInstance().getAgents().get("TanHostAgent");
+
+		//host = (TanHostAgent) Directory.sharedInstance().getAgents().get("TanHostAgent");
 		
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
@@ -109,6 +110,10 @@ public class TanCustomerRole extends Role implements Customer{
 				b.addGui(customerGui);
 			}
 		}
+
+		state=AgentState.DoingNothing;
+		event= AgentEvent.gotHungry;
+		//host.msgIWantFood(this);
 	}
 	/*
 	public TanCustomerRole(String name){
@@ -169,6 +174,15 @@ public class TanCustomerRole extends Role implements Customer{
 		}
 	}
 
+	public void msgPleaseLeave(){
+		print("i'm leaving!");
+		customerGui.DoLeave();
+		host.msgLeavingRestaurant(this);
+		state = AgentState.DoingNothing;
+		getPersonAgent().msgRoleFinished();
+	}
+	
+
 	public void msgAtCashier(){
 		if(sc== sanityCheck.approachingCashier){
 			sc= sanityCheck.none;
@@ -182,8 +196,9 @@ public class TanCustomerRole extends Role implements Customer{
 		stateChanged();
 	}
 
-	public void msgFollowMeToTable(int seatnumber) { //should take in Menu
+	public void msgFollowMeToTable(int seatnumber, TanWaiterRole w) { //should take in Menu
 		print("received msgFollowMeToTable");
+		waiter=w;
 		mySeat=seatnumber;
 		event = AgentEvent.followWaiter;
 		stateChanged();
@@ -202,13 +217,13 @@ public class TanCustomerRole extends Role implements Customer{
 		event=AgentEvent.served;
 		stateChanged();
 	}
-
+/*
 	public void msgInformCustomerNoFood(Order o){
 		event=AgentEvent.informedNoFood;
 		os= OrderStatus.unavailable;
 		//print("1. in msgInformCustNoFood order is " + o.getName());
 		stateChanged();
-	}
+	}*/
 	
 	public void msgHereIsYourBill(Bill b){
 		//print("I have to pay $"+b.bill);
@@ -252,6 +267,8 @@ public class TanCustomerRole extends Role implements Customer{
 			goToRestaurant();
 			return true;
 		}*/
+		
+		//print("in customer role's scheduler");
 		
 		if (state == AgentState.DoingNothing && event == AgentEvent.gotHungry ){
 			state = AgentState.GoingToRestaurant;
@@ -336,15 +353,15 @@ public class TanCustomerRole extends Role implements Customer{
 		}
 
 		if (state == AgentState.givenBill && event == AgentEvent.doneEating){
-			if(!(name.equals("Douche"))){
+			//if(!(name.equals("Douche"))){
 				state = AgentState.PayingBill; //agentstate=waitingtopay.
 				sc= sanityCheck.approachingCashier;
 				payBill(this);
-				}
+			/*	}
 			else if(name.equals("Douche")){
 				state = AgentState.actCasual;
 				dineAndDash();
-			}
+			}*/
 			//leaveTable();
 			return true;
 		}
@@ -433,7 +450,7 @@ public class TanCustomerRole extends Role implements Customer{
 				Picked= rand.nextInt(4) + 1;
 			}
 		}
-		o= new Order(Picked);
+		o= new CustOrder(Picked);
 		os= OrderStatus.ordered;
 		print("I want to reorder "+ o.getName());
 		if( !name.equals("VIP") &&  ((o.getName().equals("Steak") && (cash < 15.99))||(o.getName().equals("Chicken") && (cash < 10.99))||(o.getName().equals("Salad") && (cash < 5.99))||(o.getName().equals("Pizza") && (cash < 8.99)))){
@@ -459,7 +476,7 @@ public class TanCustomerRole extends Role implements Customer{
 		else{
 		os= OrderStatus.ordered;
 		int Picked;
-	
+	/*
 		if(name.equals("Steak")||name.equals("poorSteak")){
 			Picked=1;
 		}
@@ -472,21 +489,21 @@ public class TanCustomerRole extends Role implements Customer{
 		else if(name.equals("Pizza")||name.equals("poorPizza")){
 			Picked=4;
 		}
-		else{
+		else{*/
 			Random rand= new Random();
 			Picked= rand.nextInt(4) + 1;
-		}
+		//}
 		
 		if(cash>=cheapestItem && cash<8.99)
 			Picked=3;
 		
-		o= new Order(Picked);
-		if(!name.equals("VIP")){
+		o= new CustOrder(Picked);
+		//if(!name.equals("VIP")){
 			if((o.getName().equals("Steak") && (cash < 15.99))||(o.getName().equals("Chicken") && (cash < 10.99))||(o.getName().equals("Pizza") && (cash < 8.99))){
 				state=AgentState.ReadyToReorder;
 				PlaceReorder();
 			}
-		}
+		//}
 		//waiter.msgHereIsMyChoice(this, o); //implement choices later
 		//event = AgentEvent.placedOrder;
 		print("Ordered "+ o.getName());
@@ -561,6 +578,13 @@ public class TanCustomerRole extends Role implements Customer{
 
 	public CustomerGui getGui() {
 		return customerGui;
+	}
+
+	public void msgInformCustomerNoFood(Order o2) {
+		event=AgentEvent.informedNoFood;
+		os= OrderStatus.unavailable;
+		//print("1. in msgInformCustNoFood order is " + o.getName());
+		stateChanged();
 	}
 }
 

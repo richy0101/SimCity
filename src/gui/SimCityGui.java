@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 
 import javax.swing.*;
 
+import agent.Role;
 import city.BusAgent;
 import city.PersonAgent;
 import city.TrafficAgent;
@@ -13,6 +14,7 @@ import city.helpers.Clock;
 import city.helpers.Directory;
 import city.helpers.WalkLoopHelper;
 import city.helpers.XMLReader;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -27,6 +29,8 @@ import restaurant.nakamuraRestaurant.gui.NakamuraRestaurantAnimationPanel;
 import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
 import restaurant.phillipsRestaurant.gui.PhillipsRestaurantAnimationPanel;
+import restaurant.shehRestaurant.ShehCookRole;
+import restaurant.shehRestaurant.ShehWaiterRole;
 import restaurant.shehRestaurant.gui.ShehRestaurantAnimationPanel;
 import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
 import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
@@ -782,18 +786,17 @@ public class SimCityGui {
 		if(WalkLoopHelper.sharedInstance() == null) {
 			
 		}
-
+/*
 		PersonAgent person1 = new PersonAgent("NakamuraCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
 		PersonAgent person2 = new PersonAgent("NakamuraWaiterNormal", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
 		PersonAgent person3 = new PersonAgent("Unemployed", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
 		PersonAgent person4 = new PersonAgent("BankTeller", "Test Person 4", 3, 1000.00, "House4", "TakesTheBus");
 		PersonAgent person5 = new PersonAgent("BankTeller", "Test Person 5", 3, 1000.00, "House5", "TakesTheBus");
 		PersonAgent person6 = new PersonAgent("Market", "Test Person 6", 3, 1000.00, "House6", "TakesTheBus");
-		
-		/*
+
 		String a = "TanRestaurant";
 		String b = "House1";
-		String name = "Test Person 1 Ben";
+		String name = "Ben Test Waiter";
 		Role role;
 		role= new TanWaiterNormalRole("TanRestaurant");
 		PersonAgent p = new PersonAgent(role, a , b, name);
@@ -803,12 +806,12 @@ public class SimCityGui {
 		
 		String a1 = "TanRestaurant";
 		String b1 = "House2";
-		String name1 = "Test Person 2 Ben";
+		String name1 = "Ben Test Cook";
 		Role role1;
 		role1= new TanCookRole("TanRestaurant");
 		PersonAgent p1 = new PersonAgent(role1, a1 , b1, name1);
 		p1.msgWakeUp();
-		role1.setPerson(p);
+		role1.setPerson(p1);
 		p1.startThread();
 	
 		String a2 = "TanRestaurant";
@@ -817,48 +820,40 @@ public class SimCityGui {
 		Role role2;
 		role2 = new TanCustomerRole("TanRestaurant");
 		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
-		role2.setPerson(p2);
 		p2.msgWakeUp();
+		role2.setPerson(p2);
 		p2.startThread();
 		*/
 		
+		/*
+		//RYAN TEST CODE
+		String a = "ShehRestaurant";
+		String b = "House1";
+		String name = "WAITER";
+		Role role;
+		role = new ShehWaiterRole("ShehRestaurant");
+
+		PersonAgent p = new PersonAgent(role, a , b, name);
+		role.setPerson(p);
 		
-//		//RYAN TEST CODE
-//		String a = "ShehRestaurant";
-//		String b = "House1";
-//		String name = "WAITER";
-//		Role role;
-//		role = new ShehWaiterRole("ShehRestaurant");
-//
-//		PersonAgent p = new PersonAgent(role, a , b, name);
-//		role.setPerson(p);
-//		
-//		String a1 = "ShehRestaurant";
-//		String b1 = "House2";
-//		String name1 = "WAITER2";
-//		Role role1;
-//		role1 = new ShehWaiterRole("ShehRestaurant");
-//
-//		PersonAgent p1 = new PersonAgent(role1, a1 , b1, name1);
-//		role1.setPerson(p1);
-//		
-//		String a2 = "ShehRestaurant";
-//		String b2 = "House2";
-//		String name2 = "COOK";
-//		Role role2;
-//		role2 = new ShehCookRole("ShehRestaurant");
-//
-//		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
-//		role2.setPerson(p2);
-//		
-//		String a3 = "ShehRestaurant";
-//		String b3 = "House2";
-//		String name3 = "COOK2";
-//		Role role3;
-//		role3 = new ShehCookRole("ShehRestaurant");
-//
-//		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
-//		role3.setPerson(p3);
+		String a1 = "ShehRestaurant";
+		String b1 = "House2";
+		String name1 = "WAITER2";
+		Role role1;
+		role1 = new ShehWaiterRole("ShehRestaurant");
+
+		PersonAgent p1 = new PersonAgent(role1, a1 , b1, name1);
+		role1.setPerson(p1);
+		
+		String a2 = "ShehRestaurant";
+		String b2 = "House2";
+		String name2 = "COOK";
+		Role role2;
+		role2 = new ShehCookRole("ShehRestaurant");
+
+		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
+		role2.setPerson(p2);
+		*/
 		
 		//END OF TEST CODE
 		
