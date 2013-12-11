@@ -54,6 +54,8 @@ public class TransportationGui implements Gui {
 	int Cross3X = 435, Cross3Y = 127; //435
 	int Cross5X = 435, Cross5Y = 308;
 	int Cross6X = 435, Cross6Y = 353;
+	public enum GeneralPersonPosition {CityLeft, CityRight};
+	GeneralPersonPosition cityPosition;
 	public enum Direction {ToTheLeft, ToTheRight, ToTheTop, ToTheBottom, EqualLeft, EqualRight, ItsNotAboutTheMoney, EqualBottom, EqualTop};
 	Direction directionX;
 	Direction directionY;
@@ -61,7 +63,7 @@ public class TransportationGui implements Gui {
 	Loop currentLoop;
 	Loop destinationLoop;
 	public enum CurrentAction {Travelling, Idle, 
-		BreakOut, BreakIn, BreakOver, BreakInFromTop, BreakInFromBottom, BreakOutFromTop, BreakOutFromBottom
+		BreakOut, BreakIn, BreakOver, BreakInFromTop, BreakInFromBottom, BreakOutFromTop, BreakOutFromBottom, BreakInLeft, BreakInRight
 		};
 	CurrentAction currentAction;
 	public TransportationGui(TransportationRole agent, String startLocation, String destinationLocation) {
@@ -118,18 +120,6 @@ public class TransportationGui implements Gui {
 				currentAction = CurrentAction.Idle;
 				return;
 			}
-			/*
-			if(currentAction == CurrentAction.BreakOut){
-				System.out.println("WANT TO BREAK OUT");
-			}
-			
-			if(currentAction == CurrentAction.BreakOutFromTop){
-				System.out.println("WANT TO BREAK OUT FROM TOP");
-			}
-			
-			if(currentAction == CurrentAction.BreakOutFromBottom){
-				System.out.println("WANT TO BREAK OUT FROM BOTTOM");
-			}*/
 			
 			/**
 			 * Breaking Out Block
@@ -186,11 +176,11 @@ public class TransportationGui implements Gui {
 				evaluateNextMove();
 				return;
 			}
-			if(currentAction == CurrentAction.BreakIn && (xPos == Cross1X && yPos == Cross1Y)) {
+			if(currentAction == CurrentAction.BreakInLeft && (xPos == Cross1X && yPos == Cross1Y)) {
 				currentAction = CurrentAction.BreakInFromTop;
 				return;
 			}
-			else if (currentAction == CurrentAction.BreakIn && (xPos == Cross6X && yPos == Cross6Y)) {
+			else if (currentAction == CurrentAction.BreakInRight && (xPos == Cross6X && yPos == Cross6Y)) {
 				currentAction = CurrentAction.BreakInFromBottom;
 				return;
 			}
@@ -214,28 +204,28 @@ public class TransportationGui implements Gui {
 		/**
 		 * General Logic
 		 */
-		if (directionX == Direction.ToTheLeft && directionY == Direction.ToTheBottom && xPos <= 420) {
+		if (directionX == Direction.ToTheLeft && directionY == Direction.ToTheBottom && cityPosition == GeneralPersonPosition.CityLeft) {
 			loopCounterClockwise();
 		}
-		else if (directionX == Direction.ToTheLeft && directionY == Direction.ToTheBottom && xPos > 420) {
+		else if (directionX == Direction.ToTheLeft && directionY == Direction.ToTheBottom && cityPosition == GeneralPersonPosition.CityRight) {
 			loopClockwise();
 		}
-		else if (directionX == Direction.ToTheLeft && directionY == Direction.ToTheTop && xPos <= 420) {
+		else if (directionX == Direction.ToTheLeft && directionY == Direction.ToTheTop && cityPosition == GeneralPersonPosition.CityLeft) {
 			loopClockwise();
 		}
-		else if (directionX == Direction.ToTheLeft && directionY == Direction.ToTheTop && xPos > 420) {
+		else if (directionX == Direction.ToTheLeft && directionY == Direction.ToTheTop && cityPosition == GeneralPersonPosition.CityRight) {
 			loopCounterClockwise();
 		}
-		else if (directionX == Direction.ToTheRight && directionY == Direction.ToTheBottom && xPos <= 420) {
+		else if (directionX == Direction.ToTheRight && directionY == Direction.ToTheBottom && cityPosition == GeneralPersonPosition.CityLeft) {
 			loopCounterClockwise();
 		}
-		else if (directionX == Direction.ToTheRight && directionY == Direction.ToTheBottom && xPos > 420) {
+		else if (directionX == Direction.ToTheRight && directionY == Direction.ToTheBottom && cityPosition == GeneralPersonPosition.CityRight) {
 			loopClockwise();
 		}
-		else if (directionX == Direction.ToTheRight && directionY == Direction.ToTheTop && xPos <= 420) {
+		else if (directionX == Direction.ToTheRight && directionY == Direction.ToTheTop && cityPosition == GeneralPersonPosition.CityLeft) {
 			loopClockwise();
 		}
-		else if (directionX == Direction.ToTheRight && directionY == Direction.ToTheTop && xPos > 420) {
+		else if (directionX == Direction.ToTheRight && directionY == Direction.ToTheTop && cityPosition == GeneralPersonPosition.CityRight) {
 			loopCounterClockwise();
 		}
 		/**
@@ -386,10 +376,10 @@ public class TransportationGui implements Gui {
 		else if (xPos > xDestination) {
 			directionX = Direction.ToTheLeft;
 		}
-		else if (xPos == xDestination && xPos >= 420) {
+		else if (xPos == xDestination && xPos >= 418) {
 			directionX = Direction.EqualRight;
 		}
-		else if (xPos == xDestination && xPos < 420) {
+		else if (xPos == xDestination && xPos < 418) {
 			directionX = Direction.EqualLeft;
 		}
 		if (yPos < yDestination) {
@@ -404,12 +394,21 @@ public class TransportationGui implements Gui {
 		else if (yPos == yDestination && yPos < 203) {
 			directionY = Direction.EqualTop;
 		}
+		if (xPos >= 418) {
+			cityPosition = GeneralPersonPosition.CityRight;
+		}
+		else if (xPos < 418) {
+			cityPosition = GeneralPersonPosition.CityLeft;
+		}
 		if(currentLoop == destinationLoop) {
 			currentAction = CurrentAction.Travelling;
 			ContinueLooping();
 		}
-		else if (destinationLoop == Loop.InnerLeft || destinationLoop == Loop.InnerRight) {
-			currentAction = CurrentAction.BreakIn;
+		else if (destinationLoop == Loop.InnerLeft) {
+			currentAction = CurrentAction.BreakInLeft;
+		}
+		else if (destinationLoop == Loop.InnerRight) {
+			currentAction = CurrentAction.BreakInRight;
 		}
 		else if (destinationLoop == Loop.Outer) {
 			currentAction = CurrentAction.BreakOut;
