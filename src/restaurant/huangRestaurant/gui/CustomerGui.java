@@ -20,7 +20,7 @@ public class CustomerGui implements Gui{
 	private int xDestination = 35, yDestination = 450;
     private static final int hostX = 27, hostY = 48;
 	private int xWait = 35;
-	private int yWait = 100;
+	private int yWait = 150;
 	public int currentSpot = 0;
 	private static final int cashierX = 780; 
 	private static final int cashierY = 40;

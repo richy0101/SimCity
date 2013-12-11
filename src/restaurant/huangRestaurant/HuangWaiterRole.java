@@ -2,6 +2,7 @@ package restaurant.huangRestaurant;
 
 
 import agent.Role;
+import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.WaiterGui;
 import restaurant.huangRestaurant.interfaces.Cashier;
 import restaurant.huangRestaurant.interfaces.Customer;
@@ -36,7 +37,7 @@ public class HuangWaiterRole extends Role implements Waiter {
 	}
 	public List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	
-
+	Restaurant restaurant;
 	private String name;
 	Timer timer = new Timer();
 	private class WaiterTimerTask extends TimerTask {
@@ -68,7 +69,7 @@ public class HuangWaiterRole extends Role implements Waiter {
 	protected String myLocation;
 
 	public enum WaiterState{
-		Arrived, Working, DoneWorking, CollectPay, InTransit, ReceivedPay
+		Arrived, Working, DoneWorking, CollectPay, InTransit, ReceivedPay, GoToWaitingPosition
 	};
 	public WaiterState state;
 	public HuangWaiterRole(String location) {
@@ -102,12 +103,15 @@ public class HuangWaiterRole extends Role implements Waiter {
 	}
 
 	// Messages
-	public void msgHereIsPayCheck(double payCheck) {
+	@Override
+	public void msgHereIsPaycheck(double payCheck) {
 		state = WaiterState.ReceivedPay;
+		System.out.println(getPersonAgent().getName() + " Got pay, leaving work.");
 		getPersonAgent().setFunds(getPersonAgent().getFunds() + payCheck);
 		stateChanged();
 	}
 	public void msgJobDone() {
+		System.out.println("job done activated.");
 		doneWorking = true;
 		state = WaiterState.DoneWorking;
 		stateChanged();
@@ -253,6 +257,15 @@ public class HuangWaiterRole extends Role implements Waiter {
 	public boolean pickAndExecuteAnAction() {
 		if (state == WaiterState.Arrived) {
 			tellHostAtWork();
+			return true;
+		}
+		if (this.cook == null) {
+			askForCook();
+			return false;
+		}
+		if (state == WaiterState.GoToWaitingPosition) {
+			goToWorkStation();
+			return true;
 		}
 		if (onBreak == true && customers.isEmpty()) {
 			tellHostOnBreak();
@@ -367,12 +380,15 @@ public class HuangWaiterRole extends Role implements Waiter {
 				}
 			}
 		}	
-		if (state == WaiterState.ReceivedPay) {
-			leaveWork();
-		}
-		if (state == WaiterState.CollectPay) {
-			collectPay();
-			return true;
+		if (customers.isEmpty()) {
+			if (state == WaiterState.ReceivedPay) {
+				leaveWork();
+				return false;
+			}
+			if (state == WaiterState.CollectPay) {
+				collectPay();
+				return true;
+			}
 		}
 		if(state == WaiterState.DoneWorking) {
 			tellHostDoneWorking();
@@ -388,20 +404,23 @@ public class HuangWaiterRole extends Role implements Waiter {
 	}
 	
 
-
-
-
-
 	// Actions
+	private void goToWorkStation() {
+		gui.DoGoHome();
+		state = WaiterState.Working;
+		
+	}
 	private void leaveWork() {
+		gui.DoLeaveRestaurant();
 		getPersonAgent().msgRoleFinished();
 		state = WaiterState.Arrived;
-		gui.DoLeaveRestaurant();	
 	}
 	private void collectPay() {
+		System.out.println("In action collect pay");
 		state = WaiterState.InTransit;
 		gui.DoGoToCashier();
 		atCashier.acquireUninterruptibly();
+		System.out.println("Got past semaphore for cashier for pay case.");
 		ca.msgAskForPayCheck(this);
 	}
 	private void tellHostDoneWorking() {
@@ -409,7 +428,7 @@ public class HuangWaiterRole extends Role implements Waiter {
 		host.msgDoneWorking(this);
 	}
 	private void tellHostAtWork() {
-		state = WaiterState.InTransit;
+		state = WaiterState.GoToWaitingPosition;
 		gui.DoGoToHost();
 		atHost.acquireUninterruptibly();
 		host.msgArrivedToWork(this);
@@ -501,24 +520,30 @@ public class HuangWaiterRole extends Role implements Waiter {
 		enableGuiBreak();
 		stateChanged();
 	}
+	private void askForCook() {
+		host.msgWhoIsCook(this);
+	}
 	// The animation DoXYZ() routines
 	private void DoSeatCustomer(Customer customer, int table) {
 		print(name + ": Seating " + customer + " at " + table);
 		gui.DoBringToTable(customer, table); 
 		atTable.acquireUninterruptibly();
 	}
-
+	public HuangCookRole getCook() {
+		return cook;
+	}
 	//utilities
 
 	public void setGui(WaiterGui gui) {
 		//System.out.println("GUI SET");
 		this.gui = gui;
 	}
-
 	public WaiterGui getGui() {
 		return gui;
 	}
-
+	public void setRestaurant(HuangRestaurant huang) {
+		this.restaurant = huang;
+	}
 
 }
 

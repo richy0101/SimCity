@@ -1,8 +1,10 @@
 package restaurant.shehRestaurant;
 
 import agent.Agent;
-
+import restaurant.CashierAgent;
+import restaurant.Restaurant;
 import restaurant.shehRestaurant.helpers.Bill;
+import restaurant.shehRestaurant.helpers.Bill.PayCheckBillState;
 import restaurant.shehRestaurant.helpers.Menu;
 import restaurant.shehRestaurant.helpers.Table;
 import restaurant.shehRestaurant.interfaces.Cashier;
@@ -10,15 +12,18 @@ import restaurant.shehRestaurant.interfaces.Customer;
 import restaurant.shehRestaurant.interfaces.Market;
 import restaurant.shehRestaurant.interfaces.Waiter;
 import restaurant.shehRestaurant.helpers.Bill.OrderBillState;
-
 import restaurant.shehRestaurant.test.mock.EventLog;
 
 import java.util.*;
 
+import city.helpers.Directory;
+import market.MarketCheck;
+import market.interfaces.MarketWorker;
+
 /**
  * Restaurant Cashier Agent
  */
-public class ShehCashierAgent extends Agent implements Cashier {
+public class ShehCashierAgent extends CashierAgent implements Cashier {
 	public List<myCustomer> myCustomers = Collections.synchronizedList(new ArrayList<myCustomer>());
 	public List<Bill> bills = Collections.synchronizedList(new ArrayList<Bill>());
 	
@@ -27,13 +32,13 @@ public class ShehCashierAgent extends Agent implements Cashier {
 	Table table;
 	Bill bill;
 	
-	ShehRestaurant restaurant;
-	
+	Restaurant restaurant;
 	public EventLog log = new EventLog();
 
 	private double money = 0;
 	private String name;
-	private Market market;
+	private MarketWorker market;
+	private ShehWaiterRole waiter;
 	
 	private class myCustomer {
 		Customer c;
@@ -63,14 +68,14 @@ public class ShehCashierAgent extends Agent implements Cashier {
 	
 	FoodData steak = new FoodData(20, 5000, 1);
 	FoodData chicken = new FoodData(15, 5000, 1);
-	FoodData fish = new FoodData(20, 5000, 1);
-	FoodData vegetarian = new FoodData(20, 5000, 1);
+	FoodData pizza = new FoodData(20, 5000, 1);
+	FoodData salad = new FoodData(20, 5000, 1);
 	
 	private Map<String, FoodData> inventory = new HashMap<String, FoodData>(); {
 		inventory.put("Steak", steak);
 		inventory.put("Chicken", chicken);
-		inventory.put("Fish", fish);
-		inventory.put("Vegetarian", vegetarian);
+		inventory.put("Pizza", pizza);
+		inventory.put("Salad", salad);
 	}
 	/*
 	public ShehCashierAgent(String n) {
@@ -90,23 +95,30 @@ public class ShehCashierAgent extends Agent implements Cashier {
 		stateChanged();
 	}
 	
-	public void msgHereIsMarketBill(Bill cost, Market supplier) {
-		print("Received bill from market of $" + cost.m + ".");
-		double price = cost.m;
+	public void msgGiveBill(MarketCheck marketcheck) {
+		print("Received bill from market of $" + marketcheck.getAmount() + ".");
+		double price = marketcheck.getAmount();
 		bills.add(new Bill(price, OrderBillState.PayingMarketOrder));
-		market = supplier;
+		market = marketcheck.getMarket();
 		
 		stateChanged(); 
 	}
 	
 	public void msgHereToPay(Customer c, double money2) {
 		money = money2;
+		restaurant.setTill(restaurant.getTill() + money2);
 		for(Bill b : bills) {
 			if(b.c == c) {
 				b.s = OrderBillState.Paying;
 				stateChanged();
 			}
 		}
+	}
+	
+	public void msgCollectPayCheck(ShehWaiterRole waiterRole) {
+		print("Printing paycheck to waiter.");
+		Bill bill = new Bill(waiterRole, 100, Bill.PayCheckBillState.CalculatingPayCheck);
+		stateChanged();
 	}
 	
 	/**
@@ -164,6 +176,15 @@ public class ShehCashierAgent extends Agent implements Cashier {
 				}
 			}
 		}
+		
+		synchronized(bills) {
+			for (Bill b : bills) {
+				if(b.ps == PayCheckBillState.CalculatingPayCheck) {
+					PrintPayCheck(b);
+					return true;
+				}
+			}
+		}
 	
 		return false;
 	}
@@ -198,6 +219,7 @@ public class ShehCashierAgent extends Agent implements Cashier {
 		
 		if(money > b.m) {
 			change = money - b.m;
+			restaurant.setTill(restaurant.getTill() - change);
 			print("$" + change + " is your change. Come again!");
 			
 		}
@@ -218,16 +240,25 @@ public class ShehCashierAgent extends Agent implements Cashier {
 	private void PayMarketOrder(Bill b) {
 		print("Paying market order now.");
 		
-		market.msgHereIsPayment(b);
+		market.msgPayForOrder(this, b.getBillMoney());
+		restaurant.setTill(restaurant.getTill() - b.getBillMoney());
 		b.s = OrderBillState.Complete;
 		
 	}
+	
+	private void PrintPayCheck(Bill b) {
+		print("Printing: Paycheck");
+		
+		waiter.msgHereIsPayCheck(b);
+		restaurant.setTill(restaurant.getTill() - b.m);
+		b.ps = PayCheckBillState.SentPayCheck;
+	}
 
-	public void setRestaurant(ShehRestaurant rest) {
+	public void setRestaurant(Restaurant rest) {
 		restaurant = rest;
 	}
 	
-	public ShehRestaurant getRestaurant() {
+	public Restaurant getRestaurant() {
 		return restaurant;
 	}
 

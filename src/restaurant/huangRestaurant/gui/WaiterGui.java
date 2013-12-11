@@ -2,11 +2,11 @@ package restaurant.huangRestaurant.gui;
 
 import gui.Gui;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -51,7 +51,7 @@ public class WaiterGui implements Gui {
     		this.yPos = y;
     	}
     }
-    private List<ServedFood>foodOnTable = new ArrayList<ServedFood>();
+    private List<ServedFood>foodOnTable = Collections.synchronizedList(new ArrayList<ServedFood>());
 
 
 	//private HostAgent host;
@@ -81,7 +81,9 @@ public class WaiterGui implements Gui {
         if (xPos == xDestination && yPos == yDestination
         		& (xDestination == xTable + 20) & (yDestination == yTable - 20)) {
         	if(carryingFood == true) {
-        		foodOnTable.add(new ServedFood(currentDish, xTable + 20, yTable + 20));
+        		synchronized(foodOnTable) {
+        			foodOnTable.add(new ServedFood(currentDish, xTable + 20, yTable + 20));
+        		}
         		carryingFood = false;
         		currentDish ="";
         	}
@@ -98,7 +100,7 @@ public class WaiterGui implements Gui {
         if (xPos == hostX && yPos == hostY) {
         	agent.msgAtHost();
         }
-    	if (xPos == 40 && yPos == 20 && seatingNew == true) {
+    	if (xPos == xCWaitArea && yPos == yCWaitArea && seatingNew == true) {
     		agent.msgCanSeatNew();
     		seatingNew = false;
     	}
@@ -108,18 +110,21 @@ public class WaiterGui implements Gui {
     	if (carryingFood == true) {
     		g.drawImage(waiterImage, xPos, yPos, null);
 	        g.drawString(currentDish, xPos, yPos);
-	        if(!foodOnTable.isEmpty()) {
-    			for(ServedFood served : foodOnTable) {
-    				g.drawString(served.food, served.xPos, served.yPos);
-    			}
-    		}
-	        
+	        synchronized(foodOnTable) {
+		        if(!foodOnTable.isEmpty()) {
+	    			for(ServedFood served : foodOnTable) {
+	    				g.drawString(served.food, served.xPos, served.yPos);
+	    			}
+	    		}
+	        }
     	}
     	else {
-    		if(!foodOnTable.isEmpty()) {
-    			for(ServedFood served : foodOnTable) {
-    				g.drawString(served.food, served.xPos, served.yPos);
-    			}
+    		synchronized(foodOnTable) {
+	    		if(!foodOnTable.isEmpty()) {
+	    			for(ServedFood served : foodOnTable) {
+	    				g.drawString(served.food, served.xPos, served.yPos);
+	    			}
+	    		}
     		}
     		g.drawImage(waiterImage, xPos, yPos, null);
     	}
@@ -165,21 +170,24 @@ public class WaiterGui implements Gui {
     public void DoCleanTable(int table) {
 		this.xTable = tableSpawnX + (tableOffSetX * table);
     	this.yTable = tableSpawnY;
-    	if(!foodOnTable.isEmpty()) {
-    		for(ServedFood served : foodOnTable) {
-    			if(served.xPos == xTable + 20 && served.yPos == yTable + 20) {
-    				foodOnTable.remove(served);
-    				break;
-    			}
-    		}
+    	synchronized(foodOnTable) {
+	    	if(!foodOnTable.isEmpty()) {
+	    		for(ServedFood served : foodOnTable) {
+	    			if(served.xPos == xTable + 20 && served.yPos == yTable + 20) {
+	    				foodOnTable.remove(served);
+	    				break;
+	    			}
+	    		}
+	    	}
     	}
     }
     public void setHome(int iterate) {
     	xHome = xHome + 30 * iterate;
-    	xPos = xHome;
-    	xDestination = xPos;
-    	yPos = yHome;
-    	yDestination = yPos;
+    	xDestination = xHome;
+//    	xPos = xHome;
+//    	xDestination = xPos;
+//    	yPos = yHome;
+//    	yDestination = yPos;
     }
     public void DoLeaveCustomer() {
         xDestination = xHome;
@@ -221,6 +229,11 @@ public class WaiterGui implements Gui {
 	public void DoLeaveRestaurant() {
     	xDestination = xExit;
     	yDestination = yExit;
+		
+	}
+	public void DoGoHome() {
+		xDestination = xHome;
+		yDestination = yHome;
 		
 	}
 }

@@ -28,6 +28,7 @@ public class Market {
 		marketInventory.put("Steak", new MarketItemInformation("Steak", 10, 2.00));
 		marketInventory.put("Pizza", new MarketItemInformation("Pizza", 10, 3.00));
 		marketInventory.put("Salad", new MarketItemInformation("Salad", 10, 4.00));
+		marketInventory.put("Car", new MarketItemInformation("Salad", 10, 400.00));
 	}
 	
 	public MarketWorkerRole getWorker() {
@@ -55,20 +56,22 @@ public class Market {
 	}
 
 	public void msgChangeFoodInventory(String type, int quantity) {
-		if(type.equals("Steak")) {
-			restPanel.msgChangeSteakInventory(quantity);
-		}
-		else if(type.equals("Chicken")) {
-			restPanel.msgChangeChickenInventory(quantity);
-		}
-		else if(type.equals("Salad")) {
-			restPanel.msgChangeSaladInventory(quantity);
-		}
-		else if(type.equals("Pizza")) {
-			restPanel.msgChangePizzaInventory(quantity);
-		}
-		else if(type.equals("Car")) {
-			restPanel.msgChangeCarInventory(quantity);
+		if(restPanel != null) {
+			if(type.equals("Steak")) {
+				restPanel.msgChangeSteakInventory(quantity);
+			}
+			else if(type.equals("Chicken")) {
+				restPanel.msgChangeChickenInventory(quantity);
+			}
+			else if(type.equals("Salad")) {
+				restPanel.msgChangeSaladInventory(quantity);
+			}
+			else if(type.equals("Pizza")) {
+				restPanel.msgChangePizzaInventory(quantity);
+			}
+			else if(type.equals("Car")) {
+				restPanel.msgChangeCarInventory(quantity);
+			}
 		}
 		getFoodInventory().get(type).setSupply(quantity);
 	}

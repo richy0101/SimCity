@@ -26,9 +26,9 @@ public class HuangCustomerRole extends Role implements Customer {
 	private int hungerLevel = 5; // determines length of meal
 	private int table;
 	//hard coding tables without mapping
-    private static final int tableSpawnX = 100;
-	private static final int tableSpawnY = 200;
-	private static final int tableOffSetX = 100;
+    private static final int tableSpawnX = 160;
+	private static final int tableSpawnY = 170;
+	private static final int tableOffSetX = 180;
 
 	private Menu m;
 	private String choice;
