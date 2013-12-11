@@ -2,6 +2,7 @@ package restaurant.shehRestaurant;
 
 import agent.Agent;
 import restaurant.CashierAgent;
+import restaurant.Restaurant;
 import restaurant.shehRestaurant.helpers.Bill;
 import restaurant.shehRestaurant.helpers.Bill.PayCheckBillState;
 import restaurant.shehRestaurant.helpers.Menu;
@@ -15,6 +16,7 @@ import restaurant.shehRestaurant.test.mock.EventLog;
 
 import java.util.*;
 
+import city.helpers.Directory;
 import market.MarketCheck;
 import market.interfaces.MarketWorker;
 
@@ -30,7 +32,7 @@ public class ShehCashierAgent extends CashierAgent implements Cashier {
 	Table table;
 	Bill bill;
 	
-	ShehRestaurant restaurant;
+	Restaurant restaurant;
 	
 	public EventLog log = new EventLog();
 
@@ -86,6 +88,7 @@ public class ShehCashierAgent extends CashierAgent implements Cashier {
 
 	public ShehCashierAgent() {
 		super();
+		restaurant = Directory.sharedInstance().getRestaurants().get(3);
 	}
 
 	// Messages
@@ -105,6 +108,7 @@ public class ShehCashierAgent extends CashierAgent implements Cashier {
 	
 	public void msgHereToPay(Customer c, double money2) {
 		money = money2;
+		restaurant.setTill(restaurant.getTill() + money2);
 		for(Bill b : bills) {
 			if(b.c == c) {
 				b.s = OrderBillState.Paying;
@@ -217,6 +221,7 @@ public class ShehCashierAgent extends CashierAgent implements Cashier {
 		
 		if(money > b.m) {
 			change = money - b.m;
+			restaurant.setTill(restaurant.getTill() - change);
 			print("$" + change + " is your change. Come again!");
 			
 		}
@@ -238,6 +243,7 @@ public class ShehCashierAgent extends CashierAgent implements Cashier {
 		print("Paying market order now.");
 		
 		market.msgPayForOrder(this, b.getBillMoney());
+		restaurant.setTill(restaurant.getTill() - b.getBillMoney());
 		b.s = OrderBillState.Complete;
 		
 	}
@@ -246,6 +252,7 @@ public class ShehCashierAgent extends CashierAgent implements Cashier {
 		print("Printing: Paycheck");
 		
 		waiter.msgHereIsPayCheck(b);
+		restaurant.setTill(restaurant.getTill() - b.m);
 		b.ps = PayCheckBillState.SentPayCheck;
 	}
 
@@ -253,7 +260,7 @@ public class ShehCashierAgent extends CashierAgent implements Cashier {
 		restaurant = rest;
 	}
 	
-	public ShehRestaurant getRestaurant() {
+	public Restaurant getRestaurant() {
 		return restaurant;
 	}
 
