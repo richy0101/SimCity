@@ -1,8 +1,13 @@
 package restaurant.nakamuraRestaurant.gui;
 
 import gui.Gui;
+
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 import restaurant.nakamuraRestaurant.NakamuraCookRole;
 
@@ -10,7 +15,7 @@ public class CookGui implements Gui {
 
     private NakamuraCookRole agent = null;
 
-    private static final int xStart = 575, yStart = -20;//default Cook position
+    private static final int xStart = 737, yStart = 35;//default Cook position
     private ArrayList<String> Cooking = new ArrayList<String>();
     private ArrayList<String> Plating = new ArrayList<String>();
     enum Command {noCommand, moving};
@@ -20,12 +25,14 @@ public class CookGui implements Gui {
     public int yPos = yStart;
     public int xDestination = xStart;
     public int yDestination = yStart;
-    public static final int xCooking = 575;
-    public static final int yCooking = 210;
-    public static final int xPlating = 575;
-    public static final int yPlating = 110;
-    public static final int xCashier = 500;
-    public static final int yCashier = 210;
+    public static final int xCooking = 55;
+    public static final int yCooking = 55;
+    public static final int xPlating = 86;
+    public static final int yPlating = 136;
+    public static final int xCashier = 768;
+    public static final int yCashier = 100;
+    
+    BufferedImage cookImage;
 
     public CookGui(NakamuraCookRole cook) {
         this.agent = cook;
@@ -47,12 +54,16 @@ public class CookGui implements Gui {
         	agent.msgActionComplete();
         	command = Command.noCommand;
         }
+        
+        try {
+        	cookImage = ImageIO.read(getClass().getResource("shehRestaurantCook.png"));
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ Background");
+        } 
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.RED);
-        g.fillRect(xPos, yPos, 20, 20);
-        g.setColor(Color.BLACK);
         for(int i = 0; i < Cooking.size(); i++)
         	g.drawString(Cooking.get(i), xCooking - 25, yCooking + i*10);
         for(int i = 0; i < Plating.size(); i++)

@@ -2,6 +2,7 @@ package restaurant.shehRestaurant;
 
 import agent.Agent;
 import restaurant.CashierAgent;
+import restaurant.Restaurant;
 import restaurant.shehRestaurant.helpers.Bill;
 import restaurant.shehRestaurant.helpers.Bill.PayCheckBillState;
 import restaurant.shehRestaurant.helpers.Menu;
@@ -15,6 +16,10 @@ import restaurant.shehRestaurant.test.mock.EventLog;
 
 import java.util.*;
 
+import city.helpers.Directory;
+import market.MarketCheck;
+import market.interfaces.MarketWorker;
+
 /**
  * Restaurant Cashier Agent
  */
@@ -27,13 +32,12 @@ public class ShehCashierAgent extends CashierAgent implements Cashier {
 	Table table;
 	Bill bill;
 	
-	ShehRestaurant restaurant;
-	
+	Restaurant restaurant;
 	public EventLog log = new EventLog();
 
 	private double money = 0;
 	private String name;
-	private Market market;
+	private MarketWorker market;
 	private ShehWaiterRole waiter;
 	
 	private class myCustomer {
@@ -91,17 +95,18 @@ public class ShehCashierAgent extends CashierAgent implements Cashier {
 		stateChanged();
 	}
 	
-	public void msgHereIsMarketBill(Bill cost, Market supplier) {
-		print("Received bill from market of $" + cost.m + ".");
-		double price = cost.m;
+	public void msgGiveBill(MarketCheck marketcheck) {
+		print("Received bill from market of $" + marketcheck.getAmount() + ".");
+		double price = marketcheck.getAmount();
 		bills.add(new Bill(price, OrderBillState.PayingMarketOrder));
-		market = supplier;
+		market = marketcheck.getMarket();
 		
 		stateChanged(); 
 	}
 	
 	public void msgHereToPay(Customer c, double money2) {
 		money = money2;
+		restaurant.setTill(restaurant.getTill() + money2);
 		for(Bill b : bills) {
 			if(b.c == c) {
 				b.s = OrderBillState.Paying;
@@ -214,6 +219,7 @@ public class ShehCashierAgent extends CashierAgent implements Cashier {
 		
 		if(money > b.m) {
 			change = money - b.m;
+			restaurant.setTill(restaurant.getTill() - change);
 			print("$" + change + " is your change. Come again!");
 			
 		}
@@ -234,7 +240,8 @@ public class ShehCashierAgent extends CashierAgent implements Cashier {
 	private void PayMarketOrder(Bill b) {
 		print("Paying market order now.");
 		
-		market.msgHereIsPayment(b);
+		market.msgPayForOrder(this, b.getBillMoney());
+		restaurant.setTill(restaurant.getTill() - b.getBillMoney());
 		b.s = OrderBillState.Complete;
 		
 	}
@@ -243,14 +250,15 @@ public class ShehCashierAgent extends CashierAgent implements Cashier {
 		print("Printing: Paycheck");
 		
 		waiter.msgHereIsPayCheck(b);
+		restaurant.setTill(restaurant.getTill() - b.m);
 		b.ps = PayCheckBillState.SentPayCheck;
 	}
 
-	public void setRestaurant(ShehRestaurant rest) {
+	public void setRestaurant(Restaurant rest) {
 		restaurant = rest;
 	}
 	
-	public ShehRestaurant getRestaurant() {
+	public Restaurant getRestaurant() {
 		return restaurant;
 	}
 
