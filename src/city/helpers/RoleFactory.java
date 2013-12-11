@@ -32,7 +32,6 @@ public class RoleFactory {
 		newRole = null;
 	}
 	public Role createRole(String role, PersonAgent p) {
-		System.out.println(role);
 		if(role.equals("StackRestaurant")) {
 			newRole = new StackCustomerRole("StackRestaurant");
 		}
@@ -103,18 +102,6 @@ public class RoleFactory {
 			newRole = new ShehCookRole("ShehRestaurant");
 			return newRole;
 		}
-//		else if(role.equals("TanWaiterNormal")) {
-//			newRole = new TanWaiterNormalRole("TanRestaurant");
-//			return newRole;
-//		}
-//		else if (role.equals("TanWaiterShared")) {
-//			newRole = new TanWaiterSharedRole("TanRestaurant");
-//			return newRole;
-//		}
-//		else if (role.equals("TanCook")) {
-//			newRole = new TanCookRole("TanRestaurant");
-//			return newRole;
-//		}
 		else if(role.equals("NakamuraWaiterNormal")) {
 			newRole = new NakamuraWaiterNormalRole("NakamuraRestaurant");
 			return newRole;
@@ -137,18 +124,6 @@ public class RoleFactory {
 //		}
 //		else if (role.equals("PhillipsCook")) {
 //			newRole = new PhillipsCookRole("PhillipsRestaurant");
-//			return newRole;
-//		}
-//		else if(role.equals("HuangWaiterNormal")) {
-//			newRole = new HuangWaiterNormalRole("HuangRestaurant");
-//			return newRole;
-//		}
-//		else if (role.equals("HuangWaiterShared")) {
-//			newRole = new HuangWaiterSharedRole("HuangRestaurant");
-//			return newRole;
-//		}
-//		else if (role.equals("HuangCook")) {
-//			newRole = new HuangCookRole("HuangRestaurant");
 //			return newRole;
 //		}
 		else if (role.equals("BankTeller")) {
@@ -176,7 +151,6 @@ public class RoleFactory {
 			return newRole;
 		}
 		newRole.setPerson(p);
-		//print("Set role complete.");
 		return newRole;
 	}
 };

@@ -56,20 +56,22 @@ public class Market {
 	}
 
 	public void msgChangeFoodInventory(String type, int quantity) {
-		if(type.equals("Steak")) {
-			restPanel.msgChangeSteakInventory(quantity);
-		}
-		else if(type.equals("Chicken")) {
-			restPanel.msgChangeChickenInventory(quantity);
-		}
-		else if(type.equals("Salad")) {
-			restPanel.msgChangeSaladInventory(quantity);
-		}
-		else if(type.equals("Pizza")) {
-			restPanel.msgChangePizzaInventory(quantity);
-		}
-		else if(type.equals("Car")) {
-			restPanel.msgChangeCarInventory(quantity);
+		if(restPanel != null) {
+			if(type.equals("Steak")) {
+				restPanel.msgChangeSteakInventory(quantity);
+			}
+			else if(type.equals("Chicken")) {
+				restPanel.msgChangeChickenInventory(quantity);
+			}
+			else if(type.equals("Salad")) {
+				restPanel.msgChangeSaladInventory(quantity);
+			}
+			else if(type.equals("Pizza")) {
+				restPanel.msgChangePizzaInventory(quantity);
+			}
+			else if(type.equals("Car")) {
+				restPanel.msgChangeCarInventory(quantity);
+			}
 		}
 		getFoodInventory().get(type).setSupply(quantity);
 	}

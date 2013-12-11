@@ -217,25 +217,25 @@ public class TransportationGui implements Gui {
 		if (directionX == Direction.ToTheLeft && directionY == Direction.ToTheBottom && xPos <= 420) {
 			loopCounterClockwise();
 		}
-		else if (directionX == Direction.ToTheLeft && directionY == Direction.ToTheBottom && xPos >= 420) {
+		else if (directionX == Direction.ToTheLeft && directionY == Direction.ToTheBottom && xPos > 420) {
 			loopClockwise();
 		}
 		else if (directionX == Direction.ToTheLeft && directionY == Direction.ToTheTop && xPos <= 420) {
 			loopClockwise();
 		}
-		else if (directionX == Direction.ToTheLeft && directionY == Direction.ToTheTop && xPos >= 420) {
+		else if (directionX == Direction.ToTheLeft && directionY == Direction.ToTheTop && xPos > 420) {
 			loopCounterClockwise();
 		}
 		else if (directionX == Direction.ToTheRight && directionY == Direction.ToTheBottom && xPos <= 420) {
 			loopCounterClockwise();
 		}
-		else if (directionX == Direction.ToTheRight && directionY == Direction.ToTheBottom && xPos >= 420) {
+		else if (directionX == Direction.ToTheRight && directionY == Direction.ToTheBottom && xPos > 420) {
 			loopClockwise();
 		}
 		else if (directionX == Direction.ToTheRight && directionY == Direction.ToTheTop && xPos <= 420) {
 			loopClockwise();
 		}
-		else if (directionX == Direction.ToTheRight && directionY == Direction.ToTheTop && xPos >= 420) {
+		else if (directionX == Direction.ToTheRight && directionY == Direction.ToTheTop && xPos > 420) {
 			loopCounterClockwise();
 		}
 		/**
