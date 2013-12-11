@@ -100,20 +100,29 @@ Ryan Sheh's Contribution
  * Unit testing for Bus Agent scenarios
  * Helped update Directory & Bus Helpers classes and supporting files (w/ Ryan Sheh & Alex Huang)
  * Helped hook up Transportation Role with Bus Agent (w/ Alex Huang)
- * Missing functionality: Cars in the city
+ * Missing functionality: Cars don't stop for pedestrians
  * Implemented restaurant
  * Traffic Agent
  * Car Agent
  * Implemented vehicles through intersections w/ Alex
+ * Helped implement Transportation GUI
 
 Alex Huang's Contribution:
- * Designed and implemented Person Agent and PersonGUI
+ * Designed and implemented Person Agent AI and PersonGUI
  * Integrated all roles and gui animations with Person Agent(contributions from respective implementers).
  * Debugged all Bank roles and fixed interactions within it as they were broken initially during integration.
  * Fixed Bank Role GUI's for interactions (with help from Stack, Sheh, Phillips).
  * Implemented Directory class and its data(contribution from whole team)
  * Polish superNorm test with help from Reid and Sheh
  * Implemented Transportation Role and TransportationRoleGUI
- * Missing Complete Unit Tests for PersonAgent and PersonGUI because of sharedInstance issues in Directory. Pushing back this req for V2 delivery. 
+ * Missing Complete Unit Tests for PersonAgent and PersonGUI because of sharedInstance issues in Directory. 
+ * Completed TransportationGUI upgrades and sidewalk pathing for all people(With help from Tan)
+ * Integrated restaurant into city with a few bugs but for the most part functioning
+ * Implemented conveyer loop for walking
+ * Missing non norms for collision cases in city
+ * Implemented workDetails and AI logic for workers to leave and start work
+
+
+Pushing back this req for V2 delivery. 
  * Implemented personal restaurant w/ normal/shared waiter/cook interactions
  * Transportation Role (Walking) GUI w/ Ben
