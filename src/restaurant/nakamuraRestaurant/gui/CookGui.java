@@ -18,8 +18,10 @@ public class CookGui implements Gui {
     private static final int xStart = 737, yStart = 35;//default Cook position
     private ArrayList<String> Cooking = new ArrayList<String>();
     private ArrayList<String> Plating = new ArrayList<String>();
-    enum Command {noCommand, moving};
+    enum Command {noCommand, moving, leaving};
     Command command;
+    
+    boolean isPresent;
 
     public int xPos = xStart;
     public int yPos = yStart;
@@ -37,6 +39,7 @@ public class CookGui implements Gui {
     public CookGui(NakamuraCookRole cook) {
         this.agent = cook;
 
+        isPresent = false;
         try {
         	cookImage = ImageIO.read(getClass().getResource("nakamuraRestaurantCook.png"));
         }
@@ -56,10 +59,16 @@ public class CookGui implements Gui {
         else if (yPos > yDestination)
             yPos--;
 
-        if (xPos == xDestination && yPos == yDestination
-        		&& command == Command.moving) {
-        	agent.msgActionComplete();
-        	command = Command.noCommand;
+        if (xPos == xDestination && yPos == yDestination) {
+        	if(command == Command.leaving) {
+        		agent.msgActionComplete();
+        		command = Command.noCommand;
+        		isPresent = false;
+        	}
+        	else if(command == Command.moving) {
+	        	agent.msgActionComplete();
+	        	command = Command.noCommand;
+        	}
         }
         
     }
@@ -74,7 +83,7 @@ public class CookGui implements Gui {
     }
 
     public boolean isPresent() {
-        return true;
+        return isPresent;
     }
     
     public void checkInventory() {
@@ -102,7 +111,7 @@ public class CookGui implements Gui {
     public void DoLeaveRestaurant() {
     	xDestination = xStart;
     	yDestination = yStart;
-    	command = Command.moving;
+    	command = Command.leaving;
     }
     
     public void AddCooking(String food) {
@@ -124,5 +133,9 @@ public class CookGui implements Gui {
 
     public int getYPos() {
         return yPos;
+    }
+    
+    public void setPresent() {
+    	isPresent = true;
     }
 }
