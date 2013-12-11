@@ -84,11 +84,6 @@ public class RoleFactory {
 			newRole = new StackCookRole("StackRestaurant");
 			return newRole;
 		}
-		else if(role.equals("ShehWaiter")) {
-			newRole = new ShehWaiterRole("ShehRestaurant");
-			return newRole;
-		}
-		/*
 		else if(role.equals("ShehWaiterNormal")) {
 			newRole = new ShehWaiterNormalRole("ShehRestaurant");
 			return newRole;
@@ -97,7 +92,6 @@ public class RoleFactory {
 			newRole = new ShehWaiterSharedRole("ShehRestaurant");
 			return newRole;
 		}
-		*/
 		else if (role.equals("ShehCook")) {
 			newRole = new ShehCookRole("ShehRestaurant");
 			return newRole;
