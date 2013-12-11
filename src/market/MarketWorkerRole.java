@@ -460,7 +460,6 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 			if(inventory.get(o.choice).getSupply() >= o.amount) {
 	    		inventory.get(o.choice).setSupply(inventory.get(o.choice).getSupply() - o.amount);
 	    		
-				o.state = orderState.Filled;
 				o.cook.msgCanFillOrder(this, o.choice);
 				log.add(new LoggedEvent("Filling Restaurant Order."));
 //				timer.schedule(new TimerTask() {
@@ -527,10 +526,12 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 		for (Restaurant r : restaurants) {
 			if (r.getCashier() == o.cashier) {
 				orderLocation = r.getName();
+				print(orderLocation);
 				break;
 			}
 		}
 		Role t = new TransportationRole(orderLocation, getPersonAgent().getCurrentLocation());
+		t.setPerson(getPersonAgent());
 		getPersonAgent().addRole(t);
 	}
 	private void DeliverOrder(RestaurantOrder o) {

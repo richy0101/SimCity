@@ -56,7 +56,7 @@ public class CookGui implements Gui {
         }
         
         try {
-        	cookImage = ImageIO.read(getClass().getResource("shehRestaurantCook.png"));
+        	cookImage = ImageIO.read(getClass().getResource("nakamuraRestaurantCook.png"));
         }
         catch(IOException e) {
         	System.out.println("Error w/ Background");
