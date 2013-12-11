@@ -190,6 +190,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		getPersonAgent().msgRoleFinished();
 		state = CustomerState.FinishedRole;
 	}
+    
 	private void askForAssistance() {
 		//print("I need assistance");
 		customerGui.DoGoToManager();

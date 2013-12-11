@@ -23,4 +23,5 @@ public interface Customer {
 	public abstract void msgAtCashier();
 	public abstract void setWaiter(Waiter waiter);
 	public abstract void setTableNum(int tableNumber);
+	public abstract void msgAtHost();
 }

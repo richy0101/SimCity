@@ -100,7 +100,7 @@ public class PhillipsCookRole extends CookRole implements Cook {
 	List<Order> orders;
 	List<MyMarket> markets;
 	List<MarketOrder> marketOrders;
-	public enum OrderState {pending,Arrived,haveInventory,lowInventory,outOfInventory,oweMarketMoney,gettingIngredients,cooking,plating,done,noFood};
+	public enum OrderState {pending,DoingNothing,Arrived,haveInventory,lowInventory,outOfInventory,oweMarketMoney,gettingIngredients,cooking,plating,done,noFood};
 	public enum OrderEvent {gotFromFridge,doneCooked};
 	public enum MarketState {yesInventory,noInventory};
 	Timer timer = new Timer();
@@ -108,7 +108,7 @@ public class PhillipsCookRole extends CookRole implements Cook {
 	//map<String choice,Food f> foods;
 	OrderState state, payStatus = OrderState.pending;
 	boolean marketsOut = false;
-	private final int INVENTORY = 3;  //HACK
+	private final int INVENTORY = 20;  //HACK
 	private String location;
 
 	private Semaphore atFridge = new Semaphore(0,true);
@@ -139,7 +139,7 @@ public class PhillipsCookRole extends CookRole implements Cook {
 		marketOrders = Collections.synchronizedList(new ArrayList<MarketOrder>());
 		
 		inv.put("steak",INVENTORY);
-		inv.put("chicken",2);
+		inv.put("chicken",INVENTORY);
 		inv.put("salad",INVENTORY);
 		inv.put("pizza",INVENTORY);
 		
@@ -251,7 +251,8 @@ public class PhillipsCookRole extends CookRole implements Cook {
 			
 			if(state == OrderState.Arrived){
 				tellHostAtWork();
-			}
+				return true;
+			}/*
 			else if(marketsOut == false){
 				if(state == OrderState.lowInventory){
 					orderFromMarket();
@@ -277,7 +278,7 @@ public class PhillipsCookRole extends CookRole implements Cook {
 						return true;
 					}
 				}
-			}
+			}*/
 			synchronized(this.orders){
 				for(int i=0;i<orders.size();i++){
 					if(orders.get(i).os == OrderState.pending){
@@ -315,11 +316,11 @@ public class PhillipsCookRole extends CookRole implements Cook {
 	}
 
 	// Actions
-
 	public void tellHostAtWork(){
 		System.err.println("FINALLY COOK IS AT RICHARD RESTAURANT");
 		host.msgAddCook(this);
-		state = OrderState.lowInventory;
+		cookGui.DoGoToPlatingArea();
+		state = OrderState.haveInventory;
 		stateChanged();
 	}
 	

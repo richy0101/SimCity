@@ -45,6 +45,7 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 	private Cook cook;
 	private Host host;
 	private Cashier cashier;
+	private Semaphore atHome = new Semaphore(0,true);
 	private Semaphore atTable = new Semaphore(0,true);
 	private Semaphore atCook = new Semaphore(0,true);
 	private Semaphore atHost = new Semaphore(0,true);
@@ -101,6 +102,10 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 	}
 	public void msgAtHost() {//from animation		
 		atHost.release();// = true;
+		stateChanged();
+	}
+	public void msgAtHome() {//from animation
+		atHome.release();// = true;
 		stateChanged();
 	}
 	public void msgAtCashier() {//from animation		
@@ -210,6 +215,7 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 		//}
 		if(state == AgentState.Arrived){
 			tellHostAtWork();
+			return true;
 		}
 		synchronized(this.customers){
 			for (int i=0; i< customers.size();i++){
@@ -294,6 +300,7 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 	private void tellHostAtWork() {
 		System.err.println("WAITER FINALLY AT WORK WHOOOOO");
 		host.msgAddWaiter(this);
+		waiterGui.DoGoToHome();
 		state = AgentState.WaitingAtRestaurant;
 		stateChanged();
 	}
@@ -312,7 +319,6 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 	private void GoToHost(){
 		//Do("Going to Host");
 		DoGoToHost();
-
 		try {
 			atHost.acquire();
 		} catch (InterruptedException e) {

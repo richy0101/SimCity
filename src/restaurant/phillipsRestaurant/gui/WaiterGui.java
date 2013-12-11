@@ -25,6 +25,7 @@ public class WaiterGui implements Gui {
     public static final int xTable = 240, xTable2 = 380, xTable3 = 310;
     public static final int yTable12 = 115, yTable3 = 230;
     private int xHome, yHome;
+    private static final int HOMEX = 20, HOMEY = 20;
     private static final int WAITINGX = 70, WAITINGY = 180;
     private static final int CASHIERX = 165, CASHIERY = 35;
     private static final int COOKX = 530, COOKY = 200;
@@ -82,15 +83,20 @@ public class WaiterGui implements Gui {
 
     public void updatePosition() {
         if (xPos < xDestination)
-            xPos = xPos+5;
+            xPos = xPos++;
         else if (xPos > xDestination)
-            xPos = xPos-5;
+            xPos = xPos--;
 
         if (yPos < yDestination)
-            yPos = yPos+5;
+            yPos = yPos++;
         else if (yPos > yDestination)
-            yPos = yPos-5;
+            yPos = yPos--;
         
+        if (atDestination == false && xPos == xDestination && yPos == yDestination
+        		& (xDestination == HOMEX) & (yDestination == HOMEY)) {
+            atDestination = true;
+            agent.msgAtHome();
+         }
         if (atDestination == false && xPos == xDestination && yPos == yDestination
         		& (xDestination == HOSTX) & (yDestination == HOSTY)) {
             atDestination = true;
@@ -143,6 +149,11 @@ public class WaiterGui implements Gui {
     
     public boolean isPresent() {
         return true;
+    }
+    public void DoGoToHome(){
+    	atDestination = false;
+    	xDestination = HOMEX;
+		yDestination = HOMEY;
     }
     public void DoGoToHost(){
     	atDestination = false;

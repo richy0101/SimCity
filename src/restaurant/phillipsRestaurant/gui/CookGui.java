@@ -36,14 +36,14 @@ public class CookGui implements Gui {
 
     public void updatePosition() {
         if (xPos < xDestination)
-            xPos = xPos+5;
+            xPos = xPos++;
         else if (xPos > xDestination)
-            xPos = xPos-5;
+            xPos = xPos--;
 
         if (yPos < yDestination)
-            yPos = yPos+5;
+            yPos = yPos++;
         else if (yPos > yDestination)
-            yPos = yPos-5;
+            yPos = yPos--;
         
         if (atDestination == false && xPos == xDestination && yPos == yDestination
         		& (xDestination == FRIDGEX) & (yDestination == FRIDGEY)) {

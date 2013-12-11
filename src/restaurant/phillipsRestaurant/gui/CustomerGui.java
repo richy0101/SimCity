@@ -26,6 +26,7 @@ public class CustomerGui implements Gui{
     public static final int yTable12 = 115, yTable3 = 230;
 	
 	private static final int CASHIERX = 165, CASHIERY = 35;
+    private static final int HOSTX = 25, HOSTY = 180;
 	
 	BufferedImage customerImage;
 	
@@ -43,8 +44,8 @@ public class CustomerGui implements Gui{
         case 1:
         	xPos = 0;
         	yPos = 500;
-        	xDestination = 25;
-        	yDestination = 180;
+        	xDestination = 0;
+        	yDestination = 500;
         	break;
         case 2:
         	xPos = 0;
@@ -82,20 +83,23 @@ public class CustomerGui implements Gui{
 
 	public void updatePosition() {
 		if (xPos < xDestination)
-			xPos = xPos+5;
+			xPos = xPos++;
 		else if (xPos > xDestination)
-			xPos = xPos-5;
+			xPos = xPos--;
 
 		if (yPos < yDestination)
-			yPos = yPos+5;
+			yPos = yPos++;
 		else if (yPos > yDestination)
-			yPos = yPos-5;
+			yPos = yPos--;
 
 		if(xPos == xDestination && yPos == yDestination
         		& (xDestination == CASHIERX) & (yDestination == CASHIERY)) {
             agent.msgAtCashier();
         }
-		
+		if(xPos == xDestination && yPos == yDestination
+        		& (xDestination == HOSTX) & (yDestination == HOSTY)) {
+            agent.msgAtHost();
+        }
 		if (xPos == xDestination && yPos == yDestination) {
 			if (command==Command.GoToSeat){
 				agent.msgAnimationFinishedGoToSeat();
@@ -156,6 +160,11 @@ public class CustomerGui implements Gui{
         }
 		command = Command.GoToSeat;
 	}
+	
+	public void DoGoToHost() {
+        xDestination = HOSTX;
+        yDestination = HOSTY;
+    }
 	
 	public void DoGoToCashier() {
         xDestination = CASHIERX;

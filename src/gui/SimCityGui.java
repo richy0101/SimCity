@@ -625,10 +625,10 @@ public class SimCityGui {
 		PersonAgent person4 = new PersonAgent("BankTeller", "Test Person 4", 3, 1000.00, "House4", "TakesTheBus");
 		PersonAgent person5 = new PersonAgent("BankTeller", "Test Person 5", 3, 1000.00, "House5", "TakesTheBus");
 		PersonAgent person6 = new PersonAgent("Market", "Test Person 6", 3, 1000.00, "House6", "TakesTheBus");
-		PersonAgent person7 = new PersonAgent("PhillipsCook", "Test Person 7", 3, 1000.00, "House1", "TakesTheBus");
-		PersonAgent person8 = new PersonAgent("PhillipsWaiter", "Test Person 8", 3, 1000.00, "House2", "TakesTheBus");
+		//PersonAgent person7 = new PersonAgent("PhillipsCook", "Test Person 7", 3, 1000.00, "House1", "TakesTheBus");
+		//PersonAgent person8 = new PersonAgent("PhillipsWaiter", "Test Person 8", 3, 1000.00, "House2", "TakesTheBus");
 		PersonAgent person9 = new PersonAgent("Unemployed", "Test Person 9", 3, 0.00, "House3", "TakesTheBus");
-		/*
+		
 		String a = "PhillipsRestaurant";
 		String b = "House1";
 		String name = "JEEEZZUSSWAITER";
@@ -637,7 +637,7 @@ public class SimCityGui {
 		p.msgWakeUp();
 		role.setPerson(p);
 		p.startThread();
-		
+		/*
 		String a = "TanRestaurant";
 		String b = "House1";
 		String name = "Test Person 1 Ben";
@@ -647,7 +647,7 @@ public class SimCityGui {
 		p.msgWakeUp();
 		role.setPerson(p);
 		p.startThread();
-		*/
+		
 		String a1 = "TanRestaurant";
 		String b1 = "House2";
 		String name1 = "Test Person 2 Ben";
@@ -657,7 +657,7 @@ public class SimCityGui {
 		p1.msgWakeUp();
 		role1.setPerson(p1);
 		p1.startThread();
-	
+
 		String a2 = "TanRestaurant";
 		String b2 = "House3";
 		String name2 = "Test Person 3 Ben";
@@ -667,8 +667,8 @@ public class SimCityGui {
 		role2.setPerson(p2);
 		p2.msgWakeUp();
 		p2.startThread();
+		*/
 		
-		/*
 		String a3 = "PhillipsRestaurant";
 		String b3 = "House4";
 		String name3 = "JEZZZZUSSSCOOK";
@@ -677,7 +677,7 @@ public class SimCityGui {
 		p.msgWakeUp();
 		role.setPerson(p);
 		p.startThread();
-		*/
+		
 //		//RYAN TEST CODE
 //		String a = "ShehRestaurant";
 //		String b = "House1";

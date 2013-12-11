@@ -31,6 +31,7 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	public String order;
 	Menu menu = null;
 	private Semaphore atCashier = new Semaphore(0,true);
+	private Semaphore atHost = new Semaphore(0,true);
 	double cashOnHand=0,moneyOwed=0;
 	boolean reOrder=false;
 	
@@ -89,6 +90,10 @@ public class PhillipsCustomerRole extends Role implements Customer {
 		System.err.println("Set up cashier in RICHARD restaurant");
 	}
 	
+	public void msgAtHost() {//from animation	
+		atCashier.release();// = true;
+		stateChanged();
+	}
 	public void msgAtCashier() {//from animation
 		timer.schedule(new TimerTask() {
 			public void run() {
@@ -225,6 +230,7 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	private void goToRestaurant() {
 		Do("Going to restaurant");
 		host.msgIWantFood(this);//send our instance, so he can respond to us
+		customerGui.DoGoToHost();
 	}
 	
 	 private void roleDone() {
