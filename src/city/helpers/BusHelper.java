@@ -121,6 +121,8 @@ public class BusHelper {
 		busStopToInt.put("ShehRestaurant", 2);
 
 		busStopToInt.put("NakamuraRestaurant", 4);
+		
+		busStopToInt.put("TanRestaurant", 1);
 
 		
 	}
@@ -161,7 +163,6 @@ public class BusHelper {
 		return locationDirectory;
 	}
 	public void addWaitingPerson(Transportation t, int stopNumber) {
-		//System.out.println("adding waiting person");
 		if (stopNumber == 1) {
 			waitingPassengersAtStop1.add(t);
 		}

@@ -9,7 +9,7 @@ public class Role implements RoleInterface {
 	Person myPerson;
 	public void setPerson(Person person) {
 		myPerson = person; 
-		//System.out.println(myPerson.getName() + "WOAH");
+		System.out.println(myPerson.getName() + "WOAH");
 	}
 	
 	public Person getPersonAgent() {

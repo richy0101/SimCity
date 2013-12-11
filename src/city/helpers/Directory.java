@@ -68,7 +68,8 @@ public class Directory {
 		roleDirectory.put("restaurant.huangRestaurant.HuangCookRole", "HuangRestaurant");
 		
 		//Restaurant Roles Sheh
-		roleDirectory.put("restaurant.shehRestaurant.ShehWaiterRole", "ShehRestaurant");
+		roleDirectory.put("restaurant.shehRestaurant.ShehWaiterSharedRole", "ShehRestaurant");
+		roleDirectory.put("restaurant.shehRestaurant.ShehWaiterNormalRole", "ShehRestaurant");
 		roleDirectory.put("restaurant.shehRestaurant.ShehCookRole", "ShehRestaurant");
 		
 		//Restaurant Roles Tan

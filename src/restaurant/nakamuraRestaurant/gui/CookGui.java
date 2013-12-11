@@ -70,7 +70,7 @@ public class CookGui implements Gui {
 	        	command = Command.noCommand;
         	}
         }
-        
+ 
     }
 
     public void draw(Graphics2D g) {
