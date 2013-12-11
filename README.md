@@ -36,9 +36,9 @@ Missing functionality in V1
  
  Missing functionality in V2
  * Buying/Driving Car Scenario
- *
- *
- *
+ * Car Collisions
+ * Richard Phillip's complete restaurant integration
+ * Vehicles stop for pedestrians
 
 Ryan Stack's Contribution:
  * Implemented restaurant with added shared data, market interactions, and payment from cashier
@@ -54,7 +54,6 @@ Ryan Stack's Contribution:
  * Created custom building panels for every building to include changing inventory functionality and closing functionality
  * Added log filter to clean up console and display proper log messages (2 clicks over from create person tab) 
  * Implemented more script files to populate city with 50 people
- 
 
 Richard Phillip's Contribution:
  * Implementation for bank roles
@@ -64,6 +63,7 @@ Richard Phillip's Contribution:
  * Missing functionality for V2: no robber interaction, no database (EC)
  * Implemented Second Bank
  * Implemented Bank Robbery
+ * Implemented LandLord Role w/ Ryan 
 
 Reid Nakamura's Contribution:
  * Implemented Market Roles
@@ -92,6 +92,7 @@ Ryan Sheh's Contribution
  * Updated Sim City MacroAnimation Panel to incorporate intersections/signs/nighttime.
  * Helped Nakamura's restaurant GUI
  * Icon/Images have tracking information for references
+ * Implemented LandLord Role w/ Richard
  
  Ben Tan's Contribution
  * Design of Car Agent & interaction with Transportation Role
@@ -104,7 +105,6 @@ Ryan Sheh's Contribution
  * Traffic Agent
  * Car Agent
  * Implemented vehicles through intersections w/ Alex
-
 
 Alex Huang's Contribution:
  * Designed and implemented Person Agent and PersonGUI
