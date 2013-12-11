@@ -571,15 +571,17 @@ public class SimCityGui {
 		btnIncrementDay.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
 		panel.add(btnIncrementDay);
 		
-		Restaurant restaurant = Directory.sharedInstance().getRestaurants().get(0);
-		CurrentBuildingPanel restPanel = new CurrentBuildingPanel(restaurant);
-		restaurant.setInfoPanel(restPanel);
-		tabbedPane.addTab("Current Building", restPanel);
+		
 		
 		logPanel = new JPanel();
 		tabbedPane.addTab("Alert Log", null, logPanel, null);
 		SpringLayout sl_logPanel = new SpringLayout();
 		logPanel.setLayout(sl_logPanel);
+		
+		Restaurant restaurant = Directory.sharedInstance().getRestaurants().get(0);
+		CurrentBuildingPanel restPanel = new CurrentBuildingPanel(restaurant);
+		restaurant.setInfoPanel(restPanel);
+		tabbedPane.addTab("Current Building", restPanel);
 		
 		tracePanel = new TracePanel();
 		sl_logPanel.putConstraint(SpringLayout.NORTH, tracePanel, 10, SpringLayout.NORTH, logPanel);
@@ -1070,8 +1072,8 @@ public class SimCityGui {
 	public void setUniqueBuildingPanel(String name) {
 		for(Restaurant restaurant : Directory.sharedInstance().getRestaurants()) {
 			if(restaurant.getName().contains(name)) {
-				if(tabbedPane.getTabCount() == 2) {
-					tabbedPane.remove(1);
+				if(tabbedPane.getTabCount() == 3) {
+					tabbedPane.remove(2);
 				}
 				CurrentBuildingPanel restPanel = new CurrentBuildingPanel(restaurant);
 				restaurant.setInfoPanel(restPanel);
@@ -1079,32 +1081,32 @@ public class SimCityGui {
 			}
 		}
 		if(name.equals("Market")) {
-			if(tabbedPane.getTabCount() == 2) {
-				tabbedPane.remove(1);
+			if(tabbedPane.getTabCount() == 3) {
+				tabbedPane.remove(2);
 			}
 			CurrentBuildingPanel restPanel = new CurrentBuildingPanel(Directory.sharedInstance().getMarkets().get(0));
 			Directory.sharedInstance().getMarkets().get(0).setInfoPanel(restPanel);
 			tabbedPane.addTab("Current Building", restPanel);
 		}
 		else if(name.equals("Market2")) {
-			if(tabbedPane.getTabCount() == 2) {
-				tabbedPane.remove(1);
+			if(tabbedPane.getTabCount() == 3) {
+				tabbedPane.remove(2);
 			}
 			CurrentBuildingPanel restPanel = new CurrentBuildingPanel(Directory.sharedInstance().getMarkets().get(1));
 			Directory.sharedInstance().getMarkets().get(1).setInfoPanel(restPanel);
 			tabbedPane.addTab("Current Building", restPanel);
 		}
 		else if(name.equals("Bank")) {
-			if(tabbedPane.getTabCount() == 2) {
-				tabbedPane.remove(1);
+			if(tabbedPane.getTabCount() == 3) {
+				tabbedPane.remove(2);
 			}
 			CurrentBuildingPanel restPanel = new CurrentBuildingPanel(Directory.sharedInstance().getBanks().get(0));
 			Directory.sharedInstance().getBanks().get(0).setInfoPanel(restPanel);
 			tabbedPane.addTab("Current Building", restPanel);
 		}
 		else if(name.equals("Bank2")) {
-			if(tabbedPane.getTabCount() == 2) {
-				tabbedPane.remove(1);
+			if(tabbedPane.getTabCount() == 3) {
+				tabbedPane.remove(2);
 			}
 			CurrentBuildingPanel restPanel = new CurrentBuildingPanel(Directory.sharedInstance().getBanks().get(1));
 			Directory.sharedInstance().getBanks().get(1).setInfoPanel(restPanel);
