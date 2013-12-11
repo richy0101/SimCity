@@ -28,6 +28,7 @@ public class Market {
 		marketInventory.put("Steak", new MarketItemInformation("Steak", 10, 2.00));
 		marketInventory.put("Pizza", new MarketItemInformation("Pizza", 10, 3.00));
 		marketInventory.put("Salad", new MarketItemInformation("Salad", 10, 4.00));
+		marketInventory.put("Car", new MarketItemInformation("Salad", 10, 400.00));
 	}
 	
 	public MarketWorkerRole getWorker() {
