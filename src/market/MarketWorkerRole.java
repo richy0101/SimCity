@@ -298,7 +298,7 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 
 	//Person/GUI messages-------------------------------------------------------------
 	public void msgJobDone() {
-		print("Received msgJobDone");
+		AlertLog.getInstance().logMessage(AlertTag.MARKETWORKER, getPersonAgent().getName(), "Finished job");
 		state = marketState.Closed;
 		
 	    log.add(new LoggedEvent("Received msgJobDone from Person."));
