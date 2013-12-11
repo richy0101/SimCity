@@ -327,6 +327,7 @@ public class NakamuraWaiterRole extends Role implements Waiter{
 	// Actions
 	private void ArriveAtWork() {
 		host.msgNewWaiter(this);
+		waiterGui.setPresent();
 		waiterGui.DoGoToHome();
 		status = WorkState.working;
 	}

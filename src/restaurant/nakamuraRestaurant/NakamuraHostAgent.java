@@ -42,6 +42,7 @@ public class NakamuraHostAgent extends Agent {
 		for (int ix = 1; ix <= NTABLES; ix++) {
 			tables.add(new Table(ix));//how you add to a collections
 		}
+		hostGui = new HostGui(this);
 		
 		cookState = CookState.noCook;
 	}
@@ -254,18 +255,6 @@ public class NakamuraHostAgent extends Agent {
 				}
 			}
 		}
-		
-//		if(!waitingCustomers.isEmpty())  {
-//			hostGui.DoUpdateSeat(waitingCustomers);
-//			try{
-//				actionComplete.acquire();
-//			} 
-//			catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}			
-//			return true;
-//		}
 
 		return false;
 		//we have tried all our rules and found
@@ -288,6 +277,16 @@ public class NakamuraHostAgent extends Agent {
 		waiters.get(least).addCustomer();
 		table.setOccupant(customer, waiters.get(least));
 		waitingCustomers.remove(customer);
+		
+		
+		hostGui.DoUpdateSeat(waitingCustomers);
+		try{
+			actionComplete.acquire();
+		} 
+		catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}			
 	}
 
 	private void cleanTable(Table table) {
