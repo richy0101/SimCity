@@ -5,6 +5,8 @@ package restaurant.shehRestaurant;
  */
 
 import java.util.Vector;
+import restaurant.shehRestaurant.helpers.Order;
+
 
 public class ProducerConsumerMonitor extends Object {
     private final int N = 1000000;

@@ -69,7 +69,7 @@ public class WaiterGui implements Gui {
         yDestination = yStart;
         
         try {
-        	waiterImage = ImageIO.read(getClass().getResource("shehRestaurantWaiter.png"));
+        	waiterImage = ImageIO.read(getClass().getResource("nakamuraRestaurantWaiter.png"));
         	/*
         	chickenImage = ImageIO.read(getClass().getResource("chicken.png"));
             pizzaImage = ImageIO.read(getClass().getResource("pizza.png"));

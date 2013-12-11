@@ -700,14 +700,14 @@ public class SimCityGui {
 		macroAnimationPanel.addGui(busGui2);
 		bus2.startThread();
 		
-		
+		/*
 		trafficLight = new TrafficAgent();
 		trafficLight.startThread();
 		trafficLight1 = new TrafficAgent();
 		trafficLight1.startThread();
 		trafficLight2 = new TrafficAgent();
 		trafficLight2.startThread();
-
+		*/
 		
 //		String a = "TanRestaurant";
 //		String b = "House1";
