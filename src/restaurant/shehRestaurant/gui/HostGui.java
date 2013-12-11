@@ -24,6 +24,8 @@ public class HostGui implements Gui {
 	private int YTABLE2 = 274;
 	private int XTABLE3 = 513;
 	private int YTABLE3 = 279;
+	private int xTable = 0;
+	private int yTable = 0;
 	
     public ArrayList<Table> table; 
     

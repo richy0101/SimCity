@@ -2,6 +2,7 @@ package restaurant.shehRestaurant;
 
 import restaurant.FoodInformation;
 import restaurant.Restaurant;
+import restaurant.shehRestaurant.ProducerConsumerMonitor;
 
 
 public class ShehRestaurant extends Restaurant {
@@ -9,6 +10,7 @@ public class ShehRestaurant extends Restaurant {
 	private String name;
 	ShehHostAgent host;
 	ShehCashierAgent cashier;
+	ProducerConsumerMonitor myMonitor;
 
 	
 	public ShehRestaurant(String name) {
@@ -36,18 +38,23 @@ public class ShehRestaurant extends Restaurant {
 		
 		host.startThread();
 		cashier.startThread();	
+		
+		myMonitor = new ProducerConsumerMonitor();
 	}
 	
 	public String getName() {
 		return name;
 	}
 	
-	@Override
 	public ShehHostAgent getHost() {
 		return host;
 	}
 	
 	public ShehCashierAgent getCashier() {
 		return cashier;
+	}
+	
+	public ProducerConsumerMonitor getMyMonitor() {
+		return myMonitor;
 	}
 }

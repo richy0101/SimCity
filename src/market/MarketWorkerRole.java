@@ -31,6 +31,8 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 	
 	List<Order> MyOrders;
 	List<RestaurantOrder> MyRestaurantOrders;
+	enum marketState {NotStartedWorking, Working, Closed, DeliveringToRestaurants, DoneWorking};
+	marketState state;
 	boolean atWork;
 	boolean deliverOrders;
 	boolean jobDone;
@@ -133,9 +135,8 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 	public MarketWorkerRole(String location) {		
 		MyOrders = Collections.synchronizedList(new ArrayList<Order>());
 		MyRestaurantOrders = Collections.synchronizedList(new ArrayList<RestaurantOrder>());
-		
-		jobDone = false;
-		atWork = false;
+
+		state = marketState.NotStartedWorking;
 		funds = 0.00;
 		
 		log = new EventLog();
@@ -155,8 +156,7 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 	public MarketWorkerRole() {		
 		MyOrders = Collections.synchronizedList(new ArrayList<Order>());
 		MyRestaurantOrders = Collections.synchronizedList(new ArrayList<RestaurantOrder>());
-		jobDone = false;
-		atWork = false;
+		state = marketState.NotStartedWorking;
 		funds = 0.00;
 		log = new EventLog();
 		
@@ -297,8 +297,8 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 	//Person/GUI messages-------------------------------------------------------------
 	public void msgJobDone() {
 		print("Received msgJobDone");
-		jobDone = true;
-		deliverOrders = true;
+		state = marketState.Closed;
+		
 	    log.add(new LoggedEvent("Received msgJobDone from Person."));
 		stateChanged();
 	}
@@ -310,12 +310,17 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 	
 	//scheduler---------------------------------------------------------------------------
 	public boolean pickAndExecuteAnAction() {
-		if(atWork == false) {
+		if(state == marketState.NotStartedWorking) {
 			ArriveAtJob();
 			return true;
 		}
 		
-		if(MyOrders.isEmpty() && MyRestaurantOrders.isEmpty() && jobDone == true) {
+		if(state == marketState.Closed) {
+			CloseMarket();
+			return true;
+		}
+		
+		if(MyOrders.isEmpty() && MyRestaurantOrders.isEmpty() && state == marketState.DeliveringToRestaurants) {
 			LeaveJob();
 			return true;
 		}		
@@ -361,7 +366,7 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 				}
 			}
 		}
-		if (deliverOrders == true) {
+		if (state == marketState.DeliveringToRestaurants) {
 			synchronized(MyRestaurantOrders) {
 				for(RestaurantOrder o : MyRestaurantOrders) {
 					if(o.state == orderState.Ordered) {
@@ -460,15 +465,9 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 			if(inventory.get(o.choice).getSupply() >= o.amount) {
 	    		inventory.get(o.choice).setSupply(inventory.get(o.choice).getSupply() - o.amount);
 	    		
-				o.state = orderState.Filled;
 				o.cook.msgCanFillOrder(this, o.choice);
 				log.add(new LoggedEvent("Filling Restaurant Order."));
-//				timer.schedule(new TimerTask() {
-//					public void run() {
-//						msgDeliverOrder(o);
-//					}
-//				},
-//				6000);
+
 				o.state = orderState.ReadyToDeliver;
 			}
 			else {
@@ -498,12 +497,6 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 				MyRestaurantOrders.remove(o);
 			}
 			else {
-//				timer.schedule(new TimerTask(){
-//					public void run() {
-//						msgDeliverOrder(o);
-//					}
-//				},
-//				6000);		
 				o.state = orderState.ReadyToDeliver;
 			}
 		}
@@ -522,16 +515,22 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 			}
 		}
 		
-		String orderLocation = null;
+		Restaurant destination = null;
 		List<Restaurant> restaurants = Directory.sharedInstance().getRestaurants();
 		for (Restaurant r : restaurants) {
 			if (r.getCashier() == o.cashier) {
-				orderLocation = r.getName();
+				destination = r;
+				print(destination.getName());
 				break;
 			}
 		}
-		Role t = new TransportationRole(orderLocation, getPersonAgent().getCurrentLocation());
-		getPersonAgent().addRole(t);
+		
+		if(destination.isOpen()) {
+			o.state = orderState.InTransit;
+			Role t = new TransportationRole(destination.getName(), getPersonAgent().getCurrentLocation());
+			t.setPerson(getPersonAgent());
+			getPersonAgent().addRole(t);
+		}
 	}
 	private void DeliverOrder(RestaurantOrder o) {
 		o.state = orderState.Billed;
@@ -569,11 +568,10 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 		}
 		
 		Directory.sharedInstance().marketDirectory.get(myLocation).setOpen();
-		atWork = true;
+		state = marketState.Working;
 	}
-	private void LeaveJob() {
-		log.add(new LoggedEvent("MarketRole leaving job"));
-		getPersonAgent().setFunds(getPersonAgent().getFunds() + funds);
+	
+	private void CloseMarket() {
 		Directory.sharedInstance().marketDirectory.get(myLocation).setClosed();
 
 		DoLeaveMarket();
@@ -583,10 +581,14 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
-		jobDone = false;
-		atWork = false;
 		gui.setIsNotPresent();
+		state = marketState.DeliveringToRestaurants;		
+	}
+	
+	private void LeaveJob() {
+		log.add(new LoggedEvent("MarketRole leaving job"));
+		getPersonAgent().setFunds(getPersonAgent().getFunds() + funds);
+		state = marketState.NotStartedWorking;
 		
 		getPersonAgent().msgRoleFinished();
 	}

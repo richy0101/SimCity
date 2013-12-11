@@ -69,7 +69,7 @@ public class ShehCookRole extends CookRole implements Cook {
 		state = AgentState.Arrived;
 	}
 		
-		
+	/*	
 	public ShehCookRole(String n, Market m1, Market m2) {
 		super();
 
@@ -77,7 +77,8 @@ public class ShehCookRole extends CookRole implements Cook {
 		market1 = m1;
 		market2 = m2;
 	}
-
+	*/
+	
 	// tMessages
 	public void msgCookThisOrder(ShehWaiterRole w, String o, int t, Cashier ca) {
 		cashier = ca;
@@ -279,6 +280,10 @@ public class ShehCookRole extends CookRole implements Cook {
 
 	public CookGui getGui() {
 		return cookGui;
+	}
+	
+	public List<Order> getOrders() {
+		return orders;
 	}
 
 }

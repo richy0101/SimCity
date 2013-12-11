@@ -4,6 +4,7 @@ package restaurant.shehRestaurant.helpers;
 import java.util.List;
 import java.util.Vector;
 
+import restaurant.shehRestaurant.ShehCashierAgent;
 import restaurant.shehRestaurant.ShehWaiterRole;
 import restaurant.shehRestaurant.ShehCustomerRole;
 //import restaurant.gui.Order.OrderBillState;
@@ -17,6 +18,12 @@ public class Order {
 	public int t;
 	public OrderCookState cs;
 	public OrderMarketState ms;
+	
+	public Order(ShehWaiterRole waiter, String choice, int table) {
+		w = waiter;
+		o = choice;
+		t = table;
+	}
 
 	public Order(ShehWaiterRole waiter, String choice, int table, OrderCookState state) {
 		w = waiter;
