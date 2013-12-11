@@ -36,7 +36,7 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 		
 		}
 	}
-	private List<MyCustomerW> customers;
+	private List<MyCustomerW> customers = Collections.synchronizedList(new ArrayList<MyCustomerW>());;
 	//map<String choice, int eatingTime> timeForEating;
 	Timer timer = new Timer();
 	boolean onBreak = false;
@@ -62,7 +62,6 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 	 */
 	public PhillipsWaiterRole(String location){
 		super();
-		customers = Collections.synchronizedList(new ArrayList<MyCustomerW>());
 		host = (Host) Directory.sharedInstance().getAgents().get("PhillipsRestaurantHost");
 		cashier = (Cashier) Directory.sharedInstance().getAgents().get("PhillipsRestaurantCashier");
 		
@@ -112,7 +111,8 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 		atCashier.release();// = true;
 		stateChanged();
 	}
-	public void msgAtWaitingArea() {//from animation		
+	public void msgAtWaitingArea() {//from animation
+		System.err.println("Got away from waiting area");
 		atWaitingArea.release();// = true;
 		stateChanged();
 	}
@@ -123,15 +123,13 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 	
 	
 	public void msgSeatCustomerAtTable(Customer c, int table){
-		//print("Waiter received msgSeatCustomerAtTable");
-		synchronized(this.customers){
-			customers.add(new MyCustomerW(null,c,table,AgentState.WaitingAtRestaurant));
-		}
+		System.err.println("Waiter received msgSeatCustomerAtTable");
+		customers.add(new MyCustomerW(null,c,table,AgentState.WaitingAtRestaurant));
 		stateChanged();	
 	}
 	
 	public void msgCustomerReadyToOrder(Customer c){
-		//print("Waiter received msgCustomerReadyToOrder");
+		System.err.println("Waiter received msgCustomerReadyToOrder");
 		for(int i=0; i<customers.size();i++){
 			if(customers.get(i).c == c){
 				customers.get(i).st = AgentState.ReadyToOrder;
@@ -339,7 +337,7 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 		stateChanged();
 	}
 	private void seatCustomer(MyCustomerW cust){
-		Do("Seating customer"); 
+		System.err.println("Seating customer"); 
 		cust.c.msgFollowMe(this,cust.table,new Menu());
 		DoSeatCustomer(cust);
 		try {

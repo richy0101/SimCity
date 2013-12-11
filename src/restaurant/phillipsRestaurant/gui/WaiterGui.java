@@ -83,14 +83,14 @@ public class WaiterGui implements Gui {
 
     public void updatePosition() {
         if (xPos < xDestination)
-            xPos = xPos++;
+            xPos = xPos+5;
         else if (xPos > xDestination)
-            xPos = xPos--;
+            xPos = xPos-5;
 
         if (yPos < yDestination)
-            yPos = yPos++;
+            yPos = yPos+5;
         else if (yPos > yDestination)
-            yPos = yPos--;
+            yPos = yPos-5;
         
         if (atDestination == false && xPos == xDestination && yPos == yDestination
         		& (xDestination == HOMEX) & (yDestination == HOMEY)) {
@@ -115,7 +115,7 @@ public class WaiterGui implements Gui {
             agent.msgAtCashier();
         }
         if (atDestination == false && xPos == xDestination && yPos == yDestination
-        		& (xDestination == WAITINGX) & (yDestination == WAITINGY)) {
+        		&& (xDestination == WAITINGX) && (yDestination == WAITINGY)) {
            atDestination = true;
            agent.msgAtWaitingArea();
         }
@@ -138,9 +138,7 @@ public class WaiterGui implements Gui {
     }
 
     public void draw(Graphics2D g) {
-    	if(choice.equals("")) {
-			g.drawImage(waiterImage, xPos, yPos, null);
-		}
+		g.drawImage(waiterImage, xPos, yPos, null);
     }
 
     public void updateGui(String choice) {

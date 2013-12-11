@@ -31,7 +31,7 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	public String order;
 	Menu menu = null;
 	private Semaphore atCashier = new Semaphore(0,true);
-	private Semaphore atHost = new Semaphore(0,true);
+	private Semaphore doneAnimation = new Semaphore(0,true);
 	double cashOnHand=0,moneyOwed=0;
 	boolean reOrder=false;
 	
@@ -91,7 +91,7 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	}
 	
 	public void msgAtHost() {//from animation	
-		atCashier.release();// = true;
+		doneAnimation.release();// = true;
 		stateChanged();
 	}
 	public void msgAtCashier() {//from animation
@@ -121,6 +121,7 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	}
 
 	public void msgFollowMe(Waiter w, int tNum, Menu menu) {
+		System.err.println("CUSTOMER received msgFollowMe");
 		event = AgentEvent.followWaiter;
 		this.menu = menu;
 		tableNum = tNum;
@@ -231,6 +232,12 @@ public class PhillipsCustomerRole extends Role implements Customer {
 		Do("Going to restaurant");
 		host.msgIWantFood(this);//send our instance, so he can respond to us
 		customerGui.DoGoToHost();
+		try {
+			doneAnimation.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	 private void roleDone() {
@@ -240,7 +247,7 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	}
 
 	private void SitDown() {
-		Do("Being seated. Going to table");
+		System.err.println("Being seated. Going to table");
 		timer2.schedule(new TimerTask() {
 			public void run() {
 				System.out.println("Reading Menu");
@@ -248,7 +255,15 @@ public class PhillipsCustomerRole extends Role implements Customer {
 			}
 		},
 		6000);
+		readyToOrder();
+		
 		customerGui.DoGoToSeat(tableNum);
+		try {
+			doneAnimation.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}	
 	
 	private void readyToOrder(){

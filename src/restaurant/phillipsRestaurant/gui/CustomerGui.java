@@ -16,6 +16,7 @@ public class CustomerGui implements Gui{
 	private Customer agent = null;
 	private boolean isPresent = false;
 	private boolean isHungry = false;
+	private boolean atDestination = false;
 
 	private int xPos, yPos;
 	private int xDestination, yDestination;
@@ -33,7 +34,7 @@ public class CustomerGui implements Gui{
 	//public ArrayList<Boolean> tableOccupied = new ArrayList<Boolean>();
 
 	public CustomerGui(Customer c, int customerNum){ //HostAgent m) {
-		agent = c;
+		agent = c;/*
 		switch(customerNum%6){
         case 0:
         	xPos = 0;
@@ -41,11 +42,11 @@ public class CustomerGui implements Gui{
         	xDestination = 0;
         	yDestination = 180;
         	break;
-        case 1:
+        case 1:*/
         	xPos = 0;
         	yPos = 500;
         	xDestination = 0;
-        	yDestination = 500;
+        	yDestination = 500;/*
         	break;
         case 2:
         	xPos = 0;
@@ -72,7 +73,7 @@ public class CustomerGui implements Gui{
         	yDestination = 210;
         	break;
         
-		}
+		}*/
         try {
         	customerImage = ImageIO.read(getClass().getResource("richardRestaurantCustomer.png"));
         }
@@ -83,22 +84,24 @@ public class CustomerGui implements Gui{
 
 	public void updatePosition() {
 		if (xPos < xDestination)
-			xPos = xPos++;
+			xPos = xPos+5;
 		else if (xPos > xDestination)
-			xPos = xPos--;
+			xPos = xPos-5;
 
 		if (yPos < yDestination)
-			yPos = yPos++;
+			yPos = yPos+5;
 		else if (yPos > yDestination)
-			yPos = yPos--;
+			yPos = yPos-5;
 
-		if(xPos == xDestination && yPos == yDestination
-        		& (xDestination == CASHIERX) & (yDestination == CASHIERY)) {
+		if(atDestination == false && xPos == xDestination && yPos == yDestination
+        		&& (xDestination == CASHIERX) && (yDestination == CASHIERY)) {
+			atDestination = true;
             agent.msgAtCashier();
         }
-		if(xPos == xDestination && yPos == yDestination
-        		& (xDestination == HOSTX) & (yDestination == HOSTY)) {
-            agent.msgAtHost();
+		if(atDestination == false && xPos == xDestination && yPos == yDestination
+        		&& (xDestination == HOSTX) && (yDestination == HOSTY)) {
+            atDestination = true;
+			agent.msgAtHost();
         }
 		if (xPos == xDestination && yPos == yDestination) {
 			if (command==Command.GoToSeat){
@@ -162,11 +165,13 @@ public class CustomerGui implements Gui{
 	}
 	
 	public void DoGoToHost() {
+		atDestination = false;
         xDestination = HOSTX;
         yDestination = HOSTY;
     }
 	
 	public void DoGoToCashier() {
+		atDestination = false;
         xDestination = CASHIERX;
         yDestination = CASHIERY;
     }

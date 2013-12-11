@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 
 import javax.swing.*;
 
+import agent.Role;
 import city.BusAgent;
 import city.PersonAgent;
 import city.TrafficAgent;
@@ -13,6 +14,7 @@ import city.helpers.Clock;
 import city.helpers.Directory;
 import city.helpers.WalkLoopHelper;
 import city.helpers.XMLReader;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -33,12 +35,10 @@ import restaurant.shehRestaurant.gui.ShehRestaurantAnimationPanel;
 import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
 import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 
-<<<<<<< HEAD
+
 import javax.swing.event.PopupMenuListener;
 import javax.swing.event.PopupMenuEvent;
 
-=======
->>>>>>> 9c96e7998d98addc81a0ef9cd75f747816354ee2
 import java.awt.Font;
 
 public class SimCityGui {
@@ -595,7 +595,6 @@ public class SimCityGui {
 			
 		}
 
-<<<<<<< HEAD
 		//PersonAgent person1 = new PersonAgent("HuangCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
 		//PersonAgent person2 = new PersonAgent("HuangWaiterNormal", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
 		//PersonAgent person3 = new PersonAgent("StackWaiterShared", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
@@ -607,12 +606,11 @@ public class SimCityGui {
 		PersonAgent person1 = new PersonAgent("HuangCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
 		PersonAgent person2 = new PersonAgent("HuangWaiterShared", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
 		PersonAgent person3 = new PersonAgent("HuangWaiterShared", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
-
-=======
+/*
 		PersonAgent person1 = new PersonAgent("NakamuraCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
 		PersonAgent person2 = new PersonAgent("NakamuraWaiterNormal", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
 		PersonAgent person3 = new PersonAgent("Unemployed", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
->>>>>>> 9c96e7998d98addc81a0ef9cd75f747816354ee2
+*/
 		PersonAgent person4 = new PersonAgent("BankTeller", "Test Person 4", 3, 1000.00, "House4", "TakesTheBus");
 		PersonAgent person5 = new PersonAgent("BankTeller", "Test Person 5", 3, 1000.00, "House5", "TakesTheBus");
 		PersonAgent person6 = new PersonAgent("Market", "Test Person 6", 3, 1000.00, "House6", "TakesTheBus");
