@@ -38,6 +38,7 @@ import restaurant.nakamuraRestaurant.NakamuraWaiterRole;
 import restaurant.nakamuraRestaurant.gui.NakamuraRestaurantAnimationPanel;
 import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
+import restaurant.phillipsRestaurant.PhillipsCookRole;
 import restaurant.phillipsRestaurant.PhillipsWaiterRole;
 import restaurant.phillipsRestaurant.gui.PhillipsRestaurantAnimationPanel;
 import restaurant.shehRestaurant.ShehCookRole;
@@ -52,6 +53,7 @@ import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 
 import javax.swing.event.PopupMenuListener;
 import javax.swing.event.PopupMenuEvent;
+
 import java.awt.Font;
 
 public class SimCityGui {
@@ -608,30 +610,29 @@ public class SimCityGui {
 			
 		}
 
-<<<<<<< HEAD
 		//PersonAgent person1 = new PersonAgent("HuangCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
 		//PersonAgent person2 = new PersonAgent("HuangWaiterNormal", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
 		//PersonAgent person3 = new PersonAgent("StackWaiterShared", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
-=======
+
 		PersonAgent person1 = new PersonAgent("NakamuraCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
 		PersonAgent person2 = new PersonAgent("NakamuraWaiterShared", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
 		PersonAgent person3 = new PersonAgent("Unemployed", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
->>>>>>> 8ee6806c6fc3c3b25f2dbe9daaa2f4cc63857f39
 		PersonAgent person4 = new PersonAgent("BankTeller", "Test Person 4", 3, 1000.00, "House4", "TakesTheBus");
 		PersonAgent person5 = new PersonAgent("BankTeller", "Test Person 5", 3, 1000.00, "House5", "TakesTheBus");
 		PersonAgent person6 = new PersonAgent("Market", "Test Person 6", 3, 1000.00, "House6", "TakesTheBus");
 		//PersonAgent person7 = new PersonAgent("PhillipsCook", "Test Person 7", 3, 1000.00, "House1", "TakesTheBus");
 		//PersonAgent person8 = new PersonAgent("PhillipsWaiter", "Test Person 8", 3, 1000.00, "House2", "TakesTheBus");
 		PersonAgent person9 = new PersonAgent("Unemployed", "Test Person 9", 3, 0.00, "House3", "TakesTheBus");
+		
 		String a = "PhillipsRestaurant";
 		String b = "House1";
-		String name = "Test Person 1";
+		String name = "JEEEZZUSSWAITER";
 		Role role = new PhillipsWaiterRole("PhillipsRestaurant");
 		PersonAgent p = new PersonAgent(role, a , b, name);
-		//p.msgWakeUp();
+		p.msgWakeUp();
 		role.setPerson(p);
 		p.startThread();
-		
+		/*
 		String a = "TanRestaurant";
 		String b = "House1";
 		String name = "Test Person 1 Ben";
@@ -641,7 +642,7 @@ public class SimCityGui {
 		p.msgWakeUp();
 		role.setPerson(p);
 		p.startThread();
-		
+		*/
 		String a1 = "TanRestaurant";
 		String b1 = "House2";
 		String name1 = "Test Person 2 Ben";
@@ -662,6 +663,14 @@ public class SimCityGui {
 		p2.msgWakeUp();
 		p2.startThread();
 		
+		String a3 = "PhillipsRestaurant";
+		String b3 = "House4";
+		String name3 = "JEZZZZUSSSCOOK";
+		Role role3 = new PhillipsCookRole("PhillipsRestaurant");
+		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
+		p.msgWakeUp();
+		role.setPerson(p);
+		p.startThread();
 		
 		//RYAN TEST CODE
 		/*

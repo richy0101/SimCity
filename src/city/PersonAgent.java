@@ -693,7 +693,7 @@ public class PersonAgent extends Agent implements Person {
 		setPersonState(PersonState.OutToEat);
 		//Decide Which restaurant to go to
 		
-		Restaurant r = Directory.sharedInstance().getRestaurants().get(3);
+		Restaurant r = Directory.sharedInstance().getRestaurants().get(4);
 		//Restaurant r = Directory.sharedInstance().getRestaurants().get(2);
 		//Restaurant r = Directory.sharedInstance().getRestaurants().get(0);
 		//End of Decide block

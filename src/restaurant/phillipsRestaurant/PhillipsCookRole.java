@@ -106,7 +106,7 @@ public class PhillipsCookRole extends CookRole implements Cook {
 	Timer timer = new Timer();
 	private Map<String,Integer> inv = new HashMap<String,Integer>(4);
 	//map<String choice,Food f> foods;
-	OrderState state = OrderState.lowInventory, payStatus = OrderState.pending;
+	OrderState state, payStatus = OrderState.pending;
 	boolean marketsOut = false;
 	private final int INVENTORY = 3;  //HACK
 	private String location;
@@ -252,8 +252,7 @@ public class PhillipsCookRole extends CookRole implements Cook {
 			if(state == OrderState.Arrived){
 				tellHostAtWork();
 			}
-			
-			if(marketsOut == false){
+			else if(marketsOut == false){
 				if(state == OrderState.lowInventory){
 					orderFromMarket();
 				}
@@ -318,6 +317,7 @@ public class PhillipsCookRole extends CookRole implements Cook {
 	// Actions
 
 	public void tellHostAtWork(){
+		System.err.println("FINALLY COOK IS AT RICHARD RESTAURANT");
 		host.msgAddCook(this);
 		state = OrderState.lowInventory;
 		stateChanged();

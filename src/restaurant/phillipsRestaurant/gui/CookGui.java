@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
 
 public class CookGui implements Gui {
 
-    public int xPos = 650, yPos = 200, xDestination = 650, yDestination = 200;
+    public int xPos = -40, yPos = -40, xDestination = -40, yDestination = -40;
     boolean atDestination = false;
     
     private static final int PLATINGX = 560, PLATINGY = 200;

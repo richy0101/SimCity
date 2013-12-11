@@ -47,10 +47,10 @@ public class WaiterGui implements Gui {
         	yHome = yDestination;
         	break;
         case 1:
-        	xPos = 20;
-        	yPos = 0;
-        	xDestination = 20;
-        	yDestination = 0;
+        	xPos = -45;
+        	yPos = -45;
+        	xDestination = -45;
+        	yDestination = -45;
         	xHome = xDestination;
         	yHome = yDestination;
         	break;

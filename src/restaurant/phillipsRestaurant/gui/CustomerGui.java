@@ -36,37 +36,37 @@ public class CustomerGui implements Gui{
 		switch(customerNum%6){
         case 0:
         	xPos = 0;
-        	yPos = 180;
+        	yPos = 500;
         	xDestination = 0;
         	yDestination = 180;
         	break;
         case 1:
-        	xPos = 25;
-        	yPos = 180;
+        	xPos = 0;
+        	yPos = 500;
         	xDestination = 25;
         	yDestination = 180;
         	break;
         case 2:
-        	xPos = 50;
-        	yPos = 180;
+        	xPos = 0;
+        	yPos = 500;
         	xDestination = 50;
         	yDestination = 180;
         	break;
         case 3:
         	xPos = 0;
-        	yPos = 210;
+        	yPos = 500;
         	xDestination = 0;
         	yDestination = 210;
         	break;
         case 4:
-        	xPos = 25;
-        	yPos = 210;
+        	xPos = 0;
+        	yPos = 500;
         	xDestination = 25;
         	yDestination = 210;
         	break;
         case 5:
-        	xPos = 50;
-        	yPos = 210;
+        	xPos = 0;
+        	yPos = 500;
         	xDestination = 50;
         	yDestination = 210;
         	break;
@@ -120,7 +120,7 @@ public class CustomerGui implements Gui{
 	
 	public void setHungry() {
 		isHungry = true;
-		agent.gotHungry();
+		agent.msgGotHungry();
 		setPresent(true);
 	}
 	public boolean isHungry() {
@@ -163,8 +163,8 @@ public class CustomerGui implements Gui{
     }
 
 	public void DoExitRestaurant() {
-		xDestination = -20;
-		yDestination = 300;
+		xDestination = 0;
+		yDestination = 500;
 		command = Command.LeaveRestaurant;
 	}
 }

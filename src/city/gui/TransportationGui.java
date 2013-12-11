@@ -66,6 +66,7 @@ public class TransportationGui implements Gui {
 	CurrentAction currentAction;
 	public TransportationGui(TransportationRole agent, String startLocation, String destinationLocation) {
 		this.agent = agent;
+		//System.err.println(WalkLoopHelper.sharedInstance.getCoordinateEvaluator().get(startLocation).xCoordinate + " " + WalkLoopHelper.sharedInstance.getCoordinateEvaluator().get(startLocation).yCoordinate);
 		xPos = WalkLoopHelper.sharedInstance.getCoordinateEvaluator().get(startLocation).xCoordinate;
 		yPos = WalkLoopHelper.sharedInstance.getCoordinateEvaluator().get(startLocation).yCoordinate;
 		xDestination = WalkLoopHelper.sharedInstance.getCoordinateEvaluator().get(destinationLocation).xCoordinate;

@@ -71,15 +71,18 @@ public class PhillipsHostAgent extends Agent implements Host {
 	// Messages
 	public void msgAddWaiter(Waiter w){
 		synchronized(this.waiters){
+			System.err.println("Added waiter to host in RICHARD restaurant");
 			waiters.add(w);
 		}
 	}
 	
 	public void msgAddCook(Cook c){
+		System.err.println("Added cook to host in RICHARD restaurant");
 		cook = c;
 	}
 	
 	public void msgIWantFood(Customer cust) {
+		System.err.println("Received msgIWantFood in RICHARD restaurant #" + waiters.size());
 		state = HostState.sitCustomer;
 		synchronized (waitingCustomers) {
 			waitingCustomers.add(cust);
@@ -120,16 +123,20 @@ public class PhillipsHostAgent extends Agent implements Host {
 			synchronized (waitingCustomers) {
 				if (!waitingCustomers.isEmpty()){
 					if(waiters.size() != 0){
-					setWaiter(pickWaiter());
-					for (Table table : tables){
-						if (!table.isOccupied()) {		
-							waitingCustomers.get(0).setTableNum(table.tableNumber);
-							waitingCustomers.get(0).setWaiter(waiter);
-							table.setOccupant(waitingCustomers.get(0));
-							tellWaiterSeatCustomer(waitingCustomers.remove(0));
-							return true;
+						setWaiter(pickWaiter());
+						for (Table table : tables){
+							if (!table.isOccupied()) {		
+								waitingCustomers.get(0).setTableNum(table.tableNumber);
+								waitingCustomers.get(0).setWaiter(waiter);
+								table.setOccupant(waitingCustomers.get(0));
+								tellWaiterSeatCustomer(waitingCustomers.remove(0));
+								return true;
+							}
 						}
 					}
+					else{
+						tellCustomerNoWaiters(waitingCustomers.get(0));
+						return true;
 					}
 				}
 			}
@@ -155,10 +162,16 @@ public class PhillipsHostAgent extends Agent implements Host {
 	// Actions
 
 	private void tellWaiterSeatCustomer(Customer cust) {
+		System.err.println("Telling waiter to seat customer in RICHARD restaurant");
 		waiter.msgSeatCustomerAtTable(cust, cust.tableNum);//the action
 		stateChanged();
 	}
-
+	
+	private void tellCustomerNoWaiters(Customer cust){
+		System.err.println("Telling customer no waiters in RICHARD restaurant");
+		cust.msgNoWaiters();
+		waitingCustomers.remove(cust);
+	}
 
 	//utilities
 

@@ -41,11 +41,11 @@ public class PhillipsCustomerRole extends Role implements Customer {
 
 	//    private boolean isHungry = false; //hack for gui
 	public enum AgentState
-	{DoingNothing, WaitingInRestaurant, BeingSeated, Seated, ReadyToOrder, Ordered, Eating, DoneEating, AboutToPay, Paying, ReadyToLeave, Leaving, Left};
+	{DoingNothing, WaitingInRestaurant, BeingSeated, Seated, ReadyToOrder, Ordered, Eating, DoneEating, AboutToPay, Paying, ReadyToLeave, Leaving, FinishedRole, Gone, Left};
 	private AgentState state = AgentState.DoingNothing;//The start state
 
 	public enum AgentEvent 
-	{none, gotHungry, followWaiter, seated, ordering, eatingFood, doneEating, goingToPay, paid, doneLeaving};
+	{none, noWaiters, gotHungry, followWaiter, seated, ordering, eatingFood, doneEating, goingToPay, paid, doneLeaving};
 	AgentEvent event = AgentEvent.none;
 	
 	
@@ -78,12 +78,15 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	 */
 	public void setHost(Agent host) {
 		this.host = (Host) host;
+		System.err.println("Set up host in RICHARD restaurant");
 	}
 	public void setWaiter(Waiter waiter) {
 		this.waiter = waiter;
+		System.err.println("Set up waiter in RICHARD restaurant");
 	}
-	public void setCashier(Cashier cashier){
-		this.cashier = cashier;
+	public void setCashier(Agent cashier){
+		this.cashier = (Cashier) cashier;
+		System.err.println("Set up cashier in RICHARD restaurant");
 	}
 	
 	public void msgAtCashier() {//from animation
@@ -96,12 +99,19 @@ public class PhillipsCustomerRole extends Role implements Customer {
 		},
 		5000);
 	}
+	
 	// Messages
-
-	public void gotHungry() {//from animation
-		Do("I'm hungry");
+	public void msgGotHungry() {//from animation
+		print("I'm hungry- RICHARD restaurant");
 		state = AgentState.DoingNothing;
 		event = AgentEvent.gotHungry;
+		stateChanged();
+	}
+	
+	public void msgNoWaiters(){
+		print("Can't eat, no waiters- RICHARD restaurant");
+		state = AgentState.ReadyToLeave;
+		event = AgentEvent.noWaiters;
 		stateChanged();
 	}
 
@@ -141,7 +151,9 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	}
 	public void msgAnimationFinishedLeaveRestaurant() {
 		//from animation
+		System.err.println("Officially left RICHARD restaurant from animation");
 		event = AgentEvent.doneLeaving;
+		state = AgentState.Gone;
 		stateChanged();
 	}
 
@@ -195,6 +207,16 @@ public class PhillipsCustomerRole extends Role implements Customer {
 			//no action
 			return true;
 		}
+		//ONLY BECAUSE NO WAITERS
+		if (state == AgentState.ReadyToLeave && event == AgentEvent.noWaiters){
+			state = AgentState.Leaving;
+			leaveRestaurant();
+			//no action
+			return true;
+		}
+		if(state == AgentState.Gone && event == AgentEvent.doneLeaving){
+			roleDone();
+		}
 		return false;
 	}
 
@@ -203,6 +225,12 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	private void goToRestaurant() {
 		Do("Going to restaurant");
 		host.msgIWantFood(this);//send our instance, so he can respond to us
+	}
+	
+	 private void roleDone() {
+		System.err.println("Role is done for Customer");
+		getPersonAgent().msgRoleFinished();
+		state = AgentState.FinishedRole;
 	}
 
 	private void SitDown() {
@@ -289,6 +317,11 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	private void leaveCashier() {
 		Do("Leaving restaurant");
 		waiter.msgLeavingTable(this);
+		state = AgentState.Left;
+		customerGui.DoExitRestaurant();
+	}
+	private void leaveRestaurant() {
+		System.err.println("Leaving RICHARD restaurant");
 		state = AgentState.Left;
 		customerGui.DoExitRestaurant();
 	}

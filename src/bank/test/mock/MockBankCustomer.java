@@ -85,4 +85,10 @@ public class MockBankCustomer extends Mock implements BankCustomer {
 		log.add(new LoggedEvent("Customer is ready to be helped"));
 		
 	}
+
+	@Override
+	public void msgBankIsClosed() {
+		log.add(new LoggedEvent("Bank is closed"));
+		
+	}
 }

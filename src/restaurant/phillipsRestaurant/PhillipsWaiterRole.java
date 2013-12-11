@@ -64,9 +64,11 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 		customers = Collections.synchronizedList(new ArrayList<MyCustomerW>());
 		host = (Host) Directory.sharedInstance().getAgents().get("PhillipsRestaurantHost");
 		cashier = (Cashier) Directory.sharedInstance().getAgents().get("PhillipsRestaurantCashier");
+		
 		waiterGui = new WaiterGui(this,1);
 		this.location = location;
 		state = AgentState.Arrived;
+		
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		for(Building b : buildings) {
 			if (b.getName() == location) {
@@ -103,7 +105,6 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 	}
 	public void msgAtCashier() {//from animation		
 		atCashier.release();// = true;
-		System.out.println("OUT OF CASHIER SEM");
 		stateChanged();
 	}
 	public void msgAtWaitingArea() {//from animation		
@@ -291,6 +292,7 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 
 	// Actions
 	private void tellHostAtWork() {
+		System.err.println("WAITER FINALLY AT WORK WHOOOOO");
 		host.msgAddWaiter(this);
 		state = AgentState.WaitingAtRestaurant;
 		stateChanged();
