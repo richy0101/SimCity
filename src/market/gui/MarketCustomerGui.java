@@ -97,6 +97,7 @@ public class MarketCustomerGui implements Gui {
 		}
 		
 		info = role.getPersonAgent().getName() + "(" + role.getState() + ")";
+		g.setColor(Color.magenta);
 		g.drawString(info, xPos, yPos);
 	}
 

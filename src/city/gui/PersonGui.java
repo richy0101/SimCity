@@ -177,6 +177,10 @@ public class PersonGui implements Gui {
 
 	@Override
 	public void draw(Graphics2D g) {
+		info = agent.getName() + "(" + agent.getPersonState() + ")";
+		g.setColor(Color.magenta);
+		g.drawString(info, xPos, yPos);
+		
 		if (xPos < xDestination) {
 			g.drawImage(personRight, xPos, yPos, null);
 		}
@@ -201,10 +205,6 @@ public class PersonGui implements Gui {
 		else {
 			g.drawImage(personDown, xPos, yPos, null);
 		}
-		
-		info = agent.getName() + "(" + agent.getPersonState() + ")";
-		g.drawString(info, xPos, yPos);
-		
 	}
 
 	public void setPresentFalse() {

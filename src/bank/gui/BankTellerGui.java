@@ -118,8 +118,9 @@ public class BankTellerGui implements Gui {
 			g.drawImage(personDown, xPos, yPos, null);
 		}
 		
-		//info = agent.getPersonAgent().getName() + "(" + agent.getState() + ")";
-		//g.drawString(info, xPos, yPos);
+		info = agent.getPersonAgent().getName() + "(" + agent.getState() + ")";
+		g.setColor(Color.magenta);
+		g.drawString(info, xPos, yPos);
 	}
     
 	@Override

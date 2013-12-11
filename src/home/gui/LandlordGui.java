@@ -3,6 +3,7 @@ package home.gui;
 import gui.Gui;
 import home.interfaces.Landlord;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class LandlordGui implements Gui {
@@ -21,7 +22,6 @@ public class LandlordGui implements Gui {
 
 	@Override
 	public void draw(Graphics2D g) {
-		// TODO Auto-generated method stub
 
 	}
 

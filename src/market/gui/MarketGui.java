@@ -100,6 +100,7 @@ public class MarketGui implements Gui {
 		}
 		
 		info = role.getPersonAgent().getName();
+		g.setColor(Color.magenta);
 		g.drawString(info, xPos, yPos);
 	}
 

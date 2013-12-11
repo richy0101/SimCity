@@ -143,8 +143,8 @@ public class BankCustomerGui implements Gui {
 				g.drawImage(explosion, randX-150,randY-50,null);
 			}
 		}
-		
 		info = agent.getPersonAgent().getName() + "(" + agent.getState() + ")";
+		g.setColor(Color.magenta);
 		g.drawString(info, xPos, yPos);
 	}
 
