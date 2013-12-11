@@ -37,6 +37,10 @@ import restaurant.phillipsRestaurant.gui.PhillipsRestaurantAnimationPanel;
 import restaurant.shehRestaurant.ShehCookRole;
 import restaurant.shehRestaurant.ShehWaiterRole;
 import restaurant.shehRestaurant.gui.ShehRestaurantAnimationPanel;
+import restaurant.tanRestaurant.TanCookRole;
+import restaurant.tanRestaurant.TanCustomerRole;
+import restaurant.tanRestaurant.TanWaiterNormalRole;
+import restaurant.tanRestaurant.TanWaiterSharedRole;
 import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
 import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 import trace.AlertTag;
@@ -801,11 +805,12 @@ public class SimCityGui {
 		PersonAgent person5 = new PersonAgent("BankTeller", "Test Person 5", 3, 1000.00, "House5", "TakesTheBus");
 		PersonAgent person6 = new PersonAgent("Market", "Test Person 6", 3, 1000.00, "House6", "TakesTheBus");
 
+*/
 		String a = "TanRestaurant";
 		String b = "House1";
 		String name = "Ben Test Waiter";
 		Role role;
-		role= new TanWaiterNormalRole("TanRestaurant");
+		role= new TanWaiterSharedRole("TanRestaurant");
 		PersonAgent p = new PersonAgent(role, a , b, name);
 		p.msgWakeUp();
 		role.setPerson(p);
@@ -830,7 +835,7 @@ public class SimCityGui {
 		p2.msgWakeUp();
 		role2.setPerson(p2);
 		p2.startThread();
-		*/
+		
 		
 		/*
 		//RYAN TEST CODE

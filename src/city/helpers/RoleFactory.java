@@ -28,6 +28,7 @@ import restaurant.tanRestaurant.TanCookRole;
 import restaurant.tanRestaurant.TanCustomerRole;
 import restaurant.tanRestaurant.TanWaiterNormalRole;
 import restaurant.tanRestaurant.TanWaiterRole;
+import restaurant.tanRestaurant.TanWaiterSharedRole;
 
 
 public class RoleFactory {
@@ -111,11 +112,10 @@ public class RoleFactory {
 			newRole = new TanWaiterRole("TanRestaurant");
 			return newRole;
 		}
-		/*
 		else if (role.equals("TanWaiterShared")) {
 			newRole = new TanWaiterSharedRole("TanRestaurant");
 			return newRole;
-		}*/
+		}
 		else if (role.equals("TanCook")) {
 			newRole = new TanCookRole("TanRestaurant");
 			return newRole;

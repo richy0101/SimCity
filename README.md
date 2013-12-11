@@ -1,5 +1,5 @@
 team02
-======
+
 
 SimCity201 Project Repository for CS 201 students
 
@@ -21,6 +21,24 @@ Running Normative Scenario
  * Potential inconsistencies w/ different computers 
  * (Ex. Busses sometimes stop stopping after running a long time on Mac computers)
 
+Missing functionality in V1
+ * Only one market running.
+ * No intersections.
+ * No cars.
+ * No collision detection.
+ * No A*
+ * No apartments.
+ * Populate City does not work.
+ * No animation for markets to deliver.
+ * No walking as sole form of transportation.
+ * No bank robberies.
+ * No weekends.
+ 
+ Missing functionality in V2
+ * Buying/Driving Car Scenario
+ *
+ *
+ *
 
 Ryan Stack's Contribution:
  * Implemented restaurant with added shared data, market interactions, and payment from cashier
@@ -51,6 +69,10 @@ Reid Nakamura's Contribution:
  * Implement Market Role Unit Test
  * Helped to debug Transportation GUI
  * Resolved issue with Ryan Sheh to set up CardLayout of building animation panels
+ * Implemented personal restaurant w/ normal/shared waiter/cook interactions
+ * Updated Market Role Agent to Handle Deliveries
+ * Helped Ryan w/ Market/Restaurant interaction
+ * Implemented time (days/hours/weekends)
 
 Ryan Sheh's Contribution
  * Main Window GUI (w/ help from Ryan Stack)
@@ -61,6 +83,12 @@ Ryan Sheh's Contribution
  * Implemented Directory Class for References (w/ help from Alex)
  * Unit Testing Bank Roles (w/ Richard)
  * Helped Implement Bus Agent & GUI (w/ Ben Tan)
+ * Implemented personal restaurant w/ normal/shared waiter/cook interactions
+ * Traffic Agent Design Doc
+ * Apartment implementation/GUI
+ * LandLord GUI
+ * Updated Sim City MacroAnimation Panel to incorporate intersections/signs/nighttime.
+ * Helped Nakamura's restaurant GUI
  
  Ben Tan's Contribution
  * Design of Car Agent & interaction with Transportation Role
@@ -69,6 +97,10 @@ Ryan Sheh's Contribution
  * Helped update Directory & Bus Helpers classes and supporting files (w/ Ryan Sheh & Alex Huang)
  * Helped hook up Transportation Role with Bus Agent (w/ Alex Huang)
  * Missing functionality: Cars in the city
+ * Implemented restaurant
+ * Traffic Agent
+ * Car Agent
+ * Implemented vehicles through intersections w/ Alex
 
 
 Alex Huang's Contribution:
@@ -80,4 +112,5 @@ Alex Huang's Contribution:
  * Polish superNorm test with help from Reid and Sheh
  * Implemented Transportation Role and TransportationRoleGUI
  * Missing Complete Unit Tests for PersonAgent and PersonGUI because of sharedInstance issues in Directory. Pushing back this req for V2 delivery. 
-
+ * Implemented personal restaurant w/ normal/shared waiter/cook interactions
+ * Transportation Role (Walking) GUI w/ Ben
