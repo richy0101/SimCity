@@ -617,7 +617,7 @@ public class PersonAgent extends Agent implements Person {
 	
 	private void goHome() {
 		if (currentLocation != homeName) {
-			print("Action goHome - State set to InTransit. Adding new Transportation Role.");
+			AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Going home");
 			setPersonState(PersonState.InTransit);
 			roles.clear();
 			Role t = new TransportationRole(homeName, currentLocation);
