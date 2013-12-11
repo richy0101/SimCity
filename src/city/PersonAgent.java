@@ -414,7 +414,7 @@ public class PersonAgent extends Agent implements Person {
 		stateChanged();
 	}
 	public void msgDoneWorking() {
-		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Left work, I'm hungry");
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "I am done working for today");
 		setPersonState(PersonState.WantFood);
 		stateChanged();
 	}
@@ -662,17 +662,17 @@ public class PersonAgent extends Agent implements Person {
 		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Going out to eat");
 		setPersonState(PersonState.OutToEat);
 		//Decide Which restaurant to go to
-
-		//Restaurant r = Directory.sharedInstance().getRestaurants().get(5); //CHECK HERE
-
-
-		Restaurant r = Directory.sharedInstance().getRestaurants().get(3);
-		//Restaurant r = Directory.sharedInstance().getRestaurants().get(1);
-		//Restaurant r = Directory.sharedInstance().getRestaurants().get(2);
-
-		//Restaurant r = Directory.sharedInstance().getRestaurants().get(0);
-		
-
+		List<Restaurant> restaurants = Directory.sharedInstance().getRestaurants();
+		Restaurant r = null;
+		if (!restaurants.isEmpty()) {
+			for(int i = 0; i < restaurants.size(); i++) {
+				if(restaurants.get(i).isOpen()) {
+					r = restaurants.get(i);
+					break;
+				}
+				r = restaurants.get(0);
+			}
+		}
 		//End of Decide block
 		if(currentLocation == homeName) {
 			personGui.DoLeaveHouse();

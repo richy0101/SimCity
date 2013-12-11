@@ -170,7 +170,7 @@ public class TransportationRole extends Role implements Transportation  {
 				EnterBuilding();
 			}
 		}
-		if (getPersonAgent().getTransportationMethod().contains("Car")) {
+		else if (getPersonAgent().getTransportationMethod().contains("Car")) {
 			//set car agent
 			car = new CarAgent(startingLocation);
 			car.startThread();
