@@ -68,15 +68,12 @@ public class BusGui implements Gui {
 		if (destination.equals("StackRestaurant")){
 			//sets xDestination & yDestination
 			//need to figure out how to travel on road
-			System.out.println("carGui: in DoGoTo function, simulating car running.");
-			System.out.println("carGui: approaching destination.");
 			//agent.msgAtDestination(); //hack
 			
 		}
 	}
 	
 	public void DoParkBus(){
-		System.out.println("busGui: Parking bus.");
 		//may not be necessary for bus system
 		//send msg to animation panel to remove gui from the list
 	}

@@ -4,8 +4,10 @@ import restaurant.tanRestaurant.TanCustomerRole;
 //import restaurant.HostAgent;
 import restaurant.tanRestaurant.TanWaiterRole;
 import restaurant.tanRestaurant.TanWaiterRole.MyCustomer;
+//import restaurant.tanRestaurant.gui.CustomerGui.Command;
 import gui.Gui;
 //import restaurant.gui.CustomerGui.Command;
+
 
 
 
@@ -21,14 +23,27 @@ public class WaiterGui implements Gui {
     private TanWaiterRole agent = null;
     private boolean requestedBreak= false;
 
-    private int xPos = 50, yPos = 50;//default waiter position
+    private int xPos = 292, yPos= 410;//50, yPos = 50;//default waiter position
     private int xDestination = 292, yDestination = 410;//default start position
+    private int xStart= 4, yStart=118;
 
-    public static final int xTable = 200;
-    public static final int yTable = 250;
+   // public static final int xTable = 200;
+   // public static final int yTable = 250;
     
-	public static final int xSeat = 70;
-	public static final int ySeat = 80;
+	//public static final int xSeat = 70;
+	//public static final int ySeat = 80;
+	
+	private int xCook=287, yCook=108;
+	private int xCashier=434, yCashier=73;
+	
+	//Tables
+	private int xTable1=38, xTable2=245, xTable3=452, xTable4=660;
+	private int yTable=165;
+	
+	//Waiting seats
+	private int xSeat1=31, xSeat2=95 ,xSeat3=129 ,xSeat4=158 ,xSeat5=199 ,xSeat6=381 ,xSeat7=420 ,
+			xSeat8=450 ,xSeat9=482 ,xSeat10=512; 
+	private int ySeat=320;
 	
 	public enum locationState
 	{Away, Entered};
@@ -118,34 +133,41 @@ public class WaiterGui implements Gui {
         	//yPos=yPos-3;
 
         if (xPos == xDestination && yPos == yDestination
-        		& (xDestination == xTable + 20) & (yDestination == yTable - 20)) {
-        	//if (agent.ws == WaiterState.approachingTable)
+        		& (xDestination == xTable1) & (yDestination == yTable)) {
         	agent.msgAtTable();
         }
         else if(xPos == xDestination && yPos == yDestination
-        		& (xDestination == xTable + 150 + 20) & (yDestination == yTable - 20)) {
+        		& (xDestination == xTable2) & (yDestination == yTable)) {
            agent.msgAtTable();
          }
         else if(xPos == xDestination && yPos == yDestination
-        		& (xDestination == xTable + 150 + 20) & (yDestination == yTable - 20-150)) {
+        		& (xDestination == xTable3) & (yDestination == yTable)) {
+           agent.msgAtTable();
+         }
+        else if(xPos == xDestination && yPos == yDestination
+        		& (xDestination == xTable4) & (yDestination == yTable)) {
            agent.msgAtTable();
          }
         if (xPos == xDestination && yPos == yDestination
-        		& (xDestination == 200) & (yDestination == 20)) {
-        	//if (agent.ws == WaiterState.approachingTable)
+        		& (xDestination == xCashier) & (yDestination == yCashier)) {
         	agent.msgAtCashier();
         }
-        if (xPos == xDestination && yPos == yDestination
-        		&& (((xDestination == xSeat)||(xDestination==xSeat-30)) && ((yDestination == ySeat)||(yDestination == ySeat+30)||(yDestination == ySeat+60)||(yDestination == ySeat+90)||(yDestination == ySeat+120)))) {
+        if ((xPos == xDestination && yPos == yDestination)
+        		&& ((xDestination==xSeat1 && yDestination ==ySeat) ||(xDestination==xSeat2 && yDestination ==ySeat)
+        		|| (xDestination==xSeat3 && yDestination ==ySeat) ||(xDestination==xSeat4 && yDestination ==ySeat)
+        		||(xDestination==xSeat5 && yDestination ==ySeat) ||(xDestination==xSeat6 && yDestination ==ySeat)
+        		|| (xDestination==xSeat7 && yDestination ==ySeat) ||(xDestination==xSeat8 && yDestination ==ySeat)
+        		|| (xDestination==xSeat9 && yDestination ==ySeat) ||(xDestination==xSeat10 && yDestination ==ySeat)
+        		)) {
         	agent.msgAtWaitingCustomer();
         }
         if (xPos == xDestination && yPos == yDestination
-        		& (xDestination == 350) & (yDestination == 70)) {
+        		& (xDestination == xCook) & (yDestination == yCook)) {
         	//if (agent.ws == WaiterState.approachingTable)
         	agent.msgAtCook();
         }
     }
-
+    
     public void draw(Graphics2D g) {
     	g.drawImage(waiterImage, xPos, yPos, null);
         /*g.setColor(Color.BLUE);
@@ -171,27 +193,31 @@ public class WaiterGui implements Gui {
 	
     public void DoBringToTable(TanCustomerRole customer, int seatnumber) {
         if (seatnumber==1){
-        	xDestination = xTable + 20;
-            yDestination = yTable - 20;
+        	xDestination = xTable1;
+            yDestination = yTable;
         }
         else if(seatnumber==2){
-        	xDestination = xTable + 150 + 20;
-            yDestination = yTable - 20;
+        	xDestination = xTable2;
+            yDestination = yTable;
         }
         else if(seatnumber==3){
-        	xDestination = xTable + 150 + 20;
-            yDestination = yTable - 20 - 150;
+        	xDestination = xTable3;
+            yDestination = yTable;
+        }
+        else if(seatnumber==4){
+        	xDestination = xTable4;
+            yDestination = yTable;
         }
     }
     
     public void GoToCashier(){
-    	xDestination= 200;
-    	yDestination= 20;
+    	xDestination= xCashier;
+    	yDestination= yCashier;
     }
     
     public void DoPickUpFood(){
-    	xDestination =-20;
-    	yDestination =-20;
+    	xDestination =xCook;
+    	yDestination =yCook;
     }
     
     public  void setWaiterEnabled(){
@@ -202,83 +228,92 @@ public class WaiterGui implements Gui {
 
     public void DoServeFood(int seatnumber){
     	if (seatnumber==1){
-        	xDestination = xTable + 20;
-            yDestination = yTable - 20;
+        	xDestination = xTable1;
+            yDestination = yTable;
         }
         else if(seatnumber==2){
-        	xDestination = xTable + 150 + 20;
-            yDestination = yTable - 20;
+        	xDestination = xTable2;
+            yDestination = yTable;
         }
         else if(seatnumber==3){
-        	xDestination = xTable + 150 + 20;
-            yDestination = yTable - 20 - 150;
+        	xDestination = xTable3;
+            yDestination = yTable;
+        }
+        else if(seatnumber==4){
+        	xDestination = xTable4;
+            yDestination = yTable;
         }
     }
     
     public void ApproachTable(int seatnumber){
     	if (seatnumber==1){
-        	xDestination = xTable + 20;
-            yDestination = yTable - 20;
+        	xDestination = xTable1;
+            yDestination = yTable;
         }
         else if(seatnumber==2){
-        	xDestination = xTable + 150 + 20;
-            yDestination = yTable - 20;
+        	xDestination = xTable2;
+            yDestination = yTable;
         }
         else if(seatnumber==3){
-        	xDestination = xTable + 150 + 20;
-            yDestination = yTable - 20 - 150;
+        	xDestination = xTable3;
+            yDestination = yTable;
+        }
+        else if(seatnumber==4){
+        	xDestination = xTable4;
+            yDestination = yTable;
         }
     }
     
     public void approachWaitingCustomer(int sn){
+			
     	if(sn==1){
-			xDestination = xSeat;
+			xDestination = xSeat1;
 			yDestination = ySeat;
 			//command=Command.GoToWaitingSeat;
 		}
 		if(sn==2){
-			xDestination = xSeat-30;
+			xDestination = xSeat2;
 			yDestination = ySeat;
 			//command=Command.GoToWaitingSeat;
 		}
 		if(sn==3){
-			xDestination = xSeat;
-			yDestination = ySeat+30;
+			xDestination = xSeat3;
+			yDestination = ySeat;
 			//command=Command.GoToWaitingSeat;
 		}
 		if(sn==4){
-			xDestination = xSeat-30;
-			yDestination = ySeat+30;
+			xDestination = xSeat4;
+			yDestination = ySeat;
 			//command=Command.GoToWaitingSeat;
 		}
 		if(sn==5){
-			xDestination = xSeat;
-			yDestination = ySeat+60;
+			xDestination = xSeat5;
+			yDestination = ySeat;
 			//command=Command.GoToWaitingSeat;
 		}
 		if(sn==6){
-			xDestination = xSeat-30;
-			yDestination = ySeat+60;
+			xDestination = xSeat6;
+			yDestination = ySeat;
 			//command=Command.GoToWaitingSeat;
 		}
 		if(sn==7){
-			xDestination = xSeat;
-			yDestination = ySeat+90;
+			xDestination = xSeat7;
+			yDestination = ySeat;
 			//command=Command.GoToWaitingSeat;
 		}
 		if(sn==8){
-			xDestination = xSeat-30;
-			yDestination = ySeat+90;
+			xDestination = xSeat8;
+			yDestination = ySeat;
 			//command=Command.GoToWaitingSeat;
 		}
 		if(sn==9){
-			xDestination = xSeat;
-			yDestination = ySeat+120;
+			xDestination = xSeat9;
+			yDestination = ySeat;
 			//command=Command.GoToWaitingSeat;
 		}
 		if(sn==10){
-			xDestination = xSeat-30;
-			yDestination = ySeat+120;
+			xDestination = xSeat10;
+			yDestination = ySeat;
 			//command=Command.GoToWaitingSeat;
 		}
     }
@@ -307,11 +342,15 @@ public class WaiterGui implements Gui {
 			xDestination = 20;
 			yDestination = 20;
 		}
+		else{
+			xDestination= xStart;
+			yDestination= yStart;
+		}
     }
     
     public void DoGoToCook(){
-    	xDestination = 350;
-    	yDestination = 70;
+    	xDestination = xCook;
+    	yDestination = yCook;
     }
     
     public boolean isAtStart(){
@@ -319,7 +358,9 @@ public class WaiterGui implements Gui {
     	if ((xPos == -20) &&(yPos==-20)){
     		return true;
     	}*/
-    	if((waiternumber==1 && xPos==140 && yPos==20)||(waiternumber==2 && xPos==110 && yPos==20)||(waiternumber==3 && xPos==80 && yPos==20)||(waiternumber==4 && xPos==50 && yPos==20)||(waiternumber==5 && xPos==20 && yPos==20)){
+    	if((xPos==xStart && yPos==yStart)||(waiternumber==1 && xPos==140 && yPos==20)||
+    			(waiternumber==2 && xPos==110 && yPos==20)||(waiternumber==3 && xPos==80 && yPos==20)||
+    			(waiternumber==4 && xPos==50 && yPos==20)||(waiternumber==5 && xPos==20 && yPos==20)){
     		return true;
     	}
     	else return false;
@@ -350,4 +391,9 @@ public class WaiterGui implements Gui {
     public int getYPos() {
         return yPos;
     }
+
+	public void DoGoToPost() {
+		xDestination=xStart;
+		yDestination=yStart;
+	}
 }

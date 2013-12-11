@@ -404,7 +404,7 @@ public class ShehWaiterRole extends Role implements Waiter {
 		stateChanged();
 	}
 	
-	private void CookThisOrder(myCustomer c) {
+	protected void CookThisOrder(myCustomer c) {
 		/*
 		waiterGui.DoGoToKitchen(); //change to cooking area later
 		try {

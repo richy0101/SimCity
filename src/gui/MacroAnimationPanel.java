@@ -65,7 +65,6 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     		}
     	}
     	try{
-    		System.out.println("making row 0 and col 0 unavailable");
     		for(int i=0; i<gridY+1; i++){
     			grid[0][0+i].acquire();
     		}
@@ -73,7 +72,6 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     			grid[0+i][0].acquire();	
     		}
     		
-    		System.out.println("making first 4 rows (top buildings) unavailable");
     		for(int i=1;i<gridX+1; i++){
     			grid[0+i][1].acquire();
     			grid[0+i][2].acquire();
@@ -84,7 +82,6 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     		
     		//x=5, y=18 grids
     		
-    		System.out.println("making first 5x18 grids unavailable for left buildings");
     		for(int i=1; i<=5; i++){ //first 5 columns
     			for(int j=5; j<= 18; j++){ //start from 5 bc first top 4 rows were already acquired
     				grid[i][j].acquire();
@@ -95,9 +92,7 @@ public class MacroAnimationPanel extends JPanel implements ActionListener, Mouse
     	catch(Exception e){
     		System.out.println("Caught unexpected exception during grid setup: "+ e);
     	}
-    	
-    	System.out.println("Reached here");
-    	
+    	    	
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
         setBackground(Color.LIGHT_GRAY);

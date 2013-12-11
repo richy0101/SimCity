@@ -128,20 +128,20 @@ public class TransportationGui implements Gui {
 			 */
 			if (currentAction == CurrentAction.BreakOutFromTop && !doneBreaking(Cross1X, Cross1Y)) {
 				yPos--;
+				drawLogic(1);
 				return;
 			}
 			else if(currentAction == CurrentAction.BreakOutFromTop && doneBreaking(Cross1X, Cross1Y)){
-				//System.out.println("broken out");
 				currentLoop = Loop.Outer;
 				evaluateNextMove();
 				return;
 			}
 			if (currentAction == CurrentAction.BreakOutFromBottom && !doneBreaking(Cross6X, Cross6Y)) {
 				yPos++;
+				drawLogic(2);
 				return;
 			}
 			else if(currentAction == CurrentAction.BreakOutFromBottom && doneBreaking(Cross6X, Cross6Y)) {
-				//System.out.println("broken out");
 				currentLoop = Loop.Outer;
 				evaluateNextMove();
 				return;
@@ -162,18 +162,20 @@ public class TransportationGui implements Gui {
 			 */
 			if (currentAction == CurrentAction.BreakInFromTop && !doneBreaking(Cross2X, Cross2Y)) {
 				yPos++;
+				drawLogic(2);
+				return;
 			}
 			else if(currentAction == CurrentAction.BreakInFromTop && doneBreaking(Cross2X, Cross2Y)) {
-				//System.out.println("broken out");
 				currentLoop = Loop.InnerLeft;
 				evaluateNextMove();
 				return;
 			}
 			if (currentAction == CurrentAction.BreakInFromBottom && !doneBreaking(Cross5X, Cross5Y)) {
 				yPos--;
+				drawLogic(1);
+				return;
 			}
 			else if(currentAction == CurrentAction.BreakInFromBottom && doneBreaking(Cross5X, Cross5Y)) {
-				//System.out.println("broken in to 5");
 				currentLoop = Loop.InnerRight;
 				evaluateNextMove();
 				return;
@@ -195,7 +197,6 @@ public class TransportationGui implements Gui {
 	}
 	private boolean doneBreaking(int x, int y) {
 		if (xPos == x && yPos == y) {
-			System.out.println("DONE BREAKING");
 			return true;
 		}
 		else {

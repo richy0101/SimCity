@@ -33,6 +33,8 @@ public class TanRestaurantAnimationPanel extends BuildingPanel implements Action
     private final int tablelength= 50;
     
     BufferedImage restaurantImage;
+    BufferedImage cashierImage;
+
     private final int delay = 10;
 
     private List<Gui> guis = new ArrayList<Gui>();
@@ -59,6 +61,8 @@ public class TanRestaurantAnimationPanel extends BuildingPanel implements Action
     	//IMAGE
     	try {
         	restaurantImage = ImageIO.read(getClass().getResource("TanRestaurant.png"));
+        	cashierImage = ImageIO.read(getClass().getResource("TanCashierAgent.png"));
+
         }
         catch(IOException e) {
         	System.out.println("Error w/ Background");
@@ -125,31 +129,44 @@ public class TanRestaurantAnimationPanel extends BuildingPanel implements Action
  
     
     public void addGui(CustomerGui gui) {
-        guis.add(gui);
+        synchronized(guis){
+        	guis.add(gui);
+        }
     }
 
     public void addGui(HostGui gui) {
-        guis.add(gui);
+    	synchronized(guis){
+        	guis.add(gui);
+        }
     }
     
     public void addGui(CashierGui gui) {
-        guis.add(gui);
+    	synchronized(guis){
+        	guis.add(gui);
+        }
     }
     
     public void addGui(CookGui gui) {
-        guis.add(gui);
+    	synchronized(guis){
+        	guis.add(gui);
+        }
     }
     
     public void addGui(WaiterGui gui){
-    	guis.add(gui);
+    	synchronized(guis){
+        	guis.add(gui);
+        }
     }
 
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
+        //Graphics2D g3 = (Graphics2D)g;
 
         //Clear the screen by painting a rectangle the size of the frame
         g2.drawImage(restaurantImage, 0, 0, null);
+        g2.drawImage(cashierImage, 460, 40, null);
 
+        
         synchronized(guis) {
 	        for(Gui gui : guis) {
 	            if (gui.isPresent()) {
@@ -167,14 +184,18 @@ public class TanRestaurantAnimationPanel extends BuildingPanel implements Action
     }
 	
 	public void updateGui() {
-        for(Gui gui : guis) {
-            if (gui.isPresent())
-                gui.updatePosition();
-        }
+		synchronized(guis){
+	        for(Gui gui : guis) {
+	            if (gui.isPresent())
+	                gui.updatePosition();
+	        }
+		}
 	}
 
     public void addGui(Gui gui) {
-        guis.add(gui);
+        synchronized(guis){
+    	guis.add(gui);
+        }
     }
 
 }

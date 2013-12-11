@@ -53,16 +53,19 @@ public class TanCookRole extends Role {
 	
 	public CookGui cookGui = null;
 	public TanWaiterRole waiter;
+	public TanHostAgent host;
 	
 	int amtChicken;
 	int amtSteak;
 	int amtSalad;
 	int amtPizza;
 	int order=5;
-	
 	public enum SharedOrderState
 	{Checked, NeedsChecking};
 	SharedOrderState sharedState = SharedOrderState.NeedsChecking;
+	public enum roleState
+	{dead, alive, living};
+	roleState state = roleState.dead;
 	
 	
 	/*
@@ -88,9 +91,14 @@ public class TanCookRole extends Role {
 
 	public TanCookRole(String location) {
 		super();
-		TanHostAgent host = (TanHostAgent) Directory.sharedInstance().getAgents().get("TanRestaurantHost");
+		host = (TanHostAgent) Directory.sharedInstance().getAgents().get("TanRestaurantHost");
 
 		cookGui = new CookGui(this);
+		
+		amtChicken=500;
+		amtSteak= 500;
+		amtSalad= 500;
+		amtPizza= 500;
 		
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		
@@ -99,7 +107,8 @@ public class TanCookRole extends Role {
 				b.addGui(cookGui);
 			}
 		}
-	}
+		state = roleState.alive;
+		}
 	
 	/*
 	public TanCookRole(String name) {
@@ -139,6 +148,7 @@ public class TanCookRole extends Role {
 			s=orderState.Pending;
 			tableNumber= t;
 			waiter= w;		
+			choice=o.getName();
 		}
 		
 		MyOrder(Order o){
@@ -287,6 +297,10 @@ public class TanCookRole extends Role {
             so that table is unoccupied and customer is waiting.
             If so seat him at the table.
 		 */
+		if (state==roleState.alive){
+			GoToPost();
+		}
+		//print("i'm in cook's scheduler");
 		
 		if(!Orders.isEmpty()){
 			synchronized(Orders){
@@ -343,6 +357,11 @@ public class TanCookRole extends Role {
 	
 	// Actions
 	
+	private void GoToPost() {
+		host.msgCookIsHere(this);
+		cookGui.DoGoToPost();
+	}
+
 	private void addSharedOrders() {
 		//Order order = Directory.sharedInstance().getRestaurants().get(1).getMonitor().remove();
 		//if(order != null) {

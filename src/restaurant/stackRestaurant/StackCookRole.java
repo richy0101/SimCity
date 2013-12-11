@@ -22,6 +22,8 @@ import restaurant.stackRestaurant.interfaces.Cashier;
 import restaurant.stackRestaurant.interfaces.Cook;
 import restaurant.stackRestaurant.interfaces.Host;
 import restaurant.stackRestaurant.interfaces.Waiter;
+import trace.AlertLog;
+import trace.AlertTag;
 import city.helpers.Directory;
 
 public class StackCookRole extends CookRole implements Cook {
@@ -107,7 +109,7 @@ public class StackCookRole extends CookRole implements Cook {
 			for(MyOrder order : orders) {
 				if(order.state == OrderState.Done) {
 					setStringState(order.state.toString());
-					print("plate it");
+					AlertLog.getInstance().logMessage(AlertTag.COOK, getName(), "Plate it");
 					plateIt(order);
 					return true;
 				}
@@ -117,7 +119,8 @@ public class StackCookRole extends CookRole implements Cook {
 			for(MyOrder order : orders) {
 				if(order.state == OrderState.Pending) {
 					setStringState(order.state.toString());
-					print("cook it");
+					AlertLog.getInstance().logMessage(AlertTag.COOK, getName(), "Cook it");
+
 					cookIt(order);
 					return true;
 				}
@@ -196,7 +199,6 @@ public class StackCookRole extends CookRole implements Cook {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				print("Done cooking, cookie=" + cookie);
 				order.state = OrderState.Done;
 				stateChanged();
 			}
@@ -215,7 +217,7 @@ public class StackCookRole extends CookRole implements Cook {
 		for(MyMarket market : markets) {
 			if(market.market != null) {
 				if(market.foodStock.get(choice)) {
-					print("finding food from market: " + market.market);
+					AlertLog.getInstance().logMessage(AlertTag.COOK, getName(), "Trying to order food");
 					market.market.msgOrderFood(this, cashier, choice);
 					restaurant.getFoodInventory().get(choice).state = FoodState.Ordered;
 					return;
@@ -233,7 +235,7 @@ public class StackCookRole extends CookRole implements Cook {
 	}
 	
 	private void leaveRestaurant() {
-		print("Leaving.");
+		AlertLog.getInstance().logMessage(AlertTag.COOK, getName(), "Leaving");
 		DoLeaveRestaurant();
 		try {
 			doneAnimation.acquire();
@@ -244,7 +246,7 @@ public class StackCookRole extends CookRole implements Cook {
 	}
 
 	private void goGetPaycheck() {
-		print("Getting paycheck");
+		AlertLog.getInstance().logMessage(AlertTag.COOK, getName(), "Getting paycheck");
 		cookGui.DoGoToPaycheck();
 		try {
 			doneAnimation.acquire();
@@ -279,7 +281,7 @@ public class StackCookRole extends CookRole implements Cook {
 	}
 	public void msgCookOrder(Waiter waiter, String choice, int table, int seat) {
 		orders.add(new MyOrder(waiter, choice, table, seat, OrderState.Pending));
-		print("cook order");
+		AlertLog.getInstance().logMessage(AlertTag.COOK, getName(), "New order to cook");
 		stateChanged();
 	}
 	
@@ -290,7 +292,7 @@ public class StackCookRole extends CookRole implements Cook {
 				mMarket.foodStock.put(choice, false);
 			}
 		}
-		print("There's no more of " + choice);
+		AlertLog.getInstance().logMessage(AlertTag.COOK, getName(), "Ran out of " + choice);
 		stateChanged();
 	}
 	
@@ -299,7 +301,7 @@ public class StackCookRole extends CookRole implements Cook {
 		restaurant.msgChangeFoodInventory(choice, inventory);
 		restaurant.getFoodInventory().get(choice).state = FoodState.Stocked;
 		Menu.sharedInstance().setInventoryStock(choice, true);
-		print("Food " + choice + " arrived");
+		AlertLog.getInstance().logMessage(AlertTag.COOK, getName(), choice + " has arrived");
 	}
 	
 	public void msgAddMarket(MarketWorker market) {

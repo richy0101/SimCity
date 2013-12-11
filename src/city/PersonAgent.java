@@ -16,6 +16,8 @@ import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import restaurant.Restaurant;
+import trace.AlertLog;
+import trace.AlertTag;
 import market.Market;
 import market.MarketCustomerRole;
 import bank.Bank;
@@ -366,11 +368,11 @@ public class PersonAgent extends Agent implements Person {
 		if(!(workDetails.offDays.contains(day))) {
 			if (hour == workDetails.workEndHour && getPersonState() == PersonState.OutToWork) {
 				 setPersonState(PersonState.DoneWorking);
-                 print("I am done working for today.");
+				AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "I am done working for today");
                  stateChanged();
 			}
 			else if((hour >= workDetails.workStartHour - 1) && getPersonState() == PersonState.Sleeping) {
-				print("Waking up to get ready for a working day.");
+				AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Waking up to work");
 				setPersonState(PersonState.WantFood);
 				this.hasWorked = false;
 				stateChanged();
@@ -388,48 +390,48 @@ public class PersonAgent extends Agent implements Person {
 		actionComplete.release();
 	}
 	public void msgWakeUp() {
-		print("msgWakeUp received - Setting state to WantFood.");
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Waking up, I want food");
 		hasWorked = false;
 		setPersonState(PersonState.WantFood);
 		stateChanged();
 	}
 	public void msgCookingDone() {
-		print("msgCookingDone received - Setting state to StartEating.");
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "I am done working for today");
 		setPersonState(PersonState.StartEating);
 		stateChanged();
 	}
 	public void msgDoneEating() {
-		print("msgDoneEating received - Setting state to Idle.");
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Done eating, nothing to do");
 		setPersonState(PersonState.Idle);
 		hungerLevel = 0;
 		stateChanged();
 	}
 	public void msgGoWork() {
 		if(unemployed == false) {
-			print("msgGoWork received - Setting state to NeedsToWork.");
+			AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Getting ready to go to work");
 			setPersonState(PersonState.NeedsToWork);
 		}
 		stateChanged();
 	}
 	public void msgDoneWorking() {
-		print("Left work! I want Dinner.");
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Left work, I'm hungry");
 		setPersonState(PersonState.WantFood);
 		stateChanged();
 	}
 	public void msgGoHome() {
-		print("msgGoHome received - Setting state to WantsToGoHome");
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "I want to go home");
 		setPersonState(PersonState.WantsToGoHome);
 		stateChanged();
 	}
 	public void msgRentPaid() {
-		print("msgRentPaid received - Setting rentDue to false.");
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Just paid my rent");
 		rentDue = false;
 		stateChanged();
 	}
 	public void msgRoleFinished() {
 		RoleInterface r = roles.pop();
 		setPersonState(PersonState.Idle);
-		print("msgRoleFinished received - Popping current Role: " + r.toString() + ".");
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Role finished");
 		stateChanged();
 	}
 	public void msgTransportFinished(String location) {
@@ -437,21 +439,21 @@ public class PersonAgent extends Agent implements Person {
 		currentLocation = location;
 		if (currentLocation == homeName) {
 			setPersonState(PersonState.EnterHome);
-			print("msgTransportFinished received - Popping transport role, updating current location to: " + currentLocation + ". At Home.");
+			AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "At home");
 			stateChanged();
 		}
 		else {
-			print("msgTransportFinished received - Popping transport role, updating current location to: " + currentLocation + ".");
+			AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "I just got to " + currentLocation);
 			stateChanged();
 		}
 	}
 	public void msgAtHome() {
-		print("msgAtHome received - Setting position to AtHome.");
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Just got home");
 		currentLocation = homeName;
 		stateChanged();
 	}
 	public void msgPayRent(Landlord landlord,double moneyOwed) {
-		print("msgPayrent received - setting rentDue to true.");
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "I need to pay rent");
 		if(this.landlord != null){
 			this.landlord = landlord;
 		}
@@ -606,7 +608,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	private void goCleanHouse() {
-		print("Action cleanHouse - State set to cleaning.");
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Going to clean house");
 		personGui.DoClean();
 		actionComplete.acquireUninterruptibly();
 		setPersonState(PersonState.Idle);
@@ -615,7 +617,7 @@ public class PersonAgent extends Agent implements Person {
 	
 	private void goHome() {
 		if (currentLocation != homeName) {
-			print("Action goHome - State set to InTransit. Adding new Transportation Role.");
+			AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Going home");
 			setPersonState(PersonState.InTransit);
 			roles.clear();
 			Role t = new TransportationRole(homeName, currentLocation);
@@ -627,7 +629,7 @@ public class PersonAgent extends Agent implements Person {
 		}
 	}	
 	private void cookHomeFood() {
-		print("Action cookHomeFood - State set to cooking " + inventory.get(desiredFood).type + ".");
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Cooking " + inventory.get(desiredFood).type + " at home");
 		setPersonState(PersonState.Cooking);
 		personGui.DoCook();
 		actionComplete.acquireUninterruptibly();
@@ -644,7 +646,7 @@ public class PersonAgent extends Agent implements Person {
 			landlord.msgHereIsRent((Person) this, moneyOwedToLandlord);
 			funds -= moneyOwedToLandlord;
 			moneyOwedToLandlord = 0;
-			print("Action goPayRent = State set to PayingRent and new funds are $" + funds);
+			AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Paying rent. I now have $" + funds);
 			rentDue = false;
 		}
 		else{
@@ -652,18 +654,22 @@ public class PersonAgent extends Agent implements Person {
 			moneyOwedToLandlord -= funds;
 			funds = 0;
 			rentDue = false;
-			print("Action goPayRent = State set to PayingRent and still owes money to landlord");
+			AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Paying rent later. I still owe rent");
 		}
 		stateChanged();
 	}
 	private void goRestaurant() {
-		print("Action goRestaurant - State set to OutToEat");
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Going out to eat");
 		setPersonState(PersonState.OutToEat);
 		//Decide Which restaurant to go to
+
+		//Restaurant r = Directory.sharedInstance().getRestaurants().get(5); //CHECK HERE
+
 
 		Restaurant r = Directory.sharedInstance().getRestaurants().get(3);
 		//Restaurant r = Directory.sharedInstance().getRestaurants().get(1);
 		//Restaurant r = Directory.sharedInstance().getRestaurants().get(2);
+
 		//Restaurant r = Directory.sharedInstance().getRestaurants().get(0);
 		
 
@@ -685,7 +691,6 @@ public class PersonAgent extends Agent implements Person {
 		roles.add(t);
 	}
 	private void decideFood() {
-		print("Action decideFood - Deciding to eat in or out.");
 		personGui.DoDecideEat();
 		actionComplete.acquireUninterruptibly();
 		Random rng = new Random();
@@ -706,7 +711,7 @@ public class PersonAgent extends Agent implements Person {
 		}
 	}
 	private void eatFood() {
-		print("Action eatFood - State set to Eating at home.");
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Eating at home");
 		setPersonState(PersonState.Eating);
 		personGui.DoEat();
 		actionComplete.acquireUninterruptibly();
@@ -719,7 +724,7 @@ public class PersonAgent extends Agent implements Person {
 
 	}
 	private void goWork() {
-		print("Action goWork. Going to work.");
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Going to work");
 		hasWorked = true;
 		setPersonState(PersonState.OutToWork);
 		if(currentLocation == homeName) {
@@ -754,7 +759,7 @@ public class PersonAgent extends Agent implements Person {
 		}
 		
 		if(m != null) {
-			print("Action goMarket - State set to OutToMarket");
+			AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Going to market");
 			setPersonState(PersonState.OutToMarket);	
 			if(currentLocation == homeName) {
 				personGui.DoLeaveHouse();
@@ -786,7 +791,7 @@ public class PersonAgent extends Agent implements Person {
 		Role t = new TransportationRole(b.getName(), currentLocation);
 		t.setPerson(this);
 		roles.add(t);
-		print("Action goRob - State set to OutBank");
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Going to bank to rob");
 		setPersonState(PersonState.OutToBank);
 	}
 	private void goDeposit() {
@@ -813,7 +818,7 @@ public class PersonAgent extends Agent implements Person {
 		Role t = new TransportationRole(b.getName(), currentLocation);
 		t.setPerson(this);
 		roles.add(t);
-		print("Action goDeposit - State set to OutBank");
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Going to bank to deposit");
 		setPersonState(PersonState.OutToBank);
 	}
 	private void goLoan() {
@@ -833,7 +838,7 @@ public class PersonAgent extends Agent implements Person {
 		Role t = new TransportationRole(b.getName(), currentLocation);
 		t.setPerson(this);
 		roles.add(t);
-		print("Action goLoan - State set to OutBank");
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Going to bank to get loan");
 		setPersonState(PersonState.OutToBank);
 		
 	}
@@ -854,7 +859,7 @@ public class PersonAgent extends Agent implements Person {
 		Role t = new TransportationRole(b.getName(), currentLocation);
 		t.setPerson(this);
 		roles.add(t);
-		print("Action goWithraw - State set to OutBank");
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Going to bank to withdraw");
 		setPersonState(PersonState.OutToBank);
 	}
 	public void clearInventory() {
