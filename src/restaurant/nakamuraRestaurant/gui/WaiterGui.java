@@ -3,7 +3,11 @@ package restaurant.nakamuraRestaurant.gui;
 import gui.Gui;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.*;
+
+import javax.imageio.ImageIO;
 
 import restaurant.nakamuraRestaurant.NakamuraCookRole;
 import restaurant.nakamuraRestaurant.NakamuraCustomerRole;
@@ -19,16 +23,16 @@ public class WaiterGui implements Gui {
 
     private static final int xTable = 200; //Location of Table 1
     private static final int yTable = 100;
-    private static final int xStart = -20;
-    private static final int yStart = -20;
+    private static final int xStart = 737;
+    private static final int yStart = 29;
     private int xHome;
     private int yHome;
-    private static final int xCooking = 525;
-    private static final int yCooking = 200;
-    private static final int xPlating = 525;
-    private static final int yPlating = 100;
-    private static final int xCashier = 525;
-    private static final int yCashier = 200;
+    private static final int xCooking = 55;
+    private static final int yCooking = 55;
+    private static final int xPlating = 86;
+    private static final int yPlating = 136;
+    private static final int xCashier = 769;
+    private static final int yCashier = 100;
     private String choice;
     private boolean isTired = false;
     
@@ -38,6 +42,8 @@ public class WaiterGui implements Gui {
     private Map<Integer, Integer> tableX = new HashMap<Integer, Integer>();
     private Map<Integer, Integer> tableY = new HashMap<Integer, Integer>();
     private Map<String, String> foodIcon = new HashMap<String, String>();
+    
+    BufferedImage waiterImage;
     
     public WaiterGui(NakamuraWaiterRole role, int x, int y) {
         this.role = role;
@@ -61,6 +67,19 @@ public class WaiterGui implements Gui {
         yPos = yStart;
         xDestination = xStart;
         yDestination = yStart;
+        
+        try {
+        	waiterImage = ImageIO.read(getClass().getResource("nakamuraRestaurantWaiter.png"));
+        	/*
+        	chickenImage = ImageIO.read(getClass().getResource("chicken.png"));
+            pizzaImage = ImageIO.read(getClass().getResource("pizza.png"));
+            saladImage = ImageIO.read(getClass().getResource("salad.png"));
+            steakImage = ImageIO.read(getClass().getResource("steak.png"));
+       		*/
+        }
+        catch(IOException e) {
+        	System.out.println("Error w/ Background");
+        }
     }
 
     public void updatePosition() {
@@ -79,6 +98,10 @@ public class WaiterGui implements Gui {
             	role.msgActionComplete();
             	command = Command.noCommand;            		
         	}
+        	else if(command == Command.leaving) {
+            	role.msgActionComplete();
+            	command = Command.noCommand;            		
+        	}
         	else if(command != Command.noCommand) {
         		xDestination = xHome;
         		yDestination = yHome;
@@ -89,8 +112,8 @@ public class WaiterGui implements Gui {
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.MAGENTA);
-        g.fillRect(xPos, yPos, 20, 20);
+    	g.drawImage(waiterImage, xPos, yPos, null);
+    	
         if(command == Command.deliverFood) {
         	g.drawString(foodIcon.get(choice), xPos, yPos);
         }

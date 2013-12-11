@@ -1,11 +1,11 @@
-package restaurant.shehRestaurant;
+package restaurant.huangRestaurant;
 
 /*
  * Figure 2-27
  */
 
 import java.util.Vector;
-import restaurant.shehRestaurant.helpers.Order;
+import restaurant.huangRestaurant.Order;
 
 
 public class ProducerConsumerMonitor extends Object {

@@ -226,11 +226,6 @@ public class NakamuraHostAgent extends Agent {
 			}
 		}
 
-		/* Think of this next rule as:
-            Does there exist a table and customer,
-            so that table is unoccupied and customer is waiting.
-            If so seat him at the table.
-		 */
 		if(cookState == CookState.noCook || waiters.isEmpty()) {
 			synchronized(waitingCustomers) {
 				for(NakamuraCustomerRole customer : waitingCustomers) {
@@ -242,6 +237,11 @@ public class NakamuraHostAgent extends Agent {
 			return true;
 		}
 		
+		/* Think of this next rule as:
+            Does there exist a table and customer,
+            so that table is unoccupied and customer is waiting.
+            If so seat him at the table.
+		 */
 		synchronized(tables) {
 			for (Table table : tables) {
 				if (!table.isOccupied()) {

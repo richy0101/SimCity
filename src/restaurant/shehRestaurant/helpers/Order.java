@@ -1,8 +1,10 @@
 package restaurant.shehRestaurant.helpers;
 
 //import restaurant.WaiterAgent.OrderState;
+import java.util.List;
 import java.util.Vector;
 
+import restaurant.shehRestaurant.ShehCashierAgent;
 import restaurant.shehRestaurant.ShehWaiterRole;
 import restaurant.shehRestaurant.ShehCustomerRole;
 //import restaurant.gui.Order.OrderBillState;
@@ -12,10 +14,16 @@ public class Order {
 	public ShehWaiterRole w;
 	public Customer c;
 	public String o;
-	public Vector<String> list;
+	public List<String> list;
 	public int t;
 	public OrderCookState cs;
 	public OrderMarketState ms;
+	
+	public Order(ShehWaiterRole waiter, String choice, int table) {
+		w = waiter;
+		o = choice;
+		t = table;
+	}
 
 	public Order(ShehWaiterRole waiter, String choice, int table, OrderCookState state) {
 		w = waiter;
@@ -34,9 +42,14 @@ public class Order {
 		ms = state;
 	}
 
-	public Order(Vector<String> orders, OrderMarketState state) {
+	public Order(List<String> orders, OrderMarketState state) {
 		list = orders;
 		ms = state;
+	}
+
+	public Order(List<String> orders, OrderCookState state) {
+		list = orders;
+		cs = state;
 	}
 	
 	public enum OrderCookState

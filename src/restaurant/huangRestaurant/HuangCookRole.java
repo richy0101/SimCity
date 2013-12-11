@@ -6,6 +6,7 @@ import gui.Gui;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -13,8 +14,13 @@ import java.util.concurrent.Semaphore;
 
 import market.interfaces.MarketWorker;
 import restaurant.CookRole;
+import restaurant.FoodInformation;
+import restaurant.Restaurant;
+import restaurant.FoodInformation.FoodState;
+import restaurant.huangRestaurant.Order.OrderState;
 import restaurant.huangRestaurant.gui.CookGui;
 import restaurant.huangRestaurant.interfaces.Cashier;
+import restaurant.nakamuraRestaurant.NakamuraCookRole.SharedOrderState;
 import city.helpers.Directory;
 
 
@@ -32,21 +38,10 @@ public class HuangCookRole extends CookRole {
 	public HuangHostAgent host;
 	public Cashier cashier;
 	public CookGui gui;
-	private enum OrderState {Pending, Cooking, Done, Plated, out};
-	private class Order {
-		private HuangWaiterRole w;
-		public String choice;
-		public int table;
-		private OrderState state;
-		Order(HuangWaiterRole w, String choice, int table) {
-			this.w = w;
-			this.choice = choice;
-			this.table = table;
-			this.state = OrderState.Pending;
-		}
-	}
+	private HuangRestaurant restaurant;
 	public List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
-	
+	public enum SharedOrderState {NeedsChecking, Checked};
+	SharedOrderState sharedState = SharedOrderState.NeedsChecking;
 	Timer timer = new Timer();
 	private class CookTimerTask extends TimerTask {
 		Order o;
@@ -61,28 +56,28 @@ public class HuangCookRole extends CookRole {
 		}
 	}
 
-	public static class Food {
-		public String type;
-		public int preparationTime;
-		public int stock;
-		public Food(String type) {
-			this.type = type;
-			if (this.type == "Chicken") {
-				preparationTime = 5000;
-			}
-			else if (this.type == "Steak") {
-				preparationTime = 9000;
-			}
-			else if (this.type == "Salad") {
-				preparationTime = 4000;
-			}
-			else if (this.type == "Pizza") {
-				preparationTime = 7000;
-			}
-			stock = 0;
-		}
-	}
-	private List<Food> inventory = Collections.synchronizedList(new ArrayList<Food>());
+//	public static class Food {
+//		public String type;
+//		public int preparationTime;
+//		public int stock;
+//		public Food(String type) {
+//			this.type = type;
+//			if (this.type == "Chicken") {
+//				preparationTime = 5000;
+//			}
+//			else if (this.type == "Steak") {
+//				preparationTime = 9000;
+//			}
+//			else if (this.type == "Salad") {
+//				preparationTime = 4000;
+//			}
+//			else if (this.type == "Pizza") {
+//				preparationTime = 7000;
+//			}
+//			stock = 0;
+//		}
+//	}
+//	private List<Food> inventory = Collections.synchronizedList(new ArrayList<Food>());
 	
 	private enum MarketReqState {notSent,pending, canBeFulfilled, cannotBeFulfilled, Received}
 	private class MarketRequest {
@@ -148,15 +143,6 @@ public class HuangCookRole extends CookRole {
 				b.addGui((Gui) gui);
 			}
 		}
-		//Set up inventory
-		Food initialFood = new Food("Chicken");
-		inventory.add(initialFood);
-		initialFood = new Food ("Steak");
-		inventory.add(initialFood);
-		initialFood = new Food ("Salad");
-		inventory.add(initialFood);
-		initialFood = new Food ("Pizza");
-		inventory.add(initialFood);
 		//Set up markets
 		MyMarket mm;
 		for(int i = 0; i < Directory.sharedInstance().getMarkets().size(); i++) {
@@ -175,12 +161,8 @@ public class HuangCookRole extends CookRole {
 	}
 	public void msgMarketDeliveringOrder(int resupply, String type) {
 		System.out.println(name + ": msgHereIsDelivery received: Cook: Kitchen inventory replenished!");
-		for (Food i : inventory) {
-			if (i.type.equals(type)) {
-				i.stock += resupply;
-				break;
-			}
-		}
+		restaurant.getFoodInventory().get(type).setQuantity(restaurant.getFoodInventory().get(type).getQuantity() + resupply);
+		restaurant.msgChangeFoodInventory(type, restaurant.getFoodInventory().get(type).getQuantity());
 		for (MarketRequest mr: marketRequests) {
 			if (mr.request.equals(type)) {
 				if(mr.requirement - resupply <= 0) {
@@ -275,7 +257,7 @@ public class HuangCookRole extends CookRole {
 		stateChanged();
 	}
 
-	public void msgHereIsPayCheck(double payCheck) {
+	public void msgHereIsPaycheck(double payCheck) {
 		state = CookState.ReceivedPay;
 		getPersonAgent().setFunds(getPersonAgent().getFunds() + payCheck);
 		stateChanged();
@@ -296,13 +278,10 @@ public class HuangCookRole extends CookRole {
 		System.out.println(name + ": msgFoodDone received: This dish is done!");
 		stateChanged();
 	}
-	public void msgHereIsRestock(List<Food> currentOrder) {
-		inventory.clear();
-		inventory = currentOrder;
-		System.out.println(name + ": msgHereIsRestock received: More vespene gas recieved!");
+	public void msgYouCanLeave() {
+		state = CookState.CollectPay;
 		stateChanged();
 	}
-
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
@@ -379,6 +358,19 @@ public class HuangCookRole extends CookRole {
 		}
 		if (state == CookState.DoneWorking) {
 			tellHostDoneWorking();
+			return true;
+		}
+		if(sharedState == SharedOrderState.NeedsChecking) {
+			timer.schedule(new TimerTask() {
+				public void run() {
+					addSharedOrders();
+					sharedState = SharedOrderState.NeedsChecking;
+					stateChanged();
+				}
+			},
+			5000);
+			sharedState = SharedOrderState.Checked;
+			return true;
 		}
 		//rule 2
 		checkInventory();
@@ -387,12 +379,6 @@ public class HuangCookRole extends CookRole {
 		//nothing to do. So return false to main loop of abstract agent
 		//and wait.
 	}
-
-
-
-
-
-
 
 	// Actions	
 	private void leaveWork() {
@@ -467,13 +453,13 @@ public class HuangCookRole extends CookRole {
 	
 	private void checkInventory() {
 		boolean exists = false;
-		synchronized(inventory) {
-			for (Food f: inventory) {
-				if ((int)f.stock <= threshold) {
+		synchronized(restaurant.getFoodInventory()) {
+			for (Map.Entry<String, FoodInformation> food : restaurant.getFoodInventory().entrySet()) {
+				if ((int)food.getValue().getQuantity() <= threshold) {
 					if (!marketRequests.isEmpty()) {
 						synchronized(marketRequests) {
 							for (MarketRequest m: marketRequests) {
-								if(m.request.equals(f.type)) {
+								if(m.request.equals(food.getKey())) {
 									exists = true;
 									break;
 								}
@@ -483,7 +469,7 @@ public class HuangCookRole extends CookRole {
 							exists = false;
 							continue;
 						}
-						MarketRequest mr = new MarketRequest(f.type, requestStock);
+						MarketRequest mr = new MarketRequest(food.getKey(), requestStock);
 						marketRequests.add(mr);
 					}
 				}
@@ -492,13 +478,16 @@ public class HuangCookRole extends CookRole {
 	}
 
 	private void tryCook(Order o) {
+
 		int time;
-		synchronized(inventory) {
-			for (Food f: inventory) {
-				if (f.type.equals(o.choice)) {
-					if ((int) f.stock > threshold) {
-						f.stock--;
-						time = f.preparationTime;
+		
+		synchronized(restaurant.getFoodInventory()) {
+			for (Map.Entry<String, FoodInformation> f : restaurant.getFoodInventory().entrySet()) {
+				if (f.getKey().equals(o.choice)) {
+					if ((int) f.getValue().getQuantity() > threshold) {
+						f.getValue().setQuantity(f.getValue().getQuantity() - 1);
+						restaurant.msgChangeFoodInventory(f.getKey(), f.getValue().getQuantity());
+						time = f.getValue().getCookTime();
 						timer.schedule(new CookTimerTask(o, this) {
 							public void run() {
 								cook.msgFoodDone(o);
@@ -509,10 +498,11 @@ public class HuangCookRole extends CookRole {
 						DoCook(o);
 						break;
 					}
-					else if((int) f.stock <= threshold) {
-						if ((int) f.stock > 0) {
-							f.stock--;
-							time = f.preparationTime;
+					else if((int) f.getValue().getQuantity() <= threshold) {
+						if ((int) f.getValue().getQuantity() > 0) {
+							f.getValue().setQuantity(f.getValue().getQuantity() - 1);
+							restaurant.msgChangeFoodInventory(f.getKey(), f.getValue().getQuantity());
+							time = f.getValue().getCookTime();
 							timer.schedule(new CookTimerTask(o, this) {
 								public void run() {
 									cook.msgFoodDone(o);
@@ -532,7 +522,7 @@ public class HuangCookRole extends CookRole {
 							MarketRequest mr = new MarketRequest(o.choice, requestStock);
 							marketRequests.add(mr);
 						}
-						else if ((int) f.stock <= 0) {
+						else if ((int) f.getValue().getQuantity() <= 0) {
 							o.state = OrderState.out;
 							o.w.msgOutOfChoice(o.choice, o.table);
 							if (!marketRequests.isEmpty()) {
@@ -559,10 +549,18 @@ public class HuangCookRole extends CookRole {
 		DoPlate(o);
 	}
 	//utilities
+	private void addSharedOrders() {
+		Order order = restaurant.getMyMonitor().remove();
+		if(order != null) {
+			orders.add(order);
+		}
+	}
 	public void setGui(CookGui gui) {
 		this.gui = gui;
 	}
-	
+	public void setRestaurant(HuangRestaurant huang) {
+		this.restaurant = huang;
+	}
 	public void setCashier(HuangCashierAgent cashier) {
 		this.cashier = cashier;
 	}

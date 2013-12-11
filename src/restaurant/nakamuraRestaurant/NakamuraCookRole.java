@@ -102,6 +102,7 @@ public class NakamuraCookRole extends CookRole {
 		for(String c : choices) {
 			int quantity = getFood(c).getQuantity();
 			getFood(c).setQuantity(quantity + amount);
+			restaurant.msgChangeFoodInventory(c, amount);
 			getFood(c).state = FoodState.Stocked;
 		}
 		stateChanged();
@@ -235,12 +236,12 @@ public class NakamuraCookRole extends CookRole {
 
 	private void ArriveAtWork() {
 		host.msgNewCook(this);
+		cashier.setCook(this);
 		cookGui.DoGoToCooking();
 		state = cookState.Working;
 	}
 
 	private void addSharedOrders() {
-		print("checking for order---------------");
 		Order order = restaurant.getMyMonitor().remove();
 		if(order != null) {
 			Orders.add(order);
@@ -264,6 +265,7 @@ public class NakamuraCookRole extends CookRole {
 			o.s = orderState.cooking;
 			DoCookOrder(o);
 			getFood(o.choice).setQuantity(getFood(o.choice).getQuantity() - 1);
+			restaurant.msgChangeFoodInventory(o.choice, getFood(o.choice).getQuantity() - 1);
 			print(o.choice + " remaining: " + getFood(o.choice).getQuantity());
 			timer.schedule(new TimerTask() {
 				public void run() {

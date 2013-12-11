@@ -18,8 +18,8 @@ public class CookGui implements Gui {
     private int xPos = 705;
     private int yPos = 63;//default waiter position
     private int XHOME = 72, YHOME = 157;
-    private int xDestination = XHOME;
-    private int yDestination = YHOME;//default start position
+    private int xDestination = -700;
+    private int yDestination = -100;//default start position
 
     private final int XPLATING = 245;
     private final int YPLATING = 262;
@@ -44,8 +44,6 @@ public class CookGui implements Gui {
         catch(IOException e) {
         	System.out.println("Error w/ Background");
         } 
-        
-        //isPresent = true;
     }
 
 	public void updatePosition() {
@@ -78,7 +76,7 @@ public class CookGui implements Gui {
         
         g2.drawString(label, xLoc, yLoc);
     }
-    
+   
     public void DoCooking() {
         xDestination = XCOOKING;
         yDestination = YCOOKING;

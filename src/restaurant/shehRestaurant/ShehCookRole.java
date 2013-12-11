@@ -1,25 +1,28 @@
 package restaurant.shehRestaurant;
 
-import agent.Agent;
-import agent.Role;
+import gui.Building;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Semaphore;
+
+import market.Market;
 import restaurant.CookRole;
+import restaurant.FoodInformation.FoodState;
+import restaurant.Restaurant;
 import restaurant.shehRestaurant.gui.CookGui;
+import restaurant.shehRestaurant.helpers.Bill;
 import restaurant.shehRestaurant.helpers.FoodData;
 import restaurant.shehRestaurant.helpers.Menu;
 import restaurant.shehRestaurant.helpers.Order;
-import restaurant.shehRestaurant.gui.WaiterGui;
 import restaurant.shehRestaurant.helpers.Order.OrderCookState;
-import restaurant.shehRestaurant.helpers.Bill;
-import restaurant.shehRestaurant.helpers.Order.OrderMarketState;
 import restaurant.shehRestaurant.interfaces.Cashier;
 import restaurant.shehRestaurant.interfaces.Cook;
-import restaurant.shehRestaurant.interfaces.Market;
-import gui.Building;
-import gui.Gui;
-
-import java.util.*;
-import java.util.concurrent.Semaphore;
-
 import city.helpers.Directory;
 
 /**
@@ -38,38 +41,23 @@ public class ShehCookRole extends CookRole implements Cook {
 	public ShehHostAgent host;
 	private Market market1, market2; 
 	private Cashier cashier;
+	private Restaurant restaurant;
 	
 	private enum AgentState 
 	{NeedsToWork, Arrived, Working, GettingPaycheck, Leaving, WaitingForPaycheck};
 	AgentState state = AgentState.NeedsToWork;
 
-	
-	//FOODDATA~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	
-	//CHANGE QUANTITY OF COOK AGENT
-	FoodData steak = new FoodData("Steak", 30, 5000, 10); //CHANGE THE THIRD PARAMETER (QUANTITY): FoodData(Price, CookTime, QUANTITY)
-	FoodData chicken = new FoodData("Chicken", 20, 5000, 10); 
-	FoodData pizza = new FoodData("Pizza", 25, 5000, 10);
-	FoodData salad = new FoodData("Salad", 20, 5000, 10);
-
-	private Map<String, FoodData> restaurantInventory = new HashMap<String, FoodData>(); {
-		restaurantInventory.put("Steak", steak);
-		restaurantInventory.put("Chicken", chicken);
-		restaurantInventory.put("Pizza", pizza);
-		restaurantInventory.put("Salad", salad);
-		
-
-	}
-
-
 	public ShehCookRole(String location) {
 		super();
 		host = (ShehHostAgent) Directory.sharedInstance().getAgents().get("ShehRestaurantHost");
-		cashier = (Cashier) Directory.sharedInstance().getRestaurants().get(2).getCashier();
+		cashier = (Cashier) Directory.sharedInstance().getAgents().get("ShehRestaurantCashier");
 		//instantiate markets
 		
 		cookGui = new CookGui(this);
+		market1 = Directory.sharedInstance().getMarkets().get(0);
+		market2 = Directory.sharedInstance().getMarkets().get(1);
 		
+		restaurant = Directory.sharedInstance().getRestaurants().get(3);
 		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
 		
 		for(Building b : buildings) {
@@ -81,7 +69,7 @@ public class ShehCookRole extends CookRole implements Cook {
 		state = AgentState.Arrived;
 	}
 		
-		
+	/*	
 	public ShehCookRole(String n, Market m1, Market m2) {
 		super();
 
@@ -89,7 +77,8 @@ public class ShehCookRole extends CookRole implements Cook {
 		market1 = m1;
 		market2 = m2;
 	}
-
+	*/
+	
 	// tMessages
 	public void msgCookThisOrder(ShehWaiterRole w, String o, int t, Cashier ca) {
 		cashier = ca;
@@ -104,20 +93,23 @@ public class ShehCookRole extends CookRole implements Cook {
 		stateChanged();
 	}
 	
-	public void msgHereIsReplenishment(Order o, int quantity) {
+	public void msgMarketDeliveringOrder(int supply, List<String> choices) {
 		//update inventory
-		
-		for(int i = 0; i < o.list.size(); i++) {
-			restaurantInventory.get(o.list.get(i)).quantity = restaurantInventory.get(o.list.get(i).toString()).quantity + 4;
-			print("Item: " + restaurantInventory.get(o.list.get(i)).name + "| Quantity: " + restaurantInventory.get(o.list.get(i)).quantity);
+
+		for(String c : choices) {
+			int quantity = restaurant.getFoodInventory().get(c).getQuantity();
+			restaurant.getFoodInventory().get(c).setQuantity(quantity + supply);
+			restaurant.msgChangeFoodInventory(c, supply);
+			restaurant.getFoodInventory().get(c).state = FoodState.Stocked;
 		}
+		stateChanged();
 		
 		print("Shipment from market received!");
 	}
 	
-	public void msgCannotFulfillOrder(String o) {
-		print("Need to order " + o + " from another market.");
-		orders.add(new Order(o, OrderCookState.Ordering));
+	public void msgInventoryOut(List<String> order) {
+		print("Need to order " + order + " from another market.");
+		orders.add(new Order(order, OrderCookState.Ordering));
 		stateChanged();
 	}
 	
@@ -171,12 +163,12 @@ public class ShehCookRole extends CookRole implements Cook {
 	}
 	
 	private void CookingOrder(final Order o)	{
-		if(restaurantInventory.get(o.o).quantity == 0) {
+		if(restaurant.getFoodInventory().get(o.o).getQuantity() == 0) {
 			print("Out of this order");
 			o.w.msgOutOfFood(o.t, o.o);
 			orders.remove(o);
 		}
-		else if(restaurantInventory.get(o.o).quantity == 1){
+		else if(restaurant.getFoodInventory().get(o.o).getQuantity() == 1){
 			CheckInventory();
 			
 			//standard cooking procedure
@@ -187,13 +179,14 @@ public class ShehCookRole extends CookRole implements Cook {
 				e.printStackTrace();
 			}
 			o.cs = OrderCookState.Nothing;
-			restaurantInventory.get(o.o).quantity--;
+			restaurant.getFoodInventory().get(o.o).setQuantity(restaurant.getFoodInventory().get(o.o).getQuantity() - 1);
+			restaurant.msgChangeFoodInventory(o.o, restaurant.getFoodInventory().get(o.o).getQuantity() - 1);
 			stateChanged();
 			 (timer).schedule(new TimerTask() {
 				public void run() {
 					msgfoodDone(o);
 				}
-			}, restaurantInventory.get(o.o).cookTime);
+			}, restaurant.getFoodInventory().get(o.o).getCookTime());
 			 
 		}
 		else {
@@ -204,13 +197,13 @@ public class ShehCookRole extends CookRole implements Cook {
 				e.printStackTrace();
 			}
 			o.cs = OrderCookState.Nothing;
-			restaurantInventory.get(o.o).quantity--;
+			restaurant.getFoodInventory().get(o.o).setQuantity(restaurant.getFoodInventory().get(o.o).getQuantity() - 1);
 			stateChanged();
 			 (timer).schedule(new TimerTask() {
 				public void run() {
 					msgfoodDone(o);
 				}
-			}, restaurantInventory.get(o.o).cookTime);
+			}, restaurant.getFoodInventory().get(o.o).getCookTime());
 		}
 		 //atCooking.release();
 		 //stateChanged();
@@ -225,18 +218,18 @@ public class ShehCookRole extends CookRole implements Cook {
 		print("Checking inventory.");
 		
 		//search inventory for low items
-		Vector<String> lowItems = new Vector<String>();
+		List<String> lowItems = new ArrayList<String>();
 		
-		if(restaurantInventory.get("Steak").quantity <= 1) {
+		if(restaurant.getFoodInventory().get("Steak").getQuantity() <= 1) {
 			lowItems.add("Steak");
 		}
-		if(restaurantInventory.get("Chicken").quantity <= 1) {
+		if(restaurant.getFoodInventory().get("Chicken").getQuantity() <= 1) {
 			lowItems.add("Chicken");
 		}
-		if(restaurantInventory.get("Pizza").quantity <= 1) {
+		if(restaurant.getFoodInventory().get("Fish").getQuantity() <= 1) {
 			lowItems.add("Fish");
 		}
-		if(restaurantInventory.get("Salad").quantity <= 1) {
+		if(restaurant.getFoodInventory().get("Vegetarian").getQuantity() <= 1) {
 			lowItems.add("Vegetarian");
 		}
 
@@ -244,7 +237,12 @@ public class ShehCookRole extends CookRole implements Cook {
 		//send order
 		if(lowItems.size() > 0) {
 			print("We have low inventory, must order from market.");
-			market1.msgOrderForReplenishment(lowItems, this, cashier);
+			if(market1.isOpen())
+				market1.getWorker().msgOrderFood(this, cashier, lowItems, 5);
+			else if(market2.isOpen())
+				market1.getWorker().msgOrderFood(this, cashier, lowItems, 5);
+			else
+				print("All markets closed.");
 		}
 		else
 			print("We have plenty of inventory.");
@@ -254,9 +252,12 @@ public class ShehCookRole extends CookRole implements Cook {
 	
 	private void ReOrder(Order o) {
 		print("Reordering from another market.");
-		Vector<String> neededItem = new Vector<String>();
+		List<String> neededItem = new ArrayList<String>();
 		neededItem.add(o.o);
-		market2.msgOrderForReplenishment(neededItem, this, cashier);
+		if(market2.isOpen())
+			market2.getWorker().msgOrderFood(this, cashier, neededItem, 5);
+		else
+			print("market2 closed");
 		o.cs = OrderCookState.Nothing;
 	}
 	
@@ -279,6 +280,10 @@ public class ShehCookRole extends CookRole implements Cook {
 
 	public CookGui getGui() {
 		return cookGui;
+	}
+	
+	public List<Order> getOrders() {
+		return orders;
 	}
 
 }

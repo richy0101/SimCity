@@ -7,6 +7,7 @@ import java.util.List;
 import market.MarketCheck;
 import market.interfaces.MarketWorker;
 import restaurant.CashierAgent;
+import restaurant.Restaurant;
 import restaurant.huangRestaurant.interfaces.Cashier;
 import restaurant.huangRestaurant.interfaces.Customer;
 import restaurant.huangRestaurant.interfaces.Waiter;
@@ -98,9 +99,9 @@ public class HuangCashierAgent extends CashierAgent implements Cashier {
 	}
 	public List<MyEmployee> employees = new ArrayList<MyEmployee>();
 	private String name;
+	private Restaurant restaurant;
 	public HuangCashierAgent(String name) {
 		this.name = name;
-		this.startThread();
 	}
 
 	public String getName() {
@@ -151,6 +152,7 @@ public class HuangCashierAgent extends CashierAgent implements Cashier {
 		stateChanged();
 	}
 	public void msgAskForPayCheck(Role r) {
+		System.out.println("Adding new employee to pay");
 		employees.add(new MyEmployee(r));
 		stateChanged();
 	}
@@ -163,6 +165,7 @@ public class HuangCashierAgent extends CashierAgent implements Cashier {
 			for(MyEmployee me : employees) {
 				if (me.state == EmployeeState.AskedForPay) {
 					payEmployee(me);
+					System.out.println("Paid employee");
 					return true;
 				}
 			}
@@ -217,7 +220,7 @@ public class HuangCashierAgent extends CashierAgent implements Cashier {
 			me.r.msgHereIsPaycheck(25.00);
 		}
 		else {
-			me.r.msgHereIsPaycheck(50);
+			me.r.msgHereIsPaycheck(50.00);
 		}
 	}
 	private void payBill(MarketBill mb) {
@@ -245,7 +248,9 @@ public class HuangCashierAgent extends CashierAgent implements Cashier {
 		o.state = OrderState.withWaiter;
 	}
 	//utilities
-
+	public void setRestaurant(Restaurant huang) {
+		this.restaurant = huang;
+	}
 
 
 }

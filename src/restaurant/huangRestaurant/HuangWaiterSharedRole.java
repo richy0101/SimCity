@@ -7,7 +7,9 @@ import java.util.List;
 
 import restaurant.huangRestaurant.HuangWaiterRole.WaiterState;
 import restaurant.huangRestaurant.gui.WaiterGui;
-import restaurant.stackRestaurant.Order;
+import restaurant.huangRestaurant.Order;
+import restaurant.huangRestaurant.ProducerConsumerMonitor;
+
 import city.helpers.Directory;
 
 
@@ -32,9 +34,8 @@ public class HuangWaiterSharedRole extends HuangWaiterRole {
 	}
 	@Override
 	protected void deliverOrderToCook(HuangWaiterRole w, int table, String choice){
-		//do go to stuff;
-//			host.msgWaiterBusy(this);
-//			print("Adding " + customer.customer + "'s order to shared data for cook");
-//			Directory.sharedInstance().getRestaurants().get(0).getMonitor().insert(new Order(this, customer.choice, customer.table, customer.seatNum));;
+		print("Adding order to shared data for cook");
+		((ProducerConsumerMonitor) restaurant.getMyMonitor()).insert(new Order(this, choice, table));
+		gui.DoLeaveCustomer();
 	}
 }
