@@ -20,6 +20,8 @@ import market.test.mock.LoggedEvent;
 import restaurant.CashierInterface;
 import restaurant.CookInterface;
 import restaurant.Restaurant;
+import trace.AlertLog;
+import trace.AlertTag;
 import agent.Role;
 import city.TransportationRole;
 import city.helpers.Directory;
@@ -179,7 +181,7 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 	
 	//MarketCustomer messages-------------------------------------------------------------
 	public void msgGetGroceries(MarketCustomer customer, Map<String, Integer> groceryList) {
-		print("Received msgGetGroceries");
+		AlertLog.getInstance().logMessage(AlertTag.MARKETWORKER, getPersonAgent().getName(), "Customer wants groceries");
 		
 	    MyOrders.add(new Order(customer, groceryList));
 	    
@@ -189,7 +191,7 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 	}
 	
 	public void msgHereIsMoney(MarketCustomer customer, double money) {
-		print("Received msgHereIsMoney");
+		AlertLog.getInstance().logMessage(AlertTag.MARKETWORKER, getPersonAgent().getName(), "Here is my money");
 		
 		synchronized(MyOrders){
 		    for(Order o : MyOrders) {
@@ -205,7 +207,7 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 	}
 	
 	public void msgCantAffordGroceries(MarketCustomer customer) {
-		print("Received msgCantAffordGroceries");
+		AlertLog.getInstance().logMessage(AlertTag.MARKETWORKER, getPersonAgent().getName(), "Customer can't afford the groceries");
 		
 		synchronized(MyOrders) {
 			for(Order o : MyOrders) {
@@ -220,7 +222,7 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 	
 	//Restaurant messages-------------------------------------------------------------
 	public void msgOrderFood(CookInterface cook, CashierInterface cashier, String choice, int amount) {
-		print("Received msgOrderFood");
+		AlertLog.getInstance().logMessage(AlertTag.MARKETWORKER, getPersonAgent().getName(), "Order this food");
 		MyRestaurantOrders.add(new RestaurantOrder(cook, cashier, choice, amount));
 		
 		log.add(new LoggedEvent("Received msgOrderFood from Cook. Choice = " + choice));
@@ -229,7 +231,7 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 	
 		/*No amount given*/
 	public void msgOrderFood(CookInterface cook, CashierInterface cashier, String choice) {
-		print("Received msgOrderFood");
+		AlertLog.getInstance().logMessage(AlertTag.MARKETWORKER, getPersonAgent().getName(), "Order this food");
 		MyRestaurantOrders.add(new RestaurantOrder(cook, cashier, choice, 5));
 		
 		log.add(new LoggedEvent("Received msgOrderFood from Cook. Choice = " + choice));
@@ -238,7 +240,7 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 	
 		/*List of choices*/
 	public void msgOrderFood(CookInterface cook, CashierInterface cashier, List<String> choices, int amount) {
-		print("Received msgOrderFood");
+		AlertLog.getInstance().logMessage(AlertTag.MARKETWORKER, getPersonAgent().getName(), "Order this food");
 		MyRestaurantOrders.add(new RestaurantOrder(cook, cashier, choices, amount));
 		
 		log.add(new LoggedEvent("Received msgOrderFood from Cook. Choices = " + choices));
@@ -246,7 +248,7 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 	}
 	
 	public void msgDeliverOrder(RestaurantOrder o) {
-		print("Received msgDeliverOrder");
+		AlertLog.getInstance().logMessage(AlertTag.MARKETWORKER, getPersonAgent().getName(), "Deliver this food");
 		o.state = orderState.ReadyToDeliver;
 		
 		log.add(new LoggedEvent("Received msgDeliverOrder from Timer."));
@@ -254,7 +256,7 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 	}
 	
 	public void msgPayForOrder(CashierInterface cashier, double funds) {
-		print("Received msgPayForOrder");
+		AlertLog.getInstance().logMessage(AlertTag.MARKETWORKER, getPersonAgent().getName(), "Cashier paying for this food");
 		this.funds += funds;
 		
 		synchronized(MyRestaurantOrders) {
@@ -269,7 +271,7 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 	}
 	
 	public void msgCannotPay(CashierInterface cashier, double funds) {
-		print("Received msgCannotPay");
+		AlertLog.getInstance().logMessage(AlertTag.MARKETWORKER, getPersonAgent().getName(), "Customer can't pay");
 		synchronized(MyRestaurantOrders) {
 			for(RestaurantOrder o : MyRestaurantOrders) {
 				if(o.cashier == cashier)
@@ -283,7 +285,7 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 	
 	//Huang Restaurant messages----------------------------------------------------------
 	public void msgCancelOrder(CookInterface cook) {
-		print("Received msgCancelOrder");
+		AlertLog.getInstance().logMessage(AlertTag.MARKETWORKER, getPersonAgent().getName(), "Cancelling order");
 		synchronized(MyRestaurantOrders) {
 			for (RestaurantOrder o : MyRestaurantOrders) {
 				if(o.cook == cook) {
@@ -481,7 +483,6 @@ public class MarketWorkerRole extends Role implements MarketWorker {
 		else {
 			for(String choice : o.choices) {
 				if(inventory.get(choice).getSupply() >= o.amount) {
-					print(choice + " remaining: " + inventory.get(choice).getSupply());
 		    		inventory.get(choice).setSupply(inventory.get(choice).getSupply() - o.amount);
 		    		
 					o.filled.add(choice);

@@ -10,6 +10,8 @@ import restaurant.Restaurant;
 import restaurant.stackRestaurant.gui.WaiterGui;
 import restaurant.stackRestaurant.helpers.Check;
 import restaurant.stackRestaurant.interfaces.*;
+import trace.AlertLog;
+import trace.AlertTag;
 import city.helpers.Directory;
 
 public class StackWaiterRole extends Role implements Waiter {
@@ -190,7 +192,7 @@ public class StackWaiterRole extends Role implements Waiter {
 	}
 	
 	private void goOnBreak() {
-		print("went on break");
+		AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),"went on break");
 		state = AgentState.OnBreak;
 		DoGoOnBreak();
 	}
@@ -235,7 +237,7 @@ public class StackWaiterRole extends Role implements Waiter {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		print("here to take order");
+		AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),"here to take order");
 		customer.state = CustomerState.Ordering;
 		customer.customer.msgHereToTakeOrder();
 	}
@@ -246,7 +248,7 @@ public class StackWaiterRole extends Role implements Waiter {
 	
 	private void goPickUpFood(MyCustomer customer) {
 		host.msgWaiterBusy(this);
-		print("here to get order");
+		AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),"here to get order");
 		DoGoToCook();
 		try {
 			doneAnimation.acquire();
@@ -258,7 +260,7 @@ public class StackWaiterRole extends Role implements Waiter {
 	
 	private void tellCustomerToReorder(MyCustomer customer) {
 		host.msgWaiterBusy(this);
-		print("telling " + customer.customer + " to reorder");
+		AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),"telling " + customer.customer + " to reorder");
 		DoGoToCustomerTable(customer, customer.table);
 		try {
 			doneAnimation.acquire();
@@ -289,7 +291,7 @@ public class StackWaiterRole extends Role implements Waiter {
 	}
 	
 	private void leaveRestaurant() {
-		print("Leaving.");
+		AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),"Leaving.");
 		DoLeaveRestaurant();
 		try {
 			doneAnimation.acquire();
@@ -300,14 +302,14 @@ public class StackWaiterRole extends Role implements Waiter {
 	}
 	
 	private void goGetPaycheck() {
-		print("Getting paycheck");
+		AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),"Getting paycheck");
 		waiterGui.DoGoToPaycheck();
 		try {
 			doneAnimation.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		print("telling cashier I need my paycheck");
+		AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),"telling cashier I need my paycheck");
 		cashier.msgNeedPaycheck(this);
 		state = AgentState.WaitingForPaycheck;
 	}
@@ -315,28 +317,28 @@ public class StackWaiterRole extends Role implements Waiter {
 	
 //	animation---------------------------------------------------------------------------------------------------------------------------------
 	private void DoGoOnBreak() {
-		print("Going on break");
+		AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),"Going on break");
 		waiterGui.DoGoOnBreak();
 	}
 	
 	private void DoSeatCustomer(Customer customer, int table) {
-		print("Seating " + customer + " at table " + table);
+		AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),"Seating " + customer + " at table " + table);
 		waiterGui.DoBringToTable(table); 
 
 	}
 	
 	private void DoGoToCustomerTable(MyCustomer customer, int tableNumber) {
-		print("Going to " + customer.customer + "'s table");
+		AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),"Going to " + customer.customer + "'s table");
 		waiterGui.DoBringToTable(tableNumber);
 	}
 	
 	protected void DoGoToCook() {
-		print("Going to cook");
+		AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),"Going to cook");
 		waiterGui.DoGoToCook();
 	}
 	
 	private void DoGoToWaitingArea() {
-		print("Going to customer");
+		AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),"Going to customer");
 		waiterGui.DoGoToCustomer();
 	}
 	
@@ -376,7 +378,7 @@ public class StackWaiterRole extends Role implements Waiter {
 	public void msgCheckPlease(Customer customer) {
 		for(MyCustomer mCustomer : customers) {
 			if(mCustomer.customer.equals(customer)) {
-				print(customer + " ready for check");
+				AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),customer + " ready for check");
 				mCustomer.state = CustomerState.ReadyForCheck;
 				stateChanged();
 			}
@@ -385,12 +387,12 @@ public class StackWaiterRole extends Role implements Waiter {
 	
 	public void	msgYouCanGoOnBreak(boolean canGoOnBreak) {
 		if(canGoOnBreak) {
-			print("Waiter can go on break");
+			AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),"Waiter can go on break");
 			state = AgentState.GoingOnBreak;
 			stateChanged();
 		}
 		else {
-			print("Waiter cannot go on break");
+			AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),"Waiter cannot go on break");
 			waiterGui.setWaiterCheckOff();
 			state = AgentState.Working;
 			stateChanged();
@@ -401,7 +403,7 @@ public class StackWaiterRole extends Role implements Waiter {
 		synchronized(customers) {
 			for(MyCustomer mCustomer : customers) {
 				if(mCustomer.customer.equals(customer)) {
-					print(customer + " ready to order");
+					AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),customer + " ready to order");
 					mCustomer.state = CustomerState.ReadyToOrder;
 					stateChanged();
 				}
@@ -413,7 +415,7 @@ public class StackWaiterRole extends Role implements Waiter {
 		synchronized(customers) {
 			for(MyCustomer mCustomer : customers) {
 				if(mCustomer.customer.equals(customer)) {
-					print(customer + " ordered " + choice);
+					AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),customer + " ordered " + choice);
 					mCustomer.choice = choice;
 					mCustomer.state = CustomerState.Ordered;
 					stateChanged();
@@ -423,7 +425,7 @@ public class StackWaiterRole extends Role implements Waiter {
 	}
 	
 	public void msgSeatCustomer(Customer customer, int tableNumber, int seatNumber) {
-		print("Seating " + customer);
+		AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),"Seating " + customer);
 		boolean doesContainCustomer = false;
 		synchronized(customers) {
 			for(MyCustomer mCustomer : customers) {
@@ -451,7 +453,7 @@ public class StackWaiterRole extends Role implements Waiter {
 						&& customer.table == table
 						&& customer.seatNum == seat
 						&& customer.state == CustomerState.AtCook) {
-					print(customer.customer + "'s food is ready");
+					AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),customer.customer + "'s food is ready");
 					customer.state = CustomerState.FoodReady;
 					stateChanged();
 				}
@@ -464,7 +466,7 @@ public class StackWaiterRole extends Role implements Waiter {
 			for(MyCustomer mCustomer : customers) {
 				if(mCustomer.customer.equals(customer)) {
 					mCustomer.state = CustomerState.DoneEating;
-					print(customer + " done eating");
+					AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),customer + " done eating");
 					stateChanged();
 				}
 			}
@@ -478,7 +480,7 @@ public class StackWaiterRole extends Role implements Waiter {
 						&& customer.table == table
 						&& customer.seatNum == seat
 						&& customer.state == CustomerState.AtCook) {
-					print(customer.customer + "'s food is empty");
+					AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),customer.customer + "'s food is empty");
 					customer.state = CustomerState.FoodEmpty;
 					stateChanged();
 				}
@@ -493,14 +495,14 @@ public class StackWaiterRole extends Role implements Waiter {
 	}
 	
 	public void msgIWantToGoOnBreak() {//from GUI
-		print("I want to go on break");
+		AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),"I want to go on break");
 		state = AgentState.WantToGoOnBreak;
 		stateChanged();
 	}
 	
 	public void msgImComingOffBreak() {
 		if(state == AgentState.OnBreak) {
-			print("I'm getting back to work");
+			AlertLog.getInstance().logMessage(AlertTag.WAITER, getName(),"I'm getting back to work");
 			state = AgentState.FinishingBreak;
 			stateChanged();
 		}

@@ -59,19 +59,16 @@ public class CarAgent extends Agent implements Vehicle {
 	*/	
 		protected boolean pickAndExecuteAnAction(){
 			if (currentState == carState.inTransit){
-				//print("STUBPICKANDEXECUTEANACTION");
 				goTo(destination);
 				return true;
 			}
 			
 			else if(currentState == carState.atIntersection1 || currentState == carState.atIntersection2){
-				//print("stopping at intersection");
 				stopCar();
 				return true;
 			}
 		
 			else if(currentState == carState.givenGreen){
-				//print("given green light");
 				keepDriving();
 				return true;
 			}
@@ -94,14 +91,12 @@ public class CarAgent extends Agent implements Vehicle {
 		public void msgTakeMeHere(Transportation Passenger, String myDestination){ //receives msg from passenger
 			passenger= Passenger;
 			destination = myDestination;
-			//print("Car Destination: " + myDestination + ".");
 			
 			currentState = carState.inTransit;
 			stateChanged();
 		}
 		
 		public void msgAtDestination(){ //from carGui when reached destination
-			print("Car arrived to destination.");
 			driving.release();
 			currentLocation= destination;
 			currentState = carState.atDestination;
@@ -110,7 +105,6 @@ public class CarAgent extends Agent implements Vehicle {
 
 		public void msgAtIntersection1() {
 			// TODO Auto-generated method stub
-			//print("gui told me i'm at intersection 1. alerting traffic light");
 			trafficLight1.msgAtIntersection(this);
 			currentState = carState.atIntersection1;
 			driving.release();
@@ -119,7 +113,6 @@ public class CarAgent extends Agent implements Vehicle {
 		
 		public void msgAtIntersection2() {
 			// TODO Auto-generated method stub
-			//print("gui told me i'm at intersection 2. alerting traffic light");
 			trafficLight2.msgAtIntersection(this);
 			currentState = carState.atIntersection2;
 			driving.release();
@@ -128,9 +121,7 @@ public class CarAgent extends Agent implements Vehicle {
 		
 		public void msgGreenLight(TrafficAgent ta){
 			currentLight= ta;
-			//print("given green light");
 			currentState = carState.givenGreen;
-			//driving.acquire();
 			stateChanged();
 		}
 		
@@ -146,7 +137,7 @@ public class CarAgent extends Agent implements Vehicle {
 
 		
 		private void goTo(String myDestination){
-			print("Starting car"); // to "+myDestination);
+
 			doGoTo(myDestination); //sets destination in carGui
 			try {
 				driving.acquire(); //to ensure that the gui is uninterrupted on the way
@@ -157,14 +148,11 @@ public class CarAgent extends Agent implements Vehicle {
 		}
 		
 		private void doGoTo(String myDestination){
-			System.out.println("Car is going to "+ myDestination);
 			carGui.DoGoTo(myDestination);
 		}
 		
 		private void parkCar(){
 		//msg gives passenger the destination so its gui can reappear at an appropriate place
-			print("Car is parking.");
-			print("desti is"+ destination);
 			passenger.msgArrivedAtDestination(destination);
 			carGui.DoParkCar();
 			currentState = carState.Idle;

@@ -56,7 +56,6 @@ public class HomePersonRole extends Role implements HomePerson {
 	private void Clean() {
 		DoClean();
 		cleanHouse = true;
-		print("(stubhomepersonrole clean()) MY HOUSE IS CLEANNNNNNN!!!!!!!!");
 	}
 	
 	//GUI Actions-------------------------------------------------------------------------

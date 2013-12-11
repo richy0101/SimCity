@@ -5,6 +5,8 @@ import gui.Building;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import city.PersonAgent;
 import city.helpers.Directory;
 import agent.Role;
@@ -82,7 +84,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 	//messages----------------------------------------------------------------------------
 	public void msgHereIsBill(double price) {
-		print("Received msgHereIsBill");
+		AlertLog.getInstance().logMessage(AlertTag.MARKETCUSTOMER, getPersonAgent().getName(), "Received bill");
 		
 		orderCost = price;
 	    roleEvent = Event.GotBill;
@@ -92,7 +94,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	}
 	
 	public void msgHereAreYourGroceries(Map<String, Integer> groceries) {
-		print("Received msgHereAreYourGroceries");
+		AlertLog.getInstance().logMessage(AlertTag.MARKETCUSTOMER, getPersonAgent().getName(), "Got my groceries");
 		
 		myGroceryList = groceries;
 	    roleEvent = Event.GotGroceries;
@@ -102,8 +104,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	}
 	
 	public void msgCantFillOrder(Map<String, Integer> groceries) {
-		print("Receieved msgCantFillOrder");
-		
+		AlertLog.getInstance().logMessage(AlertTag.MARKETCUSTOMER, getPersonAgent().getName(), "Market can't fulfill my order");		
 		roleEvent = Event.TurnedAway;
 		
 	    log.add(new LoggedEvent("Received msgHereAreYourGroceries."));
@@ -158,11 +159,6 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		if(worker == null) {
-			print("market null");
-		}
-		else if(myGroceryList == null)
-			print("grocerylist null");
 	    worker.msgGetGroceries(this, myGroceryList);
 	    log.add(new LoggedEvent("Ordered groceries."));
 	}

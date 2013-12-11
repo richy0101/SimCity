@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import bank.gui.BankCustomerGui;
 import bank.interfaces.*;
 import agent.Agent;
@@ -55,7 +57,7 @@ public class BankManagerAgent extends Agent implements BankManager {
 	
     //messages----------------------------------------------------------------------------
 	public void msgINeedAssistance(BankCustomer customer) {
-		print("A customer needs assistance.");
+		AlertLog.getInstance().logMessage(AlertTag.BANKMANAGER, getName(), "A customer needs assistance");
 		synchronized(this.customers){
 			customers.add(customer);
 		}
@@ -63,7 +65,7 @@ public class BankManagerAgent extends Agent implements BankManager {
 	}
 
 	public void msgTellerFree(BankTeller teller) {
-		print("Bank Teller is now free");
+		AlertLog.getInstance().logMessage(AlertTag.BANKMANAGER, getName(), "Bank Teller is now free");
 		for(MyBankTeller tempTeller : tellers){
 			if(tempTeller.teller == teller){
 				tempTeller.state = BankTellerState.Idle;
@@ -73,7 +75,7 @@ public class BankManagerAgent extends Agent implements BankManager {
 	}
 	
 	public void msgHereForWork(BankTeller teller) {
-		print("MsgHereForWork received");
+		AlertLog.getInstance().logMessage(AlertTag.BANKMANAGER, getName(), "Here for work");
 		synchronized(this.tellers){
 			print("A new teller has arrived to work. Adding him to Teller list.");
 			tellers.add(new MyBankTeller(teller, BankTellerState.GotToWork));
@@ -81,7 +83,8 @@ public class BankManagerAgent extends Agent implements BankManager {
 		stateChanged();
 	}
 	
-	public void msgCollectPay(BankTeller teller){
+	public void msgCollectPay(BankTeller teller) {
+		AlertLog.getInstance().logMessage(AlertTag.BANKMANAGER, getName(), "Collecting pay");
 		for(MyBankTeller tempTeller: tellers){
 			if(tempTeller.teller == teller){
 				tempTeller.state = BankTellerState.GettingPay;
@@ -90,6 +93,7 @@ public class BankManagerAgent extends Agent implements BankManager {
 	}
 	
 	public void msgTellerLeavingWork(BankTeller teller) {
+		AlertLog.getInstance().logMessage(AlertTag.BANKMANAGER, getName(), "Leaving work");
 		synchronized(this.tellers) {
 			for(MyBankTeller tempTeller: tellers){
 				if(tempTeller.teller == teller){
@@ -143,7 +147,7 @@ public class BankManagerAgent extends Agent implements BankManager {
     //actions-----------------------------------------------------------------------------
 	
 	private void AssignTellerToRegister(MyBankTeller myTeller) {
-		print("Assigning teller to register");
+		AlertLog.getInstance().logMessage(AlertTag.BANKMANAGER, getName(), "Assigning teller to register");
 		myTeller.tellerNum = this.tellerNum;
 		this.tellerNum++;
 	    myTeller.teller.msgGoToRegister(myTeller.tellerNum);
@@ -151,15 +155,15 @@ public class BankManagerAgent extends Agent implements BankManager {
 	}
 	
 	private void AssignCustomerToTeller(BankCustomer customer, MyBankTeller myTeller) {
-		print("Assigning customer to teller");
+		AlertLog.getInstance().logMessage(AlertTag.BANKMANAGER, getName(), "A customer to teller");
 	    myTeller.teller.msgAssigningCustomer(customer);
 	    myTeller.state = BankTellerState.Busy;
 	    customers.remove(customer);
 	    stateChanged();
 	}
 	
-	private void GiveTellerPay(MyBankTeller myTeller){
-		print("Giving teller his paycheck");
+	private void GiveTellerPay(MyBankTeller myTeller) {
+		AlertLog.getInstance().logMessage(AlertTag.BANKMANAGER, getName(), "Giving teller his paycheck");
 		myTeller.teller.msgHereIsPaycheck(100.0); //100 is amount of money from unlimited bank funds
 		myTeller.state = BankTellerState.ReceivedPay;
 	}
