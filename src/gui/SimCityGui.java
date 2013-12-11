@@ -1,30 +1,20 @@
 package gui;
 
 import java.awt.CardLayout;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 import city.BusAgent;
 import city.PersonAgent;
 import city.TrafficAgent;
 import city.gui.BusGui;
-import city.helpers.ApartmentHelper;
 import city.helpers.Clock;
 import city.helpers.Directory;
 import city.helpers.WalkLoopHelper;
 import city.helpers.XMLReader;
-import agent.Role;
-import bank.BankTellerRole;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,24 +23,14 @@ import java.util.Random;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
-import restaurant.nakamuraRestaurant.NakamuraCookRole;
-import restaurant.nakamuraRestaurant.NakamuraWaiterRole;
 import restaurant.nakamuraRestaurant.gui.NakamuraRestaurantAnimationPanel;
 import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
 import restaurant.phillipsRestaurant.gui.PhillipsRestaurantAnimationPanel;
-import restaurant.shehRestaurant.ShehCookRole;
-import restaurant.shehRestaurant.ShehCustomerRole;
-import restaurant.shehRestaurant.ShehWaiterRole;
 import restaurant.shehRestaurant.gui.ShehRestaurantAnimationPanel;
-import restaurant.tanRestaurant.TanCookRole;
-import restaurant.tanRestaurant.TanCustomerRole;
-import restaurant.tanRestaurant.TanWaiterNormalRole;
 import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
 import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 
-import javax.swing.event.PopupMenuListener;
-import javax.swing.event.PopupMenuEvent;
 import java.awt.Font;
 
 public class SimCityGui {
@@ -607,9 +587,9 @@ public class SimCityGui {
 			
 		}
 
-		PersonAgent person1 = new PersonAgent("HuangCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
-		PersonAgent person2 = new PersonAgent("HuangWaiterShared", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
-		PersonAgent person3 = new PersonAgent("HuangWaiterShared", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
+		PersonAgent person1 = new PersonAgent("NakamuraCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
+		PersonAgent person2 = new PersonAgent("NakamuraWaiterNormal", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
+		PersonAgent person3 = new PersonAgent("Unemployed", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
 		PersonAgent person4 = new PersonAgent("BankTeller", "Test Person 4", 3, 1000.00, "House4", "TakesTheBus");
 		PersonAgent person5 = new PersonAgent("BankTeller", "Test Person 5", 3, 1000.00, "House5", "TakesTheBus");
 		PersonAgent person6 = new PersonAgent("Market", "Test Person 6", 3, 1000.00, "House6", "TakesTheBus");
@@ -700,14 +680,14 @@ public class SimCityGui {
 		macroAnimationPanel.addGui(busGui2);
 		bus2.startThread();
 		
-		
+		/*
 		trafficLight = new TrafficAgent();
 		trafficLight.startThread();
 		trafficLight1 = new TrafficAgent();
 		trafficLight1.startThread();
 		trafficLight2 = new TrafficAgent();
 		trafficLight2.startThread();
-
+		*/
 		
 //		String a = "TanRestaurant";
 //		String b = "House1";

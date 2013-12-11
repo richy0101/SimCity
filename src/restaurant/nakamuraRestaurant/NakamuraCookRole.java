@@ -236,6 +236,7 @@ public class NakamuraCookRole extends CookRole {
 
 	private void ArriveAtWork() {
 		host.msgNewCook(this);
+		cashier.setCook(this);
 		cookGui.DoGoToCooking();
 		state = cookState.Working;
 	}

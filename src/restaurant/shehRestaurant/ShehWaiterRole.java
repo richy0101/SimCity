@@ -25,19 +25,21 @@ public class ShehWaiterRole extends Role implements Waiter {
 	private List<myCustomer> customers = Collections.synchronizedList(new ArrayList<myCustomer>());
 	public ArrayList<Table> tables;
 	
-	private ShehCookRole cook;
+	protected ShehCookRole cook;
 	private ShehHostAgent host;
-	private ShehCashierAgent cashier;
+	protected ShehCashierAgent cashier;
 
 	private Boolean breakGranted = false;
 
 	private Menu menu;
 	private Bill bill;
 	
+	protected ShehRestaurant restaurant = (ShehRestaurant) Directory.sharedInstance().getRestaurants().get(3);
+	
 	private String name;
 	private Semaphore atTable = new Semaphore(0,true);
 	private Semaphore atKiosk = new Semaphore(0,true);
-	private Semaphore atKitchen = new Semaphore(0,true);
+	protected Semaphore atKitchen = new Semaphore(0,true);
 	
 	private double moneyEarned = 0;
 	
@@ -403,6 +405,7 @@ public class ShehWaiterRole extends Role implements Waiter {
 	}
 	
 	private void CookThisOrder(myCustomer c) {
+		/*
 		waiterGui.DoGoToKitchen(); //change to cooking area later
 		try {
 			atKitchen.acquire();
@@ -412,6 +415,7 @@ public class ShehWaiterRole extends Role implements Waiter {
 		cook.msgCookThisOrder(this, c.o, c.t.getTableNumber(), cashier);
 		c.s = CustomerState.Waiting;
 		stateChanged();
+		*/
 	}
 	
 	private void HereIsYourFood(myCustomer c) {
