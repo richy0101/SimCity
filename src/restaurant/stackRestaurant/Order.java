@@ -4,7 +4,7 @@ import restaurant.stackRestaurant.interfaces.Waiter;
 
 public class Order {
 	
-		Order(Waiter waiter, String choice, int table, int seat) {
+		public Order(Waiter waiter, String choice, int table, int seat) {
 			this.waiter = waiter;
 			this.choice = choice;
 			this.table = table;

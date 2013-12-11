@@ -3,6 +3,9 @@ package gui;
 import java.awt.CardLayout;
 import java.awt.EventQueue;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 import agent.Role;
@@ -17,6 +20,8 @@ import city.helpers.XMLReader;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +37,10 @@ import restaurant.phillipsRestaurant.gui.PhillipsRestaurantAnimationPanel;
 import restaurant.shehRestaurant.ShehCookRole;
 import restaurant.shehRestaurant.ShehWaiterRole;
 import restaurant.shehRestaurant.gui.ShehRestaurantAnimationPanel;
+import restaurant.tanRestaurant.TanCookRole;
+import restaurant.tanRestaurant.TanCustomerRole;
+import restaurant.tanRestaurant.TanWaiterNormalRole;
+import restaurant.tanRestaurant.TanWaiterSharedRole;
 import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
 import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 import trace.AlertTag;
@@ -71,13 +80,13 @@ public class SimCityGui {
 				try {
 					SimCityGui window = new SimCityGui();
 					window.frame.setVisible(true);
-					/*
+					
 					URL url = new File("src/gui/12-new-bark-town.wav").toURI().toURL();
 					Clip audioClip = AudioSystem.getClip();
 					AudioInputStream ais = AudioSystem.getAudioInputStream(url);
 					audioClip.open(ais);
 					audioClip.loop(Clip.LOOP_CONTINUOUSLY);
-					*/
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -566,15 +575,17 @@ public class SimCityGui {
 		btnIncrementDay.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
 		panel.add(btnIncrementDay);
 		
-		Restaurant restaurant = Directory.sharedInstance().getRestaurants().get(0);
-		CurrentBuildingPanel restPanel = new CurrentBuildingPanel(restaurant);
-		restaurant.setInfoPanel(restPanel);
-		tabbedPane.addTab("Current Building", restPanel);
+		
 		
 		logPanel = new JPanel();
 		tabbedPane.addTab("Alert Log", null, logPanel, null);
 		SpringLayout sl_logPanel = new SpringLayout();
 		logPanel.setLayout(sl_logPanel);
+		
+		Restaurant restaurant = Directory.sharedInstance().getRestaurants().get(0);
+		CurrentBuildingPanel restPanel = new CurrentBuildingPanel(restaurant);
+		restaurant.setInfoPanel(restPanel);
+		tabbedPane.addTab("Current Building", restPanel);
 		
 		tracePanel = new TracePanel();
 		sl_logPanel.putConstraint(SpringLayout.NORTH, tracePanel, 10, SpringLayout.NORTH, logPanel);
@@ -794,11 +805,12 @@ public class SimCityGui {
 		PersonAgent person5 = new PersonAgent("BankTeller", "Test Person 5", 3, 1000.00, "House5", "TakesTheBus");
 		PersonAgent person6 = new PersonAgent("Market", "Test Person 6", 3, 1000.00, "House6", "TakesTheBus");
 
+*/
 		String a = "TanRestaurant";
 		String b = "House1";
 		String name = "Ben Test Waiter";
 		Role role;
-		role= new TanWaiterNormalRole("TanRestaurant");
+		role= new TanWaiterSharedRole("TanRestaurant");
 		PersonAgent p = new PersonAgent(role, a , b, name);
 		p.msgWakeUp();
 		role.setPerson(p);
@@ -823,7 +835,7 @@ public class SimCityGui {
 		p2.msgWakeUp();
 		role2.setPerson(p2);
 		p2.startThread();
-		*/
+		
 		
 		/*
 		//RYAN TEST CODE
@@ -1065,8 +1077,8 @@ public class SimCityGui {
 	public void setUniqueBuildingPanel(String name) {
 		for(Restaurant restaurant : Directory.sharedInstance().getRestaurants()) {
 			if(restaurant.getName().contains(name)) {
-				if(tabbedPane.getTabCount() == 2) {
-					tabbedPane.remove(1);
+				if(tabbedPane.getTabCount() == 3) {
+					tabbedPane.remove(2);
 				}
 				CurrentBuildingPanel restPanel = new CurrentBuildingPanel(restaurant);
 				restaurant.setInfoPanel(restPanel);
@@ -1074,32 +1086,32 @@ public class SimCityGui {
 			}
 		}
 		if(name.equals("Market")) {
-			if(tabbedPane.getTabCount() == 2) {
-				tabbedPane.remove(1);
+			if(tabbedPane.getTabCount() == 3) {
+				tabbedPane.remove(2);
 			}
 			CurrentBuildingPanel restPanel = new CurrentBuildingPanel(Directory.sharedInstance().getMarkets().get(0));
 			Directory.sharedInstance().getMarkets().get(0).setInfoPanel(restPanel);
 			tabbedPane.addTab("Current Building", restPanel);
 		}
 		else if(name.equals("Market2")) {
-			if(tabbedPane.getTabCount() == 2) {
-				tabbedPane.remove(1);
+			if(tabbedPane.getTabCount() == 3) {
+				tabbedPane.remove(2);
 			}
 			CurrentBuildingPanel restPanel = new CurrentBuildingPanel(Directory.sharedInstance().getMarkets().get(1));
 			Directory.sharedInstance().getMarkets().get(1).setInfoPanel(restPanel);
 			tabbedPane.addTab("Current Building", restPanel);
 		}
 		else if(name.equals("Bank")) {
-			if(tabbedPane.getTabCount() == 2) {
-				tabbedPane.remove(1);
+			if(tabbedPane.getTabCount() == 3) {
+				tabbedPane.remove(2);
 			}
 			CurrentBuildingPanel restPanel = new CurrentBuildingPanel(Directory.sharedInstance().getBanks().get(0));
 			Directory.sharedInstance().getBanks().get(0).setInfoPanel(restPanel);
 			tabbedPane.addTab("Current Building", restPanel);
 		}
 		else if(name.equals("Bank2")) {
-			if(tabbedPane.getTabCount() == 2) {
-				tabbedPane.remove(1);
+			if(tabbedPane.getTabCount() == 3) {
+				tabbedPane.remove(2);
 			}
 			CurrentBuildingPanel restPanel = new CurrentBuildingPanel(Directory.sharedInstance().getBanks().get(1));
 			Directory.sharedInstance().getBanks().get(1).setInfoPanel(restPanel);
