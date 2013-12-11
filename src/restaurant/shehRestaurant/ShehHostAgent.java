@@ -1,15 +1,10 @@
 package restaurant.shehRestaurant;
 
 import agent.Agent;
-import agent.Role;
 import restaurant.shehRestaurant.gui.HostGui;
 import restaurant.shehRestaurant.helpers.Table;
-import restaurant.shehRestaurant.interfaces.Cashier;
-
 import java.util.*;
 import java.util.concurrent.Semaphore;
-
-import city.helpers.Directory;
 
 /**
  * Restaurant Host Agent
@@ -18,7 +13,7 @@ import city.helpers.Directory;
 public class ShehHostAgent extends Agent {
 	static final int NTABLES = 3;
 	public List<ShehCustomerRole> waitingCustomers = Collections.synchronizedList(new ArrayList<ShehCustomerRole>());
-	public List<ShehWaiterRole> waiters = new ArrayList<ShehWaiterRole>();
+	public List<ShehWaiterRole> waiters = Collections.synchronizedList(new ArrayList<ShehWaiterRole>());
 	//private Cashier cashier;
 	
 	public List<myWaiter> breakWaiters = Collections.synchronizedList(new ArrayList<myWaiter>());
@@ -27,15 +22,13 @@ public class ShehHostAgent extends Agent {
 	
 	public ArrayList<Table> tables;
 
-	private String name;
 	private Semaphore atTable = new Semaphore(0,true);
 
 	public HostGui hostGui = null;
 	
 	Boolean cookPresent = false;
 	private int counter = 0;
-	private int availableTables = NTABLES;
-	private int numOfCustomers = 0, numOfWaiters = 0;
+	private int numOfCustomers = 0;
 	
 	ShehRestaurant restaurant;
 
@@ -44,9 +37,11 @@ public class ShehHostAgent extends Agent {
 		
 		//cashier = (ShehCashierAgent) Directory.sharedInstance().getAgents().get("ShehRestaurantCashier");
 		tables = new ArrayList<Table>(NTABLES);
-		for (int ix = 1; ix <= NTABLES; ix++) {
-			tables.add(new Table(ix));
-		} 
+		synchronized(tables) {
+			for (int ix = 1; ix <= NTABLES; ix++) {
+				tables.add(new Table(ix));
+			} 
+		}
 	}
 	
 	public class myCustomer {
@@ -111,24 +106,27 @@ public class ShehHostAgent extends Agent {
 	
 	public void msgFreeOfCustomers(ShehWaiterRole waiter) {
 		print("You may go on break");
-		for(myWaiter w : breakWaiters) {
-			if(w.w == waiter) {
-				w.s = WaiterState.OnBreak;
-				stateChanged();
+		synchronized(breakWaiters) {
+			for(myWaiter w : breakWaiters) {
+				if(w.w == waiter) {
+					w.s = WaiterState.OnBreak;
+					stateChanged();
+				}
 			}
 		}
 	
 	}
 
 	public void msgLeavingTable(ShehCustomerRole cust) {
-		for (Table table : tables) {
-			if (table.getOccupant() == cust) {
-				print(cust + " leaving " + table);
-				table.setUnoccupied();
-				stateChanged();
-				
-				availableTables++;
-				numOfCustomers--;
+		synchronized(tables) {
+			for (Table table : tables) {
+				if (table.getOccupant() == cust) {
+					print(cust + " leaving " + table);
+					table.setUnoccupied();
+					stateChanged();
+					
+					numOfCustomers--;
+				}
 			}
 		}
 	}
@@ -159,7 +157,6 @@ public class ShehHostAgent extends Agent {
 		if(waiters.size() > 0 && cookPresent == true) { //if there are waiters and customers
 			if(waitingCustomers.size() >= 1) {
 				organizeCustomers();
-				
 				if(numOfCustomers <= 3) {
 					synchronized(tables) {
 						for (Table table : tables) {
@@ -212,9 +209,12 @@ public class ShehHostAgent extends Agent {
 	// Actions
 	private void noWaiters() {
 		print("We are not open.");
-		for(ShehCustomerRole cust : waitingCustomers) {
-			cust.msgRestaurantIsClosed();
-			waitingCustomers.remove(cust);
+		synchronized(waitingCustomers) {
+			for(ShehCustomerRole cust : waitingCustomers) {
+				cust.msgRestaurantIsClosed();
+				waitingCustomers.remove(cust);
+				break;
+			}
 		}
 
 	}
@@ -223,8 +223,10 @@ public class ShehHostAgent extends Agent {
 		print("We have waiters and I'm going to organize them.");
 		int queue = 0;
 		int num = 0;
-		for(ShehWaiterRole w : waiters) {
-			w.setCook(cook);
+		synchronized(waiters) {
+			for(ShehWaiterRole w : waiters) {
+				w.setCook(cook);
+			}
 		}
 		num = (waitingCustomers.size() + queue -1) % 10;
 		queue++;
@@ -247,13 +249,13 @@ public class ShehHostAgent extends Agent {
 	
 		waitingCustomers.remove(customer);
 		
-		for(myCustomer c : customers) {
-			if(c.c == customer) {
-				customers.remove(customer);
+		synchronized(customers) {
+			for(myCustomer c : customers) {
+				if(c.c == customer) {
+					customers.remove(customer);
+				}
 			}
 		}
-		
-		availableTables--;
 	}
 	
 	private void tablesAreFull(ShehCustomerRole customer) {

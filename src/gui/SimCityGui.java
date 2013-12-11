@@ -3,6 +3,9 @@ package gui;
 import java.awt.CardLayout;
 import java.awt.EventQueue;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 import agent.Role;
@@ -17,6 +20,8 @@ import city.helpers.XMLReader;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +34,8 @@ import restaurant.nakamuraRestaurant.gui.NakamuraRestaurantAnimationPanel;
 import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
 import restaurant.phillipsRestaurant.gui.PhillipsRestaurantAnimationPanel;
+import restaurant.shehRestaurant.ShehCookRole;
+import restaurant.shehRestaurant.ShehWaiterRole;
 import restaurant.shehRestaurant.gui.ShehRestaurantAnimationPanel;
 import restaurant.tanRestaurant.TanCookRole;
 import restaurant.tanRestaurant.TanCustomerRole;
@@ -73,13 +80,13 @@ public class SimCityGui {
 				try {
 					SimCityGui window = new SimCityGui();
 					window.frame.setVisible(true);
-					/*
+					
 					URL url = new File("src/gui/12-new-bark-town.wav").toURI().toURL();
 					Clip audioClip = AudioSystem.getClip();
 					AudioInputStream ais = AudioSystem.getAudioInputStream(url);
 					audioClip.open(ais);
 					audioClip.loop(Clip.LOOP_CONTINUOUSLY);
-					*/
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -828,43 +835,35 @@ public class SimCityGui {
 		p2.startThread();
 		
 		
+		/*
+		//RYAN TEST CODE
+		String a = "ShehRestaurant";
+		String b = "House1";
+		String name = "WAITER";
+		Role role;
+		role = new ShehWaiterRole("ShehRestaurant");
+
+		PersonAgent p = new PersonAgent(role, a , b, name);
+		role.setPerson(p);
 		
-//		//RYAN TEST CODE
-//		String a = "ShehRestaurant";
-//		String b = "House1";
-//		String name = "WAITER";
-//		Role role;
-//		role = new ShehWaiterRole("ShehRestaurant");
-//
-//		PersonAgent p = new PersonAgent(role, a , b, name);
-//		role.setPerson(p);
-//		
-//		String a1 = "ShehRestaurant";
-//		String b1 = "House2";
-//		String name1 = "WAITER2";
-//		Role role1;
-//		role1 = new ShehWaiterRole("ShehRestaurant");
-//
-//		PersonAgent p1 = new PersonAgent(role1, a1 , b1, name1);
-//		role1.setPerson(p1);
-//		
-//		String a2 = "ShehRestaurant";
-//		String b2 = "House2";
-//		String name2 = "COOK";
-//		Role role2;
-//		role2 = new ShehCookRole("ShehRestaurant");
-//
-//		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
-//		role2.setPerson(p2);
-//		
-//		String a3 = "ShehRestaurant";
-//		String b3 = "House2";
-//		String name3 = "COOK2";
-//		Role role3;
-//		role3 = new ShehCookRole("ShehRestaurant");
-//
-//		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
-//		role3.setPerson(p3);
+		String a1 = "ShehRestaurant";
+		String b1 = "House2";
+		String name1 = "WAITER2";
+		Role role1;
+		role1 = new ShehWaiterRole("ShehRestaurant");
+
+		PersonAgent p1 = new PersonAgent(role1, a1 , b1, name1);
+		role1.setPerson(p1);
+		
+		String a2 = "ShehRestaurant";
+		String b2 = "House2";
+		String name2 = "COOK";
+		Role role2;
+		role2 = new ShehCookRole("ShehRestaurant");
+
+		PersonAgent p2 = new PersonAgent(role2, a2 , b2, name2);
+		role2.setPerson(p2);
+		*/
 		
 		//END OF TEST CODE
 		
