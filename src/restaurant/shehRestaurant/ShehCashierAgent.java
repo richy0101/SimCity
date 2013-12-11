@@ -33,7 +33,6 @@ public class ShehCashierAgent extends CashierAgent implements Cashier {
 	Bill bill;
 	
 	Restaurant restaurant;
-	
 	public EventLog log = new EventLog();
 
 	private double money = 0;
@@ -88,7 +87,6 @@ public class ShehCashierAgent extends CashierAgent implements Cashier {
 
 	public ShehCashierAgent() {
 		super();
-		restaurant = Directory.sharedInstance().getRestaurants().get(3);
 	}
 
 	// Messages
@@ -256,7 +254,7 @@ public class ShehCashierAgent extends CashierAgent implements Cashier {
 		b.ps = PayCheckBillState.SentPayCheck;
 	}
 
-	public void setRestaurant(ShehRestaurant rest) {
+	public void setRestaurant(Restaurant rest) {
 		restaurant = rest;
 	}
 	
