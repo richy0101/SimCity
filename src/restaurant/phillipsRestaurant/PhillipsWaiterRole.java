@@ -297,7 +297,7 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 	// Actions
 	private void tellHostAtWork() {
 		System.err.println("WAITER FINALLY AT WORK WHOOOOO");
-		host.msgAddWaiter(this);
+		//host.msgAddWaiter(this);
 		waiterGui.DoGoToHome();
 		state = AgentState.WaitingAtRestaurant;
 		stateChanged();

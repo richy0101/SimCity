@@ -603,9 +603,9 @@ public class SimCityGui {
 		PersonAgent person2 = new PersonAgent("NakamuraWaiterShared", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
 		PersonAgent person3 = new PersonAgent("Unemployed", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
 */
-		PersonAgent person1 = new PersonAgent("HuangCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
-		PersonAgent person2 = new PersonAgent("HuangWaiterShared", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
-		PersonAgent person3 = new PersonAgent("HuangWaiterShared", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
+		//PersonAgent person1 = new PersonAgent("HuangCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
+		//PersonAgent person2 = new PersonAgent("HuangWaiterShared", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
+		//PersonAgent person3 = new PersonAgent("HuangWaiterShared", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
 /*
 		PersonAgent person1 = new PersonAgent("NakamuraCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
 		PersonAgent person2 = new PersonAgent("NakamuraWaiterNormal", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
@@ -626,6 +626,15 @@ public class SimCityGui {
 		p.msgWakeUp();
 		role.setPerson(p);
 		p.startThread();
+		
+		String a1 = "PhillipsRestaurant";
+		String b1 = "House2";
+		String name1 = "JEEEZZUSSWAITER2";
+		Role role1 = new PhillipsWaiterRole("PhillipsRestaurant");
+		PersonAgent p1 = new PersonAgent(role1, a1 , b1, name1);
+		p1.msgWakeUp();
+		role.setPerson(p1);
+		p1.startThread();
 		/*
 		String a = "TanRestaurant";
 		String b = "House1";
@@ -659,7 +668,7 @@ public class SimCityGui {
 		*/
 		
 		String a3 = "PhillipsRestaurant";
-		String b3 = "House4";
+		String b3 = "House3";
 		String name3 = "JEZZZZUSSSCOOK";
 		Role role3 = new PhillipsCookRole("PhillipsRestaurant");
 		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
@@ -720,14 +729,14 @@ public class SimCityGui {
 		macroAnimationPanel.addGui(busGui2);
 		bus2.startThread();
 		
-		/*
+		
 		trafficLight = new TrafficAgent();
 		trafficLight.startThread();
 		trafficLight1 = new TrafficAgent();
 		trafficLight1.startThread();
 		trafficLight2 = new TrafficAgent();
 		trafficLight2.startThread();
-		*/
+		
 		
 //		String a = "TanRestaurant";
 //		String b = "House1";
