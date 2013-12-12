@@ -82,7 +82,7 @@ public class WaiterGui implements Gui {
         }
         if(xPos == xExit && yPos == yExit
         		&& (xDestination == xExit && yDestination == yExit)) {
-        	agent.msgAnimationFinishedLeavingRestaurant();
+//        	agent.msgAnimationFinishedLeavingRestaurant();
         }
     }
 

@@ -57,10 +57,12 @@ public class GUIMarket extends BuildingPanel {
 	}
 	
 	public void updateGui() {
-        for(Gui gui : guis) {
-            if (gui.isPresent())
-                gui.updatePosition();
-        }
+		synchronized(guis) {
+			for(Gui gui : guis) {
+	            if (gui.isPresent())
+	                gui.updatePosition();
+	        }
+		}
 	}
 	
 	public void addGui(Gui gui) {
