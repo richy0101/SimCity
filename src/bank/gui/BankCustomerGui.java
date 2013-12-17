@@ -100,47 +100,61 @@ public class BankCustomerGui implements Gui {
 
 	@Override
 	public void draw(Graphics2D g) {
-		int randX = (int) Math.random()*500+200;
-		int randY = (int) Math.random()*200+50;
+		int xRand = 70, yRand = 70;
 		
 		if (xPos < xDestination) {
 			g.drawImage(customerRight, xPos, yPos, null);
 			if(explosionScene == true){
-				g.drawImage(explosion, randX,randY,null);
-				g.drawImage(explosion, randX+100,randY+70,null);
-				g.drawImage(explosion, randX-150,randY-50,null);
+				g.drawImage(explosion, xPos+xRand,yPos+yRand,null);
+				g.drawImage(explosion, xPos+xRand,yPos-yRand,null);
+				g.drawImage(explosion, xPos-xRand,yPos+yRand,null);
+				g.drawImage(explosion, xPos-xRand,yPos-yRand,null);
+				xRand += 3;
+				yRand += 3;
 			}
 		}
 		else if (xPos > xDestination) {
 			g.drawImage(customerLeft,  xPos, yPos, null);
 			if(explosionScene == true){
-				g.drawImage(explosion, randX,randY,null);
-				g.drawImage(explosion, randX+100,randY+70,null);
-				g.drawImage(explosion, randX-150,randY-50,null);
+				g.drawImage(explosion, xPos+xRand,yPos+yRand,null);
+				g.drawImage(explosion, xPos+xRand,yPos-yRand,null);
+				g.drawImage(explosion, xPos-xRand,yPos+yRand,null);
+				g.drawImage(explosion, xPos-xRand,yPos-yRand,null);
+				xRand += 3;
+				yRand += 3;
 			}
 		}
 		else if (yPos < yDestination) {
 			g.drawImage(customerDown, xPos, yPos, null);
 			if(explosionScene == true){
-				g.drawImage(explosion, randX,randY,null);
-				g.drawImage(explosion, randX+100,randY+70,null);
-				g.drawImage(explosion, randX-150,randY-50,null);
+				g.drawImage(explosion, xPos+xRand,yPos+yRand,null);
+				g.drawImage(explosion, xPos+xRand,yPos-yRand,null);
+				g.drawImage(explosion, xPos-xRand,yPos+yRand,null);
+				g.drawImage(explosion, xPos-xRand,yPos-yRand,null);
+				xRand += 3;
+				yRand += 3;
 			}
 		}
 		else if (yPos > yDestination) {
 			g.drawImage(customerUp, xPos, yPos, null);
 			if(explosionScene == true){
-				g.drawImage(explosion, randX,randY,null);
-				g.drawImage(explosion, randX+100,randY+70,null);
-				g.drawImage(explosion, randX-150,randY-50,null);
+				g.drawImage(explosion, xPos+xRand,yPos+yRand,null);
+				g.drawImage(explosion, xPos+xRand,yPos-yRand,null);
+				g.drawImage(explosion, xPos-xRand,yPos+yRand,null);
+				g.drawImage(explosion, xPos-xRand,yPos-yRand,null);
+				xRand += 3;
+				yRand += 3;
 			}
 		}
 		else {
 			g.drawImage(customerDown, xPos, yPos, null);
 			if(explosionScene == true){
-				g.drawImage(explosion, randX,randY,null);
-				g.drawImage(explosion, randX+100,randY+70,null);
-				g.drawImage(explosion, randX-150,randY-50,null);
+				g.drawImage(explosion, xPos+xRand,yPos+yRand,null);
+				g.drawImage(explosion, xPos+xRand,yPos-yRand,null);
+				g.drawImage(explosion, xPos-xRand,yPos+yRand,null);
+				g.drawImage(explosion, xPos-xRand,yPos-yRand,null);
+				xRand += 3;
+				yRand += 3;
 			}
 		}
 		info = agent.getPersonAgent().getName() + "(" + agent.getState() + ")";

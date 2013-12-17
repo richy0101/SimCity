@@ -24,4 +24,5 @@ public interface Waiter {
 	public abstract void msgAtWaitingArea();
 	public abstract void msgAtTable();
 	public abstract int getCustomers();
+	public abstract void msgAtHome();
 }

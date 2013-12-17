@@ -5,6 +5,7 @@ import restaurant.phillipsRestaurant.interfaces.*;
 import restaurant.phillipsRestaurant.gui.*;
 import agent.Agent;
 import agent.Role;
+import gui.Building;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,6 +13,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
+
+import city.helpers.Directory;
 
 /**
  * Restaurant waiter agent.
@@ -33,31 +36,45 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 		
 		}
 	}
-	private List<MyCustomerW> customers;
+	private List<MyCustomerW> customers = Collections.synchronizedList(new ArrayList<MyCustomerW>());;
 	//map<String choice, int eatingTime> timeForEating;
 	Timer timer = new Timer();
 	boolean onBreak = false;
 	private String name;
-	public enum AgentState {Break,WaitingAtRestaurant,WaitingToBeSeated,Seated,ReadyToOrder,Ordering,Ordered,WaitingForFoodToCook,WaitingForFoodToTable,Eating,NeedToPay,CheckingPayment,WaitingForPayment,GoingToPay,Paying,Paid,Leaving,Left};
+	public enum AgentState {Break,Arrived,WaitingAtRestaurant,WaitingToBeSeated,Seated,ReadyToOrder,Ordering,Ordered,WaitingForFoodToCook,WaitingForFoodToTable,Eating,NeedToPay,CheckingPayment,WaitingForPayment,GoingToPay,Paying,Paid,Leaving,Left};
 	private Cook cook;
 	private Host host;
 	private Cashier cashier;
+	private Semaphore atHome = new Semaphore(0,true);
 	private Semaphore atTable = new Semaphore(0,true);
 	private Semaphore atCook = new Semaphore(0,true);
 	private Semaphore atHost = new Semaphore(0,true);
 	private Semaphore atCashier = new Semaphore(0,true);
 	private Semaphore atWaitingArea = new Semaphore(0,true);
-	AgentState state = AgentState.WaitingAtRestaurant;
+	AgentState state;
 	public WaiterGui waiterGui = null;
+	private String location;
 	
 	/**
 	 * Constructor for WaiterAgent class
 	 *
 	 * @param name name of the waiter
 	 */
-	public PhillipsWaiterRole(String n){
-		name = n;	
-		customers = Collections.synchronizedList(new ArrayList<MyCustomerW>());
+	public PhillipsWaiterRole(String location){
+		super();
+		host = (Host) Directory.sharedInstance().getAgents().get("PhillipsRestaurantHost");
+		cashier = (Cashier) Directory.sharedInstance().getAgents().get("PhillipsRestaurantCashier");
+		
+		waiterGui = new WaiterGui(this,1);
+		this.location = location;
+		state = AgentState.Arrived;
+		
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == location) {
+				b.addGui(waiterGui);
+			}
+		}
 	}
 	
 	public void setCook(Cook c){
@@ -86,12 +103,16 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 		atHost.release();// = true;
 		stateChanged();
 	}
-	public void msgAtCashier() {//from animation		
-		atCashier.release();// = true;
-		System.out.println("OUT OF CASHIER SEM");
+	public void msgAtHome() {//from animation
+		atHome.release();// = true;
 		stateChanged();
 	}
-	public void msgAtWaitingArea() {//from animation		
+	public void msgAtCashier() {//from animation		
+		atCashier.release();// = true;
+		stateChanged();
+	}
+	public void msgAtWaitingArea() {//from animation
+		System.err.println("Got away from waiting area");
 		atWaitingArea.release();// = true;
 		stateChanged();
 	}
@@ -102,15 +123,13 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 	
 	
 	public void msgSeatCustomerAtTable(Customer c, int table){
-		//print("Waiter received msgSeatCustomerAtTable");
-		synchronized(this.customers){
-			customers.add(new MyCustomerW(null,c,table,AgentState.WaitingAtRestaurant));
-		}
+		System.err.println("Waiter received msgSeatCustomerAtTable");
+		customers.add(new MyCustomerW(null,c,table,AgentState.WaitingAtRestaurant));
 		stateChanged();	
 	}
 	
 	public void msgCustomerReadyToOrder(Customer c){
-		//print("Waiter received msgCustomerReadyToOrder");
+		System.err.println("Waiter received msgCustomerReadyToOrder");
 		for(int i=0; i<customers.size();i++){
 			if(customers.get(i).c == c){
 				customers.get(i).st = AgentState.ReadyToOrder;
@@ -192,6 +211,10 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 		//if(customers.size()==0){
 		//	takeBreak();
 		//}
+		if(state == AgentState.Arrived){
+			tellHostAtWork();
+			return true;
+		}
 		synchronized(this.customers){
 			for (int i=0; i< customers.size();i++){
 				if(customers.get(i).st == AgentState.WaitingAtRestaurant){
@@ -272,6 +295,14 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 	}
 
 	// Actions
+	private void tellHostAtWork() {
+		System.err.println("WAITER FINALLY AT WORK WHOOOOO");
+		//host.msgAddWaiter(this);
+		waiterGui.DoGoToHome();
+		state = AgentState.WaitingAtRestaurant;
+		stateChanged();
+	}
+	
 	private void takeBreak(){
 		onBreak = true;
 		timer.schedule(new TimerTask() {
@@ -286,7 +317,6 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 	private void GoToHost(){
 		//Do("Going to Host");
 		DoGoToHost();
-
 		try {
 			atHost.acquire();
 		} catch (InterruptedException e) {
@@ -307,7 +337,7 @@ public class PhillipsWaiterRole extends Role implements Waiter{
 		stateChanged();
 	}
 	private void seatCustomer(MyCustomerW cust){
-		Do("Seating customer"); 
+		System.err.println("Seating customer"); 
 		cust.c.msgFollowMe(this,cust.table,new Menu());
 		DoSeatCustomer(cust);
 		try {

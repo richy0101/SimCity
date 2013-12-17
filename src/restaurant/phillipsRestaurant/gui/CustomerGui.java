@@ -16,10 +16,7 @@ public class CustomerGui implements Gui{
 	private Customer agent = null;
 	private boolean isPresent = false;
 	private boolean isHungry = false;
-	
-
-	//private HostAgent host;
-	//RestaurantGui gui;
+	private boolean atDestination = false;
 
 	private int xPos, yPos;
 	private int xDestination, yDestination;
@@ -30,59 +27,59 @@ public class CustomerGui implements Gui{
     public static final int yTable12 = 115, yTable3 = 230;
 	
 	private static final int CASHIERX = 165, CASHIERY = 35;
+    private static final int HOSTX = 25, HOSTY = 180;
 	
 	BufferedImage customerImage;
 	
 	//public ArrayList<Boolean> tableOccupied = new ArrayList<Boolean>();
 
 	public CustomerGui(Customer c, int customerNum){ //HostAgent m) {
-		agent = c;
+		agent = c;/*
 		switch(customerNum%6){
         case 0:
         	xPos = 0;
-        	yPos = 180;
+        	yPos = 500;
         	xDestination = 0;
         	yDestination = 180;
         	break;
-        case 1:
-        	xPos = 25;
-        	yPos = 180;
-        	xDestination = 25;
-        	yDestination = 180;
+        case 1:*/
+        	xPos = 0;
+        	yPos = 500;
+        	xDestination = 0;
+        	yDestination = 500;/*
         	break;
         case 2:
-        	xPos = 50;
-        	yPos = 180;
+        	xPos = 0;
+        	yPos = 500;
         	xDestination = 50;
         	yDestination = 180;
         	break;
         case 3:
         	xPos = 0;
-        	yPos = 210;
+        	yPos = 500;
         	xDestination = 0;
         	yDestination = 210;
         	break;
         case 4:
-        	xPos = 25;
-        	yPos = 210;
+        	xPos = 0;
+        	yPos = 500;
         	xDestination = 25;
         	yDestination = 210;
         	break;
         case 5:
-        	xPos = 50;
-        	yPos = 210;
+        	xPos = 0;
+        	yPos = 500;
         	xDestination = 50;
         	yDestination = 210;
         	break;
         
-		}
+		}*/
         try {
         	customerImage = ImageIO.read(getClass().getResource("richardRestaurantCustomer.png"));
         }
         catch(IOException e) {
         	System.out.println("Error w/ Background");
         }  
-		//this.gui = gui;
 	}
 
 	public void updatePosition() {
@@ -96,11 +93,16 @@ public class CustomerGui implements Gui{
 		else if (yPos > yDestination)
 			yPos = yPos-5;
 
-		if(xPos == xDestination && yPos == yDestination
-        		& (xDestination == CASHIERX) & (yDestination == CASHIERY)) {
+		if(atDestination == false && xPos == xDestination && yPos == yDestination
+        		&& (xDestination == CASHIERX) && (yDestination == CASHIERY)) {
+			atDestination = true;
             agent.msgAtCashier();
         }
-		
+		if(atDestination == false && xPos == xDestination && yPos == yDestination
+        		&& (xDestination == HOSTX) && (yDestination == HOSTY)) {
+            atDestination = true;
+			agent.msgAtHost();
+        }
 		if (xPos == xDestination && yPos == yDestination) {
 			if (command==Command.GoToSeat){
 				agent.msgAnimationFinishedGoToSeat();
@@ -120,12 +122,12 @@ public class CustomerGui implements Gui{
 	}
 
 	public boolean isPresent() {
-		return isPresent;
+		return true;
 	}
 	
 	public void setHungry() {
 		isHungry = true;
-		agent.gotHungry();
+		agent.msgGotHungry();
 		setPresent(true);
 	}
 	public boolean isHungry() {
@@ -162,14 +164,21 @@ public class CustomerGui implements Gui{
 		command = Command.GoToSeat;
 	}
 	
+	public void DoGoToHost() {
+		atDestination = false;
+        xDestination = HOSTX;
+        yDestination = HOSTY;
+    }
+	
 	public void DoGoToCashier() {
+		atDestination = false;
         xDestination = CASHIERX;
         yDestination = CASHIERY;
     }
 
 	public void DoExitRestaurant() {
-		xDestination = -20;
-		yDestination = 300;
+		xDestination = 0;
+		yDestination = 500;
 		command = Command.LeaveRestaurant;
 	}
 }

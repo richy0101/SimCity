@@ -10,7 +10,8 @@ import restaurant.phillipsRestaurant.*;
  */
 public interface Customer {
 	int tableNum = 0;
-	public abstract void gotHungry();
+	public abstract void msgGotHungry();
+	public abstract void msgNoWaiters();
 	public abstract void msgFollowMe(Waiter w, int tNum, Menu menu);	
 	public abstract void msgWhatDoYouWant();
 	public abstract void msgEatMeal();
@@ -22,4 +23,5 @@ public interface Customer {
 	public abstract void msgAtCashier();
 	public abstract void setWaiter(Waiter waiter);
 	public abstract void setTableNum(int tableNumber);
+	public abstract void msgAtHost();
 }

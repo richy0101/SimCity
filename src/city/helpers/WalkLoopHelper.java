@@ -38,10 +38,10 @@ public class WalkLoopHelper {
 		private Walkway nakamuraRestaurant = new Walkway("NakamuraRestaurant"); //restaurant 3
 		Coordinate nakamuraRestaurantLocation = new Coordinate(348,83);
 
-		/*
+		
 		private Walkway phillipsRestaurant = new Walkway("PhillipsRestaurant"); //restaurant 4
 		Coordinate phillipsRestaurantLocation = new Coordinate(719,323);
-		*/
+		
 		private Walkway shehRestaurant = new Walkway("ShehRestaurant"); //restaurant 5
 		Coordinate shehRestaurantLocation = new Coordinate(624,353);
 		
@@ -146,14 +146,15 @@ public class WalkLoopHelper {
 			
 			locationDirectory.put(nakamuraRestaurant.getName(), nakamuraRestaurantLocation);
 			
+			locationDirectory.put(phillipsRestaurant.getName(), phillipsRestaurantLocation);
+			
+			
+			
 			//BUs stops
 			locationDirectory.put(busStop1.getName(), busStop1Location);
 			locationDirectory.put(busStop2.getName(), busStop2Location);
 			locationDirectory.put(busStop3.getName(), busStop3Location);
 			locationDirectory.put(busStop4.getName(), busStop4Location);
-			/*
-			locationDirectory.put(phillipsRestaurant.getName(), phillipsRestaurantLocation);
-			*/
 			
 			
 		}
@@ -180,6 +181,7 @@ public class WalkLoopHelper {
 			loopEvaluator.put("HuangRestaurant", "OuterLoop");
 			loopEvaluator.put("TanRestaurant","OuterLoop");
 			loopEvaluator.put("NakamuraRestaurant","OuterLoop");
+			loopEvaluator.put("PhillipsRestaurant","OuterLoop");
 			
 			loopEvaluator.put("BusStop1", "OuterLoop");
 			loopEvaluator.put("BusStop2", "OuterLoop");
@@ -209,6 +211,7 @@ public class WalkLoopHelper {
 			coordinateEvaluator.put("HuangRestaurant", huangRestaurantLocation);
 			coordinateEvaluator.put("TanRestaurant", tanRestaurantLocation);
 			coordinateEvaluator.put("NakamuraRestaurant", nakamuraRestaurantLocation);
+			coordinateEvaluator.put("PhillipsRestaurant", nakamuraRestaurantLocation);
 			
 			coordinateEvaluator.put("BusStop1", busStop1Location);
 			coordinateEvaluator.put("BusStop2", busStop2Location);

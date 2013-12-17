@@ -7,6 +7,9 @@ import market.MarketCustomerRole;
 import market.MarketWorkerRole;
 import agent.Role;
 import bank.BankTellerRole;
+import restaurant.phillipsRestaurant.PhillipsCookRole;
+import restaurant.phillipsRestaurant.PhillipsCustomerRole;
+import restaurant.phillipsRestaurant.PhillipsWaiterRole;
 import restaurant.nakamuraRestaurant.NakamuraCookRole;
 import restaurant.nakamuraRestaurant.NakamuraCustomerRole;
 import restaurant.nakamuraRestaurant.NakamuraWaiterNormalRole;
@@ -51,6 +54,9 @@ public class RoleFactory {
 		}
 		else if(role.equals("TanRestaurant")) {
 			newRole = new TanCustomerRole("TanRestaurant");
+		}
+		else if(role.equals("PhillipsRestaurant")) {
+			newRole = new PhillipsCustomerRole("PhillipsRestaurant");
 		}
 		else if(role.equals("MarketCust")) {
 			newRole = new MarketCustomerRole(p.getGroceriesList(), "Market");
@@ -120,6 +126,31 @@ public class RoleFactory {
 			newRole = new TanCookRole("TanRestaurant");
 			return newRole;
 		}
+
+//		else if(role.equals("TanWaiterNormal")) {
+//			newRole = new TanWaiterNormalRole("TanRestaurant");
+//			return newRole;
+//		}
+//		else if (role.equals("TanWaiterShared")) {
+//			newRole = new TanWaiterSharedRole("TanRestaurant");
+//			return newRole;
+//		}
+//		else if (role.equals("TanCook")) {
+//			newRole = new TanCookRole("TanRestaurant");
+//			return newRole;
+//		}
+//		else if(role.equals("NakamuraWaiterNormal")) {
+//			newRole = new NakamuraWaiterNormalRole("NakamuraRestaurant");
+//			return newRole;
+//		}
+//		else if (role.equals("NakamurakWaiterShared")) {
+//			newRole = new NakamuraWaiterSharedRole("NakamuraRestaurant");
+//			return newRole;
+//		}
+//		else if (role.equals("NakamuraCook")) {
+//			newRole = new NakamuraCookRole("NakamuraRestaurant");
+//			return newRole;
+//		}
 		else if(role.equals("NakamuraWaiterNormal")) {
 			newRole = new NakamuraWaiterNormalRole("NakamuraRestaurant");
 			return newRole;
@@ -140,9 +171,24 @@ public class RoleFactory {
 //			newRole = new PhillipsWaiterSharedRole("PhillipsRestaurant");
 //			return newRole;
 //		}
-//		else if (role.equals("PhillipsCook")) {
-//			newRole = new PhillipsCookRole("PhillipsRestaurant");
+		else if(role.equals("PhillipsWaiter")) {
+			newRole = new PhillipsWaiterRole("PhillipsRestaurant");
+			return newRole;
+		}
+		else if (role.equals("PhillipsCook")) {
+			newRole = new PhillipsCookRole("PhillipsRestaurant");
+			return newRole;
+		}
+//		else if(role.equals("HuangWaiterNormal")) {
+//			newRole = new HuangWaiterNormalRole("HuangRestaurant");
 //			return newRole;
+//		}
+//		else if (role.equals("HuangWaiterShared")) {
+//			newRole = new HuangWaiterSharedRole("HuangRestaurant");
+//			return newRole;
+//		}
+//		else if (role.equals("HuangCook")) {
+//			newRole = new HuangCookRole("HuangRestaurant");
 //		}
 		else if (role.equals("BankTeller")) {
 			newRole = new BankTellerRole("Bank");

@@ -25,6 +25,7 @@ public class WaiterGui implements Gui {
     public static final int xTable = 240, xTable2 = 380, xTable3 = 310;
     public static final int yTable12 = 115, yTable3 = 230;
     private int xHome, yHome;
+    private static final int HOMEX = 20, HOMEY = 20;
     private static final int WAITINGX = 70, WAITINGY = 180;
     private static final int CASHIERX = 165, CASHIERY = 35;
     private static final int COOKX = 530, COOKY = 200;
@@ -47,10 +48,10 @@ public class WaiterGui implements Gui {
         	yHome = yDestination;
         	break;
         case 1:
-        	xPos = 20;
-        	yPos = 0;
-        	xDestination = 20;
-        	yDestination = 0;
+        	xPos = -45;
+        	yPos = -45;
+        	xDestination = -45;
+        	yDestination = -45;
         	xHome = xDestination;
         	yHome = yDestination;
         	break;
@@ -92,6 +93,11 @@ public class WaiterGui implements Gui {
             yPos = yPos-5;
         
         if (atDestination == false && xPos == xDestination && yPos == yDestination
+        		& (xDestination == HOMEX) & (yDestination == HOMEY)) {
+            atDestination = true;
+            agent.msgAtHome();
+         }
+        if (atDestination == false && xPos == xDestination && yPos == yDestination
         		& (xDestination == HOSTX) & (yDestination == HOSTY)) {
             atDestination = true;
             agent.msgAtHost();
@@ -109,7 +115,7 @@ public class WaiterGui implements Gui {
             agent.msgAtCashier();
         }
         if (atDestination == false && xPos == xDestination && yPos == yDestination
-        		& (xDestination == WAITINGX) & (yDestination == WAITINGY)) {
+        		&& (xDestination == WAITINGX) && (yDestination == WAITINGY)) {
            atDestination = true;
            agent.msgAtWaitingArea();
         }
@@ -132,9 +138,7 @@ public class WaiterGui implements Gui {
     }
 
     public void draw(Graphics2D g) {
-    	if(choice.equals("")) {
-			g.drawImage(waiterImage, xPos, yPos, null);
-		}
+		g.drawImage(waiterImage, xPos, yPos, null);
     }
 
     public void updateGui(String choice) {
@@ -143,6 +147,11 @@ public class WaiterGui implements Gui {
     
     public boolean isPresent() {
         return true;
+    }
+    public void DoGoToHome(){
+    	atDestination = false;
+    	xDestination = HOMEX;
+		yDestination = HOMEY;
     }
     public void DoGoToHost(){
     	atDestination = false;

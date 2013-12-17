@@ -33,6 +33,8 @@ import javax.swing.event.ChangeEvent;
 import restaurant.nakamuraRestaurant.gui.NakamuraRestaurantAnimationPanel;
 import restaurant.Restaurant;
 import restaurant.huangRestaurant.gui.HuangRestaurantAnimationPanel;
+import restaurant.phillipsRestaurant.PhillipsCookRole;
+import restaurant.phillipsRestaurant.PhillipsWaiterRole;
 import restaurant.phillipsRestaurant.gui.PhillipsRestaurantAnimationPanel;
 import restaurant.shehRestaurant.ShehCookRole;
 import restaurant.shehRestaurant.ShehWaiterNormalRole;
@@ -47,6 +49,10 @@ import restaurant.tanRestaurant.gui.TanRestaurantAnimationPanel;
 import restaurant.stackRestaurant.gui.StackRestaurantAnimationPanel;
 import trace.AlertTag;
 import trace.TracePanel;
+
+
+import javax.swing.event.PopupMenuListener;
+import javax.swing.event.PopupMenuEvent;
 
 import java.awt.Font;
 
@@ -190,7 +196,7 @@ public class SimCityGui {
         roles.put("Tan's Restaurant Waiter Shared", "TanWaiterShared");
         roles.put("Tan's Restaurant Cook", "TanCook");
         
-        roles.put("Richard's Restaurant Waiter Normal", "RichardWaiterNormal");
+        roles.put("Richard's Restaurant Waiter", "RichardWaiter");
         //roles.put("Richards's Restaurant Waiter Shared", "RichardWaiterShared");
         roles.put("Richard's Restaurant Cook", "RichardCook");
         
@@ -799,16 +805,57 @@ public class SimCityGui {
 		if(WalkLoopHelper.sharedInstance() == null) {
 			
 		}
+		
+		String a = "PhillipsRestaurant";
+		String b = "House1";
+		String name = "JEEEZZUSSWAITER";
+		Role role = new PhillipsWaiterRole("PhillipsRestaurant");
+		PersonAgent p = new PersonAgent(role, a , b, name);
+		p.msgWakeUp();
+		role.setPerson(p);
+		p.startThread();
+		
+		String a1 = "PhillipsRestaurant";
+		String b1 = "House2";
+		String name1 = "JEEEZZUSSWAITER2";
+		Role role1 = new PhillipsWaiterRole("PhillipsRestaurant");
+		PersonAgent p1 = new PersonAgent(role1, a1 , b1, name1);
+		p1.msgWakeUp();
+		role.setPerson(p1);
+		p1.startThread();
+
 /*
-		//REID TEST CODE
+		
+		//PersonAgent person1 = new PersonAgent("HuangCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
+		//PersonAgent person2 = new PersonAgent("HuangWaiterNormal", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
+		//PersonAgent person3 = new PersonAgent("StackWaiterShared", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
+/*
+		PersonAgent person1 = new PersonAgent("NakamuraCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
+		PersonAgent person2 = new PersonAgent("NakamuraWaiterShared", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
+		PersonAgent person3 = new PersonAgent("Unemployed", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
+*/
+		//PersonAgent person1 = new PersonAgent("HuangCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
+		//PersonAgent person2 = new PersonAgent("HuangWaiterShared", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
+		//PersonAgent person3 = new PersonAgent("HuangWaiterShared", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
+/*
+
 		PersonAgent person1 = new PersonAgent("NakamuraCook", "Test Person 1", 3, 1000.00, "House1", "TakesTheBus");
 		PersonAgent person2 = new PersonAgent("NakamuraWaiterNormal", "Test Person 2", 3, 1000.00, "House2", "TakesTheBus");
 		PersonAgent person3 = new PersonAgent("Unemployed", "Test Person 3", 3, 1000.00, "House3", "TakesTheBus");
+*/
 		PersonAgent person4 = new PersonAgent("BankTeller", "Test Person 4", 3, 1000.00, "House4", "TakesTheBus");
 		PersonAgent person5 = new PersonAgent("BankTeller", "Test Person 5", 3, 1000.00, "House5", "TakesTheBus");
 		PersonAgent person6 = new PersonAgent("Market", "Test Person 6", 3, 1000.00, "House6", "TakesTheBus");
-*/
+
 		
+		String a3 = "PhillipsRestaurant";
+		String b3 = "House3";
+		String name3 = "JEZZZZUSSSCOOK";
+		Role role3 = new PhillipsCookRole("PhillipsRestaurant");
+		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
+		p3.msgWakeUp();
+		role3.setPerson(p3);
+		p3.startThread();
 /*
 		//RYAN TEST CODE
 		String a = "ShehRestaurant";
@@ -841,6 +888,29 @@ public class SimCityGui {
 		
 /*
  		//TAN RESTAURANT CODE
+
+		//PersonAgent person7 = new PersonAgent("PhillipsCook", "Test Person 7", 3, 1000.00, "House1", "TakesTheBus");
+		//PersonAgent person8 = new PersonAgent("PhillipsWaiter", "Test Person 8", 3, 1000.00, "House2", "TakesTheBus");
+		PersonAgent person9 = new PersonAgent("Unemployed", "Test Person 9", 3, 0.00, "House3", "TakesTheBus");
+		
+		String a = "PhillipsRestaurant";
+		String b = "House1";
+		String name = "JEEEZZUSSWAITER";
+		Role role = new PhillipsWaiterRole("PhillipsRestaurant");
+		PersonAgent p = new PersonAgent(role, a , b, name);
+		p.msgWakeUp();
+		role.setPerson(p);
+		p.startThread();
+		
+		String a1 = "PhillipsRestaurant";
+		String b1 = "House2";
+		String name1 = "JEEEZZUSSWAITER2";
+		Role role1 = new PhillipsWaiterRole("PhillipsRestaurant");
+		PersonAgent p1 = new PersonAgent(role1, a1 , b1, name1);
+		p1.msgWakeUp();
+		role.setPerson(p1);
+		p1.startThread();
+		/*
 		String a = "TanRestaurant";
 		String b = "House1";
 		String name = "Test Person 1";
@@ -858,9 +928,10 @@ public class SimCityGui {
 		role1= new TanCookRole("TanRestaurant");
 		PersonAgent p1 = new PersonAgent(role, a1 , b1, name1);
 		p1.msgWakeUp();
-		role.setPerson(p);
+		
+		role1.setPerson(p1);
 		p1.startThread();
-	
+
 		String a2 = "TanRestaurant";
 		String b2 = "House3";
 		String name2 = "Test Person 3";
@@ -870,8 +941,18 @@ public class SimCityGui {
 		role2.setPerson(p2);
 		p2.msgWakeUp();
 		p2.startThread();
-*/		
+	
 		
+		String a3 = "PhillipsRestaurant";
+		String b3 = "House3";
+		String name3 = "JEZZZZUSSSCOOK";
+		Role role3 = new PhillipsCookRole("PhillipsRestaurant");
+		PersonAgent p3 = new PersonAgent(role3, a3 , b3, name3);
+		p3.msgWakeUp();
+		role3.setPerson(p3);
+		p3.startThread();
+		
+		/*
 		String a = "TanRestaurant";
 		String b = "House1";
 		String name = "Ben Test Waiter";
@@ -903,6 +984,7 @@ public class SimCityGui {
 		p2.startThread();
 		
 		
+		
 		bus = new BusAgent(1);
 		busGui = new BusGui(bus,1); //agent, starting StopNumber
 		bus.setGui(busGui);
@@ -916,14 +998,14 @@ public class SimCityGui {
 		macroAnimationPanel.addGui(busGui2);
 		bus2.startThread();
 		
-		/*
+		
 		trafficLight = new TrafficAgent();
 		trafficLight.startThread();
 		trafficLight1 = new TrafficAgent();
 		trafficLight1.startThread();
 		trafficLight2 = new TrafficAgent();
 		trafficLight2.startThread();
-		*/
+		
 		
 //		String a = "TanRestaurant";
 //		String b = "House1";

@@ -662,8 +662,9 @@ public class PersonAgent extends Agent implements Person {
 		AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "Going out to eat");
 		setPersonState(PersonState.OutToEat);
 		//Decide Which restaurant to go to
+
 		List<Restaurant> restaurants = Directory.sharedInstance().getRestaurants();
-		Restaurant r = null;
+		/*Restaurant r = null;
 		if (!restaurants.isEmpty()) {
 			for(int i = 0; i < restaurants.size(); i++) {
 				if(restaurants.get(i).isOpen()) {
@@ -673,6 +674,17 @@ public class PersonAgent extends Agent implements Person {
 				r = restaurants.get(0);
 			}
 		}
+		*/
+
+		Restaurant r = Directory.sharedInstance().getRestaurants().get(4);
+		//Restaurant r = Directory.sharedInstance().getRestaurants().get(2);
+		//Restaurant r = Directory.sharedInstance().getRestaurants().get(0);
+
+//		Restaurant r = Directory.sharedInstance().getRestaurants().get(2);
+		//Restaurant r = Directory.sharedInstance().getRestaurants().get(1);
+		//Restaurant r = Directory.sharedInstance().getRestaurants().get(2);
+		//Restaurant r = Directory.sharedInstance().getRestaurants().get(0);
+		
 		//End of Decide block
 		if(currentLocation == homeName) {
 			personGui.DoLeaveHouse();
@@ -683,9 +695,9 @@ public class PersonAgent extends Agent implements Person {
 		roles.clear();
 		Role custRole = factory.createRole(r.getName(), this);
 		roles.add(custRole);
-		custRole.msgGotHungry();
 		custRole.setHost(Directory.sharedInstance().getAgents().get(r.getName() + "Host"));
 		custRole.setCashier(Directory.sharedInstance().getAgents().get(r.getName() + "Cashier"));
+		custRole.msgGotHungry();
 		Role t = new TransportationRole(r.getName(), currentLocation);
 		t.setPerson(this);
 		roles.add(t);
@@ -735,6 +747,7 @@ public class PersonAgent extends Agent implements Person {
 		//Role Logic
 		roles.clear();
 		roles.add(workDetails.workRole);
+		System.err.println(workDetails.workRole);
 		workDetails.workRole.setPerson(this);
 		Role t = new TransportationRole(workDetails.workLocation, currentLocation);
 		t.setPerson(this);

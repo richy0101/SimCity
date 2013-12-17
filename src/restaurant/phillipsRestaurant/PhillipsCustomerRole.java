@@ -7,16 +7,21 @@ import agent.Role;
 import restaurant.CashierAgent;
 import restaurant.phillipsRestaurant.Menu;
 import agent.Agent;
+import gui.Building;
 
+import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import city.helpers.Directory;
+
 /**
  * Restaurant customer agent.
  */
 public class PhillipsCustomerRole extends Role implements Customer {
+	private String name;
 	private String location;
 	private int hungerLevel = 6;        // determines length of meal
 	Timer timer = new Timer();
@@ -26,6 +31,7 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	public String order;
 	Menu menu = null;
 	private Semaphore atCashier = new Semaphore(0,true);
+	private Semaphore doneAnimation = new Semaphore(0,true);
 	double cashOnHand=0,moneyOwed=0;
 	boolean reOrder=false;
 	
@@ -36,11 +42,11 @@ public class PhillipsCustomerRole extends Role implements Customer {
 
 	//    private boolean isHungry = false; //hack for gui
 	public enum AgentState
-	{DoingNothing, WaitingInRestaurant, BeingSeated, Seated, ReadyToOrder, Ordered, Eating, DoneEating, AboutToPay, Paying, ReadyToLeave, Leaving, Left};
+	{DoingNothing, WaitingInRestaurant, BeingSeated, Seated, ReadyToOrder, Ordered, Eating, DoneEating, AboutToPay, Paying, ReadyToLeave, Leaving, FinishedRole, Gone, Left};
 	private AgentState state = AgentState.DoingNothing;//The start state
 
 	public enum AgentEvent 
-	{none, gotHungry, followWaiter, seated, ordering, eatingFood, doneEating, goingToPay, paid, doneLeaving};
+	{none, noWaiters, gotHungry, followWaiter, seated, ordering, eatingFood, doneEating, goingToPay, paid, doneLeaving};
 	AgentEvent event = AgentEvent.none;
 	
 	
@@ -52,9 +58,19 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	 */
 	public PhillipsCustomerRole(String location){
 		super();
+		
 		this.location = location;
+		customerGui = new CustomerGui(this,1);
+		
 		double rand = (double) Math.random()*30+30;
 		cashOnHand = rand;
+		
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == location) {
+				b.addGui(customerGui);
+			}
+		}
 		
 	}
 
@@ -63,14 +79,21 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	 */
 	public void setHost(Agent host) {
 		this.host = (Host) host;
+		System.err.println("Set up host in RICHARD restaurant");
 	}
 	public void setWaiter(Waiter waiter) {
 		this.waiter = waiter;
+		System.err.println("Set up waiter in RICHARD restaurant");
 	}
-	public void setCashier(Cashier cashier){
-		this.cashier = cashier;
+	public void setCashier(Agent cashier){
+		this.cashier = (Cashier) cashier;
+		System.err.println("Set up cashier in RICHARD restaurant");
 	}
 	
+	public void msgAtHost() {//from animation	
+		doneAnimation.release();// = true;
+		stateChanged();
+	}
 	public void msgAtCashier() {//from animation
 		timer.schedule(new TimerTask() {
 			public void run() {
@@ -81,16 +104,24 @@ public class PhillipsCustomerRole extends Role implements Customer {
 		},
 		5000);
 	}
+	
 	// Messages
-
-	public void gotHungry() {//from animation
-		Do("I'm hungry");
+	public void msgGotHungry() {//from animation
+		print("I'm hungry- RICHARD restaurant");
 		state = AgentState.DoingNothing;
 		event = AgentEvent.gotHungry;
 		stateChanged();
 	}
+	
+	public void msgNoWaiters(){
+		print("Can't eat, no waiters- RICHARD restaurant");
+		state = AgentState.ReadyToLeave;
+		event = AgentEvent.noWaiters;
+		stateChanged();
+	}
 
 	public void msgFollowMe(Waiter w, int tNum, Menu menu) {
+		System.err.println("CUSTOMER received msgFollowMe");
 		event = AgentEvent.followWaiter;
 		this.menu = menu;
 		tableNum = tNum;
@@ -126,7 +157,9 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	}
 	public void msgAnimationFinishedLeaveRestaurant() {
 		//from animation
+		System.err.println("Officially left RICHARD restaurant from animation");
 		event = AgentEvent.doneLeaving;
+		state = AgentState.Gone;
 		stateChanged();
 	}
 
@@ -180,6 +213,16 @@ public class PhillipsCustomerRole extends Role implements Customer {
 			//no action
 			return true;
 		}
+		//ONLY BECAUSE NO WAITERS
+		if (state == AgentState.ReadyToLeave && event == AgentEvent.noWaiters){
+			state = AgentState.Leaving;
+			leaveRestaurant();
+			//no action
+			return true;
+		}
+		if(state == AgentState.Gone && event == AgentEvent.doneLeaving){
+			roleDone();
+		}
 		return false;
 	}
 
@@ -188,10 +231,23 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	private void goToRestaurant() {
 		Do("Going to restaurant");
 		host.msgIWantFood(this);//send our instance, so he can respond to us
+		customerGui.DoGoToHost();
+		try {
+			doneAnimation.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	 private void roleDone() {
+		System.err.println("Role is done for Customer");
+		getPersonAgent().msgRoleFinished();
+		state = AgentState.FinishedRole;
 	}
 
 	private void SitDown() {
-		Do("Being seated. Going to table");
+		System.err.println("Being seated. Going to table");
 		timer2.schedule(new TimerTask() {
 			public void run() {
 				System.out.println("Reading Menu");
@@ -199,7 +255,15 @@ public class PhillipsCustomerRole extends Role implements Customer {
 			}
 		},
 		6000);
+		readyToOrder();
+		
 		customerGui.DoGoToSeat(tableNum);
+		try {
+			doneAnimation.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}	
 	
 	private void readyToOrder(){
@@ -274,6 +338,11 @@ public class PhillipsCustomerRole extends Role implements Customer {
 	private void leaveCashier() {
 		Do("Leaving restaurant");
 		waiter.msgLeavingTable(this);
+		state = AgentState.Left;
+		customerGui.DoExitRestaurant();
+	}
+	private void leaveRestaurant() {
+		System.err.println("Leaving RICHARD restaurant");
 		state = AgentState.Left;
 		customerGui.DoExitRestaurant();
 	}

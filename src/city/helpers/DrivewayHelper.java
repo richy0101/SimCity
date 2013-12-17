@@ -52,10 +52,10 @@ public class DrivewayHelper {
 		private Driveway nakamuraRestaurant = new Driveway("NakamuraRestaurant"); //restaurant 3
 		Coordinate nakamuraRestaurantLocation = new Coordinate(334,93);
 
-		/*
+		
 		private Driveway phillipsRestaurant = new Driveway("PhillipsRestaurant"); //restaurant 4
 		Coordinate phillipsRestaurantLocation = new Coordinate(685,320);
-		*/
+		
 		private Driveway shehRestaurant = new Driveway("ShehRestaurant"); //restaurant 5
 		Coordinate shehRestaurantLocation = new Coordinate(621,320);
 		
@@ -169,9 +169,9 @@ public class DrivewayHelper {
 			locationDirectory.put(tanRestaurant.getName(), tanRestaurantLocation);
 
 			locationDirectory.put(nakamuraRestaurant.getName(), nakamuraRestaurantLocation);
-			/*
+			
 			locationDirectory.put(phillipsRestaurant.getName(), phillipsRestaurantLocation);
-			*/
+			
 			
 		}
 		

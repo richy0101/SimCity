@@ -69,6 +69,7 @@ public class BusHelper {
 		busStopEvaluator.put("StackRestaurant", busStop1Location);
 		busStopEvaluator.put("ShehRestaurant", busStop2Location);
 		busStopEvaluator.put("HuangRestaurant", busStop4Location);
+		busStopEvaluator.put("PhillipsRestaurant", busStop2Location);
 	}
 	public Map<String, String> busStopToString = new HashMap<String, String>(); {
 		busStopToString.put("Bank", "BusStop4");
@@ -94,6 +95,8 @@ public class BusHelper {
 		busStopToString.put("ShehRestaurant", "BusStop2");
 		
 		busStopToString.put("NakamuraRestaurant", "BusStop4");
+		
+		busStopToString.put("PhillipsRestaurant", "BusStop2");
 
 		
 	}
@@ -119,6 +122,8 @@ public class BusHelper {
 		busStopToInt.put("HuangRestaurant", 4);
 
 		busStopToInt.put("ShehRestaurant", 2);
+		
+		busStopToInt.put("PhillipsRestaurant", 2);
 
 		busStopToInt.put("NakamuraRestaurant", 4);
 		

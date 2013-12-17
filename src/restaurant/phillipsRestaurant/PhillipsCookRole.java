@@ -1,16 +1,14 @@
 package restaurant.phillipsRestaurant;
 
 import gui.Building;
-
 import restaurant.CookRole;
 import restaurant.phillipsRestaurant.gui.*;
 import restaurant.Restaurant;
 import restaurant.FoodInformation;
 import restaurant.phillipsRestaurant.Menu;
 import restaurant.phillipsRestaurant.interfaces.*;
-import restaurant.phillipsRestaurant.interfaces.Waiter;
 import city.helpers.Directory;
-
+import market.interfaces.*;
 import market.interfaces.MarketWorker;
 
 import java.util.ArrayList;
@@ -28,6 +26,7 @@ import java.util.concurrent.Semaphore;
  */
 public class PhillipsCookRole extends CookRole implements Cook {
 	
+	//FOOD CLASS
 	private class Food{ 
 		String choice; 
 		int cookTime;
@@ -54,6 +53,7 @@ public class PhillipsCookRole extends CookRole implements Cook {
 		}
 	}
 	
+	//ORDER CLASS
 	private class Order{
 		Waiter waiter; 
 		String order; 
@@ -69,6 +69,7 @@ public class PhillipsCookRole extends CookRole implements Cook {
 		}
 	}
 	
+	//MYMARKET CLASS
 	private class MyMarket{
 		MarketAgent market; 
 		MarketState ms;
@@ -80,6 +81,7 @@ public class PhillipsCookRole extends CookRole implements Cook {
 		}
 	}
 	
+	//MARKETORDER CLASS
 	private class MarketOrder{
 		MarketAgent market;
 		String food;
@@ -98,15 +100,16 @@ public class PhillipsCookRole extends CookRole implements Cook {
 	List<Order> orders;
 	List<MyMarket> markets;
 	List<MarketOrder> marketOrders;
-	public enum OrderState {pending,haveInventory,lowInventory,outOfInventory,oweMarketMoney,gettingIngredients,cooking,plating,done,noFood};
+	public enum OrderState {pending,DoingNothing,Arrived,haveInventory,lowInventory,outOfInventory,oweMarketMoney,gettingIngredients,cooking,plating,done,noFood};
 	public enum OrderEvent {gotFromFridge,doneCooked};
 	public enum MarketState {yesInventory,noInventory};
 	Timer timer = new Timer();
 	private Map<String,Integer> inv = new HashMap<String,Integer>(4);
 	//map<String choice,Food f> foods;
-	OrderState state = OrderState.lowInventory, payStatus = OrderState.pending;
+	OrderState state, payStatus = OrderState.pending;
 	boolean marketsOut = false;
-	private final int INVENTORY = 3;  //HACK
+	private final int INVENTORY = 20;  //HACK
+	private String location;
 
 	private Semaphore atFridge = new Semaphore(0,true);
 	private Semaphore atCookingArea = new Semaphore(0,true);
@@ -115,21 +118,37 @@ public class PhillipsCookRole extends CookRole implements Cook {
 	public CookGui cookGui = null;
 	private Waiter waiter=null;
 	private Cashier cashier=null;
+	private Host host=null;
 
 
 	/**
 	 * Constructor for CookAgent class
 	 *
 	 */
-	public PhillipsCookRole(){
+	public PhillipsCookRole(String location){
 		super();
+		this.location = location;
+		state = OrderState.Arrived;
+		cookGui = new CookGui(this);
+		
+		host = (Host) Directory.sharedInstance().getAgents().get("PhillipsRestaurantHost");
+		cashier = (Cashier) Directory.sharedInstance().getAgents().get("PhillipsRestaurantCashier");
+		
 		orders = Collections.synchronizedList(new ArrayList<Order>());
 		markets = Collections.synchronizedList(new ArrayList<MyMarket>());
 		marketOrders = Collections.synchronizedList(new ArrayList<MarketOrder>());
+		
 		inv.put("steak",INVENTORY);
-		inv.put("chicken",2);
+		inv.put("chicken",INVENTORY);
 		inv.put("salad",INVENTORY);
 		inv.put("pizza",INVENTORY);
+		
+		List<Building> buildings = Directory.sharedInstance().getCityGui().getMacroAnimationPanel().getBuildings();
+		for(Building b : buildings) {
+			if (b.getName() == location) {
+				b.addGui(cookGui);
+			}
+		}
 	}
 	//setters
 	public void setMarket(MarketAgent m){
@@ -230,7 +249,11 @@ public class PhillipsCookRole extends CookRole implements Cook {
 	public boolean pickAndExecuteAnAction() {
 		if(state != OrderState.noFood){
 			
-			if(marketsOut == false){
+			if(state == OrderState.Arrived){
+				tellHostAtWork();
+				return true;
+			}/*
+			else if(marketsOut == false){
 				if(state == OrderState.lowInventory){
 					orderFromMarket();
 				}
@@ -255,7 +278,7 @@ public class PhillipsCookRole extends CookRole implements Cook {
 						return true;
 					}
 				}
-			}
+			}*/
 			synchronized(this.orders){
 				for(int i=0;i<orders.size();i++){
 					if(orders.get(i).os == OrderState.pending){
@@ -293,7 +316,14 @@ public class PhillipsCookRole extends CookRole implements Cook {
 	}
 
 	// Actions
-
+	public void tellHostAtWork(){
+		System.err.println("FINALLY COOK IS AT RICHARD RESTAURANT");
+		host.msgAddCook(this);
+		cookGui.DoGoToPlatingArea();
+		state = OrderState.haveInventory;
+		stateChanged();
+	}
+	
 	public void checkInventory(Order o){
 		//System.out.println("Cook checking inventory for " + o.order);
 		for (Map.Entry<String, Integer> entry : inv.entrySet()) { 

@@ -191,6 +191,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		getPersonAgent().msgRoleFinished();
 		state = CustomerState.FinishedRole;
 	}
+    
 	private void askForAssistance() {
 		AlertLog.getInstance().logMessage(AlertTag.BANKCUSTOMER, getPersonAgent().getName(), "I need assistance");
 		customerGui.DoGoToManager();

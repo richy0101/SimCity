@@ -1,6 +1,4 @@
 package agent;
-import market.Market;
-import market.MarketWorkerRole;
 import city.PersonAgent;
 import city.interfaces.Person;
 import city.interfaces.RoleInterface;
