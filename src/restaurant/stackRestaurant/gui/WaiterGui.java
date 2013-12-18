@@ -80,10 +80,10 @@ public class WaiterGui implements Gui {
         	agent.msgAtCashier();
         	DoGoHome();	
         }
-        if(xPos == xExit && yPos == yExit
-        		&& (xDestination == xExit && yDestination == yExit)) {
-//        	agent.msgAnimationFinishedLeavingRestaurant();
-        }
+//        if(xPos == xExit && yPos == yExit
+//        		&& (xDestination == xExit && yDestination == yExit)) {
+////        	agent.msgAnimationFinishedLeavingRestaurant();
+//        }
     }
 
     public void updateGui(String choice) {

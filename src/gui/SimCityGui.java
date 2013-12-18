@@ -312,11 +312,10 @@ public class SimCityGui {
         //		occupationComboBox.addItem("Huang's Restaurant Cook");
         //		occupationComboBox.addItem("Huang's Restaurant Cashier");
         //Nakamura
-        occupationComboBox.addItem("Nakamura's Restaurant Host");
-        occupationComboBox.addItem("Nakamura's Restaurant Waiter");
+        occupationComboBox.addItem("Nakamura's Restaurant Waiter Normal");
+        occupationComboBox.addItem("Nakamura's Restaurant Waiter Shared");
         occupationComboBox.addItem("Nakamura's Restaurant Cook");
-        occupationComboBox.addItem("Nakamura's Restaurant Cashier");
-		
+        
 		panel.add(occupationComboBox);
 		
 		final JComboBox<String> transportationComboBox = new JComboBox<String>();
@@ -917,13 +916,13 @@ public class SimCityGui {
 		bus2.startThread();
 		
 //		/*
-		trafficLight = new TrafficAgent();
-		trafficLight.startThread();
-		trafficLight1 = new TrafficAgent();
-		trafficLight1.startThread();
-		trafficLight2 = new TrafficAgent();
-		trafficLight2.startThread();
-//		*/
+//		trafficLight = new TrafficAgent();
+//		trafficLight.startThread();
+//		trafficLight1 = new TrafficAgent();
+//		trafficLight1.startThread();
+//		trafficLight2 = new TrafficAgent();
+//		trafficLight2.startThread();
+////		*/
 		
 //		String a = "TanRestaurant";
 //		String b = "House1";

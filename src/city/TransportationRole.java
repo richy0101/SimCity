@@ -170,18 +170,18 @@ public class TransportationRole extends Role implements Transportation  {
 				EnterBuilding();
 			}
 		}
-		else if (getPersonAgent().getTransportationMethod().contains("Car")) {
-			//set car agent
-			car = new CarAgent(startingLocation);
-			car.startThread();
-			//set destination
-			car.msgTakeMeHere(this, destination);
-			//create car gui
-			//carGui = new CarGui(car, startingLocation);
-			//car.setGui(carGui);
-			//.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(carGui);
-			//setState(TransportationState.InTransit); //SET STATE
-		}
+//		else if (getPersonAgent().getTransportationMethod().contains("Car")) {
+//			//set car agent
+//			car = new CarAgent(startingLocation);
+//			car.startThread();
+//			//set destination
+//			car.msgTakeMeHere(this, destination);
+//			//create car gui
+//			//carGui = new CarGui(car, startingLocation);
+//			//car.setGui(carGui);
+//			//.sharedInstance().getCityGui().getMacroAnimationPanel().addGui(carGui);
+//			//setState(TransportationState.InTransit); //SET STATE
+//		}
 		else {
 			/**
 			 * Walk to destination don't check buses
